@@ -14,3 +14,7 @@
 
 # Development KPI tracking (user-specific data)
 .devcontainer/.dev-kpis.json
+
+# Deployment credentials (NEVER commit)
+.sftp-config.env
+.deploy-git.env

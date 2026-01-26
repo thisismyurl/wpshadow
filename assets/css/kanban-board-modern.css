@@ -1,0 +1,500 @@
+/**
+ * Modern Kanban Board Enhancements
+ * Phase 2: UI/UX Modernization (Epic #685, Issue #667)
+ * 
+ * Enhances the existing kanban-board.css with:
+ * - Replit-inspired modern card design
+ * - Improved drag-and-drop visual feedback
+ * - Enhanced keyboard navigation
+ * - Better animations and interactions
+ * - WCAG AA accessibility compliance
+ * 
+ * Philosophy: Inspire Confidence (#8), Effortless task management
+ * CANON: Accessibility First with keyboard navigation
+ * 
+ * @package WPShadow
+ * @since 1.2601.2148
+ */
+
+/* ============================================================================
+   Enhanced Kanban Container
+   ============================================================================ */
+
+.wpshadow-kanban-container {
+	margin-top: var(--wps-space-6, 1.5rem);
+}
+
+/* Kanban intro card modernization */
+.wpshadow-kanban-container > .wps-m-20-p-15-rounded-4 {
+	background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	box-shadow: var(--wps-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+	margin-bottom: var(--wps-space-6, 1.5rem);
+}
+
+.wpshadow-kanban-container > .wps-m-20-p-15-rounded-4 h3 {
+	color: var(--wps-gray-900, #111827);
+	font-size: var(--wps-text-lg, 1.125rem);
+	font-weight: var(--wps-font-semibold, 600);
+}
+
+.wpshadow-kanban-container > .wps-m-20-p-15-rounded-4 p {
+	color: var(--wps-gray-600, #6b7280);
+	line-height: 1.6;
+}
+
+/* ============================================================================
+   Enhanced Kanban Board Grid
+   ============================================================================ */
+
+.wpshadow-kanban-board {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: var(--wps-space-5, 1.25rem);
+	padding: 0;
+	margin: 0;
+}
+
+@media (max-width: 1400px) {
+	.wpshadow-kanban-board {
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--wps-space-4, 1rem);
+	}
+}
+
+@media (max-width: 768px) {
+	.wpshadow-kanban-board {
+		grid-template-columns: 1fr;
+		gap: var(--wps-space-4, 1rem);
+	}
+}
+
+/* ============================================================================
+   Modern Column Design
+   ============================================================================ */
+
+.kanban-column {
+	background: #ffffff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: var(--wps-radius-lg, 12px);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	min-height: 400px;
+	max-height: 70vh;
+	box-shadow: var(--wps-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+	transition: box-shadow var(--wps-transition-base, 0.2s ease);
+}
+
+.kanban-column:hover {
+	box-shadow: var(--wps-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+/* Enhanced column headers */
+.wps-kanban-column-header,
+.kanban-column h3 {
+	background: var(--wps-gray-50, #f9fafb);
+	border-bottom: 2px solid var(--wps-gray-200, #e5e7eb);
+	padding: var(--wps-space-4, 1rem) var(--wps-space-5, 1.25rem);
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--wps-space-3, 0.75rem);
+	flex-shrink: 0;
+}
+
+.wps-kanban-column-title {
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-2, 0.5rem);
+	font-size: var(--wps-text-base, 1rem);
+	font-weight: var(--wps-font-semibold, 600);
+	color: var(--wps-gray-900, #111827);
+	flex: 1;
+	min-width: 0;
+}
+
+.kanban-column-icon {
+	font-size: var(--wps-text-lg, 1.125rem);
+	color: var(--wps-gray-500, #6b7280);
+	flex-shrink: 0;
+}
+
+/* Enhanced count badge */
+.wps-kanban-count-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 28px;
+	height: 28px;
+	padding: 0 var(--wps-space-2, 0.5rem);
+	background: var(--wps-gray-200, #e5e7eb);
+	border-radius: var(--wps-radius-full, 50%);
+	font-size: var(--wps-text-sm, 0.875rem);
+	font-weight: var(--wps-font-bold, 700);
+	color: var(--wps-gray-700, #374151);
+	flex-shrink: 0;
+	transition: all var(--wps-transition-fast, 0.15s ease);
+}
+
+/* Status-specific badge colors */
+.kanban-column[data-status="detected"] .wps-kanban-count-badge {
+	background: var(--wps-info-light, #dbeafe);
+	color: var(--wps-info-dark, #2563eb);
+}
+
+.kanban-column[data-status="manual"] .wps-kanban-count-badge {
+	background: var(--wps-warning-light, #fef3c7);
+	color: var(--wps-warning-dark, #d97706);
+}
+
+.kanban-column[data-status="automated"] .wps-kanban-count-badge {
+	background: var(--wps-success-light, #d1fae5);
+	color: var(--wps-success-dark, #047857);
+}
+
+.kanban-column[data-status="fixed"] .wps-kanban-count-badge {
+	background: var(--wps-gray-200, #e5e7eb);
+	color: var(--wps-gray-700, #374151);
+}
+
+/* ============================================================================
+   Enhanced Finding Cards (Replit-inspired)
+   ============================================================================ */
+
+.finding-card {
+	background: #ffffff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-left: 4px solid var(--wps-info, #3b82f6);
+	border-radius: var(--wps-radius-md, 8px);
+	padding: var(--wps-space-4, 1rem);
+	margin-bottom: var(--wps-space-3, 0.75rem);
+	cursor: grab;
+	transition: all var(--wps-transition-fast, 0.15s ease);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	position: relative;
+}
+
+.finding-card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+	transform: translateY(-2px);
+	border-color: var(--wps-gray-300, #d1d5db);
+}
+
+.finding-card:active {
+	cursor: grabbing;
+}
+
+/* Dragging state */
+.finding-card.dragging {
+	opacity: 0.6;
+	cursor: grabbing;
+	transform: rotate(3deg) scale(1.02);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Card severity colors */
+.finding-card[data-severity="critical"],
+.finding-card.critical {
+	border-left-color: var(--wps-danger, #ef4444);
+}
+
+.finding-card[data-severity="high"],
+.finding-card.high {
+	border-left-color: var(--wps-warning, #f59e0b);
+}
+
+.finding-card[data-severity="medium"],
+.finding-card.medium {
+	border-left-color: var(--wps-info, #3b82f6);
+}
+
+.finding-card[data-severity="low"],
+.finding-card.low {
+	border-left-color: var(--wps-success, #10b981);
+}
+
+/* Card header with category badge */
+.wps-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: var(--wps-space-3, 0.75rem);
+	gap: var(--wps-space-2, 0.5rem);
+}
+
+/* Enhanced category badges */
+.wps-category-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-1, 0.25rem);
+	padding: var(--wps-space-1, 0.25rem) var(--wps-space-2, 0.5rem);
+	font-size: var(--wps-text-xs, 0.75rem);
+	font-weight: var(--wps-font-semibold, 600);
+	border-radius: var(--wps-radius-sm, 6px);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	line-height: 1;
+}
+
+/* Enhanced threat indicators */
+.wps-threat-indicator {
+	font-size: 20px;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+/* Card title */
+.finding-title,
+.wps-card-title {
+	font-weight: var(--wps-font-semibold, 600);
+	font-size: var(--wps-text-sm, 0.875rem);
+	margin: 0 0 var(--wps-space-2, 0.5rem) 0;
+	color: var(--wps-gray-900, #111827);
+	line-height: 1.5;
+}
+
+/* Card description */
+.finding-description,
+.wps-card-description {
+	font-size: var(--wps-text-sm, 0.875rem);
+	color: var(--wps-gray-600, #6b7280);
+	margin: 0 0 var(--wps-space-3, 0.75rem) 0;
+	line-height: 1.6;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+/* Enhanced card actions */
+.finding-actions,
+.wps-card-footer {
+	display: flex;
+	gap: var(--wps-space-2, 0.5rem);
+	flex-wrap: wrap;
+	padding-top: var(--wps-space-3, 0.75rem);
+	border-top: 1px solid var(--wps-gray-100, #f3f4f6);
+}
+
+/* Modern button styling */
+.finding-actions .button,
+.wps-btn-sm {
+	font-size: var(--wps-text-xs, 0.75rem);
+	padding: var(--wps-space-2, 0.5rem) var(--wps-space-3, 0.75rem);
+	height: auto;
+	line-height: 1.5;
+	border-radius: var(--wps-radius-sm, 6px);
+	font-weight: var(--wps-font-medium, 500);
+	transition: all var(--wps-transition-fast, 0.15s ease);
+	white-space: nowrap;
+}
+
+.wps-btn-sm.primary {
+	background: var(--wps-info, #3b82f6);
+	border-color: var(--wps-info, #3b82f6);
+	color: #ffffff;
+}
+
+.wps-btn-sm.primary:hover {
+	background: var(--wps-info-dark, #2563eb);
+	border-color: var(--wps-info-dark, #2563eb);
+	transform: translateY(-1px);
+}
+
+.wps-btn-sm.ghost {
+	background: transparent;
+	color: var(--wps-gray-700, #374151);
+	border-color: var(--wps-gray-300, #d1d5db);
+}
+
+.wps-btn-sm.ghost:hover {
+	background: var(--wps-gray-100, #f3f4f6);
+	border-color: var(--wps-gray-400, #9ca3af);
+}
+
+/* ============================================================================
+   Enhanced Drag & Drop States
+   ============================================================================ */
+
+.kanban-column.drag-over {
+	background: var(--wps-info-light, #dbeafe);
+	border-color: var(--wps-info, #3b82f6);
+	border-width: 2px;
+}
+
+.kanban-column.drag-over .kanban-column-content {
+	border: 2px dashed var(--wps-info, #3b82f6);
+	border-radius: var(--wps-radius-md, 8px);
+	background: rgba(59, 130, 246, 0.05);
+	padding: var(--wps-space-4, 1rem);
+}
+
+/* Drop zone indicator */
+.kanban-column-content::after {
+	content: attr(data-drop-hint);
+	display: none;
+	text-align: center;
+	padding: var(--wps-space-4, 1rem);
+	color: var(--wps-info, #3b82f6);
+	font-weight: var(--wps-font-medium, 500);
+	font-size: var(--wps-text-sm, 0.875rem);
+}
+
+.kanban-column.drag-over .kanban-column-content:empty::after {
+	display: block;
+}
+
+/* ============================================================================
+   Enhanced Keyboard Navigation
+   ============================================================================ */
+
+.finding-card:focus,
+.finding-card:focus-visible {
+	outline: 3px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+	box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Keyboard move menu enhancements */
+.wps-keyboard-move-menu {
+	background: #ffffff;
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+	border-radius: var(--wps-radius-lg, 12px);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	padding: 0;
+	min-width: 240px;
+	z-index: 10000;
+	animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.wps-keyboard-move-menu-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--wps-space-4, 1rem) var(--wps-space-5, 1.25rem);
+	border-bottom: 1px solid var(--wps-gray-200, #e5e7eb);
+	background: var(--wps-gray-50, #f9fafb);
+}
+
+.wps-keyboard-move-menu-header strong {
+	font-size: var(--wps-text-sm, 0.875rem);
+	font-weight: var(--wps-font-semibold, 600);
+	color: var(--wps-gray-900, #111827);
+}
+
+.wps-keyboard-move-option {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	text-align: left;
+	padding: var(--wps-space-3, 0.75rem) var(--wps-space-5, 1.25rem);
+	background: transparent;
+	border: none;
+	font-size: var(--wps-text-sm, 0.875rem);
+	font-weight: var(--wps-font-medium, 500);
+	color: var(--wps-gray-700, #374151);
+	cursor: pointer;
+	transition: all var(--wps-transition-fast, 0.15s ease);
+	position: relative;
+}
+
+.wps-keyboard-move-option::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 3px;
+	height: 0;
+	background: var(--wps-info, #3b82f6);
+	transition: height var(--wps-transition-fast, 0.15s ease);
+}
+
+.wps-keyboard-move-option:hover::before,
+.wps-keyboard-move-option:focus::before {
+	height: 60%;
+}
+
+.wps-keyboard-move-option:hover,
+.wps-keyboard-move-option:focus {
+	background: var(--wps-info-light, #dbeafe);
+	color: var(--wps-info-dark, #2563eb);
+	outline: none;
+}
+
+/* ============================================================================
+   Accessibility Enhancements
+   ============================================================================ */
+
+/* Screen reader only text */
+.wps-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+	.finding-card,
+	.kanban-column {
+		border-width: 2px;
+	}
+
+	.wps-btn-sm,
+	.finding-actions .button {
+		border-width: 2px;
+	}
+
+	.wps-keyboard-move-option:focus {
+		outline: 2px solid currentColor;
+		outline-offset: -2px;
+	}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.finding-card,
+	.finding-card:hover,
+	.finding-card.dragging,
+	.kanban-column,
+	.wps-btn-sm,
+	.wps-keyboard-move-menu {
+		transition: none;
+		transform: none;
+		animation: none;
+	}
+}
+
+/* Print styles */
+@media print {
+	.finding-actions,
+	.finding-remove-btn,
+	.wps-kanban-column-menu {
+		display: none;
+	}
+
+	.finding-card {
+		page-break-inside: avoid;
+		box-shadow: none;
+	}
+}
