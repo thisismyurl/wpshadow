@@ -190,15 +190,12 @@ class Diagnostic_Pub_Heading_Count extends Diagnostic_Base {
 		$min_headings            = 3;
 
 		foreach ( $posts as $post ) {
-			$content = $post->post_content;
+			// Apply WordPress content filters to process shortcodes and blocks.
+			$content = apply_filters( 'the_content', $post->post_content );
 
 			// Count heading tags (H2 through H6, excluding H1 which should be post title).
-			$heading_count  = 0;
-			$heading_count += preg_match_all( '/<h2[^>]*>/i', $content );
-			$heading_count += preg_match_all( '/<h3[^>]*>/i', $content );
-			$heading_count += preg_match_all( '/<h4[^>]*>/i', $content );
-			$heading_count += preg_match_all( '/<h5[^>]*>/i', $content );
-			$heading_count += preg_match_all( '/<h6[^>]*>/i', $content );
+			// Using single regex for efficiency.
+			$heading_count = preg_match_all( '/<h[2-6][^>]*>/i', $content, $matches );
 
 			// Flag if post has fewer than minimum required headings.
 			if ( $heading_count < $min_headings ) {
