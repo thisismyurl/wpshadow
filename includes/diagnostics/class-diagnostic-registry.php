@@ -57,7 +57,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Discover all diagnostic classes from subdirectories
 	 *
-	 * Scans tests/, help/, todo/, verified/ directories for class files.
+	 * Scans tests/, help/, todo/, verified/ directories recursively for class files.
 	 * Captures both class-diagnostic-* and class-test-* patterns.
 	 *
 	 * @return array Array of diagnostic class names
@@ -74,10 +74,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 				continue;
 			}
 
-			// Get all class-diagnostic-*.php and class-test-*.php files
-			$diagnostic_files = glob( $dir . '/class-diagnostic-*.php' );
-			$test_files       = glob( $dir . '/class-test-*.php' );
-			$files            = array_merge( (array) $diagnostic_files, (array) $test_files );
+			// Get all class-diagnostic-*.php and class-test-*.php files recursively
+			$diagnostic_files = glob( $dir . '/**/class-diagnostic-*.php', GLOB_BRACE );
+			$test_files       = glob( $dir . '/**/class-test-*.php', GLOB_BRACE );
+			// Also get files in the root of the directory
+			$diagnostic_root  = glob( $dir . '/class-diagnostic-*.php' );
+			$test_root        = glob( $dir . '/class-test-*.php' );
+			$files            = array_merge( (array) $diagnostic_files, (array) $test_files, (array) $diagnostic_root, (array) $test_root );
 
 			if ( empty( $files ) ) {
 				continue;
@@ -130,7 +133,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Load all diagnostic class files
 	 *
-	 * Requires all diagnostic files from subdirectories.
+	 * Requires all diagnostic files from subdirectories recursively.
 	 * Loads both class-diagnostic-*.php and class-test-*.php patterns.
 	 */
 	private static function load_diagnostics(): void {
@@ -144,10 +147,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 				continue;
 			}
 
-			// Load both diagnostic and test files
-			$diagnostic_files = glob( $dir . '/class-diagnostic-*.php' );
-			$test_files       = glob( $dir . '/class-test-*.php' );
-			$files            = array_merge( (array) $diagnostic_files, (array) $test_files );
+			// Load both diagnostic and test files recursively
+			$diagnostic_files = glob( $dir . '/**/class-diagnostic-*.php', GLOB_BRACE );
+			$test_files       = glob( $dir . '/**/class-test-*.php', GLOB_BRACE );
+			// Also load files in the root of the directory
+			$diagnostic_root  = glob( $dir . '/class-diagnostic-*.php' );
+			$test_root        = glob( $dir . '/class-test-*.php' );
+			$files            = array_merge( (array) $diagnostic_files, (array) $test_files, (array) $diagnostic_root, (array) $test_root );
 
 			if ( empty( $files ) ) {
 				continue;

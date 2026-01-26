@@ -5,6 +5,8 @@
  */
 
 // Load environment variables from .env file
+const fs = require('fs');
+
 require('dotenv').config({ path: './tests/e2e/.env' });
 
 const { defineConfig, devices } = require('@playwright/test');
@@ -16,6 +18,8 @@ const { defineConfig, devices } = require('@playwright/test');
 const WP_BASE_URL = process.env.WP_BASE_URL || 'http://localhost:9000';
 const WP_ADMIN_USER = process.env.WP_ADMIN_USER || 'admin';
 const WP_ADMIN_PASS = process.env.WP_ADMIN_PASS || 'password';
+const PLAYWRIGHT_CHROMIUM_PATH = process.env.PW_CHROMIUM_PATH || '/usr/lib/chromium/chrome';
+const chromiumExecutable = fs.existsSync( PLAYWRIGHT_CHROMIUM_PATH ) ? PLAYWRIGHT_CHROMIUM_PATH : undefined;
 
 module.exports = defineConfig({
 	testDir: './tests/e2e',
@@ -60,6 +64,7 @@ module.exports = defineConfig({
 			use: { 
 				...devices['Desktop Chrome'],
 				viewport: { width: 1920, height: 1080 },
+				launchOptions: chromiumExecutable ? { executablePath: chromiumExecutable } : {},
 			},
 		},
 		
