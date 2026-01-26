@@ -70,6 +70,30 @@ abstract class Treatment_Base implements Treatment_Interface {
 		$class      = get_called_class();
 		$finding_id = static::get_finding_id();
 
+		// Allow admin to disable specific treatments via settings
+		$disabled = get_option( 'wpshadow_disabled_treatment_classes', array() );
+		if ( ! is_array( $disabled ) ) {
+			$disabled = array();
+		}
+
+		$enabled = ! in_array( $class, $disabled, true );
+		/**
+		 * Filters whether a treatment is enabled.
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param bool   $enabled Whether the treatment is enabled.
+		 * @param string $class   Fully-qualified treatment class name.
+		 */
+		$enabled = apply_filters( 'wpshadow_treatment_enabled', $enabled, $class );
+
+		if ( ! $enabled ) {
+			return array(
+				'success' => false,
+				'message' => __( 'This treatment has been disabled by the site administrator.', 'wpshadow' ),
+			);
+		}
+
 		/**
 		 * Fires before a treatment is applied.
 		 *
@@ -174,7 +198,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 */
 	public static function execute_undo() {
 		$class = get_called_class();
-		
+
 		// Get finding_id if method exists, otherwise use class name.
 		$finding_id = method_exists( $class, 'get_finding_id' ) ? static::get_finding_id() : $class;
 

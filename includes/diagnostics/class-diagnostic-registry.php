@@ -259,8 +259,30 @@ class Diagnostic_Registry extends Abstract_Registry {
 	private static function run_checks( array $diagnostic_classes ): array {
 		$findings = array();
 
+		// Read disabled diagnostics from settings (fully-qualified class names)
+		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		if ( ! is_array( $disabled ) ) {
+			$disabled = array();
+		}
+
 		foreach ( $diagnostic_classes as $class_name ) {
 			if ( ! class_exists( $class_name ) ) {
+				continue;
+			}
+
+			// Check if diagnostic is enabled (apply filter for external control)
+			$enabled = ! in_array( $class_name, $disabled, true );
+			/**
+			 * Filters whether a diagnostic is enabled.
+			 *
+			 * @since 1.2601.2148
+			 *
+			 * @param bool   $enabled    Whether the diagnostic is enabled.
+			 * @param string $class_name Fully-qualified diagnostic class name.
+			 */
+			$enabled = apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $class_name );
+
+			if ( ! $enabled ) {
 				continue;
 			}
 
@@ -269,7 +291,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 				try {
 					$result = call_user_func( array( $class_name, 'check' ) );
 
-					if ( $result !== null ) {
+					if ( null !== $result ) {
 						$findings[] = $result;
 					}
 				} catch ( \Exception $e ) {

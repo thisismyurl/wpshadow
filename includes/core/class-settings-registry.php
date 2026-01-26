@@ -303,6 +303,36 @@ class Settings_Registry {
 			)
 		);
 
+		// =================================================================
+		// DIAGNOSTIC & TREATMENT TOGGLES
+		// =================================================================
+
+		// Disabled diagnostic classes (fully-qualified class names)
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_disabled_diagnostic_classes',
+			array(
+				'type'              => 'array',
+				'default'           => array(),
+				'sanitize_callback' => array( __CLASS__, 'sanitize_class_list' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'List of diagnostic classes disabled by admin', 'wpshadow' ),
+			)
+		);
+
+		// Disabled treatment classes (fully-qualified class names)
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_disabled_treatment_classes',
+			array(
+				'type'              => 'array',
+				'default'           => array(),
+				'sanitize_callback' => array( __CLASS__, 'sanitize_class_list' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'List of treatment classes disabled by admin', 'wpshadow' ),
+			)
+		);
+
 		register_setting(
 			'wpshadow_settings',
 			'wpshadow_kb_link_enabled',
@@ -622,5 +652,32 @@ class Settings_Registry {
 	public static function sanitize_followup_days( $value ): int {
 		$int = absint( $value );
 		return min( max( $int, 1 ), 90 ); // Clamp between 1-90 days
+	}
+
+	/**
+	 * Sanitize a list of class identifiers (fully-qualified class names)
+	 *
+	 * Allows only letters, numbers, underscores, and namespace separators (\\).
+	 * Discards any invalid entries.
+	 *
+	 * @param mixed $value Input value
+	 * @return array Sanitized class names
+	 */
+	public static function sanitize_class_list( $value ): array {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+
+		$sanitized = array();
+		foreach ( $value as $class ) {
+			$raw = is_string( $class ) ? $class : '';
+			// Allow namespace separators and typical class characters
+			if ( preg_match( '/^[A-Za-z0-9_\\\\\\]+$/', $raw ) ) {
+				$sanitized[] = $raw;
+			}
+		}
+
+		// De-duplicate
+		return array_values( array_unique( $sanitized ) );
 	}
 }
