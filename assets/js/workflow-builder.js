@@ -22,6 +22,8 @@
 		init: function() {
 			this.bindEvents();
 			this.setupAccessibility();
+			this.createConfigPanel();
+			this.createShortcutsPanel();
 			this.announceToScreenReader('Workflow builder loaded');
 		},
 
@@ -282,9 +284,118 @@
 
 			this.selectedBlock = block;
 
-			// Show configuration panel (future enhancement)
-			// For now, use console log
-			console.log('Configure block:', block, blockDef);
+			// Build configuration form
+			const fields = blockDef.fields || {};
+			let configHTML = `
+				<div class="wps-config-field">
+					<label for="block-label-${blockId}">
+						Block Label
+						<span class="wps-help-tooltip" data-tooltip="Give this block a custom name">?</span>
+					</label>
+					<input type="text" id="block-label-${blockId}" value="${blockDef.label || ''}" readonly />
+				</div>
+			`;
+
+			// Generate fields based on block definition
+			Object.keys(fields).forEach(fieldKey => {
+				const field = fields[fieldKey];
+				const fieldId = `field-${blockId}-${fieldKey}`;
+				const currentValue = block.config[fieldKey] || field.default || '';
+
+				configHTML += `<div class="wps-config-field">`;
+				configHTML += `<label for="${fieldId}">${field.label}</label>`;
+
+				switch (field.type) {
+					case 'select':
+						configHTML += `<select id="${fieldId}" data-field="${fieldKey}">`;
+						Object.keys(field.options || {}).forEach(optKey => {
+							const selected = currentValue === optKey ? 'selected' : '';
+							configHTML += `<option value="${optKey}" ${selected}>${field.options[optKey]}</option>`;
+						});
+						configHTML += `</select>`;
+						break;
+
+					case 'textarea':
+						configHTML += `<textarea id="${fieldId}" data-field="${fieldKey}" rows="4">${currentValue}</textarea>`;
+						break;
+
+					case 'time':
+						configHTML += `<input type="time" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" />`;
+						break;
+
+					case 'number':
+						configHTML += `<input type="number" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" />`;
+						break;
+
+					default:
+						configHTML += `<input type="text" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" />`;
+				}
+
+				configHTML += `</div>`;
+			});
+
+			// Add save button
+			configHTML += `
+				<div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+					<button type="button" class="wps-btn primary" id="save-block-config" style="flex: 1;">
+						Save Configuration
+					</button>
+					<button type="button" class="wps-btn ghost" id="cancel-block-config" style="flex: 1;">
+						Cancel
+					</button>
+				</div>
+			`;
+
+			// Update panel content
+			$('#wps-config-panel-content').html(configHTML);
+			$('.wps-block-config-panel').addClass('active').attr('aria-hidden', 'false');
+
+			// Focus first field for accessibility
+			setTimeout(() => {
+				$('#wps-config-panel-content').find('input, select, textarea').first().focus();
+			}, 300);
+
+			// Bind save button
+			$('#save-block-config').on('click', () => {
+				this.saveBlockConfig(blockId);
+			});
+
+			// Bind cancel button
+			$('#cancel-block-config').on('click', () => {
+				$('.wps-block-config-panel').removeClass('active').attr('aria-hidden', 'true');
+				$('.wps-block').removeClass('selected');
+				this.selectedBlock = null;
+			});
+
+			// Auto-save on field change
+			$('#wps-config-panel-content').find('input, select, textarea').on('change', () => {
+				this.saveBlockConfig(blockId, true);
+			});
+
+			this.announceToScreenReader(`Configuring ${blockDef.label || 'block'}`);
+		},
+
+		/**
+		 * Save block configuration
+		 */
+		saveBlockConfig: function(blockId, silent = false) {
+			const block = this.blocks.find(b => b.id === blockId);
+			if (!block) return;
+
+			// Gather all field values
+			$('#wps-config-panel-content').find('[data-field]').each((i, el) => {
+				const $field = $(el);
+				const fieldKey = $field.data('field');
+				block.config[fieldKey] = $field.val();
+			});
+
+			if (!silent) {
+				this.announceToScreenReader('Configuration saved');
+				this.showNotification('success', 'Block configuration saved');
+			}
+
+			// Update block display to show it's configured
+			$(`[data-block-id="${blockId}"]`).addClass('configured');
 		},
 
 		/**
@@ -424,10 +535,31 @@
 				$('#wps-save-workflow').trigger('click');
 			}
 
-			// Escape to deselect
+			// Escape to deselect or close panels
 			if (e.key === 'Escape') {
 				$('.wps-block').removeClass('selected');
 				this.selectedBlock = null;
+				$('.wps-block-config-panel').removeClass('active');
+				$('.wps-shortcuts-panel, .wps-shortcuts-backdrop').removeClass('active');
+			}
+
+			// ? to show keyboard shortcuts
+			if (e.key === '?' && !$(e.target).is('input, textarea')) {
+				e.preventDefault();
+				this.toggleShortcutsPanel();
+			}
+
+			// Ctrl+Z or Cmd+Z for undo (future enhancement)
+			if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+				e.preventDefault();
+				// TODO: Implement undo functionality
+				this.announceToScreenReader('Undo not yet implemented');
+			}
+
+			// Delete selected block
+			if ((e.key === 'Delete' || e.key === 'Backspace') && this.selectedBlock && !$(e.target).is('input, textarea')) {
+				e.preventDefault();
+				this.removeBlock(this.selectedBlock.id);
 			}
 		},
 
@@ -461,6 +593,115 @@
 				$('body').append('<div id="wps-sr-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>');
 			}
 			$('#wps-sr-announcer').text(message);
+		},
+
+		/**
+		 * Create configuration panel
+		 */
+		createConfigPanel: function() {
+			if ($('.wps-block-config-panel').length > 0) return;
+
+			const panelHTML = `
+				<div class="wps-block-config-panel" role="dialog" aria-labelledby="config-panel-title" aria-hidden="true">
+					<div class="wps-config-panel-header">
+						<h4 id="config-panel-title">
+							<span class="dashicons dashicons-admin-generic" aria-hidden="true"></span>
+							Configure Block
+						</h4>
+						<button type="button" class="wps-config-panel-close" aria-label="Close configuration panel">
+							×
+						</button>
+					</div>
+					<div class="wps-config-panel-body" id="wps-config-panel-content">
+						<!-- Configuration fields will be dynamically inserted here -->
+					</div>
+				</div>
+			`;
+
+			$('body').append(panelHTML);
+
+			// Bind close button
+			$('.wps-config-panel-close').on('click', () => {
+				$('.wps-block-config-panel').removeClass('active').attr('aria-hidden', 'true');
+				$('.wps-block').removeClass('selected');
+				this.selectedBlock = null;
+			});
+		},
+
+		/**
+		 * Create keyboard shortcuts panel
+		 */
+		createShortcutsPanel: function() {
+			if ($('.wps-shortcuts-panel').length > 0) return;
+
+			const shortcuts = [
+				{ label: 'Save workflow', keys: ['Ctrl/Cmd', 'S'] },
+				{ label: 'Test workflow', keys: ['Ctrl/Cmd', 'T'] },
+				{ label: 'Clear canvas', keys: ['Ctrl/Cmd', 'K'] },
+				{ label: 'Show shortcuts', keys: ['?'] },
+				{ label: 'Close panel/Deselect', keys: ['Esc'] },
+				{ label: 'Delete selected block', keys: ['Del/Backspace'] }
+			];
+
+			const shortcutsHTML = shortcuts.map(s => `
+				<li>
+					<span class="wps-shortcut-label">${s.label}</span>
+					<div class="wps-shortcut-keys">
+						${s.keys.map(k => `<kbd class="wps-key">${k}</kbd>`).join('<span style="margin: 0 0.25rem;">+</span>')}
+					</div>
+				</li>
+			`).join('');
+
+			const panelHTML = `
+				<div class="wps-shortcuts-backdrop"></div>
+				<div class="wps-shortcuts-panel" role="dialog" aria-labelledby="shortcuts-title" aria-modal="true">
+					<h3 id="shortcuts-title">
+						<span class="dashicons dashicons-keyboard-hide" aria-hidden="true"></span>
+						Keyboard Shortcuts
+					</h3>
+					<ul class="wps-shortcuts-list">
+						${shortcutsHTML}
+					</ul>
+					<button type="button" class="wps-btn ghost" onclick="WorkflowBuilder.toggleShortcutsPanel()" style="width: 100%; margin-top: 1rem;">
+						Close
+					</button>
+				</div>
+			`;
+
+			$('body').append(panelHTML);
+
+			// Close on backdrop click
+			$('.wps-shortcuts-backdrop').on('click', () => {
+				this.toggleShortcutsPanel();
+			});
+
+			// Add help button to toolbar
+			if ($('#wps-show-shortcuts').length === 0) {
+				$('.wps-workflow-toolbar').append(`
+					<button type="button" id="wps-show-shortcuts" class="wps-btn ghost" aria-label="Show keyboard shortcuts">
+						<span class="dashicons dashicons-keyboard-hide" aria-hidden="true"></span>
+						Shortcuts
+					</button>
+				`);
+
+				$('#wps-show-shortcuts').on('click', () => {
+					this.toggleShortcutsPanel();
+				});
+			}
+		},
+
+		/**
+		 * Toggle keyboard shortcuts panel
+		 */
+		toggleShortcutsPanel: function() {
+			$('.wps-shortcuts-panel, .wps-shortcuts-backdrop').toggleClass('active');
+			
+			if ($('.wps-shortcuts-panel').hasClass('active')) {
+				$('.wps-shortcuts-panel').focus();
+				this.announceToScreenReader('Keyboard shortcuts panel opened');
+			} else {
+				this.announceToScreenReader('Keyboard shortcuts panel closed');
+			}
 		}
 	};
 

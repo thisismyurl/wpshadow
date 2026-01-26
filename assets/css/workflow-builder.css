@@ -297,44 +297,98 @@
 }
 
 /* ============================================================================
-   Canvas Blocks
+   Canvas Blocks - Scratch-style Visual Design
    ============================================================================ */
 
 .wps-canvas-blocks-container {
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	gap: 1.25rem;
 	position: relative;
+	padding: 0.5rem;
 }
 
 .wps-block {
 	background: #fff;
-	border: 1px solid var(--wps-gray-200, #e5e7eb);
-	border-left: 4px solid;
-	border-radius: 0.5rem;
-	padding: 1rem;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	border: 2px solid var(--wps-gray-200, #e5e7eb);
+	border-left: 5px solid;
+	border-radius: 0.625rem;
+	padding: 1.25rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
 	position: relative;
-	transition: all 0.2s ease;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	cursor: pointer;
+	transform: translateZ(0);
 }
 
 .wps-block:hover {
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.08);
+	transform: translateY(-2px);
+	border-color: var(--wps-gray-300, #d1d5db);
 }
 
 .wps-block.trigger {
 	border-left-color: var(--wps-info, #3b82f6);
-	background: var(--wps-info-light, #eff6ff);
+	background: linear-gradient(135deg, #ffffff 0%, var(--wps-info-light, #eff6ff) 100%);
 }
 
 .wps-block.action {
 	border-left-color: var(--wps-success, #10b981);
-	background: var(--wps-success-light, #f0fdf4);
+	background: linear-gradient(135deg, #ffffff 0%, var(--wps-success-light, #f0fdf4) 100%);
 }
 
 .wps-block.selected {
-	outline: 2px solid var(--wps-info, #3b82f6);
-	outline-offset: 2px;
+	outline: 3px solid var(--wps-info, #3b82f6);
+	outline-offset: 3px;
+	box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2), 0 12px 32px rgba(59, 130, 246, 0.1);
+	transform: translateY(-4px);
+}
+
+.wps-block.configured::before {
+	content: '✓';
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background: var(--wps-success, #10b981);
+	color: #fff;
+	font-size: 0.75rem;
+	font-weight: 600;
+	width: 1.25rem;
+	height: 1.25rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.wps-block.dragging {
+	opacity: 0.6;
+	cursor: grabbing;
+	transform: rotate(2deg) scale(1.05);
+}
+
+/* Block badge for type indicator */
+.wps-block::after {
+	content: attr(data-block-type);
+	position: absolute;
+	top: -8px;
+	right: 12px;
+	background: var(--wps-gray-900, #111827);
+	color: #fff;
+	font-size: 0.625rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.25rem;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	pointer-events: none;
+}
+
+.wps-block:hover::after {
+	opacity: 1;
 }
 
 .wps-block-header {
@@ -405,19 +459,78 @@
 	font-family: inherit;
 }
 
-/* Block Connector Lines */
+/* Block Connector Lines - Scratch-style Visual Connections */
 .wps-block-connector {
 	position: absolute;
 	left: 50%;
-	bottom: -1rem;
-	width: 2px;
-	height: 1rem;
-	background: var(--wps-gray-300, #d1d5db);
+	bottom: -1.25rem;
+	width: 3px;
+	height: 1.25rem;
+	background: linear-gradient(to bottom, var(--wps-gray-300, #d1d5db), var(--wps-gray-400, #9ca3af));
 	transform: translateX(-50%);
+	z-index: 1;
+}
+
+.wps-block-connector::before,
+.wps-block-connector::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+/* Top connection point (from block) */
+.wps-block-connector::before {
+	top: -4px;
+	width: 8px;
+	height: 8px;
+	background: var(--wps-gray-400, #9ca3af);
+	border-radius: 50%;
+	border: 2px solid #fff;
+}
+
+/* Bottom connection point (to next block) */
+.wps-block-connector::after {
+	bottom: -4px;
+	width: 8px;
+	height: 8px;
+	background: var(--wps-gray-400, #9ca3af);
+	border-radius: 50%;
+	border: 2px solid #fff;
+}
+
+/* Colored connectors based on block type */
+.wps-block.trigger .wps-block-connector {
+	background: linear-gradient(to bottom, var(--wps-info, #3b82f6), rgba(59, 130, 246, 0.5));
+}
+
+.wps-block.trigger .wps-block-connector::before,
+.wps-block.trigger .wps-block-connector::after {
+	background: var(--wps-info, #3b82f6);
+}
+
+.wps-block.action .wps-block-connector {
+	background: linear-gradient(to bottom, var(--wps-success, #10b981), rgba(16, 185, 129, 0.5));
+}
+
+.wps-block.action .wps-block-connector::before,
+.wps-block.action .wps-block-connector::after {
+	background: var(--wps-success, #10b981);
 }
 
 .wps-block:last-child .wps-block-connector {
 	display: none;
+}
+
+/* Add hover effect for connectors */
+.wps-block:hover .wps-block-connector {
+	width: 4px;
+}
+
+.wps-block:hover .wps-block-connector::before,
+.wps-block:hover .wps-block-connector::after {
+	width: 10px;
+	height: 10px;
 }
 
 /* ============================================================================
@@ -494,7 +607,7 @@
 }
 
 /* ============================================================================
-   Block Configuration Modal
+   Block Configuration Panel - Slide-in Side Panel
    ============================================================================ */
 
 .wps-block-config-panel {
@@ -502,20 +615,77 @@
 	right: 0;
 	top: 32px;
 	bottom: 0;
-	width: 400px;
+	width: 420px;
 	max-width: 100%;
 	background: #fff;
 	border-left: 1px solid var(--wps-gray-200, #e5e7eb);
-	padding: 1.5rem;
+	padding: 0;
 	overflow-y: auto;
-	box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+	box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
 	transform: translateX(100%);
-	transition: transform 0.3s ease;
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	z-index: 9999;
 }
 
 .wps-block-config-panel.active {
 	transform: translateX(0);
+}
+
+/* Panel Header */
+.wps-config-panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1.5rem;
+	border-bottom: 1px solid var(--wps-gray-200, #e5e7eb);
+	background: var(--wps-gray-50, #f9fafb);
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.wps-config-panel-header h4 {
+	margin: 0;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.wps-config-panel-header .dashicons {
+	font-size: 1.25rem;
+	width: 1.25rem;
+	height: 1.25rem;
+	color: var(--wps-info, #3b82f6);
+}
+
+.wps-config-panel-close {
+	background: transparent;
+	border: none;
+	color: var(--wps-gray-500, #6b7280);
+	cursor: pointer;
+	padding: 0.25rem;
+	font-size: 1.5rem;
+	line-height: 1;
+	transition: color 0.2s ease;
+	border-radius: 0.25rem;
+}
+
+.wps-config-panel-close:hover {
+	color: var(--wps-gray-900, #111827);
+	background: var(--wps-gray-200, #e5e7eb);
+}
+
+.wps-config-panel-close:focus {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+/* Panel Body */
+.wps-config-panel-body {
+	padding: 1.5rem;
 }
 
 .wps-block-config-panel h4 {
@@ -675,6 +845,26 @@
 	border: 0;
 }
 
+/* Skip links - visible on focus */
+.wps-skip-link {
+	position: absolute;
+	top: -40px;
+	left: 0;
+	background: var(--wps-info, #3b82f6);
+	color: #fff;
+	padding: 0.5rem 1rem;
+	text-decoration: none;
+	border-radius: 0 0 0.25rem 0;
+	z-index: 100;
+	transition: top 0.2s ease;
+}
+
+.wps-skip-link:focus {
+	top: 0;
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
 	*,
@@ -735,6 +925,175 @@
 		right: 1rem;
 		left: 1rem;
 	}
+}
+
+/* ============================================================================
+   Keyboard Shortcuts Help Panel
+   ============================================================================ */
+
+.wps-shortcuts-panel {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.75rem;
+	padding: 2rem;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	z-index: 10000;
+	max-width: 500px;
+	width: calc(100% - 2rem);
+	max-height: calc(100vh - 4rem);
+	overflow-y: auto;
+	display: none;
+}
+
+.wps-shortcuts-panel.active {
+	display: block;
+	animation: fadeInScale 0.2s ease;
+}
+
+@keyframes fadeInScale {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+.wps-shortcuts-panel h3 {
+	margin: 0 0 1.5rem;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.wps-shortcuts-panel h3 .dashicons {
+	color: var(--wps-info, #3b82f6);
+}
+
+.wps-shortcuts-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.wps-shortcuts-list li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 0;
+	border-bottom: 1px solid var(--wps-gray-100, #f3f4f6);
+}
+
+.wps-shortcuts-list li:last-child {
+	border-bottom: none;
+}
+
+.wps-shortcut-label {
+	font-size: 0.875rem;
+	color: var(--wps-gray-700, #374151);
+}
+
+.wps-shortcut-keys {
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+}
+
+.wps-key {
+	background: var(--wps-gray-100, #f3f4f6);
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+	border-radius: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	font-family: monospace;
+	color: var(--wps-gray-900, #111827);
+	min-width: 2rem;
+	text-align: center;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Overlay backdrop */
+.wps-shortcuts-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 9999;
+	display: none;
+}
+
+.wps-shortcuts-backdrop.active {
+	display: block;
+	animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* ============================================================================
+   Contextual Help Tooltips
+   ============================================================================ */
+
+.wps-help-tooltip {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.25rem;
+	height: 1.25rem;
+	background: var(--wps-info-light, #dbeafe);
+	color: var(--wps-info, #3b82f6);
+	border-radius: 50%;
+	font-size: 0.75rem;
+	font-weight: 600;
+	cursor: help;
+	margin-left: 0.25rem;
+}
+
+.wps-help-tooltip:hover::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: calc(100% + 0.5rem);
+	left: 50%;
+	transform: translateX(-50%);
+	background: var(--wps-gray-900, #111827);
+	color: #fff;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	font-size: 0.8125rem;
+	font-weight: 400;
+	white-space: nowrap;
+	z-index: 1000;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.wps-help-tooltip:hover::before {
+	content: '';
+	position: absolute;
+	bottom: calc(100% + 0.125rem);
+	left: 50%;
+	transform: translateX(-50%);
+	border: 0.375rem solid transparent;
+	border-top-color: var(--wps-gray-900, #111827);
+	z-index: 1000;
 }
 
 /* ============================================================================
