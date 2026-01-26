@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.2601.210101
+ * Version: 1.2601.210114
  * Author: thisismyurl
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.210101' );
+define( 'WPSHADOW_VERSION', '1.2601.210114' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
@@ -32,6 +32,7 @@ require_once WPSHADOW_PATH . 'includes/core/class-settings-registry.php';
 require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
 require_once WPSHADOW_PATH . 'includes/core/functions-treatment.php';
 require_once WPSHADOW_PATH . 'includes/helpers/form-controls.php';
+require_once WPSHADOW_PATH . 'includes/views/menu-stubs.php';
 
 /**
  * Initialize error handler early

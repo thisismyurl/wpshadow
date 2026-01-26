@@ -53,7 +53,11 @@ if ! git diff-index --quiet HEAD --; then
     git add .
     git commit -m "Deploy v$NEW_VERSION"
     echo "✅ Changes committed"
+else
+    echo "✅ No uncommitted changes"
 fi
+
+echo ""
 
 # Initialize remote git repo if needed
 echo -e "${YELLOW}Setting up remote repository...${NC}"
@@ -85,6 +89,14 @@ fi
 echo -e "${YELLOW}Pushing to GreenGeeks...${NC}"
 git push $REMOTE_NAME ${DEPLOY_BRANCH:-main} --force
 
+# Force checkout on remote to update working directory
+echo -e "${YELLOW}Updating remote files...${NC}"
+ssh -p ${REMOTE_PORT:-22} ${SSH_KEY_FILE:+-i $SSH_KEY_FILE} "$REMOTE_USER@$REMOTE_HOST" << ENDSSH
+    cd "$REMOTE_WP_PATH"
+    git checkout -f ${DEPLOY_BRANCH:-main}
+ENDSSH
+
 echo ""
 echo -e "${GREEN}✓ Deployment complete!${NC}"
 echo "Plugin deployed to: $REMOTE_HOST$REMOTE_WP_PATH"
+echo "Version: $NEW_VERSION"

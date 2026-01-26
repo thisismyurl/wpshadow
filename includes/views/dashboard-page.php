@@ -8,8 +8,6 @@
  * @subpackage Views
  */
 
-namespace WPShadow\Views;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
