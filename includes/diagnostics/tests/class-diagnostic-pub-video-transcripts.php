@@ -252,8 +252,8 @@ class Diagnostic_Pub_Video_Transcripts extends Diagnostic_Base {
 		foreach ( $posts as $post_id ) {
 			$content = get_post_field( 'post_content', $post_id );
 
-			// Find all <video> tags in post content.
-			preg_match_all( '/<video[^>]*>.*?<\/video>/is', $content, $video_matches );
+			// Find all <video> tags in post content (both regular and self-closing).
+			preg_match_all( '/<video[^>]*(?:>.*?<\/video>|\s*\/>)/is', $content, $video_matches );
 
 			foreach ( $video_matches[0] as $video_block ) {
 				++$total_videos;
@@ -272,16 +272,16 @@ class Diagnostic_Pub_Video_Transcripts extends Diagnostic_Base {
 
 			foreach ( $iframe_matches[1] as $iframe_src ) {
 				// Check if this is a video embed (YouTube, Vimeo, etc.).
-				if ( preg_match( '/youtube\.com|youtu\.be|vimeo\.com|dailymotion\.com|wistia\.com/i', $iframe_src ) ) {
+				if ( preg_match( '/\b(?:youtube\.com|youtu\.be|vimeo\.com|dailymotion\.com|wistia\.com)\b/i', $iframe_src ) ) {
 					++$total_videos;
 
 					// Check for caption parameters in URL.
 					// YouTube: cc_load_policy=1 or cc=1.
-					// Vimeo: Most videos have captions available, we'll be lenient.
-					if ( preg_match( '/[?&](?:cc_load_policy|cc)=1|vimeo\.com/i', $iframe_src ) ) {
+					// For other platforms, we can't definitively know caption status from the embed URL.
+					if ( preg_match( '/[?&](?:cc_load_policy|cc)=1/i', $iframe_src ) ) {
 						++$videos_with_captions;
 					} else {
-						// For iframes, we can't definitively know, so count as without captions.
+						// For iframes without explicit caption parameters, count as without captions.
 						++$videos_without_captions;
 					}
 				}
@@ -349,8 +349,8 @@ class Diagnostic_Pub_Video_Transcripts extends Diagnostic_Base {
 			return array(
 				'passed'  => true,
 				'message' => sprintf(
-					/* translators: 1: number of videos without captions, 2: total videos */
-					__( 'Test passed. Correctly detected %1$d video(s) without captions (%.0f%% coverage).', 'wpshadow' ),
+					/* translators: 1: number of videos without captions, 2: coverage percentage */
+					__( 'Test passed. Correctly detected %1$d video(s) without captions (%2$.0f%% coverage).', 'wpshadow' ),
 					$videos_without_captions,
 					$coverage
 				),
@@ -361,7 +361,7 @@ class Diagnostic_Pub_Video_Transcripts extends Diagnostic_Base {
 			'passed'  => false,
 			'message' => sprintf(
 				/* translators: 1: number of videos without captions, 2: coverage percentage */
-				__( 'Test failed. %1$d videos without captions (%.0f%% coverage) but check() returned unexpected result.', 'wpshadow' ),
+				__( 'Test failed. %1$d videos without captions (%2$.0f%% coverage) but check() returned unexpected result.', 'wpshadow' ),
 				$videos_without_captions,
 				$coverage
 			),
