@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Ensure required functions are loaded.
+require_once WPSHADOW_PATH . 'includes/core/class-category-metadata.php';
+
 /**
  * Render the main WPShadow dashboard
  *
