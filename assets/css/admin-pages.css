@@ -896,3 +896,40 @@
     border: 1px solid var(--wps-gray-200);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .wps-page-header {
+        margin-bottom: var(--wps-space-6);
+    }
+
+    .wps-page-title {
+        font-size: var(--wps-text-2xl);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--wps-space-2);
+    }
+
+    .wps-page-title .dashicons {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .wps-page-subtitle {
+        font-size: var(--wps-text-base);
+    }
+
+    .wps-drilldown-header {
+        padding: var(--wps-space-4);
+        border-radius: var(--wps-radius-lg);
+    }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .wps-page-header,
+    @keyframes fadeInDown {
+        animation: none;
+    }
+}

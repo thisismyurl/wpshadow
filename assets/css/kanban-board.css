@@ -681,6 +681,19 @@
 
 /* Responsive: Mobile */
 @media (max-width: 768px) {
+	.wpshadow-kanban-container {
+		margin: 16px !important;
+	}
+
+	.wps-info-card {
+		padding: 16px !important;
+		margin-bottom: 16px !important;
+	}
+
+	.wps-info-card h3 {
+		font-size: 1rem !important;
+	}
+
 	.wpshadow-kanban-board {
 		grid-template-columns: 1fr;
 		gap: 12px;
