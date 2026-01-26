@@ -239,21 +239,32 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 		$admin_email = get_option( 'admin_email' );
 
 		// Check for invalid or test email domains.
-		$invalid_domains = array( 'example.com', 'example.org', 'test.com', 'localhost' );
+		$invalid_domains = array(
+			'example.com',
+			'example.org',
+			'example.net',
+			'test.com',
+			'localhost',
+			'domain.tld',
+			'your-domain.com',
+			'yourdomain.com',
+			'mydomain.com',
+			'site.com',
+		);
 		$is_invalid      = false;
 
 		if ( empty( $admin_email ) ) {
 			$is_invalid = true;
+		} elseif ( false === filter_var( $admin_email, FILTER_VALIDATE_EMAIL ) ) {
+			// Email format is invalid.
+			$is_invalid = true;
 		} else {
-			// Extract domain from email.
+			// Extract domain from email after validation.
 			$email_parts = explode( '@', $admin_email );
 			if ( count( $email_parts ) === 2 ) {
-				$domain = strtolower( $email_parts[1] );
-				foreach ( $invalid_domains as $invalid_domain ) {
-					if ( $domain === $invalid_domain ) {
-						$is_invalid = true;
-						break;
-					}
+				$domain = strtolower( trim( $email_parts[1] ) );
+				if ( in_array( $domain, $invalid_domains, true ) ) {
+					$is_invalid = true;
 				}
 			}
 		}
