@@ -398,6 +398,70 @@ class Settings_Registry {
 				'description'       => __( 'Screenshot height in pixels', 'wpshadow' ),
 			)
 		);
+
+		// =================================================================
+		// EXIT FOLLOWUP SETTINGS (Philosophy: Commandment #1, #4, #10)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_exit_followup_settings',
+			'wpshadow_exit_followup_enabled',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Enable exit interview followup scheduling', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_exit_followup_settings',
+			'wpshadow_exit_followup_immediate_days',
+			array(
+				'type'              => 'integer',
+				'default'           => 3,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_followup_days' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Days to wait for immediate followup (competitor intel)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_exit_followup_settings',
+			'wpshadow_exit_followup_short_term_days',
+			array(
+				'type'              => 'integer',
+				'default'           => 14,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_followup_days' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Days to wait for short-term followup (feature needs)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_exit_followup_settings',
+			'wpshadow_exit_followup_long_term_days',
+			array(
+				'type'              => 'integer',
+				'default'           => 30,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_followup_days' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Days to wait for long-term followup (general feedback)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_exit_followup_settings',
+			'wpshadow_exit_followup_auto_send',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Automatically send followup emails (requires email service)', 'wpshadow' ),
+			)
+		);
 	}
 
 	/**
@@ -547,5 +611,16 @@ class Settings_Registry {
 	public static function sanitize_screenshot_dimension( $value ): int {
 		$int = absint( $value );
 		return min( max( $int, 400 ), 2560 ); // Clamp between 400-2560 pixels
+	}
+
+	/**
+	 * Sanitize followup days value
+	 *
+	 * @param mixed $value Input value
+	 * @return int Sanitized value (1-90 days)
+	 */
+	public static function sanitize_followup_days( $value ): int {
+		$int = absint( $value );
+		return min( max( $int, 1 ), 90 ); // Clamp between 1-90 days
 	}
 }
