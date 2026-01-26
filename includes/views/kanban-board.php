@@ -14,8 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Get status manager
 $status_manager = new \WPShadow\Core\Finding_Status_Manager();
 
-// Get all findings
-$all_findings = wpshadow_get_cached_findings();
+// Get all findings from diagnostic registry
+$diagnostic_registry = \WPShadow\Diagnostics\Diagnostic_Registry::class;
+$all_findings        = method_exists( $diagnostic_registry, 'run_enabled_scan' ) ? $diagnostic_registry::run_enabled_scan() : array();
 
 // Apply category filter if present (Issue #564)
 $kanban_category = isset( $_GET['kanban_category'] ) ? sanitize_key( $_GET['kanban_category'] ) : '';
