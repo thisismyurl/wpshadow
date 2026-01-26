@@ -1,0 +1,64 @@
+name: WordPress Plugin Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  plugin-check:
+    runs-on: ubuntu-latest
+    name: Run WordPress.org Plugin Check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install WordPress environment
+        run: |
+          composer global require wp-cli/wp-cli-bundle
+          mkdir -p /tmp/wordpress
+          cd /tmp/wordpress
+          wp core download --force
+          wp config create --dbname=test --dbuser=root --dbpass=root --dbhost=127.0.0.1 --skip-check
+          
+      - name: Install Plugin Check
+        run: |
+          cd /tmp/wordpress/wp-content/plugins
+          wp plugin install plugin-check --activate --allow-root --path=/tmp/wordpress
+
+      - name: Copy WPShadow plugin
+        run: |
+          cp -r $GITHUB_WORKSPACE /tmp/wordpress/wp-content/plugins/wpshadow
+          
+      - name: Run Plugin Check
+        run: |
+          cd /tmp/wordpress
+          wp plugin-check run wpshadow --format=json --allow-root > $GITHUB_WORKSPACE/plugin-check-results.json || true
+          wp plugin-check run wpshadow --allow-root
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: plugin-check-results
+          path: plugin-check-results.json
+          retention-days: 30
+
+      - name: Check for errors
+        run: |
+          if grep -q '"type":"ERROR"' plugin-check-results.json 2>/dev/null; then
+            echo "❌ Plugin Check found ERRORS"
+            cat plugin-check-results.json | jq '.[] | select(.type=="ERROR")'
+            exit 1
+          else
+            echo "✅ No critical errors found"
+          fi
