@@ -52,3 +52,11 @@ desktop.ini
 *.tmp
 *.bak
 *.log
+
+# ML Campbell podcast files (external project)
+/mlcampbell/
+
+# Test results
+/test-results/
+/tests/e2e-reports/
+/tests/e2e/.env
