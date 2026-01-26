@@ -32,6 +32,11 @@ if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 	 * Render Guardian page (Diagnostics & Treatments)
 	 */
 	function wpshadow_render_guardian() {
+		// Load Guardian Manager class if not already loaded
+		if ( ! class_exists( '\WPShadow\Guardian\Guardian_Manager' ) ) {
+			require_once WPSHADOW_PATH . 'includes/guardian/class-guardian-manager.php';
+		}
+		
 		// Load Guardian Dashboard class if not already loaded
 		if ( ! class_exists( '\WPShadow\Admin\Guardian_Dashboard' ) ) {
 			require_once WPSHADOW_PATH . 'includes/admin/class-guardian-dashboard.php';
