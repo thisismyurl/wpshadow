@@ -245,7 +245,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 			</div>
 
 			<p class="submit">
-				<button type="submit" name="wpshadow_send_test_email" class="button button-primary">
+				<button type="submit" name="wpshadow_send_test_email" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?>
 				</button>
 			</p>
@@ -330,7 +330,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 			</div>
 
 			<p class="submit" style="margin-top: 15px;">
-				<button type="submit" name="wpshadow_update_compliance" class="button button-primary">
+				<button type="submit" name="wpshadow_update_compliance" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Update Compliance Settings', 'wpshadow' ); ?>
 				</button>
 			</p>

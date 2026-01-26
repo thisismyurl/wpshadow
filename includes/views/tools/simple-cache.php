@@ -130,7 +130,7 @@ $kanban_cards = array(
 
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Cache Actions', 'wpshadow' ); ?></h3>
-		<button type="button" class="button button-primary" id="wpshadow-clear-cache" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_cache_nonce' ) ); ?>">
+		<button type="button" class="wps-btn wps-btn-primary wps-btn-icon-left" id="wpshadow-clear-cache" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_cache_nonce' ) ); ?>"><span class="dashicons dashicons-update"></span>
 			<?php esc_html_e( 'Clear All Cache', 'wpshadow' ); ?>
 		</button>
 		<p class="description"><?php esc_html_e( 'Remove all cached pages to rebuild them fresh on next visit.', 'wpshadow' ); ?></p>
@@ -168,7 +168,7 @@ $kanban_cards = array(
 				<?php esc_html_e( 'Auto-clear on publish', 'wpshadow' ); ?>
 			</label>
 			<br /><br />
-			<button type="submit" class="button button-primary">
+			<button type="submit" class="wps-btn wps-btn-primary">
 				<?php esc_html_e( 'Save Cache Settings', 'wpshadow' ); ?>
 			</button>
 			<div id="wpshadow-cache-options-message" class="wps-none"></div>

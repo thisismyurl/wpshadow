@@ -57,7 +57,7 @@ class Notification_Preferences_Form {
 						<option value="weekly" selected><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
 						<option value="monthly"><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
 					</select>
-					<button type="button" class="button button-primary" id="add-subscription-btn">
+					<button type="button" class="wps-btn wps-btn-primary" id="add-subscription-btn">
 						<?php esc_html_e( 'Subscribe', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -114,7 +114,7 @@ class Notification_Preferences_Form {
 			
 			<!-- Save Button -->
 			<div class="preferences-actions">
-				<button type="button" class="button button-primary" id="save-preferences">
+				<button type="button" class="wps-btn wps-btn-primary" id="save-preferences">
 					<?php esc_html_e( 'Save Preferences', 'wpshadow' ); ?>
 				</button>
 			</div>

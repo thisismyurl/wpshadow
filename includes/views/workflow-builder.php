@@ -161,6 +161,7 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 				aria-label="<?php esc_attr_e( 'Workflow canvas', 'wpshadow' ); ?>"
 				aria-describedby="canvas-instructions"
 			>
+				<!-- Canvas content will be wrapped by JavaScript -->
 				<!-- Empty State -->
 				<div class="wps-canvas-empty" data-empty-state>
 					<span class="dashicons dashicons-block-default" aria-hidden="true"></span>

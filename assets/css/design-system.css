@@ -2347,6 +2347,223 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 /* ============================================================================
+   15. BUTTON COMPONENT SYSTEM (GitHub/Stripe-inspired)
+   ============================================================================ */
+
+/* Base Button Styles */
+.wps-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--wps-space-2);
+    padding: var(--wps-space-2) var(--wps-space-4);
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-medium);
+    font-family: var(--wps-font-sans);
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: var(--wps-radius-md);
+    cursor: pointer;
+    transition: var(--wps-transition-base);
+    user-select: none;
+}
+
+.wps-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+.wps-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Primary Button (Main Actions) */
+.wps-btn-primary {
+    color: white;
+    background: var(--wps-primary);
+    border-color: var(--wps-primary);
+}
+
+.wps-btn-primary:hover:not(:disabled) {
+    background: var(--wps-primary-hover);
+    border-color: var(--wps-primary-hover);
+    color: white;
+}
+
+.wps-btn-primary:active:not(:disabled) {
+    background: var(--wps-primary-dark);
+    border-color: var(--wps-primary-dark);
+}
+
+/* Success Button (Positive Actions) */
+.wps-btn-success {
+    color: white;
+    background: var(--wps-success);
+    border-color: var(--wps-success);
+}
+
+.wps-btn-success:hover:not(:disabled) {
+    background: var(--wps-success-dark);
+    border-color: var(--wps-success-dark);
+    color: white;
+}
+
+/* Danger Button (Destructive Actions) */
+.wps-btn-danger {
+    color: white;
+    background: var(--wps-danger);
+    border-color: var(--wps-danger);
+}
+
+.wps-btn-danger:hover:not(:disabled) {
+    background: var(--wps-danger-dark);
+    border-color: var(--wps-danger-dark);
+    color: white;
+}
+
+/* Secondary Button (Supporting Actions) */
+.wps-btn-secondary {
+    color: var(--wps-gray-700);
+    background: white;
+    border-color: var(--wps-gray-300);
+}
+
+.wps-btn-secondary:hover:not(:disabled) {
+    background: var(--wps-gray-50);
+    border-color: var(--wps-gray-400);
+    color: var(--wps-gray-900);
+}
+
+/* Ghost Button (Tertiary/Subtle Actions) */
+.wps-btn-ghost {
+    color: var(--wps-gray-700);
+    background: transparent;
+    border-color: transparent;
+}
+
+.wps-btn-ghost:hover:not(:disabled) {
+    background: var(--wps-gray-100);
+    color: var(--wps-gray-900);
+}
+
+/* Link Button (Text-only Actions) */
+.wps-btn-link {
+    color: var(--wps-primary);
+    background: transparent;
+    border-color: transparent;
+    padding: var(--wps-space-1) var(--wps-space-2);
+}
+
+.wps-btn-link:hover:not(:disabled) {
+    color: var(--wps-primary-hover);
+    text-decoration: underline;
+}
+
+/* Icon Button (Icon-only) */
+.wps-btn-icon {
+    padding: var(--wps-space-2);
+    width: 36px;
+    height: 36px;
+}
+
+.wps-btn-icon svg,
+.wps-btn-icon .dashicons {
+    width: 20px;
+    height: 20px;
+}
+
+/* Button Sizes */
+.wps-btn-sm {
+    padding: var(--wps-space-1) var(--wps-space-3);
+    font-size: var(--wps-text-xs);
+}
+
+.wps-btn-lg {
+    padding: var(--wps-space-3) var(--wps-space-6);
+    font-size: var(--wps-text-base);
+}
+
+/* Full Width Button */
+.wps-btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* Loading State */
+.wps-btn-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.wps-btn-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: wps-spin 0.6s linear infinite;
+}
+
+@keyframes wps-spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Button Group */
+.wps-btn-group {
+    display: inline-flex;
+    gap: var(--wps-space-2);
+}
+
+.wps-btn-group-attached {
+    gap: 0;
+}
+
+.wps-btn-group-attached .wps-btn {
+    border-radius: 0;
+    margin-left: -1px;
+}
+
+.wps-btn-group-attached .wps-btn:first-child {
+    border-top-left-radius: var(--wps-radius-md);
+    border-bottom-left-radius: var(--wps-radius-md);
+    margin-left: 0;
+}
+
+.wps-btn-group-attached .wps-btn:last-child {
+    border-top-right-radius: var(--wps-radius-md);
+    border-bottom-right-radius: var(--wps-radius-md);
+}
+
+.wps-btn-group-attached .wps-btn:focus {
+    z-index: 1;
+}
+
+/* Button with Icon */
+.wps-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin: -2px 0;
+}
+
+.wps-btn-icon-left .dashicons {
+    margin-left: calc(var(--wps-space-1) * -1);
+}
+
+.wps-btn-icon-right .dashicons {
+    margin-right: calc(var(--wps-space-1) * -1);
    15. FORM CONTROLS - MODERN INPUT STYLING
    ============================================================================ */
 

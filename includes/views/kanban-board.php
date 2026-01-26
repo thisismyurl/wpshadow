@@ -185,8 +185,8 @@ $severity_legend = array(
 				</p>
 			</div>
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-autofix-once" class="button wps-p-10">Just Once</button>
-				<button id="wpshadow-autofix-always" class="button button-primary wps-p-10">Create Workflow</button>
+				<button type="button" class="wps-btn wps-btn-secondary wps-p-10" id="wpshadow-autofix-once">Just Once</button>
+				<button type="button" class="wps-btn wps-btn-primary wps-p-10" id="wpshadow-autofix-always">Create Workflow</button>
 			</div>
 		</div>
 	</div>
@@ -269,10 +269,10 @@ $severity_legend = array(
 
 			<!-- Action Buttons -->
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-workflow-modal-cancel" class="button" class="wps-p-10">
+				<button type="button" id="wpshadow-workflow-modal-cancel" class="wps-btn wps-btn-secondary wps-p-10">
 					<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-workflow-modal-create" class="button button-primary" class="wps-p-10">
+				<button type="button" id="wpshadow-workflow-modal-create" class="wps-btn wps-btn-primary wps-btn-icon-left wps-p-10">
 					<span class="dashicons dashicons-update" style="font-size: 16px; vertical-align: middle;"></span>
 					<?php esc_html_e( 'Create & Configure', 'wpshadow' ); ?>
 				</button>
@@ -306,8 +306,8 @@ $severity_legend = array(
 				</p>
 			</div>
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-family-fix-this-only" class="button" class="wps-p-10">Fix This Only</button>
-				<button id="wpshadow-family-fix-all" class="button button-primary" class="wps-p-10">Fix All Related Issues</button>
+				<button type="button" id="wpshadow-family-fix-this-only" class="wps-btn wps-btn-secondary wps-p-10">Fix This Only</button>
+				<button type="button" id="wpshadow-family-fix-all" class="wps-btn wps-btn-primary wps-p-10">Fix All Related Issues</button>
 			</div>
 		</div>
 	</div>

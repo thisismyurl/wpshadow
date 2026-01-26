@@ -370,7 +370,7 @@ class Report_Scheduler {
 					</div>
 					
 					<!-- Save Button -->
-					<button type="submit" class="button button-primary">
+					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Schedule', 'wpshadow' ); ?>
 					</button>
 					<span class="schedule-status" style="margin-left: 10px;"></span>
@@ -436,7 +436,7 @@ class Report_Scheduler {
 					</div>
 					
 					<!-- Save Button -->
-					<button type="submit" class="button button-primary">
+					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Schedule', 'wpshadow' ); ?>
 					</button>
 					<span class="schedule-status" style="margin-left: 10px;"></span>

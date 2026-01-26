@@ -55,7 +55,7 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 			</div>
 
 			<div class="wps-form-group">
-				<button class="button button-primary" id="add-email-btn">
+				<button type="button" class="wps-btn wps-btn-primary" id="add-email-btn">
 					<?php esc_html_e( 'Add Recipient', 'wpshadow' ); ?>
 				</button>
 				<span id="add-email-message" style="margin-left: 10px;"></span>
