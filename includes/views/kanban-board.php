@@ -138,14 +138,23 @@ $severity_legend = array(
 ?>
 
 <div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
-	<div class="wps-m-20-p-15-rounded-4">
-		<h3 class="wps-m-0">Organize Your Findings</h3>
-		<p class="wps-m-0">
-			Drag findings between columns to decide how to handle them.
-			<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">Learn about the workflow →</a>
-		</p>
+	<div class="wps-info-card" style="background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); border: 1px solid #93c5fd; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);">
+		<div style="display: flex; align-items: start; gap: 16px;">
+			<span class="dashicons dashicons-info" style="color: #2563eb; font-size: 28px; width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px;" aria-hidden="true"></span>
+			<div style="flex: 1;">
+				<h3 style="margin: 0 0 8px 0; font-size: 1.125rem; font-weight: 700; color: #1e40af;">
+					<?php esc_html_e( 'Organize Your Findings', 'wpshadow' ); ?>
+				</h3>
+				<p style="margin: 0; color: #1e40af; line-height: 1.6;">
+					<?php esc_html_e( 'Drag findings between columns to decide how to handle them. Use your keyboard (Enter/Space) for accessibility.', 'wpshadow' ); ?>
+					<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" style="color: #1e40af; text-decoration: none; font-weight: 600; margin-left: 4px;" aria-label="<?php esc_attr_e( 'Learn about the Kanban workflow (opens in new tab)', 'wpshadow' ); ?>">
+						<?php esc_html_e( 'Learn about the workflow', 'wpshadow' ); ?> →
+					</a>
+				</p>
+			</div>
+		</div>
 	</div>
-	<div id="wpshadow-kanban-status" class="wps-none-m-0-p-10-rounded-6"></div>
+	<div id="wpshadow-kanban-status" class="wps-none-m-0-p-10-rounded-6" role="status" aria-live="polite" aria-atomic="true"></div>
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
 
 	<!-- Workflow Creation Modal -->
