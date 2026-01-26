@@ -451,65 +451,105 @@ $severity_legend = array(
 								}
 							}
 							?>
-						<div class="finding-card <?php echo esc_attr( $card_severity . $hidden_class ); ?>"
-							data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>"
-							data-category="<?php echo esc_attr( $category_key ); ?>"
-							draggable="true"
-							tabindex="0"
-							role="article"
-							aria-label="<?php echo esc_attr( sprintf( /* translators: 1: Finding title, 2: Threat level label */ __( '%1$s - Threat level: %2$s', 'wpshadow' ), $finding['title'], $threat_label ) ); ?>"
-							<?php
-							if ( $is_hidden ) {
-								echo 'style="display: none;"';
-							}
-							?>
-						>
-							<!-- Card Header -->
-							<div class="finding-card-header">
-								<h4 class="finding-card-title finding-title">
-									<?php echo esc_html( $finding['title'] ); ?>
-								</h4>
-								<span class="finding-card-severity finding-threat <?php echo esc_attr( $card_severity ); ?>" data-level="<?php echo esc_attr( $card_severity ); ?>">
-									<?php echo esc_html( ucfirst( $card_severity ) ); ?>
-								</span>
-							</div>
-
-							<!-- Card Body / Description -->
-							<p class="finding-card-description finding-description">
+							<div class="finding-card <?php echo esc_attr( $card_severity ); ?><?php echo esc_attr( $hidden_class ); ?>"
+								data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>"
+								data-severity="<?php echo esc_attr( $card_severity ); ?>"
+								data-category="<?php echo esc_attr( $category_key ); ?>"
+								draggable="true"
+								tabindex="0"
+								role="button"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: 1: finding title, 2: severity level */ __( '%1$s - %2$s severity', 'wpshadow' ), $finding['title'], $card_severity ) ); ?>"
+							<div class="finding-card <?php echo esc_attr( $card_severity . $hidden_class ); ?>"
+								data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>"
+								data-category="<?php echo esc_attr( $category_key ); ?>"
+								draggable="true"
+								tabindex="0"
+								role="article"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: 1: Finding title, 2: Threat level label */ __( '%1$s - Threat level: %2$s', 'wpshadow' ), $finding['title'], $threat_label ) ); ?>"
 								<?php
-								echo esc_html( substr( $finding['description'], 0, 150 ) );
-								if ( strlen( $finding['description'] ) > 150 ) {
-									echo '...';
+								if ( $is_hidden ) {
+									echo 'style="display: none;"';
 								}
 								?>
-							</p>
-
-							<!-- Smart Action Status Badge (Issue #567) -->
-							<?php if ( ! empty( $smart_status ) ) : ?>
-								<div style="margin: 8px 0;">
-									<span style="display: inline-block; font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background: <?php echo esc_attr( $smart_color ); ?>20; color: <?php echo esc_attr( $smart_color ); ?>; font-weight: 500;" title="<?php echo esc_attr( $smart_status ); ?>">
-										<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
+							>
+								<!-- Card Header -->
+								<div class="finding-card-header">
+									<h4 class="finding-card-title finding-title">
+										<?php echo esc_html( $finding['title'] ); ?>
+									</h4>
+									<span class="finding-card-severity finding-threat <?php echo esc_attr( $card_severity ); ?>" data-level="<?php echo esc_attr( $card_severity ); ?>">
+										<?php echo esc_html( ucfirst( $card_severity ) ); ?>
+								<!-- Card Header: Category Badge and Threat Indicator -->
+								<div class="wps-card-header">
+									<span class="wps-category-badge <?php echo esc_attr( $category_key ); ?>">
+										<?php echo esc_html( strtoupper( $category['label'] ) ); ?>
+									</span>
+									<span class="wps-threat-indicator <?php echo esc_attr( $card_severity ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Threat level label */ __( 'Threat level: %s', 'wpshadow' ), $threat_label ) ); ?>">
+										●
 									</span>
 								</div>
-							<?php endif; ?>
 
-							<!-- Card Footer with Actions -->
-							<div class="finding-card-footer">
-								<div class="finding-card-actions finding-actions">
+								<!-- Card Title -->
+								<h4 class="wps-card-title">
+									<?php echo esc_html( $finding['title'] ); ?>
+								</h4>
+
+								<!-- Description (truncated) -->
+								<!-- Card Body / Description -->
+								<p class="finding-card-description finding-description">
+									<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
+								<!-- Card Description -->
+								<p class="wps-card-description">
+									<?php
+									echo esc_html( substr( $finding['description'], 0, 150 ) );
+									if ( strlen( $finding['description'] ) > 150 ) {
+										echo '...';
+									}
+									?>
+								</p>
+
+								<!-- Card Footer with Actions -->
+								<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
+									<div class="finding-card-footer">
+										<div class="finding-card-actions finding-actions">
+											<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
+												<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" 
+													target="_blank" 
+													class="button button-small"
+													aria-label="<?php esc_attr_e( 'Learn more in knowledge base', 'wpshadow' ); ?>">
+													<?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
+												</a>
+											<?php endif; ?>
+											<?php if ( ! empty( $finding['training_link'] ) ) : ?>
+												<a href="<?php echo esc_url( $finding['training_link'] ); ?>" 
+													target="_blank" 
+													class="button button-small"
+													aria-label="<?php esc_attr_e( 'Watch training video', 'wpshadow' ); ?>">
+													<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
+												</a>
+											<?php endif; ?>
+										</div>
+									</div>
+								<?php endif; ?>
+
+								<!-- Status note (if exists) -->
+								<?php
+								if ( $note ) :
+									?>
+								<!-- Smart Action Status Badge (Issue #567) -->
+								<?php if ( ! empty( $smart_status ) ) : ?>
+									<div style="margin: 8px 0;">
+										<span style="display: inline-block; font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background: <?php echo esc_attr( $smart_color ); ?>20; color: <?php echo esc_attr( $smart_color ); ?>; font-weight: 500;" title="<?php echo esc_attr( $smart_status ); ?>">
+											<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
+										</span>
+									</div>
+								<?php endif; ?>
+
+								<!-- Card Footer: Action Buttons -->
+								<div class="wps-card-footer">
 									<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
-										<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" 
-											target="_blank" 
-											class="button button-small"
-											aria-label="<?php esc_attr_e( 'Learn more in knowledge base', 'wpshadow' ); ?>">
-											<?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
-										</a>
-									<?php endif; ?>
-									<?php if ( ! empty( $finding['training_link'] ) ) : ?>
-										<a href="<?php echo esc_url( $finding['training_link'] ); ?>" 
-											target="_blank" 
-											class="button button-small"
-											aria-label="<?php esc_attr_e( 'Watch training video', 'wpshadow' ); ?>">
-											<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
+										<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" target="_blank" class="wps-btn-sm ghost" rel="noopener noreferrer">
+											<?php esc_html_e( 'Learn More', 'wpshadow' ); ?>
 										</a>
 									<?php endif; ?>
 									<?php if ( ! empty( $finding['auto_fixable'] ) && $finding['auto_fixable'] ) : ?>
@@ -518,20 +558,19 @@ $severity_legend = array(
 										</button>
 									<?php endif; ?>
 								</div>
+
+								<!-- Status note (if exists) -->
+								<?php if ( $note ) : ?>
+									<div class="finding-note">
+										<strong><?php esc_html_e( 'Note:', 'wpshadow' ); ?></strong> <?php echo esc_html( $note ); ?>
+									</div>
+								<?php endif; ?>
+
+								<!-- Keyboard Navigation Hint (appears on focus) -->
+								<span class="wps-keyboard-hint" aria-hidden="true">
+									<?php esc_html_e( 'Press Enter to move', 'wpshadow' ); ?>
+								</span>
 							</div>
-
-							<!-- Status note (if exists) -->
-							<?php if ( $note ) : ?>
-								<div class="finding-note">
-									<strong><?php esc_html_e( 'Note:', 'wpshadow' ); ?></strong> <?php echo esc_html( $note ); ?>
-								</div>
-							<?php endif; ?>
-
-							<!-- Keyboard Navigation Hint (appears on focus) -->
-							<span class="wps-keyboard-hint" aria-hidden="true">
-								<?php esc_html_e( 'Press Enter to move', 'wpshadow' ); ?>
-							</span>
-						</div>
 							<?php endforeach; ?>
 						<?php
 					endif; // End if fixed (workflows) vs regular findings
