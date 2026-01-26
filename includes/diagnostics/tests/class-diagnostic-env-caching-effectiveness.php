@@ -18,7 +18,7 @@
  * @subpackage Diagnostics
  * @since      1.2601.2148
  *
- * @verified 2026-01-26 - Full implementation complete
+ * @verified 2025-01-26 - Full implementation complete
  */
 
 declare(strict_types=1);
@@ -271,7 +271,7 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 	 * that the cache is not being utilized effectively.
 	 *
 	 * @since  1.2601.2148
-	 * @param  \wpdb $wpdb WordPress database object.
+	 * @param  wpdb $wpdb WordPress database object.
 	 * @return array Transient analysis data.
 	 */
 	private static function analyze_transient_health( $wpdb ): array {
@@ -342,8 +342,7 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 		}
 
 		// Transient health indicates cache is being used well
-		$transient_health_score = ( $transient_analysis['health_percentage'] * 30 ) / 100;
-		$score                 += $transient_health_score;
+		$score += ( $transient_analysis['health_percentage'] * 30 ) / 100;
 
 		return (int) $score;
 	}
