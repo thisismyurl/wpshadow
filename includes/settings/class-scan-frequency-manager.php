@@ -386,7 +386,7 @@ class Scan_Frequency_Manager {
 					</fieldset>
 					
 					<!-- Save Button -->
-					<button type="submit" class="button button-primary">
+					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Scan Settings', 'wpshadow' ); ?>
 					</button>
 					<span id="wpshadow-scan-status" style="margin-left: 10px;"></span>

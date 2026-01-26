@@ -28,7 +28,7 @@ $latest_report = ! empty( $audit_reports ) ? end( $audit_reports ) : null;
 			<li><?php esc_html_e( 'Potential security and compatibility risks', 'wpshadow' ); ?></li>
 		</ul>
 		<br />
-		<button type="button" class="button button-primary" id="wpshadow-generate-audit">
+		<button type="button" class="wps-btn wps-btn-primary wps-btn-icon-left" id="wpshadow-generate-audit"><span class="dashicons dashicons-update"></span>
 			<?php esc_html_e( 'Generate Audit Report', 'wpshadow' ); ?>
 		</button>
 	</div>
@@ -72,7 +72,7 @@ $latest_report = ! empty( $audit_reports ) ? end( $audit_reports ) : null;
 			</tr>
 		</table>
 		<br />
-		<button type="button" class="button" id="wpshadow-export-audit">
+		<button type="button" class="wps-btn wps-btn-secondary" id="wpshadow-export-audit">
 			<?php esc_html_e( 'Export Report (CSV)', 'wpshadow' ); ?>
 		</button>
 	</div>
@@ -107,7 +107,7 @@ $latest_report = ! empty( $audit_reports ) ? end( $audit_reports ) : null;
 							</td>
 							<td><?php echo esc_html( $report['total_issues'] ?? 0 ); ?></td>
 							<td>
-								<button type="button" class="button button-small wpshadow-view-report" data-report-id="<?php echo esc_attr( $report['id'] ?? '' ); ?>">
+								<button type="button" class="wps-btn wps-btn-secondary wpshadow-view-report" data-report-id="<?php echo esc_attr( $report['id'] ?? '' ); ?>">
 									<?php esc_html_e( 'View', 'wpshadow' ); ?>
 								</button>
 							</td>
