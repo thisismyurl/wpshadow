@@ -271,7 +271,7 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 	 * that the cache is not being utilized effectively.
 	 *
 	 * @since  1.2601.2148
-	 * @param  object $wpdb WordPress database object.
+	 * @param  \wpdb $wpdb WordPress database object.
 	 * @return array Transient analysis data.
 	 */
 	private static function analyze_transient_health( $wpdb ): array {
@@ -284,18 +284,20 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 		);
 
 		// Count expired transients (timeout value is less than current time)
+		// Note: option_value is stored as string in WordPress options table
 		$expired_transients = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->options} 
 				WHERE option_name LIKE %s 
-				AND option_value < %d",
+				AND option_value < %s",
 				'_transient_timeout_%',
-				time()
+				(string) time()
 			)
 		);
 
 		// Calculate health percentage
-		$health_percentage = 100;
+		// If no transients exist, return 0% (not using transient caching)
+		$health_percentage = 0;
 		if ( $total_transients > 0 ) {
 			$active_transients = $total_transients - $expired_transients;
 			$health_percentage = ( $active_transients / $total_transients ) * 100;
