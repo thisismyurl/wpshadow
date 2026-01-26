@@ -16,6 +16,13 @@
 		blocks: [],
 		selectedBlock: null,
 		draggedBlock: null,
+		canvasZoom: 1,
+		canvasPosition: { x: 0, y: 0 },
+		isPanning: false,
+		lastPanPosition: { x: 0, y: 0 },
+		touchedBlock: null,
+		touchStartPos: { x: 0, y: 0 },
+		validationTimeout: null,
 		draggedElement: null,
 		zoomLevel: 1,
 		configPanel: null,
@@ -24,19 +31,192 @@
 		 * Initialize the workflow builder
 		 */
 		init: function() {
+			this.setupCanvas();
 			this.bindEvents();
 			this.setupAccessibility();
-			this.createConfigPanel();
+			this.addCanvasControls();
+			this.addSearchFilter();
+
 
 			this.createCanvasControls();
 			this.announceToScreenReader('Workflow builder loaded. Press Tab to navigate blocks, Enter to configure.');
 		},
 
 		/**
+		 * Setup canvas with SVG connections and viewport
+		 */
+		setupCanvas: function() {
+			const $canvas = $('#wps-canvas');
+			
+			// Wrap canvas content in viewport for zoom/pan
+			$canvas.wrapInner('<div class="wps-canvas-viewport"><div class="wps-canvas-content"></div></div>');
+			
+			// Add SVG layer for connections
+			$('.wps-canvas-viewport').prepend('<svg class="wps-workflow-connections"><g></g></svg>');
+		},
+
+		/**
+		 * Add canvas controls (zoom, pan, reset)
+		 */
+		addCanvasControls: function() {
+			const controlsHTML = `
+				<div class="wps-canvas-controls" role="toolbar" aria-label="Canvas controls">
+					<button id="wps-zoom-in" class="wps-zoom-btn" aria-label="Zoom in" title="Zoom in">
+						<span class="dashicons dashicons-plus-alt2"></span>
+					</button>
+					<span class="wps-zoom-level" role="status" aria-live="polite">100%</span>
+					<button id="wps-zoom-out" class="wps-zoom-btn" aria-label="Zoom out" title="Zoom out">
+						<span class="dashicons dashicons-minus"></span>
+					</button>
+					<button id="wps-zoom-reset" class="wps-zoom-btn" aria-label="Reset zoom" title="Reset zoom">
+						<span class="dashicons dashicons-image-rotate"></span>
+					</button>
+				</div>
+			`;
+			$('.wps-workflow-canvas').append(controlsHTML);
+
+			// Bind zoom controls
+			$('#wps-zoom-in').on('click', () => this.zoomCanvas(0.1));
+			$('#wps-zoom-out').on('click', () => this.zoomCanvas(-0.1));
+			$('#wps-zoom-reset').on('click', () => this.resetCanvas());
+
+			// Mouse wheel zoom
+			$('.wps-workflow-canvas').on('wheel', (e) => {
+				if (e.ctrlKey || e.metaKey) {
+					e.preventDefault();
+					const delta = e.originalEvent.deltaY > 0 ? -0.05 : 0.05;
+					this.zoomCanvas(delta);
+				}
+			});
+
+			// Pan controls
+			$('.wps-canvas-viewport').on('mousedown', (e) => {
+				if (e.which === 2 || (e.which === 1 && e.shiftKey)) { // Middle click or Shift+click
+					this.isPanning = true;
+					const startX = e.clientX - this.canvasPosition.x;
+					const startY = e.clientY - this.canvasPosition.y;
+					this.lastPanPosition = { x: startX, y: startY };
+					$('.wps-canvas-content').addClass('panning');
+					e.preventDefault();
+				}
+			});
+
+			$(document).on('mousemove', (e) => {
+				if (this.isPanning) {
+					this.canvasPosition.x = e.clientX - this.lastPanPosition.x;
+					this.canvasPosition.y = e.clientY - this.lastPanPosition.y;
+					this.updateCanvasTransform();
+				}
+			});
+
+			$(document).on('mouseup', () => {
+				if (this.isPanning) {
+					this.isPanning = false;
+					$('.wps-canvas-content').removeClass('panning');
+				}
+			});
+		},
+
+		/**
+		 * Add search/filter functionality to block palette
+		 */
+		addSearchFilter: function() {
+			const searchHTML = `
+				<div class="wps-palette-search">
+					<span class="dashicons dashicons-search"></span>
+					<input type="text" 
+						   id="wps-block-search" 
+						   placeholder="Search blocks..." 
+						   aria-label="Search workflow blocks"
+					/>
+				</div>
+			`;
+			$('.wps-workflow-palette').prepend(searchHTML);
+
+			$('#wps-block-search').on('input', (e) => {
+				const query = e.target.value.toLowerCase();
+				$('.wps-block-item').each(function() {
+					const $block = $(this);
+					const text = $block.text().toLowerCase();
+					if (text.includes(query)) {
+						$block.removeClass('hidden').show();
+					} else {
+						$block.addClass('hidden').hide();
+					}
+				});
+			});
+		},
+
+		/**
+		 * Zoom canvas
+		 */
+		zoomCanvas: function(delta) {
+			this.canvasZoom = Math.max(0.5, Math.min(2, this.canvasZoom + delta));
+			this.updateCanvasTransform();
+			$('.wps-zoom-level').text(Math.round(this.canvasZoom * 100) + '%');
+			this.announceToScreenReader('Zoom level: ' + Math.round(this.canvasZoom * 100) + '%');
+		},
+
+		/**
+		 * Reset canvas zoom and position
+		 */
+		resetCanvas: function() {
+			this.canvasZoom = 1;
+			this.canvasPosition = { x: 0, y: 0 };
+			this.updateCanvasTransform();
+			$('.wps-zoom-level').text('100%');
+			this.announceToScreenReader('Canvas reset to 100%');
+		},
+
+		/**
+		 * Update canvas transform
+		 */
+		updateCanvasTransform: function() {
+			const transform = `translate(${this.canvasPosition.x}px, ${this.canvasPosition.y}px) scale(${this.canvasZoom})`;
+			$('.wps-canvas-content').css('transform', transform);
+			
+			// Update connections
+			this.updateConnections();
+		},
+
+		/**
+		 * Draw SVG connections between blocks
+		 */
+		updateConnections: function() {
+			const $svg = $('.wps-workflow-connections g');
+			$svg.empty();
+
+			const blocks = $('.wps-block').toArray();
+			for (let i = 0; i < blocks.length - 1; i++) {
+				const $block1 = $(blocks[i]);
+				const $block2 = $(blocks[i + 1]);
+
+				const rect1 = $block1[0].getBoundingClientRect();
+				const rect2 = $block2[0].getBoundingClientRect();
+				const canvasRect = $('.wps-canvas-viewport')[0].getBoundingClientRect();
+
+				// Calculate positions relative to canvas
+				const x1 = rect1.left + rect1.width / 2 - canvasRect.left;
+				const y1 = rect1.bottom - canvasRect.top;
+				const x2 = rect2.left + rect2.width / 2 - canvasRect.left;
+				const y2 = rect2.top - canvasRect.top;
+
+				// Create curved path
+				const midY = (y1 + y2) / 2;
+				const path = `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`;
+
+				const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+				pathEl.setAttribute('d', path);
+				pathEl.setAttribute('class', 'trigger-to-action');
+				$svg.append(pathEl);
+			}
+		},
+
+		/**
 		 * Bind all event handlers
 		 */
 		bindEvents: function() {
-			// Palette block drag events
+			// Palette block drag events (desktop)
 			$('.wps-block-item').on('dragstart', this.handlePaletteDragStart.bind(this));
 			$('.wps-block-item').on('dragend', this.handlePaletteDragEnd.bind(this));
 
@@ -66,6 +246,59 @@
 			$(document).on('dragend', '.wps-block', this.handleBlockDragEnd.bind(this));
 			$(document).on('dragover', '.wps-block', this.handleBlockDragOver.bind(this));
 			$(document).on('drop', '.wps-block', this.handleBlockDrop.bind(this));
+		},
+
+		/**
+		 * Setup touch events for mobile devices
+		 */
+		setupTouchEvents: function() {
+			// Touch start on palette blocks
+			$('.wps-block-item').on('touchstart', (e) => {
+				const touch = e.originalEvent.touches[0];
+				this.touchedBlock = $(e.currentTarget);
+				this.touchStartPos = { x: touch.clientX, y: touch.clientY };
+				
+				this.touchedBlock.addClass('dragging');
+			});
+
+			// Touch move
+			$(document).on('touchmove', (e) => {
+				if (!this.touchedBlock) return;
+
+				const touch = e.originalEvent.touches[0];
+				const deltaX = touch.clientX - this.touchStartPos.x;
+				const deltaY = touch.clientY - this.touchStartPos.y;
+
+				// Show visual feedback for drag
+				if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+					$('#wps-canvas').addClass('drag-over');
+				}
+			});
+
+			// Touch end
+			$(document).on('touchend', (e) => {
+				if (!this.touchedBlock) return;
+
+				$('.wps-block-item').removeClass('dragging');
+				$('#wps-canvas').removeClass('drag-over');
+
+				const touch = e.originalEvent.changedTouches[0];
+				const canvasRect = $('#wps-canvas')[0].getBoundingClientRect();
+
+				// Check if touch ended over canvas
+				if (
+					touch.clientX >= canvasRect.left &&
+					touch.clientX <= canvasRect.right &&
+					touch.clientY >= canvasRect.top &&
+					touch.clientY <= canvasRect.bottom
+				) {
+					const blockId = this.touchedBlock.data('block-id');
+					const blockType = this.touchedBlock.data('block-type');
+					this.addBlockToCanvas(blockId, blockType);
+				}
+
+				this.touchedBlock = null;
+			});
 		},
 
 		/**
@@ -179,6 +412,47 @@
 			$('#wps-zoom-out').on('click', this.zoomOut.bind(this));
 			$('#wps-zoom-reset').on('click', this.zoomReset.bind(this));
 		},
+
+		/**
+		 * Validate workflow
+		 */
+		validateWorkflow: function() {
+			let isValid = false;
+			let message = '';
+
+			const triggerBlocks = this.blocks.filter(b => b.type === 'trigger');
+			const actionBlocks = this.blocks.filter(b => b.type === 'action');
+
+			if (this.blocks.length === 0) {
+				message = 'Add at least one trigger and one action to create a workflow';
+			} else if (triggerBlocks.length === 0) {
+				message = 'Add at least one trigger (IF condition)';
+			} else if (actionBlocks.length === 0) {
+				message = 'Add at least one action (THEN what to do)';
+			} else {
+				isValid = true;
+				message = 'Workflow is ready to save';
+			}
+
+			// Update indicator
+			const $indicator = $('.wps-workflow-validation');
+			$indicator.removeClass('valid invalid');
+			$indicator.addClass(isValid ? 'valid' : 'invalid');
+			$indicator.find('.dashicons').removeClass().addClass('dashicons').addClass(
+				isValid ? 'dashicons-yes-alt' : 'dashicons-info'
+			);
+			$indicator.find('.wps-validation-message').text(message);
+
+			// Show indicator briefly
+			$indicator.addClass('show');
+			clearTimeout(this.validationTimeout);
+			this.validationTimeout = setTimeout(() => {
+				$indicator.removeClass('show');
+			}, 3000);
+
+			return isValid;
+		},
+
 
 		/**
 		 * Handle palette block drag start
@@ -469,11 +743,11 @@
 			const blockDef = allBlocks[blockId] || {};
 
 			// Remove empty state if present
-			$('#wps-canvas').find('[data-empty-state]').remove();
+			$('.wps-canvas-content').find('[data-empty-state]').remove();
 
 			// Create blocks container if it doesn't exist
 			if ($('.wps-canvas-blocks-container').length === 0) {
-				$('#wps-canvas').append('<div class="wps-canvas-blocks-container"></div>');
+				$('.wps-canvas-content').append('<div class="wps-canvas-blocks-container"></div>');
 			}
 
 			// Create block HTML
@@ -484,7 +758,12 @@
 			this.bindBlockActions(uniqueId);
 
 			// Animate block appearance
-			$(`[data-block-id="${uniqueId}"]`).hide().fadeIn(300);
+			$(`[data-block-id="${uniqueId}"]`).hide().fadeIn(300, () => {
+				// Update connections after animation
+				this.updateConnections();
+				// Validate workflow
+				this.validateWorkflow();
+			});
 		},
 
 		/**
@@ -517,7 +796,6 @@
 					<div class="wps-block-config">
 						<p>${description}</p>
 					</div>
-					<div class="wps-block-connector" aria-hidden="true"></div>
 				</div>
 			`;
 		},
@@ -613,20 +891,26 @@
 			this.blocks = this.blocks.filter(b => b.id !== blockId);
 
 			// Remove from DOM with animation
-			$(`[data-block-id="${blockId}"]`).fadeOut(300, function() {
-				$(this).remove();
+			$(`[data-block-id="${blockId}"]`).fadeOut(300, () => {
+				$(`[data-block-id="${blockId}"]`).remove();
 
 				// Show empty state if no blocks left
-				if (WorkflowBuilder.blocks.length === 0) {
-					WorkflowBuilder.showEmptyState();
+				if (this.blocks.length === 0) {
+					this.showEmptyState();
+				} else {
+					// Update connections after block removal
+					this.updateConnections();
 				}
+				
+				// Validate workflow
+				this.validateWorkflow();
 			});
 
 			this.announceToScreenReader(wpshadowWorkflow.strings.blockRemoved);
 		},
 
 		/**
-		 * Open block configuration
+		 * Open block configuration panel
 		 */
 		openBlockConfig: function(blockId) {
 			const block = this.blocks.find(b => b.id === blockId);
@@ -767,17 +1051,17 @@
 			const emptyHTML = `
 				<div class="wps-canvas-empty" data-empty-state>
 					<span class="dashicons dashicons-block-default"></span>
-					<h3>${'Build Your Workflow'}</h3>
-					<p>${'Drag blocks from the left to get started'}</p>
+					<h3>${wpshadowWorkflow.strings.buildWorkflow || 'Build Your Workflow'}</h3>
+					<p>${wpshadowWorkflow.strings.dragBlocks || 'Drag blocks from the left to get started'}</p>
 					<ol class="wps-steps">
-						<li data-step="1">Add a TRIGGER block (IF condition)</li>
-						<li data-step="2">Add ACTION blocks (THEN what to do)</li>
-						<li data-step="3">Configure each block</li>
-						<li data-step="4">Save and test your workflow</li>
+						<li data-step="1">${wpshadowWorkflow.strings.step1 || 'Add a TRIGGER block (IF condition)'}</li>
+						<li data-step="2">${wpshadowWorkflow.strings.step2 || 'Add ACTION blocks (THEN what to do)'}</li>
+						<li data-step="3">${wpshadowWorkflow.strings.step3 || 'Configure each block'}</li>
+						<li data-step="4">${wpshadowWorkflow.strings.step4 || 'Save and test your workflow'}</li>
 					</ol>
 				</div>
 			`;
-			$('#wps-canvas').html(emptyHTML);
+			$('.wps-canvas-content').html(emptyHTML);
 		},
 
 		/**
@@ -788,9 +1072,9 @@
 
 			const name = $('#wps-workflow-name').val() || 'Untitled Workflow';
 
-			if (this.blocks.length === 0) {
-				alert(wpshadowWorkflow.strings.noBlocks);
-				$('#wps-workflow-name').focus();
+			// Validate workflow before saving
+			if (!this.validateWorkflow()) {
+				this.showNotification('error', 'Please complete your workflow before saving');
 				return;
 			}
 
@@ -799,12 +1083,36 @@
 			const originalText = $btn.html();
 			$btn.html('<span class="dashicons dashicons-update"></span> Saving...').prop('disabled', true);
 
-			// Simulate save (replace with AJAX call)
-			setTimeout(() => {
-				$btn.html(originalText).prop('disabled', false);
-				this.announceToScreenReader(wpshadowWorkflow.strings.saveSuccess);
-				this.showNotification('success', wpshadowWorkflow.strings.saveSuccess);
-			}, 1000);
+			// Prepare workflow data
+			const workflowData = {
+				action: 'wpshadow_save_workflow',
+				nonce: wpshadowWorkflow.nonce,
+				name: name,
+				blocks: this.blocks,
+				enabled: true
+			};
+
+			// AJAX save
+			$.post(wpshadowWorkflow.ajaxUrl, workflowData)
+				.done((response) => {
+					if (response.success) {
+						this.announceToScreenReader(wpshadowWorkflow.strings.saveSuccess);
+						this.showNotification('success', wpshadowWorkflow.strings.saveSuccess);
+						
+						// Store workflow ID if returned
+						if (response.data && response.data.workflow_id) {
+							$('#wps-canvas').data('workflow-id', response.data.workflow_id);
+						}
+					} else {
+						this.showNotification('error', response.data?.message || wpshadowWorkflow.strings.saveError);
+					}
+				})
+				.fail(() => {
+					this.showNotification('error', wpshadowWorkflow.strings.saveError);
+				})
+				.always(() => {
+					$btn.html(originalText).prop('disabled', false);
+				});
 
 			console.log('Saving workflow:', { name, blocks: this.blocks });
 		},
@@ -949,6 +1257,52 @@
 					e.preventDefault();
 					this.zoomReset();
 				}
+			}
+
+			// Arrow key navigation between blocks
+			if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+				this.handleArrowNavigation(e);
+			}
+
+			// Ctrl+F or Cmd+F to focus search
+			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+				e.preventDefault();
+				$('#wps-block-search').focus();
+			}
+		},
+
+		/**
+		 * Handle arrow key navigation between blocks
+		 */
+		handleArrowNavigation: function(e) {
+			const $blocks = $('.wps-block');
+			if ($blocks.length === 0) return;
+
+			const $focused = $(':focus');
+			let currentIndex = -1;
+
+			// Find currently focused block
+			$blocks.each(function(index) {
+				if ($(this).is($focused)) {
+					currentIndex = index;
+					return false;
+				}
+			});
+
+			// Navigate based on arrow key
+			let newIndex = currentIndex;
+			if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+				e.preventDefault();
+				newIndex = currentIndex < $blocks.length - 1 ? currentIndex + 1 : 0;
+			} else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+				e.preventDefault();
+				newIndex = currentIndex > 0 ? currentIndex - 1 : $blocks.length - 1;
+			}
+
+			// Focus new block
+			if (newIndex !== currentIndex && newIndex >= 0) {
+				$blocks.eq(newIndex).focus();
+				this.announceToScreenReader('Block ' + (newIndex + 1) + ' of ' + $blocks.length);
 			}
 		},
 

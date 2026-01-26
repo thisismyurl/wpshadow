@@ -203,6 +203,98 @@
 	line-height: 1.3;
 }
 
+/* Block Tooltips */
+.wps-block-item {
+	position: relative;
+}
+
+.wps-block-tooltip {
+	position: absolute;
+	left: 100%;
+	top: 0;
+	margin-left: 0.5rem;
+	background: var(--wps-gray-900, #111827);
+	color: #fff;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	font-size: 0.75rem;
+	line-height: 1.4;
+	white-space: nowrap;
+	z-index: 1000;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease, visibility 0.2s ease;
+	pointer-events: none;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.wps-block-tooltip::before {
+	content: '';
+	position: absolute;
+	right: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+	border: 5px solid transparent;
+	border-right-color: var(--wps-gray-900, #111827);
+}
+
+.wps-block-item:hover .wps-block-tooltip {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* Workflow Validation Indicator */
+.wps-workflow-validation {
+	position: fixed;
+	bottom: 1rem;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 0.75rem 1.25rem;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	display: none;
+	align-items: center;
+	gap: 0.5rem;
+	z-index: 9998;
+}
+
+.wps-workflow-validation.show {
+	display: flex;
+}
+
+.wps-workflow-validation.valid {
+	border-color: var(--wps-success, #10b981);
+	background: var(--wps-success-light, #d1fae5);
+}
+
+.wps-workflow-validation.invalid {
+	border-color: var(--wps-warning, #f59e0b);
+	background: var(--wps-warning-light, #fef3c7);
+}
+
+.wps-workflow-validation .dashicons {
+	font-size: 1.25rem;
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.wps-workflow-validation.valid .dashicons {
+	color: var(--wps-success, #10b981);
+}
+
+.wps-workflow-validation.invalid .dashicons {
+	color: var(--wps-warning, #f59e0b);
+}
+
+.wps-workflow-validation span {
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--wps-gray-900, #111827);
+}
+
+
 /* ============================================================================
    Canvas Area
    ============================================================================ */
@@ -506,6 +598,15 @@
 	font-family: inherit;
 }
 
+/* Block Connector Lines - SVG-based for smooth visual flow */
+.wps-workflow-connections {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
 /* Block Connector Lines - Visual Flow Indicators */
 .wps-block-connector {
 	position: absolute;
@@ -553,7 +654,32 @@
 	border-top-color: var(--wps-success-dark, #047857);
 }
 
-.wps-block:last-child .wps-block-connector {
+.wps-workflow-connections svg {
+	width: 100%;
+	height: 100%;
+}
+
+.wps-workflow-connections path {
+	fill: none;
+	stroke: var(--wps-gray-300, #d1d5db);
+	stroke-width: 2;
+	stroke-linecap: round;
+}
+
+.wps-workflow-connections path.trigger-to-action {
+	stroke: var(--wps-info, #3b82f6);
+	stroke-dasharray: 5, 5;
+	animation: dash 20s linear infinite;
+}
+
+@keyframes dash {
+	to {
+		stroke-dashoffset: -100;
+	}
+}
+
+/* Legacy connector for fallback */
+.wps-block-connector {
 	display: none;
 }
 
@@ -1074,6 +1200,11 @@
 		align-items: flex-start;
 	}
 
+	.wps-workflow-toolbar {
+		width: 100%;
+		flex-wrap: wrap;
+	}
+
 	.wps-workflow-name-input {
 		font-size: 1rem;
 		max-width: 100%;
@@ -1082,6 +1213,290 @@
 	.wps-workflow-canvas {
 		padding: 1rem;
 		min-height: 400px;
+	}
+
+	.wps-canvas-controls {
+		bottom: 0.5rem !important;
+		right: 0.5rem !important;
+		flex-direction: column;
+	}
+
+	.wps-canvas-controls button {
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+		font-size: 1rem !important;
+	}
+
+	.wps-workflow-palette {
+		max-height: 200px;
+	}
+
+	.wps-palette-section {
+		margin-bottom: 1rem;
+	}
+
+	.wps-block-item {
+		font-size: 0.875rem;
+	}
+
+	.wps-block {
+		padding: 0.75rem;
+	}
+
+	.wps-test-results {
+		width: calc(100% - 1rem);
+		right: 0.5rem;
+		bottom: 0.5rem;
+	}
+
+	/* Mobile-specific drag interactions */
+	.wps-block-item {
+		cursor: pointer;
+		touch-action: none;
+	}
+
+	/* Larger touch targets for mobile */
+	.wps-block-remove {
+		padding: 0.5rem;
+		font-size: 1.5rem;
+	}
+
+	.wps-btn {
+		padding: 0.75rem 1rem;
+		font-size: 0.9375rem;
+	}
+
+	/* Stack validation indicator on mobile */
+	.wps-workflow-validation {
+		left: 1rem;
+		right: 1rem;
+		transform: none;
+		bottom: 0.5rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.wps-workflow-builder-title {
+		font-size: 1.25rem;
+	}
+
+	.wps-workflow-builder-description {
+		font-size: 0.875rem;
+	}
+
+	.wps-workflow-canvas {
+		padding: 0.75rem;
+		min-height: 300px;
+	}
+
+	.wps-block {
+		padding: 0.625rem;
+	}
+
+	.wps-block-label {
+		font-size: 0.8125rem;
+	}
+
+	.wps-palette-blocks {
+		gap: 0.375rem;
+	}
+
+	.wps-block-item {
+		padding: 0.625rem;
+	}
+
+	.wps-canvas-controls {
+		gap: 0.375rem;
+		padding: 0.375rem;
+	}
+
+	.wps-canvas-controls button {
+		width: 2.25rem !important;
+		height: 2.25rem !important;
+	}
+
+	.wps-workflow-toolbar {
+		gap: 0.5rem;
+	}
+
+	.wps-btn {
+		padding: 0.625rem 0.875rem;
+		font-size: 0.875rem;
+	}
+
+	/* Compact test results on small screens */
+	.wps-test-results {
+		padding: 1rem;
+	}
+
+	.wps-test-step {
+		padding: 0.5rem;
+		font-size: 0.8125rem;
+	}
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+	/* Ensure all interactive elements are touch-friendly */
+	.wps-block-item,
+	.wps-btn,
+	.wps-block,
+	.wps-block-remove,
+	button {
+		min-height: 44px;
+		min-width: 44px;
+	}
+
+	/* Remove hover effects on touch devices */
+	.wps-block-item:hover,
+	.wps-btn:hover {
+		transform: none;
+	}
+
+	/* Show tooltips on tap instead of hover */
+	.wps-block-tooltip {
+		display: none;
+	}
+
+	/* Increase spacing for easier tap targets */
+	.wps-workflow-toolbar {
+		gap: 0.75rem;
+	}
+
+	.wps-palette-blocks {
+		gap: 0.625rem;
+	}
+}
+
+/* Print styles */
+@media print {
+	.wps-workflow-palette,
+	.wps-workflow-toolbar,
+	.wps-canvas-controls,
+	.wps-block-config-panel,
+	.wps-test-results,
+	.wps-workflow-validation {
+		display: none !important;
+	}
+
+	.wps-workflow-canvas {
+		border: 1px solid #000;
+	}
+
+	.wps-block {
+		break-inside: avoid;
+	}
+}
+
+/* ============================================================================
+   Canvas Controls (Zoom/Pan)
+   ============================================================================ */
+
+.wps-canvas-controls {
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	display: flex;
+	gap: 0.5rem;
+	z-index: 10;
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wps-canvas-controls button {
+	width: 2.75rem;
+	height: 2.75rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.375rem;
+	cursor: pointer;
+	color: var(--wps-gray-700, #374151);
+	font-size: 1.125rem;
+	transition: all 0.2s ease;
+}
+
+.wps-canvas-controls button:hover {
+	background: var(--wps-gray-50, #f9fafb);
+	border-color: var(--wps-info, #3b82f6);
+	color: var(--wps-info, #3b82f6);
+}
+
+.wps-canvas-controls button:focus {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+.wps-canvas-controls button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.wps-canvas-controls .wps-zoom-level {
+	display: flex;
+	align-items: center;
+	padding: 0 0.5rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: var(--wps-gray-600, #4b5563);
+	min-width: 3.5rem;
+	justify-content: center;
+}
+
+.wps-canvas-viewport {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.wps-canvas-content {
+	transform-origin: 0 0;
+	transition: transform 0.2s ease;
+}
+
+.wps-canvas-content.panning {
+	cursor: grabbing !important;
+	transition: none;
+}
+
+/* Block Search/Filter */
+.wps-palette-search {
+	margin-bottom: 1rem;
+	position: relative;
+}
+
+.wps-palette-search input {
+	width: 100%;
+	padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	transition: border-color 0.2s ease;
+}
+
+.wps-palette-search input:focus {
+	outline: none;
+	border-color: var(--wps-info, #3b82f6);
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.wps-palette-search .dashicons {
+	position: absolute;
+	left: 0.75rem;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--wps-gray-400, #9ca3af);
+	pointer-events: none;
+}
+
+.wps-block-item.hidden {
+	display: none;
 	}
 
 	.wps-workflow-toolbar {
