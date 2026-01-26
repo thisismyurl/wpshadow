@@ -359,7 +359,7 @@
 						Block Label
 						<span class="wps-help-tooltip" data-tooltip="Give this block a custom name">?</span>
 					</label>
-					<input type="text" id="block-label-${blockId}" value="${blockDef.label || ''}" readonly />
+					<input type="text" id="block-label-${blockId}" value="${blockDef.label || ''}" readonly aria-readonly="true" tabindex="-1" />
 				</div>
 			`;
 
@@ -374,7 +374,7 @@
 
 				switch (field.type) {
 					case 'select':
-						configHTML += `<select id="${fieldId}" data-field="${fieldKey}">`;
+						configHTML += `<select id="${fieldId}" data-field="${fieldKey}" aria-label="${field.label}">`;
 						Object.keys(field.options || {}).forEach(optKey => {
 							const selected = currentValue === optKey ? 'selected' : '';
 							configHTML += `<option value="${optKey}" ${selected}>${field.options[optKey]}</option>`;
@@ -383,19 +383,19 @@
 						break;
 
 					case 'textarea':
-						configHTML += `<textarea id="${fieldId}" data-field="${fieldKey}" rows="4">${currentValue}</textarea>`;
+						configHTML += `<textarea id="${fieldId}" data-field="${fieldKey}" rows="4" aria-label="${field.label}">${currentValue}</textarea>`;
 						break;
 
 					case 'time':
-						configHTML += `<input type="time" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" />`;
+						configHTML += `<input type="time" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" aria-label="${field.label}" />`;
 						break;
 
 					case 'number':
-						configHTML += `<input type="number" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" />`;
+						configHTML += `<input type="number" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" aria-label="${field.label}" />`;
 						break;
 
 					default:
-						configHTML += `<input type="text" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" />`;
+						configHTML += `<input type="text" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" aria-label="${field.label}" />`;
 				}
 
 				configHTML += `</div>`;
@@ -729,13 +729,18 @@
 					<ul class="wps-shortcuts-list">
 						${shortcutsHTML}
 					</ul>
-					<button type="button" class="wps-btn ghost" onclick="WorkflowBuilder.toggleShortcutsPanel()" style="width: 100%; margin-top: 1rem;">
+					<button type="button" class="wps-btn ghost wps-close-shortcuts" style="width: 100%; margin-top: 1rem;">
 						Close
 					</button>
 				</div>
 			`;
 
 			$('body').append(panelHTML);
+
+			// Bind close button event
+			$('.wps-close-shortcuts').on('click', () => {
+				this.toggleShortcutsPanel();
+			});
 
 			// Close on backdrop click
 			$('.wps-shortcuts-backdrop').on('click', () => {

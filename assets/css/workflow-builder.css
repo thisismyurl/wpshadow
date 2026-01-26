@@ -930,6 +930,8 @@
 		flex: 1 1 auto;
 		justify-content: center;
 		min-width: 120px;
+		min-height: 44px;
+		padding: 0.75rem 1rem;
 	}
 
 	.wps-workflow-palette {
@@ -968,12 +970,6 @@
 		min-width: 44px;
 		min-height: 44px;
 	}
-
-	/* Larger touch targets */
-	.wps-btn {
-		min-height: 44px;
-		padding: 0.75rem 1rem;
-	}
 }
 
 @media (max-width: 480px) {
@@ -991,7 +987,6 @@
 
 	.wps-btn {
 		font-size: 0.8125rem;
-		padding: 0.625rem 0.875rem;
 	}
 }
 
