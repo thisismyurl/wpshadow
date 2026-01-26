@@ -829,6 +829,16 @@
 		font-size: 1.5rem;
 	}
 
+	.wps-workflow-builder-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.wps-workflow-toolbar {
+		width: 100%;
+		flex-wrap: wrap;
+	}
+
 	.wps-workflow-name-input {
 		font-size: 1rem;
 	}
@@ -841,12 +851,173 @@
 	.wps-canvas-controls {
 		bottom: 0.5rem !important;
 		right: 0.5rem !important;
+		flex-direction: column;
 	}
 
 	.wps-canvas-controls button {
 		width: 2.5rem !important;
 		height: 2.5rem !important;
 		font-size: 1rem !important;
+	}
+
+	.wps-workflow-palette {
+		max-height: 200px;
+	}
+
+	.wps-palette-section {
+		margin-bottom: 1rem;
+	}
+
+	.wps-block-item {
+		font-size: 0.875rem;
+	}
+
+	.wps-block {
+		padding: 0.75rem;
+	}
+
+	.wps-test-results {
+		width: calc(100% - 1rem);
+		right: 0.5rem;
+		bottom: 0.5rem;
+	}
+
+	/* Mobile-specific drag interactions */
+	.wps-block-item {
+		cursor: pointer;
+		touch-action: none;
+	}
+
+	/* Larger touch targets for mobile */
+	.wps-block-remove {
+		padding: 0.5rem;
+		font-size: 1.5rem;
+	}
+
+	.wps-btn {
+		padding: 0.75rem 1rem;
+		font-size: 0.9375rem;
+	}
+
+	/* Stack validation indicator on mobile */
+	.wps-workflow-validation {
+		left: 1rem;
+		right: 1rem;
+		transform: none;
+		bottom: 0.5rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.wps-workflow-builder-title {
+		font-size: 1.25rem;
+	}
+
+	.wps-workflow-builder-description {
+		font-size: 0.875rem;
+	}
+
+	.wps-workflow-canvas {
+		padding: 0.75rem;
+		min-height: 300px;
+	}
+
+	.wps-block {
+		padding: 0.625rem;
+	}
+
+	.wps-block-label {
+		font-size: 0.8125rem;
+	}
+
+	.wps-palette-blocks {
+		gap: 0.375rem;
+	}
+
+	.wps-block-item {
+		padding: 0.625rem;
+	}
+
+	.wps-canvas-controls {
+		gap: 0.375rem;
+		padding: 0.375rem;
+	}
+
+	.wps-canvas-controls button {
+		width: 2.25rem !important;
+		height: 2.25rem !important;
+	}
+
+	.wps-workflow-toolbar {
+		gap: 0.5rem;
+	}
+
+	.wps-btn {
+		padding: 0.625rem 0.875rem;
+		font-size: 0.875rem;
+	}
+
+	/* Compact test results on small screens */
+	.wps-test-results {
+		padding: 1rem;
+	}
+
+	.wps-test-step {
+		padding: 0.5rem;
+		font-size: 0.8125rem;
+	}
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+	/* Ensure all interactive elements are touch-friendly */
+	.wps-block-item,
+	.wps-btn,
+	.wps-block,
+	.wps-block-remove,
+	button {
+		min-height: 44px;
+		min-width: 44px;
+	}
+
+	/* Remove hover effects on touch devices */
+	.wps-block-item:hover,
+	.wps-btn:hover {
+		transform: none;
+	}
+
+	/* Show tooltips on tap instead of hover */
+	.wps-block-tooltip {
+		display: none;
+	}
+
+	/* Increase spacing for easier tap targets */
+	.wps-workflow-toolbar {
+		gap: 0.75rem;
+	}
+
+	.wps-palette-blocks {
+		gap: 0.625rem;
+	}
+}
+
+/* Print styles */
+@media print {
+	.wps-workflow-palette,
+	.wps-workflow-toolbar,
+	.wps-canvas-controls,
+	.wps-block-config-panel,
+	.wps-test-results,
+	.wps-workflow-validation {
+		display: none !important;
+	}
+
+	.wps-workflow-canvas {
+		border: 1px solid #000;
+	}
+
+	.wps-block {
+		break-inside: avoid;
 	}
 }
 

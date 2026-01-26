@@ -209,14 +209,17 @@
 		 * Bind all event handlers
 		 */
 		bindEvents: function() {
-			// Palette block drag events
+			// Palette block drag events (desktop)
 			$('.wps-block-item').on('dragstart', this.handlePaletteDragStart.bind(this));
 			$('.wps-block-item').on('dragend', this.handlePaletteDragEnd.bind(this));
 
-			// Canvas drop events
+			// Canvas drop events (desktop)
 			$('#wps-canvas').on('dragover', this.handleCanvasDragOver.bind(this));
 			$('#wps-canvas').on('dragleave', this.handleCanvasDragLeave.bind(this));
 			$('#wps-canvas').on('drop', this.handleCanvasDrop.bind(this));
+
+			// Touch events for mobile
+			this.setupTouchEvents();
 
 			// Toolbar actions
 			$('#wps-save-workflow').on('click', this.handleSaveWorkflow.bind(this));
@@ -225,6 +228,62 @@
 
 			// Keyboard shortcuts
 			$(document).on('keydown', this.handleKeyboardShortcuts.bind(this));
+		},
+
+		/**
+		 * Setup touch events for mobile devices
+		 */
+		setupTouchEvents: function() {
+			let touchedBlock = null;
+			let touchStartPos = { x: 0, y: 0 };
+
+			// Touch start on palette blocks
+			$('.wps-block-item').on('touchstart', function(e) {
+				const touch = e.originalEvent.touches[0];
+				touchedBlock = $(this);
+				touchStartPos = { x: touch.clientX, y: touch.clientY };
+				
+				$(this).addClass('dragging');
+			});
+
+			// Touch move
+			$(document).on('touchmove', function(e) {
+				if (!touchedBlock) return;
+
+				const touch = e.originalEvent.touches[0];
+				const deltaX = touch.clientX - touchStartPos.x;
+				const deltaY = touch.clientY - touchStartPos.y;
+
+				// Show visual feedback for drag
+				if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+					$('#wps-canvas').addClass('drag-over');
+				}
+			});
+
+			// Touch end
+			$(document).on('touchend', function(e) {
+				if (!touchedBlock) return;
+
+				$('.wps-block-item').removeClass('dragging');
+				$('#wps-canvas').removeClass('drag-over');
+
+				const touch = e.originalEvent.changedTouches[0];
+				const canvasRect = $('#wps-canvas')[0].getBoundingClientRect();
+
+				// Check if touch ended over canvas
+				if (
+					touch.clientX >= canvasRect.left &&
+					touch.clientX <= canvasRect.right &&
+					touch.clientY >= canvasRect.top &&
+					touch.clientY <= canvasRect.bottom
+				) {
+					const blockId = touchedBlock.data('block-id');
+					const blockType = touchedBlock.data('block-type');
+					WorkflowBuilder.addBlockToCanvas(blockId, blockType);
+				}
+
+				touchedBlock = null;
+			});
 		},
 
 		/**
