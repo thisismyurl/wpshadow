@@ -70,6 +70,34 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 	protected static $family_label = 'Content Publishing';
 
 	/**
+	 * Maximum allowed image file size in bytes (5MB)
+	 *
+	 * @var int
+	 */
+	const MAX_IMAGE_SIZE = 5242880;
+
+	/**
+	 * Minimum percentage of modern format adoption to pass check
+	 *
+	 * @var int
+	 */
+	const MIN_MODERN_FORMAT_ADOPTION = 25;
+
+	/**
+	 * Minimum number of images required to evaluate format adoption
+	 *
+	 * @var int
+	 */
+	const MIN_IMAGES_FOR_FORMAT_CHECK = 5;
+
+	/**
+	 * Minimum optimization percentage to pass check
+	 *
+	 * @var int
+	 */
+	const MIN_OPTIMIZATION_PERCENTAGE = 75;
+
+	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
@@ -182,6 +210,7 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 
 		foreach ( $posts as $post ) {
 			// Extract images from post content.
+			// Note: Using regex for simplicity. For more complex HTML parsing, consider DOMDocument.
 			preg_match_all( '/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', $post->post_content, $matches );
 
 			if ( ! empty( $matches[1] ) ) {
@@ -189,6 +218,8 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 					++$total_images;
 
 					// Get attachment ID from URL.
+					// Note: attachment_url_to_postid() performs a DB query per URL.
+					// For large-scale operations, consider caching or batching.
 					$attachment_id = attachment_url_to_postid( $img_url );
 
 					if ( $attachment_id ) {
@@ -198,8 +229,8 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 						if ( $file_path && file_exists( $file_path ) ) {
 							$file_size = filesize( $file_path );
 
-							// Flag images larger than 5MB as unoptimized.
-							if ( $file_size > 5242880 ) { // 5MB in bytes.
+							// Flag images larger than MAX_IMAGE_SIZE as unoptimized.
+							if ( $file_size > self::MAX_IMAGE_SIZE ) {
 								++$unoptimized_images;
 								$large_images[] = array(
 									'post_id'    => $post->ID,
@@ -228,10 +259,7 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 		}
 
 		// Calculate optimization metrics.
-		$optimization_percentage = 100;
-		if ( $total_images > 0 ) {
-			$optimization_percentage = ( ( $total_images - $unoptimized_images ) / $total_images ) * 100;
-		}
+		$optimization_percentage = ( ( $total_images - $unoptimized_images ) / $total_images ) * 100;
 
 		// Check if modern format adoption is low.
 		$modern_format_adoption = 0;
@@ -242,8 +270,8 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 
 		// Determine if there's an issue to report.
 		$has_large_images    = count( $large_images ) > 0;
-		$low_modern_adoption = $modern_format_adoption < 25 && $total_counted_images > 5;
-		$low_optimization    = $optimization_percentage < 75;
+		$low_modern_adoption = $modern_format_adoption < self::MIN_MODERN_FORMAT_ADOPTION && $total_counted_images > self::MIN_IMAGES_FOR_FORMAT_CHECK;
+		$low_optimization    = $optimization_percentage < self::MIN_OPTIMIZATION_PERCENTAGE;
 
 		// If images are well optimized and using modern formats, return null (no issues).
 		if ( ! $has_large_images && ! $low_modern_adoption && ! $low_optimization ) {
@@ -269,7 +297,7 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 		if ( $low_modern_adoption ) {
 			$description_parts[] = sprintf(
 				/* translators: %d: percentage of modern format adoption */
-				__( 'Only %.0f%% of images use modern formats (WebP/AVIF). Modern formats reduce file sizes by 25-35%% without quality loss', 'wpshadow' ),
+				__( 'Only %.0f%%%% of images use modern formats (WebP/AVIF). Modern formats reduce file sizes by 25-35%%%% without quality loss', 'wpshadow' ),
 				$modern_format_adoption
 			);
 		}
@@ -277,7 +305,7 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 		if ( $low_optimization ) {
 			$description_parts[] = sprintf(
 				/* translators: %d: optimization percentage */
-				__( 'Overall optimization score: %.0f%%. Consider using an image optimization plugin', 'wpshadow' ),
+				__( 'Overall optimization score: %.0f%%%%. Consider using an image optimization plugin', 'wpshadow' ),
 				$optimization_percentage
 			);
 		}
