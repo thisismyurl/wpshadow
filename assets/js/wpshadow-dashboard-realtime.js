@@ -269,15 +269,13 @@
 		},
 
 		/**
-		 * Toggle fullscreen mode
-		 */
-		toggleFullscreen: function() {
-			const elem = document.getElementById('wpshadow-dashboard-wrapper');
-			
-		console.log('toggleFullscreen called, elem:', elem);
+	/**
+	 * Toggle fullscreen mode
+	 */
+	toggleFullscreen: function() {
+		const elem = document.getElementById('wpshadow-dashboard-wrapper');
 		
 		if (!elem) {
-			console.error('Dashboard wrapper element not found');
 			return;
 		}
 
@@ -285,10 +283,13 @@
 			document.webkitFullscreenElement || 
 			document.mozFullScreenElement;
 
-		console.log('Current fullscreen state:', isFullscreen);
-				this.enterFullscreen(elem);
-			}
-		},
+		if (!isFullscreen) {
+			this.enterFullscreen(elem);
+		} else {
+			this.exitFullscreen();
+		}
+	},
+
 
 		/**
 		 * Enter fullscreen mode
@@ -296,14 +297,10 @@
 		enterFullscreen: function(elem) {
 			const self = this;
 
-		console.log('enterFullscreen called for elem:', elem);
-
 		// Request fullscreen
 		const requestFullscreen = elem.requestFullscreen || 
 			elem.webkitRequestFullscreen || 
 			elem.mozRequestFullScreen;
-
-		console.log('requestFullscreen method:', requestFullscreen);
 
 		if (requestFullscreen) {
 			requestFullscreen.call(elem).then(function() {
