@@ -25,8 +25,8 @@ Tool_View_Base::enqueue_assets( 'a11y-audit' );
 Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ) );
 ?>
 
-	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
-		<h2><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
+	<div class="wpshadow-tool-section wps-card wps-form-card" role="region" aria-labelledby="wpshadow-a11y-quick-heading">
+		<h2 id="wpshadow-a11y-quick-heading"><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Enter a page URL to check for common accessibility issues:', 'wpshadow' ); ?></p>
 
 		<form id="wpshadow-a11y-scan-form" method="post">
@@ -49,18 +49,18 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 			</div>
 
 			<p class="submit">
-				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-scan">
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-scan" aria-label="<?php esc_attr_e( 'Run an accessibility scan for the provided page path', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-update"></span>
 					<?php esc_html_e( 'Run Accessibility Scan', 'wpshadow' ); ?>
 				</button>
 			</p>
 		</form>
 
-		<div id="scan-results" class="wps-none"></div>
+		<div id="scan-results" class="wps-none" role="status" aria-live="polite" aria-label="<?php esc_attr_e( 'Accessibility scan results', 'wpshadow' ); ?>"></div>
 	</div>
 
-	<div class="wpshadow-tool-section wps-p-20-rounded-4">
-		<h2><?php esc_html_e( 'Common Checks', 'wpshadow' ); ?></h2>
+	<div class="wpshadow-tool-section wps-card" role="region" aria-labelledby="wpshadow-a11y-common-heading">
+		<h2 id="wpshadow-a11y-common-heading"><?php esc_html_e( 'Common Checks', 'wpshadow' ); ?></h2>
 		<ul>
 			<li><strong><?php esc_html_e( 'Alt Text:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'All images must have descriptive alt attributes for screen readers.', 'wpshadow' ); ?></li>
 			<li><strong><?php esc_html_e( 'Heading Structure:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Headings should follow proper hierarchy (H1, H2, H3, etc).', 'wpshadow' ); ?></li>

@@ -182,10 +182,10 @@ $action_labels = array(
 
 			<!-- Submit and Export -->
 			<div class="wps-flex-gap-8">
-				<button type="submit" class="wps-btn wps-btn-primary wps-flex-1">
+				<button type="submit" class="wps-btn wps-btn-primary wps-flex-1" aria-label="<?php esc_attr_e( 'Apply activity history filters', 'wpshadow' ); ?>">
 					<?php esc_html_e( 'Filter', 'wpshadow' ); ?>
 				</button>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity&export=csv' . ( ! empty( $filters ) ? '&' . http_build_query( $filters ) : '' ) ) ); ?>" class="wps-btn wps-btn-secondary wps-btn-icon-left wps-flex-1" title="<?php esc_attr_e( 'Export to CSV', 'wpshadow' ); ?>">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity&export=csv' . ( ! empty( $filters ) ? '&' . http_build_query( $filters ) : '' ) ) ); ?>" class="wps-btn wps-btn-secondary wps-btn-icon-left wps-flex-1" title="<?php esc_attr_e( 'Export to CSV', 'wpshadow' ); ?>" aria-label="<?php esc_attr_e( 'Export activity history to CSV', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-download wps-align-middle"></span>
 					<?php esc_html_e( 'Export', 'wpshadow' ); ?>
 				</a>

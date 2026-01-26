@@ -31,7 +31,7 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 		</p>
 	</div>
 
-	<div class="wps-grid wps-grid-auto-260 wps-gap-4 wps-mt-4 wps-max-w-900">
+		<div class="wps-grid wps-grid-auto-260 wps-gap-4 wps-mt-4 wps-max-w-900">
 		<div class="wps-card wps-mb-0">
 			<h2 class="wps-mt-0"><?php esc_html_e( 'Consent Preferences', 'wpshadow' ); ?></h2>
 			<p class="wps-text-sm wps-text-gray-600 wps-mb-3">
@@ -57,10 +57,10 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 			</div>
 
 			<div class="wps-flex-gap-10-items-center">
-				<button id="wpshadow-save-consent" class="wps-btn wps-btn-primary">
+				<button id="wpshadow-save-consent" class="wps-btn wps-btn-primary" aria-label="<?php esc_attr_e( 'Save your WPShadow privacy and consent preferences', 'wpshadow' ); ?>">
 					<?php esc_html_e( 'Save preferences', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-dismiss-consent" class="wps-btn wps-btn-secondary">
+				<button id="wpshadow-dismiss-consent" class="wps-btn wps-btn-secondary" aria-label="<?php esc_attr_e( 'Snooze the consent prompt for 30 days', 'wpshadow' ); ?>">
 					<?php esc_html_e( 'Snooze for 30 days', 'wpshadow' ); ?>
 				</button>
 				<a href="https://wpshadow.com/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" class="wps-text-xs wps-no-underline wps-text-blue-600 wps-font-600">
@@ -68,7 +68,7 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 				</a>
 			</div>
 
-			<div id="wpshadow-consent-status" class="wps-mt-3 wps-text-xs wps-text-gray-600"></div>
+			<div id="wpshadow-consent-status" class="wps-mt-3 wps-text-xs wps-text-gray-600" role="status" aria-live="polite"></div>
 		</div>
 
 		<div class="wps-card wps-mb-0">

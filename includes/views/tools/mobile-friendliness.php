@@ -27,8 +27,8 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 	<p><?php esc_html_e( 'Run a quick scan to spot mobile-readiness issues like viewport, zoom, and small fonts.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-mobile-grid">
-		<div class="wpshadow-mobile-panel">
-			<h3><?php esc_html_e( 'Scan a URL', 'wpshadow' ); ?></h3>
+		<div class="wpshadow-mobile-panel wps-card wps-form-card" role="region" aria-labelledby="wpshadow-mobile-scan-heading">
+			<h3 id="wpshadow-mobile-scan-heading"><?php esc_html_e( 'Scan a URL', 'wpshadow' ); ?></h3>
 			<form id="wpshadow-mobile-form">
 				<div class="wps-settings-section">
 					<div class="wps-form-group">
@@ -46,18 +46,18 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 				</div>
 			
 				<p class="submit">
-					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left">
+					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" aria-label="<?php esc_attr_e( 'Run a mobile readiness check for the provided page path', 'wpshadow' ); ?>">
 						<span class="dashicons dashicons-update"></span>
 						<?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?>
 					</button>
 				</p>
 
-				<div id="wpshadow-mobile-error" class="notice notice-error"></div>
+				<div id="wpshadow-mobile-error" class="notice notice-error" role="alert" aria-live="assertive"></div>
 			</form>
 		</div>
 
-		<div class="wpshadow-mobile-panel">
-			<h3><?php esc_html_e( 'What we look for', 'wpshadow' ); ?></h3>
+		<div class="wpshadow-mobile-panel wps-card" role="region" aria-labelledby="wpshadow-mobile-checklist-heading">
+			<h3 id="wpshadow-mobile-checklist-heading"><?php esc_html_e( 'What we look for', 'wpshadow' ); ?></h3>
 			<ul style="list-style: disc; margin-left: 18px;">
 				<li><?php esc_html_e( 'Viewport tag with width=device-width', 'wpshadow' ); ?></li>
 				<li><?php esc_html_e( 'Zoom allowed (no user-scalable=no)', 'wpshadow' ); ?></li>
@@ -68,8 +68,8 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 		</div>
 	</div>
 
-	<div class="wpshadow-mobile-panel wpshadow-mobile-results is-hidden" id="wpshadow-mobile-results">
-		<h3><?php esc_html_e( 'Results', 'wpshadow' ); ?></h3>
+	<div class="wpshadow-mobile-panel wpshadow-mobile-results is-hidden wps-card" id="wpshadow-mobile-results" role="region" aria-live="polite" aria-labelledby="wpshadow-mobile-results-heading">
+		<h3 id="wpshadow-mobile-results-heading"><?php esc_html_e( 'Results', 'wpshadow' ); ?></h3>
 		<p><strong><?php esc_html_e( 'Checked URL:', 'wpshadow' ); ?></strong> <span id="wpshadow-mobile-last-url"></span></p>
 		<div class="wpshadow-mobile-summary">
 			<span class="wpshadow-mobile-pill is-pass" data-mobile-summary="pass"><?php esc_html_e( 'Passes', 'wpshadow' ); ?>: <strong>0</strong></span>
