@@ -11,9 +11,11 @@ WPShadow has 713 diagnostic files, of which 418 are stubs (minimal implementatio
 ### 1. `generate-diagnostic-issues.py`
 Main script that creates GitHub issues via the GitHub API.
 
+**Location:** `dev-tools/generate-diagnostic-issues.py`
+
 **Usage:**
 ```bash
-python3 generate-diagnostic-issues.py [OPTIONS]
+python3 dev-tools/generate-diagnostic-issues.py [OPTIONS]
 
 Options:
   --batch N       Create only N issues at a time (default: all)
@@ -26,16 +28,16 @@ Options:
 **Examples:**
 ```bash
 # Dry run to see what would be created
-python3 generate-diagnostic-issues.py --dry-run --batch 10
+python3 dev-tools/generate-diagnostic-issues.py --dry-run --batch 10
 
 # Create first 10 issues
-python3 generate-diagnostic-issues.py --batch 10
+python3 dev-tools/generate-diagnostic-issues.py --batch 10
 
 # Create issues 11-20
-python3 generate-diagnostic-issues.py --batch 10 --start 11
+python3 dev-tools/generate-diagnostic-issues.py --batch 10 --start 11
 
 # Create issues matching "security"
-python3 generate-diagnostic-issues.py --filter security
+python3 dev-tools/generate-diagnostic-issues.py --filter security
 ```
 
 **Requirements:**
@@ -63,12 +65,14 @@ Convenient wrapper script for batch processing.
 ./create-issues-batch.sh
 ```
 
-### 3. `show-progress.py`
+### 3. `show-diagnostic-progress.py`
 Display current implementation progress.
+
+**Location:** `dev-tools/show-diagnostic-progress.py`
 
 **Usage:**
 ```bash
-python3 show-progress.py
+python3 dev-tools/show-diagnostic-progress.py
 ```
 
 **Output:**

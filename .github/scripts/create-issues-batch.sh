@@ -3,13 +3,14 @@
 # Usage: ./create-issues-batch.sh [start_number] [batch_size]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 START=${1:-1}
 BATCH=${2:-10}
 
 echo "Creating batch of $BATCH issues starting from #$START"
 echo ""
 
-python3 "$SCRIPT_DIR/generate-diagnostic-issues.py" --batch "$BATCH" --start "$START"
+python3 "$REPO_ROOT/dev-tools/generate-diagnostic-issues.py" --batch "$BATCH" --start "$START"
 
 NEXT=$((START + BATCH))
 echo ""

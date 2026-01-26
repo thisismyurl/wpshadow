@@ -63,10 +63,12 @@ Issues cover diagnostics in these areas:
 ## Files Created
 
 ```
-.github/scripts/
+dev-tools/
 ├── generate-diagnostic-issues.py  (Main generator - 300+ lines)
+└── show-diagnostic-progress.py    (Progress tracker)
+
+.github/scripts/
 ├── create-issues-batch.sh         (Batch wrapper)
-├── show-progress.py               (Progress tracker)
 ├── README.md                      (Full documentation)
 └── COMPLETION_SUMMARY.md          (This file)
 
@@ -202,7 +204,7 @@ Track implementation progress:
 
 ```bash
 # Show current progress
-python3 .github/scripts/show-progress.py
+python3 dev-tools/show-diagnostic-progress.py
 
 # Count closed stub issues
 gh issue list --label "stub-implementation" --state closed | wc -l
