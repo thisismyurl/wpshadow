@@ -154,8 +154,17 @@ class Diagnostic_Pub_Alt_Text_Descriptive extends Diagnostic_Base {
 
 		$descriptive_percentage = ( ( $total_images - $non_descriptive_count ) / $total_images ) * 100;
 
-		// Flag if less than 80% of images have descriptive alt text.
-		if ( $descriptive_percentage < 80 ) {
+		/**
+		 * Filters the minimum percentage of images that must have descriptive alt text.
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param int $threshold Minimum percentage (0-100). Default 80.
+		 */
+		$threshold = apply_filters( 'wpshadow_descriptive_alt_text_threshold', 80 );
+
+		// Flag if less than threshold of images have descriptive alt text.
+		if ( $descriptive_percentage < $threshold ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => __( 'Non-Descriptive Alt Text Found', 'wpshadow' ),
@@ -231,6 +240,18 @@ class Diagnostic_Pub_Alt_Text_Descriptive extends Diagnostic_Base {
 			'default',
 			'placeholder',
 		);
+
+		/**
+		 * Filters the list of generic terms considered non-descriptive for alt text.
+		 *
+		 * Allows developers to customize which terms are flagged as non-descriptive
+		 * alt text. Useful for adding language-specific terms or industry-specific jargon.
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param array $generic_terms Array of lowercase strings to check against.
+		 */
+		$generic_terms = apply_filters( 'wpshadow_generic_alt_text_terms', $generic_terms );
 
 		$alt_lower = strtolower( $alt_text );
 		foreach ( $generic_terms as $term ) {
