@@ -22,7 +22,7 @@ if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
 		if ( file_exists( WPSHADOW_PATH . 'includes/views/kanban-board.php' ) ) {
 			require_once WPSHADOW_PATH . 'includes/views/kanban-board.php';
 		} else {
-			echo '<div class="wrap"><h1>Action Items</h1><p>Loading action items...</p></div>';
+			echo '<div class="wrap"><h1>Action Items</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Loading action items...</p></div>';
 		}
 	}
 }
@@ -54,7 +54,7 @@ if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 		if ( class_exists( '\WPShadow\Admin\Guardian_Dashboard' ) ) {
 			echo \WPShadow\Admin\Guardian_Dashboard::render();
 		} else {
-			echo '<div class="wrap"><h1>Guardian</h1><p>Diagnostics and treatments system.</p></div>';
+			echo '<div class="wrap"><h1>Guardian</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Diagnostics and treatments system.</p></div>';
 		}
 	}
 }
@@ -72,7 +72,7 @@ if ( ! function_exists( 'wpshadow_render_reports' ) ) {
 		if ( class_exists( '\WPShadow\Admin\Report_Form' ) ) {
 			echo \WPShadow\Admin\Report_Form::render();
 		} else {
-			echo '<div class="wrap"><h1>Reports</h1><p>Site health reports and analytics.</p></div>';
+			echo '<div class="wrap"><h1>Reports</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Site health reports and analytics.</p></div>';
 		}
 	}
 }
@@ -82,7 +82,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	 * Render Settings page
 	 */
 	function wpshadow_render_settings() {
-		echo '<div class="wrap"><h1>Settings</h1><p>Plugin configuration settings.</p></div>';
+		echo '<div class="wrap"><h1>Settings</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Plugin configuration settings.</p></div>';
 	}
 }
 
@@ -108,7 +108,7 @@ if ( ! function_exists( 'wpshadow_render_visual_comparisons' ) ) {
 	 * Render Visual Comparisons page
 	 */
 	function wpshadow_render_visual_comparisons() {
-		echo '<div class="wrap"><h1>Visual Comparisons</h1><p>Visual regression testing coming soon.</p></div>';
+		echo '<div class="wrap"><h1>Visual Comparisons</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Visual regression testing coming soon.</p></div>';
 	}
 }
 

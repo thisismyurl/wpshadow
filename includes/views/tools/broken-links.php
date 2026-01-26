@@ -17,6 +17,7 @@ if ( ! current_user_can( 'read' ) ) {
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Broken Link Checker', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Find and fix broken links across your site.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">

@@ -38,6 +38,7 @@ foreach ( $catalog as $tip ) {
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Tips & Guidance', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tips-toolbar wps-m-20">

@@ -97,6 +97,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Email Test & Configuration', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Test your WordPress email delivery and configure the From Name and From Email address.', 'wpshadow' ); ?></p>
 
 	<?php if ( $test_results ) : ?>

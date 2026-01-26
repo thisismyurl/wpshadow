@@ -25,6 +25,7 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 			<span class="dashicons dashicons-shield" style="color: var(--wps-primary);"></span>
 			<?php esc_html_e( 'Privacy & Consent', 'wpshadow' ); ?>
 		</h1>
+		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 		<p class="wps-page-subtitle">
 			<?php esc_html_e( 'Control how WPShadow collects anonymized analytics. Essential functions and error reporting are always on to keep the plugin working reliably.', 'wpshadow' ); ?>
 		</p>

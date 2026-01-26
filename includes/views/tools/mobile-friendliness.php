@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="wrap wpshadow-tool-container">
 	<h1><?php esc_html_e( 'Mobile Friendliness Checker', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Run a quick scan to spot mobile-readiness issues like viewport, zoom, and small fonts.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-mobile-grid">

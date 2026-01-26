@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="wrap wpshadow-tool-container">
 	<h1><?php esc_html_e( 'Color Contrast Checker', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Evaluate text and background color pairs against WCAG contrast targets.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-contrast-grid">

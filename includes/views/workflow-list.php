@@ -31,6 +31,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 			<span class="dashicons dashicons-update" style="color: var(--wps-primary);"></span>
 			<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
 		</h1>
+		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	</div>
 
 	<p class="description">

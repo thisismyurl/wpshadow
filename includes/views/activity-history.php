@@ -126,6 +126,7 @@ $action_labels = array(
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Activity History', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Comprehensive audit log of all WPShadow actions and system changes.', 'wpshadow' ); ?></p>
 
 	<!-- Filters -->

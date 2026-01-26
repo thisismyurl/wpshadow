@@ -50,6 +50,7 @@ class Visual_Comparisons_Page {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Visual Comparisons', 'wpshadow' ); ?></h1>
+			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 			
 			<p class="description">
 				<?php esc_html_e( 'Visual comparison captures screenshots before and after treatments are applied, helping you ensure changes don\'t break your site.', 'wpshadow' ); ?>

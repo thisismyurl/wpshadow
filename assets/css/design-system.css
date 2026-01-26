@@ -268,6 +268,16 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     line-height: 1.6;
 }
 
+.wps-version-tag {
+    font-size: var(--wps-text-xs);
+    color: var(--wps-gray-500);
+    margin: var(--wps-space-1) 0 0 0;
+    padding: 0;
+    font-weight: var(--wps-font-normal);
+    font-family: var(--wps-font-mono);
+    letter-spacing: 0.02em;
+}
+
 /* ============================================================================
    3. CARDS - Modern Card Component
    ============================================================================ */

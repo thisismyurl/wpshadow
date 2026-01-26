@@ -74,6 +74,7 @@ function wpshadow_render_dashboard() {
 		<?php else : ?>
 			<div class="wps-page-header">
 				<h1 class="wps-page-title"><?php esc_html_e( 'WPShadow Dashboard', 'wpshadow' ); ?></h1>
+				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 			</div>
 		<?php endif; ?>
 

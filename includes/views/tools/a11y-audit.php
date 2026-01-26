@@ -17,6 +17,7 @@ if ( ! current_user_can( 'read' ) ) {
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Accessibility Audit', 'wpshadow' ); ?></h1>
+	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 	<p><?php esc_html_e( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
