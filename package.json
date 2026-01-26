@@ -1,0 +1,33 @@
+{
+  "name": "wpshadow",
+  "version": "1.0.0",
+  "description": "> **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report tests/e2e-reports"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thisismyurl/wpshadow.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/thisismyurl/wpshadow/issues"
+  },
+  "homepage": "https://github.com/thisismyurl/wpshadow#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.0"
+  }
+}
