@@ -1,19 +1,66 @@
 <?php
+/**
+ * Diagnostic: Pub Heading Hierarchy
+ *
+ * Checks for proper heading hierarchy (H1 → H2 → H3 structure without gaps)
+ * in published content. Ensures content follows accessibility best practices
+ * and SEO guidelines for heading structure.
+ *
+ * @since   1.2601.2148
+ * @package WPShadow\Diagnostics
+ */
+
 declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * Diagnostic_Pub_Heading_Hierarchy Class
+ *
+ * Detects heading hierarchy issues in published content that could
+ * negatively impact accessibility and SEO.
+ *
+ * @since 1.2601.2148
+ */
 class Diagnostic_Pub_Heading_Hierarchy extends Diagnostic_Base {
+	/**
+	 * The diagnostic slug
+	 *
+	 * @var string
+	 */
 	protected static $slug = 'pub-heading-hierarchy';
 
-	protected static $title = 'Pub Heading Hierarchy';
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Heading Hierarchy Check';
 
-	protected static $description = 'Automatically initialized lean diagnostic for Pub Heading Hierarchy. Optimized for minimal overhead while surfacing high-value signals.';
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Verifies proper heading hierarchy (H1 → H2 → H3) in published content for accessibility and SEO.';
 
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
 	protected static $family = 'general';
 
+	/**
+	 * Display name for the family
+	 *
+	 * @var string
+	 */
 	protected static $family_label = 'General';
 
 	/**
@@ -56,26 +103,26 @@ class Diagnostic_Pub_Heading_Hierarchy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic test
 	 *
-	 * @return array Diagnostic results
+	 * Executes the heading hierarchy check and returns formatted results.
+	 *
+	 * @since  1.2601.2148
+	 * @return array Diagnostic results with status, message, and data.
 	 */
 	public static function run(): array {
-		// STUB: Implement pub-heading-hierarchy test
-		// Philosophy focus: Commandment #7, 8, 9
-		//
-		// Data collection strategy:
-		// - Gather relevant metrics from WordPress
-		// - Calculate or query necessary values
-		// - Return structured result
-		//
-		// KB Article: https://wpshadow.com/kb/pub-heading-hierarchy
-		// Training: https://wpshadow.com/training/category-content-publishing
-		//
-		// User impact: Comprehensive pre-publication audit ensures content meets quality standards, SEO best practices, and accessibility requirements before going live.
+		$result = self::check();
+
+		if ( null === $result ) {
+			return array(
+				'status'  => 'pass',
+				'message' => __( 'No heading hierarchy issues found', 'wpshadow' ),
+				'data'    => array(),
+			);
+		}
 
 		return array(
-			'status'  => 'todo',
-			'message' => 'Diagnostic not yet implemented',
-			'data'    => array(),
+			'status'  => 'fail',
+			'message' => $result['description'] ?? __( 'Heading hierarchy issues detected', 'wpshadow' ),
+			'data'    => $result,
 		);
 	}
 
@@ -93,20 +140,152 @@ class Diagnostic_Pub_Heading_Hierarchy extends Diagnostic_Base {
 		return 'https://wpshadow.com/training/category-content-publishing';
 	}
 
+	/**
+	 * Check for heading hierarchy issues in published content.
+	 *
+	 * This diagnostic analyzes the most recent published post or page to ensure
+	 * proper heading hierarchy (H1 → H2 → H3 structure without gaps).
+	 *
+	 * @since  1.2601.2148
+	 * @return array|null Finding array if issues found, null otherwise.
+	 */
 	public static function check(): ?array {
-		if ( ! ( false ) ) {
+		// Get the most recent published post or page.
+		$args = array(
+			'post_type'      => array( 'post', 'page' ),
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'no_found_rows'  => true,
+		);
+
+		$posts = get_posts( $args );
+
+		// If no published content, nothing to check.
+		if ( empty( $posts ) ) {
 			return null;
 		}
 
+		$post    = $posts[0];
+		$content = $post->post_content;
+
+		// Extract headings from content.
+		$headings = self::extract_headings_from_content( $content );
+
+		// If no headings found, pass (nothing to check).
+		if ( empty( $headings ) ) {
+			return null;
+		}
+
+		// Detect hierarchy issues.
+		$issues = self::detect_hierarchy_issues( $headings );
+
+		// No issues found = PASS.
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		// Calculate threat level based on number of issues.
+		$threat_level = 25;
+		if ( count( $issues ) > 2 ) {
+			$threat_level = 40;
+		}
+
+		// Build descriptive message.
+		$message = sprintf(
+			/* translators: 1: post title, 2: number of issues, 3: list of issues */
+			__( 'Your post "%1$s" has %2$d heading hierarchy issue(s): %3$s. Proper heading hierarchy is important for accessibility and SEO.', 'wpshadow' ),
+			esc_html( $post->post_title ),
+			count( $issues ),
+			implode( '; ', array_slice( $issues, 0, 3 ) )
+		);
+
 		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 			'pub-heading-hierarchy',
-			'Pub Heading Hierarchy',
-			'Automatically initialized lean diagnostic for Pub Heading Hierarchy. Optimized for minimal overhead while surfacing high-value signals.',
+			__( 'Heading Hierarchy Issues', 'wpshadow' ),
+			$message,
 			'general',
 			'low',
-			30,
+			$threat_level,
 			'pub-heading-hierarchy'
 		);
+	}
+
+	/**
+	 * Extract headings from content.
+	 *
+	 * @since  1.2601.2148
+	 * @param  string $content Post content.
+	 * @return array Array of heading levels in order.
+	 */
+	protected static function extract_headings_from_content( string $content ): array {
+		if ( empty( $content ) ) {
+			return array();
+		}
+
+		$headings = array();
+
+		// Match all heading tags (H1-H6).
+		preg_match_all( '/<h([1-6])[^>]*>/i', $content, $matches );
+
+		if ( ! empty( $matches[1] ) ) {
+			$headings = array_map( 'intval', $matches[1] );
+		}
+
+		return $headings;
+	}
+
+	/**
+	 * Detect heading hierarchy issues.
+	 *
+	 * @since  1.2601.2148
+	 * @param  array $headings Array of heading levels.
+	 * @return array Array of issue descriptions.
+	 */
+	protected static function detect_hierarchy_issues( array $headings ): array {
+		$issues = array();
+
+		if ( empty( $headings ) ) {
+			return $issues;
+		}
+
+		// Check if H1 is present.
+		if ( ! in_array( 1, $headings, true ) ) {
+			$issues[] = __( 'No H1 heading found', 'wpshadow' );
+		}
+
+		// Check for skipped levels.
+		$previous_level = 0;
+		foreach ( $headings as $level ) {
+			if ( $previous_level > 0 && $level > $previous_level + 1 ) {
+				$issues[] = sprintf(
+					/* translators: 1: previous heading level, 2: current heading level */
+					__( 'Skipped heading level: H%1$d → H%2$d', 'wpshadow' ),
+					$previous_level,
+					$level
+				);
+			}
+			$previous_level = $level;
+		}
+
+		// Check for orphan headings (heading level used without parent).
+		$level_counts = array_count_values( $headings );
+		for ( $i = 2; $i <= 6; $i++ ) {
+			if ( isset( $level_counts[ $i ] ) && ! isset( $level_counts[ $i - 1 ] ) ) {
+				$issues[] = sprintf(
+					/* translators: 1: heading level, 2: parent heading level */
+					__( 'Orphan heading: H%1$d found without H%2$d parent', 'wpshadow' ),
+					$i,
+					$i - 1
+				);
+			}
+		}
+
+		// Remove duplicate issues.
+		$issues = array_unique( $issues );
+
+		return $issues;
 	}
 
 	/**
@@ -119,29 +298,41 @@ class Diagnostic_Pub_Heading_Hierarchy extends Diagnostic_Base {
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
 	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Automatically initialized lean diagnostic for Pub Heading Hierarchy. Optimized for minimal overhead while surfacing high-value signals.
+	 * - Description: Checks for proper heading hierarchy (H1 → H2 → H3) in published content.
 	 *
+	 * @since  1.2601.2148
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
 	public static function test_live_pub_heading_hierarchy(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-
 		$result = self::check();
 
-		// TODO: Implement actual test logic
+		// If check() returns null, diagnostic passed (no issues found).
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Diagnostic passed: No heading hierarchy issues found in published content', 'wpshadow' ),
+			);
+		}
+
+		// If check() returns an array, diagnostic found issues.
+		if ( is_array( $result ) && isset( $result['description'] ) ) {
+			return array(
+				'passed'  => false,
+				'message' => sprintf(
+					/* translators: %s: issue description */
+					__( 'Diagnostic failed: %s', 'wpshadow' ),
+					$result['description']
+				),
+			);
+		}
+
+		// Unexpected result format.
 		return array(
 			'passed'  => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'message' => __( 'Diagnostic test produced unexpected result format', 'wpshadow' ),
 		);
 	}
 }
