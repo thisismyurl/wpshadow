@@ -214,16 +214,20 @@ class Diagnostic_Pub_Year_References_Updateable extends Diagnostic_Base {
 			++$posts_with_years;
 
 			// Check for updateable patterns (shortcodes that might handle years).
-			$has_year_shortcode = (
-				strpos( $content, '[year' ) !== false ||
-				strpos( $content, '[current_year' ) !== false ||
-				strpos( $content, '[date' ) !== false
-			);
+			// Use a combined regex pattern for better performance.
+			$has_year_shortcode = preg_match( '/\[(year|current_year|date)[\s\]]/i', $content );
 
 			// Check for year in custom fields (common pattern for dynamic content).
-			$year_meta = get_post_meta( $post->ID, 'year', true ) ||
-						get_post_meta( $post->ID, 'publication_year', true ) ||
-						get_post_meta( $post->ID, 'reference_year', true );
+			// Get all post meta at once to avoid multiple database calls.
+			$all_meta = get_post_meta( $post->ID );
+			$year_meta = false;
+			if ( ! empty( $all_meta['year'][0] ) ) {
+				$year_meta = $all_meta['year'][0];
+			} elseif ( ! empty( $all_meta['publication_year'][0] ) ) {
+				$year_meta = $all_meta['publication_year'][0];
+			} elseif ( ! empty( $all_meta['reference_year'][0] ) ) {
+				$year_meta = $all_meta['reference_year'][0];
+			}
 
 			if ( $has_year_shortcode || ! empty( $year_meta ) ) {
 				++$posts_with_patterns;
@@ -233,7 +237,7 @@ class Diagnostic_Pub_Year_References_Updateable extends Diagnostic_Base {
 			}
 		}
 
-		// If less than 20% of posts have year references, not a concern.
+		// If no posts have year references, not a concern.
 		if ( 0 === $posts_with_years ) {
 			return null;
 		}
@@ -251,7 +255,7 @@ class Diagnostic_Pub_Year_References_Updateable extends Diagnostic_Base {
 					$posts_hardcoded,
 					$hardcoded_percentage
 				),
-				'general',
+				'content-publishing',
 				'low',
 				25,
 				'pub-year-references-updateable'
