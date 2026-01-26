@@ -102,6 +102,12 @@ function wpshadow_get_tools_catalog() {
 			'tool'    => 'activity-history',
 			'enabled' => true,
 		),
+		array(
+			'title'   => __( 'Visual Comparisons', 'wpshadow' ),
+			'desc'    => __( 'Visual regression testing and screenshot comparison tool.', 'wpshadow' ),
+			'tool'    => 'visual-comparisons',
+			'enabled' => false, // Coming soon
+		),
 	);
 }
 

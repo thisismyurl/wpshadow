@@ -16,6 +16,11 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 ?>
 
 <div class="wpshadow-onboarding-wizard">
+	<!-- Close Button (always visible) -->
+	<button type="button" class="wpshadow-onboarding-close" id="close-onboarding" aria-label="<?php esc_attr_e( 'Exit setup wizard', 'wpshadow' ); ?>" title="<?php esc_attr_e( 'Exit Setup (you can return anytime)', 'wpshadow' ); ?>">
+		<span class="dashicons dashicons-no-alt"></span>
+	</button>
+	
 	<div class="wpshadow-onboarding-container">
 
 		<!-- Step 1: Welcome & Platform Selection -->
@@ -382,6 +387,41 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		color: #1d2327;
 	}
 
+	/* Close button */
+	.wpshadow-onboarding-close {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		width: 36px;
+		height: 36px;
+		border: none;
+		background: #f0f0f1;
+		border-radius: 4px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s ease;
+		z-index: 10;
+		color: #646970;
+	}
+
+	.wpshadow-onboarding-close:hover {
+		background: #dcdcde;
+		color: #1d2327;
+	}
+
+	.wpshadow-onboarding-close:focus {
+		outline: 2px solid #2271b1;
+		outline-offset: 2px;
+	}
+
+	.wpshadow-onboarding-close .dashicons {
+		font-size: 20px;
+		width: 20px;
+		height: 20px;
+	}
+
 	.platform-card p,
 	.comfort-card p {
 		margin: 0 0 20px 0;
@@ -685,10 +725,10 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	});
 
 	// Skip onboarding
-	$('#skip-onboarding').on('click', function(e) {
+	$('#skip-onboarding, #close-onboarding').on('click', function(e) {
 		e.preventDefault();
 
-		if (!confirm('<?php echo esc_js( __( 'Are you sure? The onboarding helps us customize your experience.', 'wpshadow' ) ); ?>')) {
+		if (!confirm('<?php echo esc_js( __( 'Exit setup wizard? You can return anytime from Settings → Onboarding.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
 
@@ -698,6 +738,13 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		}, function() {
 			window.location.reload();
 		});
+	});
+
+	// ESC key to exit
+	$(document).on('keydown', function(e) {
+		if (e.key === 'Escape' || e.keyCode === 27) {
+			$('#close-onboarding').trigger('click');
+		}
 	});
 
 	// Finish onboarding
