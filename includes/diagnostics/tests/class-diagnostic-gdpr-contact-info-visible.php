@@ -186,7 +186,7 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 				'gdpr-contact-info-visible',
 				'GDPR Contact Info Visible',
 				'No privacy policy page configured. GDPR requires visible contact details of the data controller and DPO for data subject requests.',
-				'security',
+				'config',
 				'high',
 				75,
 				'gdpr-contact-info-visible'
@@ -200,7 +200,7 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 				'gdpr-contact-info-visible',
 				'GDPR Contact Info Visible',
 				'Privacy policy exists but is empty. Add contact details of the data controller and DPO as required by GDPR.',
-				'security',
+				'config',
 				'high',
 				70,
 				'gdpr-contact-info-visible'
@@ -228,7 +228,7 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 				'gdpr-contact-info-visible',
 				'GDPR Contact Info Visible',
 				'Privacy policy lacks contact information. GDPR requires clear contact details for the data controller and DPO to handle data subject requests.',
-				'security',
+				'config',
 				'high',
 				65,
 				'gdpr-contact-info-visible'
@@ -237,12 +237,33 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 
 		// Step 4: Additional check - verify admin email is set and not a default/test value.
 		$admin_email = get_option( 'admin_email' );
-		if ( empty( $admin_email ) || strpos( $admin_email, 'example.com' ) !== false || strpos( $admin_email, 'test' ) !== false ) {
+
+		// Check for invalid or test email domains.
+		$invalid_domains = array( 'example.com', 'example.org', 'test.com', 'localhost' );
+		$is_invalid      = false;
+
+		if ( empty( $admin_email ) ) {
+			$is_invalid = true;
+		} else {
+			// Extract domain from email.
+			$email_parts = explode( '@', $admin_email );
+			if ( count( $email_parts ) === 2 ) {
+				$domain = strtolower( $email_parts[1] );
+				foreach ( $invalid_domains as $invalid_domain ) {
+					if ( $domain === $invalid_domain ) {
+						$is_invalid = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if ( $is_invalid ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-contact-info-visible',
 				'GDPR Contact Info Visible',
 				'Admin email is not properly configured. Set a valid contact email for GDPR compliance.',
-				'security',
+				'config',
 				'medium',
 				55,
 				'gdpr-contact-info-visible'
