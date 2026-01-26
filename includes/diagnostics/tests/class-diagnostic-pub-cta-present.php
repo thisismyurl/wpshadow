@@ -118,12 +118,13 @@ class Diagnostic_Pub_Cta_Present extends Diagnostic_Base {
 			}
 		}
 
+		// Calculate percentage (safe from division by zero due to empty check above).
 		$percentage = ( $posts_without_cta / count( $posts ) ) * 100;
 
 		// Alert if more than 30% of posts lack CTAs.
 		if ( $percentage > 30 ) {
 			return Diagnostic_Lean_Checks::build_finding(
-				'pub-cta-present',
+				self::$slug,
 				'Posts Missing Call-To-Action',
 				sprintf(
 					/* translators: %s: percentage of posts without CTAs */
@@ -133,7 +134,7 @@ class Diagnostic_Pub_Cta_Present extends Diagnostic_Base {
 				'general',
 				'low',
 				25,
-				'pub-cta-present'
+				self::$slug
 			);
 		}
 
@@ -188,17 +189,19 @@ class Diagnostic_Pub_Cta_Present extends Diagnostic_Base {
 			'upgrade',
 		);
 
+		// Build a single regex pattern for efficiency.
+		$escaped_keywords = array_map(
+			function ( $keyword ) {
+				return preg_quote( $keyword, '/' );
+			},
+			$action_keywords
+		);
+		$pattern          = '/<a[^>]*>.*?(' . implode( '|', $escaped_keywords ) . ').*?<\/a>/is';
+
 		// Convert to lowercase for case-insensitive matching.
 		$content_lower = strtolower( $content );
 
-		foreach ( $action_keywords as $keyword ) {
-			// Look for keywords within anchor tags.
-			if ( preg_match( '/<a[^>]*>.*?' . preg_quote( $keyword, '/' ) . '.*?<\/a>/is', $content_lower ) ) {
-				return true;
-			}
-		}
-
-		return false;
+		return (bool) preg_match( $pattern, $content_lower );
 	}
 
 	/**
