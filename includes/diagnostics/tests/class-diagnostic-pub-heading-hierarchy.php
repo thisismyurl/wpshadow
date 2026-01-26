@@ -255,30 +255,58 @@ class Diagnostic_Pub_Heading_Hierarchy extends Diagnostic_Base {
 			$issues[] = __( 'No H1 heading found', 'wpshadow' );
 		}
 
-		// Check for skipped levels.
-		$previous_level = 0;
+		// Check for skipped levels by tracking max level seen.
+		$max_level_seen = 0;
+		$seen_levels    = array();
+
 		foreach ( $headings as $level ) {
-			if ( $previous_level > 0 && $level > $previous_level + 1 ) {
-				$issues[] = sprintf(
-					/* translators: 1: previous heading level, 2: current heading level */
-					__( 'Skipped heading level: H%1$d → H%2$d', 'wpshadow' ),
-					$previous_level,
-					$level
-				);
+			$seen_levels[ $level ] = true;
+
+			// Check if we skipped any levels between max_level_seen and current level.
+			if ( $level > $max_level_seen + 1 ) {
+				// Find which levels were skipped.
+				for ( $expected = $max_level_seen + 1; $expected < $level; $expected++ ) {
+					if ( ! isset( $seen_levels[ $expected ] ) ) {
+						$issues[] = sprintf(
+							/* translators: 1: previous heading level, 2: current heading level */
+							__( 'Skipped heading level: H%1$d → H%2$d', 'wpshadow' ),
+							$max_level_seen > 0 ? $max_level_seen : 0,
+							$level
+						);
+						break; // Only report once per gap.
+					}
+				}
 			}
-			$previous_level = $level;
+
+			// Update max level seen.
+			if ( $level > $max_level_seen ) {
+				$max_level_seen = $level;
+			}
 		}
 
-		// Check for orphan headings (heading level used without parent).
-		$level_counts = array_count_values( $headings );
-		for ( $i = 2; $i <= 6; $i++ ) {
-			if ( isset( $level_counts[ $i ] ) && ! isset( $level_counts[ $i - 1 ] ) ) {
-				$issues[] = sprintf(
-					/* translators: 1: heading level, 2: parent heading level */
-					__( 'Orphan heading: H%1$d found without H%2$d parent', 'wpshadow' ),
-					$i,
-					$i - 1
-				);
+		// Check for orphan headings - level exists but parent level never appeared before it.
+		$levels_in_order = array();
+		foreach ( $headings as $level ) {
+			if ( ! in_array( $level, $levels_in_order, true ) ) {
+				$levels_in_order[] = $level;
+			}
+		}
+
+		foreach ( $levels_in_order as $level ) {
+			if ( $level > 1 ) {
+				// Check if parent level appeared before this level in the sequence.
+				$parent_level = $level - 1;
+				$level_index  = array_search( $level, $levels_in_order, true );
+				$parent_index = array_search( $parent_level, $levels_in_order, true );
+
+				if ( false === $parent_index || $parent_index > $level_index ) {
+					$issues[] = sprintf(
+						/* translators: 1: heading level, 2: parent heading level */
+						__( 'Orphan heading: H%1$d found without H%2$d parent', 'wpshadow' ),
+						$level,
+						$parent_level
+					);
+				}
 			}
 		}
 
