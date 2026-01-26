@@ -574,18 +574,6 @@ $severity_legend = array(
 							<?php else : ?>
 								<?php esc_html_e( 'No findings yet', 'wpshadow' ); ?>
 							<?php endif; ?>
-					<?php if ( empty( $findings_by_status[ $column_status ] ) ) : ?>
-						<div class="wps-kanban-empty">
-							<span class="dashicons dashicons-yes-alt"></span>
-							<p>
-								<?php
-								if ( 'fixed' === $column_status ) :
-									esc_html_e( 'No workflows yet', 'wpshadow' );
-								else :
-									esc_html_e( 'No items in this column', 'wpshadow' );
-								endif;
-								?>
-							</p>
 						</div>
 					<?php endif; ?>
 				</div>
