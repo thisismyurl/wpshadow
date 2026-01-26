@@ -205,10 +205,10 @@ class Onboarding_Manager {
 				?>
 			</p>
 			<p>
-				<button type="button" class="button button-primary" id="wpshadow-graduate-btn">
+				<button type="button" class="wps-btn wps-btn-primary" id="wpshadow-graduate-btn">
 					<?php esc_html_e( 'Show Me Everything', 'wpshadow' ); ?>
 				</button>
-				<button type="button" class="button" id="wpshadow-graduate-later">
+				<button type="button" class="wps-btn wps-btn-secondary" id="wpshadow-graduate-later">
 					<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
 				</button>
 				<a href="https://wpshadow.com/kb/wordpress-graduation/" target="_blank" style="margin-left: 15px;">

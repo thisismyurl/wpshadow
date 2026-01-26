@@ -1,0 +1,1 @@
+@copilot Please resume work on this issue. The workflow builder modernization is a high priority. Start by exploring the current workflow-builder.php file and begin implementing the Scratch-inspired block design system.

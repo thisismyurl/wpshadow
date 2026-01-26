@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</span>
 				</div>
 			</div>
-			<button type="submit" class="button button-primary">
+			<button type="submit" class="wps-btn wps-btn-primary">
 				<?php esc_html_e( 'Check Contrast', 'wpshadow' ); ?>
 			</button>
 		</form>
@@ -92,16 +92,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Common Color Pairs', 'wpshadow' ); ?></h3>
-		<button type="button" class="button" data-text="#000000" data-bg="#FFFFFF">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#000000" data-bg="#FFFFFF">
 			Black on White
 		</button>
-		<button type="button" class="button" data-text="#FFFFFF" data-bg="#000000">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#000000">
 			White on Black
 		</button>
-		<button type="button" class="button" data-text="#003366" data-bg="#FFFFFF">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#003366" data-bg="#FFFFFF">
 			Dark Blue on White
 		</button>
-		<button type="button" class="button" data-text="#FFFFFF" data-bg="#003366">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#003366">
 			White on Dark Blue
 		</button>
 	</div>

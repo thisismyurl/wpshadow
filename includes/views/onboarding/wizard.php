@@ -16,11 +16,6 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 ?>
 
 <div class="wpshadow-onboarding-wizard">
-	<!-- Close Button (always visible) -->
-	<button type="button" class="wpshadow-onboarding-close" id="close-onboarding" aria-label="<?php esc_attr_e( 'Exit setup wizard', 'wpshadow' ); ?>" title="<?php esc_attr_e( 'Exit Setup (you can return anytime)', 'wpshadow' ); ?>">
-		<span class="dashicons dashicons-no-alt"></span>
-	</button>
-	
 	<div class="wpshadow-onboarding-container">
 
 		<!-- Step 1: Welcome & Platform Selection -->
@@ -34,12 +29,17 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 
 			<div class="platform-cards">
 				<?php foreach ( $platforms as $platform ) : ?>
-				<div class="platform-card clickable" data-platform="<?php echo esc_attr( $platform['id'] ); ?>" role="button" tabindex="0" aria-label="<?php echo esc_attr( sprintf( __( 'Select: %s', 'wpshadow' ), $platform['label'] ) ); ?>">
-					<div class="platform-icon">
-						<span class="dashicons dashicons-<?php echo esc_attr( $platform['icon'] ); ?>"></span>
+					<div class="platform-card" data-platform="<?php echo esc_attr( $platform['id'] ); ?>">
+						<div class="platform-icon">
+							<span class="dashicons dashicons-<?php echo esc_attr( $platform['icon'] ); ?>"></span>
+						</div>
+						<h3><?php echo esc_html( $platform['label'] ); ?></h3>
+						<p><?php echo esc_html( $platform['description'] ); ?></p>
+						<button type="button" class="wps-btn wps-btn-primary select-platform">
+							<?php esc_html_e( 'This One', 'wpshadow' ); ?>
+						</button>
 					</div>
-					<h3><?php echo esc_html( $platform['label'] ); ?></h3>
-					<p><?php echo esc_html( $platform['description'] ); ?></p>
+				<?php endforeach; ?>
 			</div>
 
 			<p class="onboarding-skip">
@@ -60,28 +60,38 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="comfort-options">
-			<div class="comfort-card clickable" data-comfort="learning" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Select: I like to take my time', 'wpshadow' ); ?>">
-				<div class="comfort-icon">
-					<span class="dashicons dashicons-welcome-learn-more"></span>
+				<div class="comfort-card" data-comfort="learning">
+					<div class="comfort-icon">
+						<span class="dashicons dashicons-welcome-learn-more"></span>
+					</div>
+					<h3><?php esc_html_e( 'I like to take my time', 'wpshadow' ); ?></h3>
+					<p><?php esc_html_e( 'I prefer step-by-step guidance and clear explanations', 'wpshadow' ); ?></p>
+					<button type="button" class="wps-btn wps-btn-primary select-comfort">
+						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
+					</button>
 				</div>
-				<h3><?php esc_html_e( 'I like to take my time', 'wpshadow' ); ?></h3>
-				<p><?php esc_html_e( 'I prefer step-by-step guidance and clear explanations', 'wpshadow' ); ?></p>
-			</div>
 
-			<div class="comfort-card clickable" data-comfort="comfortable" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Select: I can figure things out', 'wpshadow' ); ?>">
-				<div class="comfort-icon">
-					<span class="dashicons dashicons-yes"></span>
+				<div class="comfort-card" data-comfort="comfortable">
+					<div class="comfort-icon">
+						<span class="dashicons dashicons-yes"></span>
+					</div>
+					<h3><?php esc_html_e( 'I can figure things out', 'wpshadow' ); ?></h3>
+					<p><?php esc_html_e( 'I like some guidance but I\'m comfortable exploring', 'wpshadow' ); ?></p>
+					<button type="button" class="wps-btn wps-btn-primary select-comfort">
+						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
+					</button>
 				</div>
-				<h3><?php esc_html_e( 'I can figure things out', 'wpshadow' ); ?></h3>
-				<p><?php esc_html_e( 'I like some guidance but I\'m comfortable exploring', 'wpshadow' ); ?></p>
-			</div>
 
-			<div class="comfort-card clickable" data-comfort="expert" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Select: I dive right in', 'wpshadow' ); ?>">
-				<div class="comfort-icon">
-					<span class="dashicons dashicons-superhero"></span>
+				<div class="comfort-card" data-comfort="expert">
+					<div class="comfort-icon">
+						<span class="dashicons dashicons-superhero"></span>
+					</div>
+					<h3><?php esc_html_e( 'I dive right in', 'wpshadow' ); ?></h3>
+					<p><?php esc_html_e( 'I learn by doing and prefer minimal hand-holding', 'wpshadow' ); ?></p>
+					<button type="button" class="wps-btn wps-btn-primary select-comfort">
+						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
+					</button>
 				</div>
-				<h3><?php esc_html_e( 'I dive right in', 'wpshadow' ); ?></h3>
-				<p><?php esc_html_e( 'I learn by doing and prefer minimal hand-holding', 'wpshadow' ); ?></p>
 			</div>
 
 			<p class="onboarding-nav">
@@ -129,7 +139,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="onboarding-actions">
-				<button type="button" class="button button-primary" id="continue-config">
+				<button type="button" class="wps-btn wps-btn-primary" id="continue-config">
 					<?php esc_html_e( 'Continue', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -214,7 +224,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="onboarding-actions">
-				<button type="button" class="button button-primary" id="continue-privacy">
+				<button type="button" class="wps-btn wps-btn-primary" id="continue-privacy">
 					<?php esc_html_e( 'Continue', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -233,7 +243,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="onboarding-actions">
-				<button type="button" class="button button-primary button-hero" id="finish-onboarding">
+				<button type="button" class="wps-btn wps-btn-primary wps-btn-lg" id="finish-onboarding">
 					<?php esc_html_e( 'Let\'s Go!', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -275,11 +285,11 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	}
 
 	.onboarding-step {
-		display: none !important;
+		display: none;
 	}
 
 	.onboarding-step.active {
-		display: block !important;
+		display: block;
 		animation: fadeIn 0.4s ease-in;
 	}
 
@@ -385,41 +395,6 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		margin: 0 0 10px 0;
 		font-size: 18px;
 		color: #1d2327;
-	}
-
-	/* Close button */
-	.wpshadow-onboarding-close {
-		position: absolute;
-		top: 20px;
-		right: 20px;
-		width: 36px;
-		height: 36px;
-		border: none;
-		background: #f0f0f1;
-		border-radius: 4px;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: all 0.2s ease;
-		z-index: 10;
-		color: #646970;
-	}
-
-	.wpshadow-onboarding-close:hover {
-		background: #dcdcde;
-		color: #1d2327;
-	}
-
-	.wpshadow-onboarding-close:focus {
-		outline: 2px solid #2271b1;
-		outline-offset: 2px;
-	}
-
-	.wpshadow-onboarding-close .dashicons {
-		font-size: 20px;
-		width: 20px;
-		height: 20px;
 	}
 
 	.platform-card p,
@@ -584,11 +559,9 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			selectedPlatform = $(this).closest('.platform-card').data('platform');
 
 			// Show next step
-			$('#step-platform'). - entire card is clickable
-		$('.platform-card.clickable').on('click keypress', function(e) {
-			if (e.type === 'keypress' && e.which !== 13 && e.which !== 32) return;
-			e.preventDefault();
-			selectedPlatform = $(this
+			$('#step-platform').removeClass('active');
+			$('#step-comfort').addClass('active');
+		});
 
 		// Comfort level selection
 		$('.select-comfort').on('click', function() {
@@ -600,11 +573,9 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			// Show next step
 			$('#step-comfort').removeClass('active');
 			$('#step-config').addClass('active');
-		}); - entire card is clickable
-		$('.comfort-card.clickable').on('click keypress', function(e) {
-			if (e.type === 'keypress' && e.which !== 13 && e.which !== 32) return;
-			e.preventDefault();
-			selectedComfort = $(this
+		});
+		
+		// Continue from config step
 		$('#continue-config').on('click', function() {
 			// Collect config preferences
 			const selectedConfig = {
@@ -725,10 +696,10 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	});
 
 	// Skip onboarding
-	$('#skip-onboarding, #close-onboarding').on('click', function(e) {
+	$('#skip-onboarding').on('click', function(e) {
 		e.preventDefault();
 
-		if (!confirm('<?php echo esc_js( __( 'Exit setup wizard? You can return anytime from Settings → Onboarding.', 'wpshadow' ) ); ?>')) {
+		if (!confirm('<?php echo esc_js( __( 'Are you sure? The onboarding helps us customize your experience.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
 
@@ -738,13 +709,6 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		}, function() {
 			window.location.reload();
 		});
-	});
-
-	// ESC key to exit
-	$(document).on('keydown', function(e) {
-		if (e.key === 'Escape' || e.keyCode === 27) {
-			$('#close-onboarding').trigger('click');
-		}
 	});
 
 	// Finish onboarding

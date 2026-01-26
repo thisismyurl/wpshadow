@@ -34,7 +34,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			
 				<p class="submit">
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?></button>
+					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left">
+						<span class="dashicons dashicons-update"></span>
+						<?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?>
+					</button>
 				</p>
 
 				<div id="wpshadow-mobile-error" class="notice notice-error"></div>

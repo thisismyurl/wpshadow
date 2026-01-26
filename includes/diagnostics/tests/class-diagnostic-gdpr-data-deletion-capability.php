@@ -1,23 +1,76 @@
 <?php
+/**
+ * GDPR Data Deletion Capability Diagnostic
+ *
+ * Verifies that WordPress is properly configured to allow users to request
+ * deletion of their personal data, fulfilling GDPR's "Right to Erasure" requirement.
+ *
+ * This diagnostic checks:
+ * - WordPress version supports data deletion (4.9.6+)
+ * - Privacy policy page is configured
+ * - Privacy policy page is published and accessible
+ *
+ * @since   1.2601.2148
+ * @package WPShadow\Diagnostics
+ */
+
 declare(strict_types=1);
+
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-
+/**
+ * Diagnostic class for GDPR data deletion capability.
+ *
+ * @since 1.2601.2148
+ */
 class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
+	/**
+	 * The diagnostic slug/ID
+	 *
+	 * @since 1.2601.2148
+	 * @var string
+	 */
 	protected static $slug = 'gdpr-data-deletion-capability';
 
+	/**
+	 * The diagnostic title
+	 *
+	 * @since 1.2601.2148
+	 * @var string
+	 */
 	protected static $title = 'Gdpr Data Deletion Capability';
 
-	protected static $description = 'Automatically initialized lean diagnostic for Gdpr Data Deletion Capability. Optimized for minimal overhead while surfacing high-value signals.';
+	/**
+	 * The diagnostic description
+	 *
+	 * @since 1.2601.2148
+	 * @var string
+	 */
+	protected static $description = 'Verifies that WordPress is configured to allow users to request deletion of their personal data (GDPR Right to Erasure).';
 
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @since 1.2601.2148
+	 * @var string
+	 */
 	protected static $family = 'general';
 
+	/**
+	 * Display name for the family
+	 *
+	 * @since 1.2601.2148
+	 * @var string
+	 */
 	protected static $family_label = 'General';
 
 	/**
 	 * Get diagnostic ID
+	 *
+	 * @since 1.2601.2148
+	 * @return string Diagnostic identifier.
 	 */
 	public static function get_id(): string {
 		return 'gdpr-data-deletion-capability';
@@ -25,6 +78,9 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 
 	/**
 	 * Get diagnostic name
+	 *
+	 * @since 1.2601.2148
+	 * @return string Translatable diagnostic name.
 	 */
 	public static function get_name(): string {
 		return __( 'Can users request data deletion?', 'wpshadow' );
@@ -32,40 +88,50 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 
 	/**
 	 * Get diagnostic description
+	 *
+	 * @since 1.2601.2148
+	 * @return string Translatable diagnostic description.
 	 */
 	public static function get_description(): string {
-		return __( 'Can users request data deletion?. Part of Compliance & Legal Risk analysis.', 'wpshadow' );
+		return __( 'Can users request data deletion? Part of Compliance & Legal Risk analysis.', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic category
+	 *
+	 * @since 1.2601.2148
+	 * @return string Diagnostic category identifier.
 	 */
 	public static function get_category(): string {
 		return 'compliance_risk';
 	}
 
 	/**
-	 * Run the diagnostic test
+	 * Run the diagnostic test (legacy method)
 	 *
-	 * @return array Finding data or empty if no issue
+	 * @since 1.2601.2148
+	 * @return array Finding data or empty if no issue.
 	 */
 	public static function run(): array {
-		// Implement: Can users request data deletion? test
-		// Smart implementation needed
-
-		return array(); // Stub: full implementation pending
+		$result = self::check();
+		return is_array( $result ) ? $result : array();
 	}
 
 	/**
 	 * Get threat level for this finding (0-100)
+	 *
+	 * @since 1.2601.2148
+	 * @return int Threat level score.
 	 */
 	public static function get_threat_level(): int {
-		// Threat level based on diagnostic category
 		return 57;
 	}
 
 	/**
 	 * Get KB article URL
+	 *
+	 * @since 1.2601.2148
+	 * @return string Knowledge base article URL.
 	 */
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/gdpr-data-deletion-capability/';
@@ -73,44 +139,71 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 
 	/**
 	 * Get training video URL
+	 *
+	 * @since 1.2601.2148
+	 * @return string Training video URL.
 	 */
 	public static function get_training_video(): string {
 		return 'https://wpshadow.com/training/gdpr-data-deletion-capability/';
 	}
 
+	/**
+	 * Run the diagnostic check for GDPR data deletion capability.
+	 *
+	 * Verifies that WordPress has the necessary features configured to allow users
+	 * to request deletion of their personal data (GDPR Right to Erasure).
+	 *
+	 * Checks:
+	 * 1. WordPress version supports data deletion (4.9.6+ with wp_user_request function)
+	 * 2. Privacy policy page is configured (required for data request forms)
+	 * 3. Privacy policy page is published and accessible
+	 *
+	 * @since 1.2601.2148
+	 * @return array|null Finding array if issues detected, null if compliant.
+	 */
 	public static function check(): ?array {
-		// Check if user data deletion is supported
-		// WordPress has built-in export/deletion features, check if accessible
-
-		// Check if privacy page exists (which has delete data functionality in newer WP)
-		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
-
-		if ( ! $privacy_policy_id ) {
-			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-				'gdpr-data-deletion-capability',
-				'Gdpr Data Deletion Capability',
-				'No privacy policy configured. Set up the privacy policy page to enable data deletion features.',
-				'security',
-				'high',
-				70,
-				'gdpr-data-deletion-capability'
-			);
-		}
-
-		// Check if WordPress supports personal data deletion
+		// Check if WordPress version supports personal data deletion (introduced in 4.9.6).
 		if ( ! function_exists( 'wp_user_request' ) ) {
-			// Older version - might not have full support
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-data-deletion-capability',
-				'Gdpr Data Deletion Capability',
-				'WordPress version may not have full data deletion support. Update to WordPress 4.9.6+ for GDPR data deletion features.',
-				'security',
+				'WordPress Data Deletion Not Supported',
+				'WordPress 4.9.6+ is required for GDPR data deletion features. Update WordPress to enable users to request data deletion.',
+				'compliance',
 				'medium',
 				50,
 				'gdpr-data-deletion-capability'
 			);
 		}
 
+		// Check if privacy policy page is configured.
+		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
+		if ( 0 === $privacy_policy_id ) {
+			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
+				'gdpr-data-deletion-capability',
+				'Privacy Policy Not Configured',
+				'A privacy policy page is required to enable user data deletion requests. Go to Settings → Privacy to configure one.',
+				'compliance',
+				'high',
+				75,
+				'gdpr-data-deletion-capability'
+			);
+		}
+
+		// Check if the privacy policy page exists and is published.
+		$privacy_page = get_post( $privacy_policy_id );
+		if ( ! $privacy_page || 'publish' !== $privacy_page->post_status ) {
+			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
+				'gdpr-data-deletion-capability',
+				'Privacy Policy Not Published',
+				'The privacy policy page must be published for users to access data deletion request forms. Publish the page or assign a different one in Settings → Privacy.',
+				'compliance',
+				'high',
+				70,
+				'gdpr-data-deletion-capability'
+			);
+		}
+
+		// All checks passed - data deletion capability is properly configured.
 		return null;
 	}
 
@@ -124,29 +217,52 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
 	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Automatically initialized lean diagnostic for Gdpr Data Deletion Capability. Optimized for minimal overhead while surfacing high-value signals.
+	 * - Description: Verifies that WordPress has GDPR data deletion capability properly configured.
 	 *
+	 * @since 1.2601.2148
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
 	public static function test_live_gdpr_data_deletion_capability(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-
 		$result = self::check();
 
-		// TODO: Implement actual test logic
+		// Determine expected state based on actual site configuration.
+		$has_wp_support        = function_exists( 'wp_user_request' );
+		$privacy_policy_id     = (int) get_option( 'wp_page_for_privacy_policy' );
+		$has_privacy_policy    = 0 !== $privacy_policy_id;
+		$privacy_page          = $has_privacy_policy ? get_post( $privacy_policy_id ) : null;
+		$privacy_page_published = $privacy_page && 'publish' === $privacy_page->post_status;
+
+		// Site is healthy if all conditions are met.
+		$is_healthy = $has_wp_support && $has_privacy_policy && $privacy_page_published;
+
+		// Test passes if result matches expected state.
+		// Healthy site should return null, unhealthy should return finding array.
+		if ( $is_healthy && null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Site is properly configured for GDPR data deletion. Check correctly returned null.',
+			);
+		} elseif ( ! $is_healthy && is_array( $result ) && isset( $result['id'] ) ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Site has data deletion issues. Check correctly identified: ' . $result['title'],
+			);
+		}
+
+		// Result doesn't match expected state - test fails.
+		if ( null === $result ) {
+			return array(
+				'passed'  => false,
+				'message' => 'Check returned null but site has configuration issues (WP support: ' . ( $has_wp_support ? 'yes' : 'no' ) . ', Privacy policy: ' . ( $has_privacy_policy ? 'yes' : 'no' ) . ', Published: ' . ( $privacy_page_published ? 'yes' : 'no' ) . ')',
+			);
+		}
+
 		return array(
 			'passed'  => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'message' => 'Check returned finding but site appears properly configured',
 		);
 	}
 }
