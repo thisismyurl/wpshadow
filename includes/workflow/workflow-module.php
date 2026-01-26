@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Ensure Block_Registry is loaded.
+require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
+
 /**
  * Render the Visual Workflow Builder page
  *
