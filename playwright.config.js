@@ -21,12 +21,12 @@ module.exports = defineConfig({
 	testDir: './tests/e2e',
 	
 	/* Maximum time one test can run for */
-	timeout: 60 * 1000,
+	timeout: 30 * 1000, // Reduced to 30 seconds
 	
 	/* Test execution settings */
 	fullyParallel: false, // Run tests sequentially for WordPress (avoid conflicts)
 	forbidOnly: !!process.env.CI,
-	retries: process.env.CI ? 2 : 0,
+	retries: process.env.CI ? 0 : 0, // No retries to fail faster
 	workers: process.env.CI ? 1 : 1, // WordPress needs sequential execution
 	
 	/* Reporter to use */
