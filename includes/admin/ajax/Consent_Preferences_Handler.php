@@ -34,7 +34,25 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 	 * Save consent preferences for the current admin user.
 	 */
 	public static function handle_save(): void {
-		self::verify_request( 'wpshadow_consent', 'read' );
+		// Verify nonce without dying - more graceful error handling
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpshadow_consent' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Security check failed. Please refresh the page and try again.', 'wpshadow' ),
+				),
+				400
+			);
+		}
+
+		// Verify user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You must be logged in to save preferences.', 'wpshadow' ),
+				),
+				403
+			);
+		}
 
 		$current_user = get_current_user_id();
 		$telemetry    = self::get_post_param( 'telemetry', 'bool', false, false );
@@ -60,7 +78,25 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 	 * Dismiss consent prompt for 30 days.
 	 */
 	public static function handle_dismiss(): void {
-		self::verify_request( 'wpshadow_consent', 'read' );
+		// Verify nonce without dying - more graceful error handling
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpshadow_consent' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Security check failed. Please refresh the page and try again.', 'wpshadow' ),
+				),
+				400
+			);
+		}
+
+		// Verify user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You must be logged in to dismiss this prompt.', 'wpshadow' ),
+				),
+				403
+			);
+		}
 
 		$current_user = get_current_user_id();
 		First_Run_Consent::dismiss_consent( $current_user );
