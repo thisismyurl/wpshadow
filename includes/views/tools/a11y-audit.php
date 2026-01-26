@@ -43,7 +43,7 @@ if ( ! current_user_can( 'read' ) ) {
 			</div>
 
 			<p class="submit">
-				<button type="submit" class="button button-primary" id="run-scan">
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-scan"><span class="dashicons dashicons-update"></span>
 					<?php esc_html_e( 'Run Accessibility Scan', 'wpshadow' ); ?>
 				</button>
 			</p>

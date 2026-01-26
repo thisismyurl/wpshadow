@@ -61,7 +61,7 @@ $active_links = array_filter(
 						<?php esc_html_e( 'How long the link will work before expiring', 'wpshadow' ); ?>
 					</div>
 			</div>
-			<button type="submit" class="button button-primary">
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left"><span class="dashicons dashicons-update"></span>
 				<?php esc_html_e( 'Generate Magic Link', 'wpshadow' ); ?>
 			</button>
 			<div id="wpshadow-magic-link-message" class="wps-none"></div>
@@ -91,7 +91,7 @@ $active_links = array_filter(
 							<td><?php echo esc_html( wp_date( get_option( 'date_format' ), $link['created_at'] ?? 0 ) ); ?></td>
 							<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $link['expires_at'] ?? 0 ) ); ?></td>
 							<td>
-								<button type="button" class="button button-small wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>">
+								<button type="button" class="wps-btn wps-btn-secondary wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>">
 									<?php esc_html_e( 'Revoke', 'wpshadow' ); ?>
 								</button>
 							</td>
@@ -142,7 +142,7 @@ jQuery(document).ready(function($) {
 						'<p><?php esc_attr_e( 'Link:', 'wpshadow' ); ?></p>' +
 						'<code class="wps-block-m-10-p-10">' + response.data.magic_link + '</code>' +
 						'<p><?php esc_attr_e( 'Expires:', 'wpshadow' ); ?> ' + response.data.expires_at + '</p>' +
-						'<button type="button" class="button" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
+						'<button type="button" class="wps-btn wps-btn-secondary" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
 						'</div>';
 					$message.html(html).show();
 					$form[0].reset();

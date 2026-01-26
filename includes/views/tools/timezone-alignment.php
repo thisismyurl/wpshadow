@@ -81,7 +81,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			<h3><?php esc_html_e( 'Browser Timezone Detection', 'wpshadow' ); ?></h3>
 			<p><?php esc_html_e( 'Click below to automatically detect your timezone from your browser and apply it to WordPress.', 'wpshadow' ); ?></p>
 
-			<button id="wpshadow-detect-tz-btn" class="button button-primary" type="button">
+			<button id="wpshadow-detect-tz-btn" class="wps-btn wps-btn-primary wps-btn-icon-left" type="button"><span class="dashicons dashicons-update"></span>
 				<?php esc_html_e( 'Detect & Apply My Timezone', 'wpshadow' ); ?>
 			</button>
 
@@ -116,7 +116,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 				<?php endforeach; ?>
 			</div>
 
-			<button id="wpshadow-save-tz-btn" class="button button-primary" type="button" style="margin-top: 15px;">
+			<button id="wpshadow-save-tz-btn" class="wps-btn wps-btn-primary" type="button" style="margin-top: 15px;">
 				<?php esc_html_e( 'Apply Selected Timezone', 'wpshadow' ); ?>
 			</button>
 

@@ -236,11 +236,11 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 
 			<!-- Quick Scan and Deep Scan Buttons -->
 			<div class="wps-health-gauge-actions">
-				<button id="wpshadow-quick-scan-btn" class="button button-primary wps-btn-scan" aria-label="<?php esc_attr_e( 'Run quick site scan', 'wpshadow' ); ?>">
+				<button type="button" id="wpshadow-quick-scan-btn" class="wps-btn wps-btn-success wps-btn-icon-left wps-btn-scan" aria-label="<?php esc_attr_e( 'Run quick site scan', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-update" aria-hidden="true"></span>
 					<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-deep-scan-btn" class="button wps-btn-scan" aria-label="<?php esc_attr_e( 'Run comprehensive deep scan', 'wpshadow' ); ?>">
+				<button type="button" id="wpshadow-deep-scan-btn" class="wps-btn wps-btn-secondary wps-btn-icon-left wps-btn-scan" aria-label="<?php esc_attr_e( 'Run comprehensive deep scan', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-search" aria-hidden="true"></span>
 					<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
 				</button>
