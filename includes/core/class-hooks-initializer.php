@@ -258,8 +258,22 @@ class Hooks_Initializer {
 		);
 
 		wp_enqueue_style(
+			'wpshadow-kanban-board-modern',
+			WPSHADOW_URL . 'assets/css/kanban-board-modern.css',
+			array( 'wpshadow-design-system', 'wpshadow-kanban-board' ),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_style(
 			'wpshadow-dashboard-fullscreen',
 			WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
+			array( 'wpshadow-design-system' ),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_style(
+			'wpshadow-guardian-dashboard-modern',
+			WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
 			array( 'wpshadow-design-system' ),
 			WPSHADOW_VERSION
 		);
