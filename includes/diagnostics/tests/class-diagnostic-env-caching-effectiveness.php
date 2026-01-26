@@ -275,15 +275,15 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 	 * @return array Transient analysis data.
 	 */
 	private static function analyze_transient_health( $wpdb ): array {
-		// Count total transients
+		// Count total transient timeout keys (each represents a cached item)
 		$total_transients = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s",
-				'_transient_%'
+				'_transient_timeout_%'
 			)
 		);
 
-		// Count expired transients
+		// Count expired transients (timeout value is less than current time)
 		$expired_transients = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->options} 
@@ -297,7 +297,8 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 		// Calculate health percentage
 		$health_percentage = 100;
 		if ( $total_transients > 0 ) {
-			$health_percentage = ( ( $total_transients - $expired_transients ) / $total_transients ) * 100;
+			$active_transients = $total_transients - $expired_transients;
+			$health_percentage = ( $active_transients / $total_transients ) * 100;
 		}
 
 		return array(
