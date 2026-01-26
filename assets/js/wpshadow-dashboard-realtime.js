@@ -269,7 +269,6 @@
 		},
 
 		/**
-	/**
 	 * Toggle fullscreen mode
 	 */
 	toggleFullscreen: function() {
@@ -290,12 +289,11 @@
 		}
 	},
 
-
-		/**
-		 * Enter fullscreen mode
-		 */
-		enterFullscreen: function(elem) {
-			const self = this;
+	/**
+	 * Enter fullscreen mode
+	 */
+	enterFullscreen: function(elem) {
+		const self = this;
 
 		// Request fullscreen
 		const requestFullscreen = elem.requestFullscreen || 
@@ -304,7 +302,6 @@
 
 		if (requestFullscreen) {
 			requestFullscreen.call(elem).then(function() {
-				console.log('Fullscreen entered successfully');
 				// Hide WordPress admin chrome
 				$('html').addClass('wpshadow-fullscreen-mode');
 				$('#wpadminbar').hide();
@@ -330,18 +327,21 @@
 				$('#wpshadow-fullscreen-toggle').html('Exit Full Screen (ESC)');
 
 			}).catch(function(err) {
-				console.error('Fullscreen request failed:', err);
 				alert('Unable to enter fullscreen mode. Error: ' + err.message);
 			});
 		} else {
-			console.error('Fullscreen API not supported');
 			alert('Fullscreen mode is not supported in your browser.');
-			$(document).on('keydown.wpshadow-fullscreen', function(e) {
-				if (e.key === 'Escape') {
-					self.exitFullscreen();
-				}
-			});
-		},
+		}
+		
+		// Listen for ESC key to exit
+		$(document).on('keydown.wpshadow-fullscreen', function(e) {
+			if (e.key === 'Escape') {
+				self.exitFullscreen();
+			}
+		});
+	},
+
+
 
 		/**
 		 * Exit fullscreen mode
@@ -358,10 +358,9 @@
 			// Restore WordPress admin chrome
 			$('html').removeClass('wpshadow-fullscreen-mode');
 			$('#wpadminbar').show();
-
-				'margin': '',
-				'padding': '',
-				'box-sizing': '',
+		$('#wpshadow-dashboard-wrapper').css({
+			'width': '',
+			'height': '',
 				'overflow': ''
 			});
 
