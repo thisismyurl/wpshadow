@@ -42,6 +42,14 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 	protected static $family_label = 'General';
 
 	/**
+	 * Common English stop words to exclude from keyword extraction.
+	 *
+	 * @since 1.2601.2148
+	 * @var array
+	 */
+	const STOP_WORDS = array( 'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did' );
+
+	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
@@ -167,7 +175,11 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 		}
 
 		// Flag if more than 30% of posts have sub-optimal keyword density.
-		$issue_percentage = ( $posts_with_issues / $total_posts ) * 100;
+		if ( $total_posts > 0 ) {
+			$issue_percentage = ( $posts_with_issues / $total_posts ) * 100;
+		} else {
+			$issue_percentage = 0;
+		}
 
 		if ( $issue_percentage > 30 ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -218,12 +230,11 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 		}
 
 		// Remove common stop words and get longest word.
-		$stop_words = array( 'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did' );
-		$words      = preg_split( '/\s+/', strtolower( $title ) );
-		$words      = array_filter(
+		$words = preg_split( '/\s+/', strtolower( $title ) );
+		$words = array_filter(
 			$words,
-			function ( $word ) use ( $stop_words ) {
-				return strlen( $word ) > 3 && ! in_array( $word, $stop_words, true );
+			function ( $word ) {
+				return strlen( $word ) > 3 && ! in_array( $word, self::STOP_WORDS, true );
 			}
 		);
 
@@ -246,6 +257,7 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 	 * Calculate keyword density in content
 	 *
 	 * Calculates the percentage of times a keyword appears in the content.
+	 * Uses word-boundary matching to avoid partial word matches.
 	 *
 	 * @since  1.2601.2148
 	 * @param  string $content Content to analyze.
@@ -263,13 +275,20 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 			return 0.0;
 		}
 
-		// Count keyword occurrences (case-insensitive).
-		$keyword_lower = strtolower( $keyword );
+		// Count keyword occurrences using word boundaries to avoid partial matches.
+		$keyword_lower = preg_quote( strtolower( $keyword ), '/' );
 		$content_lower = strtolower( $clean_content );
-		$keyword_count = substr_count( $content_lower, $keyword_lower );
+
+		// Match whole words only using word boundaries.
+		$pattern = '/\b' . $keyword_lower . '\b/';
+		$matches = preg_match_all( $pattern, $content_lower );
+
+		if ( false === $matches ) {
+			return 0.0;
+		}
 
 		// Calculate density as percentage.
-		$density = ( $keyword_count / $total_words ) * 100;
+		$density = ( $matches / $total_words ) * 100;
 
 		return round( $density, 2 );
 	}
