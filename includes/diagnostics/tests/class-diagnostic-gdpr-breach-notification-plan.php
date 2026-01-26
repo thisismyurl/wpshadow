@@ -262,8 +262,15 @@ class Diagnostic_GdprBreachNotificationPlan extends Diagnostic_Base {
 		$breach_plan_documented = get_option( 'wpshadow_gdpr_breach_plan_documented', '' );
 		$admin_email            = get_option( 'admin_email', '' );
 
-		// Determine expected state
-		$should_pass = ( 0 !== $privacy_page_id && 'yes' === $breach_plan_documented && ! empty( $admin_email ) );
+		// Check if privacy policy is published
+		$privacy_page_published = false;
+		if ( 0 !== $privacy_page_id ) {
+			$privacy_page           = get_post( $privacy_page_id );
+			$privacy_page_published = ( $privacy_page && 'publish' === $privacy_page->post_status );
+		}
+
+		// Determine expected state - all conditions must be met
+		$should_pass = ( $privacy_page_published && 'yes' === $breach_plan_documented && ! empty( $admin_email ) );
 
 		// Verify result matches expected state
 		$actual_pass = ( null === $result );
