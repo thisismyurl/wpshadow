@@ -405,18 +405,43 @@
 	font-family: inherit;
 }
 
-/* Block Connector Lines */
-.wps-block-connector {
+/* Block Connector Lines - SVG-based for smooth visual flow */
+.wps-workflow-connections {
 	position: absolute;
-	left: 50%;
-	bottom: -1rem;
-	width: 2px;
-	height: 1rem;
-	background: var(--wps-gray-300, #d1d5db);
-	transform: translateX(-50%);
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
 }
 
-.wps-block:last-child .wps-block-connector {
+.wps-workflow-connections svg {
+	width: 100%;
+	height: 100%;
+}
+
+.wps-workflow-connections path {
+	fill: none;
+	stroke: var(--wps-gray-300, #d1d5db);
+	stroke-width: 2;
+	stroke-linecap: round;
+}
+
+.wps-workflow-connections path.trigger-to-action {
+	stroke: var(--wps-info, #3b82f6);
+	stroke-dasharray: 5, 5;
+	animation: dash 20s linear infinite;
+}
+
+@keyframes dash {
+	to {
+		stroke-dashoffset: -100;
+	}
+}
+
+/* Legacy connector for fallback */
+.wps-block-connector {
 	display: none;
 }
 
@@ -719,6 +744,129 @@
 	.wps-workflow-canvas {
 		padding: 1rem;
 		min-height: 400px;
+	}
+
+	.wps-canvas-controls {
+		bottom: 0.5rem !important;
+		right: 0.5rem !important;
+	}
+
+	.wps-canvas-controls button {
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+		font-size: 1rem !important;
+	}
+}
+
+/* ============================================================================
+   Canvas Controls (Zoom/Pan)
+   ============================================================================ */
+
+.wps-canvas-controls {
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	display: flex;
+	gap: 0.5rem;
+	z-index: 10;
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wps-canvas-controls button {
+	width: 2.75rem;
+	height: 2.75rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.375rem;
+	cursor: pointer;
+	color: var(--wps-gray-700, #374151);
+	font-size: 1.125rem;
+	transition: all 0.2s ease;
+}
+
+.wps-canvas-controls button:hover {
+	background: var(--wps-gray-50, #f9fafb);
+	border-color: var(--wps-info, #3b82f6);
+	color: var(--wps-info, #3b82f6);
+}
+
+.wps-canvas-controls button:focus {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+.wps-canvas-controls button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.wps-canvas-controls .wps-zoom-level {
+	display: flex;
+	align-items: center;
+	padding: 0 0.5rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: var(--wps-gray-600, #4b5563);
+	min-width: 3.5rem;
+	justify-content: center;
+}
+
+.wps-canvas-viewport {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.wps-canvas-content {
+	transform-origin: 0 0;
+	transition: transform 0.2s ease;
+}
+
+.wps-canvas-content.panning {
+	cursor: grabbing !important;
+	transition: none;
+}
+
+/* Block Search/Filter */
+.wps-palette-search {
+	margin-bottom: 1rem;
+	position: relative;
+}
+
+.wps-palette-search input {
+	width: 100%;
+	padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	transition: border-color 0.2s ease;
+}
+
+.wps-palette-search input:focus {
+	outline: none;
+	border-color: var(--wps-info, #3b82f6);
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.wps-palette-search .dashicons {
+	position: absolute;
+	left: 0.75rem;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--wps-gray-400, #9ca3af);
+	pointer-events: none;
+}
+
+.wps-block-item.hidden {
+	display: none;
 	}
 
 	.wps-workflow-toolbar {
