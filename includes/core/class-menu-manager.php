@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Core\Form_Param_Helper;
 /**
  * Manages WPShadow admin menu registration and setup
  */
@@ -148,11 +149,11 @@ class Menu_Manager {
 	 * @return void
 	 */
 	public static function handle_legacy_redirects() {
-		if ( ! isset( $_GET['page'] ) ) {
+		if ( ! Form_Param_Helper::has_get( 'page' ) ) {
 			return;
 		}
 
-		$page      = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+		$page      = Form_Param_Helper::get( 'page', 'text', '' );
 		$redirects = array(
 			'wpshadow-guardian-reports'       => 'wpshadow-reports',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',

@@ -13,12 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Core\Form_Param_Helper;
+
 // Get filters from query string
-$filter_category = isset( $_GET['activity_category'] ) ? sanitize_key( $_GET['activity_category'] ) : '';
-$filter_action   = isset( $_GET['activity_action'] ) ? sanitize_key( $_GET['activity_action'] ) : '';
-$filter_user     = isset( $_GET['activity_user'] ) ? intval( $_GET['activity_user'] ) : 0;
-$filter_search   = isset( $_GET['activity_search'] ) ? sanitize_text_field( $_GET['activity_search'] ) : '';
-$page_num        = isset( $_GET['activity_page'] ) ? max( 1, intval( $_GET['activity_page'] ) ) : 1;
+$filter_category = Form_Param_Helper::get( 'activity_category', 'key', '' );
+$filter_action   = Form_Param_Helper::get( 'activity_action', 'key', '' );
+$filter_user     = Form_Param_Helper::get( 'activity_user', 'int', 0 );
+$filter_search   = Form_Param_Helper::get( 'activity_search', 'text', '' );
+$page_num        = max( 1, Form_Param_Helper::get( 'activity_page', 'int', 1 ) );
 $per_page        = 25;
 
 // Build filters array

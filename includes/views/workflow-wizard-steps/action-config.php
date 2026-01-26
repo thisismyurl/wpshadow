@@ -9,9 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$trigger_id   = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
-$workflow_id  = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
-$action_index = isset( $_GET['action_index'] ) ? absint( $_GET['action_index'] ) : 0;
+use WPShadow\Core\Form_Param_Helper;
+
+$trigger_id   = Form_Param_Helper::get( 'trigger', 'key', '' );
+$workflow_id  = Form_Param_Helper::get( 'workflow', 'key', '' );
+$action_index = Form_Param_Helper::get( 'action_index', 'int', 0 );
 
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {

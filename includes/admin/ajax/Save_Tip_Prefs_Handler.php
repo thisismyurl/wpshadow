@@ -11,6 +11,7 @@ namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Form_Param_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,8 +30,7 @@ class Save_Tip_Prefs_Handler extends AJAX_Handler_Base {
 			self::send_error( __( 'User not authenticated.', 'wpshadow' ) );
 		}
 
-		$disabled_categories = isset( $_POST['disabled_categories'] ) ? (array) $_POST['disabled_categories'] : array();
-		$disabled_categories = array_map( 'sanitize_key', $disabled_categories );
+		$disabled_categories = Form_Param_Helper::post_multiple( 'disabled_categories', 'key', array() );
 
 		$prefs = array(
 			'disabled_categories' => $disabled_categories,

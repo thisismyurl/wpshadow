@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace WPShadow\Settings;
+use WPShadow\Core\Form_Param_Helper;
 
 /**
  * Email Template Manager
@@ -177,7 +178,7 @@ class Email_Template_Manager {
 	 */
 	public static function render_template_editor() {
 		$templates         = self::get_all_templates();
-		$selected_template = isset( $_GET['template'] ) ? sanitize_key( $_GET['template'] ) : 'report_executive';
+		$selected_template = Form_Param_Helper::get( 'template', 'key', 'report_executive' );
 
 		if ( ! isset( $templates[ $selected_template ] ) ) {
 			$selected_template = 'report_executive';

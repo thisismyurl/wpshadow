@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WP_Theme;
+use WPShadow\Core\Form_Param_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +48,7 @@ class Update_Notification_Manager {
 	 * Process management actions triggered from admin links.
 	 */
 	public static function handle_requests(): void {
-		$action = isset( $_GET['wpshadow_action'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_action'] ) ) : '';
+		$action = Form_Param_Helper::get( 'wpshadow_action', 'key', '' );
 		if ( empty( $action ) || ! self::can_manage() ) {
 			return;
 		}
@@ -293,7 +294,7 @@ class Update_Notification_Manager {
 			return;
 		}
 
-		$notice  = isset( $_GET['wpshadow_notice'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_notice'] ) ) : '';
+		$notice  = Form_Param_Helper::get( 'wpshadow_notice', 'key', '' );
 		$message = '';
 
 		switch ( $notice ) {
@@ -382,8 +383,8 @@ class Update_Notification_Manager {
 	 * @param string $redirect Redirect target.
 	 */
 	private static function handle_theme_delete( string $redirect ): void {
-		$slug  = isset( $_GET['theme'] ) ? sanitize_text_field( wp_unslash( $_GET['theme'] ) ) : '';
-		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$slug  = Form_Param_Helper::get( 'theme', 'text', '' );
+		$nonce = Form_Param_Helper::get( '_wpnonce', 'text', '' );
 		if ( empty( $slug ) || ! wp_verify_nonce( $nonce, 'wpshadow_delete_theme' ) ) {
 			return;
 		}
@@ -414,9 +415,9 @@ class Update_Notification_Manager {
 	 * @param string $redirect Redirect target.
 	 */
 	private static function handle_theme_suppression( bool $suppress, string $redirect ): void {
-		$slug         = isset( $_GET['theme'] ) ? sanitize_text_field( wp_unslash( $_GET['theme'] ) ) : '';
+		$slug         = Form_Param_Helper::get( 'theme', 'text', '' );
 		$nonce_action = $suppress ? 'wpshadow_suppress_theme_update' : 'wpshadow_unsuppress_theme_update';
-		$nonce        = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$nonce        = Form_Param_Helper::get( '_wpnonce', 'text', '' );
 		if ( empty( $slug ) || ! wp_verify_nonce( $nonce, $nonce_action ) ) {
 			return;
 		}
@@ -449,9 +450,9 @@ class Update_Notification_Manager {
 	 */
 	private static function handle_plugin_suppression( bool $suppress, string $redirect ): void {
 		self::ensure_plugin_functions();
-		$plugin       = isset( $_GET['plugin'] ) ? sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) : '';
+		$plugin       = Form_Param_Helper::get( 'plugin', 'text', '' );
 		$nonce_action = $suppress ? 'wpshadow_suppress_plugin_update' : 'wpshadow_unsuppress_plugin_update';
-		$nonce        = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$nonce        = Form_Param_Helper::get( '_wpnonce', 'text', '' );
 		if ( empty( $plugin ) || ! wp_verify_nonce( $nonce, $nonce_action ) ) {
 			return;
 		}

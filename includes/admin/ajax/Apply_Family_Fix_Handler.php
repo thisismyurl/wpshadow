@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Form_Param_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,7 +93,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 
 		if ( $fix_all_family && $successful_count > 1 ) {
 			// Log that this was a family-grouped fix
-			$family_label = isset( $_POST['family_label'] ) ? sanitize_text_field( wp_unslash( $_POST['family_label'] ) ) : 'family';
+			$family_label = Form_Param_Helper::post( 'family_label', 'text', 'family' );
 
 			\WPShadow\Core\Activity_Logger::log(
 				'family_grouped_fix',

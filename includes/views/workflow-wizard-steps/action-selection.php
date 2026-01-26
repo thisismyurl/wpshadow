@@ -9,8 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$trigger_id  = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
-$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
+use WPShadow\Core\Form_Param_Helper;
+
+$trigger_id  = Form_Param_Helper::get( 'trigger', 'key', '' );
+$workflow_id = Form_Param_Helper::get( 'workflow', 'key', '' );
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {
 		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow_id . '&step=action' ) );

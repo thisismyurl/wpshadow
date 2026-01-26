@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Core\Form_Param_Helper;
 /**
  * Centralized hook registration for WPShadow
  */
@@ -571,8 +572,8 @@ class Hooks_Initializer {
 			return;
 		}
 
-		if ( isset( $_POST['wpshadow_dark_mode'] ) ) {
-			$dark_mode = sanitize_text_field( $_POST['wpshadow_dark_mode'] );
+		$dark_mode = Form_Param_Helper::post( 'wpshadow_dark_mode', 'text', '' );
+		if ( ! empty( $dark_mode ) ) {
 			if ( in_array( $dark_mode, array( 'auto', 'light', 'dark' ), true ) ) {
 				update_user_meta( $user_id, 'wpshadow_dark_mode_preference', $dark_mode );
 			}

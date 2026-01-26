@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use WPShadow\Core\Form_Param_Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -126,7 +128,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 			wp_die( 'Insufficient permissions.' );
 		}
 
-		$tool = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
+		$tool = Form_Param_Helper::get( 'tool', 'key', '' );
 
 		// Route to specific tool if requested
 		if ( ! empty( $tool ) ) {

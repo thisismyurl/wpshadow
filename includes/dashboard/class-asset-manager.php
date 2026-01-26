@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use WPShadow\Core\Form_Param_Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -119,7 +121,7 @@ function wpshadow_enqueue_color_contrast_assets( $hook ) {
 		return;
 	}
 
-	$tool = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
+	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
 	if ( $tool !== 'color-contrast' ) {
 		return;
 	}
@@ -167,7 +169,7 @@ function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
 		return;
 	}
 
-	$tool = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
+	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
 	if ( $tool !== 'mobile-friendliness' ) {
 		return;
 	}

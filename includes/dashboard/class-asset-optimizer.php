@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin;
 
+use WPShadow\Core\Form_Param_Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -125,7 +127,7 @@ class Asset_Optimizer {
 		wp_dequeue_script( 'heartbeat' ); // Saves periodic AJAX calls
 
 		// Remove admin bar on WPShadow fullscreen pages
-		if ( isset( $_GET['fullscreen'] ) && $_GET['fullscreen'] === '1' ) {
+		if ( '1' === Form_Param_Helper::get( 'fullscreen', 'text', '' ) ) {
 			show_admin_bar( false );
 		}
 	}

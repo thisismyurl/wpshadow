@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use WPShadow\Views\Tool_View_Base;
+use WPShadow\Core\Form_Param_Helper;
 
 require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
 
@@ -29,15 +30,15 @@ Tool_View_Base::render_header( __( 'Email Notification Test', 'wpshadow' ) );
 
 // Handle test email submission
 $test_results = null;
-if ( isset( $_POST['wpshadow_send_test_email'] ) && check_admin_referer( 'wpshadow_email_test', 'wpshadow_email_test_nonce' ) ) {
+if ( Form_Param_Helper::has_post( 'wpshadow_send_test_email' ) && check_admin_referer( 'wpshadow_email_test', 'wpshadow_email_test_nonce' ) ) {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( 'Insufficient permissions.' );
 	}
 
-	$to_email    = isset( $_POST['to_email'] ) ? sanitize_email( $_POST['to_email'] ) : '';
-	$from_name   = isset( $_POST['from_name'] ) ? sanitize_text_field( $_POST['from_name'] ) : '';
-	$from_email  = isset( $_POST['from_email'] ) ? sanitize_email( $_POST['from_email'] ) : '';
-	$save_config = isset( $_POST['save_config'] ) && $_POST['save_config'] === '1';
+	$to_email    = Form_Param_Helper::post( 'to_email', 'email', '' );
+	$from_name   = Form_Param_Helper::post( 'from_name', 'text', '' );
+	$from_email  = Form_Param_Helper::post( 'from_email', 'email', '' );
+	$save_config = Form_Param_Helper::post( 'save_config', 'bool', false );
 
 	// Save configuration if requested
 	if ( $save_config && ! empty( $from_name ) && ! empty( $from_email ) ) {
@@ -87,12 +88,12 @@ if ( isset( $_POST['wpshadow_send_test_email'] ) && check_admin_referer( 'wpshad
 }
 
 // Handle compliance settings update
-if ( isset( $_POST['wpshadow_update_compliance'] ) && check_admin_referer( 'wpshadow_compliance_settings', 'wpshadow_compliance_nonce' ) ) {
+if ( Form_Param_Helper::has_post( 'wpshadow_update_compliance' ) && check_admin_referer( 'wpshadow_compliance_settings', 'wpshadow_compliance_nonce' ) ) {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( 'Insufficient permissions.' );
 	}
 
-	$uncheck_by_default = isset( $_POST['email_unchecked_by_default'] ) && $_POST['email_unchecked_by_default'] === '1';
+	$uncheck_by_default = Form_Param_Helper::post( 'email_unchecked_by_default', 'text', '' ) === '1';
 	update_option( 'wpshadow_user_email_unchecked_by_default', $uncheck_by_default );
 
 	echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Privacy compliance settings updated.', 'wpshadow' ) . '</p></div>';

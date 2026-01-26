@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Core\Form_Param_Helper;
+
 // Load category metadata functions (global aliases)
 require_once WPSHADOW_PATH . 'includes/core/functions-category-metadata.php';
 
@@ -28,7 +30,7 @@ require_once WPSHADOW_PATH . 'includes/core/functions-category-metadata.php';
  */
 function wpshadow_render_dashboard() {
 	// Check if onboarding wizard should be shown
-	$onboarding_action = isset( $_GET['onboarding'] ) ? sanitize_key( $_GET['onboarding'] ) : '';
+	$onboarding_action = Form_Param_Helper::get( 'onboarding', 'key', '' );
 	$show_onboarding   = in_array( $onboarding_action, array( 'start', 'restart' ), true );
 
 	if ( $show_onboarding ) {
@@ -41,7 +43,7 @@ function wpshadow_render_dashboard() {
 	}
 
 	// Check for category drill-down (Issue #564)
-	$category_filter = isset( $_GET['category'] ) ? sanitize_key( $_GET['category'] ) : '';
+	$category_filter = Form_Param_Helper::get( 'category', 'key', '' );
 	$is_drilldown    = ! empty( $category_filter );
 
 	// Get category metadata for title/details

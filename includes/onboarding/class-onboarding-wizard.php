@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Onboarding;
 
+use WPShadow\Core\Form_Param_Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -66,7 +68,7 @@ class Onboarding_Wizard {
 		}
 
 		// Skip if already on WPShadow page
-		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		$page = Form_Param_Helper::get( 'page', 'text', '' );
 		if ( 'wpshadow' === $page ) {
 			return;
 		}
@@ -115,7 +117,7 @@ class Onboarding_Wizard {
 		}
 
 		// Check if explicitly requesting onboarding
-		$onboarding_param = isset( $_GET['onboarding'] ) ? sanitize_text_field( wp_unslash( $_GET['onboarding'] ) ) : '';
+		$onboarding_param = Form_Param_Helper::get( 'onboarding', 'text', '' );
 		if ( '1' === $onboarding_param || 'restart' === $onboarding_param ) {
 			return true;
 		}

@@ -13,6 +13,7 @@ namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Dashboard_Customization;
+use WPShadow\Core\Form_Param_Helper;
 
 /**
  * AJAX handler for saving dashboard preferences
@@ -38,7 +39,7 @@ class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_admin_nonce', 'read' );
 
 		// Get and validate preferences
-		$prefs = isset( $_POST['prefs'] ) ? (array) $_POST['prefs'] : array();
+		$prefs = Form_Param_Helper::post_multiple( 'prefs', 'text', array() );
 
 		// Sanitize category names
 		$sanitized_prefs = array();

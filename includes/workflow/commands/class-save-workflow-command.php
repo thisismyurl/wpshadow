@@ -12,6 +12,7 @@ namespace WPShadow\Workflow\Commands;
 use WPShadow\Workflow\Command;
 use WPShadow\Workflow\Block_Registry;
 use WPShadow\Workflow\Workflow_Manager;
+use WPShadow\Core\Form_Param_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,8 @@ class Save_Workflow_Command extends Command {
 		}
 
 		$name        = $this->get_post_var( 'name', '' );
-		$blocks      = isset( $_POST['blocks'] ) ? json_decode( wp_unslash( $_POST['blocks'] ), true ) : array();
+		$blocks_json = Form_Param_Helper::post( 'blocks', 'raw', '' );
+		$blocks      = ! empty( $blocks_json ) ? json_decode( wp_unslash( $blocks_json ), true ) : array();
 		$workflow_id = $this->get_post_var( 'workflow_id', '' );
 		$workflow_id = ( '' === $workflow_id ) ? null : $workflow_id;
 

@@ -11,6 +11,7 @@ namespace WPShadow\Workflow\Commands;
 
 use WPShadow\Workflow\Command;
 use WPShadow\Workflow\Workflow_Manager;
+use WPShadow\Core\Form_Param_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +41,7 @@ class Toggle_Workflow_Command extends Command {
 		}
 
 		$workflow_id = $this->get_post_var( 'workflow_id', '' );
-		$enabled     = isset( $_POST['enabled'] ) ? (bool) $_POST['enabled'] : null;
+		$enabled     = Form_Param_Helper::post( 'enabled', 'bool', null );
 
 		if ( empty( $workflow_id ) ) {
 			$this->error( __( 'Invalid workflow ID.', 'wpshadow' ) );

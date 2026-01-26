@@ -27,6 +27,7 @@ require_once __DIR__ . '/../core/class-options-manager.php';
 
 use WPShadow\Utils\Email_Service;
 use WPShadow\Core\Options_Manager;
+use WPShadow\Core\Form_Param_Helper;
 
 /**
  * Engine that evaluates triggers and executes workflow actions
@@ -1484,12 +1485,11 @@ class Workflow_Executor {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['wpshadow_trigger'] ) ) {
+		if ( ! Form_Param_Helper::has_get( 'wpshadow_trigger' ) ) {
 			return;
 		}
 
-		$provided_token = sanitize_text_field( wp_unslash( $_GET['wpshadow_trigger'] ) );
+		$provided_token = Form_Param_Helper::get( 'wpshadow_trigger', 'text', '' );
 		$triggered      = false;
 
 		// Get all workflows with manual_cron_trigger

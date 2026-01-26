@@ -14,6 +14,8 @@
 
 declare(strict_types=1);
 
+use WPShadow\Core\Form_Param_Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -213,17 +215,21 @@ function wpshadow_render_activity_page(): void {
 	}
 
 	// Handle CSV export
-	if ( isset( $_GET['export'] ) && 'csv' === $_GET['export'] ) {
+	$export = Form_Param_Helper::get( 'export', 'text', '' );
+	if ( $export === 'csv' ) {
 		// Build filters for export
 		$filters = array();
-		if ( ! empty( $_GET['activity_category'] ) ) {
-			$filters['category'] = sanitize_key( wp_unslash( $_GET['activity_category'] ) );
+		$category = Form_Param_Helper::get( 'activity_category', 'key', '' );
+		if ( ! empty( $category ) ) {
+			$filters['category'] = $category;
 		}
-		if ( ! empty( $_GET['activity_action'] ) ) {
-			$filters['action'] = sanitize_key( wp_unslash( $_GET['activity_action'] ) );
+		$action = Form_Param_Helper::get( 'activity_action', 'key', '' );
+		if ( ! empty( $action ) ) {
+			$filters['action'] = $action;
 		}
-		if ( ! empty( $_GET['activity_search'] ) ) {
-			$filters['search'] = sanitize_text_field( wp_unslash( $_GET['activity_search'] ) );
+		$search = Form_Param_Helper::get( 'activity_search', 'text', '' );
+		if ( ! empty( $search ) ) {
+			$filters['search'] = $search;
 		}
 
 		// Generate CSV

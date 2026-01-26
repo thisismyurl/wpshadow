@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/../utils/class-email-service.php';
 
 use WPShadow\Utils\Email_Service;
+use WPShadow\Core\Form_Param_Helper;
 
 /**
  * Manages pre-approved email recipients
@@ -242,7 +243,7 @@ class Email_Recipient_Manager {
 	 * Handle email verification from verification link
 	 */
 	public static function handle_verify_email() {
-		$token = isset( $_GET['token'] ) ? sanitize_text_field( $_GET['token'] ) : '';
+		$token = Form_Param_Helper::get( 'token', 'text', '' );
 
 		if ( empty( $token ) ) {
 			wp_die( 'No verification token provided.' );

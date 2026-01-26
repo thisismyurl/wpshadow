@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Form_Param_Helper;
 use WPShadow\Reports\Report_Engine;
 use WPShadow\Reports\Report_Renderer;
 
@@ -51,11 +52,11 @@ class Download_Report_Handler extends AJAX_Handler_Base {
 		}
 
 		// Get parameters from GET (for download links)
-		$date_from = isset( $_GET['date_from'] ) ? sanitize_text_field( wp_unslash( $_GET['date_from'] ) ) : date( 'Y-m-d', strtotime( '-30 days' ) );
-		$date_to   = isset( $_GET['date_to'] ) ? sanitize_text_field( wp_unslash( $_GET['date_to'] ) ) : date( 'Y-m-d' );
-		$category  = isset( $_GET['category'] ) ? sanitize_text_field( wp_unslash( $_GET['category'] ) ) : '';
-		$type      = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : 'summary';
-		$format    = isset( $_GET['format'] ) ? sanitize_text_field( wp_unslash( $_GET['format'] ) ) : 'csv';
+		$date_from = Form_Param_Helper::get( 'date_from', 'text', date( 'Y-m-d', strtotime( '-30 days' ) ) );
+		$date_to   = Form_Param_Helper::get( 'date_to', 'text', date( 'Y-m-d' ) );
+		$category  = Form_Param_Helper::get( 'category', 'text', '' );
+		$type      = Form_Param_Helper::get( 'type', 'text', 'summary' );
+		$format    = Form_Param_Helper::get( 'format', 'text', 'csv' );
 
 		// Validate format
 		if ( ! in_array( $format, array( 'html', 'csv', 'json' ), true ) ) {

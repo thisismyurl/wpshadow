@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Form_Param_Helper;
 
 /**
  * AJAX handler for saving onboarding preferences
@@ -39,8 +40,8 @@ class Save_Onboarding_Handler extends AJAX_Handler_Base {
 		$user_id       = get_current_user_id();
 		$platform      = self::get_post_param( 'platform', 'text', '' );
 		$comfort_level = self::get_post_param( 'comfort_level', 'text', '' );
-		$config        = isset( $_POST['config'] ) ? (array) $_POST['config'] : array();
-		$privacy       = isset( $_POST['privacy'] ) ? (array) $_POST['privacy'] : array();
+		$config        = Form_Param_Helper::post_multiple( 'config', 'text', array() );
+		$privacy       = Form_Param_Helper::post_multiple( 'privacy', 'text', array() );
 
 		// Validate platform
 		$valid_platforms = array( 'wordpress', 'word', 'google-docs', 'wix', 'squarespace', 'moodle', 'notion', 'none' );
