@@ -128,5 +128,8 @@ class AJAX_Router {
 		// Visual comparison operations
 		\WPShadow\Admin\Ajax\Get_Visual_Comparisons_Handler::register();
 		\WPShadow\Admin\Ajax\Get_Visual_Comparison_Handler::register();
+
+		// Exit interview operations
+		\WPShadow\Admin\Ajax\Submit_Exit_Interview_Handler::register();
 	}
 }

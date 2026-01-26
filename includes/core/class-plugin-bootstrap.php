@@ -181,7 +181,7 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_engage_system() {
-		$engage_path = WPSHADOW_PATH . 'includes/engage/';
+		$engage_path = WPSHADOW_PATH . 'includes/engagement/';
 
 		$engage_classes = array(
 			'class-achievement.php',
@@ -189,6 +189,7 @@ class Plugin_Bootstrap {
 			'class-leaderboard.php',
 			'class-badge.php',
 			'class-milestone.php',
+			'class-exit-interview.php',
 		);
 
 		foreach ( $engage_classes as $file ) {
@@ -216,6 +217,11 @@ class Plugin_Bootstrap {
 
 		if ( class_exists( '\\WPShadow\\Engage\\Milestone' ) ) {
 			\WPShadow\Engage\Milestone::init();
+		}
+
+		// Initialize exit interview system
+		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) ) {
+			\WPShadow\Engagement\Exit_Interview::init();
 		}
 	}
 
