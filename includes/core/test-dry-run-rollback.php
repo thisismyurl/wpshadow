@@ -123,8 +123,10 @@ if ( defined( 'ABSPATH' ) ) {
 		$result = wpshadow_attempt_autofix( $finding_id, true );
 
 		echo "Result:\n";
-		print_r( $result );
-		echo "\n";
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Test file only
+		// print_r( $result );
+		echo "Success: " . ( $result['success'] ? 'Yes' : 'No' ) . "\n";
+		echo "Dry run: " . ( ! empty( $result['dry_run'] ) ? 'Yes' : 'No' ) . "\n";
 
 		if ( ! empty( $result['dry_run'] ) && $result['dry_run'] === true ) {
 			echo "✓ Dry run mode confirmed\n";

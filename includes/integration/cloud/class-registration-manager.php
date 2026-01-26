@@ -235,7 +235,10 @@ class Registration_Manager {
 		// Clean up scan cache
 		global $wpdb;
 		$wpdb->query(
-			"DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wpshadow_cloud_scan_%'"
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+				$wpdb->esc_like( 'wpshadow_cloud_scan_' ) . '%'
+			)
 		);
 
 		do_action( 'wpshadow_unregistered' );
