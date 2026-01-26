@@ -88,7 +88,9 @@ All 11 Commandments applied:
 
 ---
 
-## Example: Welcome Email (Day 3)
+## Example: Welcome Email (Trigger: First Scan Complete)
+
+**Trigger:** After first diagnostic scan completes (or Day 3 fallback)
 
 **Subject:** `Hi Sarah, I'm [Founder], and I want to help Acme Coffee Shop succeed`
 

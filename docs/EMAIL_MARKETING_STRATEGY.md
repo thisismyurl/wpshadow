@@ -125,17 +125,21 @@ Day 0: Plugin Activation
   ↓
 Day 0-1: First diagnostic scan completes
   ↓ (if user opts in)
-Day 3: Welcome Email #1
+Trigger 1: Welcome Email #1
+  After first diagnostic scan completes (or Day 3 if no activity)
   "Hi [Name], I'm [Founder Name]. Thanks for trusting WPShadow with [Site Name]!"
   ↓
-Day 7: Quick Win Email #2
-  "Your first week with WPShadow: [X] issues fixed, [Y]% faster"
+Trigger 2: Quick Win Email #2
+  After 3+ issues fixed OR 5+ diagnostics run (or Day 7 fallback)
+  "Your first wins with WPShadow: [X] issues fixed, [Y]% faster"
   ↓
-Day 14: Educational Email #3
+Trigger 3: Educational Email #3
+  After first workflow created OR dashboard visited 3+ times (or Day 14 fallback)
   "Here's what WPShadow is watching on [Site Name]"
   ↓
-Day 30: Monthly Summary #1
-  "Your first month: [Site Name] is healthier than [X]% of WordPress sites"
+Trigger 4: Monthly Summary #1
+  After 10+ treatments applied OR 20+ diagnostics (or Day 30 fallback)
+  "Your journey with WPShadow: [Site Name] is healthier than [X]% of WordPress sites"
   ↓
 Every 30 days: Monthly Personalized Summary
   "What happened on [Site Name] in [Month]"
@@ -148,10 +152,27 @@ Every 90 days: Quarterly Deep Dive (optional)
 
 | Time Period | Max Frequency | Rationale |
 |-------------|---------------|-----------|
-| **Week 1** | 1 email | Welcome + quick win |
-| **Week 2-4** | 1 email | Educational onboarding |
+| **First 2 weeks** | 2 emails max | Welcome + quick win (triggered by usage) |
+| **Weeks 2-4** | 1 email | Educational (triggered by engagement) |
 | **Month 2+** | 1-2 per month | Monthly summary + occasional tips |
 | **Quarterly** | 1 deep dive | Optional detailed report |
+
+**Feature-Based Triggers (Primary):**
+- **Welcome:** After first diagnostic scan completes
+- **Quick Win:** After 3+ issues fixed OR 5+ diagnostics run
+- **Educational:** After first workflow created OR dashboard visited 3+ times
+- **Monthly Summary:** After 10+ treatments applied OR 20+ diagnostics run
+
+**Time-Based Fallback (Secondary):**
+- If feature milestones aren't reached, fall back to: Day 3, Day 7, Day 14, Day 30
+- Ensures all users receive emails even with minimal activity
+
+**Why Feature-Based Triggers?**
+1. **More Relevant:** Emails arrive when users are actively engaged and have context
+2. **Better Timing:** Messages align with user's actual progress, not arbitrary days
+3. **Higher Engagement:** Users who trigger emails by activity are more likely to engage
+4. **Personalized Pace:** Fast adopters get emails sooner, slow adopters aren't rushed
+5. **Graceful Fallback:** Inactive users still get helpful content at reasonable intervals
 
 **Special Triggers (Outside Regular Cadence):**
 - Critical security issue detected (immediate, if opted into alerts)
@@ -358,7 +379,9 @@ Use these in email templates:
 
 ## Content Ideas & Templates
 
-### Email #1: Welcome (Day 3)
+### Email #1: Welcome (Trigger: First Scan Complete)
+
+**Trigger:** After first diagnostic scan completes (or Day 3 fallback if no activity)
 
 **Subject:** `Hi {{first_name}}, I'm [Founder], and I want to help {{site_name}} succeed`
 
@@ -416,7 +439,9 @@ I actually read them. 📧
 
 ---
 
-### Email #2: Quick Win (Day 7)
+### Email #2: Quick Win (Trigger: First Fixes Applied)
+
+**Trigger:** After 3+ issues fixed OR 5+ diagnostics run (or Day 7 fallback)
 
 **Subject:** `{{site_name}} is already {{improvement}}% healthier!`
 
@@ -463,7 +488,9 @@ hours down the road. [Try your first workflow]
 
 ---
 
-### Email #3: Educational (Day 14)
+### Email #3: Educational (Trigger: Engagement Milestone)
+
+**Trigger:** After first workflow created OR dashboard visited 3+ times (or Day 14 fallback)
 
 **Subject:** `What WPShadow is watching on {{site_name}} (and why it matters)`
 
@@ -523,7 +550,9 @@ Thanks for being part of the WPShadow family!
 
 ---
 
-### Email #4: Monthly Summary (Day 30, then monthly)
+### Email #4: Monthly Summary (Trigger: Usage Milestone)
+
+**Trigger:** After 10+ treatments applied OR 20+ diagnostics run (or Day 30 fallback)
 
 **Subject:** `{{site_name}}'s December Report: {{total_fixes}} fixes, {{time_saved}} hours saved`
 
@@ -1075,17 +1104,32 @@ class Engagement_Tracker {
 <?php
 namespace WPShadow\Email;
 
+use WPShadow\Core\Activity_Logger;
+
 class Email_Scheduler {
     
     /**
      * Schedule email campaign after opt-in
+     * Uses feature-based triggers with time-based fallback
      */
     public static function schedule_campaign($user_email) {
         $install_date = get_option('wpshadow_install_date');
         $days_since_install = (current_time('timestamp') - strtotime($install_date)) / DAY_IN_SECONDS;
         
-        // Day 3: Welcome email
-        if ($days_since_install < 3) {
+        // Trigger 1: Welcome email
+        // Primary: After first diagnostic scan completes
+        // Fallback: Day 3 if no activity
+        $first_scan_completed = get_option('wpshadow_first_scan_completed');
+        if ($first_scan_completed) {
+            // Schedule immediately after first scan
+            Email_Queue::enqueue(
+                $user_email,
+                'welcome',
+                array(),
+                current_time('timestamp')
+            );
+        } elseif ($days_since_install < 3) {
+            // Fallback to Day 3
             Email_Queue::enqueue(
                 $user_email,
                 'welcome',
@@ -1094,8 +1138,22 @@ class Email_Scheduler {
             );
         }
         
-        // Day 7: Quick win email
-        if ($days_since_install < 7) {
+        // Trigger 2: Quick win email
+        // Primary: After 3+ issues fixed OR 5+ diagnostics run
+        // Fallback: Day 7 if milestones not reached
+        $treatments_applied = self::count_treatments_applied();
+        $diagnostics_run = self::count_diagnostics_run();
+        
+        if ($treatments_applied >= 3 || $diagnostics_run >= 5) {
+            // Schedule based on feature use
+            Email_Queue::enqueue(
+                $user_email,
+                'quick_win',
+                array(),
+                current_time('timestamp') + DAY_IN_SECONDS // Next day
+            );
+        } elseif ($days_since_install < 7) {
+            // Fallback to Day 7
             Email_Queue::enqueue(
                 $user_email,
                 'quick_win',
@@ -1104,8 +1162,22 @@ class Email_Scheduler {
             );
         }
         
-        // Day 14: Educational email
-        if ($days_since_install < 14) {
+        // Trigger 3: Educational email
+        // Primary: After first workflow created OR dashboard visited 3+ times
+        // Fallback: Day 14 if engagement milestones not reached
+        $workflows_created = self::count_workflows_created();
+        $dashboard_visits = self::count_dashboard_visits();
+        
+        if ($workflows_created >= 1 || $dashboard_visits >= 3) {
+            // Schedule based on engagement
+            Email_Queue::enqueue(
+                $user_email,
+                'educational',
+                array(),
+                current_time('timestamp') + (2 * DAY_IN_SECONDS) // 2 days later
+            );
+        } elseif ($days_since_install < 14) {
+            // Fallback to Day 14
             Email_Queue::enqueue(
                 $user_email,
                 'educational',
@@ -1114,8 +1186,19 @@ class Email_Scheduler {
             );
         }
         
-        // Day 30: First monthly summary
-        if ($days_since_install < 30) {
+        // Trigger 4: First monthly summary
+        // Primary: After 10+ treatments OR 20+ diagnostics
+        // Fallback: Day 30 if usage milestones not reached
+        if ($treatments_applied >= 10 || $diagnostics_run >= 20) {
+            // Schedule based on usage milestone
+            Email_Queue::enqueue(
+                $user_email,
+                'monthly_summary',
+                array(),
+                current_time('timestamp') + (3 * DAY_IN_SECONDS) // 3 days later
+            );
+        } elseif ($days_since_install < 30) {
+            // Fallback to Day 30
             Email_Queue::enqueue(
                 $user_email,
                 'monthly_summary',
@@ -1126,6 +1209,54 @@ class Email_Scheduler {
     }
     
     /**
+     * Count total treatments applied
+     */
+    private static function count_treatments_applied() {
+        $activities = Activity_Logger::get_activities(
+            array('action' => 'treatment_applied'),
+            1000,
+            0
+        );
+        return $activities['total'];
+    }
+    
+    /**
+     * Count total diagnostics run
+     */
+    private static function count_diagnostics_run() {
+        $activities = Activity_Logger::get_activities(
+            array('category' => 'diagnostics'),
+            1000,
+            0
+        );
+        return $activities['total'];
+    }
+    
+    /**
+     * Count workflows created
+     */
+    private static function count_workflows_created() {
+        $activities = Activity_Logger::get_activities(
+            array('action' => 'workflow_created'),
+            1000,
+            0
+        );
+        return $activities['total'];
+    }
+    
+    /**
+     * Count dashboard visits
+     */
+    private static function count_dashboard_visits() {
+        $activities = Activity_Logger::get_activities(
+            array('action' => 'dashboard_accessed'),
+            1000,
+            0
+        );
+        return $activities['total'];
+    }
+    
+    /**
      * Schedule recurring monthly summaries
      */
     public static function schedule_monthly_summary($user_email) {
@@ -1133,6 +1264,14 @@ class Email_Scheduler {
         $next_month = strtotime('first day of next month 09:00:00');
         
         Email_Queue::enqueue(
+            $user_email,
+            'monthly_summary',
+            array(),
+            $next_month
+        );
+    }
+}
+```
             $user_email,
             'monthly_summary',
             array(),

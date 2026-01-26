@@ -19,25 +19,29 @@ Day 0: Plugin Activation
   │       └── [No] → No emails sent (can opt-in later via settings)
   │
   ▼
-Day 3: Welcome Email 👋
+Trigger 1: Welcome Email 👋
+  │   Trigger: After first diagnostic scan completes (or Day 3 fallback)
   │   Subject: "Hi {{first_name}}, I'm [Founder], and I want to help {{site_name}} succeed"
   │   Content: Personal welcome, show initial value, set expectations
   │   From: [Founder Name] <founder@wpshadow.com>
   │
   ▼
-Day 7: Quick Win Email 🎯
+Trigger 2: Quick Win Email 🎯
+  │   Trigger: After 3+ issues fixed OR 5+ diagnostics run (or Day 7 fallback)
   │   Subject: "{{site_name}} is already {{improvement}}% healthier!"
-  │   Content: First week accomplishments, top fixes, what's next
+  │   Content: Accomplishments, top fixes, what's next
   │   From: [Founder Name] <founder@wpshadow.com>
   │
   ▼
-Day 14: Educational Email 🎓
+Trigger 3: Educational Email 🎓
+  │   Trigger: After first workflow OR 3+ dashboard visits (or Day 14 fallback)
   │   Subject: "What WPShadow is watching on {{site_name}} (and why it matters)"
   │   Content: Behind-the-scenes, explain diagnostics, link to training
   │   From: [Founder Name] <founder@wpshadow.com>
   │
   ▼
-Day 30: First Monthly Summary 📊
+Trigger 4: First Monthly Summary 📊
+  │   Trigger: After 10+ treatments OR 20+ diagnostics (or Day 30 fallback)
   │   Subject: "{{site_name}}'s {{month}} Report: {{total_fixes}} fixes, {{time_saved}} hours saved"
   │   Content: Complete monthly report with stats, recommendations, comparison
   │   From: [Founder Name] <founder@wpshadow.com>
@@ -313,18 +317,18 @@ Phase 6: Testing & Launch (Weeks 7-10)
 ## Email Types Comparison
 
 ```
-┌──────────────────────┬──────────┬───────────┬──────────────────┐
-│ Email Type           │ Timing   │ Frequency │ Primary Goal     │
-├──────────────────────┼──────────┼───────────┼──────────────────┤
-│ Welcome              │ Day 3    │ Once      │ Set expectations │
-│ Quick Win            │ Day 7    │ Once      │ Show early value │
-│ Educational          │ Day 14   │ Quarterly │ Teach concepts   │
-│ Monthly Summary      │ Monthly  │ Monthly   │ Report progress  │
-│ Re-Engagement        │ Variable │ Max 2x    │ Restore activity │
-│ Milestone            │ Variable │ As earned │ Celebrate wins   │
-│ Feature Announcement │ Variable │ Ad-hoc    │ Drive adoption   │
-│ Content/Education    │ Variable │ Quarterly │ Deep learning    │
-└──────────────────────┴──────────┴───────────┴──────────────────┘
+┌──────────────────────┬────────────────────────────────┬───────────┬──────────────────┐
+│ Email Type           │ Timing                         │ Frequency │ Primary Goal     │
+├──────────────────────┼────────────────────────────────┼───────────┼──────────────────┤
+│ Welcome              │ After first scan (Day 3 back)  │ Once      │ Set expectations │
+│ Quick Win            │ After 3+ fixes (Day 7 back)    │ Once      │ Show early value │
+│ Educational          │ After engagement (Day 14 back) │ Quarterly │ Teach concepts   │
+│ Monthly Summary      │ After milestones (Day 30 back) │ Monthly   │ Report progress  │
+│ Re-Engagement        │ Variable                       │ Max 2x    │ Restore activity │
+│ Milestone            │ Variable                       │ As earned │ Celebrate wins   │
+│ Feature Announcement │ Variable                       │ Ad-hoc    │ Drive adoption   │
+│ Content/Education    │ Variable                       │ Quarterly │ Deep learning    │
+└──────────────────────┴────────────────────────────────┴───────────┴──────────────────┘
 ```
 
 ---

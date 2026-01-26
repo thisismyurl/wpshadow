@@ -6,7 +6,7 @@
 
 ---
 
-## Template #1: Welcome Email (Day 3)
+## Template #1: Welcome Email (Trigger: First Scan Complete)
 
 ### Subject Lines (A/B Test Options)
 1. `Hi {{first_name}}, I'm [Founder], and I want to help {{site_name}} succeed`
@@ -76,7 +76,7 @@ Most plugins just tell you about problems—we actually solve them.
 
 ---
 
-## Template #2: Quick Win (Day 7)
+## Template #2: Quick Win (Trigger: First Fixes Applied)
 
 ### Subject Lines
 1. `{{site_name}} is already {{improvement}}% healthier!`
@@ -135,7 +135,7 @@ hours down the road. [Try your first workflow →]({{workflow_url}})
 
 ---
 
-## Template #3: Educational (Day 14)
+## Template #3: Educational (Trigger: Engagement Milestone)
 
 ### Subject Lines
 1. `What WPShadow is watching on {{site_name}} (and why it matters)`
@@ -747,9 +747,10 @@ All emails should use this HTML wrapper for consistent branding and responsive d
 
 | Template | Timing | Trigger | Frequency |
 |----------|--------|---------|-----------|
-| **Welcome** | Day 3 | After opt-in | Once |
-| **Quick Win** | Day 7 | First week complete | Once |
-| **Educational** | Day 14 | Onboarding | Once, then quarterly |
+| **Welcome** | After first scan | After opt-in | Once |
+| **Quick Win** | After 3+ fixes | Activity milestone | Once |
+| **Educational** | After engagement | Usage milestone | Once, then quarterly |
+| **Monthly Summary** | After 10+ treatments | Usage milestone | Monthly |
 | **Monthly Summary** | Monthly | First of month | Monthly |
 | **Re-Engagement** | Variable | Engagement score < 25 | Once, then pause |
 | **Milestone** | Variable | Achievement reached | As earned |

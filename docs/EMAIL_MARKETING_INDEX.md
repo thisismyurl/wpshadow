@@ -44,8 +44,8 @@ This planning package contains everything needed to implement a personalized, "H
 
 | Metric | Value |
 |--------|-------|
-| **Time to first email** | Day 3 |
-| **Email frequency** | 1-2x per month max |
+| **Time to first email** | After first scan (Day 3 fallback) |
+| **Email frequency** | Feature-triggered + 1-2x per month max |
 | **Auto-pause threshold** | Engagement score < 25 |
 | **Target opt-in rate** | 40%+ |
 | **Target open rate** | 35%+ |
@@ -54,12 +54,15 @@ This planning package contains everything needed to implement a personalized, "H
 ### Email Journey
 
 ```
-Day 3:  Welcome (personal from founder)
-Day 7:  Quick wins achieved
-Day 14: Educational content
-Day 30: First monthly summary
+Trigger 1: Welcome (after first scan, or Day 3 fallback)
+Trigger 2: Quick wins (after 3+ fixes OR 5+ diagnostics, or Day 7 fallback)
+Trigger 3: Educational (after first workflow OR 3+ dashboard visits, or Day 14 fallback)
+Trigger 4: Monthly summary (after 10+ treatments OR 20+ diagnostics, or Day 30 fallback)
 Then:   Monthly summaries
 ```
+
+**Feature-Based Triggers:** Emails sent when user reaches milestones  
+**Time-Based Fallback:** Fixed days if milestones not reached
 
 ### Engagement Scoring
 
@@ -111,9 +114,10 @@ Then:   Monthly summaries
 **Best For:** Content writers, implementers
 
 **Contains:**
-- ✅ Template #1: Welcome Email (Day 3)
-- ✅ Template #2: Quick Win (Day 7)
-- ✅ Template #3: Educational (Day 14)
+- ✅ Template #1: Welcome Email (after first scan)
+- ✅ Template #2: Quick Win (after fixes/diagnostics)
+- ✅ Template #3: Educational (after engagement)
+- ✅ Template #4: Monthly Summary
 - ✅ Template #4: Monthly Summary
 - ✅ Template #5: Re-Engagement
 - ✅ Template #6: Major Milestone
@@ -326,9 +330,10 @@ Reply-To: [Founder Name] <founder@wpshadow.com>
 - ✅ Cron integration (WordPress hooks)
 
 ### Email Templates
-- ✅ Welcome email (Day 3)
-- ✅ Quick win email (Day 7)
-- ✅ Educational email (Day 14)
+- ✅ Welcome email (after first scan)
+- ✅ Quick win email (after fixes/diagnostics)
+- ✅ Educational email (after engagement)
+- ✅ Monthly summary
 - ✅ Monthly summary
 - ✅ Re-engagement (2 versions)
 - ✅ Milestone celebration
