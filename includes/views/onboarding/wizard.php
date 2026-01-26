@@ -29,17 +29,12 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 
 			<div class="platform-cards">
 				<?php foreach ( $platforms as $platform ) : ?>
-					<div class="platform-card" data-platform="<?php echo esc_attr( $platform['id'] ); ?>">
-						<div class="platform-icon">
-							<span class="dashicons dashicons-<?php echo esc_attr( $platform['icon'] ); ?>"></span>
-						</div>
-						<h3><?php echo esc_html( $platform['label'] ); ?></h3>
-						<p><?php echo esc_html( $platform['description'] ); ?></p>
-						<button type="button" class="button button-primary select-platform">
-							<?php esc_html_e( 'This One', 'wpshadow' ); ?>
-						</button>
+				<div class="platform-card clickable" data-platform="<?php echo esc_attr( $platform['id'] ); ?>" role="button" tabindex="0" aria-label="<?php echo esc_attr( sprintf( __( 'Select: %s', 'wpshadow' ), $platform['label'] ) ); ?>">
+					<div class="platform-icon">
+						<span class="dashicons dashicons-<?php echo esc_attr( $platform['icon'] ); ?>"></span>
 					</div>
-				<?php endforeach; ?>
+					<h3><?php echo esc_html( $platform['label'] ); ?></h3>
+					<p><?php echo esc_html( $platform['description'] ); ?></p>
 			</div>
 
 			<p class="onboarding-skip">
@@ -549,9 +544,11 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			selectedPlatform = $(this).closest('.platform-card').data('platform');
 
 			// Show next step
-			$('#step-platform').removeClass('active');
-			$('#step-comfort').addClass('active');
-		});
+			$('#step-platform'). - entire card is clickable
+		$('.platform-card.clickable').on('click keypress', function(e) {
+			if (e.type === 'keypress' && e.which !== 13 && e.which !== 32) return;
+			e.preventDefault();
+			selectedPlatform = $(this
 
 		// Comfort level selection
 		$('.select-comfort').on('click', function() {
