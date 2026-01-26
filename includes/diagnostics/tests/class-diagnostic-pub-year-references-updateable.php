@@ -244,8 +244,7 @@ class Diagnostic_Pub_Year_References_Updateable extends Diagnostic_Base {
 		if ( $hardcoded_percentage > 70 ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'pub-year-references-updateable',
-				/* translators: %d: percentage of posts with hard-coded years */
-				sprintf( __( 'Year References Not Easily Updateable', 'wpshadow' ) ),
+				__( 'Year References Not Easily Updateable', 'wpshadow' ),
 				sprintf(
 					/* translators: 1: number of posts with hard-coded years, 2: percentage */
 					__( 'Found %1$d posts with year-specific content (%.0f%% hard-coded). Consider using shortcodes like [current_year] or custom fields instead of hard-coding years. This makes annual updates much easier and reduces the risk of outdated content.', 'wpshadow' ),
