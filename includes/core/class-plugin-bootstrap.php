@@ -181,14 +181,15 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_engage_system() {
-		$engage_path = WPSHADOW_PATH . 'includes/engage/';
+		$engage_path = WPSHADOW_PATH . 'includes/engagement/';
 
 		$engage_classes = array(
-			'class-achievement.php',
-			'class-streak.php',
-			'class-leaderboard.php',
-			'class-badge.php',
-			'class-milestone.php',
+			'class-achievement-system.php',
+			'class-streak-tracker.php',
+			'class-leaderboard-manager.php',
+			'class-badge-manager.php',
+			'class-milestone-notifier.php',
+			'class-exit-interview.php',
 		);
 
 		foreach ( $engage_classes as $file ) {
@@ -197,25 +198,30 @@ class Plugin_Bootstrap {
 			}
 		}
 
-		// Initialize engage systems
-		if ( class_exists( '\\WPShadow\\Engage\\Achievement' ) ) {
-			\WPShadow\Engage\Achievement::init();
+		// Initialize gamification systems
+		if ( class_exists( '\\WPShadow\\Gamification\\Achievement_System' ) ) {
+			\WPShadow\Gamification\Achievement_System::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Streak' ) ) {
-			\WPShadow\Engage\Streak::init();
+		if ( class_exists( '\\WPShadow\\Gamification\\Streak_Tracker' ) ) {
+			\WPShadow\Gamification\Streak_Tracker::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Leaderboard' ) ) {
-			\WPShadow\Engage\Leaderboard::init();
+		if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager' ) ) {
+			\WPShadow\Gamification\Leaderboard_Manager::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Badge' ) ) {
-			\WPShadow\Engage\Badge::init();
+		if ( class_exists( '\\WPShadow\\Gamification\\Badge_Manager' ) ) {
+			\WPShadow\Gamification\Badge_Manager::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Milestone' ) ) {
-			\WPShadow\Engage\Milestone::init();
+		if ( class_exists( '\\WPShadow\\Gamification\\Milestone_Notifier' ) ) {
+			\WPShadow\Gamification\Milestone_Notifier::init();
+		}
+
+		// Initialize exit interview system
+		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) ) {
+			\WPShadow\Engagement\Exit_Interview::init();
 		}
 	}
 
