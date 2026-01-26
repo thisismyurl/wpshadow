@@ -3,8 +3,8 @@
  * Diagnostic: Qualified Traffic Percent
  *
  * Measures the percentage of high-quality, engaged traffic visiting the site.
- * Analyzes bounce rate, session duration, pages per session, and traffic sources
- * to determine overall traffic quality.
+ * Uses WordPress-native engagement signals as proxy metrics: comment engagement,
+ * content freshness, and spam ratio to assess overall traffic quality.
  *
  * @since   1.2601.2148
  * @package WPShadow\Diagnostics
@@ -22,12 +22,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_QualifiedTrafficPercent Class
  *
- * Evaluates traffic quality by analyzing user engagement metrics.
- * Qualified traffic includes visitors who:
- * - Have low bounce rates (indicating engagement)
- * - Spend adequate time on site (>2 minutes average)
- * - View multiple pages per session
- * - Come from legitimate, quality traffic sources
+ * Evaluates traffic quality by analyzing user engagement metrics available
+ * in WordPress. Qualified traffic includes visitors who interact meaningfully
+ * with content, indicated by:
+ * - High comment engagement (engaged visitors leave feedback)
+ * - Regular content consumption (site publishes fresh content regularly)
+ * - Low spam ratio (legitimate visitors vs bots/spam)
+ *
+ * This diagnostic uses WordPress-native signals as proxy metrics for traffic
+ * quality when external analytics are unavailable.
  *
  * @since 1.2601.2148
  */
@@ -51,7 +54,7 @@ class Diagnostic_QualifiedTrafficPercent extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Measures the percentage of high-quality, engaged traffic based on bounce rate, session duration, and engagement metrics.';
+	protected static $description = 'Measures traffic quality using WordPress engagement signals: comment engagement, content freshness, and spam ratio.';
 
 	/**
 	 * The family this diagnostic belongs to.
