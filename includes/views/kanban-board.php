@@ -138,14 +138,23 @@ $severity_legend = array(
 ?>
 
 <div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
-	<div class="wps-m-20-p-15-rounded-4">
-		<h3 class="wps-m-0">Organize Your Findings</h3>
-		<p class="wps-m-0">
-			Drag findings between columns to decide how to handle them.
-			<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">Learn about the workflow →</a>
-		</p>
+	<div class="wps-info-card" style="background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); border: 1px solid #93c5fd; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);">
+		<div style="display: flex; align-items: start; gap: 16px;">
+			<span class="dashicons dashicons-info" style="color: #2563eb; font-size: 28px; width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px;" aria-hidden="true"></span>
+			<div style="flex: 1;">
+				<h3 style="margin: 0 0 8px 0; font-size: 1.125rem; font-weight: 700; color: #1e40af;">
+					<?php esc_html_e( 'Organize Your Findings', 'wpshadow' ); ?>
+				</h3>
+				<p style="margin: 0; color: #1e40af; line-height: 1.6;">
+					<?php esc_html_e( 'Drag findings between columns to decide how to handle them. Use your keyboard (Enter/Space) for accessibility.', 'wpshadow' ); ?>
+					<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" style="color: #1e40af; text-decoration: none; font-weight: 600; margin-left: 4px;" aria-label="<?php esc_attr_e( 'Learn about the Kanban workflow (opens in new tab)', 'wpshadow' ); ?>">
+						<?php esc_html_e( 'Learn about the workflow', 'wpshadow' ); ?> →
+					</a>
+				</p>
+			</div>
+		</div>
 	</div>
-	<div id="wpshadow-kanban-status" class="wps-none-m-0-p-10-rounded-6"></div>
+	<div id="wpshadow-kanban-status" class="wps-none-m-0-p-10-rounded-6" role="status" aria-live="polite" aria-atomic="true"></div>
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
 
 	<!-- Workflow Creation Modal -->
@@ -176,8 +185,8 @@ $severity_legend = array(
 				</p>
 			</div>
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-autofix-once" class="button wps-p-10">Just Once</button>
-				<button id="wpshadow-autofix-always" class="button button-primary wps-p-10">Create Workflow</button>
+				<button type="button" class="wps-btn wps-btn-secondary wps-p-10" id="wpshadow-autofix-once">Just Once</button>
+				<button type="button" class="wps-btn wps-btn-primary wps-p-10" id="wpshadow-autofix-always">Create Workflow</button>
 			</div>
 		</div>
 	</div>
@@ -260,10 +269,10 @@ $severity_legend = array(
 
 			<!-- Action Buttons -->
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-workflow-modal-cancel" class="button" class="wps-p-10">
+				<button type="button" id="wpshadow-workflow-modal-cancel" class="wps-btn wps-btn-secondary wps-p-10">
 					<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-workflow-modal-create" class="button button-primary" class="wps-p-10">
+				<button type="button" id="wpshadow-workflow-modal-create" class="wps-btn wps-btn-primary wps-btn-icon-left wps-p-10">
 					<span class="dashicons dashicons-update" style="font-size: 16px; vertical-align: middle;"></span>
 					<?php esc_html_e( 'Create & Configure', 'wpshadow' ); ?>
 				</button>
@@ -297,8 +306,8 @@ $severity_legend = array(
 				</p>
 			</div>
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-family-fix-this-only" class="button" class="wps-p-10">Fix This Only</button>
-				<button id="wpshadow-family-fix-all" class="button button-primary" class="wps-p-10">Fix All Related Issues</button>
+				<button type="button" id="wpshadow-family-fix-this-only" class="wps-btn wps-btn-secondary wps-p-10">Fix This Only</button>
+				<button type="button" id="wpshadow-family-fix-all" class="wps-btn wps-btn-primary wps-p-10">Fix All Related Issues</button>
 			</div>
 		</div>
 	</div>
@@ -306,6 +315,15 @@ $severity_legend = array(
 
 
 	<div class="wpshadow-kanban-board" class="wps-grid-p-20-rounded-8">
+		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
+			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" role="region" aria-label="<?php echo esc_attr( $status_labels[ $status ] ); ?>">
+				<div class="kanban-column-header">
+					<h3>
+						<span class="kanban-column-icon dashicons dashicons-info" aria-hidden="true"></span>
+						<?php echo esc_html( $status_labels[ $status ] ); ?>
+					</h3>
+					<span class="kanban-column-count" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number of items */ __( '%d items', 'wpshadow' ), count( $findings_by_status[ $status ] ) ) ); ?>">
+						<?php echo count( $findings_by_status[ $status ] ); ?>
 		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $column_status ) : ?>
 			<div class="kanban-column" data-status="<?php echo esc_attr( $column_status ); ?>" role="region" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Column status label */ __( '%s findings column', 'wpshadow' ), $status_labels[ $column_status ] ) ); ?>">
 				<div class="wps-kanban-column-header">
@@ -330,19 +348,31 @@ $severity_legend = array(
 							?>
 							<div class="workflow-card"
 								data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>"
-								class="wps-p-12-rounded-4"
-								onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
-								onmouseout="this.style.boxShadow='none'">
+								role="article"
+								aria-label="<?php echo esc_attr( sprintf( __( 'Workflow: %s', 'wpshadow' ), $workflow_name ) ); ?>">
 								<!-- Workflow Title -->
 								<div class="wps-flex-gap-8-items-center-m-0">
-									<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: #8bc34a;"></span>
-									<?php echo esc_html( $workflow_name ); ?>
+									<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: var(--wps-success);" aria-hidden="true"></span>
+									<strong><?php echo esc_html( $workflow_name ); ?></strong>
 									<?php if ( ! $workflow_enabled ) : ?>
-										<span class="wps-p-2-rounded-3">Disabled</span>
+										<span class="wps-p-2-rounded-3"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
 									<?php endif; ?>
 								</div>
 
 								<!-- Workflow Stats -->
+								<div style="font-size: 11px; color: var(--wps-gray-600); margin-bottom: 8px;">
+									<?php
+									echo esc_html(
+										sprintf(
+											/* translators: 1: number of triggers, 2: number of actions */
+											__( '%1$d trigger%2$s • %3$d action%4$s', 'wpshadow' ),
+											(int) $workflow_triggers,
+											$workflow_triggers !== 1 ? 's' : '',
+											(int) $workflow_actions,
+											$workflow_actions !== 1 ? 's' : ''
+										)
+									);
+									?>
 								<div style="font-size: 11px; color: #666; margin-bottom: 8px;">
 									<?php echo (int) $workflow_triggers; ?> trigger<?php echo 1 !== $workflow_triggers ? 's' : ''; ?> •
 									<?php echo (int) $workflow_actions; ?> action<?php echo 1 !== $workflow_actions ? 's' : ''; ?>
@@ -350,8 +380,8 @@ $severity_legend = array(
 
 								<!-- Edit Link -->
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflow-builder&workflow_id=' . $workflow_id ) ); ?>"
-									style="font-size: 12px; color: #2271b1; text-decoration: none;">
-									Edit Workflow →
+									style="font-size: 12px; color: var(--wps-info); text-decoration: none;">
+									<?php esc_html_e( 'Edit Workflow', 'wpshadow' ); ?> →
 								</a>
 							</div>
 						<?php endforeach; ?>
@@ -421,6 +451,14 @@ $severity_legend = array(
 								}
 							}
 							?>
+							<div class="finding-card <?php echo esc_attr( $card_severity ); ?><?php echo esc_attr( $hidden_class ); ?>"
+								data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>"
+								data-severity="<?php echo esc_attr( $card_severity ); ?>"
+								data-category="<?php echo esc_attr( $category_key ); ?>"
+								draggable="true"
+								tabindex="0"
+								role="button"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: 1: finding title, 2: severity level */ __( '%1$s - %2$s severity', 'wpshadow' ), $finding['title'], $card_severity ) ); ?>"
 							<div class="finding-card <?php echo esc_attr( $card_severity . $hidden_class ); ?>"
 								data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>"
 								data-category="<?php echo esc_attr( $category_key ); ?>"
@@ -434,6 +472,13 @@ $severity_legend = array(
 								}
 								?>
 							>
+								<!-- Card Header -->
+								<div class="finding-card-header">
+									<h4 class="finding-card-title finding-title">
+										<?php echo esc_html( $finding['title'] ); ?>
+									</h4>
+									<span class="finding-card-severity finding-threat <?php echo esc_attr( $card_severity ); ?>" data-level="<?php echo esc_attr( $card_severity ); ?>">
+										<?php echo esc_html( ucfirst( $card_severity ) ); ?>
 								<!-- Card Header: Category Badge and Threat Indicator -->
 								<div class="wps-card-header">
 									<span class="wps-category-badge <?php echo esc_attr( $category_key ); ?>">
@@ -449,6 +494,10 @@ $severity_legend = array(
 									<?php echo esc_html( $finding['title'] ); ?>
 								</h4>
 
+								<!-- Description (truncated) -->
+								<!-- Card Body / Description -->
+								<p class="finding-card-description finding-description">
+									<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
 								<!-- Card Description -->
 								<p class="wps-card-description">
 									<?php
@@ -459,6 +508,34 @@ $severity_legend = array(
 									?>
 								</p>
 
+								<!-- Card Footer with Actions -->
+								<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
+									<div class="finding-card-footer">
+										<div class="finding-card-actions finding-actions">
+											<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
+												<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" 
+													target="_blank" 
+													class="button button-small"
+													aria-label="<?php esc_attr_e( 'Learn more in knowledge base', 'wpshadow' ); ?>">
+													<?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
+												</a>
+											<?php endif; ?>
+											<?php if ( ! empty( $finding['training_link'] ) ) : ?>
+												<a href="<?php echo esc_url( $finding['training_link'] ); ?>" 
+													target="_blank" 
+													class="button button-small"
+													aria-label="<?php esc_attr_e( 'Watch training video', 'wpshadow' ); ?>">
+													<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
+												</a>
+											<?php endif; ?>
+										</div>
+									</div>
+								<?php endif; ?>
+
+								<!-- Status note (if exists) -->
+								<?php
+								if ( $note ) :
+									?>
 								<!-- Smart Action Status Badge (Issue #567) -->
 								<?php if ( ! empty( $smart_status ) ) : ?>
 									<div style="margin: 8px 0;">
@@ -499,6 +576,13 @@ $severity_legend = array(
 					endif; // End if fixed (workflows) vs regular findings
 					?>
 
+					<?php if ( empty( $findings_by_status[ $status ] ) ) : ?>
+						<div class="kanban-column-empty kanban-empty-message">
+							<?php if ( $status === 'fixed' ) : ?>
+								<?php esc_html_e( 'No workflows yet. Drag findings here to create workflows.', 'wpshadow' ); ?>
+							<?php else : ?>
+								<?php esc_html_e( 'No findings yet', 'wpshadow' ); ?>
+							<?php endif; ?>
 					<?php if ( empty( $findings_by_status[ $column_status ] ) ) : ?>
 						<div class="wps-kanban-empty">
 							<span class="dashicons dashicons-yes-alt"></span>

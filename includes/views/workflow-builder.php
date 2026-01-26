@@ -23,6 +23,18 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 ?>
 
 <div class="wrap wps-workflow-builder">
+	<!-- Skip Links for Accessibility -->
+	<a href="#wps-canvas" class="sr-only wps-skip-link">
+		<?php esc_html_e( 'Skip to workflow canvas', 'wpshadow' ); ?>
+	</a>
+	<a href="#wps-workflow-name" class="sr-only wps-skip-link">
+		<?php esc_html_e( 'Skip to workflow name', 'wpshadow' ); ?>
+	</a>
+
+	<!-- Screen Reader Announcements -->
+	<div id="wps-sr-live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+	<div id="wps-sr-alert-region" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
 	<!-- Header -->
 	<div class="wps-workflow-builder-header">
 		<div>

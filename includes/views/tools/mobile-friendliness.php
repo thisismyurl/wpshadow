@@ -18,21 +18,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="wpshadow-mobile-panel">
 			<h3><?php esc_html_e( 'Scan a URL', 'wpshadow' ); ?></h3>
 			<form id="wpshadow-mobile-form">
-				<table class="form-table" role="presentation">
-					<tr>
-						<th scope="row"><label for="wpshadow-mobile-path"><?php esc_html_e( 'Page Path', 'wpshadow' ); ?></label></th>
-						<td>
-							<div class="wps-flex-gap-10-items-center">
-								<span class="wps-p-8-rounded-3" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-								<input type="text" id="wpshadow-mobile-path" name="path" class="regular-text" value="/" placeholder="/about" required />
-							</div>
-							<p class="description"><?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check viewport and layout signals.', 'wpshadow' ); ?></p>
-						</td>
-					</tr>
-				</table>
+				<div class="wps-settings-section">
+					<div class="wps-form-group">
+						<label class="wps-label" for="wpshadow-mobile-path">
+							<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
+						</label>
+						<div class="wps-flex-gap-10-items-center">
+							<span class="wps-p-8-rounded-3" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+							<input type="text" id="wpshadow-mobile-path" name="path" class="regular-text" value="/" placeholder="/about" required />
+						</div>
+						<span class="wps-help-text">
+							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check viewport and layout signals.', 'wpshadow' ); ?>
+						</span>
+					</div>
+				</div>
 			
 				<p class="submit">
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?></button>
+					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left">
+						<span class="dashicons dashicons-update"></span>
+						<?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?>
+					</button>
 				</p>
 
 				<div id="wpshadow-mobile-error" class="notice notice-error"></div>

@@ -58,11 +58,12 @@ wp_localize_script(
 		?>
 	</div>
 
-	<button class="button button-primary wpshadow-run-scan" 
+	<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left wpshadow-run-scan" 
 		data-scan-type="deep"
 		data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>"
 		data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
 		data-redirect-url="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>">
+		<span class="dashicons dashicons-update"></span>
 		<?php esc_html_e( 'Run Deep Scan Now', 'wpshadow' ); ?>
 	</button>
 

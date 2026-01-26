@@ -166,94 +166,86 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		<form method="post" action="">
 			<?php wp_nonce_field( 'wpshadow_email_test', 'wpshadow_email_test_nonce' ); ?>
 
-			<table class="form-table" role="presentation">
-				<tbody>
-					<tr>
-						<th scope="row">
-							<label for="to_email"><?php esc_html_e( 'Send To', 'wpshadow' ); ?></label>
-						</th>
-						<td>
-							<input type="email"
-								id="to_email"
-								name="to_email"
-								value="<?php echo esc_attr( $current_user_email ); ?>"
-								class="regular-text"
-								required>
-							<p class="description">
-								<?php esc_html_e( 'The email address where the test email will be sent.', 'wpshadow' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							<label for="from_name"><?php esc_html_e( 'From Name', 'wpshadow' ); ?></label>
-						</th>
-						<td>
-							<input type="text"
-								id="from_name"
-								name="from_name"
-								value="<?php echo esc_attr( $current_from_name ); ?>"
-								class="regular-text"
-								required>
-							<p class="description">
-								<?php esc_html_e( 'The name that appears as the email sender.', 'wpshadow' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							<label for="from_email"><?php esc_html_e( 'From Email', 'wpshadow' ); ?></label>
-						</th>
-						<td>
-							<input type="email"
-								id="from_email"
-								name="from_email"
-								value="<?php echo esc_attr( $current_from_email ); ?>"
-								class="regular-text"
-								required>
-							<p class="description">
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label" for="to_email">
+						<?php esc_html_e( 'Send To', 'wpshadow' ); ?>
+					</label>
+					<input type="email"
+						id="to_email"
+						name="to_email"
+						value="<?php echo esc_attr( $current_user_email ); ?>"
+						class="regular-text"
+						required>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'The email address where the test email will be sent.', 'wpshadow' ); ?>
+					</span>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label" for="from_name">
+						<?php esc_html_e( 'From Name', 'wpshadow' ); ?>
+					</label>
+					<input type="text"
+						id="from_name"
+						name="from_name"
+						value="<?php echo esc_attr( $current_from_name ); ?>"
+						class="regular-text"
+						required>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'The name that appears as the email sender.', 'wpshadow' ); ?>
+					</span>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label" for="from_email">
+						<?php esc_html_e( 'From Email', 'wpshadow' ); ?>
+					</label>
+					<input type="email"
+						id="from_email"
+						name="from_email"
+						value="<?php echo esc_attr( $current_from_email ); ?>"
+						class="regular-text"
+						required>
+					<span class="wps-help-text">
+						<?php
+						printf(
+							/* translators: 1: opening anchor tag, 2: closing anchor tag */
+							esc_html__( 'The email address emails are sent from. Use a valid address from your domain. %1$sLearn more about email deliverability%2$s.', 'wpshadow' ),
+							'<a href="https://wordpress.org/support/article/settings-general-screen/#email-address" target="_blank">',
+							'</a>'
+						);
+						?>
+					</span>
+					<?php if ( $current_from_email === $wp_from_email ) : ?>
+						<div class="notice notice-warning inline wps-m-10-p-10">
+							<p>
+								<strong><?php esc_html_e( 'Warning:', 'wpshadow' ); ?></strong>
 								<?php
 								printf(
-									/* translators: 1: opening anchor tag, 2: closing anchor tag */
-									esc_html__( 'The email address emails are sent from. Use a valid address from your domain. %1$sLearn more about email deliverability%2$s.', 'wpshadow' ),
-									'<a href="https://wordpress.org/support/article/settings-general-screen/#email-address" target="_blank">',
-									'</a>'
-								);
-								?>
-							</p>
-							<?php if ( $current_from_email === $wp_from_email ) : ?>
-								<div class="notice notice-warning inline wps-m-10-p-10">
-									<p>
-										<strong><?php esc_html_e( 'Warning:', 'wpshadow' ); ?></strong>
-										<?php
-										printf(
-											/* translators: 1: default WordPress email address */
+									/* translators: 1: default WordPress email address */
 											esc_html__( 'You are using the WordPress default email address (%s). Many mail servers will reject emails from this address. Consider using a real email address from your domain (e.g., noreply@yourdomain.com).', 'wpshadow' ),
 											'<code>' . esc_html( $wp_from_email ) . '</code>'
 										);
 										?>
-									</p>
-								</div>
-							<?php endif; ?>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"></th>
-						<td>
-							<label>
-								<input type="checkbox" name="save_config" value="1" checked>
-								<?php esc_html_e( 'Save From Name and From Email as defaults for all site emails', 'wpshadow' ); ?>
-							</label>
-							<p class="description">
-								<?php esc_html_e( 'If checked, these settings will be applied to all emails sent by WordPress.', 'wpshadow' ); ?>
 							</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+						</div>
+					<?php endif; ?>
+				</div>
+
+				<div class="wps-form-group">
+					<label>
+						<input type="checkbox" name="save_config" value="1" checked>
+						<?php esc_html_e( 'Save From Name and From Email as defaults for all site emails', 'wpshadow' ); ?>
+					</label>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'If checked, these settings will be applied to all emails sent by WordPress.', 'wpshadow' ); ?>
+					</span>
+				</div>
+			</div>
 
 			<p class="submit">
-				<button type="submit" name="wpshadow_send_test_email" class="button button-primary">
+				<button type="submit" name="wpshadow_send_test_email" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?>
 				</button>
 			</p>
@@ -338,7 +330,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 			</div>
 
 			<p class="submit" style="margin-top: 15px;">
-				<button type="submit" name="wpshadow_update_compliance" class="button button-primary">
+				<button type="submit" name="wpshadow_update_compliance" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Update Compliance Settings', 'wpshadow' ); ?>
 				</button>
 			</p>

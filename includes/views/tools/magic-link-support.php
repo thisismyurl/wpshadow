@@ -26,41 +26,43 @@ $active_links = array_filter(
 		<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>
 		<form id="wpshadow-create-magic-link">
 			<?php wp_nonce_field( 'wpshadow_magic_link_nonce', 'wpshadow_magic_link_nonce' ); ?>
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label for="developer-name"><?php esc_html_e( 'Developer Name', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<input type="text" id="developer-name" name="developer_name" class="regular-text" required />
-						<p class="description"><?php esc_html_e( 'Full name of the person who will use this link', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="developer-email"><?php esc_html_e( 'Developer Email', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<input type="email" id="developer-email" name="developer_email" class="regular-text" required />
-						<p class="description"><?php esc_html_e( 'Email for notifications about access', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="access-duration"><?php esc_html_e( 'Access Duration', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<select id="access-duration" name="duration">
-							<option value="1">1 <?php esc_html_e( 'hour', 'wpshadow' ); ?></option>
-							<option value="24" selected>24 <?php esc_html_e( 'hours', 'wpshadow' ); ?></option>
-							<option value="72">72 <?php esc_html_e( 'hours', 'wpshadow' ); ?></option>
-							<option value="168">1 <?php esc_html_e( 'week', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'How long the link will work before expiring', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</table>
-			<button type="submit" class="button button-primary">
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label" for="developer-name">
+						<?php esc_html_e( 'Developer Name', 'wpshadow' ); ?>
+					</label>
+					<input type="text" id="developer-name" name="developer_name" class="regular-text" required />
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Full name of the person who will use this link', 'wpshadow' ); ?>
+					</span>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label" for="developer-email">
+						<?php esc_html_e( 'Developer Email', 'wpshadow' ); ?>
+					</label>
+					<input type="email" id="developer-email" name="developer_email" class="regular-text" required />
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Email for notifications about access', 'wpshadow' ); ?>
+					</span>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label" for="access-duration">
+						<?php esc_html_e( 'Access Duration', 'wpshadow' ); ?>
+					</label>
+					<select id="access-duration" name="duration">
+						<option value="1">1 <?php esc_html_e( 'hour', 'wpshadow' ); ?></option>
+						<option value="24" selected>24 <?php esc_html_e( 'hours', 'wpshadow' ); ?></option>
+						<option value="72">72 <?php esc_html_e( 'hours', 'wpshadow' ); ?></option>
+						<option value="168">1 <?php esc_html_e( 'week', 'wpshadow' ); ?></option>
+					</select>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'How long the link will work before expiring', 'wpshadow' ); ?>
+					</div>
+			</div>
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left">
+				<span class="dashicons dashicons-update"></span>
 				<?php esc_html_e( 'Generate Magic Link', 'wpshadow' ); ?>
 			</button>
 			<div id="wpshadow-magic-link-message" class="wps-none"></div>
@@ -90,7 +92,7 @@ $active_links = array_filter(
 							<td><?php echo esc_html( wp_date( get_option( 'date_format' ), $link['created_at'] ?? 0 ) ); ?></td>
 							<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $link['expires_at'] ?? 0 ) ); ?></td>
 							<td>
-								<button type="button" class="button button-small wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>">
+								<button type="button" class="wps-btn wps-btn-secondary wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>">
 									<?php esc_html_e( 'Revoke', 'wpshadow' ); ?>
 								</button>
 							</td>
@@ -141,7 +143,7 @@ jQuery(document).ready(function($) {
 						'<p><?php esc_attr_e( 'Link:', 'wpshadow' ); ?></p>' +
 						'<code class="wps-block-m-10-p-10">' + response.data.magic_link + '</code>' +
 						'<p><?php esc_attr_e( 'Expires:', 'wpshadow' ); ?> ' + response.data.expires_at + '</p>' +
-						'<button type="button" class="button" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
+						'<button type="button" class="wps-btn wps-btn-secondary" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
 						'</div>';
 					$message.html(html).show();
 					$form[0].reset();

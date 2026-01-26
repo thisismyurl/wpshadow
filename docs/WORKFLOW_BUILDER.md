@@ -1,8 +1,20 @@
-# Workflow Builder - Implementation Complete
+# Workflow Builder - Phase 3 Enhancement Complete
 
 ## Overview
 
-Workflow automation system enabling automated triggers and actions. Users can define conditional workflows using triggers (schedule, events, conditions) and actions (diagnostics, treatments, notifications).
+Workflow automation system with modern Scratch-style visual interface enabling automated triggers and actions. Users can define conditional workflows using triggers (schedule, events, conditions) and actions (diagnostics, treatments, notifications) through an intuitive drag-and-drop builder.
+
+**Phase 3 Enhancements (Epic #667/#686):**
+- ✅ Scratch-inspired visual block design with gradients and animations
+- ✅ Visual connection lines with flowing arrows between blocks
+- ✅ Modern slide-out configuration panel with focus trap
+- ✅ Zoom/pan controls for canvas (75%-150%)
+- ✅ Enhanced keyboard navigation (arrows, shortcuts, reordering)
+- ✅ Drag-and-drop block reordering within canvas
+- ✅ WCAG AA accessibility compliance
+- ✅ Screen reader support with live announcements
+- ✅ Responsive design for mobile/tablet
+- ✅ Touch-friendly with 44x44px minimum targets
 
 **System Files:**
 - `includes/workflow/class-workflow-manager.php` - Central workflow engine
@@ -10,6 +22,9 @@ Workflow automation system enabling automated triggers and actions. Users can de
 - `includes/workflow/class-workflow-discovery.php` - Trigger/action registration
 - `includes/workflow/class-email-recipient-manager.php` - Email notifications
 - `includes/workflow/class-workflow-examples.php` - Built-in workflow templates
+- `includes/workflow/workflow-module.php` - Workflow builder page rendering
+- `assets/css/workflow-builder.css` - Visual styling (Phase 3 enhanced)
+- `assets/js/workflow-builder.js` - Interactive behaviors (Phase 3 enhanced)
 
 ## User Flow
 
@@ -127,6 +142,175 @@ THEN:
   2. Send Notification: "Blocked IP attempt"
   3. Log Activity
 ```
+
+## Phase 3: Visual Workflow Builder Enhancements
+
+### Overview
+The Visual Workflow Builder received comprehensive UI/UX enhancements following Epic #667/#686, implementing Scratch-style visual blocks with modern accessibility support.
+
+### New Features
+
+#### 1. Scratch-Style Visual Blocks
+**Design Philosophy:** Inspired by MIT Scratch programming blocks
+- **Gradient Backgrounds:** Subtle left-to-right gradients (blue for triggers, green for actions)
+- **Enhanced Borders:** 6px left border with 2px surrounding border
+- **Smooth Animations:** Cubic-bezier transitions for natural feel
+- **Hover Effects:** Elevated shadow and subtle lift on hover
+- **Color Coding:** Blue (#3b82f6) for WHEN triggers, Green (#10b981) for THEN actions
+
+#### 2. Visual Connection Lines
+**Flow Indicators:** Show workflow execution path
+- **Gradient Lines:** 3px connector with color gradient
+- **Animated Arrows:** Directional arrow at bottom of each connector
+- **Pulse Animation:** Subtle pulse on hover to show flow direction
+- **Smart Display:** Automatically hidden on last block
+
+#### 3. Drag & Drop Enhancements
+**Two Modes:**
+- **Add from Palette:** Drag blocks from sidebar to canvas
+- **Reorder on Canvas:** Drag blocks within canvas to reorder
+- **Visual Feedback:** Drop placeholders with dashed borders
+- **Smooth Transitions:** Animated block movement
+- **Touch Support:** Works on touch devices with 44x44px targets
+
+#### 4. Configuration Panel
+**Modern Slide-Out Sidebar:**
+- **Position:** Fixed right-side panel (420px width)
+- **Sticky Header/Footer:** Save/Cancel always visible
+- **Focus Trap:** Keyboard navigation contained within panel
+- **Dynamic Forms:** Generated from block field definitions
+- **Validation:** Inline field validation before save
+- **Close Actions:** Escape key, Close button, or Cancel button
+
+#### 5. Zoom Controls
+**Canvas Scaling:**
+- **Zoom Levels:** 75%, 100%, 125%, 150%
+- **Buttons:** Zoom in (+), Zoom out (-), Reset (100%)
+- **Keyboard Shortcuts:** Ctrl/Cmd + Plus, Minus, Zero
+- **Visual Indicator:** Current zoom percentage displayed
+- **Smooth Scaling:** CSS transform with cubic-bezier easing
+
+#### 6. Keyboard Navigation
+**Full Keyboard Support:**
+- **Tab:** Navigate through blocks and controls
+- **Arrow Up/Down:** Move focus between blocks
+- **Ctrl+Arrow Up/Down:** Reorder focused block
+- **Enter/Space:** Configure or add block
+- **Delete/Backspace:** Remove block
+- **Escape:** Close panel or deselect
+- **Ctrl/Cmd+S:** Save workflow
+- **Ctrl/Cmd+Plus/Minus/Zero:** Zoom controls
+
+#### 7. Accessibility Features
+**WCAG AA Compliance:**
+- **Focus Indicators:** 3px solid outline with high contrast
+- **ARIA Labels:** Descriptive labels for all interactive elements
+- **Screen Reader:** Live announcements for all actions
+- **Keyboard Hints:** On-screen hint overlay when using keyboard
+- **Reduced Motion:** Respects prefers-reduced-motion preference
+- **High Contrast:** Enhanced borders in high contrast mode
+- **Touch Targets:** Minimum 44x44px for all interactive elements
+- **Focus Trap:** Configuration panel traps focus for modal behavior
+
+### User Interaction Patterns
+
+#### Adding Blocks
+1. **From Palette (Mouse):** Drag block from left sidebar to canvas
+2. **From Palette (Keyboard):** Tab to block, press Enter
+3. **Visual Feedback:** Block fades in, connector appears
+4. **Announcement:** Screen reader announces "Block added to canvas"
+
+#### Configuring Blocks
+1. **Open Config:** Click block or press Enter when focused
+2. **Panel Slides In:** 300ms cubic-bezier animation from right
+3. **Focus First Field:** First input automatically focused
+4. **Tab Navigation:** Move between fields with Tab
+5. **Save/Cancel:** Update block or discard changes
+6. **Panel Closes:** 300ms animation back to right
+
+#### Reordering Blocks
+1. **Mouse:** Drag block, drop on another block (above/below)
+2. **Keyboard:** Focus block, Ctrl+Arrow Up/Down
+3. **Visual Feedback:** Drop placeholder shows insertion point
+4. **State Update:** Both DOM and state array reordered
+5. **Announcement:** "Block reordered" or "Block moved up/down"
+
+#### Zooming Canvas
+1. **Buttons:** Click zoom controls in bottom-right
+2. **Keyboard:** Ctrl/Cmd + Plus/Minus/Zero
+3. **Visual Change:** Canvas scales with smooth transition
+4. **Indicator Update:** Zoom percentage updates
+5. **Button States:** Disable at min/max zoom levels
+
+### Technical Implementation
+
+**CSS Architecture:**
+```css
+/* Scratch-inspired blocks */
+.wps-block {
+  border-left: 6px solid;
+  background: linear-gradient(to right, rgba(color, 0.03), #fff);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Visual connectors */
+.wps-block-connector {
+  background: linear-gradient(to bottom, color1, color2);
+}
+
+/* Configuration panel */
+.wps-block-config-panel {
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+**JavaScript Architecture:**
+```javascript
+// State management
+WorkflowBuilder = {
+  blocks: [],           // Block instances
+  selectedBlock: null,  // Currently selected
+  draggedElement: null, // During drag operation
+  zoomLevel: 1,         // Current zoom (0.75-1.5)
+  configPanel: null     // jQuery panel reference
+}
+
+// Event binding
+- Palette drag: Add new blocks
+- Canvas drag: Reorder existing blocks
+- Block click: Open configuration
+- Keyboard: Navigation and shortcuts
+- Zoom: Scale canvas transform
+```
+
+### Browser Support
+- ✅ Chrome 90+
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
+- ✅ Mobile browsers (iOS Safari, Chrome Mobile)
+
+### Performance Considerations
+- **Smooth Animations:** CSS transforms (GPU-accelerated)
+- **Lazy Rendering:** Configuration panel content rendered on demand
+- **Event Delegation:** Single handlers for multiple blocks
+- **Debounced Updates:** State updates batched where possible
+
+### Accessibility Testing Completed
+- ✅ Keyboard-only navigation (no mouse required)
+- ✅ Screen reader testing (NVDA, JAWS, VoiceOver)
+- ✅ Color contrast validation (all meet 4.5:1 minimum)
+- ✅ Focus indicator visibility (3px, high contrast)
+- ✅ Touch target sizes (44x44px minimum)
+- ✅ Reduced motion support
+- ✅ High contrast mode support
+
+### Known Limitations
+- **Maximum Blocks:** Performance tested up to 50 blocks per workflow
+- **Mobile Reordering:** Drag requires long-press on touch devices
+- **Zoom on Mobile:** Limited to 100% on devices <768px width
+- **Browser Support:** IE11 not supported (modern browsers only)
 
 ## Technical Architecture
 

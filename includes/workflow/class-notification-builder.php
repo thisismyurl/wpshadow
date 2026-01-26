@@ -469,7 +469,7 @@ class Notification_Builder {
 							<div id="wpshadow-trigger-items" class="wps-none-p-16-rounded-6">
 								<!-- Populated by JavaScript -->
 							</div>
-							<select name="trigger_type" id="wpshadow-trigger-select" class="wps-input" required class="wps-none">
+							<select name="trigger_type" id="wpshadow-trigger-select" class="wps-input wps-none" required>
 								<option value="">-- <?php esc_html_e( 'Select a trigger', 'wpshadow' ); ?> --</option>
 							</select>
 						</div>
@@ -508,7 +508,7 @@ class Notification_Builder {
 											<?php esc_html_e( 'Email Message', 'wpshadow' ); ?>
 											<span style="color: #d32f2f;">*</span>
 										</label>
-										<textarea name="action_message" class="wps-input" rows="6" placeholder="<?php esc_attr_e( 'Enter email body...', 'wpshadow' ); ?>" required></textarea>
+										<textarea name="action_message" class="wps-textarea" rows="6" placeholder="<?php esc_attr_e( 'Enter email body...', 'wpshadow' ); ?>" required></textarea>
 										<p class="wps-form-help">
 											<?php esc_html_e( 'Use {trigger_name}, {severity}, {details} for variables', 'wpshadow' ); ?>
 										</p>
@@ -519,7 +519,7 @@ class Notification_Builder {
 											<?php esc_html_e( 'Notification Message', 'wpshadow' ); ?>
 											<span style="color: #d32f2f;">*</span>
 										</label>
-										<textarea name="action_message" class="wps-input" rows="4" placeholder="<?php esc_attr_e( 'Enter notification message...', 'wpshadow' ); ?>" required></textarea>
+										<textarea name="action_message" class="wps-textarea" rows="4" placeholder="<?php esc_attr_e( 'Enter notification message...', 'wpshadow' ); ?>" required></textarea>
 										<p class="wps-form-help">
 											<?php esc_html_e( 'Use {trigger_name}, {severity} for variables', 'wpshadow' ); ?>
 										</p>
@@ -529,12 +529,14 @@ class Notification_Builder {
 										<label class="wps-form-label">
 											<?php esc_html_e( 'Notification Style', 'wpshadow' ); ?>
 										</label>
-										<select name="action_style" class="wps-input">
-											<option value="info"><?php esc_html_e( 'Info (Blue)', 'wpshadow' ); ?></option>
-											<option value="success"><?php esc_html_e( 'Success (Green)', 'wpshadow' ); ?></option>
-											<option value="warning"><?php esc_html_e( 'Warning (Orange)', 'wpshadow' ); ?></option>
-											<option value="error"><?php esc_html_e( 'Error (Red)', 'wpshadow' ); ?></option>
-										</select>
+										<div class="wps-select-wrapper">
+											<select name="action_style" class="wps-select">
+												<option value="info"><?php esc_html_e( 'Info (Blue)', 'wpshadow' ); ?></option>
+												<option value="success"><?php esc_html_e( 'Success (Green)', 'wpshadow' ); ?></option>
+												<option value="warning"><?php esc_html_e( 'Warning (Orange)', 'wpshadow' ); ?></option>
+												<option value="error"><?php esc_html_e( 'Error (Red)', 'wpshadow' ); ?></option>
+											</select>
+										</div>
 									</div>
 								<?php endif; ?>
 							</div>

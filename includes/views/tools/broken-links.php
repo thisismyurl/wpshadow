@@ -26,28 +26,29 @@ if ( ! current_user_can( 'read' ) ) {
 		<form id="wpshadow-link-checker-form" method="post">
 			<?php wp_nonce_field( 'wpshadow_link_check', 'wpshadow_link_nonce' ); ?>
 
-			<table class="form-table">
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Scan Options', 'wpshadow' ); ?></th>
-					<td>
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label"><?php esc_html_e( 'Scan Options', 'wpshadow' ); ?></label>
+					<div style="display: flex; flex-direction: column; gap: 8px;">
 						<label>
 							<input type="checkbox" name="check_internal" value="1" checked>
 							<?php esc_html_e( 'Check internal links', 'wpshadow' ); ?>
-						</label><br>
+						</label>
 						<label>
 							<input type="checkbox" name="check_external" value="1" checked>
 							<?php esc_html_e( 'Check external links', 'wpshadow' ); ?>
-						</label><br>
+						</label>
 						<label>
 							<input type="checkbox" name="check_images" value="1">
 							<?php esc_html_e( 'Check image URLs', 'wpshadow' ); ?>
 						</label>
-					</td>
-				</tr>
-			</table>
+					</div>
+				</div>
+			</div>
 
 			<p class="submit">
-				<button type="submit" class="button button-primary" id="run-link-scan">
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-link-scan">
+					<span class="dashicons dashicons-update"></span>
 					<?php esc_html_e( 'Start Link Scan', 'wpshadow' ); ?>
 				</button>
 			</p>

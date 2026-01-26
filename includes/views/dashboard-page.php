@@ -8,8 +8,6 @@
  * @subpackage Views
  */
 
-namespace WPShadow\Views;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -44,7 +42,7 @@ function wpshadow_render_dashboard() {
 	$is_drilldown    = ! empty( $category_filter );
 
 	// Get category metadata for title/details
-	$category_meta    = \WPShadow\Core\wpshadow_get_category_metadata();
+	$category_meta    = wpshadow_get_category_metadata();
 	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] )
 		? $category_meta[ $category_filter ]
 		: null;
@@ -91,7 +89,8 @@ function wpshadow_render_dashboard() {
 						<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
 					</p>
 					<div class="wps-cta-actions">
-						<button type="button" class="button button-primary wps-btn-primary" id="wpshadow-run-first-scan">
+						<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left" id="wpshadow-run-first-scan">
+							<span class="dashicons dashicons-update"></span>
 							<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
 						</button>
 					</div>

@@ -26,24 +26,25 @@ if ( ! current_user_can( 'read' ) ) {
 		<form id="wpshadow-a11y-scan-form" method="post">
 			<?php wp_nonce_field( 'wpshadow_a11y_scan', 'wpshadow_a11y_nonce' ); ?>
 
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label for="page_path"><?php esc_html_e( 'Page Path', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<div class="wps-flex-gap-10-items-center">
-							<span class="wps-p-8-rounded-3" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-							<input type="text" name="page_path" id="page_path" class="regular-text"
-								value="/" placeholder="/about" required>
-						</div>
-						<p class="description"><?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</table>
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label" for="page_path">
+						<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
+					</label>
+					<div class="wps-flex-gap-10-items-center">
+						<span class="wps-p-8-rounded-3" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+						<input type="text" name="page_path" id="page_path" class="regular-text"
+							value="/" placeholder="/about" required>
+					</div>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean.', 'wpshadow' ); ?>
+					</span>
+				</div>
+			</div>
 
 			<p class="submit">
-				<button type="submit" class="button button-primary" id="run-scan">
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-scan">
+					<span class="dashicons dashicons-update"></span>
 					<?php esc_html_e( 'Run Accessibility Scan', 'wpshadow' ); ?>
 				</button>
 			</p>

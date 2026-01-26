@@ -17,39 +17,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Color Contrast Check', 'wpshadow' ); ?></h3>
 		<form id="wpshadow-contrast-checker">
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label for="text-color"><?php esc_html_e( 'Text Color', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<input type="text" id="text-color" name="text_color" placeholder="#000000" class="regular-text" required />
-						<p class="description"><?php esc_html_e( 'Enter hex color (e.g., #000000, #FFFFFF)', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="background-color"><?php esc_html_e( 'Background Color', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<input type="text" id="background-color" name="background_color" placeholder="#FFFFFF" class="regular-text" required />
-						<p class="description"><?php esc_html_e( 'Enter hex color (e.g., #000000, #FFFFFF)', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="text-size"><?php esc_html_e( 'Text Type', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<select id="text-size" name="text_size">
-							<option value="normal"><?php esc_html_e( 'Normal text (less than 18px)', 'wpshadow' ); ?></option>
-							<option value="large"><?php esc_html_e( 'Large text (18px or more)', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'Different size categories have different contrast requirements', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</table>
-			<button type="submit" class="button button-primary">
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label" for="text-color">
+						<?php esc_html_e( 'Text Color', 'wpshadow' ); ?>
+					</label>
+					<input type="text" id="text-color" name="text_color" placeholder="#000000" class="regular-text" required />
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Enter hex color (e.g., #000000, #FFFFFF)', 'wpshadow' ); ?>
+					</span>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label" for="background-color">
+						<?php esc_html_e( 'Background Color', 'wpshadow' ); ?>
+					</label>
+					<input type="text" id="background-color" name="background_color" placeholder="#FFFFFF" class="regular-text" required />
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Enter hex color (e.g., #000000, #FFFFFF)', 'wpshadow' ); ?>
+					</span>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label" for="text-size">
+						<?php esc_html_e( 'Text Type', 'wpshadow' ); ?>
+					</label>
+					<select id="text-size" name="text_size">
+						<option value="normal"><?php esc_html_e( 'Normal text (less than 18px)', 'wpshadow' ); ?></option>
+						<option value="large"><?php esc_html_e( 'Large text (18px or more)', 'wpshadow' ); ?></option>
+					</select>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Different size categories have different contrast requirements', 'wpshadow' ); ?>
+					</span>
+				</div>
+			</div>
+			<button type="submit" class="wps-btn wps-btn-primary">
 				<?php esc_html_e( 'Check Contrast', 'wpshadow' ); ?>
 			</button>
 		</form>
@@ -90,16 +92,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Common Color Pairs', 'wpshadow' ); ?></h3>
-		<button type="button" class="button" data-text="#000000" data-bg="#FFFFFF">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#000000" data-bg="#FFFFFF">
 			Black on White
 		</button>
-		<button type="button" class="button" data-text="#FFFFFF" data-bg="#000000">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#000000">
 			White on Black
 		</button>
-		<button type="button" class="button" data-text="#003366" data-bg="#FFFFFF">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#003366" data-bg="#FFFFFF">
 			Dark Blue on White
 		</button>
-		<button type="button" class="button" data-text="#FFFFFF" data-bg="#003366">
+		<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#003366">
 			White on Dark Blue
 		</button>
 	</div>

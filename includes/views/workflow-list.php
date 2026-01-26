@@ -46,7 +46,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 	<?php if ( empty( $workflows ) ) : ?>
 		<!-- Create Workflow Button Section -->
 		<div class="workflow-cta-section">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="button button-primary button-hero">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="wps-btn wps-btn-primary wps-btn-lg">
 				<?php esc_html_e( 'Create a Workflow', 'wpshadow' ); ?>
 			</a>
 		</div>
@@ -84,7 +84,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 									</div>
 								</div>
 								<p class="suggested-description"><?php echo esc_html( $suggestion['description'] ); ?></p>
-								<button type="button" class="button button-primary create-suggested-workflow" data-title="<?php echo esc_attr( $suggestion['title'] ); ?>" data-label="<?php esc_attr_e( 'Create from suggestion', 'wpshadow' ); ?>">
+								<button type="button" class="wps-btn wps-btn-primary create-suggested-workflow" data-title="<?php echo esc_attr( $suggestion['title'] ); ?>" data-label="<?php esc_attr_e( 'Create from suggestion', 'wpshadow' ); ?>">
 									<?php esc_html_e( 'Create from suggestion', 'wpshadow' ); ?>
 								</button>
 							</div>
@@ -102,7 +102,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 						<h3><?php esc_html_e( 'Suggested Workflows', 'wpshadow' ); ?></h3>
 						<p class="suggested-intro"><?php esc_html_e( 'High-impact automations tuned to your site. Add any with one click.', 'wpshadow' ); ?></p>
 					</div>
-					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>"><?php esc_html_e( 'Build your own', 'wpshadow' ); ?></a>
+					<a class="wps-btn wps-btn-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>"><?php esc_html_e( 'Build your own', 'wpshadow' ); ?></a>
 				</div>
 				<div class="suggested-grid suggested-workflows-grid">
 					<?php foreach ( $suggestions as $suggestion ) : ?>
@@ -117,7 +117,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 								</div>
 							</div>
 							<p class="suggested-description"><?php echo esc_html( $suggestion['description'] ); ?></p>
-							<button type="button" class="button create-suggested-workflow" data-title="<?php echo esc_attr( $suggestion['title'] ); ?>" data-label="<?php esc_attr_e( 'Add suggestion', 'wpshadow' ); ?>">
+							<button type="button" class="wps-btn wps-btn-secondary wps-btn-sm create-suggested-workflow" data-title="<?php echo esc_attr( $suggestion['title'] ); ?>" data-label="<?php esc_attr_e( 'Add suggestion', 'wpshadow' ); ?>">
 								<?php esc_html_e( 'Add suggestion', 'wpshadow' ); ?>
 							</button>
 						</div>
@@ -158,16 +158,16 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 					</div>
 
 				<div class="workflow-buttons">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="button button-small button-primary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="wps-btn wps-btn-primary wps-btn-sm">
 							<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 						</a>
-						<button class="button button-small workflow-test-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
+						<button type="button" class="wps-btn wps-btn-secondary wps-btn-sm workflow-test-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 							<?php esc_html_e( 'Test', 'wpshadow' ); ?>
 						</button>
-						<button class="button button-small workflow-run-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
+						<button type="button" class="wps-btn wps-btn-success wps-btn-sm workflow-run-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 							<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
 						</button>
-						<button class="button button-small button-link-delete workflow-delete-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
+						<button type="button" class="wps-btn wps-btn-danger wps-btn-sm workflow-delete-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 							<?php esc_html_e( 'Delete', 'wpshadow' ); ?>
 						</button>
 					</div>

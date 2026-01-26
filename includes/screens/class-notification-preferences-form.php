@@ -57,7 +57,7 @@ class Notification_Preferences_Form {
 						<option value="weekly" selected><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
 						<option value="monthly"><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
 					</select>
-					<button type="button" class="button button-primary" id="add-subscription-btn">
+					<button type="button" class="wps-btn wps-btn-primary" id="add-subscription-btn">
 						<?php esc_html_e( 'Subscribe', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -67,47 +67,43 @@ class Notification_Preferences_Form {
 			<div class="preferences-card email-settings-card">
 				<h3><?php esc_html_e( 'Email Settings', 'wpshadow' ); ?></h3>
 				
-				<table class="form-table">
-					<tr>
-						<th scope="row">
-							<label for="notification_email"><?php esc_html_e( 'Default Email', 'wpshadow' ); ?></label>
-						</th>
-						<td>
-							<input type="email" id="notification_email" name="notification_email" 
+				<div class="wps-settings-section">
+					<div class="wps-form-group">
+						<label class="wps-label" for="notification_email">
+							<?php esc_html_e( 'Default Email', 'wpshadow' ); ?>
+						</label>
+						<input type="email" id="notification_email" name="notification_email" 
 							value="<?php echo esc_attr( get_option( 'admin_email', '' ) ); ?>" />
-							<p class="description">
-								<?php esc_html_e( 'Primary email for notifications', 'wpshadow' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							<label for="digest_mode"><?php esc_html_e( 'Digest Mode', 'wpshadow' ); ?></label>
-						</th>
-						<td>
-							<label>
-								<input type="checkbox" id="digest_mode" name="digest_mode" value="1" />
-								<?php esc_html_e( 'Send batched notifications (instead of individual alerts)', 'wpshadow' ); ?>
-							</label>
-							<p class="description">
-								<?php esc_html_e( 'Reduces email frequency by grouping related notifications', 'wpshadow' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
+						<span class="wps-help-text">
+							<?php esc_html_e( 'Primary email for notifications', 'wpshadow' ); ?>
+						</span>
+					</div>
+
+					<div class="wps-form-group">
+						<label class="wps-label">
+							<?php esc_html_e( 'Digest Mode', 'wpshadow' ); ?>
+						</label>
+						<label>
+							<input type="checkbox" id="digest_mode" name="digest_mode" value="1" />
+							<?php esc_html_e( 'Send batched notifications (instead of individual alerts)', 'wpshadow' ); ?>
+						</label>
+						<span class="wps-help-text">
+							<?php esc_html_e( 'Reduces email frequency by grouping related notifications', 'wpshadow' ); ?>
+						</span>
+					</div>
+
+					<div class="wps-form-group">
+						<label class="wps-label">
 							<?php esc_html_e( 'Test Notification', 'wpshadow' ); ?>
-						</th>
-						<td>
-							<button type="button" class="button" id="send-test-btn">
-								<?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?>
-							</button>
-							<p class="description">
-								<?php esc_html_e( 'Send a test notification to verify email delivery', 'wpshadow' ); ?>
-							</p>
-						</td>
-					</tr>
-				</table>
+						</label>
+						<button type="button" class="button" id="send-test-btn">
+							<?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?>
+						</button>
+						<span class="wps-help-text">
+							<?php esc_html_e( 'Send a test notification to verify email delivery', 'wpshadow' ); ?>
+						</span>
+					</div>
+				</div>
 			</div>
 			
 			<!-- Statistics Section -->
@@ -118,7 +114,7 @@ class Notification_Preferences_Form {
 			
 			<!-- Save Button -->
 			<div class="preferences-actions">
-				<button type="button" class="button button-primary" id="save-preferences">
+				<button type="button" class="wps-btn wps-btn-primary" id="save-preferences">
 					<?php esc_html_e( 'Save Preferences', 'wpshadow' ); ?>
 				</button>
 			</div>
