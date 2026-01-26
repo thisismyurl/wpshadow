@@ -4,6 +4,9 @@
  * @see https://playwright.dev/docs/test-configuration
  */
 
+// Load environment variables from .env file
+require('dotenv').config({ path: './tests/e2e/.env' });
+
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
