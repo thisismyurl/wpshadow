@@ -112,6 +112,51 @@ class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 	}
 
 	/**
+	 * Count internal links in post content.
+	 *
+	 * Counts links that point to the same site (internal links).
+	 * Handles absolute URLs with site domain and root-relative paths.
+	 * Excludes external links, protocol-relative links, and fragments.
+	 *
+	 * @since  1.2601.2148
+	 * @param  string $content     Post content HTML.
+	 * @param  string $site_domain Site domain for comparison.
+	 * @return int Number of internal links found.
+	 */
+	private static function count_internal_links( string $content, string $site_domain ): int {
+		// Find all links in content.
+		preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\']/i', $content, $matches );
+
+		if ( empty( $matches[1] ) ) {
+			return 0;
+		}
+
+		$internal_links_count = 0;
+
+		// Check each link to see if it's internal.
+		foreach ( $matches[1] as $link ) {
+			// Skip fragment-only links (e.g., #section).
+			if ( 0 === strpos( $link, '#' ) ) {
+				continue;
+			}
+
+			// Skip protocol-relative links (e.g., //example.com).
+			if ( 0 === strpos( $link, '//' ) ) {
+				continue;
+			}
+
+			$link_domain = wp_parse_url( $link, PHP_URL_HOST );
+
+			// Internal link if domain matches or is relative path.
+			if ( $link_domain === $site_domain || ( null === $link_domain && 0 === strpos( $link, '/' ) ) ) {
+				++$internal_links_count;
+			}
+		}
+
+		return $internal_links_count;
+	}
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Checks if recent published posts have adequate internal linking (2-3 links per post).
@@ -145,28 +190,8 @@ class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 		$posts_below_threshold = 0;
 
 		foreach ( $posts as $post_id ) {
-			$content = get_post_field( 'post_content', $post_id );
-
-			// Find all links in content.
-			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\']/i', $content, $matches );
-
-			if ( empty( $matches[1] ) ) {
-				++$posts_below_threshold;
-				++$posts_count;
-				continue;
-			}
-
-			$internal_links_count = 0;
-
-			// Check each link to see if it's internal.
-			foreach ( $matches[1] as $link ) {
-				$link_domain = wp_parse_url( $link, PHP_URL_HOST );
-
-				// Internal link if domain matches or is relative path.
-				if ( $link_domain === $site_domain || ( null === $link_domain && 0 === strpos( $link, '/' ) ) ) {
-					++$internal_links_count;
-				}
-			}
+			$content              = get_post_field( 'post_content', $post_id );
+			$internal_links_count = self::count_internal_links( $content, $site_domain );
 
 			$total_links += $internal_links_count;
 			++$posts_count;
@@ -244,24 +269,15 @@ class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 		// Run the diagnostic check.
 		$result = self::check();
 
-		// Calculate actual stats for reporting.
+		// Calculate actual stats for reporting using helper method.
 		$site_url    = home_url();
 		$site_domain = wp_parse_url( $site_url, PHP_URL_HOST );
 		$total_links = 0;
 		$posts_count = count( $posts );
 
 		foreach ( $posts as $post_id ) {
-			$content = get_post_field( 'post_content', $post_id );
-			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\']/i', $content, $matches );
-
-			if ( ! empty( $matches[1] ) ) {
-				foreach ( $matches[1] as $link ) {
-					$link_domain = wp_parse_url( $link, PHP_URL_HOST );
-					if ( $link_domain === $site_domain || ( null === $link_domain && 0 === strpos( $link, '/' ) ) ) {
-						++$total_links;
-					}
-				}
-			}
+			$content      = get_post_field( 'post_content', $post_id );
+			$total_links += self::count_internal_links( $content, $site_domain );
 		}
 
 		$average_links = $posts_count > 0 ? $total_links / $posts_count : 0;
