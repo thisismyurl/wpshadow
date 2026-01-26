@@ -59,23 +59,20 @@ class Diagnostic_Pub_Alt_Text_Descriptive extends Diagnostic_Base {
 	 * @return array Diagnostic results
 	 */
 	public static function run(): array {
-		// STUB: Implement pub-alt-text-descriptive test
-		// Philosophy focus: Commandment #7, 8, 9
-		//
-		// Data collection strategy:
-		// - Gather relevant metrics from WordPress
-		// - Calculate or query necessary values
-		// - Return structured result
-		//
-		// KB Article: https://wpshadow.com/kb/pub-alt-text-descriptive
-		// Training: https://wpshadow.com/training/category-content-publishing
-		//
-		// User impact: Comprehensive pre-publication audit ensures content meets quality standards, SEO best practices, and accessibility requirements before going live.
+		$result = self::check();
+
+		if ( null === $result ) {
+			return array(
+				'status'  => 'pass',
+				'message' => __( 'Alt text is descriptive on published content', 'wpshadow' ),
+				'data'    => array(),
+			);
+		}
 
 		return array(
-			'status'  => 'todo',
-			'message' => 'Diagnostic not yet implemented',
-			'data'    => array(),
+			'status'  => 'warning',
+			'message' => $result['description'],
+			'data'    => $result,
 		);
 	}
 
@@ -93,20 +90,156 @@ class Diagnostic_Pub_Alt_Text_Descriptive extends Diagnostic_Base {
 		return 'https://wpshadow.com/training/category-content-publishing';
 	}
 
+	/**
+	 * Check if alt text is descriptive on published content.
+	 *
+	 * Analyzes recent published posts to detect images with non-descriptive alt text
+	 * such as filenames, generic terms, or very short text.
+	 *
+	 * @since  1.2601.2148
+	 * @return array|null Finding array if issues detected, null otherwise.
+	 */
 	public static function check(): ?array {
-		if ( ! ( false ) ) {
+		// Get recent published posts.
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => 20,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+
+		if ( empty( $posts ) ) {
 			return null;
 		}
 
-		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-			'pub-alt-text-descriptive',
-			'Pub Alt Text Descriptive',
-			'Automatically initialized lean diagnostic for Pub Alt Text Descriptive. Optimized for minimal overhead while surfacing high-value signals.',
-			'general',
-			'low',
-			30,
-			'pub-alt-text-descriptive'
+		$total_images             = 0;
+		$non_descriptive_count    = 0;
+		$problematic_alt_examples = array();
+
+		foreach ( $posts as $post ) {
+			$content = $post->post_content;
+
+			// Parse HTML for images with alt text.
+			preg_match_all( '/<img[^>]+alt=["\']([^"\']*)["\'][^>]*>/i', $content, $matches );
+
+			if ( empty( $matches[1] ) ) {
+				continue;
+			}
+
+			foreach ( $matches[1] as $alt_text ) {
+				++$total_images;
+
+				if ( self::is_non_descriptive_alt( $alt_text ) ) {
+					++$non_descriptive_count;
+
+					// Store first 5 examples for reporting.
+					if ( count( $problematic_alt_examples ) < 5 ) {
+						$problematic_alt_examples[] = array(
+							'post_id'    => $post->ID,
+							'post_title' => $post->post_title,
+							'alt_text'   => $alt_text,
+						);
+					}
+				}
+			}
+		}
+
+		// Need at least some images to analyze.
+		if ( 0 === $total_images ) {
+			return null;
+		}
+
+		$descriptive_percentage = ( ( $total_images - $non_descriptive_count ) / $total_images ) * 100;
+
+		// Flag if less than 80% of images have descriptive alt text.
+		if ( $descriptive_percentage < 80 ) {
+			return array(
+				'id'            => self::$slug,
+				'title'         => __( 'Non-Descriptive Alt Text Found', 'wpshadow' ),
+				'description'   => sprintf(
+					/* translators: 1: percentage of images with descriptive alt, 2: total images analyzed */
+					__( 'Only %1$.0f%% of images (%2$d total) have descriptive alt text. Alt text should describe the image content, not just be a filename or generic term like "image.jpg" or "photo".', 'wpshadow' ),
+					$descriptive_percentage,
+					$total_images
+				),
+				'severity'      => 'low',
+				'threat_level'  => 25,
+				'category'      => 'content_publishing',
+				'kb_link'       => self::get_kb_article(),
+				'training_link' => self::get_training_video(),
+				'auto_fixable'  => false,
+				'examples'      => $problematic_alt_examples,
+			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check if alt text is non-descriptive.
+	 *
+	 * Detects common patterns of non-descriptive alt text:
+	 * - Filenames (contains .jpg, .png, etc. or looks like a filename)
+	 * - Generic terms (image, photo, picture, img, etc.)
+	 * - Very short text (less than 3 characters)
+	 * - Numeric-only or code-like patterns (IMG_001, DSC0001, etc.)
+	 *
+	 * @since  1.2601.2148
+	 * @param  string $alt_text The alt text to analyze.
+	 * @return bool True if non-descriptive, false otherwise.
+	 */
+	private static function is_non_descriptive_alt( string $alt_text ): bool {
+		$alt_text = trim( $alt_text );
+
+		// Empty alt is handled by coverage diagnostic.
+		if ( empty( $alt_text ) ) {
+			return false;
+		}
+
+		// Too short to be descriptive (less than 3 characters).
+		if ( strlen( $alt_text ) < 3 ) {
+			return true;
+		}
+
+		// Contains file extension - likely a filename.
+		if ( preg_match( '/\.(jpe?g|png|gif|bmp|webp|svg|ico)$/i', $alt_text ) ) {
+			return true;
+		}
+
+		// Looks like a filename pattern (underscores, hyphens, numbers).
+		if ( preg_match( '/^[a-z0-9_\-]+$/i', $alt_text ) && preg_match( '/[_\-]/', $alt_text ) ) {
+			return true;
+		}
+
+		// Common camera/device naming patterns.
+		if ( preg_match( '/^(IMG|DSC|DCIM|P|PANO|WP)[_\-]?\d+$/i', $alt_text ) ) {
+			return true;
+		}
+
+		// Generic terms (case-insensitive, whole word match).
+		$generic_terms = array(
+			'image',
+			'photo',
+			'picture',
+			'img',
+			'pic',
+			'screenshot',
+			'untitled',
+			'default',
+			'placeholder',
 		);
+
+		$alt_lower = strtolower( $alt_text );
+		foreach ( $generic_terms as $term ) {
+			if ( $alt_lower === $term ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -119,29 +252,29 @@ class Diagnostic_Pub_Alt_Text_Descriptive extends Diagnostic_Base {
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
 	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Automatically initialized lean diagnostic for Pub Alt Text Descriptive. Optimized for minimal overhead while surfacing high-value signals.
+	 * - Description: Checks if image alt text is descriptive rather than filenames or generic terms
 	 *
+	 * @since  1.2601.2148
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
 	public static function test_live_pub_alt_text_descriptive(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-
 		$result = self::check();
 
-		// TODO: Implement actual test logic
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Published posts have descriptive alt text (or no posts found)', 'wpshadow' ),
+			);
+		}
+
+		$message = $result['description'] ?? __( 'Non-descriptive alt text detected on published content', 'wpshadow' );
+
 		return array(
 			'passed'  => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'message' => $message,
 		);
 	}
 }
