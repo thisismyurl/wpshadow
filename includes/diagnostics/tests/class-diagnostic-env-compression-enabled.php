@@ -84,11 +84,7 @@ class Diagnostic_EnvCompressionEnabled extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		// First check PHP configuration.
-		$php_compression_enabled = false;
-		if ( function_exists( 'ini_get' ) ) {
-			$zlib_compression        = ini_get( 'zlib.output_compression' );
-			$php_compression_enabled = ! empty( $zlib_compression ) && '0' !== $zlib_compression && 'off' !== strtolower( (string) $zlib_compression );
-		}
+		$php_compression_enabled = self::is_php_compression_enabled();
 
 		// Check actual HTTP response headers.
 		$http_compression_enabled = self::check_http_compression();
@@ -128,9 +124,8 @@ class Diagnostic_EnvCompressionEnabled extends Diagnostic_Base {
 		$response = wp_remote_get(
 			home_url( '/' ),
 			array(
-				'timeout'   => 10,
-				'sslverify' => false,
-				'headers'   => array(
+				'timeout' => 10,
+				'headers' => array(
 					'Accept-Encoding' => 'gzip, deflate, br',
 				),
 			)
@@ -153,5 +148,32 @@ class Diagnostic_EnvCompressionEnabled extends Diagnostic_Base {
 		return ( false !== strpos( $content_encoding, 'gzip' ) ||
 				false !== strpos( $content_encoding, 'br' ) ||
 				false !== strpos( $content_encoding, 'deflate' ) );
+	}
+
+	/**
+	 * Check if PHP compression is enabled via ini settings
+	 *
+	 * @since  1.2601.2148
+	 * @return bool True if PHP compression is enabled, false otherwise.
+	 */
+	private static function is_php_compression_enabled(): bool {
+		if ( ! function_exists( 'ini_get' ) ) {
+			return false;
+		}
+
+		$zlib_compression = ini_get( 'zlib.output_compression' );
+
+		// Empty value means disabled.
+		if ( empty( $zlib_compression ) ) {
+			return false;
+		}
+
+		// String '0' or 'off' means disabled.
+		if ( '0' === $zlib_compression || 'off' === strtolower( (string) $zlib_compression ) ) {
+			return false;
+		}
+
+		// Any other value means enabled.
+		return true;
 	}
 }
