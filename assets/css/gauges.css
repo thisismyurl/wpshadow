@@ -14,6 +14,18 @@
 .wps-dashboard-gauges {
     margin-bottom: var(--wps-space-8);
     flex-wrap: wrap;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ============================================================================
@@ -27,25 +39,44 @@
 }
 
 .wps-health-gauge-card {
-    border: 2px solid var(--wps-gray-300);
-    border-radius: var(--wps-radius-lg);
-    padding: var(--wps-space-6);
-    background: #ffffff;
-    box-shadow: var(--wps-shadow-md);
+    border: 1px solid var(--wps-gray-200);
+    border-radius: var(--wps-radius-xl);
+    padding: var(--wps-space-8);
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     text-align: center;
-    transition: box-shadow var(--wps-transition-base), transform var(--wps-transition-base);
+    transition: all var(--wps-transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.wps-health-gauge-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--wps-info), var(--wps-success));
+    opacity: 0;
+    transition: opacity var(--wps-transition-base);
 }
 
 .wps-health-gauge-card:hover {
-    box-shadow: var(--wps-shadow-lg);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+.wps-health-gauge-card:hover::before {
+    opacity: 1;
 }
 
 .wps-health-gauge-title {
-    margin: 0 0 var(--wps-space-4) 0;
-    font-size: var(--wps-text-xl);
+    margin: 0 0 var(--wps-space-6) 0;
+    font-size: var(--wps-text-2xl);
     color: var(--wps-gray-900);
-    font-weight: var(--wps-font-semibold);
+    font-weight: var(--wps-font-bold);
+    letter-spacing: -0.02em;
 }
 
 .wps-health-gauge-svg {
@@ -139,20 +170,38 @@
     align-items: center;
     gap: var(--wps-space-4);
     border: 1px solid var(--wps-gray-200);
-    border-radius: var(--wps-radius-md);
-    padding: var(--wps-space-3) var(--wps-space-4);
+    border-radius: var(--wps-radius-lg);
+    padding: var(--wps-space-4);
     background: #ffffff;
     text-decoration: none;
     color: inherit;
     transition: all var(--wps-transition-base);
     cursor: pointer;
-    min-height: 90px;
+    min-height: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.wps-category-gauge::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--wps-info);
+    opacity: 0;
+    transition: opacity var(--wps-transition-base);
+}
+
+.wps-category-gauge:hover::before {
+    opacity: 1;
 }
 
 .wps-category-gauge:hover {
-    box-shadow: var(--wps-shadow-md);
-    border-color: var(--wps-gray-300);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--wps-info-light);
+    transform: translateY(-2px) scale(1.01);
     text-decoration: none;
 }
 

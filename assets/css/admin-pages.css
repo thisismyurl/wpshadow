@@ -841,3 +841,58 @@
         justify-content: center;
     }
 }
+
+/* ============================================================================
+   Enhanced Page Header Styles (UI/UX Modernization Phase 2)
+   ============================================================================ */
+
+.wps-page-header {
+    margin-bottom: var(--wps-space-8);
+    animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.wps-page-title {
+    font-size: var(--wps-text-4xl);
+    font-weight: var(--wps-font-bold);
+    color: var(--wps-gray-900);
+    margin: 0 0 var(--wps-space-2) 0;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+}
+
+.wps-page-title .dashicons {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+}
+
+.wps-page-subtitle {
+    font-size: var(--wps-text-lg);
+    color: var(--wps-gray-600);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Drilldown header variant */
+.wps-drilldown-header {
+    position: relative;
+    padding: var(--wps-space-6);
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border-radius: var(--wps-radius-xl);
+    border: 1px solid var(--wps-gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
