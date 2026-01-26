@@ -163,12 +163,12 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 	 * @return bool True if disclosure is present, false otherwise.
 	 */
 	private static function has_cookie_disclosure(): bool {
-		// Ensure required WordPress functions are available.
+		// Check if popular cookie consent plugins are active.
+		// Early return if any plugin is found to avoid database queries.
 		if ( ! function_exists( 'is_plugin_active' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		// Check if popular cookie consent plugins are active.
 		$consent_plugins = array(
 			'cookie-notice/cookie-notice.php',               // Cookie Notice & Compliance.
 			'iubenda-cookie-law-consent/iubenda.php',        // Iubenda Cookie Solution.
@@ -181,30 +181,34 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 			'wp-gdpr-compliance/wp-gdpr-compliance.php',     // WP GDPR Compliance.
 		);
 
-		// Check if any cookie consent plugin is active.
+		// Check if any cookie consent plugin is active (fastest check).
 		foreach ( $consent_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
 				return true;
 			}
 		}
 
-		// If no plugin found, check privacy policy for cookie disclosure.
+		// Fallback: Check privacy policy for cookie disclosure (database query).
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
 
-		if ( $privacy_policy_id > 0 ) {
-			$privacy_policy = get_post( $privacy_policy_id );
+		if ( $privacy_policy_id <= 0 ) {
+			return false;
+		}
 
-			// Check if privacy policy exists, is published, and mentions cookies.
-			if ( $privacy_policy && 'publish' === $privacy_policy->post_status ) {
-				$content = $privacy_policy->post_content;
+		$privacy_policy = get_post( $privacy_policy_id );
 
-				// Search for cookie-related keywords in the content.
-				$cookie_keywords = array( 'cookie', 'cookies', 'tracking', 'analytics' );
-				foreach ( $cookie_keywords as $keyword ) {
-					if ( false !== stripos( $content, $keyword ) ) {
-						return true;
-					}
-				}
+		// Check if privacy policy exists, is published, and mentions cookies.
+		if ( ! $privacy_policy || 'publish' !== $privacy_policy->post_status ) {
+			return false;
+		}
+
+		// Search for cookie-related keywords in the content.
+		$content         = $privacy_policy->post_content;
+		$cookie_keywords = array( 'cookie', 'cookies', 'tracking', 'analytics' );
+
+		foreach ( $cookie_keywords as $keyword ) {
+			if ( false !== stripos( $content, $keyword ) ) {
+				return true;
 			}
 		}
 
