@@ -31,18 +31,28 @@ echo "Remote: $REMOTE_USER@$REMOTE_HOST"
 echo "Path: $REMOTE_WP_PATH"
 echo ""
 
-# Check if we have uncommitted changes
+# Update version number with current timestamp
+HOUR=$(date +%H)
+MINUTE=$(date +%M)
+NEW_VERSION="1.2601.21${HOUR}${MINUTE}"
+echo -e "${YELLOW}Updating version to: $NEW_VERSION${NC}"
+
+# Update version in main plugin file
+sed -i "s/Version: 1\.2601\.[0-9]\+/Version: $NEW_VERSION/" wpshadow.php
+sed -i "s/define( 'WPSHADOW_VERSION', '1\.2601\.[0-9]\+' );/define( 'WPSHADOW_VERSION', '$NEW_VERSION' );/" wpshadow.php
+
+# Update version in readme.txt
+sed -i "s/Stable tag: 1\.2601\.[0-9]\+/Stable tag: $NEW_VERSION/" readme.txt
+
+echo "✅ Version updated to $NEW_VERSION"
+echo ""
+
+# Auto-commit all changes with version as commit message
 if ! git diff-index --quiet HEAD --; then
-    echo -e "${YELLOW}Warning: You have uncommitted changes${NC}"
-    read -p "Commit them now? (y/n) " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        read -p "Commit message: " commit_msg
-        git add .
-        git commit -m "$commit_msg"
-    else
-        echo "Deploying without local changes..."
-    fi
+    echo -e "${YELLOW}Committing changes...${NC}"
+    git add .
+    git commit -m "Deploy v$NEW_VERSION"
+    echo "✅ Changes committed"
 fi
 
 # Initialize remote git repo if needed
