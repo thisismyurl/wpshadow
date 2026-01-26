@@ -37,9 +37,10 @@ class Hooks_Initializer {
 
 		// Admin initialization
 		add_action( 'admin_init', array( __CLASS__, 'on_admin_init' ) );
-		// NOTE: on_plugins_loaded is called directly from Plugin_Bootstrap::init()
-		// because Plugin_Bootstrap::init() is ITSELF hooked to plugins_loaded,
-		// so trying to hook it here would be too late (plugins_loaded already fired)
+		// NOTE: on_plugins_loaded is called directly from Plugin_Bootstrap::init() with EARLY priority
+		// to register AJAX handlers. Then we also add it as a hook with late priority to initialize
+		// other systems that require fully-loaded classes.
+		add_action( 'plugins_loaded', array( __CLASS__, 'on_plugins_loaded_late' ), 999 );
 
 		// Menu and asset loading
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
@@ -125,13 +126,21 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Plugins loaded hook
+	 * Plugins loaded hook - Early phase (AJAX handlers only)
 	 */
 	public static function on_plugins_loaded() {
 		// Debug logging
 		$debug_file = WPSHADOW_PATH . 'debug-ajax.log';
 		file_put_contents( $debug_file, "Hooks_Initializer::on_plugins_loaded() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
 		
+		// AJAX handlers (Phase 3.5.1) - ONLY THIS, other stuff happens in on_plugins_loaded_late
+		AJAX_Router::init();
+	}
+
+	/**
+	 * Plugins loaded hook - Late phase (everything else that needs fully-loaded classes)
+	 */
+	public static function on_plugins_loaded_late() {
 		// Initialize core registries and systems
 		\WPShadow\Admin\Update_Notification_Manager::init();
 		\WPShadow\Diagnostics\Diagnostic_Registry::init();
@@ -139,9 +148,6 @@ class Hooks_Initializer {
 		\WPShadow\Workflow\Workflow_Executor::init();
 		\WPShadow\Core\Treatment_Hooks::init();
 		\WPShadow\Core\Site_Health_Explanations::init();
-
-		// AJAX handlers (Phase 3.5.1)
-		AJAX_Router::init();
 
 		// Initialize Guardian system
 		\WPShadow\Guardian\Guardian_Manager::init();

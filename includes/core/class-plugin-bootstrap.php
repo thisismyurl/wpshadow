@@ -42,8 +42,9 @@ class Plugin_Bootstrap {
 		// 2. Register hooks (must be early, before other systems)
 		Hooks_Initializer::init();
 		
-		// 2.5 Call on_plugins_loaded directly since we're ALREADY ON plugins_loaded
-		Hooks_Initializer::on_plugins_loaded();
+		// 2.5 Register AJAX handlers FIRST (before other plugins_loaded stuff)
+		// This must be done early so AJAX endpoints work on the first request
+		\WPShadow\Core\AJAX_Router::init();
 
 		// 3. Initialize menu system
 		Menu_Manager::init();
