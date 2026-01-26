@@ -270,11 +270,11 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	}
 
 	.onboarding-step {
-		display: none;
+		display: none !important;
 	}
 
 	.onboarding-step.active {
-		display: block;
+		display: block !important;
 		animation: fadeIn 0.4s ease-in;
 	}
 
