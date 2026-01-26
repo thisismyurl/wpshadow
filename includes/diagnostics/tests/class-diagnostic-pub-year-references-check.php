@@ -178,6 +178,8 @@ class Diagnostic_Pub_Year_References_Check extends Diagnostic_Base {
 			return null;
 		}
 
+		$total_posts = count( $posts );
+
 		// Define year range to check (current year ± 10 years).
 		$current_year = (int) gmdate( 'Y' );
 		$min_year     = $current_year - 10;
@@ -192,6 +194,12 @@ class Diagnostic_Pub_Year_References_Check extends Diagnostic_Base {
 
 			// Pattern: look for 4-digit years that are standalone or in context.
 			// Matches: "2024", "Best of 2025", "2023 trends", etc.
+			// Use preg_match first for efficiency - only process matches if years exist.
+			if ( ! preg_match( '/\b(20\d{2}|19\d{2})\b/', $text_to_check ) ) {
+				continue;
+			}
+
+			// Now get all year matches for validation.
 			if ( preg_match_all( '/\b(20\d{2}|19\d{2})\b/', $text_to_check, $matches ) ) {
 				$found_years = array_unique( $matches[1] );
 				foreach ( $found_years as $year ) {
@@ -201,7 +209,7 @@ class Diagnostic_Pub_Year_References_Check extends Diagnostic_Base {
 						++$posts_with_years;
 						// Store example for reporting.
 						if ( count( $year_examples ) < 3 ) {
-							$year_examples[] = sprintf( '"%s" (contains %s)', esc_html( $post->post_title ), esc_html( $year ) );
+							$year_examples[] = sprintf( '"%s" (contains %d)', esc_html( $post->post_title ), $year_int );
 						}
 						break; // Count this post only once.
 					}
@@ -209,7 +217,7 @@ class Diagnostic_Pub_Year_References_Check extends Diagnostic_Base {
 			}
 		}
 
-		$percentage = ( $posts_with_years / count( $posts ) ) * 100;
+		$percentage = ( $posts_with_years / $total_posts ) * 100;
 
 		// Flag if more than 30% of recent posts contain year references.
 		if ( $percentage > 30 ) {
