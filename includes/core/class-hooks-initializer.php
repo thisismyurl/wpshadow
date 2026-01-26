@@ -129,10 +129,6 @@ class Hooks_Initializer {
 	 * Plugins loaded hook - Early phase (AJAX handlers only)
 	 */
 	public static function on_plugins_loaded() {
-		// Debug logging
-		$debug_file = WPSHADOW_PATH . 'debug-ajax.log';
-		file_put_contents( $debug_file, "Hooks_Initializer::on_plugins_loaded() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
-		
 		// AJAX handlers (Phase 3.5.1) - ONLY THIS, other stuff happens in on_plugins_loaded_late
 		AJAX_Router::init();
 	}
