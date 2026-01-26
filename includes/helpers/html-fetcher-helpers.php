@@ -171,16 +171,20 @@ function wpshadow_clear_html_cache(): int {
 	$groups  = array( 'wpshadow_html', 'wpshadow_frontend', 'wpshadow_admin', 'wpshadow_posts' );
 
 	foreach ( $groups as $group ) {
-		// Delete all transients starting with this group prefix
-		$sql = $wpdb->prepare(
-			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-			$wpdb->esc_like( '_transient_' . $group ) . '%',
-			$wpdb->esc_like( '_transient_timeout_' . $group ) . '%'
+		// Get all transient names starting with this group prefix
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- No native WP function for bulk transient deletion
+		$transient_names = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT REPLACE(option_name, '_transient_', '') FROM {$wpdb->options} WHERE option_name LIKE %s",
+				$wpdb->esc_like( '_transient_' . $group ) . '%'
+			)
 		);
 
-		$result = $wpdb->query( $sql );
-		if ( $result ) {
-			$deleted += $result;
+		// Use native WordPress function to delete each transient
+		foreach ( $transient_names as $transient_name ) {
+			if ( delete_transient( $transient_name ) ) {
+				++$deleted;
+			}
 		}
 	}
 

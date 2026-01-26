@@ -232,14 +232,21 @@ class Registration_Manager {
 		delete_option( 'wpshadow_subscription_expires' );
 		delete_transient( 'wpshadow_registration_status_cache' );
 
-		// Clean up scan cache
+		// Clean up scan cache using WordPress functions
+		// Get all option names starting with prefix
 		global $wpdb;
-		$wpdb->query(
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- No native WP function for bulk prefix deletion
+		$option_names = $wpdb->get_col(
 			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
 				$wpdb->esc_like( 'wpshadow_cloud_scan_' ) . '%'
 			)
 		);
+
+		// Use native WordPress function to delete each option
+		foreach ( $option_names as $option_name ) {
+			delete_option( $option_name );
+		}
 
 		do_action( 'wpshadow_unregistered' );
 

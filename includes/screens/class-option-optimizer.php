@@ -72,22 +72,14 @@ class Option_Optimizer {
 			'wpshadow_last_deep_scan',
 		);
 
-		$placeholders = implode( ',', array_fill( 0, count( $option_names ), '%s' ) );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, placeholders dynamically created but properly prepared
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name IN ($placeholders)",
-				$option_names
-			),
-			ARRAY_A
-		);
-
-		// Store in cache
-		foreach ( $results as $row ) {
-			$value = maybe_unserialize( $row['option_value'] );
-			wp_cache_set( $row['option_name'], $value, 'options' );
-			self::$option_cache[ $row['option_name'] ] = $value;
+		// Use native get_option() which handles caching automatically
+		// This is more WordPress-native and respects object cache
+		foreach ( $option_names as $option_name ) {
+			// get_option() automatically handles caching and unserialization
+			$value = get_option( $option_name, false );
+			if ( false !== $value ) {
+				self::$option_cache[ $option_name ] = $value;
+			}
 		}
 	}
 
@@ -168,22 +160,14 @@ class Option_Optimizer {
 
 		// Fetch remaining from database in one query
 		if ( ! empty( $to_fetch ) ) {
-			$placeholders = implode( ',', array_fill( 0, count( $to_fetch ), '%s' ) );
-
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, placeholders dynamically created but properly prepared
-			$rows = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name IN ($placeholders)",
-					$to_fetch
-				),
-				ARRAY_A
-			);
-
-			foreach ( $rows as $row ) {
-				$value                                     = maybe_unserialize( $row['option_value'] );
-				$results[ $row['option_name'] ]            = $value;
-				self::$option_cache[ $row['option_name'] ] = $value;
-				wp_cache_set( $row['option_name'], $value, 'options' );
+			// Use native get_option() which handles caching, unserialization, and object cache
+			foreach ( $to_fetch as $option_name ) {
+				// get_option() automatically handles all caching layers
+				$value = get_option( $option_name, false );
+				if ( false !== $value ) {
+					$results[ $option_name ]            = $value;
+					self::$option_cache[ $option_name ] = $value;
+				}
 			}
 		}
 

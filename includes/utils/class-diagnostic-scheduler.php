@@ -293,7 +293,7 @@ class Diagnostic_Scheduler {
 		$frequency = $schedule['frequency'] ?? self::FREQUENCY_DAILY;
 
 		// If frequency is 0 (run on every request), return true
-		if ( $frequency === 0 ) {
+		if ( 0 === $frequency ) {
 			return true;
 		}
 
@@ -388,14 +388,20 @@ class Diagnostic_Scheduler {
 	 * Trigger on upgrader complete
 	 */
 	public static function on_upgrader_complete( $upgrader, $options ): void {
-		// Reset all last run times to trigger fresh diagnostics
+		// Reset all last run times to trigger fresh diagnostics using WordPress functions
 		global $wpdb;
-		$wpdb->query(
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- No native WP function for bulk prefix deletion
+		$option_names = $wpdb->get_col(
 			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
 				'wpshadow_last_run_%'
 			)
 		);
+
+		// Use native WordPress function to delete each option
+		foreach ( $option_names as $option_name ) {
+			delete_option( $option_name );
+		}
 	}
 
 	/**

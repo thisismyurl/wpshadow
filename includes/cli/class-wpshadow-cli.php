@@ -609,16 +609,16 @@ class WPShadow_CLI extends WP_CLI_Command {
 	 * @param array  $assoc_args   Associative arguments.
 	 */
 	private function list_settings( string $format, array $assoc_args ): void {
-		global $wpdb;
+		// Use native WordPress function to load all options
+		$all_options = wp_load_alloptions();
 
-		// Get all wpshadow options.
-		// Use proper escaping for wildcard pattern.
-		$settings = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_name",
-				$wpdb->esc_like( 'wpshadow_' ) . '%'
-			),
-			ARRAY_A
+		// Filter for wpshadow options only
+		$settings = array_filter(
+			$all_options,
+			function ( $key ) {
+				return str_starts_with( $key, 'wpshadow_' );
+			},
+			ARRAY_FILTER_USE_KEY
 		);
 
 		if ( empty( $settings ) ) {
@@ -626,11 +626,14 @@ class WPShadow_CLI extends WP_CLI_Command {
 			return;
 		}
 
+		// Sort by key for consistent output
+		ksort( $settings );
+
 		$data = array();
-		foreach ( $settings as $setting ) {
+		foreach ( $settings as $name => $value ) {
 			$data[] = array(
-				'name'  => $setting['option_name'],
-				'value' => $setting['option_value'],
+				'name'  => $name,
+				'value' => $value,
 			);
 		}
 
