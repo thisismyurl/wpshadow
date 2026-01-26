@@ -290,6 +290,11 @@ class Diagnostic_Referrer_Quality extends Diagnostic_Base {
 			return true;
 		}
 
+		// Load plugin functions if not already available
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		// Check if common security plugins set referrer policy
 		// Most modern security plugins set this header
 		$security_plugins = array(
