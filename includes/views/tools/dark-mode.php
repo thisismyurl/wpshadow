@@ -1,18 +1,28 @@
 <?php
-
 /**
  * Dark Mode Tool Page
  *
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! current_user_can( 'read' ) ) {
-	wp_die( 'Insufficient permissions.' );
-}
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'read' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'dark-mode' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ) );
 
 $user_id = get_current_user_id();
 

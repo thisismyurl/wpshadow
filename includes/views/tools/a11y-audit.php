@@ -1,24 +1,29 @@
 <?php
-
 /**
  * Accessibility Audit Tool Page
  *
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! current_user_can( 'read' ) ) {
-	wp_die( 'Insufficient permissions.' );
-}
-?>
+use WPShadow\Views\Tool_View_Base;
 
-<div class="wrap">
-	<h1><?php esc_html_e( 'Accessibility Audit', 'wpshadow' ); ?></h1>
-	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-	<p><?php esc_html_e( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ); ?></p>
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'read' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'a11y-audit' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ) );
+?>
 
 	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
@@ -166,3 +171,5 @@ if ( ! current_user_can( 'read' ) ) {
 		});
 	});
 </script>
+
+<?php Tool_View_Base::render_footer(); ?>

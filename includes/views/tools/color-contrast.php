@@ -5,17 +5,24 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'color-contrast' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Color Contrast Checker', 'wpshadow' ), __( 'Evaluate text and background color pairs against WCAG contrast targets.', 'wpshadow' ) );
 ?>
 
-<div class="wrap wpshadow-tool-container">
-	<h1><?php esc_html_e( 'Color Contrast Checker', 'wpshadow' ); ?></h1>
-	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-	<p><?php esc_html_e( 'Evaluate text and background color pairs against WCAG contrast targets.', 'wpshadow' ); ?></p>
-
-	<div class="wpshadow-contrast-grid">
+<div class="wpshadow-contrast-grid">
 		<div class="wpshadow-contrast-panel">
 			<h3><?php esc_html_e( 'Check a Color Pair', 'wpshadow' ); ?></h3>
 			<form id="wpshadow-contrast-form">
@@ -104,3 +111,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ul id="wpshadow-contrast-theme-contexts" class="wpshadow-theme-contexts"></ul>
 	</div>
 </div>
+
+<?php Tool_View_Base::render_footer(); ?>

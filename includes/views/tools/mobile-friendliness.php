@@ -5,14 +5,25 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-?>
 
-<div class="wrap wpshadow-tool-container">
-	<h1><?php esc_html_e( 'Mobile Friendliness Checker', 'wpshadow' ); ?></h1>
-	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'read' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'mobile-friendliness' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) );
+?>
 	<p><?php esc_html_e( 'Run a quick scan to spot mobile-readiness issues like viewport, zoom, and small fonts.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-mobile-grid">
@@ -68,3 +79,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div id="wpshadow-mobile-checks"></div>
 	</div>
 </div>
+
+<?php Tool_View_Base::render_footer(); ?>

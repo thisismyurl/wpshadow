@@ -5,9 +5,24 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'manage_options' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'simple-cache' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Simple Cache Management', 'wpshadow' ) );
 
 $cache_dir  = WP_CONTENT_DIR . '/cache/wpshadow';
 $cache_size = 0;
@@ -293,3 +308,4 @@ jQuery(document).ready(function($) {
 	});
 });
 </script>
+<?php Tool_View_Base::render_footer(); ?>

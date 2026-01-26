@@ -14,6 +14,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'manage_options' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'email-test' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Email Notification Test', 'wpshadow' ) );
+
 // Handle test email submission
 $test_results = null;
 if ( isset( $_POST['wpshadow_send_test_email'] ) && check_admin_referer( 'wpshadow_email_test', 'wpshadow_email_test_nonce' ) ) {
@@ -338,3 +351,4 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		</form>
 	</div>
 </div>
+<?php Tool_View_Base::render_footer(); ?>

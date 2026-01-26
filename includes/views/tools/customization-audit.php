@@ -5,17 +5,25 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'customization-audit' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Customization Audit', 'wpshadow' ), __( 'Audit custom WordPress modifications, themes, and plugins to identify potential risks and compliance issues.', 'wpshadow' ) );
+
 $audit_reports = get_option( 'wpshadow_customization_audit_reports', array() );
 $latest_report = ! empty( $audit_reports ) ? end( $audit_reports ) : null;
 ?>
-
-<div class="wpshadow-tool-container">
-	<h2><?php esc_html_e( 'Customization Audit', 'wpshadow' ); ?></h2>
-	<p><?php esc_html_e( 'Audit custom WordPress modifications, themes, and plugins to identify potential risks and compliance issues.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Generate New Audit', 'wpshadow' ); ?></h3>

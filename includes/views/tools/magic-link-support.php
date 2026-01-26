@@ -5,9 +5,24 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'manage_options' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'magic-link-support' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Magic Link Support', 'wpshadow' ) );
 
 $magic_links  = get_option( 'wpshadow_magic_links', array() );
 $active_links = array_filter(
@@ -200,3 +215,4 @@ jQuery(document).ready(function($) {
 	});
 });
 </script>
+<?php Tool_View_Base::render_footer(); ?>

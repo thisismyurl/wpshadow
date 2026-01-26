@@ -1,20 +1,34 @@
 <?php
-
 /**
  * Timezone Alignment Tool
  *
  * Helps admins detect and align their timezone with WordPress.
  * Shows browser timezone vs server timezone vs current WordPress setting.
  * Can be rerun anytime to resync.
+ *
+ * @package WPShadow
  */
 
-namespace WPShadow\Views\Tools;
+declare(strict_types=1);
 
-use WPShadow\Core\Timezone_Manager;
+use WPShadow\Views\Tool_View_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'manage_options' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'timezone-alignment' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Timezone Alignment', 'wpshadow' ) );
+
+use WPShadow\Core\Timezone_Manager;
 
 // Get current timezones
 $current_tz   = Timezone_Manager::get_admin_timezone();
@@ -26,7 +40,6 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 ?>
 
 <div class="wpshadow-tool-container timezone-alignment-tool">
-	<div class="tool-header">
 		<h2><?php esc_html_e( 'Timezone Alignment', 'wpshadow' ); ?></h2>
 		<p class="description">
 			<?php esc_html_e( 'Automatically detect and align your timezone with WordPress. Ensures all timestamps reflect your actual location, not the server\'s timezone.', 'wpshadow' ); ?>
@@ -371,3 +384,4 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 		});
 	});
 </script>
+<?php Tool_View_Base::render_footer(); ?>

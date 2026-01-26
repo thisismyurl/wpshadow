@@ -13,23 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use WPShadow\Core\Options_Manager;
+use WPShadow\Views\Tool_View_Base;
 
-// Enqueue scan tools assets
-wp_enqueue_style( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/css/scan-tools.css', array(), WPSHADOW_VERSION );
-wp_enqueue_script( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/js/scan-tools.js', array( 'jquery' ), WPSHADOW_VERSION, true );
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
 
-// Localize script for AJAX URL
-wp_localize_script(
-	'wpshadow-scan-tools',
-	'wpshadowScanTools',
-	array(
-		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-	)
-);
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'quick-scan' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Quick Scan', 'wpshadow' ) );
 ?>
 
 <div class="wpshadow-tool quick-scan-tool">
-	<h2><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
 	
 	<p class="description">
 		<?php esc_html_e( 'Run a fast, lightweight scan of your site for common issues and security concerns. This typically completes in 30-60 seconds.', 'wpshadow' ); ?>
@@ -76,3 +71,5 @@ wp_localize_script(
 
 	<div class="scan-results"></div>
 </div>
+
+<?php Tool_View_Base::render_footer(); ?>

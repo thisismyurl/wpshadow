@@ -5,9 +5,21 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'color-contrast-checker' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __( 'Check if your text colors stand out enough from the background so everyone can read them easily.', 'wpshadow' ) );
 ?>
 
 <div class="wpshadow-tool-container">

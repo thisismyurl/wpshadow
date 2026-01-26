@@ -1,18 +1,29 @@
 <?php
-
 /**
  * Broken Link Checker Tool Page
  *
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! current_user_can( 'read' ) ) {
-	wp_die( 'Insufficient permissions.' );
-}
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'read' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'broken-links' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Broken Links', 'wpshadow' ), __( 'Scan your site for broken internal and external links.', 'wpshadow' ) );
+?>
 ?>
 
 <div class="wrap">
@@ -133,3 +144,5 @@ if ( ! current_user_can( 'read' ) ) {
 		});
 	});
 </script>
+
+<?php Tool_View_Base::render_footer(); ?>

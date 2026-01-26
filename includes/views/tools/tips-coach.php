@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tips & Guidance Tool - Admin Tooltips Configuration
  *
@@ -9,10 +8,24 @@
  * @package WPShadow
  */
 
+declare(strict_types=1);
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Views\Tool_View_Base;
+
+require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
+
+// Verify access
+Tool_View_Base::verify_access( 'read' );
+
+// Enqueue assets
+Tool_View_Base::enqueue_assets( 'tips-coach' );
+
+// Render header
+Tool_View_Base::render_header( __( 'Tips & Coaching', 'wpshadow' ) );
 if ( ! current_user_can( 'read' ) ) {
 	wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
 }
@@ -207,3 +220,4 @@ foreach ( $catalog as $tip ) {
 		});
 	})(jQuery);
 </script>
+<?php Tool_View_Base::render_footer(); ?>
