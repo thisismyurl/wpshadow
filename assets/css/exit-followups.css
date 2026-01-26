@@ -1,0 +1,173 @@
+/**
+ * Exit Followups Admin Interface Styles
+ *
+ * @since 1.2601.2148
+ */
+
+.wpshadow-exit-followups-page {
+	max-width: 1400px;
+}
+
+/* Statistics Cards */
+.wpshadow-stats-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 20px;
+	margin: 20px 0;
+}
+
+.wpshadow-stat-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 20px;
+	text-align: center;
+}
+
+.wpshadow-stat-card .stat-value {
+	font-size: 32px;
+	font-weight: bold;
+	color: #2271b1;
+	margin-bottom: 8px;
+}
+
+.wpshadow-stat-card .stat-label {
+	font-size: 14px;
+	color: #50575e;
+}
+
+/* Filters */
+.wpshadow-followups-filters {
+	margin: 20px 0;
+	padding: 15px;
+	background: #f0f0f1;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.wpshadow-followups-filters label {
+	font-weight: 600;
+	margin: 0;
+}
+
+.wpshadow-followups-filters select {
+	max-width: 200px;
+}
+
+/* Followups Table */
+.wpshadow-followups-table {
+	margin-top: 20px;
+}
+
+.wpshadow-followups-table th {
+	font-weight: 600;
+}
+
+.wpshadow-followups-table td {
+	vertical-align: middle;
+}
+
+/* Status Badges */
+.wpshadow-status-badge {
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.wpshadow-status-pending {
+	background: #f0f6fc;
+	color: #0969da;
+}
+
+.wpshadow-status-sent {
+	background: #fff8c5;
+	color: #9a6700;
+}
+
+.wpshadow-status-completed {
+	background: #dafbe1;
+	color: #0f5323;
+}
+
+.wpshadow-status-cancelled {
+	background: #f1f2f3;
+	color: #57606a;
+}
+
+/* Badge */
+.wpshadow-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	margin-left: 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.wpshadow-badge-danger {
+	background: #d1242f;
+	color: #fff;
+}
+
+/* Empty State */
+.wpshadow-no-followups {
+	padding: 40px;
+	text-align: center;
+	color: #646970;
+	font-style: italic;
+}
+
+/* Error Message */
+.wpshadow-error {
+	color: #d63638;
+	padding: 15px;
+	background: #fcf0f1;
+	border: 1px solid #d63638;
+	border-radius: 4px;
+}
+
+/* Buttons */
+.wpshadow-followups-table .button-small {
+	height: auto;
+	line-height: 1.5;
+	padding: 4px 8px;
+	font-size: 12px;
+}
+
+/* Loading State */
+#wpshadow-followups-container p {
+	padding: 20px;
+	text-align: center;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 782px) {
+	.wpshadow-stats-cards {
+		grid-template-columns: 1fr;
+	}
+
+	.wpshadow-followups-filters {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.wpshadow-followups-filters select {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	.wpshadow-followups-table {
+		font-size: 13px;
+	}
+
+	.wpshadow-followups-table th,
+	.wpshadow-followups-table td {
+		padding: 8px 4px;
+	}
+}

@@ -125,3 +125,7 @@ require_once $ajax_path . 'Submit_Exit_Interview_Handler.php';
 // Kanban operations (loaded separately in kanban-module.php)
 // - Get_Finding_Family_Handler.php
 // - Apply_Family_Fix_Handler.php
+
+// Exit interview and followup operations
+require_once $ajax_path . 'exit-followup-handlers.php';
+

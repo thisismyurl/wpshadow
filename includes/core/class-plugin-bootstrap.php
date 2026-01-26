@@ -59,19 +59,22 @@ class Plugin_Bootstrap {
 		// 9. Load privacy system
 		self::load_privacy_system();
 
-		// 10. Load content post types (KB, FAQ, etc.)
+		// 10. Load exit followup system
+		self::load_exit_followup_system();
+
+		// 11. Load content post types (KB, FAQ, etc.)
 		self::load_content_types();
 
-		// 11. Load pro addon integration
+		// 12. Load pro addon integration
 		self::load_pro_integration();
 
-		// 12. Load WP-CLI commands
+		// 13. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 13. Initialize visual comparator
+		// 14. Initialize visual comparator
 		self::init_visual_comparator();
 
-		// 14. Fire initialization complete hook
+		// 15. Fire initialization complete hook
 		do_action( 'wpshadow_core_initialized' );
 	}
 
@@ -274,6 +277,30 @@ class Plugin_Bootstrap {
 
 		if ( file_exists( $privacy_path . 'class-first-run-consent.php' ) ) {
 			require_once $privacy_path . 'class-first-run-consent.php';
+		}
+	}
+
+	/**
+	 * Load exit followup system
+	 *
+	 * @return void
+	 */
+	private static function load_exit_followup_system() {
+		$engagement_path = WPSHADOW_PATH . 'includes/engagement/';
+		$screens_path    = WPSHADOW_PATH . 'includes/screens/';
+
+		// Load exit followup classes
+		if ( file_exists( $engagement_path . 'class-exit-followup-manager.php' ) ) {
+			require_once $engagement_path . 'class-exit-followup-manager.php';
+		}
+
+		if ( file_exists( $engagement_path . 'class-exit-survey-builder.php' ) ) {
+			require_once $engagement_path . 'class-exit-survey-builder.php';
+		}
+
+		// Load admin page
+		if ( file_exists( $screens_path . 'class-exit-followups-page.php' ) ) {
+			require_once $screens_path . 'class-exit-followups-page.php';
 		}
 	}
 

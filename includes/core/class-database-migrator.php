@@ -29,7 +29,7 @@ class Database_Migrator {
 	 * Current schema version
 	 * Increment when database schema changes
 	 */
-	const SCHEMA_VERSION = 1;
+	const SCHEMA_VERSION = 2;
 
 	/**
 	 * Database version option key
@@ -57,6 +57,11 @@ class Database_Migrator {
 		// Version 0 -> 1: Initial schema
 		if ( $current_version < 1 ) {
 			self::schema_v1();
+		}
+
+		// Version 1 -> 2: Exit followup tables
+		if ( $current_version < 2 ) {
+			self::schema_v2();
 		}
 
 		// Update version
@@ -144,6 +149,65 @@ class Database_Migrator {
 	}
 
 	/**
+	 * Schema Version 2: Exit followup tables
+	 *
+	 * Creates tables for exit interview followup feature:
+	 * - wpshadow_exit_interviews: Exit interview responses with contact permissions
+	 * - wpshadow_exit_followups: Scheduled followup contacts and surveys
+	 *
+	 * @since 1.2601.2148
+	 * @return void
+	 */
+	private static function schema_v2() {
+		global $wpdb;
+
+		// Exit interviews table - stores deactivation feedback
+		$table_interviews = $wpdb->prefix . 'wpshadow_exit_interviews';
+		$sql_interviews   = "CREATE TABLE {$table_interviews} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			user_id BIGINT UNSIGNED NOT NULL,
+			site_url VARCHAR(255) NOT NULL,
+			exit_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			exit_reason VARCHAR(100),
+			detailed_feedback TEXT,
+			competitor_name VARCHAR(100),
+			features_needed TEXT,
+			contact_allowed TINYINT(1) NOT NULL DEFAULT 0,
+			contact_email VARCHAR(255),
+			usage_duration_days INT UNSIGNED,
+			features_used TEXT,
+			site_type VARCHAR(100),
+			INDEX (user_id),
+			INDEX (exit_date),
+			INDEX (contact_allowed),
+			PRIMARY KEY (id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+		// Followup schedules table - manages scheduled followup contacts
+		$table_followups = $wpdb->prefix . 'wpshadow_exit_followups';
+		$sql_followups   = "CREATE TABLE {$table_followups} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			interview_id BIGINT UNSIGNED NOT NULL,
+			followup_type VARCHAR(50) NOT NULL,
+			scheduled_date DATETIME NOT NULL,
+			completed_date DATETIME,
+			status VARCHAR(50) NOT NULL DEFAULT 'pending',
+			survey_questions LONGTEXT,
+			survey_responses LONGTEXT,
+			contact_method VARCHAR(50) NOT NULL DEFAULT 'email',
+			notes TEXT,
+			INDEX (interview_id),
+			INDEX (scheduled_date),
+			INDEX (status),
+			PRIMARY KEY (id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+		// Use dbDelta for safe table creation
+		dbDelta( $sql_interviews );
+		dbDelta( $sql_followups );
+	}
+
+	/**
 	 * Get database tables created by WPShadow
 	 *
 	 * @return array List of table names
@@ -154,6 +218,7 @@ class Database_Migrator {
 		return array(
 			$wpdb->prefix . 'wpshadow_workflow_logs',
 			$wpdb->prefix . 'wpshadow_exit_interviews',
+			$wpdb->prefix . 'wpshadow_exit_followups',
 		);
 	}
 
