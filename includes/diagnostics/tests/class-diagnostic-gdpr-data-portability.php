@@ -102,9 +102,10 @@ class Diagnostic_Gdpr_Data_Portability extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic test
 	 *
-	 * @deprecated Use check() instead.
-	 * @since      1.2601.2148
-	 * @return     array Finding data or empty if no issue.
+	 * Wrapper method that calls check() and formats the result for compatibility.
+	 *
+	 * @since 1.2601.2148
+	 * @return array Finding data or empty if no issue.
 	 */
 	public static function run(): array {
 		$result = self::check();
