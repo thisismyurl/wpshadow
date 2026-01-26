@@ -60,38 +60,28 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="comfort-options">
-				<div class="comfort-card" data-comfort="learning">
-					<div class="comfort-icon">
-						<span class="dashicons dashicons-welcome-learn-more"></span>
-					</div>
-					<h3><?php esc_html_e( 'I like to take my time', 'wpshadow' ); ?></h3>
-					<p><?php esc_html_e( 'I prefer step-by-step guidance and clear explanations', 'wpshadow' ); ?></p>
-					<button type="button" class="button button-primary select-comfort">
-						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
-					</button>
+			<div class="comfort-card clickable" data-comfort="learning" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Select: I like to take my time', 'wpshadow' ); ?>">
+				<div class="comfort-icon">
+					<span class="dashicons dashicons-welcome-learn-more"></span>
 				</div>
+				<h3><?php esc_html_e( 'I like to take my time', 'wpshadow' ); ?></h3>
+				<p><?php esc_html_e( 'I prefer step-by-step guidance and clear explanations', 'wpshadow' ); ?></p>
+			</div>
 
-				<div class="comfort-card" data-comfort="comfortable">
-					<div class="comfort-icon">
-						<span class="dashicons dashicons-yes"></span>
-					</div>
-					<h3><?php esc_html_e( 'I can figure things out', 'wpshadow' ); ?></h3>
-					<p><?php esc_html_e( 'I like some guidance but I\'m comfortable exploring', 'wpshadow' ); ?></p>
-					<button type="button" class="button button-primary select-comfort">
-						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
-					</button>
+			<div class="comfort-card clickable" data-comfort="comfortable" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Select: I can figure things out', 'wpshadow' ); ?>">
+				<div class="comfort-icon">
+					<span class="dashicons dashicons-yes"></span>
 				</div>
+				<h3><?php esc_html_e( 'I can figure things out', 'wpshadow' ); ?></h3>
+				<p><?php esc_html_e( 'I like some guidance but I\'m comfortable exploring', 'wpshadow' ); ?></p>
+			</div>
 
-				<div class="comfort-card" data-comfort="expert">
-					<div class="comfort-icon">
-						<span class="dashicons dashicons-superhero"></span>
-					</div>
-					<h3><?php esc_html_e( 'I dive right in', 'wpshadow' ); ?></h3>
-					<p><?php esc_html_e( 'I learn by doing and prefer minimal hand-holding', 'wpshadow' ); ?></p>
-					<button type="button" class="button button-primary select-comfort">
-						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
-					</button>
+			<div class="comfort-card clickable" data-comfort="expert" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Select: I dive right in', 'wpshadow' ); ?>">
+				<div class="comfort-icon">
+					<span class="dashicons dashicons-superhero"></span>
 				</div>
+				<h3><?php esc_html_e( 'I dive right in', 'wpshadow' ); ?></h3>
+				<p><?php esc_html_e( 'I learn by doing and prefer minimal hand-holding', 'wpshadow' ); ?></p>
 			</div>
 
 			<p class="onboarding-nav">
@@ -573,9 +563,11 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			// Show next step
 			$('#step-comfort').removeClass('active');
 			$('#step-config').addClass('active');
-		});
-		
-		// Continue from config step
+		}); - entire card is clickable
+		$('.comfort-card.clickable').on('click keypress', function(e) {
+			if (e.type === 'keypress' && e.which !== 13 && e.which !== 32) return;
+			e.preventDefault();
+			selectedComfort = $(this
 		$('#continue-config').on('click', function() {
 			// Collect config preferences
 			const selectedConfig = {
