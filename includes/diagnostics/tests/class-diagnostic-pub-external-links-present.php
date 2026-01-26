@@ -204,6 +204,9 @@ class Diagnostic_Pub_External_Links_Present extends Diagnostic_Base {
 
 		foreach ( $posts as $post ) {
 			// Extract links from content using regex.
+			// Note: While DOMDocument could be more robust, regex is sufficient here
+			// for performance reasons when scanning up to 100 posts. The content is
+			// already stored in the database, not real-time user input.
 			preg_match_all( '/<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>/i', $post->post_content, $matches );
 
 			if ( empty( $matches[1] ) ) {
