@@ -130,24 +130,14 @@ class Diagnostic_Pub_Excerpt_Present extends Diagnostic_Base {
 	public static function check(): ?array {
 		global $wpdb;
 
-		// Query published posts without custom excerpts.
+		// Query published posts stats in a single query for efficiency.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$posts_without_excerpt = (int) $wpdb->get_var(
+		$stats = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_status = %s 
-				AND post_type = %s 
-				AND (post_excerpt = '' OR post_excerpt IS NULL)",
-				'publish',
-				'post'
-			)
-		);
-
-		// Get total published posts.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$total_posts = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
+				"SELECT 
+					COUNT(*) as total_posts,
+					SUM(CASE WHEN (post_excerpt = '' OR post_excerpt IS NULL) THEN 1 ELSE 0 END) as posts_without_excerpt
+				FROM {$wpdb->posts} 
 				WHERE post_status = %s 
 				AND post_type = %s",
 				'publish',
@@ -156,9 +146,12 @@ class Diagnostic_Pub_Excerpt_Present extends Diagnostic_Base {
 		);
 
 		// If no posts exist, nothing to check.
-		if ( 0 === $total_posts ) {
+		if ( ! $stats || 0 === (int) $stats->total_posts ) {
 			return null;
 		}
+
+		$total_posts           = (int) $stats->total_posts;
+		$posts_without_excerpt = (int) $stats->posts_without_excerpt;
 
 		// Calculate percentage of posts missing excerpts.
 		$percentage_missing = ( $posts_without_excerpt / $total_posts ) * 100;
@@ -211,7 +204,13 @@ class Diagnostic_Pub_Excerpt_Present extends Diagnostic_Base {
 				'message' => __( 'Published posts have SEO-optimized excerpts configured', 'wpshadow' ),
 			);
 		}
-		$message = $result['description'] ?? __( 'Missing excerpts on published posts detected', 'wpshadow' );
+
+		// Get message from result, with fallback.
+		$message = __( 'Missing excerpts on published posts detected', 'wpshadow' );
+		if ( isset( $result['description'] ) ) {
+			$message = $result['description'];
+		}
+
 		return array(
 			'passed'  => false,
 			'message' => $message,
