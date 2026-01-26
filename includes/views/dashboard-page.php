@@ -95,7 +95,7 @@ function wpshadow_render_dashboard() {
 						<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
 					</p>
 					<div class="wps-cta-actions">
-						<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left" id="wpshadow-run-first-scan">
+						<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left" id="wpshadow-run-first-scan" aria-label="<?php esc_attr_e( 'Run an initial quick scan of your site', 'wpshadow' ); ?>">
 							<span class="dashicons dashicons-update"></span>
 							<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
 						</button>

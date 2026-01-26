@@ -35,6 +35,7 @@
 			var progressInterval = scanType === 'quick' ? 500 : 1000;
 			
 			var $progress = $('.scan-progress');
+			var $progressBar = $('.progress-bar');
 			var $progressFill = $('.progress-fill');
 			var $progressText = $('.progress-text');
 			var $results = $('.scan-results');
@@ -42,13 +43,20 @@
 			// Ensure ajaxurl is available
 			var ajaxUrl = typeof ajaxurl !== 'undefined' ? ajaxurl : $button.data('ajax-url');
 			if (!ajaxUrl) {
-				alert('Error: AJAX URL not available. Please contact support.');
+				var message = 'Error: AJAX URL not available. Please contact support.';
+				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+					window.WPShadowDesign.alert('AJAX unavailable', message, 'error');
+				} else {
+					alert(message);
+				}
 				return;
 			}
 			
 			// Disable button and show progress
 			$button.prop('disabled', true).text('Running...');
 			$progress.removeClass('hidden');
+			$progress.attr('aria-busy', 'true');
+			$progressBar.attr('aria-valuenow', 0);
 			$progressFill.css('width', '0%').css('background-color', '#2271b1');
 			$progressText.text('Starting ' + scanName.toLowerCase() + '...' + (scanType === 'deep' ? ' This may take several minutes.' : ''));
 			$results.empty();
@@ -58,7 +66,9 @@
 			var progressAnimationInterval = setInterval(function() {
 				if (progress < 90) {
 					progress += Math.random() * progressSpeed;
-					$progressFill.css('width', Math.min(progress, 90) + '%');
+					var currentProgress = Math.min(progress, 90);
+					$progressFill.css('width', currentProgress + '%');
+					$progressBar.attr('aria-valuenow', Math.round(currentProgress));
 				}
 			}, progressInterval);
 			
@@ -75,6 +85,7 @@
 				success: function(response) {
 					clearInterval(progressAnimationInterval);
 					$progressFill.css('width', '100%');
+					$progressBar.attr('aria-valuenow', 100);
 					
 					if (response.success) {
 						var data = response.data;
@@ -92,17 +103,20 @@
 						
 						// Refresh page after delay
 						setTimeout(function() {
+							$progress.attr('aria-busy', 'false');
 							window.location.href = $button.data('redirect-url');
 						}, 2000);
 					} else {
 						$progressText.text('Error: ' + (response.data || 'Unknown error'));
 						$results.html('<div class="notice notice-error"><p>' + (response.data || scanName + ' failed') + '</p></div>');
 						restoreButton($button);
+						$progress.attr('aria-busy', 'false');
 					}
 				},
 				error: function(xhr, status, error) {
 					clearInterval(progressAnimationInterval);
 					$progressFill.css('width', '100%').css('background-color', '#d63638');
+					$progressBar.attr('aria-valuenow', 100);
 					
 					var errorMsg = 'Error: Unable to complete ' + scanName.toLowerCase();
 					if (status === 'timeout') {
@@ -112,6 +126,7 @@
 					$progressText.text(errorMsg);
 					$results.html('<div class="notice notice-error"><p>' + errorMsg + '</p></div>');
 					restoreButton($button);
+					$progress.attr('aria-busy', 'false');
 				}
 			});
 		});

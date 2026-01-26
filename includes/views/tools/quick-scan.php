@@ -57,13 +57,14 @@ Tool_View_Base::render_header( __( 'Quick Scan', 'wpshadow' ) );
 		data-scan-type="quick"
 		data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>"
 		data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
-		data-redirect-url="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>">
+		data-redirect-url="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>"
+		aria-label="<?php esc_attr_e( 'Run a quick scan of your site now', 'wpshadow' ); ?>">
 		<span class="dashicons dashicons-update"></span>
 		<?php esc_html_e( 'Run Quick Scan Now', 'wpshadow' ); ?>
 	</button>
 
-	<div class="scan-progress hidden">
-		<div class="progress-bar">
+	<div class="scan-progress hidden" role="status" aria-live="polite">
+		<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
 			<div class="progress-fill"></div>
 		</div>
 		<p class="progress-text"></p>
