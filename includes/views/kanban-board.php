@@ -315,15 +315,6 @@ $severity_legend = array(
 
 
 	<div class="wpshadow-kanban-board" class="wps-grid-p-20-rounded-8">
-		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
-			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" role="region" aria-label="<?php echo esc_attr( $status_labels[ $status ] ); ?>">
-				<div class="kanban-column-header">
-					<h3>
-						<span class="kanban-column-icon dashicons dashicons-info" aria-hidden="true"></span>
-						<?php echo esc_html( $status_labels[ $status ] ); ?>
-					</h3>
-					<span class="kanban-column-count" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number of items */ __( '%d items', 'wpshadow' ), count( $findings_by_status[ $status ] ) ) ); ?>">
-						<?php echo count( $findings_by_status[ $status ] ); ?>
 		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $column_status ) : ?>
 			<div class="kanban-column" data-status="<?php echo esc_attr( $column_status ); ?>" role="region" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Column status label */ __( '%s findings column', 'wpshadow' ), $status_labels[ $column_status ] ) ); ?>">
 				<div class="wps-kanban-column-header">
