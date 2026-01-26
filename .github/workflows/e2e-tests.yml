@@ -32,9 +32,9 @@ jobs:
       - name: Create .env file
         run: |
           cat > tests/e2e/.env << EOF
-          WP_BASE_URL=${{ secrets.WP_BASE_URL || 'https://staging.wpshadow.com' }}
-          WP_ADMIN_USER=${{ secrets.WP_ADMIN_USER || 'admin' }}
-          WP_ADMIN_PASS=${{ secrets.WP_ADMIN_PASS }}
+          WP_BASE_URL=${{ secrets.WP_BASE_URL || 'https://wpshadow.com' }}
+          WP_ADMIN_USER=${{ secrets.WP_ADMIN_USER || 'github' }}
+          WP_ADMIN_PASS=${{ secrets.WP_ADMIN_PASS || 'github' }}
           EOF
       
       - name: Run E2E tests
