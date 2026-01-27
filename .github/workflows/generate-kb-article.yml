@@ -22,24 +22,35 @@ jobs:
         id: extract
         run: |
           ISSUE_BODY="${{ github.event.issue.body }}"
+          ISSUE_TITLE="${{ github.event.issue.title }}"
           
-          # Extract article title
+          # Extract article title (from template or use issue title)
           TITLE=$(echo "$ISSUE_BODY" | sed -n '/^### Article Title/,/^###/p' | sed '/^### Article Title/d; /^###/d' | head -n 1 | xargs)
+          if [ -z "$TITLE" ]; then
+            # Fallback to issue title, removing [KB] prefix if present
+            TITLE=$(echo "$ISSUE_TITLE" | sed 's/^\[KB\]\s*//')
+          fi
           echo "title=$TITLE" >> $GITHUB_OUTPUT
           
           # Extract category
           CATEGORY=$(echo "$ISSUE_BODY" | sed -n '/^### Topic Category/,/^###/p' | grep "^- \[x\]" | head -n 1 | sed 's/- \[x\] //')
           if [ -z "$CATEGORY" ]; then
-            CATEGORY="General"
+            CATEGORY="Getting Started"
           fi
           echo "category=$CATEGORY" >> $GITHUB_OUTPUT
           
           # Extract purpose
           PURPOSE=$(echo "$ISSUE_BODY" | sed -n '/^### Article Purpose/,/^###/p' | sed '/^### Article Purpose/d; /^###/d' | head -n 1 | xargs)
+          if [ -z "$PURPOSE" ]; then
+            PURPOSE="$ISSUE_BODY"
+          fi
           echo "purpose=$PURPOSE" >> $GITHUB_OUTPUT
           
           # Extract topics
           TOPICS=$(echo "$ISSUE_BODY" | sed -n '/^### Key Topics to Cover/,/^###/p' | sed '/^### Key Topics to Cover/d; /^###/d; s/^- //' | tr '\n' ', ')
+          if [ -z "$TOPICS" ]; then
+            TOPICS="To be determined"
+          fi
           echo "topics=$TOPICS" >> $GITHUB_OUTPUT
 
       - name: Create KB article file
