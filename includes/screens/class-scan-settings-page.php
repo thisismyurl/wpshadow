@@ -32,11 +32,9 @@ function wpshadow_render_scan_settings() {
 	?>
 	<div class="wrap">
 		<div class="wps-page-header">
-			<div>
-				<h1><?php echo esc_html__( 'Scan Settings', 'wpshadow' ); ?></h1>
-				<p class="wps-page-description"><?php echo esc_html__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' ); ?></p>
-			</div>
+			<h1 class="wps-page-title"><?php echo esc_html__( 'Scan Settings', 'wpshadow' ); ?></h1>
 			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+			<p class="wps-page-subtitle"><?php echo esc_html__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' ); ?></p>
 		</div>
 
 		<section aria-labelledby="diagnostics-heading">

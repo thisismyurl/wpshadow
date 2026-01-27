@@ -29,16 +29,12 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 
 	<!-- Page Header -->
 	<div class="wps-page-header">
-		<div>
-			<h1 class="wps-page-title">
-				<span class="dashicons dashicons-block-default" aria-hidden="true"></span>
+		<h1 class="wps-page-title">
+			<span class="dashicons dashicons-block-default" aria-hidden="true"></span>
 			<?php esc_html_e( 'Workflow Builder', 'wpshadow' ); ?>
-			<small class="wps-text-gray-500">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>
 		</h1>
-		<p class="wps-page-subtitle">
-			<?php esc_html_e( 'Build automation workflows using visual blocks to automate your WordPress maintenance.', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+		<p class="wps-page-subtitle"><?php esc_html_e( 'Build automation workflows using visual blocks to automate your WordPress maintenance.', 'wpshadow' ); ?></p>
 	</div>
 
 	<!-- Main Container -->

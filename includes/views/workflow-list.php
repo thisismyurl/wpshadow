@@ -32,17 +32,16 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 			<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
 		</h1>
 		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+		<p class="wps-page-subtitle">
+			<?php
+			printf(
+				/* translators: %s: link to knowledge base article */
+				esc_html__( 'Automate your WordPress management with smart workflows. %s', 'wpshadow' ),
+				'<a href="https://wpshadow.com/kb/workflow-manager" target="_blank">' . esc_html__( 'Learn about workflows →', 'wpshadow' ) . '</a>'
+			);
+			?>
+		</p>
 	</div>
-
-	<p class="description">
-		<?php
-		printf(
-			/* translators: %s: link to knowledge base article */
-			esc_html__( 'Automate your WordPress management with smart workflows. %s', 'wpshadow' ),
-			'<a href="https://wpshadow.com/kb/workflow-manager" target="_blank">' . esc_html__( 'Learn about workflows →', 'wpshadow' ) . '</a>'
-		);
-		?>
-	</p>
 
 	<?php if ( empty( $workflows ) ) : ?>
 		<!-- Create Workflow Button Section -->

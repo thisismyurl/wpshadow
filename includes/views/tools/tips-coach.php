@@ -50,9 +50,11 @@ foreach ( $catalog as $tip ) {
 
 
 <div class="wrap">
-	<h1><?php esc_html_e( 'Tips & Guidance', 'wpshadow' ); ?></h1>
-	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-	<p><?php esc_html_e( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ); ?></p>
+	<div class="wps-page-header">
+		<h1 class="wps-page-title"><?php esc_html_e( 'Tips & Guidance', 'wpshadow' ); ?></h1>
+		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+		<p class="wps-page-subtitle"><?php esc_html_e( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ); ?></p>
+	</div>
 
 	<div class="wpshadow-tips-toolbar wps-m-20">
 		<button id="wpshadow-enable-all-tips" class="wps-btn wps-btn--secondary" style="margin-right: 10px;">

@@ -30,8 +30,9 @@ class Notification_Preferences_Form {
 		?>
 		<div class="wpshadow-notification-preferences">
 			<div class="wps-page-header">
-				<h1><?php esc_html_e( 'Notification Preferences', 'wpshadow' ); ?></h1>
+				<h1 class="wps-page-title"><?php esc_html_e( 'Notification Preferences', 'wpshadow' ); ?></h1>
 				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+				<p class="wps-page-subtitle"><?php esc_html_e( 'Choose which events should trigger notifications.', 'wpshadow' ); ?></p>
 			</div>
 			
 			<!-- Alert Types Section -->

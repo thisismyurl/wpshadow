@@ -33,8 +33,8 @@ class Report_Form {
 				<h1 class="wps-page-title">
 					<span class="dashicons dashicons-chart-line"></span>
 					<?php esc_html_e( 'Generate Reports', 'wpshadow' ); ?>
-					<small style="font-size: 14px; color: #666; margin-left: 12px;">v<?php echo esc_html( WPSHADOW_VERSION ); ?></small>
 				</h1>
+				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 				<p class="wps-page-subtitle">
 					<?php esc_html_e( 'Create, preview, and export custom reports of your site activity.', 'wpshadow' ); ?>
 				</p>

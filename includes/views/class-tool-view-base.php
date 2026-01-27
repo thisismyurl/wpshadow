@@ -93,15 +93,17 @@ class Tool_View_Base {
 	public static function render_header( string $title, string $description = '' ): void {
 		?>
 		<div class="wrap wpshadow-tool-container">
-			<h1><?php echo esc_html( $title ); ?></h1>
-			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-			<?php
-			if ( ! empty( $description ) ) {
-				?>
-				<p><?php echo esc_html( $description ); ?></p>
+			<div class="wps-page-header">
+				<h1 class="wps-page-title"><?php echo esc_html( $title ); ?></h1>
+				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
 				<?php
-			}
-			?>
+				if ( ! empty( $description ) ) {
+					?>
+					<p class="wps-page-subtitle"><?php echo esc_html( $description ); ?></p>
+					<?php
+				}
+				?>
+			</div>
 		<?php
 	}
 

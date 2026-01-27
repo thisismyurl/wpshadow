@@ -127,9 +127,11 @@ $action_labels = array(
 ?>
 
 <div class="wrap">
-	<h1><?php esc_html_e( 'Activity History', 'wpshadow' ); ?></h1>
-	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-	<p><?php esc_html_e( 'Comprehensive audit log of all WPShadow actions and system changes.', 'wpshadow' ); ?></p>
+	<div class="wps-page-header">
+		<h1 class="wps-page-title"><?php esc_html_e( 'Activity History', 'wpshadow' ); ?></h1>
+		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+		<p class="wps-page-subtitle"><?php esc_html_e( 'Comprehensive audit log of all WPShadow actions and system changes.', 'wpshadow' ); ?></p>
+	</div>
 
 	<!-- Filters -->
 	<div class="wps-card wps-m-20">
