@@ -59,9 +59,20 @@ fi
 
 echo ""
 
+# Check for password file and setup sshpass if available
+SSH_CMD="ssh"
+if [ -f ".deploy-password" ]; then
+    export SSHPASS=$(cat .deploy-password)
+    SSH_CMD="sshpass -e ssh"
+    echo -e "${YELLOW}Using password authentication${NC}"
+elif [ -n "$SSH_KEY_FILE" ]; then
+    SSH_CMD="ssh -i $SSH_KEY_FILE"
+    echo -e "${YELLOW}Using SSH key: $SSH_KEY_FILE${NC}"
+fi
+
 # Initialize remote git repo if needed
 echo -e "${YELLOW}Setting up remote repository...${NC}"
-ssh -p ${REMOTE_PORT:-22} ${SSH_KEY_FILE:+-i $SSH_KEY_FILE} "$REMOTE_USER@$REMOTE_HOST" << 'ENDSSH'
+$SSH_CMD -p ${REMOTE_PORT:-22} "$REMOTE_USER@$REMOTE_HOST" << 'ENDSSH'
     cd "$REMOTE_WP_PATH" 2>/dev/null || {
         echo "Creating directory..."
         mkdir -p "$REMOTE_WP_PATH"
@@ -75,8 +86,12 @@ ssh -p ${REMOTE_PORT:-22} ${SSH_KEY_FILE:+-i $SSH_KEY_FILE} "$REMOTE_USER@$REMOT
     fi
 ENDSSH
 
-# Configure SSH for Git
-export GIT_SSH_COMMAND="ssh -i $SSH_KEY_FILE -o StrictHostKeyChecking=no"
+# Configure Git SSH/sshpass
+if [ -f ".deploy-password" ]; then
+    export GIT_SSH_COMMAND="sshpass -e ssh -o StrictHostKeyChecking=no"
+elif [ -n "$SSH_KEY_FILE" ]; then
+    export GIT_SSH_COMMAND="ssh -i $SSH_KEY_FILE -o StrictHostKeyChecking=no"
+fi
 
 # Add remote if not exists
 REMOTE_NAME="greengeeks"
@@ -91,7 +106,7 @@ git push $REMOTE_NAME ${DEPLOY_BRANCH:-main} --force
 
 # Force checkout on remote to update working directory
 echo -e "${YELLOW}Updating remote files...${NC}"
-ssh -p ${REMOTE_PORT:-22} ${SSH_KEY_FILE:+-i $SSH_KEY_FILE} "$REMOTE_USER@$REMOTE_HOST" << ENDSSH
+$SSH_CMD -p ${REMOTE_PORT:-22} "$REMOTE_USER@$REMOTE_HOST" << ENDSSH
     cd "$REMOTE_WP_PATH"
     git checkout -f ${DEPLOY_BRANCH:-main}
 ENDSSH
