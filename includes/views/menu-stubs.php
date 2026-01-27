@@ -245,8 +245,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<div>
 								<h3 class="wps-card-title wps-m-0">
 									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=backup' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Backup 					<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Backup & Recovery', 'wpshadow' ); ?> Recovery', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Backup & Recovery', 'wpshadow' ); ?>
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
