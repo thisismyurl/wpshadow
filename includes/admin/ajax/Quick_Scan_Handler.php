@@ -38,6 +38,11 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 			// Verify security
 			self::verify_request( 'wpshadow_scan_nonce', 'manage_options' );
 
+			// Check if Diagnostic_Registry is available
+			if ( ! class_exists( 'WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+				throw new \Exception( 'Diagnostic_Registry class not found' );
+			}
+
 			// Get scan mode: 'now' or 'schedule'
 			$mode = self::get_post_param( 'mode', 'text', 'now', true );
 
@@ -63,6 +68,18 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array Result data
 	 */
 	private static function run_quick_scan(): array {
+		// Defensive check for Diagnostic_Registry
+		if ( ! class_exists( 'WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+			return array(
+				'mode'                 => 'now',
+				'completed'            => 0,
+				'total'                => 0,
+				'findings_count'       => 0,
+				'progress_by_category' => array(),
+				'message'              => __( 'Diagnostic system not available. Please refresh the page.', 'wpshadow' ),
+			);
+		}
+
 		// Record scan start time
 		update_option( 'wpshadow_last_quick_scan', time() );
 
