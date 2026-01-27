@@ -314,25 +314,25 @@ class Achievement_System {
 
 		?>
 		<div class="wps-card">
-			<div class="wps-flex wps-items-center wps-gap-3" style="margin-bottom: 16px;">
-				<span class="dashicons dashicons-awards" style="font-size: 24px; color: #FFD700;"></span>
+			<div class="wps-flex wps-items-center wps-gap-3" class="wps-achievement-section">
+				<span class="dashicons dashicons-awards" class="wps-achievement-icon"></span>
 				<h3 class="wps-m-0"><?php esc_html_e( 'Your Achievements', 'wpshadow' ); ?></h3>
 			</div>
 			
 			<!-- Progress Bar -->
-			<div style="margin-bottom: 16px;">
+			<div class="wps-achievement-section">
 				<div class="wps-flex-justify-space-between">
-					<span style="font-size: 13px; font-weight: 500;">
+					<span class="wps-achievement-title">
 						<?php printf( esc_html__( '%1$d / %2$d Achievements', 'wpshadow' ), $progress['unlocked'], $progress['total'] ); ?>
 					</span>
-					<span style="font-size: 13px; font-weight: 500; color: #FFD700;">
+					<span class="wps-achievement-progress-label">
 						<?php printf( esc_html__( '%d Points', 'wpshadow' ), $progress['points'] ); ?>
 					</span>
 				</div>
 				<div class="wps-rounded-4">
-					<div style="width: <?php echo esc_attr( (string) $progress['percentage'] ); ?>%; height: 100%; background: linear-gradient(90deg, #4CAF50, #FFD700); transition: width 0.3s;"></div>
+					<div class="wps-achievement-progress-bar" style="width: <?php echo esc_attr( (string) $progress['percentage'] ); ?>%;"></div>
 				</div>
-				<div style="font-size: 12px; color: #999; margin-top: 4px;">
+				<div class="wps-achievement-progress-text">
 					<?php printf( esc_html__( '%d%% Complete', 'wpshadow' ), $progress['percentage'] ); ?>
 				</div>
 			</div>
@@ -351,14 +351,14 @@ class Achievement_System {
 						cursor: pointer;
 						border: 2px solid <?php echo esc_attr( $unlocked ? $achievement['color'] : '#ddd' ); ?>;
 					" title="<?php echo esc_attr( $achievement['description'] ); ?>">
-						<div style="font-size: 24px; margin-bottom: 4px;">
-							<span class="dashicons <?php echo esc_attr( $achievement['icon'] ); ?>" style="font-size: 24px;"></span>
+						<div class="wps-achievement-card-icon">
+							<span class="dashicons <?php echo esc_attr( $achievement['icon'] ); ?> wps-achievement-card-icon-dashicon"></span>
 						</div>
-						<div style="font-size: 11px; font-weight: 500; color: <?php echo esc_attr( $unlocked ? '#fff' : '#999' ); ?>; word-break: break-word;">
+						<div class="wps-achievement-card-title" style="color: <?php echo esc_attr( $unlocked ? '#fff' : '#999' ); ?>;">
 							<?php echo esc_html( $achievement['name'] ); ?>
 						</div>
 						<?php if ( $unlocked ) : ?>
-							<div style="font-size: 9px; color: rgba(255,255,255,0.8); margin-top: 4px;">
+							<div class="wps-achievement-card-date">
 								<?php echo esc_html( date_i18n( 'M j, Y', strtotime( $achievements[ $id ]['timestamp'] ) ) ); ?>
 							</div>
 						<?php endif; ?>

@@ -4163,3 +4163,62 @@ a:focus-visible {
 .wps-email-test-submit {
     margin-top: 15px;
 }
+
+/**
+ * Achievement System Styles
+ */
+.wps-achievement-header {
+    margin-bottom: 16px;
+}
+
+.wps-achievement-icon {
+    font-size: 24px;
+    color: #FFD700;
+}
+
+.wps-achievement-section {
+    margin-bottom: 16px;
+}
+
+.wps-achievement-title {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.wps-achievement-progress-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #FFD700;
+}
+
+.wps-achievement-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #FFD700);
+    transition: width 0.3s;
+}
+
+.wps-achievement-progress-text {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.wps-achievement-card-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.wps-achievement-card-icon-dashicon {
+    font-size: 24px;
+}
+
+.wps-achievement-card-title {
+    font-size: 11px;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.wps-achievement-card-date {
+    font-size: 9px;
+    margin-top: 4px;
+}
