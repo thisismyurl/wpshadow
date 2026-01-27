@@ -252,16 +252,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 			display: block;
 		}
 
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-			}
-			to {
-				opacity: 1;
-			}
-		}
-
-		.wps-tools-tab-pane-loading {
+		.wps-tools-tab-pane-active.wps-tools-tab-pane-loading {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -289,6 +280,15 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 		@keyframes spin {
 			to {
 				transform: rotate(360deg);
+			}
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
 			}
 		}
 
