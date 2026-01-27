@@ -330,7 +330,7 @@ Call-to-action blocks (Pro services, Academy, support)
 
 **Variations (use different wording each time):**
 - "These hand-picked resources provide additional depth..."
-- "We've tested and verified these links to ensure quality..."
+- "We've tested and verified these docs to ensure quality..."
 - "The following resources are maintained by trusted WordPress experts..."
 
 ### WPShadow Academy Section
@@ -340,7 +340,7 @@ Call-to-action blocks (Pro services, Academy, support)
 
 **Template:**
 ```markdown
-**This is a FREE course** designed to make you confident and skilled in WordPress management. We created the WPShadow Academy because we believe a stronger WordPress community benefits everyone. Whether you're managing your first site or your fiftieth, our academy will help you develop best practices, avoid common pitfalls, and become the WordPress expert your team relies on.
+**This is a FREE course** designed to help you grow your skills and confidence in WordPress management. We created the WPShadow Academy because we believe a stronger WordPress community benefits everyone. Whether you're managing your first site or your 50th, our academy will help you develop best practices, avoid common pitfalls, and become the WordPress expert your team relies on.
 
 **Enroll now (completely free):** [WPShadow Academy: WordPress Site Management Essentials](https://wpshadow.com/academy)
 
