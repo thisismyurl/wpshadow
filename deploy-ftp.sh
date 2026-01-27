@@ -37,18 +37,25 @@ echo "  User: $FTP_USER"
 echo "  Remote: $FTP_REMOTE_PATH"
 echo ""
 
-# Update version number with current timestamp
-HOUR=$(date +%H)
-MINUTE=$(date +%M)
-NEW_VERSION="1.2601.21${HOUR}${MINUTE}"
+# Update version number with current timestamp in Toronto timezone
+# Format: 1.[y][ddd].[hh][mm]
+# y = last digit of year (2026 -> 6)
+# ddd = julian date with leading zeros (001-366)
+# hh = hours with leading zeros (00-23) in Toronto time
+# mm = minutes with leading zeros (00-59) in Toronto time
+
+TORONTO_TIME=$(TZ=America/Toronto date +"%y %j %H %M")
+read YEAR_DIGIT JULIAN_DAY HOUR MINUTE <<< "$TORONTO_TIME"
+NEW_VERSION="1.${YEAR_DIGIT}${JULIAN_DAY}.${HOUR}${MINUTE}"
 echo -e "${YELLOW}Updating version to: ${GREEN}$NEW_VERSION${NC}"
+echo -e "${BLUE}(Toronto time: $(TZ=America/Toronto date '+%Y-%m-%d %H:%M:%S %Z'))${NC}"
 
 # Update version in main plugin file
-sed -i "s/Version: 1\.2601\.[0-9]\+/Version: $NEW_VERSION/" wpshadow.php
-sed -i "s/define( 'WPSHADOW_VERSION', '1\.2601\.[0-9]\+' );/define( 'WPSHADOW_VERSION', '$NEW_VERSION' );/" wpshadow.php
+sed -i "s/Version: 1\.[0-9][0-9][0-9]\.[0-9]\+/Version: $NEW_VERSION/" wpshadow.php
+sed -i "s/define( 'WPSHADOW_VERSION', '1\.[0-9][0-9][0-9]\.[0-9]\+' );/define( 'WPSHADOW_VERSION', '$NEW_VERSION' );/" wpshadow.php
 
 # Update version in readme.txt
-sed -i "s/Stable tag: 1\.2601\.[0-9]\+/Stable tag: $NEW_VERSION/" readme.txt
+sed -i "s/Stable tag: 1\.[0-9][0-9][0-9]\.[0-9]\+/Stable tag: $NEW_VERSION/" readme.txt
 
 echo -e "${GREEN}✓${NC} Version updated to $NEW_VERSION"
 echo ""
