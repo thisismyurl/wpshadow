@@ -193,7 +193,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 				</div>
 				<div class="wps-card-body">
 					<?php if ( ! empty( $item['enabled'] ) ) : ?>
-						<a href="<?php echo esc_url( $tool_url ); ?>" class="wps-btn wps-btn--primary">
+						<a href="<?php echo esc_url( $tool_url ); ?>" class="wps-btn wps-btn--secondary">
 							<span class="dashicons dashicons-external"></span>
 							<?php esc_html_e( 'Open Tool', 'wpshadow' ); ?>
 						</a>
