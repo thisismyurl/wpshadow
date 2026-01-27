@@ -210,14 +210,14 @@
 			$('.wps-block-item').on('touchstart', this.handlePaletteTouchStart.bind(this));
 			$('.wps-block-item').on('touchend', this.handlePaletteTouchEnd.bind(this));
 
-			// Canvas drop events
-			$('#wps-canvas').on('dragover', this.handleCanvasDragOver.bind(this));
-			$('#wps-canvas').on('dragleave', this.handleCanvasDragLeave.bind(this));
-			$('#wps-canvas').on('drop', this.handleCanvasDrop.bind(this));
+			// Canvas drop events - bind to both canvas and inner viewport/content for nested structure
+			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('dragover', this.handleCanvasDragOver.bind(this));
+			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('dragleave', this.handleCanvasDragLeave.bind(this));
+			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('drop', this.handleCanvasDrop.bind(this));
 
 			// Canvas touch events
-			$('#wps-canvas').on('touchmove', this.handleCanvasTouchMove.bind(this));
-			$('#wps-canvas').on('touchend', this.handleCanvasTouchEnd.bind(this));
+			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('touchmove', this.handleCanvasTouchMove.bind(this));
+			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('touchend', this.handleCanvasTouchEnd.bind(this));
 
 			// Toolbar actions
 			$('#wps-save-workflow').on('click', this.handleSaveWorkflow.bind(this));

@@ -82,6 +82,45 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	 * Render Settings page
 	 */
 	function wpshadow_render_settings() {
+		// Check if a specific tab is requested (Issue #1685)
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
+		
+		// If a specific tab is requested, redirect to appropriate settings page or show tab content
+		if ( ! empty( $tab ) ) {
+			// For now, show a message that settings are being developed
+			// This can be expanded later with actual settings forms
+			?>
+			<div class="wps-page-container">
+				<div class="wps-page-header">
+					<h1 class="wps-page-title">
+						<span class="dashicons dashicons-admin-settings"></span>
+						<?php
+						echo esc_html( 
+							sprintf(
+								/* translators: %s: settings tab name */
+								__( '%s Settings', 'wpshadow' ),
+								ucwords( str_replace( array( '_', '-' ), ' ', $tab ) )
+							)
+						);
+						?>
+					</h1>
+					<p class="wps-page-subtitle">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ); ?>">&larr; <?php esc_html_e( 'Back to Settings', 'wpshadow' ); ?></a>
+					</p>
+				</div>
+				
+				<div class="wps-card">
+					<div class="wps-card-body">
+						<p><?php esc_html_e( 'Settings interface for this section is being developed.', 'wpshadow' ); ?></p>
+						<p><?php esc_html_e( 'Coming soon: Configure options directly from this page.', 'wpshadow' ); ?></p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+		
+		// Show settings overview grid
 		?>
 		<div class="wps-page-container">
 			<!-- Page Header -->

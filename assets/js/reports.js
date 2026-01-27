@@ -18,10 +18,15 @@
          * Initialize report builder
          */
         init: function() {
+            // Hide loading spinner on page load (Issue #1684)
+            $('#loading-spinner').hide();
+            $('#report-preview').hide();
+            
             this.initPresetButtons();
             this.initDatePicker();
             this.initReportTypeSelection();
             this.initFormSubmission();
+            this.initGenerateButton();
         },
 
         /**
@@ -186,6 +191,21 @@
             $(document).on('submit', '.wps-report-builder form', function(e) {
                 e.preventDefault();
                 self.submitReportForm($(this));
+            });
+        },
+
+        /**
+         * Initialize generate button click handler (Issue #1684)
+         */
+        initGenerateButton: function() {
+            const self = this;
+            
+            $(document).on('click', '#generate-report-btn', function(e) {
+                e.preventDefault();
+                const form = $('#wpshadow-report-form');
+                if (form.length) {
+                    self.submitReportForm(form);
+                }
             });
         },
 

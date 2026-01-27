@@ -158,11 +158,34 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 
 		$tool = Form_Param_Helper::get( 'tool', 'key', '' );
 
-		// Route to specific tool if requested
+		// Route to specific tool if requested (Issue #1686)
 		if ( ! empty( $tool ) ) {
 			$tool_file = WPSHADOW_PATH . 'includes/views/tools/' . $tool . '.php';
 			if ( file_exists( $tool_file ) ) {
 				include $tool_file;
+				return;
+			} else {
+				// Tool file not found - show error and return to index
+				?>
+				<div class="wps-page-container">
+					<div class="wps-alert wps-alert--error">
+						<p>
+							<?php
+							echo esc_html(
+								sprintf(
+									/* translators: %s: tool slug */
+									__( 'Tool "%s" not found.', 'wpshadow' ),
+									$tool
+								)
+							);
+							?>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-tools' ) ); ?>">
+								<?php esc_html_e( 'Return to Tools', 'wpshadow' ); ?>
+							</a>
+						</p>
+					</div>
+				</div>
+				<?php
 				return;
 			}
 		}
