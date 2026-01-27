@@ -3098,6 +3098,145 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
  * High Contrast Mode Support
  * Ensures focus indicators and borders are visible in Windows High Contrast Mode
  */
+
+/* ============================================================================
+   16. SCAN SETTINGS PAGE - Diagnostic/Treatment Row Styling
+   ============================================================================ */
+
+.wpshadow-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+    flex-wrap: wrap;
+    margin-top: var(--wps-space-2);
+    margin-bottom: var(--wps-space-2);
+}
+
+.wpshadow-controls label {
+    font-weight: var(--wps-font-medium);
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-700);
+    white-space: nowrap;
+}
+
+.wpshadow-controls input[type="search"],
+.wpshadow-controls select {
+    padding: var(--wps-space-2) var(--wps-space-3);
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    font-size: var(--wps-text-sm);
+    min-width: 200px;
+}
+
+.wpshadow-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--wps-space-2);
+    padding: var(--wps-space-3);
+    background: white;
+    border: 1px solid var(--wps-gray-200);
+    border-radius: var(--wps-radius-md);
+    margin-bottom: var(--wps-space-2);
+    align-items: center;
+}
+
+.wpshadow-row strong {
+    font-weight: var(--wps-font-semibold);
+    color: var(--wps-gray-900);
+}
+
+.wps-diagnostic-family,
+.wps-treatment-class-name {
+    display: block;
+    font-size: var(--wps-text-xs);
+    color: var(--wps-gray-500);
+    margin-top: var(--wps-space-1);
+}
+
+.wpshadow-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--wps-space-3);
+    margin-top: var(--wps-space-2);
+}
+
+.wpshadow-pagination button {
+    padding: var(--wps-space-2) var(--wps-space-3);
+    border: 1px solid var(--wps-gray-300);
+    background: white;
+    border-radius: var(--wps-radius-md);
+    cursor: pointer;
+    font-size: var(--wps-text-sm);
+    transition: var(--wps-transition-base);
+}
+
+.wpshadow-pagination button:hover {
+    background: var(--wps-gray-50);
+    border-color: var(--wps-gray-400);
+}
+
+.wpshadow-pagination span {
+    font-weight: var(--wps-font-medium);
+    color: var(--wps-gray-700);
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Input Group Inline - for numbers with units (e.g., 85% ) */
+.wps-input-group-inline {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-2);
+}
+
+.wps-input-group-inline .wps-input-sm {
+    max-width: 100px;
+}
+
+.wps-input-group-inline .unit {
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-600);
+    font-weight: var(--wps-font-medium);
+    white-space: nowrap;
+}
+
+/* Time Input */
+.wps-input-time {
+    width: 200px;
+    padding: var(--wps-space-2) var(--wps-space-3);
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    font-size: var(--wps-text-sm);
+    transition: var(--wps-transition-base);
+}
+
+.wps-input-time:focus {
+    outline: none;
+    border-color: var(--wps-primary);
+    box-shadow: var(--wps-shadow-focus);
+}
+
+/* Checkbox Group - for grouped checkboxes */
+.wps-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wps-space-2);
+    padding: var(--wps-space-3);
+    border: 1px solid var(--wps-gray-200);
+    border-radius: var(--wps-radius-md);
+    background: var(--wps-gray-50);
+}
+
+.wps-checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-2);
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-700);
+    cursor: pointer;
+    margin: 0;
+}
 @media (prefers-contrast: high) {
     .wps-btn,
     .wps-input,

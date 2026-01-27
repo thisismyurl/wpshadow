@@ -31,22 +31,27 @@ function wpshadow_render_scan_settings() {
 	$nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	?>
 	<div class="wrap">
-		<h1><?php echo esc_html__( 'Scan Settings', 'wpshadow' ); ?></h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+		<div class="wps-page-header">
+			<div>
+				<h1><?php echo esc_html__( 'Scan Settings', 'wpshadow' ); ?></h1>
+				<p class="wps-page-description"><?php echo esc_html__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' ); ?></p>
+			</div>
+			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+		</div>
 
 		<section aria-labelledby="diagnostics-heading">
 			<h2 id="diagnostics-heading"><?php echo esc_html__( 'Diagnostics', 'wpshadow' ); ?></h2>
-			<div class="wpshadow-controls" style="margin-top:10px;margin-bottom:10px;">
+			<div class="wpshadow-controls">
 				<label for="wpshadow-search"><?php echo esc_html__( 'Search', 'wpshadow' ); ?></label>
 				<input type="search" id="wpshadow-search" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'wpshadow' ); ?>" />
-				<label for="wpshadow-family" style="margin-left:12px;"><?php echo esc_html__( 'Family', 'wpshadow' ); ?></label>
+				<label for="wpshadow-family"><?php echo esc_html__( 'Family', 'wpshadow' ); ?></label>
 				<select id="wpshadow-family">
 					<option value=""><?php echo esc_html__( 'All', 'wpshadow' ); ?></option>
 				</select>
 			</div>
 
-			<div id="wpshadow-diagnostics-list" role="region" aria-live="polite" style="margin-top:15px;"></div>
-			<div class="wpshadow-pagination" style="margin-top:10px;">
+			<div id="wpshadow-diagnostics-list" role="region" aria-live="polite"></div>
+			<div class="wpshadow-pagination">
 				<button type="button" class="button" id="wpshadow-prev" aria-label="<?php echo esc_attr__( 'Previous page', 'wpshadow' ); ?>">&larr;</button>
 				<span id="wpshadow-page">1</span>
 				<button type="button" class="button" id="wpshadow-next" aria-label="<?php echo esc_attr__( 'Next page', 'wpshadow' ); ?>">&rarr;</button>
@@ -54,13 +59,13 @@ function wpshadow_render_scan_settings() {
 		</section>
 		<section aria-labelledby="treatments-heading">
 			<h2 id="treatments-heading"><?php echo esc_html__( 'Treatments', 'wpshadow' ); ?></h2>
-			<div class="wpshadow-controls" style="margin-top:10px;margin-bottom:10px;">
+			<div class="wpshadow-controls">
 				<label for="wpshadow-t-search"><?php echo esc_html__( 'Search', 'wpshadow' ); ?></label>
 				<input type="search" id="wpshadow-t-search" placeholder="<?php echo esc_attr__( 'Search treatments...', 'wpshadow' ); ?>" />
 			</div>
 
-			<div id="wpshadow-treatments-list" role="region" aria-live="polite" style="margin-top:15px;"></div>
-			<div class="wpshadow-pagination" style="margin-top:10px;">
+			<div id="wpshadow-treatments-list" role="region" aria-live="polite"></div>
+			<div class="wpshadow-pagination">
 				<button type="button" class="button" id="wpshadow-t-prev" aria-label="<?php echo esc_attr__( 'Previous page', 'wpshadow' ); ?>">&larr;</button>
 				<span id="wpshadow-t-page">1</span>
 				<button type="button" class="button" id="wpshadow-t-next" aria-label="<?php echo esc_attr__( 'Next page', 'wpshadow' ); ?>">&rarr;</button>
@@ -99,8 +104,8 @@ function wpshadow_render_scan_settings() {
 				row.style.gap = '8px';
 				const info = document.createElement('div');
 				info.innerHTML = '<strong>' + escapeHtml(item.title || item.slug || item.class_name) + '</strong>' +
-					(item.family ? ' <span style="opacity:.7">(' + escapeHtml(item.family) + ')</span>' : '') +
-					(item.description ? '<div style="opacity:.9">' + escapeHtml(item.description) + '</div>' : '');
+				(item.family ? ' <span class="wps-diagnostic-family">(' + escapeHtml(item.family) + ')</span>' : '') +
+				(item.description ? '<div class="wps-diagnostic-description">' + escapeHtml(item.description) + '</div>' : '');
 				const toggle = document.createElement('button');
 				toggle.className = 'button';
 				toggle.setAttribute('aria-label', '<?php echo esc_js( __( 'Toggle diagnostic', 'wpshadow' ) ); ?>');
@@ -150,7 +155,7 @@ function wpshadow_render_scan_settings() {
 				row.style.gap = '8px';
 				const info = document.createElement('div');
 				info.innerHTML = '<strong>' + escapeHtml(item.label || item.class_name) + '</strong>' +
-					'<div style="opacity:.9">' + escapeHtml(item.class_name) + '</div>';
+				'<div class="wps-treatment-class-name">' + escapeHtml(item.class_name) + '</div>';
 				const toggle = document.createElement('button');
 				toggle.className = 'button';
 				toggle.setAttribute('aria-label', '<?php echo esc_js( __( 'Toggle treatment', 'wpshadow' ) ); ?>');

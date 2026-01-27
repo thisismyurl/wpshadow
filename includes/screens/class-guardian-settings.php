@@ -30,7 +30,13 @@ class Guardian_Settings {
 		ob_start();
 		?>
 		<div class="wrap wpshadow-guardian-settings">
-			<h1><?php esc_html_e( 'WPShadow Guardian Settings', 'wpshadow' ); ?></h1>
+			<div class="wps-page-header">
+				<div>
+					<h1><?php esc_html_e( 'WPShadow Guardian Settings', 'wpshadow' ); ?></h1>
+					<p class="wps-page-description"><?php esc_html_e( 'Configure automated health monitoring and intelligent fix suggestions.', 'wpshadow' ); ?></p>
+				</div>
+				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+			</div>
 			
 			<form method="post" action="options.php" class="guardian-settings-form">
 				<?php settings_fields( 'wpshadow_guardian_settings' ); ?>
@@ -347,8 +353,8 @@ class Guardian_Settings {
 				<label class="wps-label" for="memory_threshold">
 					' . esc_html__( 'Memory Usage Threshold', 'wpshadow' ) . '
 				</label>
-				<div style="display: flex; align-items: center; gap: 8px;">
-					<input type="number" id="memory_threshold" name="memory_threshold" min="50" max="95" value="85" style="max-width: 100px;" />
+				<div class="wps-input-group-inline">
+					<input type="number" id="memory_threshold" name="memory_threshold" min="50" max="95" value="85" class="wps-input-sm" />
 					<span class="unit">%</span>
 				</div>
 				<span class="wps-help-text">
@@ -360,8 +366,8 @@ class Guardian_Settings {
 				<label class="wps-label" for="change_detection_window">
 					' . esc_html__( 'Change Detection Window', 'wpshadow' ) . '
 				</label>
-				<div style="display: flex; align-items: center; gap: 8px;">
-					<input type="number" id="change_detection_window" name="change_detection_window" min="5" max="60" value="30" style="max-width: 100px;" />
+				<div class="wps-input-group-inline">
+					<input type="number" id="change_detection_window" name="change_detection_window" min="5" max="60" value="30" class="wps-input-sm" />
 					<span class="unit">' . esc_html__( 'minutes', 'wpshadow' ) . '</span>
 				</div>
 				<span class="wps-help-text">
@@ -373,8 +379,8 @@ class Guardian_Settings {
 				<label class="wps-label" for="error_spike_threshold">
 					' . esc_html__( 'Error Log Growth Threshold', 'wpshadow' ) . '
 				</label>
-				<div style="display: flex; align-items: center; gap: 8px;">
-					<input type="number" id="error_spike_threshold" name="error_spike_threshold" min="10" max="500" value="100" style="max-width: 100px;" />
+				<div class="wps-input-group-inline">
+					<input type="number" id="error_spike_threshold" name="error_spike_threshold" min="10" max="500" value="100" class="wps-input-sm" />
 					<span class="unit">KB</span>
 				</div>
 				<span class="wps-help-text">
@@ -534,9 +540,11 @@ class Guardian_Settings {
 				<label class="wps-label" for="max_treatments">
 					' . esc_html__( 'Max Treatments Per Run', 'wpshadow' ) . '
 				</label>
-				<div style="display: flex; align-items: center; gap: 12px;">
-					<input type="range" id="max_treatments" name="max_treatments" min="1" max="20" value="5" style="flex: 1; max-width: 300px;" />
-					<span id="max_treatments_value" style="font-weight: 600;">5</span>
+				<div class="wps-range-group">
+					<div class="wps-range-header">
+						<input type="range" id="max_treatments" name="max_treatments" min="1" max="20" value="5" class="wps-range" />
+						<span id="max_treatments_value" class="wps-range-value">5</span>
+					</div>
 				</div>
 				<span class="wps-help-text">
 					' . esc_html__( 'Maximum number of treatments to apply in a single execution', 'wpshadow' ) . '
@@ -582,7 +590,7 @@ class Guardian_Settings {
 					<?php esc_html_e( 'Preferred Execution Time', 'wpshadow' ); ?>
 					<span class="wps-helper-text"><?php esc_html_e( 'Time of day to run auto-fixes (server timezone)', 'wpshadow' ); ?></span>
 				</label>
-				<input type="time" id="execution-time" name="execution_time" value="02:00" class="wps-textarea" style="width: 200px;" />
+				<input type="time" id="execution_time" name="execution_time" value="02:00" class="wps-input-time" />
 			</div>
 
 			<?php
@@ -639,7 +647,7 @@ class Guardian_Settings {
 				<label class="wps-label">
 					' . esc_html__( 'Alert Types', 'wpshadow' ) . '
 				</label>
-				<div style="display: flex; flex-direction: column; gap: 8px;">
+				<div class="wps-checkbox-group">
 					<label>
 						<input type="checkbox" name="notify_critical_issues" value="1" checked />
 						' . esc_html__( 'Critical Issues', 'wpshadow' ) . '

@@ -29,7 +29,10 @@ class Notification_Preferences_Form {
 		ob_start();
 		?>
 		<div class="wpshadow-notification-preferences">
-			<h2><?php esc_html_e( 'Notification Preferences', 'wpshadow' ); ?></h2>
+			<div class="wps-page-header">
+				<h1><?php esc_html_e( 'Notification Preferences', 'wpshadow' ); ?></h1>
+				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+			</div>
 			
 			<!-- Alert Types Section -->
 			<div class="preferences-card alert-types-card">
@@ -57,7 +60,7 @@ class Notification_Preferences_Form {
 						<option value="weekly" selected><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
 						<option value="monthly"><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
 					</select>
-					<button type="button" class="wps-btn wps-btn-primary" id="add-subscription-btn">
+					<button type="button" class="wps-btn wps-btn--primary" id="add-subscription-btn">
 						<?php esc_html_e( 'Subscribe', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -114,7 +117,7 @@ class Notification_Preferences_Form {
 			
 			<!-- Save Button -->
 			<div class="preferences-actions">
-				<button type="button" class="wps-btn wps-btn-primary" id="save-preferences">
+				<button type="button" class="wps-btn wps-btn--primary" id="save-preferences">
 					<?php esc_html_e( 'Save Preferences', 'wpshadow' ); ?>
 				</button>
 			</div>
