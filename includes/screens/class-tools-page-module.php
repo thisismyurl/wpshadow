@@ -147,8 +147,9 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 		<!-- Page Header -->
 		<div class="wps-page-header">
 			<h1 class="wps-page-title">
-				<span class="dashicons dashicons-admin-tools" style="color: var(--wps-primary);"></span>
+				<span class="dashicons dashicons-admin-tools"></span>
 				<?php esc_html_e( 'WPShadow Tools', 'wpshadow' ); ?>
+				<small style="font-size: 14px; color: #666; margin-left: 12px;">v<?php echo esc_html( WPSHADOW_VERSION ); ?></small>
 			</h1>
 			<p class="wps-page-subtitle">
 				<?php esc_html_e( 'Additional tools for site analysis and optimization.', 'wpshadow' ); ?>
@@ -156,7 +157,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 		</div>
 
 		<!-- Tools Grid -->
-		<div class="wps-grid">
+		<div class="wps-grid wps-grid-2">
 			<?php
 			foreach ( $catalog as $item ) :
 				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
@@ -172,15 +173,15 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 						</p>
 					</div>
 				</div>
-				<div class="wps-card-body" style="padding-top: 12px;">
+				<div class="wps-card-body">
 					<?php if ( ! empty( $item['enabled'] ) ) : ?>
-						<a href="<?php echo esc_url( $tool_url ); ?>" class="wps-btn wps-btn-primary">
-							<span class="dashicons dashicons-external" style="font-size: 14px;"></span>
+						<a href="<?php echo esc_url( $tool_url ); ?>" class="wps-btn wps-btn--primary">
+							<span class="dashicons dashicons-external"></span>
 							<?php esc_html_e( 'Open Tool', 'wpshadow' ); ?>
 						</a>
 					<?php else : ?>
-						<button class="wps-btn wps-btn-secondary" disabled>
-							<span class="dashicons dashicons-hourglass" style="font-size: 14px;"></span>
+						<button class="wps-btn wps-btn--secondary" disabled>
+							<span class="dashicons dashicons-hourglass"></span>
 							<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
 						</button>
 					<?php endif; ?>
