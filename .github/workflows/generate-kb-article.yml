@@ -111,48 +111,65 @@ EOF
           echo "filename=$FILENAME" >> $GITHUB_OUTPUT
           echo "slug=$SLUG" >> $GITHUB_OUTPUT
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "docs: Create KB article - ${{ steps.extract.outputs.title }} (#${{ github.event.issue.number }})"
-          title: "docs: KB Article - ${{ steps.extract.outputs.title }} [#${{ github.event.issue.number }}]"
-          body: |
-            # KB Article Generation Request
-            
-            **Issue:** #${{ github.event.issue.number }}
-            **Title:** ${{ steps.extract.outputs.title }}
-            **Category:** ${{ steps.extract.outputs.category }}
-            
-            ## Purpose
-            ${{ steps.extract.outputs.purpose }}
-            
-            ## Generated File
-            - **File:** `${{ steps.create_article.outputs.filename }}`
-            - **Slug:** `${{ steps.create_article.outputs.slug }}`
-            
-            ## Next Steps
-            
-            1. ✅ Review the issue (#${{ github.event.issue.number }}) for full details
-            2. 📝 Write/update the article content in the generated file
-            3. 🔍 Add screenshots, code examples, and diagrams as needed
-            4. ✍️ Review for accuracy and clarity
-            5. 🚀 Merge when ready for publication
-            
-            ## Content Requirements
-            
-            - Follow the article template structure
-            - Include relevant links to related KB articles
-            - Add examples or screenshots where applicable
-            - Ensure accessibility guidelines are followed
-            - Verify all links are working
-            
-            **Assigned to:** @${{ env.COMMUNITY_MANAGER }} for review and content creation
-          branch: kb/article-${{ steps.create_article.outputs.slug }}-${{ github.event.issue.number }}
-          delete-branch: false
-          labels: "documentation,content/kb,automated"
-          assignees: ${{ env.COMMUNITY_MANAGER }}
-          team-reviewers: "content-team"
+      - name: Commit and create PR
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          
+          # Create branch
+          BRANCH="kb/article-${{ steps.create_article.outputs.slug }}-${{ github.event.issue.number }}"
+          git checkout -b "$BRANCH"
+          
+          # Add files
+          git add "${{ steps.create_article.outputs.filename }}"
+          
+          # Commit
+          git commit -m "docs: Create KB article - ${{ steps.extract.outputs.title }} (#${{ github.event.issue.number }})"
+          
+          # Push branch
+          git push origin "$BRANCH"
+          
+          # Create PR using GitHub CLI
+          PR_BODY="# KB Article Generation Request
+
+**Issue:** #${{ github.event.issue.number }}
+**Title:** ${{ steps.extract.outputs.title }}
+**Category:** ${{ steps.extract.outputs.category }}
+
+## Purpose
+${{ steps.extract.outputs.purpose }}
+
+## Generated File
+- **File:** \`${{ steps.create_article.outputs.filename }}\`
+- **Slug:** \`${{ steps.create_article.outputs.slug }}\`
+
+## Next Steps
+
+1. ✅ Review the issue (#${{ github.event.issue.number }}) for full details
+2. 📝 Write/update the article content in the generated file
+3. 🔍 Add screenshots, code examples, and diagrams as needed
+4. ✍️ Review for accuracy and clarity
+5. 🚀 Merge when ready for publication
+
+## Content Requirements
+
+- Follow the article template structure
+- Include relevant links to related KB articles
+- Add examples or screenshots where applicable
+- Ensure accessibility guidelines are followed
+- Verify all links are working
+
+**Assigned to:** @${{ env.COMMUNITY_MANAGER }} for review and content creation"
+          
+          gh pr create \
+            --title "docs: KB Article - ${{ steps.extract.outputs.title }} [#${{ github.event.issue.number }}]" \
+            --body "$PR_BODY" \
+            --base main \
+            --head "$BRANCH" \
+            --assignee "${{ env.COMMUNITY_MANAGER }}" \
+            --label "documentation,content/kb,automated"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add comment to issue
         uses: actions/github-script@v7
@@ -162,10 +179,10 @@ EOF
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 **KB Article Generation Started**\n\n✅ Pull request created and assigned to @${{ env.COMMUNITY_MANAGER }}\n\n**Generated Article:**\n- File: \`${{ steps.create_article.outputs.filename }}\`\n- Slug: \`${{ steps.create_article.outputs.slug }}\`\n\n**Next Steps:**\n1. Review the PR for the generated content\n2. Update article content based on requirements\n3. Add screenshots/diagrams as needed\n4. Request review when ready\n5. Merge to publish\n\nSee the linked PR for more details!`
+              body: `🚀 **KB Article Generation Complete**\n\n✅ Pull request created and assigned to @${{ env.COMMUNITY_MANAGER }}\n\n**Generated Article:**\n- File: \`${{ steps.create_article.outputs.filename }}\`\n- Slug: \`${{ steps.create_article.outputs.slug }}\`\n\n**Next Steps:**\n1. Review the PR for the generated content\n2. Update article content based on requirements\n3. Add screenshots/diagrams as needed\n4. Request review when ready\n5. Merge to publish\n\nSee the linked PR for more details!`
             });
 
-      - name: Assign issue to Community Manager
+      - name: Assign issue to Community Manager  
         uses: actions/github-script@v7
         with:
           script: |
@@ -176,7 +193,7 @@ EOF
               assignees: ["${{ env.COMMUNITY_MANAGER }}"]
             });
 
-      - name: Add labels
+      - name: Add tracking labels
         uses: actions/github-script@v7
         with:
           script: |
