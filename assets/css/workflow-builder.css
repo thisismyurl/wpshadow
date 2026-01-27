@@ -21,44 +21,16 @@
    Layout & Container
    ============================================================================ */
 
-.wps-workflow-builder {
-	max-width: 100%;
-	background: #fff;
-	position: relative;
-}
+/* Standard page container styling is inherited from design-system.css */
 
-.wps-workflow-builder-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 1.5rem;
-	flex-wrap: wrap;
-	gap: 1rem;
-}
-
-.wps-workflow-builder-title {
+.wps-workflow-toolbar {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
-	margin: 0;
-	font-size: 1.75rem;
-	font-weight: 600;
-	color: var(--wps-gray-900, #111827);
+	flex-wrap: wrap;
 }
 
-.wps-workflow-builder-title .dashicons {
-	font-size: 2rem;
-	width: 2rem;
-	height: 2rem;
-	color: var(--wps-info, #3b82f6);
-}
-
-.wps-workflow-builder-description {
-	color: var(--wps-gray-600, #4b5563);
-	font-size: 0.9375rem;
-	margin: 0.5rem 0 0;
-}
-
+/* Workflow-specific container for sidebar + canvas layout */
 .wps-workflow-builder-container {
 	display: grid;
 	grid-template-columns: 280px 1fr;
@@ -1203,14 +1175,11 @@
 		font-size: 1.5rem;
 	}
 
-	.wps-workflow-builder-header {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.wps-workflow-toolbar {
-		width: 100%;
-		flex-wrap: wrap;
+	.wps-workflow-palette {
+		grid-column: 1;
+		position: relative;
+		top: auto;
+		max-height: 250px;
 	}
 
 	.wps-workflow-name-input {
@@ -1284,14 +1253,6 @@
 }
 
 @media (max-width: 480px) {
-	.wps-workflow-builder-title {
-		font-size: 1.25rem;
-	}
-
-	.wps-workflow-builder-description {
-		font-size: 0.875rem;
-	}
-
 	.wps-workflow-canvas {
 		padding: 0.75rem;
 		min-height: 300px;
