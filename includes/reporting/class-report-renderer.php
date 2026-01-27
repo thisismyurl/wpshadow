@@ -33,7 +33,7 @@ class Report_Renderer {
 		<div class="wpshadow-report-html" class="wps-p-20"Segoe UI', Roboto, sans-serif;">
 			
 			<!-- Report Header -->
-			<div style="border-bottom: 3px solid #0073aa; padding-bottom: 20px; margin-bottom: 20px;">
+			<div class="wps-report-header">
 				<h1 class="wps-m-0">
 					<?php echo esc_html( $report['title'] ); ?>
 				</h1>
@@ -51,7 +51,7 @@ class Report_Renderer {
 			</div>
 			
 			<!-- Key Metrics -->
-			<div class="wps-grid wps-grid-auto-200" style="margin-bottom: 30px;">
+			<div class="wps-grid wps-grid-auto-200" class="wps-report-metric-grid">
 				<?php
 				$metrics = $report['metrics'];
 				$cards   = array(
@@ -84,16 +84,16 @@ class Report_Renderer {
 				
 				<?php foreach ( $cards as $card ) : ?>
 					<div style="background: linear-gradient(135deg, <?php echo esc_attr( $card['color'] ); ?> 0%, <?php echo esc_attr( $card['color'] ); ?>dd 100%); color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-						<div style="font-size: 24px; margin-bottom: 8px;"><?php echo esc_html( $card['icon'] ); ?></div>
-						<div style="font-size: 12px; opacity: 0.9; margin-bottom: 5px;"><?php echo esc_html( $card['label'] ); ?></div>
-						<div style="font-size: 20px; font-weight: bold;"><?php echo esc_html( $card['value'] ); ?></div>
+						<div class="wps-report-metric-icon"><?php echo esc_html( $card['icon'] ); ?></div>
+						<div class="wps-report-metric-label"><?php echo esc_html( $card['label'] ); ?></div>
+						<div class="wps-report-metric-value"><?php echo esc_html( $card['value'] ); ?></div>
 					</div>
 				<?php endforeach; ?>
 			</div>
 			
 			<!-- Activity by Category -->
 			<div class="wps-p-15-rounded-8">
-				<h3 style="margin-top: 0; color: #0073aa;"><?php esc_html_e( 'Activities by Category', 'wpshadow' ); ?></h3>
+				<h3 class="wps-report-section-title"><?php esc_html_e( 'Activities by Category', 'wpshadow' ); ?></h3>
 				<div class="wps-grid wps-grid-auto-200-compact">
 					<?php
 					foreach ( (array) $metrics['by_category'] as $category => $count ) {
@@ -103,12 +103,12 @@ class Report_Renderer {
 						<div>
 							<div class="wps-flex-justify-space-between">
 								<strong><?php echo esc_html( ucfirst( $category ) ); ?></strong>
-								<span style="color: #666;"><?php echo absint( $percent ); ?>%</span>
+								<span class="wps-report-category-percent"><?php echo absint( $percent ); ?>%</span>
 							</div>
 							<div class="wps-rounded-4">
 								<div style="background: #0073aa; height: 100%; width: <?php echo absint( $percent ); ?>%;"></div>
 							</div>
-							<div style="font-size: 12px; color: #666; margin-top: 3px;"><?php echo absint( $count ); ?> activities</div>
+							<div class="wps-report-category-count"><?php echo absint( $count ); ?> activities</div>
 						</div>
 					<?php } ?>
 				</div>
@@ -117,10 +117,10 @@ class Report_Renderer {
 			<!-- Trends Chart Data -->
 			<?php if ( ! empty( $report['trends'] ) ) : ?>
 			<div class="wps-p-15-rounded-8">
-				<h3 style="margin-top: 0; color: #0073aa;"><?php esc_html_e( 'Activity Trends', 'wpshadow' ); ?></h3>
-				<table style="width: 100%; border-collapse: collapse;">
+				<h3 class="wps-report-section-title"><?php esc_html_e( 'Activity Trends', 'wpshadow' ); ?></h3>
+				<table class="wps-report-table">
 					<thead>
-						<tr style="background: #e9ecef; border-bottom: 2px solid #ddd;">
+						<tr class="wps-report-table-header">
 							<th class="wps-p-10"><?php esc_html_e( 'Date', 'wpshadow' ); ?></th>
 							<th class="wps-p-10"><?php esc_html_e( 'Total', 'wpshadow' ); ?></th>
 							<th class="wps-p-10"><?php esc_html_e( 'Workflows', 'wpshadow' ); ?></th>
@@ -129,7 +129,7 @@ class Report_Renderer {
 					</thead>
 					<tbody>
 						<?php foreach ( array_slice( $report['trends'], -7 ) as $trend ) : ?>
-						<tr style="border-bottom: 1px solid #eee;">
+						<tr class="wps-report-table-row">
 							<td class="wps-p-10"><?php echo esc_html( $trend['date'] ); ?></td>
 							<td class="wps-p-10"><?php echo absint( $trend['total'] ); ?></td>
 							<td class="wps-p-10"><?php echo absint( $trend['workflows'] ); ?></td>
@@ -143,7 +143,7 @@ class Report_Renderer {
 			
 			<!-- Recommendations -->
 			<?php if ( ! empty( $report['recommendations'] ) ) : ?>
-			<div style="margin-bottom: 20px;">
+			<div class="wps-m-20-b">
 				<h3 style="color: #0073aa;"><?php esc_html_e( 'Recommendations', 'wpshadow' ); ?></h3>
 				<?php foreach ( $report['recommendations'] as $rec ) : ?>
 					<?php
@@ -160,7 +160,7 @@ class Report_Renderer {
 				<div class="wps-p-15-rounded-4">
 					<h4 class="wps-m-0"><?php echo esc_html( $rec['title'] ); ?></h4>
 					<p class="wps-m-0"><?php echo esc_html( $rec['description'] ); ?></p>
-					<a href="<?php echo esc_url( $rec['kb_link'] ); ?>" target="_blank" style="color: #0073aa; text-decoration: none;">
+					<a href="<?php echo esc_url( $rec['kb_link'] ); ?>" target="_blank" class="wps-report-recommendation-link">
 						<?php esc_html_e( 'Learn more →', 'wpshadow' ); ?>
 					</a>
 				</div>
@@ -169,7 +169,7 @@ class Report_Renderer {
 			<?php endif; ?>
 			
 			<!-- Footer -->
-			<div style="border-top: 1px solid #ddd; padding-top: 15px; margin-top: 30px; color: #666; font-size: 12px;">
+			<div class="wps-report-footer">
 				<p><?php esc_html_e( 'This report was generated by WPShadow Guardian. For more information, visit the KB or contact support.', 'wpshadow' ); ?></p>
 			</div>
 			
