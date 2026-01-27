@@ -110,11 +110,11 @@ class Privacy_Settings_Manager {
 	public static function render_privacy_ui() {
 		$settings = self::get_all_settings();
 		?>
-		<div style="max-width: 900px;">
+		<div class="wps-privacy-container">
 			<!-- Consent Management -->
 			<div class="wps-p-24-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-info" style="font-size: 24px; color: #0073aa;"></span>
+					<span class="dashicons dashicons-info" class="wps-privacy-icon"></span>
 					<h3 class="wps-m-0"><?php esc_html_e( 'User Consent', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0">
@@ -127,8 +127,8 @@ class Privacy_Settings_Manager {
 					
 					<!-- Require consent toggle -->
 					<div class="wps-flex-gap-12-items-flex-start">
-						<input type="checkbox" name="consent_required" <?php checked( $settings['consent_required'] ); ?> id="consent-required" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-						<div style="flex: 1;">
+						<input type="checkbox" name="consent_required" <?php checked( $settings['consent_required'] ); ?> id="consent-required" class="wps-checkbox-large" />
+						<div class="wps-privacy-flex-container">
 							<label for="consent-required" class="wps-block">
 								<?php esc_html_e( 'Require explicit user consent before processing data', 'wpshadow' ); ?>
 							</label>
@@ -140,8 +140,8 @@ class Privacy_Settings_Manager {
 					
 					<!-- Analytics collection toggle -->
 					<div class="wps-flex-gap-12-items-flex-start">
-						<input type="checkbox" name="collect_analytics" <?php checked( $settings['collect_analytics'] ); ?> id="collect-analytics" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-						<div style="flex: 1;">
+						<input type="checkbox" name="collect_analytics" <?php checked( $settings['collect_analytics'] ); ?> id="collect-analytics" class="wps-checkbox-large" />
+						<div class="wps-privacy-flex-container">
 							<label for="collect-analytics" class="wps-block">
 								<?php esc_html_e( 'Allow anonymized analytics collection', 'wpshadow' ); ?>
 							</label>
@@ -152,7 +152,7 @@ class Privacy_Settings_Manager {
 					</div>
 					
 					<!-- Data retention -->
-					<div style="margin-bottom: 16px;">
+					<div class="wps-privacy-section">
 						<label class="wps-block">
 							<?php esc_html_e( 'Data Retention Period (days):', 'wpshadow' ); ?>
 						</label>
@@ -164,11 +164,11 @@ class Privacy_Settings_Manager {
 					
 					<!-- Export/Delete options -->
 					<fieldset class="wps-p-12-rounded-4">
-						<legend style="font-weight: 500;"><?php esc_html_e( 'Data Subject Rights (GDPR)', 'wpshadow' ); ?></legend>
+						<legend class="wps-privacy-legend"><?php esc_html_e( 'Data Subject Rights (GDPR)', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="export_user_data" <?php checked( $settings['export_user_data'] ); ?> id="export-user-data" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<div style="flex: 1;">
+							<input type="checkbox" name="export_user_data" <?php checked( $settings['export_user_data'] ); ?> id="export-user-data" class="wps-checkbox-large" />
+							<div class="wps-privacy-flex-container">
 								<label for="export-user-data" class="wps-block">
 									<?php esc_html_e( 'Allow data export (Right to Access)', 'wpshadow' ); ?>
 								</label>
@@ -179,8 +179,8 @@ class Privacy_Settings_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="delete_user_data" <?php checked( $settings['delete_user_data'] ); ?> id="delete-user-data" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<div style="flex: 1;">
+							<input type="checkbox" name="delete_user_data" <?php checked( $settings['delete_user_data'] ); ?> id="delete-user-data" class="wps-checkbox-large" />
+							<div class="wps-privacy-flex-container">
 								<label for="delete-user-data" class="wps-block">
 									<?php esc_html_e( 'Allow data deletion (Right to be Forgotten)', 'wpshadow' ); ?>
 								</label>
@@ -191,8 +191,8 @@ class Privacy_Settings_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="anonymize_on_delete" <?php checked( $settings['anonymize_on_delete'] ); ?> id="anonymize-on-delete" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<div style="flex: 1;">
+							<input type="checkbox" name="anonymize_on_delete" <?php checked( $settings['anonymize_on_delete'] ); ?> id="anonymize-on-delete" class="wps-checkbox-large" />
+							<div class="wps-privacy-flex-container">
 								<label for="anonymize-on-delete" class="wps-block">
 									<?php esc_html_e( 'Anonymize instead of delete', 'wpshadow' ); ?>
 								</label>
@@ -207,7 +207,7 @@ class Privacy_Settings_Manager {
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Privacy Settings', 'wpshadow' ); ?>
 					</button>
-					<span id="wpshadow-privacy-status" style="margin-left: 10px;"></span>
+					<span id="wpshadow-privacy-status" class="wps-privacy-status"></span>
 				</form>
 			</div>
 
@@ -246,9 +246,9 @@ class Privacy_Settings_Manager {
 				
 				$.post(ajaxurl, data, function(response) {
 					if (response.success) {
-						$status.html('<span style="color: #2e7d32;">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
+						$status.html('<span class="wps-status-success">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
 					} else {
-						$status.html('<span style="color: #c62828;">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
+						$status.html('<span class="wps-status-error">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
 					}
 					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Privacy Settings', 'wpshadow' ) ); ?>');
 				});

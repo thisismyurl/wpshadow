@@ -3776,6 +3776,49 @@ a:focus-visible {
     font-size: 14px;
 }
 
+/**
+ * Privacy Settings Styles
+ */
+.wps-privacy-container {
+    max-width: 900px;
+}
+
+.wps-privacy-icon {
+    font-size: 24px;
+    color: var(--wps-primary);
+}
+
+.wps-checkbox-large {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.wps-privacy-flex-container {
+    flex: 1;
+}
+
+.wps-privacy-section {
+    margin-bottom: 16px;
+}
+
+.wps-privacy-legend {
+    font-weight: 500;
+}
+
+.wps-privacy-status {
+    margin-left: 10px;
+}
+
+.wps-status-success {
+    color: #2e7d32;
+}
+
+.wps-status-error {
+    color: #c62828;
+}
+
 }
 }
 }
