@@ -56,29 +56,12 @@
 		},
 
 		/**
-		 * Add canvas controls (zoom, pan, reset)
+		 * Add canvas controls (removed zoom buttons per #1677)
 		 */
 		addCanvasControls: function() {
-			const controlsHTML = `
-				<div class="wps-canvas-controls" role="toolbar" aria-label="Canvas controls">
-					<button id="wps-zoom-in" class="wps-zoom-btn" aria-label="Zoom in" title="Zoom in">
-						<span class="dashicons dashicons-plus-alt2"></span>
-					</button>
-					<span class="wps-zoom-level" role="status" aria-live="polite">100%</span>
-					<button id="wps-zoom-out" class="wps-zoom-btn" aria-label="Zoom out" title="Zoom out">
-						<span class="dashicons dashicons-minus"></span>
-					</button>
-					<button id="wps-zoom-reset" class="wps-zoom-btn" aria-label="Reset zoom" title="Reset zoom">
-						<span class="dashicons dashicons-image-rotate"></span>
-					</button>
-				</div>
-			`;
-			$('.wps-workflow-canvas').append(controlsHTML);
-
-			// Bind zoom controls
-			$('#wps-zoom-in').on('click', () => this.zoomCanvas(0.1));
-			$('#wps-zoom-out').on('click', () => this.zoomCanvas(-0.1));
-			$('#wps-zoom-reset').on('click', () => this.resetCanvas());
+			// Zoom controls removed - users can use browser zoom
+			// Keeping pan controls functional
+		},
 
 			// Mouse wheel zoom
 			$('.wps-workflow-canvas').on('wheel', (e) => {
@@ -732,7 +715,19 @@
 
 			if ('trigger' === blockType && triggerCount >= 1) {
 				const message = wpshadowWorkflow.strings.singleTrigger || 'Only one trigger is allowed per workflow';
-				this.showNotification('error', message);
+				
+				// Issue #1677: Use accessible modal instead of alert
+				if (typeof WPSModal !== 'undefined') {
+					WPSModal.show({
+						title: 'Trigger Limit Reached',
+						message: message + '<br><br>Need multiple triggers? Upgrade to WPShadow Pro for unlimited workflow complexity.',
+						confirmText: 'Got It',
+						type: 'warning'
+					});
+				} else {
+					this.showNotification('error', message);
+				}
+				
 				this.announceToScreenReader(message);
 				return;
 			}
@@ -784,6 +779,18 @@
 				this.updateConnections();
 				// Validate workflow
 				this.validateWorkflow();
+				
+				// Issue #1677: Hide triggers panel after first trigger is added
+				if (blockType === 'trigger') {
+					$('.wps-palette-section:has([data-block-type="trigger"])').fadeOut(300);
+					this.announceToScreenReader('Trigger added. Only one trigger allowed per workflow.');
+				}
+				
+				// Issue #1677: Show actions panel once trigger exists
+				if (blockType === 'trigger' && $('.wps-palette-section:has([data-block-type="action"])').is(':hidden')) {
+					$('.wps-palette-section:has([data-block-type="action"])').fadeIn(300);
+					this.announceToScreenReader('Actions panel now available.');
+				}
 			});
 		},
 
@@ -908,6 +915,10 @@
 		 * Remove a block from the canvas
 		 */
 		removeBlock: function(blockId) {
+			// Get block info before removing
+			const block = this.blocks.find(b => b.id === blockId);
+			const blockType = block ? block.type : null;
+			
 			// Remove from state
 			this.blocks = this.blocks.filter(b => b.id !== blockId);
 
@@ -921,6 +932,16 @@
 				} else {
 					// Update connections after block removal
 					this.updateConnections();
+				}
+				
+				// Issue #1677: Show triggers panel when trigger removed
+				if (blockType === 'trigger') {
+					$('.wps-palette-section:has([data-block-type="trigger"])').fadeIn(300);
+					// Hide actions if no triggers remain
+					const remainingTriggers = this.blocks.filter(b => b.type === 'trigger').length;
+					if (remainingTriggers === 0) {
+						$('.wps-palette-section:has([data-block-type="action"])').fadeOut(300);
+					}
 				}
 				
 				// Validate workflow
@@ -1091,7 +1112,14 @@
 		handleSaveWorkflow: function(e) {
 			e.preventDefault();
 
-			const name = $('#wps-workflow-name').val() || 'Untitled Workflow';
+			let name = $('#wps-workflow-name').val().trim();
+			
+			// Issue #1677: Generate ridiculous name if empty
+			if (!name) {
+				name = this.generateRidiculousName();
+				$('#wps-workflow-name').val(name);
+				this.showNotification('info', 'We gave your workflow a magnificently ridiculous name!');
+			}
 
 			// Validate workflow before saving
 			if (!this.validateWorkflow()) {
@@ -1359,6 +1387,34 @@
 			setTimeout(() => {
 				$('.notice').fadeOut(300, function() { $(this).remove(); });
 			}, 3000);
+		},
+
+		/**
+		 * Generate ridiculous workflow name (Issue #1677)
+		 */
+		generateRidiculousName: function() {
+			const adjectives = [
+				'Magnificently', 'Ridiculously', 'Spectacularly', 'Absurdly', 'Wonderfully',
+				'Hilariously', 'Preposterous', 'Outrageous', 'Fantastically', 'Ludicrously',
+				'Incredibly', 'Astonishingly', 'Remarkably', 'Extraordinarily', 'Inexplicably'
+			];
+			const nouns = [
+				'Suspicious', 'Questionable', 'Mysterious', 'Peculiar', 'Bizarre',
+				'Enigmatic', 'Cryptic', 'Curious', 'Unusual', 'Eccentric',
+				'Whimsical', 'Quirky', 'Odd', 'Strange', 'Unconventional'
+			];
+			const things = [
+				'Automation', 'Workflow', 'Sequence', 'Process', 'Routine',
+				'Mechanism', 'Protocol', 'Procedure', 'Operation', 'System',
+				'Algorithm', 'Pattern', 'Strategy', 'Method', 'Scheme'
+			];
+			
+			const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+			const noun = nouns[Math.floor(Math.random() * nouns.length)];
+			const thing = things[Math.floor(Math.random() * things.length)];
+			const number = Math.floor(Math.random() * 100) + 1;
+			
+			return `${adjective} ${noun} ${thing} #${number}`;
 		},
 
 		/**

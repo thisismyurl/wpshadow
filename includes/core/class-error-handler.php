@@ -24,9 +24,8 @@ class Error_Handler {
 		// Hook into WordPress fatal error handler
 		add_filter( 'wp_php_error_message', array( __CLASS__, 'enhance_error_message' ), 10, 2 );
 		add_filter( 'wp_php_error_args', array( __CLASS__, 'enhance_error_args' ), 10, 2 );
-		// Add inline script that loads early
-		add_action( 'wp_footer', array( __CLASS__, 'add_error_modal_script' ), 1 );
-		add_action( 'admin_footer', array( __CLASS__, 'add_error_modal_script' ), 1 );
+		// Only add error modal script when there's an actual error
+		// (removed from wp_footer/admin_footer as it was showing on ALL pages)
 	}
 
 	/**
@@ -204,7 +203,7 @@ class Error_Handler {
 			'active_plugins' => array_keys( get_option( 'active_plugins', array() ) ),
 		);
 
-		// Add WPShadow help button that opens consent modal
+		// Add WPShadow help button and modal (only shown on actual errors)
 		$help_section = '<div class="wps-p-15-rounded-4">' .
 			'<p class="wps-m-0">' .
 				esc_html__( 'For help resolving this issue, WPShadow can assist:', 'wpshadow' ) .
@@ -219,6 +218,11 @@ class Error_Handler {
 			'</div>';
 
 		$message .= $help_section;
+
+		// Add modal HTML and scripts (only when error occurs)
+		ob_start();
+		self::add_error_modal_script();
+		$message .= ob_get_clean();
 
 		return $message;
 	}

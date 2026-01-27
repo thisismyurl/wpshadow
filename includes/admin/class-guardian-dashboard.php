@@ -101,19 +101,40 @@ class Guardian_Dashboard {
 			</button>
 			<script>
 			function wpshadowToggleGuardian() {
-				if (confirm("%s")) {
-					jQuery.post(ajaxurl, {
-						action: "wpshadow_toggle_guardian",
-						nonce: "%s",
-						enabled: %s
-					}, function(response) {
-						if (response.success) {
-							location.reload();
-						} else {
-							alert("Error: " + (response.data?.message || "Could not toggle Guardian"));
-						}
-					});
+				if (typeof WPShadowModal === "undefined") {
+					console.error("WPShadowModal not loaded");
+					alert("Error: Modal system not loaded. Please refresh the page.");
+					return;
 				}
+				
+				WPShadowModal.confirm(
+					"%s",
+					"%s",
+					function() {
+						// User confirmed
+						jQuery.post(ajaxurl, {
+							action: "wpshadow_toggle_guardian",
+							nonce: "%s",
+							enabled: %s
+						}, function(response) {
+							if (response.success) {
+								location.reload();
+							} else {
+								WPShadowModal.alert(
+									"%s",
+									response.data?.message || "%s",
+									"error"
+								);
+							}
+						});
+					},
+					null, // onCancel (no action needed)
+					{
+						type: "%s",
+						confirmText: "%s",
+						cancelText: "%s"
+					}
+				);
 			}
 			</script>',
 			esc_attr( $is_enabled ? __( 'Click to disable Guardian', 'wpshadow' ) : __( 'Click to enable Guardian', 'wpshadow' ) ),
@@ -121,9 +142,15 @@ class Guardian_Dashboard {
 			esc_attr( $status_icon ),
 			esc_attr( $is_enabled ? 'enabled' : 'disabled' ),
 			esc_html( $status_text ),
+			esc_js( $is_enabled ? __( 'Disable Guardian?', 'wpshadow' ) : __( 'Enable Guardian?', 'wpshadow' ) ),
 			esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ),
 			esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ),
-			$is_enabled ? 'false' : 'true'
+			$is_enabled ? 'false' : 'true',
+			esc_js( __( 'Error', 'wpshadow' ) ),
+			esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ),
+			$is_enabled ? 'warning' : 'info',
+			esc_js( __( 'Confirm', 'wpshadow' ) ),
+			esc_js( __( 'Cancel', 'wpshadow' ) )
 		);
 	}
 

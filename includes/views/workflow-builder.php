@@ -75,7 +75,7 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 			<div class="wps-palette-section">
 				<h3 class="wps-palette-heading">
 					<span class="dashicons dashicons-lightbulb" aria-hidden="true"></span>
-					<?php esc_html_e( 'Triggers (IF)', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Triggers', 'wpshadow' ); ?>
 				</h3>
 				<div class="wps-palette-blocks">
 					<?php foreach ( $triggers as $trigger_id => $block ) : ?>
@@ -105,11 +105,11 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 				</div>
 			</div>
 
-			<!-- Actions Section -->
-			<div class="wps-palette-section">
+			<!-- Actions Section (Issue #1677: Hidden until trigger added) -->
+			<div class="wps-palette-section" style="display: none;">
 				<h3 class="wps-palette-heading">
 					<span class="dashicons dashicons-admin-generic" aria-hidden="true"></span>
-					<?php esc_html_e( 'Actions (THEN)', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Actions', 'wpshadow' ); ?>
 				</h3>
 				<div class="wps-palette-blocks">
 					<?php foreach ( $actions as $action_id => $block ) : ?>
