@@ -160,7 +160,7 @@ $severity_legend = array(
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
 
 	<!-- Workflow Creation Modal -->
-	<div id="wpshadow-autofix-modal" class="wps-none">
+	<div id="wpshadow-autofix-modal" class="wps-hidden">
 		<div class="wps-m-3 wps-p-8 wps-rounded-lg">
 			<button class="wpshadow-autofix-modal-close wps-absolute wps-top-4 wps-right-4 wps-bg-transparent wps-border-none wps-text-4xl wps-cursor-pointer wps-text-gray-400 wps-leading-none">×</button>
 			<h2 class="wps-mt-0 wps-text-success wps-flex wps-items-center wps-gap-2">
@@ -194,7 +194,7 @@ $severity_legend = array(
 	</div>
 
 	<!-- Workflow Creation Modal -->
-	<div id="wpshadow-workflow-creation-modal" class="wps-none">
+	<div id="wpshadow-workflow-creation-modal" class="wps-hidden">
 		<div class="wps-m-3 wps-p-8 wps-rounded-lg">
 			<button class="wpshadow-workflow-modal-close wps-absolute wps-top-4 wps-right-4 wps-bg-transparent wps-border-none wps-text-4xl wps-cursor-pointer wps-text-gray-400 wps-leading-none">×</button>
 			<h2 class="wps-mt-0 wps-text-primary wps-flex wps-items-center wps-gap-2">
@@ -283,7 +283,7 @@ $severity_legend = array(
 	</div>
 
 	<!-- Family-Aware Fix Modal (Philosophy #9: Show Value) -->
-	<div id="wpshadow-family-fix-modal" class="wps-none">
+	<div id="wpshadow-family-fix-modal" class="wps-hidden">
 		<div class="wps-m-3 wps-p-8 wps-rounded-lg">
 			<button class="wpshadow-family-fix-modal-close wps-absolute wps-top-4 wps-right-4 wps-bg-transparent wps-border-none wps-text-4xl wps-cursor-pointer wps-text-gray-400 wps-leading-none">×</button>
 			<h2 class="wps-mt-0 wps-text-primary wps-flex wps-items-center wps-gap-2">
