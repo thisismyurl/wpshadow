@@ -44,3 +44,14 @@ function wpshadow_calculate_overall_health( array $findings_by_category, array $
 function wpshadow_calculate_wordpress_native_health(): array {
 	return \WPShadow\Core\wpshadow_calculate_wordpress_native_health();
 }
+
+/**
+ * Get all site findings from the database
+ *
+ * Retrieves findings stored in 'wpshadow_site_findings' option.
+ *
+ * @return array Array of findings.
+ */
+function wpshadow_get_site_findings(): array {
+	return get_option( 'wpshadow_site_findings', array() );
+}
