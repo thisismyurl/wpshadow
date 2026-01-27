@@ -198,10 +198,10 @@ class Recommendation_Engine {
 								<?php
 								$kb_slug = isset( $rec['id'] ) ? sanitize_title( $rec['id'] ) : 'general-fix';
 								?>
-								<a href="<?php echo esc_url( 'https://wpshadow.com/kb/' . $kb_slug ); ?>" target="_blank" style="color: #2196f3; text-decoration: none;">
+								<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( $kb_slug, 'recommendation' ) ); ?>" target="_blank" style="color: #2196f3; text-decoration: none;">
 									📚 <?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
 								</a>
-								<a href="<?php echo esc_url( 'https://wpshadow.com/academy/' . $kb_slug ); ?>" target="_blank" style="color: #9333ea; text-decoration: none;">
+								<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::academy_link( $kb_slug, 'recommendation' ) ); ?>" target="_blank" style="color: #9333ea; text-decoration: none;">
 									🎥 <?php esc_html_e( 'Watch video', 'wpshadow' ); ?>
 								</a>
 							</div>

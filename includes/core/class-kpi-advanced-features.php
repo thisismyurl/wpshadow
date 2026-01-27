@@ -241,7 +241,7 @@ class KPI_Advanced_Features {
 			
 			<!-- Phase 5: KB Link -->
 			<div class="wps-kpi-separator">
-				<a href="https://wpshadow.com/kb/understanding-roi-calculations" target="_blank" class="wps-inline-flex">
+				<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'understanding-roi-calculations', 'kpi' ) ); ?>" target="_blank" class="wps-inline-flex">
 					<span class="dashicons dashicons-book" class="wps-kpi-separator-icon"></span>
 					<?php esc_html_e( 'Learn: How WPShadow Calculates ROI', 'wpshadow' ); ?>
 				</a>

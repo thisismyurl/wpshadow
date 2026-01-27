@@ -35,6 +35,6 @@ return array(
 		'author'         => __( 'Contributor', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
-	'kb_article'     => 'https://wpshadow.com/kb/squarespace-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/academy/squarespace-to-wordpress/',
+	'kb_article'     => \WPShadow\Core\UTM_Link_Manager::kb_link( 'squarespace-to-wordpress', 'onboarding' ),
+	'training_video' => \WPShadow\Core\UTM_Link_Manager::academy_link( 'squarespace-to-wordpress', 'onboarding' ),
 );

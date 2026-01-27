@@ -112,6 +112,7 @@ $action_labels = array(
 	'guardian_enabled'            => __( 'Guardian Enabled', 'wpshadow' ),
 	'guardian_disabled'           => __( 'Guardian Disabled', 'wpshadow' ),
 	'settings_changed'            => __( 'Settings Changed', 'wpshadow' ),
+	'user_login'                  => __( 'User Login', 'wpshadow' ),
 	'finding_action'              => __( 'Finding Activity', 'wpshadow' ),
 	'site_settings_changed'       => __( 'Site Settings Changed', 'wpshadow' ),
 	'cache_settings_changed'      => __( 'Cache Settings Changed', 'wpshadow' ),
@@ -176,6 +177,36 @@ $action_labels = array(
 						?>
 						<option value="<?php echo esc_attr( $action ); ?>" <?php selected( $filter_action, $action ); ?>>
 							<?php echo esc_html( sprintf( '%s (%d)', $action_label, $count ) ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+
+			<!-- User Filter -->
+			<div>
+				<label for="activity_user" class="wps-form-label">
+					<?php esc_html_e( 'User', 'wpshadow' ); ?>
+				</label>
+				<select id="activity_user" name="activity_user" class="wps-select">
+					<option value=""><?php esc_html_e( 'All Users', 'wpshadow' ); ?></option>
+					<?php
+					// Get all unique users from activity log
+					$all_activities = \WPShadow\Core\Activity_Logger::get_activities( array(), 10000, 0 );
+					$unique_users   = array();
+					foreach ( $all_activities['activities'] as $activity ) {
+						if ( ! empty( $activity['user_id'] ) && ! isset( $unique_users[ $activity['user_id'] ] ) ) {
+							$user                        = get_user_by( 'id', $activity['user_id'] );
+							$unique_users[ $activity['user_id'] ] = $user ? $user->display_name : __( 'Unknown User', 'wpshadow' );
+						}
+					}
+
+					// Sort users by display name
+					asort( $unique_users );
+
+					foreach ( $unique_users as $user_id => $user_name ) :
+						?>
+						<option value="<?php echo esc_attr( (string) $user_id ); ?>" <?php selected( (string) $filter_user, (string) $user_id ); ?>>
+							<?php echo esc_html( $user_name ); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>

@@ -96,11 +96,11 @@ class Diagnostic_Result_Normalizer {
 		$kb_slug = self::determine_kb_slug( $normalized, $slug );
 
 		if ( empty( $normalized['kb_link'] ) ) {
-			$normalized['kb_link'] = 'https://wpshadow.com/kb/' . rawurlencode( $kb_slug );
+			$normalized['kb_link'] = UTM_Link_Manager::kb_link( rawurlencode( $kb_slug ), 'diagnostic' );
 		}
 
 		if ( empty( $normalized['training_link'] ) ) {
-			$normalized['training_link'] = 'https://wpshadow.com/academy/' . rawurlencode( $kb_slug );
+			$normalized['training_link'] = UTM_Link_Manager::academy_link( rawurlencode( $kb_slug ), 'diagnostic' );
 		}
 
 		return $normalized;

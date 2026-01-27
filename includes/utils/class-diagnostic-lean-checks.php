@@ -103,8 +103,8 @@ class Diagnostic_Lean_Checks {
 			'category'      => $category,
 			'severity'      => $severity,
 			'threat_level'  => $threat_level,
-			'kb_link'       => 'https://wpshadow.com/kb/' . rawurlencode( $kb_slug ),
-			'training_link' => 'https://wpshadow.com/academy/' . rawurlencode( $kb_slug ),
+			'kb_link'       => UTM_Link_Manager::kb_link( rawurlencode( $kb_slug ), 'diagnostic' ),
+			'training_link' => UTM_Link_Manager::academy_link( rawurlencode( $kb_slug ), 'diagnostic' ),
 			'auto_fixable'  => false,
 		);
 	}

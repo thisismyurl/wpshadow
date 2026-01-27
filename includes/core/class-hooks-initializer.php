@@ -55,11 +55,26 @@ class Hooks_Initializer {
 		add_action( 'admin_notices', array( __CLASS__, 'on_admin_notices' ) );
 		add_action( 'tool_box', array( __CLASS__, 'on_tool_box' ) );
 
-		// User profile
+		// User profile and login tracking
 		add_action( 'show_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
 		add_action( 'edit_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
 		add_action( 'personal_options_update', array( __CLASS__, 'on_personal_options_update' ) );
 		add_action( 'edit_user_profile_update', array( __CLASS__, 'on_personal_options_update' ) );
+		add_action( 'wp_login', array( __CLASS__, 'on_user_login' ), 10, 2 );
+
+		// Settings changes tracking
+		add_action( 'update_option_wpshadow_cache_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_cache_duration', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_visual_comparison_width', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_visual_comparison_height', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_privacy_telemetry_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_privacy_error_reporting', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_data_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_notifications_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_notification_severity', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_notify_admin_email', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_backup_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_backup_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 
 		// Filters for WordPress integration
 		add_filter( 'plugin_action_links_' . WPSHADOW_BASENAME, array( __CLASS__, 'filter_plugin_action_links' ) );
@@ -1017,6 +1032,119 @@ class Hooks_Initializer {
 	public static function on_diagnostic_executed( $diagnostic_id, $result ) {
 		$success = isset( $result['success'] ) ? $result['success'] : false;
 		\WPShadow\Core\KPI_Tracker::record_diagnostic_run( $diagnostic_id, $success );
+	}
+
+	/**
+	 * Track user login
+	 *
+	 * Logs when a user logs in to the WordPress dashboard.
+	 * Helps audit who's accessing the site and when.
+	 *
+	 * @param string   $user_login Username
+	 * @param \WP_User $user       User object
+	 * @return void
+	 */
+	public static function on_user_login( $user_login, $user ) {
+		if ( ! class_exists( 'WPShadow\Core\Activity_Logger' ) || empty( $user ) ) {
+			return;
+		}
+
+		Activity_Logger::log(
+			'user_login',
+			sprintf( __( 'User %s logged in', 'wpshadow' ), $user->display_name ),
+			'admin',
+			array(
+				'user_id'     => $user->ID,
+				'username'    => $user_login,
+				'user_email'  => $user->user_email,
+				'user_roles'  => ! empty( $user->roles ) ? $user->roles : array(),
+			)
+		);
+	}
+
+	/**
+	 * Track settings changes
+	 *
+	 * Logs when any WPShadow setting is updated.
+	 * Records which user made the change, what was changed, and old/new values.
+	 *
+	 * @param mixed  $old_value Old option value
+	 * @param mixed  $new_value New option value
+	 * @param string $option    Option name
+	 * @return void
+	 */
+	public static function on_option_updated( $old_value, $new_value, $option ) {
+		if ( ! class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
+			return;
+		}
+
+		// Skip if values are the same (no actual change)
+		if ( $old_value === $new_value ) {
+			return;
+		}
+
+		// Get human-readable setting name
+		$setting_names = array(
+			'wpshadow_cache_enabled'             => 'Cache Enabled',
+			'wpshadow_cache_duration'            => 'Cache Duration',
+			'wpshadow_visual_comparison_width'   => 'Visual Comparison Width',
+			'wpshadow_visual_comparison_height'  => 'Visual Comparison Height',
+			'wpshadow_privacy_telemetry_enabled' => 'Telemetry',
+			'wpshadow_privacy_error_reporting'   => 'Error Reporting',
+			'wpshadow_data_retention_days'       => 'Data Retention',
+			'wpshadow_notifications_enabled'     => 'Notifications',
+			'wpshadow_notification_severity'     => 'Notification Severity',
+			'wpshadow_notify_admin_email'        => 'Notification Email',
+			'wpshadow_backup_enabled'            => 'Backups',
+			'wpshadow_backup_retention_days'     => 'Backup Retention',
+		);
+
+		$setting_name = isset( $setting_names[ $option ] ) ? $setting_names[ $option ] : $option;
+
+		// Format values for display
+		$old_display = self::format_setting_value( $old_value );
+		$new_display = self::format_setting_value( $new_value );
+
+		Activity_Logger::log(
+			'setting_changed',
+			sprintf(
+				__( 'Setting changed: %s (from "%s" to "%s")', 'wpshadow' ),
+				$setting_name,
+				$old_display,
+				$new_display
+			),
+			'settings',
+			array(
+				'setting_name' => $setting_name,
+				'option_key'   => $option,
+				'old_value'    => $old_value,
+				'new_value'    => $new_value,
+			)
+		);
+	}
+
+	/**
+	 * Format setting values for logging
+	 *
+	 * Converts various data types to human-readable strings.
+	 *
+	 * @param mixed $value The setting value to format
+	 * @return string Formatted value
+	 */
+	private static function format_setting_value( $value ) {
+		if ( is_bool( $value ) ) {
+			return $value ? 'enabled' : 'disabled';
+		}
+
+		if ( is_array( $value ) ) {
+			return implode( ', ', (array) $value );
+		}
+
+		if ( is_numeric( $value ) ) {
+			return (string) $value;
+		}
+
+		return (string) $value;
 	}
 
 	/**

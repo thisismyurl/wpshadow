@@ -35,6 +35,6 @@ return array(
 		'author'         => __( 'Creator', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
-	'kb_article'     => 'https://wpshadow.com/kb/notion-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/academy/notion-to-wordpress/',
+	'kb_article'     => \WPShadow\Core\UTM_Link_Manager::kb_link( 'notion-to-wordpress', 'onboarding' ),
+	'training_video' => \WPShadow\Core\UTM_Link_Manager::academy_link( 'notion-to-wordpress', 'onboarding' ),
 );

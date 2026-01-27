@@ -35,6 +35,6 @@ return array(
 		'author'         => __( 'Author', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
-	'kb_article'     => 'https://wpshadow.com/kb/word-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/academy/word-to-wordpress/',
+	'kb_article'     => \WPShadow\Core\UTM_Link_Manager::kb_link( 'word-to-wordpress', 'onboarding' ),
+	'training_video' => \WPShadow\Core\UTM_Link_Manager::academy_link( 'word-to-wordpress', 'onboarding' ),
 );

@@ -211,7 +211,7 @@ class Onboarding_Manager {
 				<button type="button" class="wps-btn wps-btn-secondary" id="wpshadow-graduate-later">
 					<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
 				</button>
-				<a href="https://wpshadow.com/kb/wordpress-graduation/" target="_blank" style="margin-left: 15px;">
+				<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'wordpress-graduation', 'onboarding' ) ); ?>" target="_blank" style="margin-left: 15px;">
 					<?php esc_html_e( 'Learn More', 'wpshadow' ); ?>
 				</a>
 			</p>

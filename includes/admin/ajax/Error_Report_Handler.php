@@ -96,7 +96,7 @@ class Error_Report_Handler extends AJAX_Handler_Base {
 			$suggestions .= '<li><strong>' . __( 'Increase Memory:', 'wpshadow' ) . '</strong> ' .
 				sprintf(
 					__( 'Your site needs more memory. <a href="%s" target="_blank">Learn how to increase PHP memory limit</a>', 'wpshadow' ),
-					'https://wpshadow.com/kb/increase-memory-limit'
+					\WPShadow\Core\UTM_Link_Manager::kb_link( 'increase-memory-limit', 'error-report' )
 				) . '</li>';
 		}
 
@@ -135,7 +135,7 @@ class Error_Report_Handler extends AJAX_Handler_Base {
 
 		// Link to full KB article
 		$suggestions .= '<li><strong>' . __( 'More Help:', 'wpshadow' ) . '</strong> ' .
-			'<a href="https://wpshadow.com/kb/fatal-errors" target="_blank">' .
+			'<a href="' . esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'fatal-errors', 'error-report' ) ) . '" target="_blank">' .
 			__( 'Read our complete guide to fixing fatal errors', 'wpshadow' ) .
 			'</a></li>';
 

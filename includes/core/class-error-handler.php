@@ -78,14 +78,7 @@ class Error_Handler {
 						<?php esc_html_e( 'Read general troubleshooting guides without sending anything.', 'wpshadow' ); ?>
 					</p>
 					<a 
-						href="https://wpshadow.com/kb/fatal-errors" 
-						target="_blank" 
-						rel="noopener"
-						class="wps-inline-block-p-12-rounded-4"
-					>
-						<?php esc_html_e( 'Open Knowledge Base', 'wpshadow' ); ?>
-					</a>
-				</div>
+					href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'fatal-errors', 'error-handler' ) ); ?>" 
 				
 				<!-- Close button -->
 				<button 

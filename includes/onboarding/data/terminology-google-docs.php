@@ -35,6 +35,6 @@ return array(
 		'author'         => __( 'Owner', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
-	'kb_article'     => 'https://wpshadow.com/kb/google-docs-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/academy/google-docs-to-wordpress/',
+	'kb_article'     => \WPShadow\Core\UTM_Link_Manager::kb_link( 'google-docs-to-wordpress', 'onboarding' ),
+	'training_video' => \WPShadow\Core\UTM_Link_Manager::academy_link( 'google-docs-to-wordpress', 'onboarding' ),
 );

@@ -35,6 +35,6 @@ return array(
 		'author'         => __( 'Teacher', 'wpshadow' ),
 		'comment'        => __( 'Forum Comment', 'wpshadow' ),
 	),
-	'kb_article'     => 'https://wpshadow.com/kb/moodle-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/academy/moodle-to-wordpress/',
+	'kb_article'     => \WPShadow\Core\UTM_Link_Manager::kb_link( 'moodle-to-wordpress', 'onboarding' ),
+	'training_video' => \WPShadow\Core\UTM_Link_Manager::academy_link( 'moodle-to-wordpress', 'onboarding' ),
 );
