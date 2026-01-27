@@ -64,49 +64,78 @@ else
 fi
 
 echo ""
+echo -e "${YELLOW}Detecting changed files...${NC}"
+
+# Get list of changed files since last tag or all files if no tag exists
+if git describe --tags &>/dev/null; then
+    LAST_TAG=$(git describe --tags --abbrev=0)
+    echo -e "${BLUE}Last deployment tag: ${YELLOW}$LAST_TAG${NC}"
+    CHANGED_FILES=$(git diff --name-only "$LAST_TAG" HEAD 2>/dev/null || echo "")
+    if [ -z "$CHANGED_FILES" ]; then
+        echo -e "${YELLOW}No changes detected since $LAST_TAG${NC}"
+        echo "Use: ${BLUE}git tag -a v$NEW_VERSION -m \"Deploy v$NEW_VERSION\"${NC} to mark current deployment"
+        exit 0
+    fi
+else
+    echo -e "${YELLOW}No previous deployment tags found - deploying all files${NC}"
+    CHANGED_FILES=$(git ls-files)
+fi
+
+# Exclude certain paths from deployment
+EXCLUDE_PATTERNS=("docs/" "node_modules/" "vendor/" "tests/" "test-results/" "dev-tools/" "build/" ".devcontainer/" ".github/" ".git/" ".tmp/" ".copilot/")
+FILTERED_FILES=()
+
+while IFS= read -r file; do
+    SKIP=false
+    
+    # Skip hidden files
+    if [[ "$file" == .* ]]; then
+        SKIP=true
+    fi
+    
+    # Skip excluded patterns
+    for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+        if [[ "$file" == "$pattern"* ]]; then
+            SKIP=true
+            break
+        fi
+    done
+    
+    # Skip config files
+    if [[ "$file" =~ \.(env|log|example)$ ]] || [[ "$file" =~ deploy- ]] || [[ "$file" =~ ^(phpcs|phpunit|playwright|package|composer|run-tests|validate-tests|build-release) ]]; then
+        SKIP=true
+    fi
+    
+    if [ "$SKIP" = false ]; then
+        FILTERED_FILES+=("$file")
+    fi
+done <<< "$CHANGED_FILES"
+
+if [ ${#FILTERED_FILES[@]} -eq 0 ]; then
+    echo -e "${YELLOW}No deployable files changed${NC}"
+    exit 0
+fi
+
+echo -e "${GREEN}✓${NC} Found ${#FILTERED_FILES[@]} file(s) to deploy:"
+for file in "${FILTERED_FILES[@]}"; do
+    echo "  ${BLUE}→${NC} $file"
+done
+echo ""
+
 echo -e "${YELLOW}Building plugin...${NC}"
 
-# Create build directory
+# Create build directory with only changed files
 BUILD_DIR="build/wpshadow"
 rm -rf build/
 mkdir -p "$BUILD_DIR"
 
-# Copy plugin files (exclude dev files, docs, and hidden directories)
-rsync -av --exclude-from=- . "$BUILD_DIR/" << 'RSYNCEOF'
-.git
-.github
-.devcontainer
-.copilot
-.tmp
-.distignore
-.editorconfig
-.gitignore
-.gitattributes
-docs
-node_modules
-vendor
-tests
-test-results
-dev-tools
-build
-*.log
-.env*
-.deploy-*
-.sftp-*
-deploy-*.sh
-build-*.sh
-run-tests.sh
-validate-tests.sh
-phpcs.xml.dist
-phpunit.xml
-playwright.config.js
-package.json
-package-lock.json
-composer.json
-composer.lock
-RSYNCEOF
+# Copy only changed files preserving directory structure
+for file in "${FILTERED_FILES[@]}"; do
+    mkdir -p "$BUILD_DIR/$(dirname "$file")"
+    cp "$file" "$BUILD_DIR/$file"
+done
 
-echo -e "${GREEN}✓${NC} Build prepared"
+echo -e "${GREEN}✓${NC} Build prepared (${#FILTERED_FILES[@]} file(s))"
 echo ""
 
 # Deploy via FTP
@@ -159,16 +188,9 @@ else
     export -f upload_file
     export FTP_USER FTP_PASSWORD FTP_HOST FTP_REMOTE_PATH
     
-    # Upload all files (excluding hidden files and directories)
+    # Upload only changed files
     cd "$BUILD_DIR"
-    find . -type f \
-        -not -path "./.git/*" \
-        -not -path "./.github/*" \
-        -not -path "./.devcontainer/*" \
-        -not -path "./.copilot/*" \
-        -not -path "./.tmp/*" \
-        -not -path "*/.*" \
-        -not -name ".*" | while read file; do
+    for file in "${FILTERED_FILES[@]}"; do
         remote_path="${file#./}"
         echo "  Uploading: $remote_path"
         upload_file "$file" "$remote_path"
