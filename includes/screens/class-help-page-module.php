@@ -26,42 +26,42 @@ function wpshadow_get_help_catalog() {
 			'description' => __( 'Learn the basics of how WPShadow helps you maintain a healthy WordPress site.', 'wpshadow' ),
 			'icon'        => 'dashicons-info',
 			'url'         => 'https://wpshadow.com/kb/getting-started',
-			'video'       => 'https://wpshadow.com/training/getting-started',
+			'video'       => 'https://wpshadow.com/academy/getting-started',
 		),
 		array(
 			'title'       => __( 'Understanding Diagnostics', 'wpshadow' ),
 			'description' => __( 'Discover what each diagnostic check does and what issues it helps identify.', 'wpshadow' ),
 			'icon'        => 'dashicons-search',
 			'url'         => 'https://wpshadow.com/kb/diagnostics',
-			'video'       => 'https://wpshadow.com/training/diagnostics',
+			'video'       => 'https://wpshadow.com/academy/diagnostics',
 		),
 		array(
 			'title'       => __( 'Applying Treatments', 'wpshadow' ),
 			'description' => __( 'Learn how to safely apply fixes to your site with one-click treatments and undo support.', 'wpshadow' ),
 			'icon'        => 'dashicons-admin-tools',
 			'url'         => 'https://wpshadow.com/kb/treatments',
-			'video'       => 'https://wpshadow.com/training/treatments',
+			'video'       => 'https://wpshadow.com/academy/treatments',
 		),
 		array(
 			'title'       => __( 'Workflows & Automation', 'wpshadow' ),
 			'description' => __( 'Set up automated workflows to keep your site healthy without manual intervention.', 'wpshadow' ),
 			'icon'        => 'dashicons-schedule',
 			'url'         => 'https://wpshadow.com/kb/workflows',
-			'video'       => 'https://wpshadow.com/training/workflows',
+			'video'       => 'https://wpshadow.com/academy/workflows',
 		),
 		array(
 			'title'       => __( 'Monitoring & Alerts', 'wpshadow' ),
 			'description' => __( 'Stay informed with real-time monitoring and custom alert notifications.', 'wpshadow' ),
 			'icon'        => 'dashicons-bell',
 			'url'         => 'https://wpshadow.com/kb/monitoring',
-			'video'       => 'https://wpshadow.com/training/monitoring',
+			'video'       => 'https://wpshadow.com/academy/monitoring',
 		),
 		array(
 			'title'       => __( 'Privacy & Security', 'wpshadow' ),
 			'description' => __( 'Learn about our privacy-first approach and how your data is protected.', 'wpshadow' ),
 			'icon'        => 'dashicons-lock',
 			'url'         => 'https://wpshadow.com/kb/privacy',
-			'video'       => 'https://wpshadow.com/training/privacy',
+			'video'       => 'https://wpshadow.com/academy/privacy',
 		),
 	);
 }
@@ -151,7 +151,7 @@ function wpshadow_render_help() {
 					<span class="dashicons dashicons-admin-comments"></span>
 					<?php esc_html_e( 'Contact Support', 'wpshadow' ); ?>
 				</a>
-				<a href="https://wpshadow.com/training" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
+				<a href="https://wpshadow.com/academy" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
 					<span class="dashicons dashicons-video-alt2"></span>
 					<?php esc_html_e( 'Online Training', 'wpshadow' ); ?>
 				</a>

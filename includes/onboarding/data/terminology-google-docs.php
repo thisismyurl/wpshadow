@@ -36,5 +36,5 @@ return array(
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
 	'kb_article'     => 'https://wpshadow.com/kb/google-docs-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/training/google-docs-to-wordpress/',
+	'training_video' => 'https://wpshadow.com/academy/google-docs-to-wordpress/',
 );

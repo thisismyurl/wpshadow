@@ -36,5 +36,5 @@ return array(
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
 	'kb_article'     => 'https://wpshadow.com/kb/squarespace-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/training/squarespace-to-wordpress/',
+	'training_video' => 'https://wpshadow.com/academy/squarespace-to-wordpress/',
 );

@@ -36,5 +36,5 @@ return array(
 		'comment'        => __( 'Forum Comment', 'wpshadow' ),
 	),
 	'kb_article'     => 'https://wpshadow.com/kb/moodle-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/training/moodle-to-wordpress/',
+	'training_video' => 'https://wpshadow.com/academy/moodle-to-wordpress/',
 );

@@ -104,7 +104,7 @@ class Diagnostic_Lean_Checks {
 			'severity'      => $severity,
 			'threat_level'  => $threat_level,
 			'kb_link'       => 'https://wpshadow.com/kb/' . rawurlencode( $kb_slug ),
-			'training_link' => 'https://wpshadow.com/training/' . rawurlencode( $kb_slug ),
+			'training_link' => 'https://wpshadow.com/academy/' . rawurlencode( $kb_slug ),
 			'auto_fixable'  => false,
 		);
 	}

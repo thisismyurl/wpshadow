@@ -100,7 +100,7 @@ class Diagnostic_Result_Normalizer {
 		}
 
 		if ( empty( $normalized['training_link'] ) ) {
-			$normalized['training_link'] = 'https://wpshadow.com/training/' . rawurlencode( $kb_slug );
+			$normalized['training_link'] = 'https://wpshadow.com/academy/' . rawurlencode( $kb_slug );
 		}
 
 		return $normalized;

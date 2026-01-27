@@ -201,7 +201,7 @@ class Recommendation_Engine {
 								<a href="<?php echo esc_url( 'https://wpshadow.com/kb/' . $kb_slug ); ?>" target="_blank" style="color: #2196f3; text-decoration: none;">
 									📚 <?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
 								</a>
-								<a href="<?php echo esc_url( 'https://wpshadow.com/training/' . $kb_slug ); ?>" target="_blank" style="color: #9333ea; text-decoration: none;">
+								<a href="<?php echo esc_url( 'https://wpshadow.com/academy/' . $kb_slug ); ?>" target="_blank" style="color: #9333ea; text-decoration: none;">
 									🎥 <?php esc_html_e( 'Watch video', 'wpshadow' ); ?>
 								</a>
 							</div>

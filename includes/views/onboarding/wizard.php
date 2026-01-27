@@ -251,7 +251,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			<p class="onboarding-resources">
 				<strong><?php esc_html_e( 'Helpful Resources:', 'wpshadow' ); ?></strong><br>
 				<a href="https://wpshadow.com/kb/getting-started/" target="_blank"><?php esc_html_e( 'Getting Started Guide', 'wpshadow' ); ?></a> |
-				<a href="https://wpshadow.com/training/" target="_blank"><?php esc_html_e( 'Video Tutorials', 'wpshadow' ); ?></a> |
+				<a href="https://wpshadow.com/academy/" target="_blank"><?php esc_html_e( 'Video Tutorials', 'wpshadow' ); ?></a> |
 				<a href="https://wpshadow.com/kb/" target="_blank"><?php esc_html_e( 'Knowledge Base', 'wpshadow' ); ?></a>
 			</p>
 		</div>

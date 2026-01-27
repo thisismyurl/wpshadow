@@ -36,5 +36,5 @@ return array(
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
 	'kb_article'     => 'https://wpshadow.com/kb/notion-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/training/notion-to-wordpress/',
+	'training_video' => 'https://wpshadow.com/academy/notion-to-wordpress/',
 );

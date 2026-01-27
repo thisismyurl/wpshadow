@@ -36,5 +36,5 @@ return array(
 		'comment'        => __( 'Comment', 'wpshadow' ),
 	),
 	'kb_article'     => 'https://wpshadow.com/kb/wix-to-wordpress/',
-	'training_video' => 'https://wpshadow.com/training/wix-to-wordpress/',
+	'training_video' => 'https://wpshadow.com/academy/wix-to-wordpress/',
 );

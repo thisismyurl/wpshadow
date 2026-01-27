@@ -161,132 +161,132 @@
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Ada Lawsuit Scan | https://wpshadow.com/training/ada-lawsuit-scan | Planned | 1 |
-| File Integrity Monitor | https://wpshadow.com/training/file-integrity-monitor | Planned | 1 |
-| PHP CVE Check | https://wpshadow.com/training/php-cve-check | Planned | 1 |
-| Malware Signature Scan | https://wpshadow.com/training/malware-signature-scan | Planned | 1 |
-| Login URL Exposed | https://wpshadow.com/training/login-url-exposed | Planned | 1 |
-| PCI Data Leak | https://wpshadow.com/training/pci-data-leak | Planned | 1 |
-| GDPR Cookie Audit | https://wpshadow.com/training/gdpr-cookie-audit | Planned | 1 |
-| Unlicensed Images | https://wpshadow.com/training/unlicensed-images | Planned | 1 |
-| Timthumb Security | https://wpshadow.com/training/timthumb-security/ | Planned | 1 |
-| WordPress Hardening | https://wpshadow.com/training/wordpress-hardening/ | Planned | 1 |
-| PCI DSS Compliance | https://wpshadow.com/training/pci-dss-compliance/ | Planned | 1 |
-| SOX Compliance | https://wpshadow.com/training/sox-compliance/ | Planned | 1 |
-| HTTPS Everywhere | https://wpshadow.com/training/https-everywhere/ | Planned | 1 |
-| Privacy Compliant Avatars | https://wpshadow.com/training/privacy-compliant-avatars | Planned | 1 |
-| Conditional Asset Loading | https://wpshadow.com/training/conditional-asset-loading | Planned | 1 |
+| Ada Lawsuit Scan | https://wpshadow.com/academy/ada-lawsuit-scan | Planned | 1 |
+| File Integrity Monitor | https://wpshadow.com/academy/file-integrity-monitor | Planned | 1 |
+| PHP CVE Check | https://wpshadow.com/academy/php-cve-check | Planned | 1 |
+| Malware Signature Scan | https://wpshadow.com/academy/malware-signature-scan | Planned | 1 |
+| Login URL Exposed | https://wpshadow.com/academy/login-url-exposed | Planned | 1 |
+| PCI Data Leak | https://wpshadow.com/academy/pci-data-leak | Planned | 1 |
+| GDPR Cookie Audit | https://wpshadow.com/academy/gdpr-cookie-audit | Planned | 1 |
+| Unlicensed Images | https://wpshadow.com/academy/unlicensed-images | Planned | 1 |
+| Timthumb Security | https://wpshadow.com/academy/timthumb-security/ | Planned | 1 |
+| WordPress Hardening | https://wpshadow.com/academy/wordpress-hardening/ | Planned | 1 |
+| PCI DSS Compliance | https://wpshadow.com/academy/pci-dss-compliance/ | Planned | 1 |
+| SOX Compliance | https://wpshadow.com/academy/sox-compliance/ | Planned | 1 |
+| HTTPS Everywhere | https://wpshadow.com/academy/https-everywhere/ | Planned | 1 |
+| Privacy Compliant Avatars | https://wpshadow.com/academy/privacy-compliant-avatars | Planned | 1 |
+| Conditional Asset Loading | https://wpshadow.com/academy/conditional-asset-loading | Planned | 1 |
 
 ### 🚀 Performance Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Duplicate Postmeta Keys | https://wpshadow.com/training/duplicate-postmeta-keys | Implemented | 1 |
-| Dashboard Widget Bloat | https://wpshadow.com/training/dashboard-widget-bloat | Implemented | 1 |
-| Missing Database Indexes | https://wpshadow.com/training/missing-database-indexes | Implemented | 1 |
-| Large Menu Overhead | https://wpshadow.com/training/large-menu-overhead | Implemented | 1 |
-| Orphaned Metadata | https://wpshadow.com/training/orphaned-metadata | Implemented | 1 |
-| Heartbeat API Overhead | https://wpshadow.com/training/heartbeat-api-overhead | Implemented | 1 |
-| Database Table Overhead | https://wpshadow.com/training/database-table-overhead | Implemented | 1 |
-| Large Serialized Options | https://wpshadow.com/training/large-serialized-options | Implemented | 1 |
-| Post Revisions Bloat | https://wpshadow.com/training/post-revisions-bloat | Implemented | 1 |
-| Expired Transients Bloat | https://wpshadow.com/training/expired-transients-bloat | Implemented | 1 |
-| Performance Optimization | https://wpshadow.com/training/performance-optimization/ | Planned | 2 |
+| Duplicate Postmeta Keys | https://wpshadow.com/academy/duplicate-postmeta-keys | Implemented | 1 |
+| Dashboard Widget Bloat | https://wpshadow.com/academy/dashboard-widget-bloat | Implemented | 1 |
+| Missing Database Indexes | https://wpshadow.com/academy/missing-database-indexes | Implemented | 1 |
+| Large Menu Overhead | https://wpshadow.com/academy/large-menu-overhead | Implemented | 1 |
+| Orphaned Metadata | https://wpshadow.com/academy/orphaned-metadata | Implemented | 1 |
+| Heartbeat API Overhead | https://wpshadow.com/academy/heartbeat-api-overhead | Implemented | 1 |
+| Database Table Overhead | https://wpshadow.com/academy/database-table-overhead | Implemented | 1 |
+| Large Serialized Options | https://wpshadow.com/academy/large-serialized-options | Implemented | 1 |
+| Post Revisions Bloat | https://wpshadow.com/academy/post-revisions-bloat | Implemented | 1 |
+| Expired Transients Bloat | https://wpshadow.com/academy/expired-transients-bloat | Implemented | 1 |
+| Performance Optimization | https://wpshadow.com/academy/performance-optimization/ | Planned | 2 |
 
 ### 📊 Marketing & Revenue Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Search Zero Results | https://wpshadow.com/training/search-zero-results | Planned | 1 |
-| Mobile Revenue Gap | https://wpshadow.com/training/mobile-revenue-gap | Planned | 1 |
-| Product Refund Rate | https://wpshadow.com/training/product-refund-rate | Planned | 1 |
-| Product Recommendation CTR | https://wpshadow.com/training/product-recommendation-ctr | Planned | 1 |
-| Speed Conversion Analysis | https://wpshadow.com/training/speed-conversion-analysis | Planned | 1 |
-| Category Content Publishing | https://wpshadow.com/training/category-content-publishing | Planned | 2 |
+| Search Zero Results | https://wpshadow.com/academy/search-zero-results | Planned | 1 |
+| Mobile Revenue Gap | https://wpshadow.com/academy/mobile-revenue-gap | Planned | 1 |
+| Product Refund Rate | https://wpshadow.com/academy/product-refund-rate | Planned | 1 |
+| Product Recommendation CTR | https://wpshadow.com/academy/product-recommendation-ctr | Planned | 1 |
+| Speed Conversion Analysis | https://wpshadow.com/academy/speed-conversion-analysis | Planned | 1 |
+| Category Content Publishing | https://wpshadow.com/academy/category-content-publishing | Planned | 2 |
 
 ### 🎨 Design & UX Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Conversion UX | https://wpshadow.com/training/conversion-ux/ | Planned | 1 |
-| Mobile UX | https://wpshadow.com/training/mobile-ux/ | Planned | 1 |
-| UX Optimization | https://wpshadow.com/training/ux-optimization/ | Planned | 1 |
-| Accessible Interactions | https://wpshadow.com/training/accessible-interactions/ | Planned | 1 |
-| Design Notification Toast Design | https://wpshadow.com/training/design-notification-toast-design | Planned | 1 |
-| Design No Time Dependent Interactions | https://wpshadow.com/training/design-no-time-dependent-interactions | Planned | 1 |
-| Design Custom Post Type Design | https://wpshadow.com/training/design-custom-post-type-design | Planned | 1 |
-| Design Plugin Output Styling | https://wpshadow.com/training/design-plugin-output-styling | Planned | 1 |
+| Conversion UX | https://wpshadow.com/academy/conversion-ux/ | Planned | 1 |
+| Mobile UX | https://wpshadow.com/academy/mobile-ux/ | Planned | 1 |
+| UX Optimization | https://wpshadow.com/academy/ux-optimization/ | Planned | 1 |
+| Accessible Interactions | https://wpshadow.com/academy/accessible-interactions/ | Planned | 1 |
+| Design Notification Toast Design | https://wpshadow.com/academy/design-notification-toast-design | Planned | 1 |
+| Design No Time Dependent Interactions | https://wpshadow.com/academy/design-no-time-dependent-interactions | Planned | 1 |
+| Design Custom Post Type Design | https://wpshadow.com/academy/design-custom-post-type-design | Planned | 1 |
+| Design Plugin Output Styling | https://wpshadow.com/academy/design-plugin-output-styling | Planned | 1 |
 
 ### ♿ Accessibility Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Theme Accessibility | https://wpshadow.com/training/theme-accessibility/ | Planned | 1 |
-| Theme Deprecated Hooks | https://wpshadow.com/training/theme-deprecated-hooks/ | Planned | 1 |
-| WCAG Consistent Nav | https://wpshadow.com/training/wcag-consistent-nav/ | Planned | 1 |
-| WCAG Language | https://wpshadow.com/training/wcag-language/ | Planned | 1 |
-| Accessibility Intro | https://wpshadow.com/training/accessibility-intro | Planned | 2 |
-| Structured Data | https://wpshadow.com/training/structured-data/ | Planned | 1 |
+| Theme Accessibility | https://wpshadow.com/academy/theme-accessibility/ | Planned | 1 |
+| Theme Deprecated Hooks | https://wpshadow.com/academy/theme-deprecated-hooks/ | Planned | 1 |
+| WCAG Consistent Nav | https://wpshadow.com/academy/wcag-consistent-nav/ | Planned | 1 |
+| WCAG Language | https://wpshadow.com/academy/wcag-language/ | Planned | 1 |
+| Accessibility Intro | https://wpshadow.com/academy/accessibility-intro | Planned | 2 |
+| Structured Data | https://wpshadow.com/academy/structured-data/ | Planned | 1 |
 
 ### 📝 Content Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Keyword Density | https://wpshadow.com/training/pub-keyword-density | Planned | 1 |
-| Content Publishing | https://wpshadow.com/training/category-content-publishing | Planned | 1 |
-| SEO Writing | https://wpshadow.com/training/seo-writing/ | Planned | 1 |
-| Content Too Long | https://wpshadow.com/training/category-content-publishing | Planned | 1 |
+| Keyword Density | https://wpshadow.com/academy/pub-keyword-density | Planned | 1 |
+| Content Publishing | https://wpshadow.com/academy/category-content-publishing | Planned | 1 |
+| SEO Writing | https://wpshadow.com/academy/seo-writing/ | Planned | 1 |
+| Content Too Long | https://wpshadow.com/academy/category-content-publishing | Planned | 1 |
 
 ### 🔍 SEO Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| SEO Fundamentals | https://wpshadow.com/training/seo-fundamentals/ | Planned | 2 |
-| SEO Essentials | https://wpshadow.com/training/seo-essentials | Planned | 1 |
-| Referrer Quality | https://wpshadow.com/training/referrer-quality/ | Planned | 1 |
+| SEO Fundamentals | https://wpshadow.com/academy/seo-fundamentals/ | Planned | 2 |
+| SEO Essentials | https://wpshadow.com/academy/seo-essentials | Planned | 1 |
+| Referrer Quality | https://wpshadow.com/academy/referrer-quality/ | Planned | 1 |
 
 ### 🛠️ Developer Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Code Standards No Param Types | https://wpshadow.com/training/code-standards-no-param-types | Planned | 1 |
-| Plugin Autoload Size | https://wpshadow.com/training/plugin-autoload-size/ | Planned | 1 |
-| Plugin CSS Specificity | https://wpshadow.com/training/plugin-css-specificity/ | Planned | 1 |
-| DX Database Sync | https://wpshadow.com/training/dx-database-sync/ | Planned | 1 |
+| Code Standards No Param Types | https://wpshadow.com/academy/code-standards-no-param-types | Planned | 1 |
+| Plugin Autoload Size | https://wpshadow.com/academy/plugin-autoload-size/ | Planned | 1 |
+| Plugin CSS Specificity | https://wpshadow.com/academy/plugin-css-specificity/ | Planned | 1 |
+| DX Database Sync | https://wpshadow.com/academy/dx-database-sync/ | Planned | 1 |
 
 ### 🏢 Enterprise Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| GTM Setup | https://wpshadow.com/training/gtm-setup/ | Planned | 1 |
-| Tag Manager | https://wpshadow.com/training/tag-manager/ | Planned | 1 |
-| Trust Signals | https://wpshadow.com/training/trust-signals/ | Planned | 1 |
+| GTM Setup | https://wpshadow.com/academy/gtm-setup/ | Planned | 1 |
+| Tag Manager | https://wpshadow.com/academy/tag-manager/ | Planned | 1 |
+| Trust Signals | https://wpshadow.com/academy/trust-signals/ | Planned | 1 |
 
 ### 🌱 Sustainability Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Sustainability Vendor Lock-In | https://wpshadow.com/training/sustainability-vendor-lock-in/ | Planned | 1 |
-| Sustainability Technical Debt | https://wpshadow.com/training/sustainability-technical-debt/ | Planned | 1 |
-| Category Environment | https://wpshadow.com/training/category-environment | Planned | 1 |
+| Sustainability Vendor Lock-In | https://wpshadow.com/academy/sustainability-vendor-lock-in/ | Planned | 1 |
+| Sustainability Technical Debt | https://wpshadow.com/academy/sustainability-technical-debt/ | Planned | 1 |
+| Category Environment | https://wpshadow.com/academy/category-environment | Planned | 1 |
 
 ### 🔄 Monitoring & Analytics Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Engagement vs Optimization | https://wpshadow.com/training/engagement-vs-optimization/ | Planned | 1 |
-| User Consent Tracking | https://wpshadow.com/training/user-consent-tracking/ | Planned | 1 |
+| Engagement vs Optimization | https://wpshadow.com/academy/engagement-vs-optimization/ | Planned | 1 |
+| User Consent Tracking | https://wpshadow.com/academy/user-consent-tracking/ | Planned | 1 |
 
 ### 🌍 Onboarding & Migration Training
 
 | Video | URL | Status | Usage Count |
 |-------|-----|--------|------------|
-| Moodle to WordPress | https://wpshadow.com/training/moodle-to-wordpress/ | Planned | 1 |
-| Word to WordPress | https://wpshadow.com/training/word-to-wordpress/ | Planned | 1 |
-| Squarespace to WordPress | https://wpshadow.com/training/squarespace-to-wordpress/ | Planned | 1 |
-| Google Docs to WordPress | https://wpshadow.com/training/google-docs-to-wordpress/ | Planned | 1 |
-| Wix to WordPress | https://wpshadow.com/training/wix-to-wordpress/ | Planned | 1 |
-| Notion to WordPress | https://wpshadow.com/training/notion-to-wordpress/ | Planned | 1 |
+| Moodle to WordPress | https://wpshadow.com/academy/moodle-to-wordpress/ | Planned | 1 |
+| Word to WordPress | https://wpshadow.com/academy/word-to-wordpress/ | Planned | 1 |
+| Squarespace to WordPress | https://wpshadow.com/academy/squarespace-to-wordpress/ | Planned | 1 |
+| Google Docs to WordPress | https://wpshadow.com/academy/google-docs-to-wordpress/ | Planned | 1 |
+| Wix to WordPress | https://wpshadow.com/academy/wix-to-wordpress/ | Planned | 1 |
+| Notion to WordPress | https://wpshadow.com/academy/notion-to-wordpress/ | Planned | 1 |
 
 ---
 
