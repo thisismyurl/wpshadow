@@ -32,18 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * );
  */
 function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class = '', $icon_color = 'var(--wps-primary)' ) {
-	// Extract variables for the template
-	extract(
-		array(
-			'title'      => $title,
-			'subtitle'   => $subtitle,
-			'icon_class' => $icon_class,
-			'icon_color' => $icon_color,
-		),
-		EXTR_SKIP
-	);
-
-	// Load the header template
+	// Load the header template (variables are available as local scope)
 	include WPSHADOW_PATH . 'includes/views/page-header.php';
 }
 

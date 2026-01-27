@@ -20,11 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Set defaults for optional variables
-$subtitle    = $subtitle ?? '';
-$icon_class  = $icon_class ?? '';
-$icon_color  = $icon_color ?? 'var(--wps-primary)';
-$title       = $title ?? __( 'WPShadow', 'wpshadow' );
 ?>
 
 <div class="wps-page-header">
