@@ -20,7 +20,7 @@ if ( ! current_user_can( 'read' ) ) {
 // Get available blocks.
 $triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
 $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
-
+?>
 
 <div class="wrap wps-workflow-builder">
 	<!-- Skip Links for Accessibility -->
