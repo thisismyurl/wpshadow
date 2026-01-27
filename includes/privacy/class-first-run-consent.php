@@ -36,7 +36,7 @@ class First_Run_Consent {
 			return false;
 		}
 
-		// Don't show if they dismissed it recently
+		// Don't show if they dismissed it recently (increasing delay)
 		$dismissed = get_user_meta( (int) $user_id, 'wpshadow_consent_dismissed_until', true );
 		if ( ! empty( $dismissed ) && time() < (int) $dismissed ) {
 			return false;
@@ -46,16 +46,41 @@ class First_Run_Consent {
 	}
 
 	/**
+	 * Get next dismiss duration (increasing delay)
+	 *
+	 * @param int $user_id User ID.
+	 * @return int Seconds until next show.
+	 */
+	public static function get_next_dismiss_duration( $user_id ) {
+		$dismiss_count = (int) get_user_meta( $user_id, 'wpshadow_consent_dismiss_count', true );
+		
+		// Increasing delays: 1 day, 3 days, 1 week, 2 weeks, 1 month
+		$delays = array(
+			DAY_IN_SECONDS,       // 1 day
+			3 * DAY_IN_SECONDS,   // 3 days
+			WEEK_IN_SECONDS,      // 1 week
+			2 * WEEK_IN_SECONDS,  // 2 weeks
+			30 * DAY_IN_SECONDS,  // 1 month (then stays here)
+		);
+		
+		$index = min( $dismiss_count, count( $delays ) - 1 );
+		return $delays[ $index ];
+	}
+
+	/**
 	 * Get consent flow HTML.
 	 *
 	 * @return string HTML.
 	 */
 	public static function get_consent_html() {
 		return '
-		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow" class="wps-p-22-rounded-10 10 0 0">
+		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow" style="position: relative; padding: 22px; border-radius: 10px; background: #fff; border: 1px solid #dcdcde; margin: 10px 0;">
+			<button type="button" class="wpshadow-consent-dismiss" aria-label="' . esc_attr__( 'Dismiss privacy notice', 'wpshadow' ) . '" style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; cursor: pointer; padding: 5px; color: #646970; font-size: 20px; line-height: 1;">
+				<span class="dashicons dashicons-no-alt"></span>
+			</button>
 			<div class="wpshadow-consent-header">
 				<h3 style="margin-top: 0;">' . esc_html( __( 'Your Privacy Matters', 'wpshadow' ) ) . '</h3>
-				<p class="wps-m-10">' .
+				<p style="margin: 10px 0;">' .
 					esc_html( __( 'WPShadow respects your privacy. Here\'s what we collect and how we use it.', 'wpshadow' ) ) .
 				'</p>
 			</div>
@@ -136,13 +161,24 @@ class First_Run_Consent {
 	}
 
 	/**
-	 * Dismiss consent flow for 30 days.
+	 * Dismiss consent prompt with increasing delay.
 	 *
 	 * @param int $user_id User ID.
-	 * @return void
+	 * @return int Seconds until next show.
 	 */
 	public static function dismiss_consent( $user_id ) {
-		$until = time() + ( 30 * DAY_IN_SECONDS );
+		// Get current dismiss count
+		$dismiss_count = (int) get_user_meta( $user_id, 'wpshadow_consent_dismiss_count', true );
+		
+		// Increment dismiss count
+		update_user_meta( $user_id, 'wpshadow_consent_dismiss_count', $dismiss_count + 1 );
+		
+		// Get next duration based on new count
+		$duration = self::get_next_dismiss_duration( $user_id );
+		$until    = time() + $duration;
+		
 		update_user_meta( (int) $user_id, 'wpshadow_consent_dismissed_until', $until );
+		
+		return $duration;
 	}
 }

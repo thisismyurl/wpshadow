@@ -102,7 +102,7 @@ class Menu_Manager {
 			'wpshadow_render_reports'
 		);
 
-		// Settings (including Notifications)
+		// Settings (including Notifications & Scan Settings as tabs)
 		add_submenu_page(
 			'wpshadow',
 			__( 'Settings', 'wpshadow' ),
@@ -112,15 +112,8 @@ class Menu_Manager {
 			'wpshadow_render_settings'
 		);
 
-		// Scan Settings (Diagnostics/Treatments toggles)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Scan Settings', 'wpshadow' ),
-			__( 'Scan Settings', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-scan-settings',
-			'wpshadow_render_scan_settings'
-		);
+		// Scan Settings is now a tab on Settings page, not a separate menu
+		// Legacy redirect handled in handle_legacy_redirects()
 
 		// Tools (Utilities & Features)
 		add_submenu_page(
@@ -157,6 +150,8 @@ class Menu_Manager {
 		$redirects = array(
 			'wpshadow-guardian-reports'       => 'wpshadow-reports',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
+			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
+			'wpshadow-exit-followups'         => 'wpshadow', // Redirect exit-followups to dashboard
 		);
 
 		if ( isset( $redirects[ $page ] ) ) {

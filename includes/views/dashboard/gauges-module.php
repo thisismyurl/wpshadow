@@ -150,17 +150,15 @@ function wpshadow_get_health_status(): array {
  *
  * Called via wpshadow_dashboard_gauges hook
  * Renders overall health gauge and category-specific gauges
+ * Always shows gauges, even when no findings exist (Issue #1672)
  *
  * @param string $category_filter Optional category to filter by (Issue #564)
  */
 function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 	$is_drilldown = ! empty( $category_filter );
 
-	// Get findings
+	// Get findings (empty array if none)
 	$findings = \wpshadow_get_site_findings();
-	if ( empty( $findings ) ) {
-		return; // No findings, no gauges needed
-	}
 
 	// Group findings by category
 	$category_meta = \wpshadow_get_category_metadata();

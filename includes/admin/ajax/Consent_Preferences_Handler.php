@@ -75,7 +75,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Dismiss consent prompt for 30 days.
+	 * Dismiss consent prompt with increasing delay.
 	 */
 	public static function handle_dismiss(): void {
 		// Verify nonce without dying - more graceful error handling
@@ -97,14 +97,33 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 		}
 
 		$current_user = get_current_user_id();
-		First_Run_Consent::dismiss_consent( $current_user );
+		$duration     = First_Run_Consent::dismiss_consent( $current_user );
+		
+		// Format duration for user message
+		$duration_text = '';
+		if ( $duration <= DAY_IN_SECONDS ) {
+			$duration_text = __( '1 day', 'wpshadow' );
+		} elseif ( $duration <= 3 * DAY_IN_SECONDS ) {
+			$duration_text = __( '3 days', 'wpshadow' );
+		} elseif ( $duration <= WEEK_IN_SECONDS ) {
+			$duration_text = __( '1 week', 'wpshadow' );
+		} elseif ( $duration <= 2 * WEEK_IN_SECONDS ) {
+			$duration_text = __( '2 weeks', 'wpshadow' );
+		} else {
+			$duration_text = __( '1 month', 'wpshadow' );
+		}
 
 		Activity_Logger::log(
 			'settings_changed',
-			'Consent prompt dismissed for 30 days',
+			sprintf( 'Consent prompt dismissed for %s', $duration_text ),
 			'privacy'
 		);
 
-		self::send_success( array( 'message' => __( 'Consent prompt snoozed for 30 days.', 'wpshadow' ) ) );
+		self::send_success(
+			array(
+				/* translators: %s: duration text (e.g., "1 week", "1 month") */
+				'message' => sprintf( __( 'Privacy notice dismissed for %s.', 'wpshadow' ), $duration_text ),
+			)
+		);
 	}
 }

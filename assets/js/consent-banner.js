@@ -10,6 +10,71 @@
 	'use strict';
 
 	/**
+	 * Get consent nonce from localized script data
+	 */
+	function getConsentNonce() {
+		return typeof wpshadow !== 'undefined' && wpshadow.consent_nonce 
+			? wpshadow.consent_nonce 
+			: '';
+	}
+
+	/**
+	 * Handle dismiss consent (with increasing delay)
+	 */
+	function handleDismissConsent($banner, $button, buttonText) {
+		// Disable all buttons during request
+		const $allButtons = $banner.find('button');
+		$allButtons.prop('disabled', true);
+		if ($button && buttonText) {
+			$button.text(buttonText);
+		}
+
+		$.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			data: {
+				action: 'wpshadow_dismiss_consent',
+				nonce: getConsentNonce()
+			},
+			success: function(response) {
+				if (response.success) {
+					// Fade out banner
+					$banner.fadeOut(300, function() {
+						$banner.remove();
+					});
+					
+					// Show brief confirmation if message provided
+					if (response.data && response.data.message) {
+						const $notice = $('<div class="notice notice-info is-dismissible" style="margin: 10px 0;"><p>' + response.data.message + '</p></div>');
+						$('h1').first().after($notice);
+						
+						// Auto-dismiss notice after 5 seconds
+						setTimeout(function() {
+							$notice.fadeOut(300, function() {
+								$(this).remove();
+							});
+						}, 5000);
+					}
+				} else {
+					// Show error message
+					alert(response.data && response.data.message ? response.data.message : 'Failed to dismiss. Please try again.');
+					$allButtons.prop('disabled', false);
+					if ($button && buttonText) {
+						$button.text(buttonText.replace('...', ''));
+					}
+				}
+			},
+			error: function() {
+				alert('Network error occurred. Please try again.');
+				$allButtons.prop('disabled', false);
+				if ($button && buttonText) {
+					$button.text(buttonText.replace('...', ''));
+				}
+			}
+		});
+	}
+
+	/**
 	 * Initialize consent banner handlers
 	 */
 	function initConsentBanner() {
@@ -18,6 +83,12 @@
 		if (!$banner.length) {
 			return;
 		}
+
+		// Handle dismiss X button (top-right corner)
+		$banner.on('click', '.wpshadow-consent-dismiss', function(e) {
+			e.preventDefault();
+			handleDismissConsent($banner, null, null);
+		});
 
 		// Handle "Save preferences" button
 		$banner.on('click', '.wpshadow-consent-accept', function(e) {
@@ -71,64 +142,13 @@
 			});
 		});
 
-		// Handle "Not now" button
-		$banner.on('click', '.wpshadow-consent-dismiss', function(e) {
-			e.preventDefault();
-			
-			// Disable buttons during request
-			const $dismissBtn = $(this);
-			const $acceptBtn = $banner.find('.wpshadow-consent-accept');
-			$dismissBtn.prop('disabled', true).text('Dismissing...');
-			$acceptBtn.prop('disabled', true);
-
-			$.ajax({
-				url: ajaxurl,
-				method: 'POST',
-				data: {
-					action: 'wpshadow_dismiss_consent',
-					nonce: getConsentNonce()
-				},
-				success: function(response) {
-					if (response.success) {
-						// Fade out banner
-						$banner.fadeOut(300, function() {
-							$banner.remove();
-						});
-					} else {
-						alert(response.data.message || 'Failed to dismiss. Please try again.');
-						$dismissBtn.prop('disabled', false).text('Not now');
-						$acceptBtn.prop('disabled', false);
-					}
-				},
-				error: function() {
-					alert('Failed to dismiss. Please try again.');
-					$dismissBtn.prop('disabled', false).text('Not now');
-					$acceptBtn.prop('disabled', false);
-				}
-			});
-		});
-
 		// Handle keyboard navigation
 		$banner.on('keydown', function(e) {
 			// Close on Escape key
 			if (e.key === 'Escape') {
-				$banner.find('.wpshadow-consent-dismiss').trigger('click');
+				handleDismissConsent($banner, null, null);
 			}
 		});
-	}
-
-	/**
-	 * Get consent nonce from inline script
-	 */
-	function getConsentNonce() {
-		// Try to get from wpshadow object (localized by WordPress)
-		if (typeof wpshadow !== 'undefined' && wpshadow.consent_nonce) {
-			return wpshadow.consent_nonce;
-		}
-		
-		// Return empty string if not available (will cause validation error server-side)
-		console.error('WPShadow: Consent nonce not found. Please refresh the page.');
-		return '';
 	}
 
 	// Initialize when document is ready
