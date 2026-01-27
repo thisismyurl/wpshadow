@@ -62,16 +62,6 @@ class Menu_Manager {
 			'wpshadow_render_dashboard'
 		);
 
-		// Action Items (Kanban Board)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Action Items', 'wpshadow' ),
-			__( 'Action Items', 'wpshadow' ),
-			'read',
-			'wpshadow-action-items',
-			'wpshadow_render_action_items'
-		);
-
 		// Guardian (Diagnostics & Treatments System)
 		add_submenu_page(
 			'wpshadow',
@@ -80,6 +70,16 @@ class Menu_Manager {
 			'read',
 			'wpshadow-guardian',
 			'wpshadow_render_guardian'
+		);
+
+		// Findings (Kanban Board)
+		add_submenu_page(
+			'wpshadow',
+			__( 'Findings', 'wpshadow' ),
+			__( 'Findings', 'wpshadow' ),
+			'read',
+			'wpshadow-action-items',
+			'wpshadow_render_action_items'
 		);
 
 		// Workflows (Automation)
