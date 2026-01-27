@@ -29,35 +29,35 @@ class WPShadow_Activity_Feed_Widget {
 						foreach ( $activities as $index => $activity ) :
 							$is_last = $index === count( $activities ) - 1;
 							?>
-							<div style="padding: 16px; border-bottom: <?php echo $is_last ? 'none' : '1px solid #eee'; ?>; display: flex; gap: 12px;">
+							<div class="wps-activity-item <?php echo $is_last ? 'wps-activity-last' : ''; ?>">
 								<!-- Icon -->
-								<div style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: <?php echo esc_attr( self::get_activity_color( $activity['type'] ) ); ?>; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;">
+								<div class="wps-activity-icon-wrapper" style="background: <?php echo esc_attr( self::get_activity_color( $activity['type'] ) ); ?>;">
 									<?php echo esc_html( self::get_activity_icon( $activity['type'] ) ); ?>
 								</div>
 								
 								<!-- Content -->
-								<div style="flex: 1; min-width: 0;">
-									<div style="font-weight: 600; color: #333; font-size: 13px; margin-bottom: 2px;">
+								<div class="wps-activity-content">
+									<div class="wps-activity-title">
 										<?php echo esc_html( $activity['title'] ); ?>
 									</div>
-									<div style="font-size: 12px; color: #666; margin-bottom: 6px;">
+									<div class="wps-activity-description">
 										<?php echo esc_html( $activity['description'] ); ?>
 									</div>
-									<div style="font-size: 11px; color: #999;">
+									<time class="wps-activity-time" datetime="<?php echo esc_attr( date( 'c', $activity['timestamp'] ) ); ?>">
 										<?php echo esc_html( human_time_diff( $activity['timestamp'], time() ) . ' ' . __( 'ago', 'wpshadow' ) ); ?>
-									</div>
+									</time>
 								</div>
 							</div>
 						<?php endforeach; ?>
 					</div>
 					<div class="wps-p-12">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=overview' ) ); ?>" style="color: #0073aa; text-decoration: none; font-size: 12px; font-weight: 600;">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=overview' ) ); ?>" class="wps-activity-link">
 							<?php esc_html_e( 'View All Activity →', 'wpshadow' ); ?>
 						</a>
 					</div>
 				<?php else : ?>
 					<div class="wps-p-32">
-						<div style="font-size: 40px; margin-bottom: 12px;">🤖</div>
+						<div class="wps-activity-empty-emoji">🤖</div>
 						<p class="wps-m-0">
 							<?php esc_html_e( 'No activity yet', 'wpshadow' ); ?>
 						</p>

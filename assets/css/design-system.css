@@ -3440,6 +3440,72 @@ a:focus-visible {
     width: auto;
     height: auto;
 }
+
+/**
+ * Activity Feed Widget Styles
+ */
+.wps-activity-item {
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    border-bottom: 1px solid var(--wps-gray-200);
+}
+
+.wps-activity-item.wps-activity-last {
+    border-bottom: none;
+}
+
+.wps-activity-icon-wrapper {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+}
+
+.wps-activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.wps-activity-title {
+    font-weight: 600;
+    color: var(--wps-gray-800);
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.wps-activity-description {
+    font-size: 12px;
+    color: var(--wps-gray-600);
+    margin-bottom: 6px;
+}
+
+.wps-activity-time {
+    font-size: 11px;
+    color: var(--wps-gray-500);
+}
+
+.wps-activity-link {
+    color: var(--wps-primary);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.wps-activity-link:hover {
+    text-decoration: underline;
+}
+
+.wps-activity-empty-emoji {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
 }
 }
 }
