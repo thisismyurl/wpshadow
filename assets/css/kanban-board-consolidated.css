@@ -31,7 +31,7 @@
 
 .wpshadow-kanban-board {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	grid-template-columns: repeat(4, 1fr);
 	gap: var(--wps-space-4);
 	padding: var(--wps-space-6);
 	background: var(--wps-gray-50);

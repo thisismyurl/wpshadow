@@ -542,8 +542,11 @@ $severity_legend = array(
 				</div>
 			</div>
 		<?php endforeach; ?>
-		<div class="wpshadow-kanban-legend" class="wps-flex-gap-12-items-center-m-10-p-10-round">
-			<p class="wps-kanban-legend-label">Color legend</p>
+	</div>
+
+	<!-- Color Legend -->
+	<div class="wpshadow-kanban-legend wps-flex wps-gap-3 wps-items-center wps-mt-4 wps-p-4 wps-rounded-lg wps-bg-white wps-border wps-border-gray-200">
+		<p class="wps-kanban-legend-label wps-m-0 wps-font-semibold">Color legend</p>
 			<?php foreach ( $severity_legend as $legend ) : ?>
 				<p class="wps-inline-flex">
 					<span style="
@@ -557,9 +560,10 @@ $severity_legend = array(
 					<span><?php echo esc_html( $legend['label'] ); ?></span>
 				</p>
 			<?php endforeach; ?>
-			<span class="wps-kanban-status-text" style="margin-left: auto;">Column dots match status colors</span>
+			<span class="wps-kanban-status-text wps-ml-auto wps-m-0 wps-text-gray-600 wps-text-sm">Column dots match status colors</span>
 		</div>
-	</div>
+
+</div>
 
 </div>
 
