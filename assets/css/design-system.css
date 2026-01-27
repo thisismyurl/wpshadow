@@ -3819,6 +3819,59 @@ a:focus-visible {
     color: #c62828;
 }
 
+/**
+ * Email Template Manager Styles
+ */
+.wps-email-container {
+    max-width: 1200px;
+}
+
+.wps-email-template-radio {
+    margin-right: 8px;
+}
+
+.wps-email-template-label {
+    color: var(--wps-primary);
+}
+
+.wps-email-textarea {
+    height: 200px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+}
+
+.wps-email-actions {
+    margin-top: 20px;
+}
+
+.wps-email-status {
+    margin-top: 10px;
+}
+
+.wps-email-preview {
+    color: var(--wps-gray-800);
+}
+
+.wps-email-preview-placeholder {
+    color: var(--wps-gray-500);
+    font-style: italic;
+}
+
+.wps-email-help-text {
+    font-size: 11px;
+    color: var(--wps-gray-600);
+    margin-top: 10px;
+}
+
+.wps-email-template-content {
+    margin-top: 0;
+    color: var(--wps-gray-700);
+}
+
+.wps-email-template-footer {
+    margin-top: 20px;
+}
+
 }
 }
 }
