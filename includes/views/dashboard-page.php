@@ -62,7 +62,7 @@ function wpshadow_render_dashboard() {
 		<?php if ( $is_drilldown && $current_category ) : ?>
 			<!-- Category Drill-Down Header -->
 			<div class="wps-page-header wps-drilldown-header">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button wps-btn-secondary wps-mr-3" aria-label="<?php esc_attr_e( 'Return to main dashboard', 'wpshadow' ); ?>">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button wps-btn wps-btn--secondary wps-mr-3" aria-label="<?php esc_attr_e( 'Return to main dashboard', 'wpshadow' ); ?>">
 					&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
 				</a>
 				<h1 class="wps-page-title">
@@ -97,7 +97,7 @@ function wpshadow_render_dashboard() {
 								<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
 							</p>
 							<div class="wps-cta-actions">
-								<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left" id="wpshadow-run-first-scan" aria-label="<?php esc_attr_e( 'Run an initial quick scan of your site', 'wpshadow' ); ?>">
+								<button type="button" class="wps-btn wps-btn--success wps-btn-icon-left" id="wpshadow-run-first-scan" aria-label="<?php esc_attr_e( 'Run an initial quick scan of your site', 'wpshadow' ); ?>">
 									<span class="dashicons dashicons-update"></span>
 									<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
 								</button>

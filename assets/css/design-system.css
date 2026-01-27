@@ -1191,13 +1191,15 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 /* Primary Button */
-.wps-btn-primary {
+.wps-btn-primary,
+.wps-btn--primary {
     background: var(--wps-primary);
     color: #ffffff;
     border-color: var(--wps-primary);
 }
 
-.wps-btn-primary:hover:not(:disabled) {
+.wps-btn-primary:hover:not(:disabled),
+.wps-btn--primary:hover:not(:disabled) {
     background: var(--wps-primary-hover);
     border-color: var(--wps-primary-hover);
     box-shadow: var(--wps-shadow-md);
@@ -1206,49 +1208,57 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 /* Secondary Button */
-.wps-btn-secondary {
+.wps-btn-secondary,
+.wps-btn--secondary {
     background: #ffffff;
     color: var(--wps-gray-700);
     border-color: var(--wps-gray-300);
 }
 
-.wps-btn-secondary:hover:not(:disabled) {
+.wps-btn-secondary:hover:not(:disabled),
+.wps-btn--secondary:hover:not(:disabled) {
     background: var(--wps-gray-50);
     border-color: var(--wps-gray-400);
 }
 
 /* Success Button - uses dark variant for WCAG AA compliance (4.97:1) */
-.wps-btn-success {
+.wps-btn-success,
+.wps-btn--success {
     background: var(--wps-success-dark);
     color: #ffffff;
     border-color: var(--wps-success-dark);
 }
 
-.wps-btn-success:hover:not(:disabled) {
+.wps-btn-success:hover:not(:disabled),
+.wps-btn--success:hover:not(:disabled) {
     background: #036347; /* Even darker on hover */
     box-shadow: var(--wps-shadow-md);
 }
 
 /* Danger Button */
-.wps-btn-danger {
+.wps-btn-danger,
+.wps-btn--danger {
     background: var(--wps-danger);
     color: #ffffff;
     border-color: var(--wps-danger);
 }
 
-.wps-btn-danger:hover:not(:disabled) {
+.wps-btn-danger:hover:not(:disabled),
+.wps-btn--danger:hover:not(:disabled) {
     background: var(--wps-danger-dark);
     box-shadow: var(--wps-shadow-md);
 }
 
 /* Ghost Button */
-.wps-btn-ghost {
+.wps-btn-ghost,
+.wps-btn--ghost {
     background: transparent;
     color: var(--wps-gray-700);
     border-color: transparent;
 }
 
-.wps-btn-ghost:hover:not(:disabled) {
+.wps-btn-ghost:hover:not(:disabled),
+.wps-btn--ghost:hover:not(:disabled) {
     background: var(--wps-gray-100);
 }
 
