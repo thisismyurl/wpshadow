@@ -550,9 +550,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 	min-width: 70px;
 }
 
-.workflow-buttons .button-primary {
-	order: -1;
-}
+/* Legacy button-primary order styles removed - wps-btn handles layout */
 </style>
 
 <?php

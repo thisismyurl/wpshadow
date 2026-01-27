@@ -31,7 +31,7 @@ Tool_View_Base::render_header( __( 'Color Contrast Checker', 'wpshadow' ), __( '
 						<label class="wps-label" for="wpshadow-text-color">
 							<?php esc_html_e( 'Text color', 'wpshadow' ); ?>
 						</label>
-						<input type="text" id="wpshadow-text-color" name="text_color" class="regular-text" placeholder="#000000" aria-describedby="wpshadow-text-help" required />
+						<input type="text" id="wpshadow-text-color" name="text_color" class="wps-input" placeholder="#000000" aria-describedby="wpshadow-text-help" required />
 						<span class="wps-help-text" id="wpshadow-text-help">
 							<?php esc_html_e( 'Enter a 6-digit hex color, e.g. #000000 or #112233.', 'wpshadow' ); ?>
 						</span>
@@ -41,7 +41,7 @@ Tool_View_Base::render_header( __( 'Color Contrast Checker', 'wpshadow' ), __( '
 						<label class="wps-label" for="wpshadow-bg-color">
 							<?php esc_html_e( 'Background color', 'wpshadow' ); ?>
 						</label>
-						<input type="text" id="wpshadow-bg-color" name="background_color" class="regular-text" placeholder="#FFFFFF" aria-describedby="wpshadow-bg-help" required />
+						<input type="text" id="wpshadow-bg-color" name="background_color" class="wps-input" placeholder="#FFFFFF" aria-describedby="wpshadow-bg-help" required />
 						<span class="wps-help-text" id="wpshadow-bg-help">
 							<?php esc_html_e( 'Enter a 6-digit hex color, e.g. #FFFFFF or #445566.', 'wpshadow' ); ?>
 						</span>

@@ -36,7 +36,7 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 				<label class="wps-label" for="new-email">
 					<?php esc_html_e( 'Email Address', 'wpshadow' ); ?>
 				</label>
-				<input type="email" id="new-email" class="regular-text" placeholder="user@example.com" />
+				<input type="email" id="new-email" class="wps-input" placeholder="user@example.com" />
 			</div>
 
 			<div class="wps-form-group">
@@ -116,11 +116,11 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 							</td>
 							<td>
 								<?php if ( isset( $data['pending_admin'] ) && $data['pending_admin'] ) : ?>
-									<button class="button approve-email-btn" data-email="<?php echo esc_attr( $email ); ?>">
-										<?php esc_html_e( 'Approve', 'wpshadow' ); ?>
-									</button>
-								<?php endif; ?>
-								<button class="button button-link-delete remove-email-btn" data-email="<?php echo esc_attr( $email ); ?>">
+								<button class="wps-btn wps-btn--secondary approve-email-btn" data-email="<?php echo esc_attr( $email ); ?>">
+									<?php esc_html_e( 'Approve', 'wpshadow' ); ?>
+								</button>
+							<?php endif; ?>
+							<button class="wps-btn wps-btn--danger remove-email-btn" data-email="<?php echo esc_attr( $email ); ?>">
 									<?php esc_html_e( 'Remove', 'wpshadow' ); ?>
 								</button>
 							</td>

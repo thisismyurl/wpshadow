@@ -190,7 +190,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						id="to_email"
 						name="to_email"
 						value="<?php echo esc_attr( $current_user_email ); ?>"
-						class="regular-text"
+						class="wps-input"
 						required>
 					<span class="wps-help-text">
 						<?php esc_html_e( 'The email address where the test email will be sent.', 'wpshadow' ); ?>
@@ -205,7 +205,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						id="from_name"
 						name="from_name"
 						value="<?php echo esc_attr( $current_from_name ); ?>"
-						class="regular-text"
+						class="wps-input"
 						required>
 					<span class="wps-help-text">
 						<?php esc_html_e( 'The name that appears as the email sender.', 'wpshadow' ); ?>
@@ -220,7 +220,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						id="from_email"
 						name="from_email"
 						value="<?php echo esc_attr( $current_from_email ); ?>"
-						class="regular-text"
+						class="wps-input"
 						required>
 					<span class="wps-help-text">
 						<?php

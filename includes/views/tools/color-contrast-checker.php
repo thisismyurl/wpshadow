@@ -34,7 +34,7 @@ Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __(
 					<label class="wps-label" for="text-color">
 						<?php esc_html_e( 'Text Color', 'wpshadow' ); ?>
 					</label>
-					<input type="text" id="text-color" name="text_color" placeholder="#000000" class="regular-text" required />
+					<input type="text" id="text-color" name="text_color" placeholder="#000000" class="wps-input" required />
 					<span class="wps-help-text">
 						<?php esc_html_e( 'Enter hex color (e.g., #000000, #FFFFFF)', 'wpshadow' ); ?>
 					</span>
@@ -44,7 +44,7 @@ Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __(
 					<label class="wps-label" for="background-color">
 						<?php esc_html_e( 'Background Color', 'wpshadow' ); ?>
 					</label>
-					<input type="text" id="background-color" name="background_color" placeholder="#FFFFFF" class="regular-text" required />
+					<input type="text" id="background-color" name="background_color" placeholder="#FFFFFF" class="wps-input" required />
 					<span class="wps-help-text">
 						<?php esc_html_e( 'Enter hex color (e.g., #000000, #FFFFFF)', 'wpshadow' ); ?>
 					</span>

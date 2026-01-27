@@ -722,6 +722,10 @@
 	justify-content: center;
 }
 
+.wps-first-scan-overlay {
+	display: flex;
+}
+
 .wps-scan-overlay[aria-busy="true"] {
 	display: flex;
 }

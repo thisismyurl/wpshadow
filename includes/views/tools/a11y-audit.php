@@ -39,7 +39,7 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 					</label>
 					<div class="wps-flex-gap-10-items-center">
 						<span class="wps-p-8-rounded-3" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-						<input type="text" name="page_path" id="page_path" class="regular-text"
+						<input type="text" name="page_path" id="page_path" class="wps-input"
 							value="/" placeholder="/about" required>
 					</div>
 					<span class="wps-help-text">

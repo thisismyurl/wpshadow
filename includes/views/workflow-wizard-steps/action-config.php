@@ -146,7 +146,7 @@ jQuery(document).ready(function($) {
 		
 		// Submit button
 		const $actions = $('<div class="form-actions">');
-		const $submitBtn = $('<button type="submit" class="button button-primary button-large">');
+		const $submitBtn = $('<button type="submit" class="wps-btn wps-btn--primary">');
 		
 		if (actionIndex < actions.length - 1) {
 			$submitBtn.html('<?php esc_html_e( 'Next Action', 'wpshadow' ); ?> <span class="dashicons dashicons-arrow-right-alt2"></span>');

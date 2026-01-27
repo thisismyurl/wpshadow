@@ -55,10 +55,10 @@ foreach ( $catalog as $tip ) {
 	<p><?php esc_html_e( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tips-toolbar wps-m-20">
-		<button id="wpshadow-enable-all-tips" class="button button-secondary" style="margin-right: 10px;">
+		<button id="wpshadow-enable-all-tips" class="wps-btn wps-btn--secondary" style="margin-right: 10px;">
 			<?php esc_html_e( 'Enable All Tips', 'wpshadow' ); ?>
 		</button>
-		<button id="wpshadow-disable-all-tips" class="button button-secondary">
+		<button id="wpshadow-disable-all-tips" class="wps-btn wps-btn--secondary">
 			<?php esc_html_e( 'Disable All Tips', 'wpshadow' ); ?>
 		</button>
 	</div>

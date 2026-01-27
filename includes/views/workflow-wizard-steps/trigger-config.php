@@ -79,7 +79,7 @@ $has_config    = ! empty( $config_fields );
 								placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
 								value="<?php echo esc_attr( $field['default'] ?? '' ); ?>"
 								<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
-								class="regular-text"
+								class="wps-input"
 							>
 							<?php
 							break;
@@ -168,7 +168,7 @@ $has_config    = ! empty( $config_fields );
 			<?php endforeach; ?>
 
 			<div class="form-actions">
-				<button type="submit" class="button button-primary button-large">
+				<button type="submit" class="wps-btn wps-btn--primary">
 					<?php esc_html_e( 'Continue to Actions', 'wpshadow' ); ?>
 					<span class="dashicons dashicons-arrow-right-alt2"></span>
 				</button>

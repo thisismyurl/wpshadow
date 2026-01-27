@@ -41,7 +41,7 @@ if ( empty( $trigger_id ) ) {
 				id="workflow_name" 
 				name="workflow_name" 
 				placeholder="<?php esc_attr_e( 'Leave blank for a randomly generated name', 'wpshadow' ); ?>"
-				class="regular-text"
+			class="wps-input"
 			>
 			<p class="description">
 				<?php esc_html_e( 'If left blank, we\'ll generate a silly name like "Brave Balloon" or "Dancing Dolphin"!', 'wpshadow' ); ?>
@@ -49,11 +49,11 @@ if ( empty( $trigger_id ) ) {
 		</div>
 
 		<div class="form-actions">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="button button-large">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--secondary">
 				<span class="dashicons dashicons-arrow-left-alt2"></span>
 				<?php esc_html_e( 'Back to Actions', 'wpshadow' ); ?>
 			</a>
-			<button type="submit" class="button button-primary button-large button-hero">
+			<button type="submit" class="wps-btn wps-btn--primary">
 				<span class="dashicons dashicons-saved"></span>
 				<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
 			</button>

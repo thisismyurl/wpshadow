@@ -68,7 +68,7 @@ foreach ( $trigger_categories as $category ) {
 		<h3><?php esc_html_e( 'Selected Action', 'wpshadow' ); ?></h3>
 		<div class="selected-actions-note"><?php esc_html_e( 'One action per workflow in this version. Upgrade to add more.', 'wpshadow' ); ?></div>
 		<div id="selected-actions-list" class="selected-actions-list"></div>
-		<button type="button" id="continue-to-review" class="button button-primary button-large">
+		<button type="button" id="continue-to-review" class="wps-btn wps-btn--primary">
 			<?php esc_html_e( 'Continue to Review', 'wpshadow' ); ?>
 			<span class="dashicons dashicons-arrow-right-alt2"></span>
 		</button>

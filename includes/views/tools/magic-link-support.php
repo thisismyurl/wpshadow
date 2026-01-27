@@ -46,7 +46,7 @@ $active_links = array_filter(
 					<label class="wps-label" for="developer-name">
 						<?php esc_html_e( 'Developer Name', 'wpshadow' ); ?>
 					</label>
-					<input type="text" id="developer-name" name="developer_name" class="regular-text" required />
+					<input type="text" id="developer-name" name="developer_name" class="wps-input" required />
 					<span class="wps-help-text">
 						<?php esc_html_e( 'Full name of the person who will use this link', 'wpshadow' ); ?>
 					</span>
@@ -56,7 +56,7 @@ $active_links = array_filter(
 					<label class="wps-label" for="developer-email">
 						<?php esc_html_e( 'Developer Email', 'wpshadow' ); ?>
 					</label>
-					<input type="email" id="developer-email" name="developer_email" class="regular-text" required />
+					<input type="email" id="developer-email" name="developer_email" class="wps-input" required />
 					<span class="wps-help-text">
 						<?php esc_html_e( 'Email for notifications about access', 'wpshadow' ); ?>
 					</span>

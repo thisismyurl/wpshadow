@@ -168,12 +168,12 @@ function wpshadow_render_dashboard() {
 
 		// First-time scan prompt handlers
 		$('#wpshadow-run-first-scan').on('click', function() {
-			$('#wpshadow-first-scan-prompt').fadeOut();
+			$('#wpshadow-first-scan-overlay').fadeOut();
 			runQuickScanWithProgress();
 		});
 
 		$('#wpshadow-dismiss-first-scan').on('click', function() {
-			$('#wpshadow-first-scan-prompt').fadeOut();
+			$('#wpshadow-first-scan-overlay').fadeOut();
 		});
 
 		/**

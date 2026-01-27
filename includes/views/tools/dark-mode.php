@@ -183,16 +183,7 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 		border-color: #666 !important;
 	}
 
-	body.wpshadow-dark-mode .button-primary {
-		background: #1976d2 !important;
-		color: #ffffff !important;
-		border-color: #1565c0 !important;
-	}
-
-	body.wpshadow-dark-mode .button-primary:hover {
-		background: #1565c0 !important;
-		border-color: #0d47a1 !important;
-	}
+	/* Legacy button-primary styles removed - wps-btn handles dark mode via CSS variables */
 
 	body.wpshadow-dark-mode table,
 	body.wpshadow-dark-mode thead,
@@ -227,9 +218,7 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 		border-left-color: #2196f3 !important;
 	}
 
-	body.wpshadow-dark-mode .form-table th {
-		background: #1e1e1e !important;
-	}
+	/* Legacy form-table styles removed - wps-form-group handles dark mode */
 
 	body.wpshadow-dark-mode .wpshadow-tools-grid,
 	body.wpshadow-dark-mode .wpshadow-tool-card,
