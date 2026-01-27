@@ -1853,11 +1853,11 @@
    Modal Styles
    ============================================================================ */
 
-/* Modal containers */
+/* Modal containers - ALWAYS hidden by default with !important */
 #wpshadow-autofix-modal,
 #wpshadow-workflow-creation-modal,
 #wpshadow-family-fix-modal {
-        display: none;
+        display: none !important;
         position: fixed;
         top: 0;
         left: 0;
@@ -1873,7 +1873,7 @@
 #wpshadow-autofix-modal:not(.wps-none):not(.wps-hidden),
 #wpshadow-workflow-creation-modal:not(.wps-none):not(.wps-hidden),
 #wpshadow-family-fix-modal:not(.wps-none):not(.wps-hidden) {
-        display: flex;
+        display: flex !important;
 }
 
 /* Modal content boxes */
