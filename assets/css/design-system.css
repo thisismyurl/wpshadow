@@ -4006,3 +4006,61 @@ a:focus-visible {
 .wps-schedule-error {
     color: #c62828;
 }
+
+/**
+ * KPI Summary Widget Styles
+ */
+.wps-kpi-emoji {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.wps-kpi-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.wps-kpi-value-primary {
+    color: #1976d2;
+}
+
+.wps-kpi-value-secondary {
+    color: #7b1fa2;
+}
+
+.wps-kpi-value-success {
+    color: #2e7d32;
+}
+
+.wps-kpi-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.wps-kpi-footer {
+    font-size: 11px;
+    color: #999;
+    padding-top: 8px;
+}
+
+.wps-kpi-footer-primary {
+    border-top: 1px solid rgba(25, 118, 210, 0.1);
+}
+
+.wps-kpi-footer-secondary {
+    border-top: 1px solid rgba(123, 31, 162, 0.1);
+}
+
+.wps-kpi-footer-success {
+    border-top: 1px solid rgba(46, 125, 50, 0.1);
+}
+
+.wps-status-icon-large {
+    font-size: 20px;
+}
+
+.wps-status-text {
+    font-weight: bold;
+}

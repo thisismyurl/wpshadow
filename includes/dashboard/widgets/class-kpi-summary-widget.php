@@ -38,42 +38,42 @@ class WPShadow_KPI_Summary_Widget {
 			<div class="wps-grid wps-grid-auto-200 wps-mt-4">
 				<!-- Time Saved Card -->
 				<div class="wps-p-20-rounded-8">
-					<div style="font-size: 32px; margin-bottom: 8px;">⏱️</div>
-					<div style="font-size: 28px; font-weight: bold; color: #1976d2; margin-bottom: 4px;">
+					<div class="wps-kpi-emoji">⏱️</div>
+					<div class="wps-kpi-value wps-kpi-value-primary">
 						<?php echo esc_html( self::format_hours( $kpis['time_saved_hours'] ) ); ?>
 					</div>
-					<div style="font-size: 12px; color: #666; margin-bottom: 12px;">
+					<div class="wps-kpi-label">
 						<?php esc_html_e( 'Hours Saved', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 11px; color: #999; padding-top: 8px; border-top: 1px solid rgba(25, 118, 210, 0.1);">
+					<div class="wps-kpi-footer wps-kpi-footer-primary">
 						<?php echo esc_html( sprintf( __( '%d auto-fix workflows', 'wpshadow' ), $kpis['workflows_executed'] ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Issues Fixed Card -->
 				<div class="wps-p-20-rounded-8">
-					<div style="font-size: 32px; margin-bottom: 8px;">✅</div>
-					<div style="font-size: 28px; font-weight: bold; color: #7b1fa2; margin-bottom: 4px;">
+					<div class="wps-kpi-emoji">✅</div>
+					<div class="wps-kpi-value wps-kpi-value-secondary">
 						<?php echo esc_html( $kpis['issues_fixed'] ); ?>
 					</div>
-					<div style="font-size: 12px; color: #666; margin-bottom: 12px;">
+					<div class="wps-kpi-label">
 						<?php esc_html_e( 'Issues Fixed', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 11px; color: #999; padding-top: 8px; border-top: 1px solid rgba(123, 31, 162, 0.1);">
+					<div class="wps-kpi-footer wps-kpi-footer-secondary">
 						<?php echo esc_html( sprintf( __( 'Avg %d/week', 'wpshadow' ), max( 1, (int) ( $kpis['issues_fixed'] / 4 ) ) ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Money Saved Card -->
 				<div class="wps-p-20-rounded-8">
-					<div style="font-size: 32px; margin-bottom: 8px;">💰</div>
-					<div style="font-size: 28px; font-weight: bold; color: #2e7d32; margin-bottom: 4px;">
+					<div class="wps-kpi-emoji">💰</div>
+					<div class="wps-kpi-value wps-kpi-value-success">
 						<?php echo esc_html( self::format_currency( $kpis['total_value'] ) ); ?>
 					</div>
-					<div style="font-size: 12px; color: #666; margin-bottom: 12px;">
+					<div class="wps-kpi-label">
 						<?php esc_html_e( 'Estimated Value', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 11px; color: #999; padding-top: 8px; border-top: 1px solid rgba(46, 125, 50, 0.1);">
+					<div class="wps-kpi-footer wps-kpi-footer-success">
 						<?php echo esc_html( sprintf( __( 'At $%d/hour', 'wpshadow' ), self::get_hourly_rate() ) ); ?>
 					</div>
 				</div>
@@ -81,9 +81,9 @@ class WPShadow_KPI_Summary_Widget {
 			
 			<!-- Status Badge -->
 			<div class="wps-flex-gap-10-items-center-p-12-rounded-4">
-				<span style="font-size: 20px;"><?php echo esc_html( $status_icon ); ?></span>
+				<span class="wps-status-icon-large"><?php echo esc_html( $status_icon ); ?></span>
 				<div>
-					<strong style="color: <?php echo esc_attr( $status_color ); ?>;"><?php echo esc_html( $status_text ); ?></strong>
+					<strong class="wps-status-text" style="color: <?php echo esc_attr( $status_color ); ?>;"><?php echo esc_html( $status_text ); ?></strong>
 					<p class="wps-m-4">
 						<?php
 						if ( $kpis['total_value'] > 0 ) {
