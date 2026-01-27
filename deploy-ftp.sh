@@ -159,9 +159,16 @@ else
     export -f upload_file
     export FTP_USER FTP_PASSWORD FTP_HOST FTP_REMOTE_PATH
     
-    # Upload all files
+    # Upload all files (excluding hidden files and directories)
     cd "$BUILD_DIR"
-    find . -type f -not -path "./.git/*" | while read file; do
+    find . -type f \
+        -not -path "./.git/*" \
+        -not -path "./.github/*" \
+        -not -path "./.devcontainer/*" \
+        -not -path "./.copilot/*" \
+        -not -path "./.tmp/*" \
+        -not -path "*/.*" \
+        -not -name ".*" | while read file; do
         remote_path="${file#./}"
         echo "  Uploading: $remote_path"
         upload_file "$file" "$remote_path"
