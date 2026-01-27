@@ -1,0 +1,177 @@
+name: Generate KB Article
+
+on:
+  issues:
+    types: [opened, edited]
+
+env:
+  COMMUNITY_MANAGER: "thisismyurl"  # Update with actual community manager GitHub username
+
+jobs:
+  generate-kb-article:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'content/kb')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract KB article details
+        id: extract
+        run: |
+          ISSUE_BODY="${{ github.event.issue.body }}"
+          
+          # Extract article title
+          TITLE=$(echo "$ISSUE_BODY" | sed -n '/^### Article Title/,/^###/p' | sed '/^### Article Title/d; /^###/d' | head -n 1 | xargs)
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          
+          # Extract category
+          CATEGORY=$(echo "$ISSUE_BODY" | sed -n '/^### Topic Category/,/^###/p' | grep "^- \[x\]" | head -n 1 | sed 's/- \[x\] //')
+          if [ -z "$CATEGORY" ]; then
+            CATEGORY="General"
+          fi
+          echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+          
+          # Extract purpose
+          PURPOSE=$(echo "$ISSUE_BODY" | sed -n '/^### Article Purpose/,/^###/p' | sed '/^### Article Purpose/d; /^###/d' | head -n 1 | xargs)
+          echo "purpose=$PURPOSE" >> $GITHUB_OUTPUT
+          
+          # Extract topics
+          TOPICS=$(echo "$ISSUE_BODY" | sed -n '/^### Key Topics to Cover/,/^###/p' | sed '/^### Key Topics to Cover/d; /^###/d; s/^- //' | tr '\n' ', ')
+          echo "topics=$TOPICS" >> $GITHUB_OUTPUT
+
+      - name: Create KB article file
+        id: create_article
+        run: |
+          # Generate slug from title
+          SLUG=$(echo "${{ steps.extract.outputs.title }}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-\|-$//')
+          
+          # Create filename with date
+          DATE=$(date +%Y-%m-%d)
+          FILENAME="docs/kb/${SLUG}.md"
+          
+          # Ensure directory exists
+          mkdir -p docs/kb
+          
+          # Create the article content
+          cat > "$FILENAME" << 'EOF'
+---
+title: "${{ steps.extract.outputs.title }}"
+description: "${{ steps.extract.outputs.purpose }}"
+category: "${{ steps.extract.outputs.category }}"
+date: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+updated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+author: "community"
+status: "draft"
+issue: "${{ github.event.issue.number }}"
+---
+
+# ${{ steps.extract.outputs.title }}
+
+## Overview
+
+${{ steps.extract.outputs.purpose }}
+
+## Key Topics
+
+${{ steps.extract.outputs.topics }}
+
+## Getting Started
+
+This section will be filled by the content team. Check the linked issue (#${{ github.event.issue.number }}) for details and requirements.
+
+## Related Resources
+
+- [Related Documentation](link-here)
+- [WPShadow Main Plugin](https://github.com/thisismyurl/wpshadow)
+
+## Questions?
+
+If you have questions about this article, please comment on issue #${{ github.event.issue.number }}.
+
+---
+
+**Note:** This article was automatically generated from issue #${{ github.event.issue.number }}. 
+Content needs to be written and reviewed before publication.
+EOF
+
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: Create KB article - ${{ steps.extract.outputs.title }} (#${{ github.event.issue.number }})"
+          title: "docs: KB Article - ${{ steps.extract.outputs.title }} [#${{ github.event.issue.number }}]"
+          body: |
+            # KB Article Generation Request
+            
+            **Issue:** #${{ github.event.issue.number }}
+            **Title:** ${{ steps.extract.outputs.title }}
+            **Category:** ${{ steps.extract.outputs.category }}
+            
+            ## Purpose
+            ${{ steps.extract.outputs.purpose }}
+            
+            ## Generated File
+            - **File:** `${{ steps.create_article.outputs.filename }}`
+            - **Slug:** `${{ steps.create_article.outputs.slug }}`
+            
+            ## Next Steps
+            
+            1. ✅ Review the issue (#${{ github.event.issue.number }}) for full details
+            2. 📝 Write/update the article content in the generated file
+            3. 🔍 Add screenshots, code examples, and diagrams as needed
+            4. ✍️ Review for accuracy and clarity
+            5. 🚀 Merge when ready for publication
+            
+            ## Content Requirements
+            
+            - Follow the article template structure
+            - Include relevant links to related KB articles
+            - Add examples or screenshots where applicable
+            - Ensure accessibility guidelines are followed
+            - Verify all links are working
+            
+            **Assigned to:** @${{ env.COMMUNITY_MANAGER }} for review and content creation
+          branch: kb/article-${{ steps.create_article.outputs.slug }}-${{ github.event.issue.number }}
+          delete-branch: false
+          labels: "documentation,content/kb,automated"
+          assignees: ${{ env.COMMUNITY_MANAGER }}
+          team-reviewers: "content-team"
+
+      - name: Add comment to issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **KB Article Generation Started**\n\n✅ Pull request created and assigned to @${{ env.COMMUNITY_MANAGER }}\n\n**Generated Article:**\n- File: \`${{ steps.create_article.outputs.filename }}\`\n- Slug: \`${{ steps.create_article.outputs.slug }}\`\n\n**Next Steps:**\n1. Review the PR for the generated content\n2. Update article content based on requirements\n3. Add screenshots/diagrams as needed\n4. Request review when ready\n5. Merge to publish\n\nSee the linked PR for more details!`
+            });
+
+      - name: Assign issue to Community Manager
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addAssignees({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              assignees: ["${{ env.COMMUNITY_MANAGER }}"]
+            });
+
+      - name: Add labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["generated-kb-pr", "awaiting-review"]
+            });
