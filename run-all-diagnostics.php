@@ -16,13 +16,15 @@ if ( ! $is_wp_cli ) {
 	// Load WordPress if running directly
 	$wp_load = false;
 	$search_paths = array(
-		dirname( __FILE__ ) . '/../../wp-load.php',
-		dirname( __FILE__ ) . '/wp-load.php',
+		dirname( __FILE__ ) . '/wp-load.php',                    // Same directory (WP root)
+		dirname( __FILE__ ) . '/../wp-load.php',                 // One level up
+		dirname( __FILE__ ) . '/../../wp-load.php',              // Two levels up
+		dirname( __FILE__ ) . '/../../../wp-load.php',           // Three levels up (if in plugin dir)
 		getenv( 'WP_ROOT' ) . '/wp-load.php',
 	);
 
 	foreach ( $search_paths as $path ) {
-		if ( file_exists( $path ) ) {
+		if ( $path && file_exists( $path ) ) {
 			require_once $path;
 			$wp_load = true;
 			break;
@@ -34,14 +36,24 @@ if ( ! $is_wp_cli ) {
 	}
 }
 
+// Ensure WordPress is loaded
+if ( ! defined( 'ABSPATH' ) ) {
+	die( "Error: WordPress not loaded properly.\n" );
+}
+
 // Load the plugin if not already loaded
 if ( ! defined( 'WPSHADOW_VERSION' ) ) {
 	$plugin_file = WP_PLUGIN_DIR . '/wpshadow/wpshadow.php';
 	if ( file_exists( $plugin_file ) ) {
 		require_once $plugin_file;
 	} else {
-		die( "Error: WPShadow plugin not found at: $plugin_file\n" );
+		die( "Error: WPShadow plugin not found. Expected at: $plugin_file\n" );
 	}
+}
+
+// Verify plugin loaded
+if ( ! defined( 'WPSHADOW_VERSION' ) ) {
+	die( "Error: WPShadow plugin failed to initialize.\n" );
 }
 
 // Ensure the diagnostics registry is loaded
