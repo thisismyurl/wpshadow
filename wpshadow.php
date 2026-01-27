@@ -46,6 +46,8 @@ require_once WPSHADOW_PATH . 'includes/helpers/form-controls.php';
 require_once WPSHADOW_PATH . 'includes/helpers/html-fetcher-helpers.php';
 require_once WPSHADOW_PATH . 'includes/views/functions-page-layout.php';
 require_once WPSHADOW_PATH . 'includes/views/menu-stubs.php';
+require_once WPSHADOW_PATH . 'includes/core/class-finding-utils.php';
+require_once WPSHADOW_PATH . 'includes/core/functions-category-metadata.php';
 
 /**
  * Initialize error handler early
