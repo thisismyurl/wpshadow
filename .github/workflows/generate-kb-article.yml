@@ -112,13 +112,16 @@ EOF
           echo "slug=$SLUG" >> $GITHUB_OUTPUT
 
       - name: Commit and create PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE: docs: KB Article - ${{ steps.extract.outputs.title }} [#${{ github.event.issue.number }}]
+          BRANCH_NAME: kb/article-${{ steps.create_article.outputs.slug }}-${{ github.event.issue.number }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           
           # Create branch
-          BRANCH="kb/article-${{ steps.create_article.outputs.slug }}-${{ github.event.issue.number }}"
-          git checkout -b "$BRANCH"
+          git checkout -b "$BRANCH_NAME"
           
           # Add files
           git add "${{ steps.create_article.outputs.filename }}"
@@ -127,49 +130,16 @@ EOF
           git commit -m "docs: Create KB article - ${{ steps.extract.outputs.title }} (#${{ github.event.issue.number }})"
           
           # Push branch
-          git push origin "$BRANCH"
+          git push origin "$BRANCH_NAME"
           
           # Create PR using GitHub CLI
-          PR_BODY="# KB Article Generation Request
-
-**Issue:** #${{ github.event.issue.number }}
-**Title:** ${{ steps.extract.outputs.title }}
-**Category:** ${{ steps.extract.outputs.category }}
-
-## Purpose
-${{ steps.extract.outputs.purpose }}
-
-## Generated File
-- **File:** \`${{ steps.create_article.outputs.filename }}\`
-- **Slug:** \`${{ steps.create_article.outputs.slug }}\`
-
-## Next Steps
-
-1. ✅ Review the issue (#${{ github.event.issue.number }}) for full details
-2. 📝 Write/update the article content in the generated file
-3. 🔍 Add screenshots, code examples, and diagrams as needed
-4. ✍️ Review for accuracy and clarity
-5. 🚀 Merge when ready for publication
-
-## Content Requirements
-
-- Follow the article template structure
-- Include relevant links to related KB articles
-- Add examples or screenshots where applicable
-- Ensure accessibility guidelines are followed
-- Verify all links are working
-
-**Assigned to:** @${{ env.COMMUNITY_MANAGER }} for review and content creation"
-          
           gh pr create \
-            --title "docs: KB Article - ${{ steps.extract.outputs.title }} [#${{ github.event.issue.number }}]" \
-            --body "$PR_BODY" \
+            --title "$PR_TITLE" \
+            --body "Created from issue #${{ github.event.issue.number }}" \
             --base main \
-            --head "$BRANCH" \
+            --head "$BRANCH_NAME" \
             --assignee "${{ env.COMMUNITY_MANAGER }}" \
             --label "documentation,content/kb,automated"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add comment to issue
         uses: actions/github-script@v7
