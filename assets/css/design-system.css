@@ -3913,6 +3913,57 @@ a:focus-visible {
     margin-top: 12px;
 }
 
+/**
+ * Scan Frequency Manager Styles
+ */
+.wps-scan-container {
+    max-width: 800px;
 }
+
+.wps-scan-icon {
+    font-size: 24px;
+    color: var(--wps-primary);
 }
+
+.wps-scan-fieldset {
+    margin-bottom: 24px;
+}
+
+.wps-scan-legend {
+    font-weight: 500;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.wps-scan-frequency-option {
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wps-scan-input-radio {
+    margin-top: 2px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.wps-scan-flex-expand {
+    flex: 1;
+}
+
+.wps-scan-label {
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.wps-scan-status {
+    margin-left: 10px;
+}
+
+.wps-scan-success-icon {
+    font-size: 24px;
+    color: #2e7d32;
 }

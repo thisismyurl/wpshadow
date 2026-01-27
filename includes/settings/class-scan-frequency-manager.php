@@ -273,11 +273,11 @@ class Scan_Frequency_Manager {
 		$frequencies = self::get_available_frequencies();
 		$next_scan   = self::get_next_scan_time();
 		?>
-		<div style="max-width: 800px;">
+		<div class="wps-scan-container">
 			<!-- Scan Frequency Selection -->
 			<div class="wps-p-24-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-search" style="font-size: 24px; color: #0073aa;"></span>
+					<span class="dashicons dashicons-search" class="wps-scan-icon"></span>
 					<h3 class="wps-m-0"><?php esc_html_e( 'Scan Frequency Settings', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0">
@@ -289,8 +289,8 @@ class Scan_Frequency_Manager {
 					<input type="hidden" name="action" value="wpshadow_update_scan_frequency" />
 					
 					<!-- Frequency Options -->
-					<fieldset style="margin-bottom: 24px;">
-						<legend style="font-weight: 500; margin-bottom: 12px; font-size: 14px;">
+					<fieldset class="wps-scan-fieldset">
+						<legend class="wps-scan-legend">
 							<?php esc_html_e( 'Scan Frequency', 'wpshadow' ); ?>
 						</legend>
 						
@@ -300,10 +300,10 @@ class Scan_Frequency_Manager {
 							$border_color = $is_selected ? '#0073aa' : '#e0e0e0';
 							$bg_color     = $is_selected ? '#f0f6fc' : '#fff';
 							?>
-							<div style="margin-bottom: 12px; padding: 12px; border: 2px solid <?php echo esc_attr( $border_color ); ?>; border-radius: 4px; cursor: pointer; transition: all 0.2s; background: <?php echo esc_attr( $bg_color ); ?>;">
+							<div class="wps-scan-frequency-option" style="border: 2px solid <?php echo esc_attr( $border_color ); ?>; background: <?php echo esc_attr( $bg_color ); ?>;">
 								<label class="wps-flex-gap-12-items-flex-start">
-									<input type="radio" name="frequency" value="<?php echo esc_attr( $freq_key ); ?>" <?php checked( $config['frequency'], $freq_key ); ?> style="margin-top: 2px; cursor: pointer; width: 18px; height: 18px;" />
-									<div style="flex: 1;">
+									<input type="radio" name="frequency" value="<?php echo esc_attr( $freq_key ); ?>" <?php checked( $config['frequency'], $freq_key ); ?> class="wps-scan-input-radio" />
+									<div class="wps-scan-flex-expand">
 										<strong class="wps-block"><?php echo esc_html( $freq_data['label'] ); ?></strong>
 										<p class="wps-m-4">
 											<?php echo esc_html( $freq_data['description'] ); ?>
@@ -330,8 +330,8 @@ class Scan_Frequency_Manager {
 						<legend class="wps-p-0"><?php esc_html_e( 'Scan Behavior', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="run_diagnostics" <?php checked( $config['run_diagnostics'] ); ?> id="run-diagnostics" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<label for="run-diagnostics" style="cursor: pointer; font-size: 13px;">
+							<input type="checkbox" name="run_diagnostics" <?php checked( $config['run_diagnostics'] ); ?> id="run-diagnostics" class="wps-scan-input-radio" />
+							<label for="run-diagnostics" class="wps-scan-label">
 								<strong><?php esc_html_e( 'Run Diagnostics', 'wpshadow' ); ?></strong>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Always recommended - checks for security, performance, and configuration issues', 'wpshadow' ); ?>
@@ -340,8 +340,8 @@ class Scan_Frequency_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="run_treatments" <?php checked( $config['run_treatments'] ); ?> id="auto-treatments" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<label for="auto-treatments" style="cursor: pointer; font-size: 13px;">
+							<input type="checkbox" name="run_treatments" <?php checked( $config['run_treatments'] ); ?> id="auto-treatments" class="wps-scan-input-radio" />
+							<label for="auto-treatments" class="wps-scan-label">
 								<strong><?php esc_html_e( 'Auto-Apply Safe Treatments', 'wpshadow' ); ?></strong>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically apply low-risk fixes. You can undo any treatment at any time.', 'wpshadow' ); ?>
@@ -350,8 +350,8 @@ class Scan_Frequency_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="email_results" <?php checked( $config['email_results'] ); ?> id="email-results" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<label for="email-results" style="cursor: pointer; font-size: 13px;">
+							<input type="checkbox" name="email_results" <?php checked( $config['email_results'] ); ?> id="email-results" class="wps-scan-input-radio" />
+							<label for="email-results" class="wps-scan-label">
 								<strong><?php esc_html_e( 'Email Scan Results', 'wpshadow' ); ?></strong>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Send email summary after each automatic scan', 'wpshadow' ); ?>
@@ -365,8 +365,8 @@ class Scan_Frequency_Manager {
 						<legend class="wps-p-0"><?php esc_html_e( 'Trigger on Updates', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="scan_on_plugin_update" <?php checked( $config['scan_on_plugin_update'] ); ?> id="scan-plugin-update" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<label for="scan-plugin-update" style="cursor: pointer; font-size: 13px;">
+							<input type="checkbox" name="scan_on_plugin_update" <?php checked( $config['scan_on_plugin_update'] ); ?> id="scan-plugin-update" class="wps-scan-input-radio" />
+							<label for="scan-plugin-update" class="wps-scan-label">
 								<strong><?php esc_html_e( 'After Plugin Update', 'wpshadow' ); ?></strong>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically scan after any plugin is updated or activated', 'wpshadow' ); ?>
@@ -375,8 +375,8 @@ class Scan_Frequency_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="scan_on_theme_update" <?php checked( $config['scan_on_theme_update'] ); ?> id="scan-theme-update" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<label for="scan-theme-update" style="cursor: pointer; font-size: 13px;">
+							<input type="checkbox" name="scan_on_theme_update" <?php checked( $config['scan_on_theme_update'] ); ?> id="scan-theme-update" class="wps-scan-input-radio" />
+							<label for="scan-theme-update" class="wps-scan-label">
 								<strong><?php esc_html_e( 'After Theme Update', 'wpshadow' ); ?></strong>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically scan after any theme is updated or activated', 'wpshadow' ); ?>
@@ -389,7 +389,7 @@ class Scan_Frequency_Manager {
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Scan Settings', 'wpshadow' ); ?>
 					</button>
-					<span id="wpshadow-scan-status" style="margin-left: 10px;"></span>
+					<span id="wpshadow-scan-status" class="wps-scan-status"></span>
 				</form>
 				
 				<!-- Next Scan Info -->
@@ -404,8 +404,8 @@ class Scan_Frequency_Manager {
 			<!-- Manual Scan Trigger -->
 			<div class="wps-p-16-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-media-play" style="font-size: 24px; color: #2e7d32;"></span>
-					<div style="flex: 1;">
+					<span class="dashicons dashicons-media-play" class="wps-scan-success-icon"></span>
+					<div class="wps-scan-flex-expand">
 						<strong style="color: #2e7d32;"><?php esc_html_e( 'Run Scan Now', 'wpshadow' ); ?></strong>
 						<p class="wps-m-4">
 							<?php esc_html_e( 'Start a diagnostic scan immediately regardless of schedule.', 'wpshadow' ); ?>
