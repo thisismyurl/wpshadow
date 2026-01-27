@@ -1,16 +1,11 @@
 <?php
 /**
- * Diagnostic: WordPress Security Keys and Salts
+ * Diagnostic: WordPress Security Keys and Salts Configuration
  *
- * Checks if WordPress security keys and salts are properly configured.
- * Missing or default salts make session hijacking trivial for attackers.
+ * Checks if WordPress security keys and salts are properly configured with unique values.
  *
- * Philosophy: Security first (#1), educate users (#6), show value (#9)
- * KB Link: https://wpshadow.com/kb/security-wp-salts
- * Training: https://wpshadow.com/training/security-wp-salts
- *
- * @since   1.2601.2148
  * @package WPShadow\Diagnostics
+ * @since   1.2601.2200
  */
 
 declare(strict_types=1);
@@ -24,39 +19,69 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WP Salts Diagnostic Class
+ * Diagnostic_WP_Salts Class
  *
- * Validates WordPress security keys and salts are unique and properly set.
+ * Detects if WordPress security keys and salts are properly configured.
+ * These 8 constants form the foundation of WordPress's security:
+ *
+ * - AUTH_KEY, SECURE_AUTH_KEY, LOGGED_IN_KEY, NONCE_KEY
+ * - AUTH_SALT, SECURE_AUTH_SALT, LOGGED_IN_SALT, NONCE_SALT
+ *
+ * Each must be unique, at least 64 characters, and randomly generated.
+ * Weak or default values allow attackers to forge authentication cookies,
+ * hijack sessions, and impersonate users.
+ *
+ * This is one of WordPress's most critical security features. Sites with
+ * weak salts are vulnerable to session hijacking and cookie forgery attacks.
+ *
+ * Returns critical threat level if any constant is missing, too short,
+ * default, or duplicated.
+ *
+ * @since 1.2601.2200
  */
 class Diagnostic_WP_Salts extends Diagnostic_Base {
 
 	/**
-	 * The diagnostic slug
+	 * Diagnostic slug/identifier
 	 *
 	 * @var string
 	 */
 	protected static $slug = 'wp-salts';
 
 	/**
-	 * The diagnostic title
+	 * Diagnostic title (user-facing)
 	 *
 	 * @var string
 	 */
-	protected static $title = 'WordPress Security Keys Missing or Weak';
+	protected static $title = 'WordPress Security Keys and Salts';
 
 	/**
-	 * The diagnostic description
+	 * Diagnostic description (plain language)
 	 *
 	 * @var string
 	 */
-	protected static $description = 'WordPress security keys and salts are not properly configured, allowing session hijacking.';
+	protected static $description = 'Verifies all 8 security keys and salts are properly configured with unique values';
 
 	/**
-	 * Required salt constants
+	 * Family grouping for batch operations
+	 *
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Family label (human-readable)
+	 *
+	 * @var string
+	 */
+	protected static $family_label = 'Security';
+
+	/**
+	 * List of all required security constants
 	 *
 	 * @var array
 	 */
-	private static $required_salts = array(
+	private static $required_constants = array(
 		'AUTH_KEY',
 		'SECURE_AUTH_KEY',
 		'LOGGED_IN_KEY',
@@ -68,121 +93,108 @@ class Diagnostic_WP_Salts extends Diagnostic_Base {
 	);
 
 	/**
-	 * Run the diagnostic check
+	 * Default/weak values that should be replaced
 	 *
-	 * @since  1.2601.2148
-	 * @return array|null Finding array if issues found, null otherwise.
+	 * @var array
+	 */
+	private static $default_values = array(
+		'put your unique phrase here',
+		'@()&*#()_',
+		'changeme',
+		'default',
+		'password',
+		'secret',
+		'undefined',
+	);
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * Verifies all 8 security constants are defined, have unique values,
+	 * are at least 64 characters long, and don't contain common weak values.
+	 *
+	 * @since  1.2601.2200
+	 * @return array|null Finding array if issues detected, null if all good.
 	 */
 	public static function check() {
-		$missing_salts = array();
-		$weak_salts    = array();
-		$default_salts = array();
+		$issues        = array();
+		$defined_const = array();
+		$values        = array();
 
-		foreach ( self::$required_salts as $salt ) {
-			// Check if constant is defined
-			if ( ! defined( $salt ) ) {
-				$missing_salts[] = $salt;
+		// Check each required constant
+		foreach ( self::$required_constants as $const ) {
+			if ( ! defined( $const ) ) {
+				$issues[] = sprintf(
+					/* translators: %s: constant name */
+					esc_html__( '%s is not defined', 'wpshadow' ),
+					$const
+				);
 				continue;
 			}
 
-			$value = constant( $salt );
+			$value = constant( $const );
+			$defined_const[] = $const;
 
-			// Check if it's the default 'put your unique phrase here'
-			if ( empty( $value ) || 'put your unique phrase here' === $value ) {
-				$default_salts[] = $salt;
-				continue;
+			// Check if value is weak or default
+			$value_lower = strtolower( $value );
+			foreach ( self::$default_values as $weak_value ) {
+				if ( false !== stripos( $value, $weak_value ) ) {
+					$issues[] = sprintf(
+						/* translators: %s: constant name */
+						esc_html__( '%s appears to have a weak or default value', 'wpshadow' ),
+						$const
+					);
+					break;
+				}
 			}
 
-			// Check if it's too short (weak)
+			// Check minimum length
 			if ( strlen( $value ) < 64 ) {
-				$weak_salts[] = $salt;
+				$issues[] = sprintf(
+					/* translators: 1: constant name, 2: actual length, 3: minimum length */
+					esc_html__( '%1$s is only %2$d characters (minimum recommended: %3$d)', 'wpshadow' ),
+					$const,
+					strlen( $value ),
+					64
+				);
 			}
+
+			$values[ $const ] = $value;
 		}
 
-		// If everything is fine
-		if ( empty( $missing_salts ) && empty( $weak_salts ) && empty( $default_salts ) ) {
-			return null;
+		// Check for duplicate values
+		$unique_values = array_unique( $values );
+		if ( count( $unique_values ) !== count( $values ) ) {
+			$issues[] = esc_html__( 'Some security constants have duplicate values. Each constant should be unique.', 'wpshadow' );
 		}
 
-		// Calculate threat level
-		$threat_level = 60; // Base threat
-
-		if ( ! empty( $missing_salts ) ) {
-			$threat_level += 30; // Critical - completely missing
-		}
-
-		if ( ! empty( $default_salts ) ) {
-			$threat_level += 20; // Very high - using defaults
-		}
-
-		if ( ! empty( $weak_salts ) ) {
-			$threat_level += 10; // High - weak but present
-		}
-
-		// Build descriptive message
-		$issues = array();
-
-		if ( ! empty( $missing_salts ) ) {
-			$issues[] = sprintf(
-				/* translators: 1: count of missing salts */
-				_n( '%d security key is completely missing', '%d security keys are completely missing', count( $missing_salts ), 'wpshadow' ),
-				count( $missing_salts )
-			);
-		}
-
-		if ( ! empty( $default_salts ) ) {
-			$issues[] = sprintf(
-				/* translators: 1: count of default salts */
-				_n( '%d security key is using the default value', '%d security keys are using default values', count( $default_salts ), 'wpshadow' ),
-				count( $default_salts )
-			);
-		}
-
-		if ( ! empty( $weak_salts ) ) {
-			$issues[] = sprintf(
-				/* translators: 1: count of weak salts */
-				_n( '%d security key is too short (weak)', '%d security keys are too short (weak)', count( $weak_salts ), 'wpshadow' ),
-				count( $weak_salts )
-			);
-		}
-
-		$message = sprintf(
-			/* translators: 1: list of issues */
-			__( 'Your WordPress security keys have problems: %s. These keys protect your login sessions. Without strong, unique keys, attackers can hijack user sessions and gain unauthorized access.', 'wpshadow' ),
-			implode( '; ', $issues )
-		);
-
-		return array(
-			'id'          => self::$slug,
-			'title'       => self::$title,
-			'description' => $message,
-			'severity'    => 'critical',
-			'threat_level' => min( $threat_level, 100 ),
-			'auto_fixable' => false, // Requires manual wp-config.php update
-			'kb_link'     => 'https://wpshadow.com/kb/security-wp-salts',
-			'training_link' => 'https://wpshadow.com/training/security-wp-salts',
-			'manual_steps' => array(
-				sprintf(
-					/* translators: 1: URL to WordPress.org API */
-					__( 'Visit %s to generate new security keys', 'wpshadow' ),
-					'https://api.wordpress.org/secret-key/1.1/salt/'
+		// If any issues found, return critical finding
+		if ( ! empty( $issues ) ) {
+			return array(
+				'id'                 => self::$slug,
+				'title'              => self::$title,
+				'description'        => sprintf(
+					/* translators: 1: number of issues, 2: list of issues */
+					esc_html__( 'Found %1$d security issues with WordPress keys and salts: %2$s', 'wpshadow' ),
+					count( $issues ),
+					implode( ', ', $issues )
 				),
-				__( 'Copy the generated keys', 'wpshadow' ),
-				__( 'Open wp-config.php in a text editor', 'wpshadow' ),
-				__( 'Replace the existing keys with the new ones', 'wpshadow' ),
-				__( 'Save the file', 'wpshadow' ),
-				__( 'All users will be logged out and need to log in again', 'wpshadow' ),
-			),
-			'impact'      => array(
-				'security' => __( 'Session hijacking vulnerability - attackers can steal user sessions', 'wpshadow' ),
-				'users'    => __( 'Users will be logged out after fixing (they must log in again)', 'wpshadow' ),
-			),
-			'evidence'    => array(
-				'missing_count' => count( $missing_salts ),
-				'default_count' => count( $default_salts ),
-				'weak_count'    => count( $weak_salts ),
-				'total_required' => count( self::$required_salts ),
-			),
-		);
+				'severity'           => 'critical',
+				'threat_level'       => 90,
+				'site_health_status' => 'critical',
+				'auto_fixable'       => false,
+				'kb_link'            => 'https://wpshadow.com/kb/security-wp-salts',
+				'family'             => self::$family,
+				'details'            => array(
+					'defined_constants' => $defined_const,
+					'issues_found'      => $issues,
+					'recommendation'    => 'Visit https://api.wordpress.org/secret-key/1.1/salt/ to generate new keys',
+					'docs_link'         => 'https://wpshadow.com/kb/security-wp-salts',
+				),
+			);
+		}
+
+		// All security constants are properly configured
+		return null;
 	}
 }

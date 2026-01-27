@@ -1,16 +1,11 @@
 <?php
 /**
- * Diagnostic: Debug Mode Detection
+ * Diagnostic: Debug Mode in Production
  *
- * Checks if WP_DEBUG is enabled in production environments.
- * Exposes sensitive error messages, file paths, and database queries to potential attackers.
+ * Checks if WP_DEBUG, WP_DEBUG_DISPLAY, or WP_DEBUG_LOG are enabled on production sites.
  *
- * Philosophy: Security isn't optional (#1 Helpful Neighbor, #10 Beyond Pure)
- * KB Link: https://wpshadow.com/kb/security-debug-mode
- * Training: https://wpshadow.com/training/security-debug-mode
- *
- * @since   1.2601.2148
  * @package WPShadow\Diagnostics
+ * @since   1.2601.2200
  */
 
 declare(strict_types=1);
@@ -24,99 +19,155 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Debug Mode Diagnostic Class
+ * Diagnostic_Debug_Mode Class
  *
- * Detects WP_DEBUG enabled in production, exposing error messages and paths.
+ * Detects if WordPress debug mode is enabled in production, which exposes
+ * sensitive information like file paths, database queries, plugin versions,
+ * and PHP configuration to potential attackers.
+ *
+ * Debug mode should only be used in development environments when actively
+ * troubleshooting issues. On production sites, it's a serious security risk
+ * and performance drain.
+ *
+ * Checks for three conditions:
+ * - Critical (80): WP_DEBUG true AND WP_DEBUG_DISPLAY true (publicly showing errors)
+ * - High (50): WP_DEBUG true AND WP_DEBUG_LOG true (logging debug info)
+ * - Good: WP_DEBUG false or undefined (no debug mode enabled)
+ *
+ * @since 1.2601.2200
  */
 class Diagnostic_Debug_Mode extends Diagnostic_Base {
 
 	/**
-	 * The diagnostic slug
+	 * Diagnostic slug/identifier
 	 *
 	 * @var string
 	 */
 	protected static $slug = 'debug-mode';
 
 	/**
-	 * The diagnostic title
+	 * Diagnostic title (user-facing)
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Debug Mode Enabled in Production';
+	protected static $title = 'Debug Mode in Production';
 
 	/**
-	 * The diagnostic description
+	 * Diagnostic description (plain language)
 	 *
 	 * @var string
 	 */
-	protected static $description = 'WordPress debug mode is enabled, exposing sensitive error messages and file paths.';
+	protected static $description = 'Detects if debug mode is enabled, exposing sensitive site information';
 
 	/**
-	 * Run the diagnostic check
+	 * Family grouping for batch operations
 	 *
-	 * @since  1.2601.2148
-	 * @return array|null Finding array if issues found, null otherwise.
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Family label (human-readable)
+	 *
+	 * @var string
+	 */
+	protected static $family_label = 'Security';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * Checks the WP_DEBUG, WP_DEBUG_DISPLAY, and WP_DEBUG_LOG constants
+	 * to determine the severity of debug mode exposure. On production sites,
+	 * any debug mode enabled is a security concern.
+	 *
+	 * @since  1.2601.2200
+	 * @return array|null Finding array if debug mode detected, null if disabled.
 	 */
 	public static function check() {
-		// Check if WP_DEBUG is enabled
-		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-			return null; // All good, debug is off
+		$wp_debug         = defined( 'WP_DEBUG' ) && WP_DEBUG;
+		$wp_debug_display = defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY;
+		$wp_debug_log     = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
+		$environment_type = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
+
+		// If debug mode is not enabled at all, we're good
+		if ( ! $wp_debug ) {
+			return null;
 		}
 
-		// Calculate threat level based on what's exposed
-		$threat_level = 80; // Base threat
-		$exposed      = array();
-
-		if ( defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ) {
-			$exposed[]     = __( 'Error messages displayed on screen', 'wpshadow' );
-			$threat_level += 10; // Higher risk when displayed publicly
+		// Critical: Debug mode enabled with public display
+		// This directly exposes errors to visitors
+		if ( $wp_debug_display ) {
+			return array(
+				'id'                 => self::$slug,
+				'title'              => self::$title,
+				'description'        => __(
+					'Debug mode is publicly displaying errors. This exposes file paths, database queries, plugin versions, and other sensitive information to attackers. Disable debug mode immediately on production sites.',
+					'wpshadow'
+				),
+				'severity'           => 'critical',
+				'threat_level'       => 80,
+				'site_health_status' => 'critical',
+				'auto_fixable'       => true,
+				'kb_link'            => 'https://wpshadow.com/kb/security-debug-mode',
+				'family'             => self::$family,
+				'details'            => array(
+					'wp_debug'         => $wp_debug,
+					'wp_debug_display' => $wp_debug_display,
+					'wp_debug_log'     => $wp_debug_log,
+					'environment'      => $environment_type,
+					'risk'             => 'critical',
+				),
+			);
 		}
 
-		if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-			$exposed[] = __( 'Errors logged to debug.log file', 'wpshadow' );
+		// High: Debug mode enabled with logging
+		// Less immediately dangerous than display, but still a concern
+		if ( $wp_debug_log ) {
+			return array(
+				'id'                 => self::$slug,
+				'title'              => self::$title,
+				'description'        => __(
+					'Debug logging is enabled in production. While errors aren\'t displayed publicly, the debug.log file may accumulate sensitive information. Consider disabling debug mode unless actively troubleshooting.',
+					'wpshadow'
+				),
+				'severity'           => 'high',
+				'threat_level'       => 50,
+				'site_health_status' => 'recommended',
+				'auto_fixable'       => true,
+				'kb_link'            => 'https://wpshadow.com/kb/security-debug-mode',
+				'family'             => self::$family,
+				'details'            => array(
+					'wp_debug'         => $wp_debug,
+					'wp_debug_display' => $wp_debug_display,
+					'wp_debug_log'     => $wp_debug_log,
+					'environment'      => $environment_type,
+					'risk'             => 'high',
+				),
+			);
 		}
 
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$exposed[] = __( 'Unminified JavaScript/CSS files loaded', 'wpshadow' );
-		}
-
-		$message = sprintf(
-			/* translators: 1: list of exposed debug settings */
-			__( 'Debug mode is enabled on your production site. This exposes: %s. Attackers can use this information to find vulnerabilities.', 'wpshadow' ),
-			implode( ', ', $exposed )
-		);
-
+		// Debug mode is true but no logging/display is enabled
+		// Still worth monitoring but lower priority
 		return array(
-			'id'          => self::$slug,
-			'title'       => self::$title,
-			'description' => $message,
-			'severity'    => 'high',
-			'threat_level' => min( $threat_level, 100 ),
-			'auto_fixable' => true,
-			'kb_link'     => 'https://wpshadow.com/kb/security-debug-mode',
-			'training_link' => 'https://wpshadow.com/training/security-debug-mode',
-			'impact'      => array(
-				'security'    => __( 'Exposes sensitive information to attackers', 'wpshadow' ),
-				'performance' => __( 'Unminified assets slow page load times', 'wpshadow' ),
+			'id'                 => self::$slug,
+			'title'              => self::$title,
+			'description'        => __(
+				'Debug mode is enabled but not logging or displaying errors. While safer than other configurations, consider disabling this on production sites unless actively troubleshooting.',
+				'wpshadow'
 			),
-			'evidence'    => array(
-				'WP_DEBUG'         => WP_DEBUG ? 'true' : 'false',
-				'WP_DEBUG_DISPLAY' => defined( 'WP_DEBUG_DISPLAY' ) ? ( WP_DEBUG_DISPLAY ? 'true' : 'false' ) : 'undefined',
-				'WP_DEBUG_LOG'     => defined( 'WP_DEBUG_LOG' ) ? ( WP_DEBUG_LOG ? 'true' : 'false' ) : 'undefined',
-				'SCRIPT_DEBUG'     => defined( 'SCRIPT_DEBUG' ) ? ( SCRIPT_DEBUG ? 'true' : 'false' ) : 'undefined',
+			'severity'           => 'medium',
+			'threat_level'       => 35,
+			'site_health_status' => 'recommended',
+			'auto_fixable'       => true,
+			'kb_link'            => 'https://wpshadow.com/kb/security-debug-mode',
+			'family'             => self::$family,
+			'details'            => array(
+				'wp_debug'         => $wp_debug,
+				'wp_debug_display' => $wp_debug_display,
+				'wp_debug_log'     => $wp_debug_log,
+				'environment'      => $environment_type,
+				'risk'             => 'medium',
 			),
-		);
-	}
-
-	/**
-	 * Get available treatments for this diagnostic
-	 *
-	 * @since  1.2601.2148
-	 * @return array Array of treatment class names.
-	 */
-	public static function get_available_treatments(): array {
-		return array(
-			'WPShadow\\Treatments\\Treatment_Debug_Mode',
 		);
 	}
 }

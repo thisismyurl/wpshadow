@@ -1,16 +1,11 @@
 <?php
 /**
- * Diagnostic: Admin Username Detection
+ * Diagnostic: Default Admin Username Detection
  *
- * Checks if a user with username 'admin' exists.
- * This is a major security risk as attackers always try 'admin' first in brute force attacks.
+ * Checks for the presence of "admin" username, a primary brute force target.
  *
- * Philosophy: Helpful neighbor warns about danger (#1), educates why it matters (#6)
- * KB Link: https://wpshadow.com/kb/security-admin-username
- * Training: https://wpshadow.com/training/security-admin-username
- *
- * @since   1.2601.2148
  * @package WPShadow\Diagnostics
+ * @since   1.2601.2200
  */
 
 declare(strict_types=1);
@@ -24,107 +19,146 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Admin Username Diagnostic Class
+ * Diagnostic_Admin_Username Class
  *
- * Detects the default 'admin' username which is a primary brute force target.
+ * Detects if any user account has the username "admin", which is a primary
+ * target for brute force attacks. Attackers know that approximately 50% of
+ * WordPress sites use the default "admin" username, making it the first
+ * credential they attempt to compromise.
+ *
+ * By using a unique, non-predictable username for administrator accounts,
+ * security can be significantly improved since attackers must guess both
+ * the username AND password.
+ *
+ * Returns different threat levels based on the role of the "admin" user:
+ * - Critical (75): "admin" user is an administrator
+ * - High (50): "admin" user exists with lower role
+ * - Good: No "admin" username found
+ *
+ * @since 1.2601.2200
  */
 class Diagnostic_Admin_Username extends Diagnostic_Base {
 
 	/**
-	 * The diagnostic slug
+	 * Diagnostic slug/identifier
 	 *
 	 * @var string
 	 */
 	protected static $slug = 'admin-username';
 
 	/**
-	 * The diagnostic title
+	 * Diagnostic title (user-facing)
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Default "admin" Username Detected';
+	protected static $title = 'Default Admin Username Detected';
 
 	/**
-	 * The diagnostic description
+	 * Diagnostic description (plain language)
 	 *
 	 * @var string
 	 */
-	protected static $description = 'A user account with username "admin" exists, making your site a target for brute force attacks.';
+	protected static $description = 'Detects if "admin" username is present, a primary brute force target';
 
 	/**
-	 * Run the diagnostic check
+	 * Family grouping for batch operations
 	 *
-	 * @since  1.2601.2148
-	 * @return array|null Finding array if issues found, null otherwise.
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Family label (human-readable)
+	 *
+	 * @var string
+	 */
+	protected static $family_label = 'Security';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * Queries the users table for any user with the login "admin" and checks
+	 * their role. Critical if they're an administrator, high if they exist
+	 * with any other role.
+	 *
+	 * @since  1.2601.2200
+	 * @return array|null Finding array if "admin" user found, null otherwise.
 	 */
 	public static function check() {
-		// Check if 'admin' user exists
 		$admin_user = get_user_by( 'login', 'admin' );
 
 		if ( ! $admin_user ) {
-			return null; // No admin user, all good
+			// No "admin" user found - we're good
+			return null;
 		}
 
-		// Check if it's an administrator
-		$is_admin     = in_array( 'administrator', (array) $admin_user->roles, true );
-		$threat_level = $is_admin ? 75 : 60;
+		// Check if this user is an administrator
+		$user_meta = get_userdata( $admin_user->ID );
+		$is_admin  = isset( $user_meta->wp_capabilities['administrator'] ) && $user_meta->wp_capabilities['administrator'];
 
-		// Check for additional risk factors
-		$risk_factors = array();
-
-		// Check when last login was (if tracking is available)
-		$last_login = get_user_meta( $admin_user->ID, 'last_login', true );
-		if ( $last_login && ( time() - $last_login ) < ( 30 * DAY_IN_SECONDS ) ) {
-			$risk_factors[] = __( 'Account is actively used', 'wpshadow' );
-			$threat_level  += 10;
-		}
-
-		// Check if it's the only admin
-		$admin_users = get_users( array( 'role' => 'administrator' ) );
-		if ( count( $admin_users ) === 1 ) {
-			$risk_factors[] = __( 'This is the only administrator account', 'wpshadow' );
-			$threat_level  += 10;
-		}
-
-		$message = sprintf(
-			/* translators: 1: user role */
-			__( 'A user with the username "admin" exists (%s role). Attackers always try this username first. We recommend creating a new admin user with a unique username and deleting this one.', 'wpshadow' ),
-			$is_admin ? __( 'Administrator', 'wpshadow' ) : ucfirst( $admin_user->roles[0] )
-		);
-
-		if ( ! empty( $risk_factors ) ) {
-			$message .= ' ' . sprintf(
-				/* translators: 1: list of risk factors */
-				__( 'Additional risks: %s.', 'wpshadow' ),
-				implode( ', ', $risk_factors )
+		if ( $is_admin ) {
+			// Critical: "admin" user is an administrator
+			return array(
+				'id'                 => self::$slug,
+				'title'              => self::$title,
+				'description'        => __(
+					'Your site has a user account with the username "admin", which is a primary target for brute force attacks. Attackers automatically try this username with common passwords. Create a new administrator account with a unique username and delete the "admin" account.',
+					'wpshadow'
+				),
+				'severity'           => 'critical',
+				'threat_level'       => 75,
+				'site_health_status' => 'critical',
+				'auto_fixable'       => false,
+				'kb_link'            => 'https://wpshadow.com/kb/security-admin-username',
+				'family'             => self::$family,
+				'details'            => array(
+					'admin_user_exists'  => true,
+					'admin_is_admin'     => true,
+					'admin_user_id'      => $admin_user->ID,
+					'admin_email'        => $admin_user->user_email,
+					'recommendation'     => 'Create new admin account, transfer posts/roles, delete "admin" account',
+				),
+			);
+		} else {
+			// High: "admin" user exists but not an administrator
+			return array(
+				'id'                 => self::$slug,
+				'title'              => self::$title,
+				'description'        => __(
+					'Your site has a user account with the username "admin" (though not an administrator). This is still a brute force risk. Consider deleting this account and having users use unique usernames instead.',
+					'wpshadow'
+				),
+				'severity'           => 'high',
+				'threat_level'       => 50,
+				'site_health_status' => 'recommended',
+				'auto_fixable'       => false,
+				'kb_link'            => 'https://wpshadow.com/kb/security-admin-username',
+				'family'             => self::$family,
+				'details'            => array(
+					'admin_user_exists' => true,
+					'admin_is_admin'    => false,
+					'admin_user_id'     => $admin_user->ID,
+					'admin_role'        => self::get_user_role( $admin_user ),
+					'recommendation'    => 'Delete "admin" account and use unique usernames',
+			),
 			);
 		}
+	}
 
-		return array(
-			'id'          => self::$slug,
-			'title'       => self::$title,
-			'description' => $message,
-			'severity'    => 'high',
-			'threat_level' => min( $threat_level, 100 ),
-			'auto_fixable' => false, // Cannot auto-fix (requires user action)
-			'kb_link'     => 'https://wpshadow.com/kb/security-admin-username',
-			'training_link' => 'https://wpshadow.com/training/security-admin-username',
-			'manual_steps' => array(
-				__( 'Create a new administrator user with a unique username', 'wpshadow' ),
-				__( 'Log in as the new administrator', 'wpshadow' ),
-				__( 'Delete the "admin" user account', 'wpshadow' ),
-				__( 'Assign all posts/content to the new user when prompted', 'wpshadow' ),
-			),
-			'impact'      => array(
-				'security' => __( 'Primary target for brute force attacks - attackers already know half your credentials', 'wpshadow' ),
-			),
-			'evidence'    => array(
-				'username'    => 'admin',
-				'user_id'     => $admin_user->ID,
-				'role'        => implode( ', ', $admin_user->roles ),
-				'email'       => $admin_user->user_email,
-				'admin_count' => count( $admin_users ),
-			),
-		);
+	/**
+	 * Get the primary role for a WordPress user.
+	 *
+	 * @since  1.2601.2200
+	 * @param  \WP_User $user The user object.
+	 * @return string The user's primary role (e.g., 'administrator', 'editor', etc).
+	 */
+	private static function get_user_role( \WP_User $user ): string {
+		if ( is_multisite() ) {
+			$roles = $user->roles;
+		} else {
+			$roles = isset( $user->wp_capabilities ) ? array_keys( $user->wp_capabilities ) : array();
+		}
+
+		return ! empty( $roles ) ? $roles[0] : 'unknown';
 	}
 }

@@ -1,16 +1,11 @@
 <?php
 /**
- * Diagnostic: File Editing Enabled
+ * Diagnostic: File Editing Disabled
  *
- * Checks if theme and plugin file editors are enabled in wp-admin.
- * If an attacker compromises an admin account, they can inject malicious code.
+ * Checks if WordPress theme and plugin file editing is disabled via DISALLOW_FILE_EDIT.
  *
- * Philosophy: Defense in depth (#1 helpful neighbor), inspire confidence (#8)
- * KB Link: https://wpshadow.com/kb/security-file-editing
- * Training: https://wpshadow.com/training/security-file-editing
- *
- * @since   1.2601.2148
  * @package WPShadow\Diagnostics
+ * @since   1.2601.2200
  */
 
 declare(strict_types=1);
@@ -24,97 +19,97 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * File Editing Diagnostic Class
+ * Diagnostic_File_Editing Class
  *
- * Detects if theme/plugin file editors are enabled (security risk).
+ * Detects if the built-in WordPress theme and plugin file editors are
+ * enabled in the WordPress admin panel. These editors should be disabled
+ * on production sites because they allow direct code injection if an
+ * administrator account is compromised.
+ *
+ * If an attacker gains access to an admin account, they can use the file
+ * editor to inject malicious code directly into theme or plugin files,
+ * creating a persistent backdoor without any server-level audit trail.
+ *
+ * Professional sites should disable the file editor and use version control
+ * (Git) and SFTP for code changes, not the browser-based editor.
+ *
+ * The fix is simple: add `define( 'DISALLOW_FILE_EDIT', true );` to wp-config.php
+ *
+ * @since 1.2601.2200
  */
 class Diagnostic_File_Editing extends Diagnostic_Base {
 
 	/**
-	 * The diagnostic slug
+	 * Diagnostic slug/identifier
 	 *
 	 * @var string
 	 */
 	protected static $slug = 'file-editing';
 
 	/**
-	 * The diagnostic title
+	 * Diagnostic title (user-facing)
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Theme and Plugin File Editors Enabled';
+	protected static $title = 'File Editing Enabled';
 
 	/**
-	 * The diagnostic description
+	 * Diagnostic description (plain language)
 	 *
 	 * @var string
 	 */
-	protected static $description = 'WordPress file editors are enabled, allowing code injection if admin account is compromised.';
+	protected static $description = 'Detects if WordPress file editor is enabled, risking code injection attacks';
 
 	/**
-	 * Run the diagnostic check
+	 * Family grouping for batch operations
 	 *
-	 * @since  1.2601.2148
-	 * @return array|null Finding array if issues found, null otherwise.
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Family label (human-readable)
+	 *
+	 * @var string
+	 */
+	protected static $family_label = 'Security';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * Checks if DISALLOW_FILE_EDIT is defined and set to true.
+	 * If not defined or set to false, the file editor is enabled.
+	 *
+	 * @since  1.2601.2200
+	 * @return array|null Finding array if file editing is enabled, null if disabled.
 	 */
 	public static function check() {
-		// Check if DISALLOW_FILE_EDIT is defined and set to true
-		if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT ) {
-			return null; // File editing is disabled, all good
+		$file_edit_disabled = defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT;
+
+		if ( ! $file_edit_disabled ) {
+			return array(
+				'id'                 => self::$slug,
+				'title'              => self::$title,
+				'description'        => __(
+					'WordPress file editing is enabled. If an admin account is compromised, attackers can inject malicious code directly into theme or plugin files. Disable this immediately by adding define( \'DISALLOW_FILE_EDIT\', true ); to wp-config.php.',
+					'wpshadow'
+				),
+				'severity'           => 'high',
+				'threat_level'       => 70,
+				'site_health_status' => 'recommended',
+				'auto_fixable'       => true,
+				'kb_link'            => 'https://wpshadow.com/kb/security-file-editing',
+				'family'             => self::$family,
+				'details'            => array(
+					'disallow_file_edit' => false,
+					'file_editor_enabled' => true,
+					'risk'               => 'High - attackers can inject code if admin account compromised',
+					'fix'                => "Add to wp-config.php: define( 'DISALLOW_FILE_EDIT', true );",
+				),
+			);
 		}
 
-		// Check if DISALLOW_FILE_MODS is defined (stronger - disables all modifications)
-		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
-			return null; // All file modifications disabled, even better
-		}
-
-		// File editing is enabled - this is a security risk
-		$threat_level = 70;
-
-		// Check if there are recent admin logins from unusual locations (if tracking available)
-		$recent_admin_logins = get_option( 'wpshadow_recent_admin_logins', array() );
-		if ( ! empty( $recent_admin_logins ) ) {
-			$threat_level += 5;
-		}
-
-		// Check if there are multiple admin users
-		$admin_users = get_users( array( 'role' => 'administrator' ) );
-		if ( count( $admin_users ) > 3 ) {
-			$threat_level += 5;
-		}
-
-		$message = __( 'The WordPress theme and plugin file editors are currently enabled. If an attacker gains access to an administrator account (through phishing, weak passwords, or session hijacking), they can inject malicious code directly through the WordPress admin panel. Disabling these editors adds an important security layer.', 'wpshadow' );
-
-		return array(
-			'id'          => self::$slug,
-			'title'       => self::$title,
-			'description' => $message,
-			'severity'    => 'high',
-			'threat_level' => min( $threat_level, 100 ),
-			'auto_fixable' => true,
-			'kb_link'     => 'https://wpshadow.com/kb/security-file-editing',
-			'training_link' => 'https://wpshadow.com/training/security-file-editing',
-			'impact'      => array(
-				'security' => __( 'Reduces attack surface if admin account is compromised', 'wpshadow' ),
-				'usability' => __( 'Disabling prevents accidental file corruption through web editor', 'wpshadow' ),
-			),
-			'evidence'    => array(
-				'DISALLOW_FILE_EDIT' => defined( 'DISALLOW_FILE_EDIT' ) ? ( DISALLOW_FILE_EDIT ? 'true' : 'false' ) : 'undefined',
-				'DISALLOW_FILE_MODS' => defined( 'DISALLOW_FILE_MODS' ) ? ( DISALLOW_FILE_MODS ? 'true' : 'false' ) : 'undefined',
-				'admin_user_count'   => count( $admin_users ),
-			),
-		);
-	}
-
-	/**
-	 * Get available treatments for this diagnostic
-	 *
-	 * @since  1.2601.2148
-	 * @return array Array of treatment class names.
-	 */
-	public static function get_available_treatments(): array {
-		return array(
-			'WPShadow\\Treatments\\Treatment_File_Editing',
-		);
+		// File editing is properly disabled
+		return null;
 	}
 }

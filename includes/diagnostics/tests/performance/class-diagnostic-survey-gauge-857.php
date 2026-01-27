@@ -1,0 +1,67 @@
+<?php
+/**
+ * Diagnostic: Survey Gauge 857
+ *
+ * Diagnostic check for survey gauge 857
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.2601.2148
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Class Diagnostic_SurveyGauge857
+ *
+ * @since 1.2601.2148
+ */
+class Diagnostic_SurveyGauge857 extends Diagnostic_Base {
+
+	/**
+	 * The diagnostic slug
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'survey-gauge-857';
+
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Survey Gauge 857';
+
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Diagnostic check for survey gauge 857';
+
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'performance';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @since  1.2601.2148
+	 * @return array|null Finding array if issue detected, null otherwise.
+	 */
+	public static function check() {
+		// TODO: Implement detection logic for issue #857
+		return null;
+	}
+}
