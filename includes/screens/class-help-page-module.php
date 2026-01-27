@@ -31,14 +31,14 @@ function wpshadow_get_help_catalog() {
 		array(
 			'title'       => __( 'Understanding Diagnostics', 'wpshadow' ),
 			'description' => __( 'Discover what each diagnostic check does and what issues it helps identify.', 'wpshadow' ),
-			'icon'        => 'dashicons-stethoscope',
+			'icon'        => 'dashicons-search',
 			'url'         => 'https://wpshadow.com/kb/diagnostics',
 			'video'       => 'https://wpshadow.com/training/diagnostics',
 		),
 		array(
 			'title'       => __( 'Applying Treatments', 'wpshadow' ),
 			'description' => __( 'Learn how to safely apply fixes to your site with one-click treatments and undo support.', 'wpshadow' ),
-			'icon'        => 'dashicons-healing',
+			'icon'        => 'dashicons-admin-tools',
 			'url'         => 'https://wpshadow.com/kb/treatments',
 			'video'       => 'https://wpshadow.com/training/treatments',
 		),
