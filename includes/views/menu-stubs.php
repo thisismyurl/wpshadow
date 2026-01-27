@@ -100,7 +100,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				$class = $settings_pages[ $tab ];
 
 				// Require the settings file if it exists
-				$file_path = WPSHADOW_PATH . 'includes/settings/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\Settings\', '', $class ) ) ) . '.php';
+				$file_path = WPSHADOW_PATH . 'includes/settings/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\\Settings\\', '', $class ) ) ) . '.php';
 				if ( file_exists( $file_path ) ) {
 					require_once $file_path;
 					if ( class_exists( $class ) && method_exists( $class, 'render' ) ) {
