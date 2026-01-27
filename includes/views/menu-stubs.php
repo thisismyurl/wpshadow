@@ -105,7 +105,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<span class="dashicons dashicons-admin-generic wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'General Settings', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=general' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'General Settings', 'wpshadow' ); ?>
+									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php esc_html_e( 'Configure general plugin behavior and preferences.', 'wpshadow' ); ?>
@@ -128,7 +130,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<span class="dashicons dashicons-search wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Scan Settings', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-scan-settings' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Scan Settings', 'wpshadow' ); ?>
+									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php esc_html_e( 'Enable or disable specific diagnostic checks and treatments.', 'wpshadow' ); ?>
@@ -151,7 +155,10 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<span class="dashicons dashicons-lock wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Privacy & Data', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Privacy 					<h3 class="wps-card-title wps-m-0">
+									<?php esc_html_e( 'Privacy & Data', 'wpshadow' ); ?> Data', 'wpshadow' ); ?>
+									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php esc_html_e( 'Manage data collection, anonymous reporting, and privacy preferences.', 'wpshadow' ); ?>
@@ -174,7 +181,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<span class="dashicons dashicons-email wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Notifications', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Notifications', 'wpshadow' ); ?>
+									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php esc_html_e( 'Configure email alerts and notification preferences.', 'wpshadow' ); ?>
@@ -197,7 +206,10 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<span class="dashicons dashicons-backup wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Backup & Recovery', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=backup' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Backup 					<h3 class="wps-card-title wps-m-0">
+									<?php esc_html_e( 'Backup & Recovery', 'wpshadow' ); ?> Recovery', 'wpshadow' ); ?>
+									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php esc_html_e( 'Configure automatic backups before applying treatments.', 'wpshadow' ); ?>
@@ -220,7 +232,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<span class="dashicons dashicons-admin-tools wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Advanced', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Advanced', 'wpshadow' ); ?>
+									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php esc_html_e( 'Advanced configuration options for power users.', 'wpshadow' ); ?>
