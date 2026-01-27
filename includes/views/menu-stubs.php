@@ -195,8 +195,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 							<div>
 								<h3 class="wps-card-title wps-m-0">
 									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Privacy 					<h3 class="wps-card-title wps-m-0">
-									<?php esc_html_e( 'Privacy & Data', 'wpshadow' ); ?> Data', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Privacy & Data', 'wpshadow' ); ?>
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
