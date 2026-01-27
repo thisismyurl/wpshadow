@@ -1,5 +1,19 @@
 # WPShadow Assets - Quick Start Guide
 
+---
+
+## ✅ Core Values Embedded
+
+**Commandment #3 - Register, Don't Pay:** Free tier is generous with a simple registration process.
+
+**Commandment #6 - Drive to Free Training:** Quick start guide makes learning and contribution accessible to all.
+
+**Accessibility Pillar 🎓 - Learning Inclusive:** Structured steps, code examples, and clear explanations support developers of all skill levels.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACCESSIBILITY.md](../../PHILOSOPHY/ACCESSIBILITY.md)
+
+---
+
 ## 🎯 For Developers Using These Assets
 
 ### Getting Started in 5 Minutes

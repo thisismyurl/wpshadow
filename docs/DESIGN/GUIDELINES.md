@@ -7,6 +7,22 @@
 
 ---
 
+## ✅ Core Values Embedded
+
+**Accessibility Pillar 🌍 - Accessibility First:** Design guidelines prioritize WCAG 2.1 AA compliance—color contrast, keyboard navigation, screen reader support, semantic HTML.
+
+**Accessibility Pillar 🎓 - Learning Inclusive:** Design supports diverse learning styles through clear visual hierarchy, intuitive interactions, and visible status indicators.
+
+**Accessibility Pillar 🌐 - Culturally Respectful:** Design is inclusive, free of cultural assumptions, supports RTL languages, and respects different abilities.
+
+**Commandment #7 - Ridiculously Good for Free:** Design rivals premium plugins—beautiful, modern, intuitive.
+
+**Commandment #8 - Inspire Confidence:** Every interaction provides clear feedback and empowerment.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACCESSIBILITY.md](../../PHILOSOPHY/ACCESSIBILITY.md)
+
+---
+
 ## 📖 Overview
 
 This document consolidates all design guidelines that were established in GitHub issues #660-680 and provides a comprehensive checklist for validating that these guidelines have been properly applied across all plugin pages.

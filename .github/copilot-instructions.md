@@ -1,5 +1,119 @@
 # Copilot Instructions for WPShadow Core Plugin
 
+## 🎯 Quick Start: Essential Patterns (Read This First!)
+
+**For AI Agents:** These patterns have been validated through hundreds of successful implementations. Use them as your default approach.
+
+### Pattern 1: Always Use WordPress APIs First
+```php
+// ❌ DON'T: Parse HTML to check enqueued scripts
+$html = Admin_Page_Scanner::capture_admin_page();
+preg_match_all('/script/', $html, $matches);
+
+// ✅ DO: Use WordPress globals
+global $wp_scripts;
+$is_enqueued = $wp_scripts->is_enqueued('handle');
+```
+
+**Available WordPress APIs:**
+- `global $menu, $submenu` - Admin menu structure
+- `global $wp_scripts, $wp_styles` - Enqueued assets
+- `global $wp_settings_fields` - Settings API fields
+- `global $wp_filter` - Registered hooks
+- `global $wp_admin_bar` - Admin toolbar
+
+### Pattern 2: HTML Parsing is ONLY for DOM Validation
+Use `Admin_Page_Scanner::capture_admin_page()` ONLY when you need to:
+- Validate rendered HTML structure
+- Check CSS classes applied to elements
+- Test JavaScript interactions
+- Detect malformed markup
+
+**Rule:** If WordPress has an API for it, use the API. HTML parsing is 20-67x slower.
+
+### Pattern 3: Security is Non-Negotiable
+```php
+// ✅ ALWAYS do all three: nonce, capability, sanitize
+self::verify_request( 'wpshadow_action', 'manage_options' );
+$value = self::get_post_param( 'field', 'text', '', true );
+
+// ✅ ALWAYS use $wpdb->prepare()
+$wpdb->query( $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE ID = %d", $id ) );
+
+// ✅ ALWAYS escape output
+echo esc_html( $user_input );
+echo esc_url( $link );
+echo esc_attr( $attribute );
+```
+
+### Pattern 4: Multi-Edit Operations
+When making multiple independent edits, use `multi_replace_string_in_file` instead of sequential `replace_string_in_file` calls. This is ~5x faster and more cost-effective for users.
+
+### Pattern 5: Documentation Comments
+Every public method needs:
+```php
+/**
+ * Brief one-line description.
+ *
+ * Longer explanation of behavior and usage.
+ *
+ * @since  1.2601.2148
+ * @param  string $param Description.
+ * @return array {
+ *     Description of return structure.
+ *
+ *     @type string $key Description.
+ * }
+ */
+```
+
+### Pattern 6: File Creation Template
+```php
+<?php
+/**
+ * [Feature Name]
+ *
+ * [Detailed description of what this file does]
+ *
+ * @package    WPShadow
+ * @subpackage [Subsystem]
+ * @since      1.2601.2148
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\[Namespace];
+
+use WPShadow\Core\[BaseClass];
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * [Class Name] Class
+ *
+ * [Detailed class description]
+ *
+ * @since 1.2601.2148
+ */
+class [Class_Name] extends [Base_Class] {
+    // Implementation
+}
+```
+
+### Pattern 7: Diagnostic Implementation Checklist
+When creating a new diagnostic:
+1. ✅ Check if WordPress has an API for what you're checking
+2. ✅ Extend `Diagnostic_Base`
+3. ✅ Set `$slug`, `$title`, `$description`, `$family`
+4. ✅ Implement `check()` method
+5. ✅ Return `array` with finding or `null` if no issue
+6. ✅ Use WordPress APIs (not HTML parsing) when possible
+7. ✅ Register in `includes/diagnostics/class-diagnostic-registry.php`
+
+---
+
 ## Repository Context
 **Repository:** `thisismyurl/wpshadow`  
 **Purpose:** Foundational WordPress plugin providing the architecture for all wpshadow-pro-* modules  
@@ -1095,6 +1209,69 @@ apply_filters( 'wpshadow_finding_data', $finding, $diagnostic_id );
 apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 ```
 
+## Common Pitfalls & Solutions
+
+### Pitfall 1: "I'll just parse the HTML to check if a script is loaded"
+**Problem:** HTML parsing is 20-67x slower than WordPress APIs  
+**Solution:** Check `global $wp_scripts` first. ALWAYS.
+
+### Pitfall 2: "I'll create multiple sequential edits"
+**Problem:** Each `replace_string_in_file` call costs time and tokens  
+**Solution:** Use `multi_replace_string_in_file` for independent edits
+
+### Pitfall 3: "I'll sanitize input later"
+**Problem:** Security vulnerabilities are introduced  
+**Solution:** Sanitize at input, escape at output, ALWAYS
+
+### Pitfall 4: "I don't need to document this simple method"
+**Problem:** Code becomes unmaintainable  
+**Solution:** Every public method gets a docblock with @since
+
+### Pitfall 5: "I'll just assume the file structure"
+**Problem:** Wrong assumptions break code  
+**Solution:** Use `file_search` and `grep_search` to verify first
+
+### Pitfall 6: "Let me make a file to document my changes"
+**Problem:** Creates documentation bloat  
+**Solution:** Only create docs when explicitly requested
+
+## Workflow Efficiency Tips
+
+### For Multi-File Operations:
+1. **Plan first** - Use `manage_todo_list` to break down work
+2. **Batch reads** - Read all needed files in parallel when possible
+3. **Batch edits** - Use `multi_replace_string_in_file` for independent changes
+4. **Verify after** - Run `get_errors` to check for issues
+
+### For Diagnostic Creation:
+1. **Search existing** - Use `grep_search` to find similar diagnostics
+2. **Check WordPress APIs** - See Pattern 1 above
+3. **Extend base class** - Always extend `Diagnostic_Base`
+4. **Register immediately** - Add to `Diagnostic_Registry` right away
+5. **Test the pattern** - Read the file back to verify structure
+
+### For Issue Management:
+1. **Batch status checks** - Check multiple issues at once
+2. **Batch closures** - Use loops with GitHub API
+3. **Add meaningful comments** - Explain WHY the issue was closed
+4. **Verify results** - Re-query to confirm changes
+
+## Performance Benchmarks (Real Data)
+
+**Optimization Project Results (Jan 2026):**
+- 11 diagnostics optimized from HTML parsing → WordPress APIs
+- Average speed improvement: **50x faster**
+- Memory reduction: **90%**
+- Time saved per scan: **10.78 seconds**
+- Files modified: 11
+- Regressions introduced: **0**
+
+**Key Learnings:**
+- Always check WordPress globals before HTML parsing
+- `global $wp_settings_fields` is incredibly powerful (used by 10+ diagnostics)
+- HTML parsing is correct for DOM validation, wrong for everything else
+- Performance gains compound across the entire plugin
+
 ## Resources
 
 **Documentation:**
@@ -1103,6 +1280,7 @@ apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 - [Coding Standards](../docs/CODING_STANDARDS.md) - Naming conventions
 - [Architecture](../docs/ARCHITECTURE.md) - System design
 - [Feature Matrix](../docs/FEATURE_MATRIX_DIAGNOSTICS.md) - All diagnostics
+- [Admin Diagnostics Optimization](../docs/ADMIN_DIAGNOSTICS_OPTIMIZATION_COMPLETE.md) - Performance case study
 
 **External Resources:**
 - [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/)
@@ -1112,3 +1290,5 @@ apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 ---
 
 **Remember:** Every feature should embody the "Helpful Neighbor" principle. Code should be secure, accessible, well-documented, and genuinely helpful to users.
+
+**Pro Tip for AI Agents:** When in doubt, search the codebase for existing patterns. This project has 48 admin diagnostics already implemented - use them as templates!
