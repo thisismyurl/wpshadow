@@ -71,10 +71,18 @@ BUILD_DIR="build/wpshadow"
 rm -rf build/
 mkdir -p "$BUILD_DIR"
 
-# Copy plugin files (exclude dev files)
+# Copy plugin files (exclude dev files, docs, and hidden directories)
 rsync -av --exclude-from=- . "$BUILD_DIR/" << 'RSYNCEOF'
 .git
 .github
+.devcontainer
+.copilot
+.tmp
+.distignore
+.editorconfig
+.gitignore
+.gitattributes
+docs
 node_modules
 vendor
 tests
@@ -96,8 +104,6 @@ package.json
 package-lock.json
 composer.json
 composer.lock
-.gitignore
-.gitattributes
 RSYNCEOF
 
 echo -e "${GREEN}✓${NC} Build prepared"
@@ -115,7 +121,14 @@ open -u "$FTP_USER,$FTP_PASSWORD" $FTP_HOST
 cd "$FTP_REMOTE_PATH" || exit 1
 mirror --reverse --delete --verbose=3 --parallel=4 \
     --exclude=.git/ \
+    --exclude=.github/ \
+    --exclude=.devcontainer/ \
+    --exclude=.copilot/ \
+    --exclude=.tmp/ \
+    --exclude=.distignore \
+    --exclude=.editorconfig \
     --exclude=.gitignore \
+    --exclude=docs/ \
     --exclude=node_modules/ \
     --exclude=vendor/ \
     --exclude=tests/ \
