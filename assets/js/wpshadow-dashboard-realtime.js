@@ -52,9 +52,6 @@
 				e.preventDefault();
 			self.toggleFullscreen();
 		});
-		
-			// Auto-refresh toggle
-			$(document).on('change', '#wpshadow-autorefresh-toggle', function() {
 				const enabled = $(this).prop('checked');
 				self.config.enableAutoRefresh = enabled;
 				localStorage.setItem('wpshadow_autorefresh', enabled ? '1' : '0');
@@ -110,7 +107,9 @@
 				this.realtimeInterval = null;
 			}
 
-		$('.wpshadow-dashboard').removeClass('wpshadow-updating');
+			$('.wpshadow-dashboard').removeClass('wpshadow-updating');
+		},
+
 		/**
 		 * Fetch and update dashboard data via AJAX
 		 */
