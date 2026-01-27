@@ -3569,6 +3569,70 @@ a:focus-visible {
     margin-bottom: 8px;
 }
 
+/**
+ * KPI Advanced Features Styles
+ */
+.wps-kpi-section-title {
+    margin-top: 30px;
+}
+
+.wps-kpi-advanced-link {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.wps-kpi-advanced-link:hover {
+    text-decoration: underline;
+}
+
+.wps-kpi-advanced-icon {
+    font-size: 24px;
+    color: #667eea;
+}
+
+.wps-kpi-advanced-intro {
+    color: var(--wps-gray-600);
+    margin-bottom: 20px;
+}
+
+.wps-kpi-flex-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.wps-kpi-separator {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--wps-gray-300);
+    text-align: center;
+}
+
+.wps-kpi-separator-icon {
+    font-size: 16px;
+}
+
+.wps-kpi-card-title-primary {
+    color: #667eea;
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-kpi-card-title-success {
+    color: #10b981;
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-kpi-card-description-alt {
+    margin-bottom: var(--wps-space-3);
+}
+
+.wps-kpi-button-full {
+    width: 100%;
+}
+
+.wps-kpi-card-no-margin {
+    margin-bottom: 0;
+}
+
 }
 }
 }
