@@ -796,6 +796,10 @@
 	outline-offset: 2px;
 }
 
+.wps-btn-primary:visited {
+	color: #ffffff;
+}
+
 .wps-btn-secondary {
 	background: #ffffff;
 	color: var(--wps-gray-700);
@@ -815,6 +819,10 @@
 .wps-btn-secondary:focus {
 	outline: 2px solid var(--wps-info);
 	outline-offset: 2px;
+}
+
+.wps-btn-secondary:visited {
+	color: var(--wps-gray-700);
 }
 
 /* ============================================================================

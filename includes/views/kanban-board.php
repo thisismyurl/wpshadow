@@ -577,6 +577,13 @@ $severity_legend = array(
 
 </div>
 
+<!-- Recent Activity Section -->
+<?php
+if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
+	wpshadow_render_recent_activity();
+}
+?>
+
 </div>
 
 <script>

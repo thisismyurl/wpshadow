@@ -204,6 +204,8 @@
 
             // Show loading state
             submitBtn.prop('disabled', true).text(wpshadowReportBuilder.i18n.generating || 'Generating...');
+            $('#loading-spinner').show();
+            $('#report-preview').hide();
 
             const formData = new FormData(form[0]);
             formData.append('action', 'wps_generate_report');
@@ -233,9 +235,11 @@
                 },
                 error: function() {
                     WPShadowAdmin.showNotice('error', wpshadowReportBuilder.i18n.error);
+                    $('#loading-spinner').hide();
                 },
                 complete: function() {
                     submitBtn.prop('disabled', false).text(originalText);
+                    $('#loading-spinner').hide();
                 }
             });
         },
