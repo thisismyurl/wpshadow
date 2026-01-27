@@ -52,8 +52,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 			self::send_success( $result );
 			wp_die();
-		} catch ( \Exception $e ) {
-			error_log( 'Deep Scan Handler Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() );
+		} catch ( \Exception $e ) {		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging for debugging			error_log( 'Deep Scan Handler Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() );
 			self::send_error( $e->getMessage() );
 			wp_die();
 		}

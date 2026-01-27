@@ -47,7 +47,7 @@ foreach ( $catalog as $tip ) {
 	}
 	$tips_by_category[ $cat ][] = $tip;
 }
-?>
+
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Tips & Guidance', 'wpshadow' ); ?></h1>

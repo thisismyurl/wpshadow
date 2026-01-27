@@ -48,9 +48,7 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 						array( 'scan_type' => 'quick_scan_first_time' )
 					);
 				} catch ( \Exception $e ) {
-					error_log( 'Activity Logger Error: ' . $e->getMessage() );
-				}
-			}
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging
 
 			// Verify Diagnostic_Registry exists
 			if ( ! class_exists( 'WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
