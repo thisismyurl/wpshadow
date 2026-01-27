@@ -5,7 +5,7 @@ on:
     types: [opened, edited]
 
 env:
-  COMMUNITY_MANAGER: "thisismyurl"  # Update with actual community manager GitHub username
+  COMMUNITY_MANAGER: "allisonsmithcreates"  # Community manager for KB articles
 
 jobs:
   generate-kb-article:
