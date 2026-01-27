@@ -97,7 +97,7 @@
 			}, 500);
 
 			// Mark dashboard as updating
-			$('#wpshadow-dashboard-wrapper').addClass('wpshadow-updating');
+		$('.wpshadow-dashboard').addClass('wpshadow-updating');
 			$('#wpshadow-dashboard-status').html('🔄 Scan in progress...').show();
 		},
 
@@ -110,9 +110,7 @@
 				this.realtimeInterval = null;
 			}
 
-			$('#wpshadow-dashboard-wrapper').removeClass('wpshadow-updating');
-		},
-
+		$('.wpshadow-dashboard').removeClass('wpshadow-updating');
 		/**
 		 * Fetch and update dashboard data via AJAX
 		 */
@@ -272,7 +270,8 @@
 	 * Toggle fullscreen mode
 	 */
 	toggleFullscreen: function() {
-		const elem = document.getElementById('wpshadow-dashboard-wrapper');
+		const elem = document.querySelector('.wpshadow-dashboard') || 
+			document.getElementById('wpshadow-dashboard-wrapper');
 		
 		if (!elem) {
 			return;
@@ -305,7 +304,7 @@
 				// Hide WordPress admin chrome
 				$('html').addClass('wpshadow-fullscreen-mode');
 				$('#wpadminbar').hide();
-				$('#wpshadow-dashboard-wrapper').css({
+				$('.wpshadow-dashboard').css({
 					'width': '100vw',
 					'height': '100vh',
 					'margin': '0',
@@ -315,7 +314,7 @@
 				});
 
 				// Optimize for fullscreen display
-				$('#wpshadow-dashboard-wrapper').addClass('wpshadow-fullscreen-optimized');
+				$('.wpshadow-dashboard').addClass('wpshadow-fullscreen-optimized');
 
 				// Enable auto-refresh in fullscreen
 				self.initAutoRefresh();
@@ -366,22 +365,7 @@
 			// Restore WordPress admin chrome
 			$('html').removeClass('wpshadow-fullscreen-mode');
 			$('#wpadminbar').show();
-		$('#wpshadow-dashboard-wrapper').css({
-			'width': '',
-			'height': '',
-				'overflow': ''
-			});
-
-			// Hide fullscreen instructions
-			$('#wpshadow-fullscreen-instructions').remove();
-
-			// Disable fullscreen auto-refresh
-			this.stopAutoRefresh();
-
-			// Update button text
-			$('#wpshadow-fullscreen-toggle').html('Full Screen');
-
-			// Unbind ESC handler
+		$('.wpshadow-dashboard').css({
 			$(document).off('keydown.wpshadow-fullscreen');
 		},
 
