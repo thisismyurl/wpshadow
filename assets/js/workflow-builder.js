@@ -36,7 +36,10 @@
 			this.setupAccessibility();
 			this.addCanvasControls();
 			this.addSearchFilter();
-
+			
+			// Auto-generate a silly workflow name on page load
+			const sillyName = this.generateRidiculousName();
+			$('#wps-workflow-name').val(sillyName).attr('placeholder', sillyName);
 
 			this.createCanvasControls();
 			this.announceToScreenReader('Workflow builder loaded. Press Tab to navigate blocks, Enter to configure.');

@@ -286,11 +286,16 @@
 }
 
 .wps-workflow-header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
 	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
 }
 
 .wps-workflow-name-input {
-	width: 100%;
+	flex: 1;
+	min-width: 300px;
 	max-width: 600px;
 	font-size: 1.25rem;
 	font-weight: 500;

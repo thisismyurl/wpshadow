@@ -23,14 +23,6 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 ?>
 
 <div class="wps-page-container">
-	<!-- Skip Links for Accessibility -->
-	<a href="#wps-canvas" class="sr-only wps-skip-link">
-		<?php esc_html_e( 'Skip to workflow canvas', 'wpshadow' ); ?>
-	</a>
-	<a href="#wps-workflow-name" class="sr-only wps-skip-link">
-		<?php esc_html_e( 'Skip to workflow name', 'wpshadow' ); ?>
-	</a>
-
 	<!-- Screen Reader Announcements -->
 	<div id="wps-sr-live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 	<div id="wps-sr-alert-region" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
@@ -46,24 +38,6 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 			<p class="wps-page-subtitle">
 				<?php esc_html_e( 'Build automation workflows using visual blocks. Create "if-then" rules like Scratch programming.', 'wpshadow' ); ?>
 			</p>
-		</div>
-		<div class="wps-workflow-toolbar">
-			<button id="wps-save-workflow" class="wps-btn wps-btn--primary" aria-label="<?php esc_attr_e( 'Save workflow', 'wpshadow' ); ?>">
-				<span class="dashicons dashicons-cloud-saved" aria-hidden="true"></span>
-				<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
-			</button>
-			<button id="wps-test-workflow" class="wps-btn wps-btn--secondary" aria-label="<?php esc_attr_e( 'Test workflow', 'wpshadow' ); ?>">
-				<span class="dashicons dashicons-media-play" aria-hidden="true"></span>
-				<?php esc_html_e( 'Test Run', 'wpshadow' ); ?>
-			</button>
-			<button id="wps-clear-canvas" class="wps-btn wps-btn--ghost" aria-label="<?php esc_attr_e( 'Clear canvas', 'wpshadow' ); ?>">
-				<span class="dashicons dashicons-trash" aria-hidden="true"></span>
-				<?php esc_html_e( 'Clear', 'wpshadow' ); ?>
-			</button>
-			<a href="<?php echo esc_url( 'https://wpshadow.com/kb/workflows' ); ?>" class="wps-btn wps-btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'Learn about workflows (opens in new window)', 'wpshadow' ); ?>">
-				<span class="dashicons dashicons-book" aria-hidden="true"></span>
-				<?php esc_html_e( 'Learn Workflows', 'wpshadow' ); ?>
-			</a>
 		</div>
 	</div>
 
@@ -142,7 +116,7 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 
 		<!-- Canvas Area -->
 		<div class="wps-workflow-canvas-wrapper">
-			<!-- Workflow Name Input -->
+			<!-- Workflow Name Input and Toolbar -->
 			<div class="wps-workflow-header">
 				<input 
 					type="text" 
@@ -152,6 +126,24 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 					aria-label="<?php esc_attr_e( 'Workflow name', 'wpshadow' ); ?>"
 					value=""
 				/>
+				<div class="wps-workflow-toolbar">
+					<button id="wps-save-workflow" class="wps-btn wps-btn--primary" aria-label="<?php esc_attr_e( 'Save workflow', 'wpshadow' ); ?>">
+						<span class="dashicons dashicons-cloud-saved" aria-hidden="true"></span>
+						<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
+					</button>
+					<button id="wps-test-workflow" class="wps-btn wps-btn--secondary" aria-label="<?php esc_attr_e( 'Test workflow', 'wpshadow' ); ?>">
+						<span class="dashicons dashicons-media-play" aria-hidden="true"></span>
+						<?php esc_html_e( 'Test Run', 'wpshadow' ); ?>
+					</button>
+					<button id="wps-clear-canvas" class="wps-btn wps-btn--ghost" aria-label="<?php esc_attr_e( 'Clear canvas', 'wpshadow' ); ?>">
+						<span class="dashicons dashicons-trash" aria-hidden="true"></span>
+						<?php esc_html_e( 'Clear', 'wpshadow' ); ?>
+					</button>
+					<a href="<?php echo esc_url( 'https://wpshadow.com/kb/workflows' ); ?>" class="wps-btn wps-btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'Learn about workflows (opens in new window)', 'wpshadow' ); ?>">
+						<span class="dashicons dashicons-book" aria-hidden="true"></span>
+						<?php esc_html_e( 'Learn Workflows', 'wpshadow' ); ?>
+					</a>
+				</div>
 			</div>
 
 			<!-- Canvas -->
