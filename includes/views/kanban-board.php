@@ -140,14 +140,11 @@ $severity_legend = array(
 
 <div class="wrap wpshadow-action-items wps-page-container">
 	<!-- Page Header -->
-	<div class="wps-page-header">
-		<h1 class="wps-page-title">
-			<span class="dashicons dashicons-grid-view"></span>
-			<?php esc_html_e( 'Action Items', 'wpshadow' ); ?>
-		</h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle"><?php esc_html_e( 'Organize and manage your findings by drag-and-dropping them between status columns.', 'wpshadow' ); ?></p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Action Items', 'wpshadow' ),
+		__( 'Organize and manage your findings by drag-and-dropping them between status columns.', 'wpshadow' ),
+		'dashicons-grid-view'
+	); ?>
 
 	<!-- Kanban Board -->
 	<div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">

@@ -81,16 +81,11 @@ function wpshadow_render_help() {
 	?>
 	<div class="wps-page-container">
 		<!-- Page Header -->
-		<div class="wps-page-header">
-			<h1 class="wps-page-title">
-				<span class="dashicons dashicons-editor-help"></span>
-				<?php esc_html_e( 'WPShadow Help & Learning', 'wpshadow' ); ?>
-			</h1>
-			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-			<p class="wps-page-subtitle">
-				<?php esc_html_e( 'Explore tutorials, guides, and resources to get the most out of WPShadow.', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php wpshadow_render_page_header(
+			__( 'WPShadow Help & Learning', 'wpshadow' ),
+			__( 'Explore tutorials, guides, and resources to get the most out of WPShadow.', 'wpshadow' ),
+			'dashicons-editor-help'
+		); ?>
 
 		<!-- Help Resources Grid -->
 		<div class="wps-grid wps-grid-auto-320">

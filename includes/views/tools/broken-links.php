@@ -27,11 +27,10 @@ Tool_View_Base::render_header( __( 'Broken Links', 'wpshadow' ), __( 'Scan your 
 ?>
 
 <div class="wrap">
-	<div class="wps-page-header">
-		<h1 class="wps-page-title"><?php esc_html_e( 'Broken Link Checker', 'wpshadow' ); ?></h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle"><?php esc_html_e( 'Find and fix broken links across your site.', 'wpshadow' ); ?></p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Broken Link Checker', 'wpshadow' ),
+		__( 'Find and fix broken links across your site.', 'wpshadow' )
+	); ?>
 
 	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Scan Site for Broken Links', 'wpshadow' ); ?></h2>

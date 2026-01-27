@@ -28,14 +28,11 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 	<div id="wps-sr-alert-region" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
 
 	<!-- Page Header -->
-	<div class="wps-page-header">
-		<h1 class="wps-page-title">
-			<span class="dashicons dashicons-block-default" aria-hidden="true"></span>
-			<?php esc_html_e( 'Workflow Builder', 'wpshadow' ); ?>
-		</h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle"><?php esc_html_e( 'Build automation workflows using visual blocks to automate your WordPress maintenance.', 'wpshadow' ); ?></p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Workflow Builder', 'wpshadow' ),
+		__( 'Build automation workflows using visual blocks to automate your WordPress maintenance.', 'wpshadow' ),
+		'dashicons-block-default'
+	); ?>
 
 	<!-- Main Container -->
 	<div class="wps-workflow-builder-container">

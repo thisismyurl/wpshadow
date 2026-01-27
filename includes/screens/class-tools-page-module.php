@@ -173,16 +173,11 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 		?>
 	<div class="wps-page-container">
 		<!-- Page Header -->
-		<div class="wps-page-header">
-			<h1 class="wps-page-title">
-				<span class="dashicons dashicons-admin-tools"></span>
-				<?php esc_html_e( 'WPShadow Tools', 'wpshadow' ); ?>
-			</h1>
-			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-			<p class="wps-page-subtitle">
-				<?php esc_html_e( 'Additional tools for site analysis and optimization.', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php wpshadow_render_page_header(
+			__( 'WPShadow Tools', 'wpshadow' ),
+			__( 'Additional tools for site analysis and optimization.', 'wpshadow' ),
+			'dashicons-admin-tools'
+		); ?>
 
 		<!-- Tools Grid -->
 		<div class="wps-grid wps-grid-auto-320">

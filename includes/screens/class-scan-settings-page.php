@@ -31,11 +31,10 @@ function wpshadow_render_scan_settings() {
 	$nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	?>
 	<div class="wrap">
-		<div class="wps-page-header">
-			<h1 class="wps-page-title"><?php echo esc_html__( 'Scan Settings', 'wpshadow' ); ?></h1>
-			<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-			<p class="wps-page-subtitle"><?php echo esc_html__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' ); ?></p>
-		</div>
+		<?php wpshadow_render_page_header(
+			__( 'Scan Settings', 'wpshadow' ),
+			__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' )
+		); ?>
 
 		<section aria-labelledby="diagnostics-heading">
 			<h2 id="diagnostics-heading"><?php echo esc_html__( 'Diagnostics', 'wpshadow' ); ?></h2>

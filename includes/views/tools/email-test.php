@@ -110,11 +110,10 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 ?>
 
 <div class="wrap">
-	<div class="wps-page-header">
-		<h1 class="wps-page-title"><?php esc_html_e( 'Email Test & Configuration', 'wpshadow' ); ?></h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle"><?php esc_html_e( 'Test your WordPress email delivery and configure the From Name and From Email address.', 'wpshadow' ); ?></p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Email Test & Configuration', 'wpshadow' ),
+		__( 'Test your WordPress email delivery and configure the From Name and From Email address.', 'wpshadow' )
+	); ?>
 
 	<?php if ( $test_results ) : ?>
 		<div class="notice notice-<?php echo esc_attr( $test_results['success'] ? 'success' : 'error' ); ?> is-dismissible">

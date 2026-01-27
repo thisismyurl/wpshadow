@@ -49,11 +49,10 @@ class Visual_Comparisons_Page {
 
 		?>
 		<div class="wrap">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title"><?php esc_html_e( 'Visual Comparisons', 'wpshadow' ); ?></h1>
-				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-				<p class="wps-page-subtitle"><?php esc_html_e( 'Visual comparison captures screenshots before and after treatments are applied, helping you ensure changes don\'t break your site.', 'wpshadow' ); ?></p>
-			</div>
+			<?php wpshadow_render_page_header(
+				__( 'Visual Comparisons', 'wpshadow' ),
+				__( 'Visual comparison captures screenshots before and after treatments are applied, helping you ensure changes don\'t break your site.', 'wpshadow' )
+			); ?>
 
 			<div class="wpshadow-visual-comparisons">
 				<!-- Statistics Cards -->

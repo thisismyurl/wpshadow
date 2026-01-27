@@ -26,22 +26,15 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 
 <div class="wps-page-container wpshadow-workflow-list">
 	<!-- Page Header -->
-	<div class="wps-page-header">
-		<h1 class="wps-page-title">
-			<span class="dashicons dashicons-update" style="color: var(--wps-primary);"></span>
-			<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
-		</h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle">
-			<?php
-			printf(
-				/* translators: %s: link to knowledge base article */
-				esc_html__( 'Automate your WordPress management with smart workflows. %s', 'wpshadow' ),
-				'<a href="https://wpshadow.com/kb/workflow-manager" target="_blank">' . esc_html__( 'Learn about workflows →', 'wpshadow' ) . '</a>'
-			);
-			?>
-		</p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Workflow Manager', 'wpshadow' ),
+		sprintf(
+			/* translators: %s: link to knowledge base article */
+			__( 'Automate your WordPress management with smart workflows. %s', 'wpshadow' ),
+			'<a href="https://wpshadow.com/kb/workflow-manager" target="_blank">' . __( 'Learn about workflows →', 'wpshadow' ) . '</a>'
+		),
+		'dashicons-update'
+	); ?>
 
 	<?php if ( empty( $workflows ) ) : ?>
 		<!-- Create Workflow Button Section -->

@@ -30,11 +30,10 @@ class Guardian_Settings {
 		ob_start();
 		?>
 		<div class="wrap wpshadow-guardian-settings">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title"><?php esc_html_e( 'WPShadow Guardian Settings', 'wpshadow' ); ?></h1>
-				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-				<p class="wps-page-subtitle"><?php esc_html_e( 'Configure automated health monitoring and intelligent fix suggestions.', 'wpshadow' ); ?></p>
-			</div>
+			<?php wpshadow_render_page_header(
+				__( 'WPShadow Guardian Settings', 'wpshadow' ),
+				__( 'Configure automated health monitoring and intelligent fix suggestions.', 'wpshadow' )
+			); ?>
 			
 			<form method="post" action="options.php" class="guardian-settings-form">
 				<?php settings_fields( 'wpshadow_guardian_settings' ); ?>

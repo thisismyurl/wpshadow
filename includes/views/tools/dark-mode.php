@@ -40,11 +40,10 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 ?>
 
 <div class="wrap">
-	<div class="wps-page-header">
-		<h1 class="wps-page-title"><?php esc_html_e( 'Dark Mode', 'wpshadow' ); ?></h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle"><?php esc_html_e( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ); ?></p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Dark Mode', 'wpshadow' ),
+		__( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' )
+	); ?>
 
 	<?php echo wp_kses_post( $saved_message ); ?>
 

@@ -22,11 +22,10 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 ?>
 
 <div class="wrap wpshadow-email-recipients">
-	<div class="wps-page-header">
-		<h1 class="wps-page-title"><?php esc_html_e( 'Workflow Email Recipients', 'wpshadow' ); ?></h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle"><?php esc_html_e( 'Manage approved email recipients that can be used when sending emails from workflows. All emails must be verified or approved by an admin before they can be used.', 'wpshadow' ); ?></p>
-	</div>
+	<?php wpshadow_render_page_header(
+		__( 'Workflow Email Recipients', 'wpshadow' ),
+		__( 'Manage approved email recipients that can be used when sending emails from workflows. All emails must be verified or approved by an admin before they can be used.', 'wpshadow' )
+	); ?>
 
 	<!-- Add New Recipient Form -->
 	<div class="card">

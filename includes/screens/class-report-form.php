@@ -29,16 +29,11 @@ class Report_Form {
 		?>
 		<div class="wps-page-container">
 			<!-- Page Header -->
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-chart-line"></span>
-					<?php esc_html_e( 'Generate Reports', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Create, preview, and export custom reports of your site activity.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php wpshadow_render_page_header(
+				__( 'Generate Reports', 'wpshadow' ),
+				__( 'Create, preview, and export custom reports of your site activity.', 'wpshadow' ),
+				'dashicons-chart-line'
+			); ?>
 
 			<!-- Two-Column Layout: 33/66 Split -->
 			<div class="wps-grid" style="grid-template-columns: 1fr 2fr; gap: 2rem;">
