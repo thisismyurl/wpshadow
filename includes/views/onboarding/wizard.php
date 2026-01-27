@@ -674,76 +674,77 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			}
 		});
 
-	// Back button
-	$('.back-step').on('click', function(e) {
-		e.preventDefault();
-		
-		const $current = $('.onboarding-step.active');
-		const currentId = $current.attr('id');
-		
-		$current.removeClass('active');
-		
-		// Navigate to previous step
-		if (currentId === 'step-comfort') {
-			$('#step-platform').addClass('active');
-		} else if (currentId === 'step-config') {
-			$('#step-comfort').addClass('active');
-		} else if (currentId === 'step-privacy') {
-			$('#step-config').addClass('active');
-		} else if (currentId === 'step-confirm') {
-			$('#step-privacy').addClass('active');
-		}
-	});
-
-	// Skip onboarding
-	$('#skip-onboarding').on('click', function(e) {
-		e.preventDefault();
-
-		if (!confirm('<?php echo esc_js( __( 'Are you sure? The onboarding helps us customize your experience.', 'wpshadow' ) ); ?>')) {
-			return;
-		}
-
-		$.post(ajaxurl, {
-			action: 'wpshadow_skip_onboarding',
-			nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
-		}, function() {
-			window.location.reload();
+		// Back button
+		$('.back-step').on('click', function(e) {
+			e.preventDefault();
+			
+			const $current = $('.onboarding-step.active');
+			const currentId = $current.attr('id');
+			
+			$current.removeClass('active');
+			
+			// Navigate to previous step
+			if (currentId === 'step-comfort') {
+				$('#step-platform').addClass('active');
+			} else if (currentId === 'step-config') {
+				$('#step-comfort').addClass('active');
+			} else if (currentId === 'step-privacy') {
+				$('#step-config').addClass('active');
+			} else if (currentId === 'step-confirm') {
+				$('#step-privacy').addClass('active');
+			}
 		});
-	});
 
-	// Finish onboarding
-	$('#finish-onboarding').on('click', function() {
-		const $btn = $(this);
-		$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Setting up...', 'wpshadow' ) ); ?>');
-		
-		// Collect all data
-		const configData = $('#continue-config').data('config') || {};
-		const privacyData = $('#continue-privacy').data('privacy') || {};
+		// Skip onboarding
+		$('#skip-onboarding').on('click', function(e) {
+			e.preventDefault();
 
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			data: {
-				action: 'wpshadow_save_onboarding',
-				platform: selectedPlatform,
-				comfort_level: selectedComfort,
-				config: configData,
-				privacy: privacyData,
+			if (!confirm('<?php echo esc_js( __( 'Are you sure? The onboarding helps us customize your experience.', 'wpshadow' ) ); ?>')) {
+				return;
+			}
+
+			$.post(ajaxurl, {
+				action: 'wpshadow_skip_onboarding',
 				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
-			},
-			success: function(response) {
-				if (response.success) {
-					window.location.reload();
-				} else {
-					WPShadowModal.alert({title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>', message: response.data || '<?php echo esc_js( __( 'Something went wrong. Please try again.', 'wpshadow' ) ); ?>');
+			}, function() {
+				window.location.reload();
+			});
+		});
+
+		// Finish onboarding
+		$('#finish-onboarding').on('click', function() {
+			const $btn = $(this);
+			$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Setting up...', 'wpshadow' ) ); ?>');
+			
+			// Collect all data
+			const configData = $('#continue-config').data('config') || {};
+			const privacyData = $('#continue-privacy').data('privacy') || {};
+
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wpshadow_save_onboarding',
+					platform: selectedPlatform,
+					comfort_level: selectedComfort,
+					config: configData,
+					privacy: privacyData,
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
+				},
+				success: function(response) {
+					if (response.success) {
+						window.location.reload();
+					} else {
+						WPShadowModal.alert({title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>', message: response.data || '<?php echo esc_js( __( 'Something went wrong. Please try again.', 'wpshadow' ) ); ?>');
+						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
+					}
+				},
+				error: function(xhr, status, error) {
+					console.error('AJAX Error:', status, error, xhr.responseText);
+					WPShadowModal.alert({title: '<?php echo esc_js( __( 'Connection Error', 'wpshadow' ) ); ?>', message: '<?php echo esc_js( __( 'Connection error. Please try again.', 'wpshadow' ) ); ?>', type: 'error'});
 					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
 				}
-			},
-			error: function(xhr, status, error) {
-				console.error('AJAX Error:', status, error, xhr.responseText);
-				WPShadowModal.alert({title: '<?php echo esc_js( __( 'Connection Error', 'wpshadow' ) ); ?>', message: '<?php echo esc_js( __( 'Connection error. Please try again.', 'wpshadow' ) ); ?>', type: 'error'});
-				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
-			}
+			});
 		});
 	});
 });
