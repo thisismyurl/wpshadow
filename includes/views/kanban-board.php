@@ -537,18 +537,11 @@ $severity_legend = array(
 	</div>
 
 	<!-- Color Legend -->
-	<div class="wpshadow-kanban-legend wps-flex wps-gap-3 wps-items-center wps-mt-4 wps-p-4 wps-rounded-lg wps-bg-white wps-border wps-border-gray-200">
+	<div class="wpshadow-kanban-legend wps-flex wps-gap-6 wps-items-center wps-mt-4 wps-p-4 wps-rounded-lg wps-bg-white wps-border wps-border-gray-200">
 		<p class="wps-kanban-legend-label wps-m-0 wps-font-semibold">Color legend</p>
 			<?php foreach ( $severity_legend as $legend ) : ?>
-				<p class="wps-inline-flex">
-					<span style="
-					display: inline-block;
-					width: 12px;
-					height: 12px;
-					border-radius: 3px;
-					background: <?php echo esc_attr( $legend['bg'] ); ?>;
-					border: 1px solid <?php echo esc_attr( $legend['color'] ); ?>;
-				"></span>
+				<p class="wps-inline-flex wps-gap-2 wps-items-center wps-m-0">
+					<span class="wps-legend-color-box" style="width: 12px; height: 12px; border-radius: 3px; background: <?php echo esc_attr( $legend['bg'] ); ?>; border: 1px solid <?php echo esc_attr( $legend['color'] ); ?>; display: inline-block;"></span>
 					<span><?php echo esc_html( $legend['label'] ); ?></span>
 				</p>
 			<?php endforeach; ?>

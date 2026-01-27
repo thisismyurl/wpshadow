@@ -346,3 +346,19 @@
 .wpshadow-gauge-workflows { --gauge-color: #ea580c; }       /* Orange */
 .wpshadow-gauge-wordpress-health { --gauge-color: #21759b; } /* WordPress Blue */
 .wpshadow-gauge-overall { --gauge-color: #1976d2; }         /* Deep Blue */
+/* ============================================================================
+	Gauge Status Text Color Mapping (via data attributes)
+	============================================================================ */
+
+.wps-category-gauge-status-text[data-status="Excellent"],
+.wps-category-gauge-status-text[data-status="Good"] {
+	color: #2e7d32 !important; /* Green */
+}
+
+.wps-category-gauge-status-text[data-status="Fair"] {
+	color: #f57c00 !important; /* Orange */
+}
+
+.wps-category-gauge-status-text[data-status="Poor"] {
+	color: #c62828 !important; /* Red */
+}

@@ -55,7 +55,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 
 			self::send_success( $snapshot );
 		} catch ( \Exception $e ) {			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging			error_log( 'Dashboard Data Error: ' . $e->getMessage() );
-			self::send_error( __( 'Failed to retrieve dashboard data', 'wpshadow' ) );
+		self::send_error( array( 'message' => __( 'Failed to retrieve dashboard data', 'wpshadow' ) ) );
 		}
 	}
 }

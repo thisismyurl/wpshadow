@@ -315,11 +315,11 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 
 						<div class="wps-category-gauge-content">
 							<!-- Title -->
-						<h4 class="wps-category-gauge-title" style="color: #2563eb;">
+						<h4 class="wps-category-gauge-title"><?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?></h4>
 
 							<!-- Status -->
 							<div class="wps-category-gauge-status">
-								<span class="wps-category-gauge-status-text" style="color: <?php echo esc_attr( $status_color ); ?>;">
+							<span class="wps-category-gauge-status-text" data-status="<?php echo esc_attr( $status_text ); ?>">
 									<span aria-hidden="true"><?php echo esc_html( $status_icon ); ?></span>
 									<?php echo esc_html( $status_text ); ?>
 								</span>
