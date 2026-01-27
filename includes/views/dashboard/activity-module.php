@@ -30,7 +30,7 @@ function wpshadow_get_recent_activity(): array {
 		return array();
 	}
 
-	$recent = \WPShadow\Core\Activity_Logger::get_recent( 10 );
+	$recent = \WPShadow\Core\Activity_Logger::get_recent( 50 );
 
 	$action_labels = array(
 		'diagnostic_run'            => __( 'Diagnostic Run', 'wpshadow' ),
@@ -161,8 +161,8 @@ function wpshadow_render_recent_activity(): void {
 			<?php
 			$count = 0;
 			foreach ( $activity as $entry ) :
-				if ( $count >= 5 ) {
-					break; // Show only first 5 activities
+				if ( $count >= 15 ) {
+					break; // Show up to 15 activities
 				}
 				++$count;
 

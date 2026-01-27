@@ -190,8 +190,8 @@ $action_labels = array(
 				<select id="activity_user" name="activity_user" class="wps-select">
 					<option value=""><?php esc_html_e( 'All Users', 'wpshadow' ); ?></option>
 					<?php
-					// Get all unique users from activity log
-					$all_activities = \WPShadow\Core\Activity_Logger::get_activities( array(), 10000, 0 );
+					// Get unique users from activity log (get all stored, max 500)
+					$all_activities = \WPShadow\Core\Activity_Logger::get_activities( array(), 500, 0 );
 					$unique_users   = array();
 					foreach ( $all_activities['activities'] as $activity ) {
 						if ( ! empty( $activity['user_id'] ) && ! isset( $unique_users[ $activity['user_id'] ] ) ) {
