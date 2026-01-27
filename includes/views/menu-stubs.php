@@ -85,10 +85,32 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 		// Check if a specific tab is requested (Issue #1685)
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
 		
-		// If a specific tab is requested, redirect to appropriate settings page or show tab content
+		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
-			// For now, show a message that settings are being developed
-			// This can be expanded later with actual settings forms
+			$settings_pages = array(
+				'general'      => 'WPShadow\Settings\General_Settings_Page',
+				'privacy'      => 'WPShadow\Settings\Privacy_Settings_Page',
+				'notifications' => 'WPShadow\Settings\Notifications_Settings_Page',
+				'backup'       => 'WPShadow\Settings\Backup_Settings_Page',
+				'advanced'     => 'WPShadow\Settings\Advanced_Settings_Page',
+			);
+
+			// Check if the requested tab exists
+			if ( isset( $settings_pages[ $tab ] ) ) {
+				$class = $settings_pages[ $tab ];
+
+				// Require the settings file if it exists
+				$file_path = WPSHADOW_PATH . 'includes/settings/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\Settings\', '', $class ) ) ) . '.php';
+				if ( file_exists( $file_path ) ) {
+					require_once $file_path;
+					if ( class_exists( $class ) && method_exists( $class, 'render' ) ) {
+						$class::render();
+						return;
+					}
+				}
+			}
+
+			// Fallback for unknown tabs
 			?>
 			<div class="wps-page-container">
 				<div class="wps-page-header">
@@ -109,10 +131,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					</p>
 				</div>
 				
-				<div class="wps-card">
+				<div class="wps-card wps-card--warning">
 					<div class="wps-card-body">
-						<p><?php esc_html_e( 'Settings interface for this section is being developed.', 'wpshadow' ); ?></p>
-						<p><?php esc_html_e( 'Coming soon: Configure options directly from this page.', 'wpshadow' ); ?></p>
+						<p><?php esc_html_e( 'This settings section is not available. Please check the URL or select a different settings tab.', 'wpshadow' ); ?></p>
 					</div>
 				</div>
 			</div>
