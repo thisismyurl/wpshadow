@@ -161,8 +161,6 @@ function wpshadow_render_recent_activity(): void {
 			<?php
 			$count = 0;
 			foreach ( $activity as $entry ) :
-			if ( $count >= 5 ) {
-				break; // Show only 5 items for full-screen data center view
 				$icon_class = 'dashicons-yes-alt';
 				$icon_color = 'var(--wps-success)';
 
@@ -182,6 +180,10 @@ function wpshadow_render_recent_activity(): void {
 					$icon_class = 'dashicons-admin-settings';
 					$icon_color = 'var(--wps-gray-600)';
 				}
+
+				if ( $count >= 5 ) {
+					break; // Show only 5 items for full-screen data center view
+				}
 				?>
 				<div class="wps-activity-item" role="listitem">
 					<div class="wps-activity-icon" style="color: <?php echo esc_attr( $icon_color ); ?>;" aria-hidden="true">
@@ -194,7 +196,10 @@ function wpshadow_render_recent_activity(): void {
 						</time>
 					</div>
 				</div>
-			<?php endforeach; ?>
+			<?php 
+				$count++;
+			endforeach; 
+			?>
 			</div>
 		</div>
 	</div>
