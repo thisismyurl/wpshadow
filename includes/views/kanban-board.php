@@ -532,7 +532,7 @@ $severity_legend = array(
 
 					<?php if ( empty( $findings_by_status[ $status ] ) ) : ?>
 						<div class="kanban-column-empty kanban-empty-message">
-							<?php if ( $status === 'fixed' ) : ?>
+							<?php if ( $column_status === 'fixed' ) : ?>
 								<?php esc_html_e( 'No workflows yet. Drag findings here to create workflows.', 'wpshadow' ); ?>
 							<?php else : ?>
 								<?php esc_html_e( 'No findings yet', 'wpshadow' ); ?>
