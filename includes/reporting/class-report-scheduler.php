@@ -310,11 +310,11 @@ class Report_Scheduler {
 		$schedules   = self::get_all_schedules();
 		$frequencies = self::get_frequencies();
 		?>
-		<div style="max-width: 900px;">
+		<div class="wps-report-scheduler-container">
 			<!-- Executive Report Schedule -->
 			<div class="wps-p-24-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-chart-area" style="font-size: 24px; color: #0073aa;"></span>
+					<span class="dashicons dashicons-chart-area" class="wps-report-scheduler-icon"></span>
 					<h3 class="wps-m-0"><?php esc_html_e( 'Executive Report Schedule', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0"><?php esc_html_e( 'Receive a high-level summary of your site\'s health and recommendations.', 'wpshadow' ); ?></p>
@@ -330,14 +330,14 @@ class Report_Scheduler {
 						$exec_config = $schedules['executive_report'] ?? array();
 						$is_enabled  = isset( $exec_config['enabled'] ) && $exec_config['enabled'];
 						?>
-						<input type="checkbox" name="enabled" <?php checked( $is_enabled ); ?> id="exec-report-enabled" style="width: 18px; height: 18px; cursor: pointer;" />
-						<label for="exec-report-enabled" style="cursor: pointer; font-weight: 500;">
+						<input type="checkbox" name="enabled" <?php checked( $is_enabled ); ?> id="exec-report-enabled" class="wps-report-scheduler-checkbox" />
+						<label for="exec-report-enabled" class="wps-report-scheduler-label">
 							<?php esc_html_e( 'Enable automatic delivery', 'wpshadow' ); ?>
 						</label>
 					</div>
 					
 					<!-- Frequency -->
-					<div style="margin-bottom: 16px;">
+					<div class="wps-report-section-margin">
 						<label class="wps-block">
 							<?php esc_html_e( 'Frequency:', 'wpshadow' ); ?>
 						</label>
@@ -359,7 +359,7 @@ class Report_Scheduler {
 					</div>
 					
 					<!-- Recipients -->
-					<div style="margin-bottom: 16px;">
+					<div class="wps-report-section-margin">
 						<label class="wps-block">
 							<?php esc_html_e( 'Send to:', 'wpshadow' ); ?>
 						</label>
@@ -373,14 +373,14 @@ class Report_Scheduler {
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Schedule', 'wpshadow' ); ?>
 					</button>
-					<span class="schedule-status" style="margin-left: 10px;"></span>
+					<span class="schedule-status" class="wps-report-status"></span>
 				</form>
 			</div>
 
 			<!-- Detailed Report Schedule -->
 			<div class="wps-p-24-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-chart-line" style="font-size: 24px; color: #0073aa;"></span>
+					<span class="dashicons dashicons-chart-line" class="wps-report-scheduler-icon"></span>
 					<h3 class="wps-m-0"><?php esc_html_e( 'Detailed Report Schedule', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0"><?php esc_html_e( 'Receive comprehensive technical details about all findings and recommendations.', 'wpshadow' ); ?></p>
@@ -396,14 +396,14 @@ class Report_Scheduler {
 						$det_config = $schedules['detailed_report'] ?? array();
 						$is_enabled = isset( $det_config['enabled'] ) && $det_config['enabled'];
 						?>
-						<input type="checkbox" name="enabled" <?php checked( $is_enabled ); ?> id="det-report-enabled" style="width: 18px; height: 18px; cursor: pointer;" />
-						<label for="det-report-enabled" style="cursor: pointer; font-weight: 500;">
+						<input type="checkbox" name="enabled" <?php checked( $is_enabled ); ?> id="det-report-enabled" class="wps-report-scheduler-checkbox" />
+						<label for="det-report-enabled" class="wps-report-scheduler-label">
 							<?php esc_html_e( 'Enable automatic delivery', 'wpshadow' ); ?>
 						</label>
 					</div>
 					
 					<!-- Frequency -->
-					<div style="margin-bottom: 16px;">
+					<div class="wps-report-section-margin">
 						<label class="wps-block">
 							<?php esc_html_e( 'Frequency:', 'wpshadow' ); ?>
 						</label>
@@ -425,7 +425,7 @@ class Report_Scheduler {
 					</div>
 					
 					<!-- Recipients -->
-					<div style="margin-bottom: 16px;">
+					<div class="wps-report-section-margin">
 						<label class="wps-block">
 							<?php esc_html_e( 'Send to:', 'wpshadow' ); ?>
 						</label>
@@ -439,7 +439,7 @@ class Report_Scheduler {
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Schedule', 'wpshadow' ); ?>
 					</button>
-					<span class="schedule-status" style="margin-left: 10px;"></span>
+					<span class="schedule-status" class="wps-report-status"></span>
 				</form>
 			</div>
 		</div>
@@ -471,9 +471,9 @@ class Report_Scheduler {
 				
 				$.post(ajaxurl, data, function(response) {
 					if (response.success) {
-						$status.html('<span style="color: #2e7d32;">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
+						$status.html('<span class="wps-schedule-success">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
 					} else {
-						$status.html('<span style="color: #c62828;">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
+						$status.html('<span class="wps-schedule-error">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
 					}
 					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Schedule', 'wpshadow' ) ); ?>');
 				});

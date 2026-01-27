@@ -3967,3 +3967,42 @@ a:focus-visible {
     font-size: 24px;
     color: #2e7d32;
 }
+
+/**
+ * Report Scheduler Styles
+ */
+.wps-report-scheduler-container {
+    max-width: 900px;
+}
+
+.wps-report-scheduler-icon {
+    font-size: 24px;
+    color: var(--wps-primary);
+}
+
+.wps-report-scheduler-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.wps-report-scheduler-label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.wps-report-section-margin {
+    margin-bottom: 16px;
+}
+
+.wps-report-status {
+    margin-left: 10px;
+}
+
+.wps-schedule-success {
+    color: #2e7d32;
+}
+
+.wps-schedule-error {
+    color: #c62828;
+}
