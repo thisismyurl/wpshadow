@@ -61,7 +61,11 @@ echo ""
 
 # Check for password file and setup sshpass if available
 SSH_CMD="ssh"
-if [ -f ".deploy-password" ]; then
+if [ -f "$HOME/.ssh/greengeeks_rsa" ]; then
+    SSH_KEY_FILE="$HOME/.ssh/greengeeks_rsa"
+    SSH_CMD="ssh -i $SSH_KEY_FILE"
+    echo -e "${YELLOW}Using SSH key: $SSH_KEY_FILE${NC}"
+elif [ -f ".deploy-password" ]; then
     export SSHPASS=$(cat .deploy-password)
     SSH_CMD="sshpass -e ssh"
     echo -e "${YELLOW}Using password authentication${NC}"
