@@ -161,12 +161,8 @@ function wpshadow_render_recent_activity(): void {
 			<?php
 			$count = 0;
 			foreach ( $activity as $entry ) :
-				if ( $count >= 15 ) {
-					break; // Show up to 15 activities
-				}
-				++$count;
-
-				// Determine icon based on action type
+			if ( $count >= 5 ) {
+				break; // Show only 5 items for full-screen data center view
 				$icon_class = 'dashicons-yes-alt';
 				$icon_color = 'var(--wps-success)';
 

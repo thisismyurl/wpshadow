@@ -203,6 +203,15 @@ class Report_Form {
 
 			<!-- Previous Reports (100% width below) -->
 			<?php echo wp_kses_post( self::render_previous_reports() ); ?>
+
+			<!-- Activity History Section -->
+			<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
+				<?php
+				if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+					wpshadow_render_page_activities( 'reports', 10 );
+				}
+				?>
+			</div>
 		</div>
 		<?php
 

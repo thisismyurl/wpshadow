@@ -170,4 +170,13 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		wpshadow_render_recent_activity();
 	}
 	?>
+
+	<!-- Page-Specific Activity History Section -->
+	<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
+		<?php
+		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+			wpshadow_render_page_activities( 'workflows', 10 );
+		}
+		?>
+	</div>
 <?php

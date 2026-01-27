@@ -383,6 +383,16 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 			});
 		});
 	</script>
+
+	<!-- Activity History Section -->
+	<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
+		<?php
+		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+			wpshadow_render_page_activities( 'tools', 10 );
+		}
+		?>
+	</div>
+
 		<?php
 	}
 } // End if ( ! function_exists( 'wpshadow_render_tools' ) )

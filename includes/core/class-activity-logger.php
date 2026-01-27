@@ -101,14 +101,42 @@ class Activity_Logger {
 			$log = array_filter(
 				$log,
 				function ( $activity ) use ( $filters ) {
-					// Category filter
-					if ( ! empty( $filters['category'] ) && $activity['category'] !== $filters['category'] ) {
-						return false;
+					// Category filter (supports both single and array)
+					if ( ! empty( $filters['category'] ) ) {
+						$category = $filters['category'];
+						if ( is_array( $category ) ) {
+							if ( ! in_array( $activity['category'], $category, true ) ) {
+								return false;
+							}
+						} elseif ( $activity['category'] !== $category ) {
+							return false;
+						}
 					}
 
-					// Action filter
-					if ( ! empty( $filters['action'] ) && $activity['action'] !== $filters['action'] ) {
-						return false;
+					// Categories filter (alias for category as array)
+					if ( ! empty( $filters['categories'] ) && is_array( $filters['categories'] ) ) {
+						if ( ! in_array( $activity['category'], $filters['categories'], true ) ) {
+							return false;
+						}
+					}
+
+					// Action filter (supports both single and array)
+					if ( ! empty( $filters['action'] ) ) {
+						$action = $filters['action'];
+						if ( is_array( $action ) ) {
+							if ( ! in_array( $activity['action'], $action, true ) ) {
+								return false;
+							}
+						} elseif ( $activity['action'] !== $action ) {
+							return false;
+						}
+					}
+
+					// Actions filter (alias for action as array)
+					if ( ! empty( $filters['actions'] ) && is_array( $filters['actions'] ) ) {
+						if ( ! in_array( $activity['action'], $filters['actions'], true ) ) {
+							return false;
+						}
 					}
 
 					// User filter
