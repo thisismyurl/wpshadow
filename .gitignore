@@ -62,3 +62,4 @@ desktop.ini
 /test-results/
 /tests/e2e-reports/
 /tests/e2e/.env
+.tmp/

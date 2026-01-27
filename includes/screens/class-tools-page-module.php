@@ -30,84 +30,98 @@ function wpshadow_get_tools_catalog() {
 			'title'   => __( 'Quick Scan', 'wpshadow' ),
 			'desc'    => __( 'Run a fast, lightweight scan of your site for common issues and security concerns.', 'wpshadow' ),
 			'tool'    => 'quick-scan',
+			'icon'    => 'dashicons-performance',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Deep Scan', 'wpshadow' ),
 			'desc'    => __( 'Run a comprehensive scan that checks database health, performance, and advanced compatibility issues.', 'wpshadow' ),
 			'tool'    => 'deep-scan',
+			'icon'    => 'dashicons-search',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
 			'desc'    => __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ),
 			'tool'    => 'a11y-audit',
+			'icon'    => 'dashicons-universal-access',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Broken Link Checker', 'wpshadow' ),
 			'desc'    => __( 'Find and fix broken links across your site.', 'wpshadow' ),
 			'tool'    => 'broken-links',
+			'icon'    => 'dashicons-admin-links',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Color Contrast Checker', 'wpshadow' ),
 			'desc'    => __( 'Check color combinations for accessibility compliance.', 'wpshadow' ),
 			'tool'    => 'color-contrast',
+			'icon'    => 'dashicons-art',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Dark Mode', 'wpshadow' ),
 			'desc'    => __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ),
 			'tool'    => 'dark-mode',
+			'icon'    => 'dashicons-visibility',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Email Test & Configuration', 'wpshadow' ),
 			'desc'    => __( 'Test email delivery and configure From Name/Email to ensure emails are sent properly.', 'wpshadow' ),
 			'tool'    => 'email-test',
+			'icon'    => 'dashicons-email',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Cache Management', 'wpshadow' ),
 			'desc'    => __( 'Manage site caching and clear cache when needed.', 'wpshadow' ),
 			'tool'    => 'simple-cache',
+			'icon'    => 'dashicons-database',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Magic Link Support', 'wpshadow' ),
 			'desc'    => __( 'Generate secure one-time access links for support staff.', 'wpshadow' ),
 			'tool'    => 'magic-link-support',
+			'icon'    => 'dashicons-admin-users',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Mobile Friendliness', 'wpshadow' ),
 			'desc'    => __( 'Test your site for mobile compatibility and responsive design.', 'wpshadow' ),
 			'tool'    => 'mobile-friendliness',
+			'icon'    => 'dashicons-smartphone',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Tips & Guidance', 'wpshadow' ),
 			'desc'    => __( 'Friendly tooltips across wp-admin with opt-out controls and helpful guidance for beginners.', 'wpshadow' ),
 			'tool'    => 'tips-coach',
+			'icon'    => 'dashicons-lightbulb',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Kanban Report', 'wpshadow' ),
 			'desc'    => __( 'Visual board to organize and track findings by status with drag-and-drop interface.', 'wpshadow' ),
 			'tool'    => 'kanban-report',
+			'icon'    => 'dashicons-grid-view',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Activity History', 'wpshadow' ),
 			'desc'    => __( 'Comprehensive audit log of all actions, changes, and fixes performed on your site.', 'wpshadow' ),
 			'tool'    => 'activity-history',
+			'icon'    => 'dashicons-backup',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Visual Comparisons', 'wpshadow' ),
 			'desc'    => __( 'Visual regression testing and screenshot comparison tool.', 'wpshadow' ),
 			'tool'    => 'visual-comparisons',
+			'icon'    => 'dashicons-format-image',
 			'enabled' => false, // Coming soon
 		),
 	);
@@ -157,20 +171,24 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 		</div>
 
 		<!-- Tools Grid -->
-		<div class="wps-grid wps-grid-3">
+		<div class="wps-grid wps-grid-auto-320">
 			<?php
 			foreach ( $catalog as $item ) :
 				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
+				$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
 				?>
 			<div class="wps-card">
-				<div class="wps-card-header">
-					<div>
-						<h3 class="wps-card-title">
-							<?php echo esc_html( $item['title'] ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php echo esc_html( $item['desc'] ); ?>
-						</p>
+				<div class="wps-card-header wps-pb-3 wps-border-bottom">
+					<div class="wps-flex wps-gap-3 wps-items-start">
+						<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-3xl wps-text-primary"></span>
+						<div>
+							<h3 class="wps-card-title wps-m-0">
+								<?php echo esc_html( $item['title'] ); ?>
+							</h3>
+							<p class="wps-card-description wps-m-0">
+								<?php echo esc_html( $item['desc'] ); ?>
+							</p>
+						</div>
 					</div>
 				</div>
 				<div class="wps-card-body">
