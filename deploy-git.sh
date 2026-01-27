@@ -51,7 +51,7 @@ echo ""
 if ! git diff-index --quiet HEAD --; then
     echo -e "${YELLOW}Committing changes...${NC}"
     git add .
-    git commit -m "Deploy v$NEW_VERSION"
+    git commit -m "Deploy v$NEW_VERSION" || true
     echo "✅ Changes committed"
 else
     echo "✅ No uncommitted changes"
