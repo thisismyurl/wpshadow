@@ -87,7 +87,7 @@ class Guardian_Dashboard {
 		$status_icon  = $is_enabled ? 'dashicons-yes-alt' : 'dashicons-dismiss';
 		$status_color = $is_enabled ? '#10b981' : '#6b7280';
 
-		return sprintf(
+		$button_html = sprintf(
 			'<button 
 				type="button"
 				class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-lg" 
@@ -97,13 +97,22 @@ class Guardian_Dashboard {
 				role="switch">
 				<span class="dashicons %s wps-icon-sm wps-status-icon" data-status="%s" aria-hidden="true"></span>
 				<span class="wps-font-semibold wps-text-gray-800">%s</span>
-			</button>
+			</button>',
+			esc_attr( $status_text ),
+			esc_attr( $is_enabled ? 'true' : 'false' ),
+			esc_attr( $status_icon ),
+			esc_attr( $status_color ),
+			esc_html( $status_text )
+		);
+
+		ob_start();
+		?>
 		<script>
 		function wpshadowToggleGuardian() {
 			if (typeof WPShadowModal === "undefined") {
 				console.error("WPShadowModal not loaded");
 				WPShadowModal.alert({
-					title: '<?php esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+					title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
 					message: 'Error: Modal system not loaded. Please refresh the page.',
 					type: 'error'
 				});
@@ -115,15 +124,15 @@ class Guardian_Dashboard {
 				'<?php echo esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ); ?>',
 				function() {
 					// User confirmed
-			jQuery.post(ajaxurl, {
-				action: "wpshadow_toggle_guardian",
-				nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
-				enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
-			}, function(response) {
-				if (response.success) {
-					location.reload();
-				} else {
-					var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
+					jQuery.post(ajaxurl, {
+						action: "wpshadow_toggle_guardian",
+						nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
+						enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
+					}, function(response) {
+						if (response.success) {
+							location.reload();
+						} else {
+							var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
 							WPShadowModal.alert(
 								'<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
 								message,
@@ -140,8 +149,11 @@ class Guardian_Dashboard {
 				}
 			);
 		}
-		</script>'
-		);
+		</script>
+		<?php
+		$script_html = ob_get_clean();
+
+		return $button_html . $script_html;
 	}
 
 	/**
