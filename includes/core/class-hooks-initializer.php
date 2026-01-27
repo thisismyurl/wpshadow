@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use WPShadow\Core\Form_Param_Helper;
+use WPShadow\Core\Activity_Logger;
 /**
  * Centralized hook registration for WPShadow
  */
@@ -97,6 +98,16 @@ class Hooks_Initializer {
 		require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
 		Database_Migrator::migrate();
 
+		// Log plugin activation
+		if ( class_exists( 'WPShadow\\Core\\Activity_Logger' ) ) {
+			Activity_Logger::log(
+				'plugin_activated',
+				__( 'WPShadow plugin activated', 'wpshadow' ),
+				'system',
+				array( 'version' => WPSHADOW_VERSION )
+			);
+		}
+
 		set_transient( 'wpshadow_redirect_to_dashboard', true, 30 );
 	}
 
@@ -104,6 +115,16 @@ class Hooks_Initializer {
 	 * Plugin deactivation hook
 	 */
 	public static function on_deactivate() {
+		// Log plugin deactivation
+		if ( class_exists( 'WPShadow\\Core\\Activity_Logger' ) ) {
+			Activity_Logger::log(
+				'plugin_deactivated',
+				__( 'WPShadow plugin deactivated', 'wpshadow' ),
+				'system',
+				array( 'version' => WPSHADOW_VERSION )
+			);
+		}
+
 		// Store deactivation timestamp for exit interview
 		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) ) {
 			\WPShadow\Engagement\Exit_Interview::on_deactivation();

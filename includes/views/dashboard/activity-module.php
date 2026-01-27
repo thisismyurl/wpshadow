@@ -58,6 +58,8 @@ function wpshadow_get_recent_activity(): array {
 		'activity_pruned'           => __( 'Activity Log Pruned', 'wpshadow' ),
 		'retention_setting_updated' => __( 'Retention Setting Updated', 'wpshadow' ),
 		'data_cleanup_completed'    => __( 'Data Cleanup Completed', 'wpshadow' ),
+		'plugin_activated'          => __( 'Plugin Activated', 'wpshadow' ),
+		'plugin_deactivated'        => __( 'Plugin Deactivated', 'wpshadow' ),
 	);
 
 	$activity = array();
@@ -149,10 +151,10 @@ function wpshadow_render_recent_activity(): void {
 	<div class="wps-card wps-mt-8">
 		<div class="wps-card-header">
 			<h2 class="wps-card-title"><?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>" class="wps-activity-link">
-				<?php esc_html_e( 'View Full Report', 'wpshadow' ); ?>
-				<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
-			</a>
+		<button type="button" class="wps-activity-link" onclick="window.location.href='<?php echo esc_attr( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>';" style="cursor: pointer; background: none; border: none; padding: 0; text-decoration: none;">
+			<?php esc_html_e( 'View Full Report', 'wpshadow' ); ?>
+			<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
+		</button>
 		</div>
 		<div class="wps-card-body">
 			<div class="wps-activity-timeline" role="list" aria-label="<?php esc_attr_e( 'Recent site activity', 'wpshadow' ); ?>">

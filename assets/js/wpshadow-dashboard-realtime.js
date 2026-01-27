@@ -366,24 +366,23 @@
 			$('html').removeClass('wpshadow-fullscreen-mode');
 			$('#wpadminbar').show();
 		$('.wpshadow-dashboard').css({
-			$(document).off('keydown.wpshadow-fullscreen');
-		},
+			'width': 'auto',
+			'height': 'auto',
+			'margin': 'auto',
+			'padding': 'auto',
+			'box-sizing': 'border-box',
+			'overflow': 'visible'
+		});
 
-		/**
-		 * Show fullscreen mode instructions
-		 */
-		showFullscreenInstructions: function() {
-			const instructions = $(`
-				<div id="wpshadow-fullscreen-instructions" style="
-					position: fixed;
-					bottom: 20px;
-					right: 20px;
-					background: rgba(0,0,0,0.9);
-					color: #fff;
-					padding: 15px 20px;
-					border-radius: 8px;
-					font-size: 14px;
-					z-index: 999999;
+		// Remove fullscreen optimizations
+		$('.wpshadow-dashboard').removeClass('wpshadow-fullscreen-optimized');
+
+		// Update button text
+		$('#wpshadow-fullscreen-toggle').html('Full Screen');
+
+		// Clean up event listener
+		$(document).off('keydown.wpshadow-fullscreen');
+	},
 					max-width: 300px;
 					line-height: 1.6;
 				">

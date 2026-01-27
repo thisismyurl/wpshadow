@@ -148,19 +148,6 @@ $severity_legend = array(
 
 	<!-- Kanban Board -->
 	<div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
-		<div class="wps-alert wps-alert--info wps-mb-6">
-			<div class="wps-flex wps-items-start wps-gap-4">
-				<span class="dashicons dashicons-info wps-text-primary" class="wps-icon-lg wps-icon-info" aria-hidden="true"></span>
-				<div class="wps-flex-1">
-					<p class="wps-m-0 wps-leading-relaxed">
-						<?php esc_html_e( 'Drag findings between columns to decide how to handle them. Use your keyboard (Enter/Space) for accessibility.', 'wpshadow' ); ?>
-						<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" class="wps-text-primary wps-font-semibold wps-no-underline wps-ml-1" aria-label="<?php esc_attr_e( 'Learn about the Kanban workflow (opens in new tab)', 'wpshadow' ); ?>">
-							<?php esc_html_e( 'Learn about the workflow', 'wpshadow' ); ?> →
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
 	<div id="wpshadow-kanban-status" class="wps-none wps-m-0 wps-p-3 wps-rounded-md" role="status" aria-live="polite" aria-atomic="true"></div>
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
 
@@ -568,16 +555,14 @@ $severity_legend = array(
 			<span class="wps-kanban-status-text wps-ml-auto wps-m-0 wps-text-gray-600 wps-text-sm">Column dots match status colors</span>
 		</div>
 
-	</div>
-
-</div>
-
 <!-- Recent Activity Section -->
 <?php
 if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
 	wpshadow_render_recent_activity();
 }
 ?>
+
+	</div>
 
 </div>
 

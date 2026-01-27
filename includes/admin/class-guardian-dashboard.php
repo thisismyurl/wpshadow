@@ -116,41 +116,53 @@ class Guardian_Dashboard {
 		?>
 		<script>
 		function wpshadowToggleGuardian() {
-			if (typeof WPShadowModal === "undefined") {
-				console.error("WPShadowModal not loaded");
-				alert('<?php echo esc_js( __( 'Error: Modal system not loaded. Please refresh the page.', 'wpshadow' ) ); ?>');
-				return;
-			}
+			// Try to use WPShadowModal if available, otherwise use browser confirm
+			const useWPShadowModal = typeof WPShadowModal !== "undefined";
 			
-			WPShadowModal.confirm(
-				'<?php echo esc_js( $is_enabled ? __( 'Disable Guardian?', 'wpshadow' ) : __( 'Enable Guardian?', 'wpshadow' ) ); ?>',
-				'<?php echo esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ); ?>',
-				function() {
-					// User confirmed
-					jQuery.post(ajaxurl, {
-						action: "wpshadow_toggle_guardian",
-						nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
-						enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
-					}, function(response) {
-						if (response.success) {
-							location.reload();
-						} else {
-							var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
+			const confirmMessage = '<?php echo esc_js( $is_enabled ? __( 'Disable Guardian?', 'wpshadow' ) : __( 'Enable Guardian?', 'wpshadow' ) ); ?>';
+			const confirmDetails = '<?php echo esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ); ?>';
+			
+			const proceedWithToggle = function() {
+				jQuery.post(ajaxurl, {
+					action: "wpshadow_toggle_guardian",
+					nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
+					enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
+				}, function(response) {
+					if (response.success) {
+						location.reload();
+					} else {
+						var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
+						if (useWPShadowModal && typeof WPShadowModal !== "undefined") {
 							WPShadowModal.alert(
 								'<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
 								message,
 								'error'
 							);
+						} else {
+							alert(message);
 						}
-					});
-				},
-				null,
-				{
-					type: '<?php echo $is_enabled ? 'warning' : 'info'; ?>',
-					confirmText: '<?php echo esc_js( __( 'Confirm', 'wpshadow' ) ); ?>',
-					cancelText: '<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>'
+					}
+				});
+			};
+			
+			if (useWPShadowModal) {
+				WPShadowModal.confirm(
+					confirmMessage,
+					confirmDetails,
+					proceedWithToggle,
+					null,
+					{
+						type: '<?php echo $is_enabled ? 'warning' : 'info'; ?>',
+						confirmText: '<?php echo esc_js( __( 'Confirm', 'wpshadow' ) ); ?>',
+						cancelText: '<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>'
+					}
+				);
+			} else {
+				// Fallback to browser confirm
+				if (confirm(confirmMessage + '\n\n' + confirmDetails)) {
+					proceedWithToggle();
 				}
-			);
+			}
 		}
 		</script>
 		<?php
