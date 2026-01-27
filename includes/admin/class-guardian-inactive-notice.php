@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin;
 
-use WPShadow\Guardian\Guardian_Manager;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -53,8 +51,13 @@ class Guardian_Inactive_Notice {
 			return;
 		}
 
+		// Check if Guardian_Manager is available
+		if ( ! class_exists( 'WPShadow\Guardian\Guardian_Manager' ) ) {
+			return; // Guardian module not loaded
+		}
+
 		// Don't show if Guardian is already enabled
-		if ( Guardian_Manager::is_enabled() ) {
+		if ( \WPShadow\Guardian\Guardian_Manager::is_enabled() ) {
 			return;
 		}
 
