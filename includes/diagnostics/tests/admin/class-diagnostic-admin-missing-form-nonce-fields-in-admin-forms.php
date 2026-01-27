@@ -68,7 +68,51 @@ class Diagnostic_Admin_Missing_Form_Nonce_Fields_In_Admin_Forms extends Diagnost
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$pages_to_check = array(
+			'options-general.php' => 'General Settings',
+			'options-writing.php' => 'Writing Settings',
+		);
+
 		$forms_without_nonce = array();
+
+		foreach ( $pages_to_check as $page_slug => $page_name ) {
+			$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( $page_slug );
+			
+			if ( false === $html ) {
+				continue;
+			}
+
+			preg_match_all( '/<form[^>]*>(.*?)<\/form>/is', $html, $form_matches );
+			
+			foreach ( $form_matches[0] as $form_html ) {
+				$has_nonce = ( preg_match( '/name=["\']_wpnonce["\']/', $form_html ) ||
+				               preg_match( '/name=["\'][^"\']*(nonce|token)[^"\']["\']/', $form_html ) );
+				
+				if ( ! $has_nonce && preg_match( '/<input[^>]*type=["\']submit["\']/', $form_html ) ) {
+					$forms_without_nonce[] = $page_name;
+					break;
+				}
+			}
+		}
+
+		if ( ! empty( $forms_without_nonce ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Forms missing nonce fields on: %s. This is a critical security vulnerability.', 'wpshadow' ),
+					implode( ', ', array_unique( $forms_without_nonce ) )
+				),
+				'severity'     => 'critical',
+				'threat_level' => 80,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
 
 		// Check settings sections for nonce fields.
 		global $wp_settings_fields;

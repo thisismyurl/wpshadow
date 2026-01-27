@@ -68,6 +68,33 @@ class Diagnostic_Admin_Inline_Js_Inserted_By_Plugins_In_Admin_Pages extends Diag
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
+		
+		if ( false === $html ) {
+			return null;
+		}
+
+		$inline_scripts_count = preg_match_all( '/<script[^>]*>(.*?)<\/script>/is', $html, $script_matches );
+
+		if ( $inline_scripts_count > 5 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Found %d inline script blocks in admin. This can slow page load and cause security issues.', 'wpshadow' ),
+					$inline_scripts_count
+				),
+				'severity'     => 'medium',
+				'threat_level' => 30,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
 		$plugin_inline_scripts = array();
 
 		// Check for inline scripts registered by plugins (not core).

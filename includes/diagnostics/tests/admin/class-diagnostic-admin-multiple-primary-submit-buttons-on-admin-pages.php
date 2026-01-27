@@ -68,6 +68,33 @@ class Diagnostic_Admin_Multiple_Primary_Submit_Buttons_On_Admin_Pages extends Di
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'options-general.php' );
+		
+		if ( false === $html ) {
+			return null;
+		}
+
+		$primary_button_count = preg_match_all( '/class=["\'][^"\']button-primary[^"\']["\']/', $html, $matches );
+
+		if ( $primary_button_count > 1 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Found %d primary submit buttons on one page. Only one primary action should be highlighted.', 'wpshadow' ),
+					$primary_button_count
+				),
+				'severity'     => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
 		global $pagenow, $wp_scripts;
 
 		$multiple_primary = array();

@@ -68,6 +68,40 @@ class Diagnostic_Admin_Buttons_Missing_Correct_Button_Primary_Class extends Diag
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'options-general.php' );
+		
+		if ( false === $html ) {
+			return null;
+		}
+
+		preg_match_all( '/<input[^>]*type=["\']submit["\'][^>]*>/i', $html, $submit_matches );
+		$buttons_without_class = 0;
+
+		foreach ( $submit_matches[0] as $button_html ) {
+			if ( false === strpos( $button_html, 'button-primary' ) && false === strpos( $button_html, 'button-secondary' ) ) {
+				$buttons_without_class++;
+			}
+		}
+
+		if ( $buttons_without_class > 0 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Found %d submit button(s) missing WordPress button classes. This affects UI consistency.', 'wpshadow' ),
+					$buttons_without_class
+				),
+				'severity'     => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
 		$missing_class_buttons = array();
 
 		// Check for inline button markup patterns in scripts.

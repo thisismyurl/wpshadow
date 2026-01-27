@@ -68,6 +68,38 @@ class Diagnostic_Admin_Incorrect_Nonce_Placement_In_Admin_Forms extends Diagnost
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'options-general.php' );
+		if ( false === $html ) {
+			return null;
+		}
+
+		preg_match_all( '/<form[^>]*>(.*?)<\/form>/is', $html, $form_matches );
+		$incorrect_placements = 0;
+		
+		foreach ( $form_matches[0] as $form_html ) {
+			if ( preg_match( '/name=["\']_wpnonce["\']/', $form_html ) ) {
+				if ( preg_match( '/<table[^>]*>.*?<\/table>.*?_wpnonce/is', $form_html ) ) {
+					$incorrect_placements++;
+				}
+			}
+		}
+
+		if ( $incorrect_placements > 0 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Nonce fields are incorrectly placed outside form sections. This can cause submission failures.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
 		$nonce_issues = array();
 
 		// Check settings fields for nonce field configuration.

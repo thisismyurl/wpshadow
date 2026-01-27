@@ -75,6 +75,39 @@ class Diagnostic_Admin_Oversized_Inline_Js_Blocks_In_Admin_Area extends Diagnost
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
+		if ( false === $html ) {
+			return null;
+		}
+
+		preg_match_all( '/<script[^>]*>(.*?)<\/script>/is', $html, $script_matches );
+		$oversized_count = 0;
+
+		foreach ( $script_matches[1] as $script_content ) {
+			if ( strlen( $script_content ) > self::$size_threshold ) {
+				$oversized_count++;
+			}
+		}
+
+		if ( $oversized_count > 0 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Found %d oversized inline JavaScript block(s) (>10KB each). These should be moved to external files.', 'wpshadow' ),
+					$oversized_count
+				),
+				'severity'     => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
 		$large_inline_scripts = array();
 
 		// Check for large inline scripts in registered scripts.
