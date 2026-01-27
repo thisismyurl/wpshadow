@@ -1848,3 +1848,42 @@
 		box-shadow: none;
 	}
 }
+
+/* ============================================================================
+   Modal Styles
+   ============================================================================ */
+
+/* Modal containers */
+#wpshadow-autofix-modal,
+#wpshadow-workflow-creation-modal,
+#wpshadow-family-fix-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999999;
+        align-items: center;
+        justify-content: center;
+}
+
+/* Show modal when not hidden */
+#wpshadow-autofix-modal:not(.wps-none):not(.wps-hidden),
+#wpshadow-workflow-creation-modal:not(.wps-none):not(.wps-hidden),
+#wpshadow-family-fix-modal:not(.wps-none):not(.wps-hidden) {
+        display: flex;
+}
+
+/* Modal content boxes */
+#wpshadow-autofix-modal > div,
+#wpshadow-workflow-creation-modal > div,
+#wpshadow-family-fix-modal > div {
+        background: white;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        position: relative;
+}
