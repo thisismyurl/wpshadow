@@ -48,7 +48,10 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 						array( 'scan_type' => 'quick_scan_first_time' )
 					);
 				} catch ( \Exception $e ) {
-				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging
+					error_log( 'Activity log failed: ' . $e->getMessage() );
+				}
+			}
 
 			// Verify Diagnostic_Registry exists
 			if ( ! class_exists( 'WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
@@ -82,8 +85,6 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 
 				// Run individual diagnostic with error handling
 				try {
-					$class_name = __NAMESPACE__ . '\\..\\..\\Diagnostics\\' . $diagnostic_class;
-					// Correct the namespace
 					$class_name = 'WPShadow\\Diagnostics\\' . $diagnostic_class;
 
 					if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
