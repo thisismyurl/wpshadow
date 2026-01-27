@@ -47,6 +47,27 @@ abstract class AJAX_Handler_Base {
 	}
 
 	/**
+	 * Verify admin request (GET-based) with nonce and capability check.
+	 *
+	 * Uses check_admin_referer instead of check_ajax_referer for GET requests.
+	 * Dies with wp_die on failure (not JSON response).
+	 *
+	 * @param string $nonce_action The nonce action to verify.
+	 * @param string $capability   The capability required (default: manage_options).
+	 * @param string $nonce_field  The nonce field name (default: _wpnonce).
+	 * @return void Dies on failure, returns on success.
+	 */
+	protected static function verify_admin_request( $nonce_action, $capability = 'manage_options', $nonce_field = '_wpnonce' ) {
+		// Verify nonce (admin referer for GET requests)
+		check_admin_referer( $nonce_action, $nonce_field );
+
+		// Verify capability
+		if ( ! current_user_can( $capability ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ), 403 );
+		}
+	}
+
+	/**
 	 * Sanitize and validate a POST parameter.
 	 *
 	 * @param string $key          The POST parameter key.
@@ -72,6 +93,51 @@ abstract class AJAX_Handler_Base {
 		}
 
 		$value = wp_unslash( $_POST[ $key ] );
+
+		switch ( $type ) {
+			case 'email':
+				return sanitize_email( $value );
+			case 'key':
+				return sanitize_key( $value );
+			case 'textarea':
+				return sanitize_textarea_field( $value );
+			case 'int':
+				return intval( $value );
+			case 'bool':
+				return rest_sanitize_boolean( $value );
+			case 'url':
+				return esc_url_raw( $value );
+			case 'text':
+			default:
+				return sanitize_text_field( $value );
+		}
+	}
+
+	/**
+	 * Sanitize and validate a GET parameter.
+	 *
+	 * @param string $key          The GET parameter key.
+	 * @param string $type         The sanitization type (text, email, key, textarea, int, bool).
+	 * @param mixed  $default      Default value if parameter is missing.
+	 * @param bool   $required     Whether this parameter is required.
+	 * @return mixed Sanitized value or dies if required and missing.
+	 */
+	protected static function get_get_param( $key, $type = 'text', $default = '', $required = false ) {
+		if ( ! isset( $_GET[ $key ] ) ) {
+			if ( $required ) {
+				wp_die(
+					sprintf(
+						/* translators: %s: parameter name */
+						esc_html__( 'Required parameter "%s" is missing.', 'wpshadow' ),
+						esc_html( $key )
+					),
+					400
+				);
+			}
+			return $default;
+		}
+
+		$value = wp_unslash( $_GET[ $key ] );
 
 		switch ( $type ) {
 			case 'email':

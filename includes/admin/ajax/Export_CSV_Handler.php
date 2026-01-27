@@ -35,13 +35,8 @@ class Export_CSV_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		// Verify nonce from URL parameter (use check_admin_referer for GET requests)
-		check_admin_referer( 'wpshadow_export', 'nonce' );
-
-		// Verify capability
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions', 'wpshadow' ), 403 );
-		}
+		// Verify nonce and capability using base class
+		self::verify_admin_request( 'wpshadow_export', 'manage_options', 'nonce' );
 
 		// Generate CSV
 		$csv_path = KPI_Advanced_Features::export_resolution_history_csv( 30 );
