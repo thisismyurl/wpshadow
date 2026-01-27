@@ -4122,3 +4122,44 @@ a:focus-visible {
 .wps-action-category-icon {
     margin-right: var(--wps-space-2);
 }
+
+/**
+ * Email Test Tool Styles
+ */
+.wps-email-test-card {
+    max-width: 800px;
+}
+
+.wps-email-test-table {
+    margin-bottom: 20px;
+}
+
+.wps-email-test-table-header {
+    width: 200px;
+}
+
+.wps-email-test-warning-icon {
+    color: #d63638;
+}
+
+.wps-email-test-warning-text {
+    color: #d63638;
+}
+
+.wps-email-test-card-alt {
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.wps-email-test-list {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.wps-email-test-description {
+    margin-top: 10px;
+}
+
+.wps-email-test-submit {
+    margin-top: 15px;
+}

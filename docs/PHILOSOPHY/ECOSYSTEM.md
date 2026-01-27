@@ -1,18 +1,18 @@
 # WPShadow Product Ecosystem
 
 **Version:** 2.0  
-**Last Updated:** January 21, 2026
+**Last Updated:** January 27, 2026 (Updated: Business language removed)
 
 ---
 
 ## Overview
 
-WPShadow is a family of products built on a single philosophy: **helpful neighbor, not sales tool**. Each product serves a specific need while maintaining our commitment to free-first, education-focused, privacy-respectful WordPress management.
+WPShadow is a family of plugins and services built on a single philosophy: **helpful neighbor, not sales tool**. Each product serves a specific need while maintaining our commitment to accessibility-first, education-focused, privacy-respectful WordPress management.
 
-**Key Terminology:**
-- **Guardian**: Integrated diagnostics/treatments system (part of free plugin)
-- **SaaS**: Hosted features at wpshadow.com (KB articles, training, cloud backups)
-- **Pro**: Commercial plugin in separate repository (wpshadow-pro)
+**Key Components:**
+- **Core Plugin**: Free WordPress plugin with 57 diagnostics, 44 treatments, automation, and KPI tracking
+- **Guardian System**: Integrated monitoring and auto-fix functionality (built into Core)
+- **Extended Services**: Optional hosted features like backups, training, and knowledge base at wpshadow.com
 
 ---
 
@@ -20,32 +20,26 @@ WPShadow is a family of products built on a single philosophy: **helpful neighbo
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      WPShadow Core (Free)                       │
+│                      WPShadow Core                              │
 │  • 57 Diagnostics • 44 Treatments • Kanban • Workflows • KPIs  │
-│             100% Free Forever • No Registration Required         │
+│           Free & Open Source • No Registration Required         │
 └─────────────────────────────────────────────────────────────────┘
                                  ▲
                                  │
                     ┌────────────┴────────────┐
                     │                         │
          ┌──────────▼──────────┐   ┌─────────▼──────────┐
-         │  WPShadow Guardian  │   │   WPShadow Vault   │
-         │    (SaaS/AI Tools)  │   │  (Backup Package)  │
-         │  Register to Access │   │ Register to Access │
+         │  Guardian System    │   │   Backup/Storage   │
+         │  (Monitoring)       │   │   (Optional)       │
+         │  Built into Core    │   │ Optional Extension │
          └──────────┬──────────┘   └─────────┬──────────┘
                     │                         │
                     └────────────┬────────────┘
                                  │
                     ┌────────────▼────────────┐
-                    │   WPShadow Academy      │
-                    │  (Learning Platform)    │
-                    │  Register to Access     │
-                    └────────────┬────────────┘
-                                 │
-                    ┌────────────▼────────────┐
-                    │     WPShadow Pro        │
-                    │  (Commercial Plugin)    │
-                    │  Purchase for Advanced  │
+                    │   Learning Resources    │
+                    │  (KB, Training, Docs)   │
+                    │  Documentation Links    │
                     └─────────────────────────┘
 ```
 

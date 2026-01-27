@@ -144,12 +144,12 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		</div>
 	<?php endif; ?>
 
-	<div class="card" style="max-width: 800px;">
+	<div class="card" class="wps-email-test-card">
 		<h2><?php esc_html_e( 'Current Email Configuration', 'wpshadow' ); ?></h2>
-		<table class="widefat striped" style="margin-bottom: 20px;">
+		<table class="widefat striped" class="wps-email-test-table">
 			<tbody>
 				<tr>
-					<th style="width: 200px;"><?php esc_html_e( 'From Name', 'wpshadow' ); ?></th>
+					<th class="wps-email-test-table-header"><?php esc_html_e( 'From Name', 'wpshadow' ); ?></th>
 					<td>
 						<code><?php echo esc_html( $current_from_name ); ?></code>
 					</td>
@@ -159,8 +159,8 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 					<td>
 						<code><?php echo esc_html( $current_from_email ); ?></code>
 						<?php if ( $current_from_email === $wp_from_email ) : ?>
-							<span class="dashicons dashicons-warning" style="color: #d63638;"></span>
-							<span style="color: #d63638;">
+							<span class="dashicons dashicons-warning wps-email-test-warning-icon"></span>
+							<span class="wps-email-test-warning-text">
 								<?php esc_html_e( 'Using WordPress default (may be rejected by mail servers)', 'wpshadow' ); ?>
 							</span>
 						<?php endif; ?>
@@ -267,10 +267,10 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		</form>
 	</div>
 
-	<div class="card" style="max-width: 800px; margin-top: 20px;">
+	<div class="card" class="wps-email-test-card-alt">
 		<h2><?php esc_html_e( 'Troubleshooting Email Delivery', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'If emails are not being delivered, consider these common issues:', 'wpshadow' ); ?></p>
-		<ul style="list-style: disc; margin-left: 20px;">
+		<ul class="wps-email-test-list">
 			<li>
 				<strong><?php esc_html_e( 'Server mail configuration:', 'wpshadow' ); ?></strong>
 				<?php esc_html_e( 'Your hosting server may not be configured to send mail properly.', 'wpshadow' ); ?>
@@ -301,11 +301,11 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		</ul>
 	</div>
 
-	<div class="card" style="max-width: 800px; margin-top: 20px;">
+	<div class="card" class="wps-email-test-card-alt">
 		<h2><?php esc_html_e( 'Privacy & New User Emails', 'wpshadow' ); ?></h2>
 		<p><strong><?php esc_html_e( 'Regarding "Send the new user an email about their account":', 'wpshadow' ); ?></strong></p>
 		<p><?php esc_html_e( 'Under GDPR and most privacy laws, it is generally acceptable to send new user account emails because:', 'wpshadow' ); ?></p>
-		<ul style="list-style: disc; margin-left: 20px;">
+		<ul class="wps-email-test-list">
 			<li><?php esc_html_e( 'It is a transactional email necessary for account functionality (providing login credentials)', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'The admin creating the account typically has legitimate interest or consent from the user', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'It is opt-in via the checkbox (not automatically sent)', 'wpshadow' ); ?></li>
@@ -314,7 +314,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		<p>
 			<strong><?php esc_html_e( 'Best practices:', 'wpshadow' ); ?></strong>
 		</p>
-		<ul style="list-style: disc; margin-left: 20px;">
+		<ul class="wps-email-test-list">
 			<li><?php esc_html_e( 'Only send the email when the checkbox is checked', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Ensure you have permission from the user before creating their account', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Document in your privacy policy that you send account creation emails', 'wpshadow' ); ?></li>
@@ -336,7 +336,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						<?php checked( $email_unchecked, true ); ?>>
 					<strong><?php esc_html_e( 'Uncheck email notification by default', 'wpshadow' ); ?></strong>
 				</label>
-				<p class="description" style="margin-top: 10px;">
+				<p class="description" class="wps-email-test-description">
 					<?php esc_html_e( 'When enabled, the "Send the new user an email about their account" checkbox on user-new.php will be unchecked by default. This ensures CASL (Canada), GDPR (EU), and CCPA (US) compliance by requiring explicit opt-in.', 'wpshadow' ); ?>
 				</p>
 				<p class="description">
@@ -344,7 +344,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 				</p>
 			</div>
 
-			<p class="submit" style="margin-top: 15px;">
+			<p class="submit" class="wps-email-test-submit">
 				<button type="submit" name="wpshadow_update_compliance" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Update Compliance Settings', 'wpshadow' ); ?>
 				</button>
