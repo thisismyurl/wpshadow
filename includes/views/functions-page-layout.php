@@ -45,3 +45,20 @@ function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class =
 function wpshadow_render_page_footer() {
 	include WPSHADOW_PATH . 'includes/views/page-footer.php';
 }
+/**
+ * Load and render page-specific activities component
+ *
+ * Includes the page-activities component file which provides functions for
+ * rendering real-time activity displays with AJAX auto-refresh.
+ *
+ * @since  1.2601.2148
+ * @return void
+ */
+function wpshadow_load_page_activities_component() {
+	if ( ! function_exists( 'wpshadow_render_page_activities' ) ) {
+		require_once WPSHADOW_PATH . 'includes/views/components/page-activities.php';
+	}
+}
+
+// Load page activities component on init
+add_action( 'wp_loaded', 'wpshadow_load_page_activities_component' );
