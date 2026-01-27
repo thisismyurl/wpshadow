@@ -146,15 +146,16 @@ function wpshadow_render_recent_activity(): void {
 	// Get category metadata for icons
 	$category_meta = \WPShadow\Core\wpshadow_get_category_metadata();
 	?>
-	<div class="wps-activity-section wps-mt-8">
-		<div class="wps-activity-header">
-			<h2 class="wps-activity-title"><?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
+	<div class="wps-card wps-mt-8">
+		<div class="wps-card-header">
+			<h2 class="wps-card-title"><?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>" class="wps-activity-link">
 				<?php esc_html_e( 'View Full Report', 'wpshadow' ); ?>
 				<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
 			</a>
 		</div>
-		<div class="wps-activity-timeline" role="list" aria-label="<?php esc_attr_e( 'Recent site activity', 'wpshadow' ); ?>">
+		<div class="wps-card-body">
+			<div class="wps-activity-timeline" role="list" aria-label="<?php esc_attr_e( 'Recent site activity', 'wpshadow' ); ?>">
 			<?php
 			$count = 0;
 			foreach ( $activity as $entry ) :
@@ -196,6 +197,7 @@ function wpshadow_render_recent_activity(): void {
 					</div>
 				</div>
 			<?php endforeach; ?>
+			</div>
 		</div>
 	</div>
 	<?php

@@ -315,9 +315,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 
 						<div class="wps-category-gauge-content">
 							<!-- Title -->
-							<h4 class="wps-category-gauge-title" style="color: <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#333' ); ?>;">
-								<?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?>
-							</h4>
+						<h4 class="wps-category-gauge-title" style="color: #2563eb;">
 
 							<!-- Status -->
 							<div class="wps-category-gauge-status">

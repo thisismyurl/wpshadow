@@ -1,6 +1,6 @@
 <?php
 /**
- * Visual Workflow Builder - Scratch-style block-based automation interface
+ * Workflow Builder - Block-based automation interface
  *
  * Modern, accessible workflow builder with clean design
  *
@@ -32,11 +32,11 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		<div>
 			<h1 class="wps-page-title">
 				<span class="dashicons dashicons-block-default" aria-hidden="true"></span>
-				<?php esc_html_e( 'Visual Workflow Builder', 'wpshadow' ); ?>
-				<small class="wps-text-gray-500">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>
-			</h1>
-			<p class="wps-page-subtitle">
-				<?php esc_html_e( 'Build automation workflows using visual blocks. Create "if-then" rules like Scratch programming.', 'wpshadow' ); ?>
+			<?php esc_html_e( 'Workflow Builder', 'wpshadow' ); ?>
+			<small class="wps-text-gray-500">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>
+		</h1>
+		<p class="wps-page-subtitle">
+			<?php esc_html_e( 'Build automation workflows using visual blocks to automate your WordPress maintenance.', 'wpshadow' ); ?>
 			</p>
 		</div>
 	</div>

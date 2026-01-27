@@ -1,8 +1,8 @@
 <?php
 /**
- * Workflow Module - Visual Workflow Builder Page
+ * Workflow Module - Workflow Builder Page
  *
- * Provides the render function for the visual workflow builder interface.
+ * Provides the render function for the workflow builder interface.
  *
  * @package WPShadow
  * @subpackage Workflow
@@ -20,7 +20,7 @@ require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
 use WPShadow\Workflow\Block_Registry;
 
 /**
- * Render the Visual Workflow Builder page
+ * Render the Workflow Builder page
  *
  * @since  1.2601.2148
  * @return void
