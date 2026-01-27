@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.2601.212129
+ * Version: 1.2601.212130
  * Author: thisismyurl
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.212129' );
+define( 'WPSHADOW_VERSION', '1.2601.212130' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );

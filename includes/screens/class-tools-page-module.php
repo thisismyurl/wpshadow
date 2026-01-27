@@ -383,15 +383,6 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 			});
 		});
 	</script>
-				const autoTabButton = document.getElementById('wps-tools-tab-' + autoTool);
-				if (autoTabButton) {
-					setTimeout(function() {
-						switchTab(autoTabButton);
-					}, 100);
-				}
-			<?php endif; ?>
-		});
-	</script>
 		<?php
 	}
 } // End if ( ! function_exists( 'wpshadow_render_tools' ) )
