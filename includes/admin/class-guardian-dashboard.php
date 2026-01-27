@@ -40,8 +40,7 @@ class Guardian_Dashboard {
 			<div class="wps-page-header">
 				<h1 class="wps-page-title" id="guardian-dashboard-title">
 					<span class="dashicons dashicons-shield-alt wps-icon-primary" aria-hidden="true"></span>
-					<?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?>
-				</h1>
+					<?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?>				<small class="wps-text-gray-500">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>				</h1>
 				<p class="wps-page-subtitle">
 					<?php esc_html_e( 'Automated health monitoring and intelligent fixes', 'wpshadow' ); ?>
 				</p>
@@ -91,7 +90,7 @@ class Guardian_Dashboard {
 		return sprintf(
 			'<button 
 				type="button"
-				class="wps-flex-gap-12-items-center-p-12-rounded-8" 
+				class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-lg" 
 				onclick="wpshadowToggleGuardian()"
 				aria-label="%s"
 				aria-pressed="%s"
@@ -160,16 +159,16 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_quick_actions(): string {
-		$html = '<div class="wps-flex-gap-12" role="group" aria-label="' . esc_attr__( 'Quick actions', 'wpshadow' ) . '">';
+		$html = '<div class="wps-flex wps-gap-3" role="group" aria-label="' . esc_attr__( 'Quick actions', 'wpshadow' ) . '">';
 
 		$html .= sprintf(
-			'<button type="button" class="wps-btn wps-btn-secondary" data-action="preview-fixes" aria-label="%s">%s</button>',
+			'<button type="button" class="wps-btn wps-btn--secondary" data-action="preview-fixes" aria-label="%s">%s</button>',
 			esc_attr__( 'Preview available fixes before applying', 'wpshadow' ),
 			esc_html__( 'Preview Fixes', 'wpshadow' )
 		);
 
 		$html .= sprintf(
-			'<a href="%s" class="wps-btn wps-btn-secondary" aria-label="%s">%s</a>',
+			'<a href="%s" class="wps-btn wps-btn--secondary" aria-label="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wpshadow-guardian-settings' ) ),
 			esc_attr__( 'Configure Guardian settings', 'wpshadow' ),
 			esc_html__( 'Settings', 'wpshadow' )
@@ -467,7 +466,7 @@ class Guardian_Dashboard {
 
 		$html = '<div class="wps-card">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0 wps-flex-gap-8-items-center">
+				<h3 class="wps-card-title wps-m-0 wps-flex wps-gap-2 wps-items-center">
 					<span class="dashicons dashicons-backup"></span>
 					' . esc_html__( 'Recovery Points', 'wpshadow' ) . '
 				</h3>
@@ -477,16 +476,16 @@ class Guardian_Dashboard {
 		if ( empty( $recovery_points ) ) {
 			$html .= '<p class="wps-m-0">' . esc_html__( 'No recovery points yet', 'wpshadow' ) . '</p>';
 		} else {
-			$html .= '<div class="wps-flex-gap-12">';
+			$html .= '<div class="wps-flex wps-gap-3">';
 
 			foreach ( $recovery_points as $point ) {
 				$html .= sprintf(
-					'<div class="wps-flex-items-center-justify-space-between-">
+					'<div class="wps-flex wps-items-center wps-justify-between">
 						<div>
 							<div class="wps-font-medium wps-text-gray-800">%s</div>
 							<div class="wps-text-xs wps-text-gray-500 wps-mt-1">%s</div>
 						</div>
-						<button class="wps-btn wps-btn-secondary" data-recovery-id="%s" data-action="restore" class="wps-p-4">
+						<button class="wps-btn wps-btn--secondary wps-p-1" data-recovery-id="%s" data-action="restore">
 							%s
 						</button>
 					</div>',
@@ -543,12 +542,12 @@ class Guardian_Dashboard {
 			),
 		);
 
-		$html .= '<div class="wps-flex-gap-12">';
+		$html .= '<div class="wps-flex wps-gap-3">';
 
 		foreach ( $checks as $check ) {
 			$status_color = 'good' === $check['status'] ? '#10b981' : ( 'warning' === $check['status'] ? '#f59e0b' : '#ef4444' );
 			$html        .= sprintf(
-				'<div class="wps-flex-gap-12-items-center-p-12-rounded-6">
+				'<div class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-md">
 					<span class="dashicons %s wps-icon-md wps-status-check-icon" style="color: %s;"></span>
 					<div class="wps-flex-1">
 						<div class="wps-font-medium wps-text-gray-800">%s</div>
