@@ -72,19 +72,36 @@ fi
 
 # Initialize remote git repo if needed
 echo -e "${YELLOW}Setting up remote repository...${NC}"
-$SSH_CMD -p ${REMOTE_PORT:-22} "$REMOTE_USER@$REMOTE_HOST" << 'ENDSSH'
-    cd "$REMOTE_WP_PATH" 2>/dev/null || {
-        echo "Creating directory..."
-        mkdir -p "$REMOTE_WP_PATH"
-        cd "$REMOTE_WP_PATH"
-    }
-    
-    if [ ! -d .git ]; then
-        echo "Initializing git repository..."
-        git init
-        git config receive.denyCurrentBranch updateInstead
-    fi
+if [ -f ".deploy-password" ]; then
+    export SSHPASS=$(cat .deploy-password)
+    sshpass -e ssh -p ${REMOTE_PORT:-22} -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_HOST" bash << 'ENDSSH'
+        cd "/home/sailmar1/public_html/wpshadow/wp-content/plugins/wpshadow" 2>/dev/null || {
+            echo "Creating directory..."
+            mkdir -p "/home/sailmar1/public_html/wpshadow/wp-content/plugins/wpshadow"
+            cd "/home/sailmar1/public_html/wpshadow/wp-content/plugins/wpshadow"
+        }
+        
+        if [ ! -d .git ]; then
+            echo "Initializing git repository..."
+            git init
+            git config receive.denyCurrentBranch updateInstead
+        fi
 ENDSSH
+else
+    ssh -p ${REMOTE_PORT:-22} ${SSH_KEY_FILE:+-i $SSH_KEY_FILE} "$REMOTE_USER@$REMOTE_HOST" << 'ENDSSH'
+        cd "$REMOTE_WP_PATH" 2>/dev/null || {
+            echo "Creating directory..."
+            mkdir -p "$REMOTE_WP_PATH"
+            cd "$REMOTE_WP_PATH"
+        }
+        
+        if [ ! -d .git ]; then
+            echo "Initializing git repository..."
+            git init
+            git config receive.denyCurrentBranch updateInstead
+        fi
+ENDSSH
+fi
 
 # Configure Git SSH/sshpass
 if [ -f ".deploy-password" ]; then
@@ -106,10 +123,18 @@ git push $REMOTE_NAME ${DEPLOY_BRANCH:-main} --force
 
 # Force checkout on remote to update working directory
 echo -e "${YELLOW}Updating remote files...${NC}"
-$SSH_CMD -p ${REMOTE_PORT:-22} "$REMOTE_USER@$REMOTE_HOST" << ENDSSH
-    cd "$REMOTE_WP_PATH"
-    git checkout -f ${DEPLOY_BRANCH:-main}
+if [ -f ".deploy-password" ]; then
+    export SSHPASS=$(cat .deploy-password)
+    sshpass -e ssh -p ${REMOTE_PORT:-22} -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_HOST" bash << ENDSSH
+        cd "/home/sailmar1/public_html/wpshadow/wp-content/plugins/wpshadow"
+        git checkout -f ${DEPLOY_BRANCH:-main}
 ENDSSH
+else
+    ssh -p ${REMOTE_PORT:-22} ${SSH_KEY_FILE:+-i $SSH_KEY_FILE} "$REMOTE_USER@$REMOTE_HOST" << ENDSSH
+        cd "$REMOTE_WP_PATH"
+        git checkout -f ${DEPLOY_BRANCH:-main}
+ENDSSH
+fi
 
 echo ""
 echo -e "${GREEN}✓ Deployment complete!${NC}"
