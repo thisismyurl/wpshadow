@@ -68,16 +68,60 @@ class Diagnostic_Admin_Admin_Forms_Missing_Submit_Buttons extends Diagnostic_Bas
 			return null;
 		}
 
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$pages_to_check = array(
+			'options-general.php' => 'General Settings',
+			'options-writing.php' => 'Writing Settings',
+			'options-reading.php' => 'Reading Settings',
+		);
+
 		$forms_without_submit = array();
 
-		// Check settings sections for submit buttons.
-		global $wp_settings_fields;
+		foreach ( $pages_to_check as $page_slug => $page_name ) {
+			$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( $page_slug );
+			
+			if ( false === $html ) {
+				continue;
+			}
 
-		if ( ! empty( $wp_settings_fields ) && is_array( $wp_settings_fields ) ) {
-			$pages_with_forms = array();
+			// Find forms and check for submit buttons.
+			preg_match_all( '/<form[^>]*>(.*?)<\/form>/is', $html, $form_matches );
+			
+			foreach ( $form_matches[0] as $form_html ) {
+				// Check if form has submit button.
+				$has_submit = ( preg_match( '/<input[^>]*type=["\']submit["\']/', $form_html ) ||
+				                preg_match( '/<button[^>]*type=["\']submit["\']/', $form_html ) ||
+				                preg_match( '/<button[^>]*>.*?<\/button>/', $form_html ) );
+				
+				if ( ! $has_submit ) {
+					$forms_without_submit[] = $page_name;
+					break; // Only report once per page.
+				}
+			}
+		}
 
-			foreach ( $wp_settings_fields as $page => $sections ) {
-				if ( ! is_array( $sections ) ) {
+		if ( ! empty( $forms_without_submit ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Forms missing submit buttons on: %s. Users cannot save settings.', 'wpshadow' ),
+					implode( ', ', array_unique( $forms_without_submit ) )
+				),
+				'severity'     => 'high',
+				'threat_level' => 50,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
+		return null;
+	}
+}
+
 					continue;
 				}
 

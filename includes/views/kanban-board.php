@@ -344,11 +344,11 @@ $severity_legend = array(
 								role="article"
 								aria-label="<?php echo esc_attr( sprintf( __( 'Workflow: %s', 'wpshadow' ), $workflow_name ) ); ?>">
 								<!-- Workflow Title -->
-								<div class="wps-flex-gap-8-items-center-m-0">
-									<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: var(--wps-success);" aria-hidden="true"></span>
-									<strong><?php echo esc_html( $workflow_name ); ?></strong>
-									<?php if ( ! $workflow_enabled ) : ?>
-										<span class="wps-p-2-rounded-3"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
+						<div class="wps-flex wps-gap-2 wps-items-center wps-m-0">
+							<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: var(--wps-success);" aria-hidden="true"></span>
+							<strong><?php echo esc_html( $workflow_name ); ?></strong>
+							<?php if ( ! $workflow_enabled ) : ?>
+								<span class="wps-p-1 wps-rounded-sm"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
 									<?php endif; ?>
 								</div>
 
@@ -679,9 +679,9 @@ $severity_legend = array(
 				if (response.success) {
 					const $card = $btn.closest('.finding-card');
 					$card.html(
-						'<div class="wps-p-15-rounded-4">' +
-						'<strong style="color: #2e7d32;">✓ Fixed!</strong>' +
-						'<p class="wps-m-8">' + response.data.message + '</p>' +
+					'<div class="wps-p-4 wps-rounded">' +
+					'<strong style="color: #2e7d32;">✓ Fixed!</strong>' +
+					'<p class="wps-m-2">' + response.data.message + '</p>' +
 						'</div>'
 					);
 					setTimeout(function() {
