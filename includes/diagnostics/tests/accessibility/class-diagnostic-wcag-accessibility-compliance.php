@@ -161,7 +161,7 @@ class Diagnostic_WCAG_Accessibility_Compliance extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/accessibility-wcag-accessibility-compliance',
+		'kb_link'     => \WPShadow\Core\UTM_Link_Manager::kb_link( 'accessibility-wcag-accessibility-compliance', 'diagnostic' ),
 			'meta'        => array(
 				'issues' => $issues,
 				'issue_count' => count( $issues ),
