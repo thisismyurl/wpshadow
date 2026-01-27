@@ -77,12 +77,8 @@
 	color: var(--wps-gray-900);
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 24px;
 	padding: 0;
 	background: transparent;
-	margin: 0;
-	animation: fadeIn 0.6s ease-out;
 }
 
 @keyframes fadeIn {
