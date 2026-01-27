@@ -57,7 +57,7 @@ function wpshadow_get_tools_catalog() {
 		array(
 			'title'   => __( 'Color Contrast Checker', 'wpshadow' ),
 			'desc'    => __( 'Check color combinations for accessibility compliance.', 'wpshadow' ),
-			'tool'    => 'color-contrast',
+			'tool'    => 'color-contrast-checker',
 			'icon'    => 'dashicons-art',
 			'enabled' => true,
 		),
@@ -115,6 +115,20 @@ function wpshadow_get_tools_catalog() {
 			'desc'    => __( 'Comprehensive audit log of all actions, changes, and fixes performed on your site.', 'wpshadow' ),
 			'tool'    => 'activity-history',
 			'icon'    => 'dashicons-backup',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Customization Audit', 'wpshadow' ),
+			'desc'    => __( 'Analyze custom themes, plugins, and code modifications for potential issues.', 'wpshadow' ),
+			'tool'    => 'customization-audit',
+			'icon'    => 'dashicons-admin-generic',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Timezone Alignment', 'wpshadow' ),
+			'desc'    => __( 'Verify and align your server, browser, and WordPress timezone settings.', 'wpshadow' ),
+			'tool'    => 'timezone-alignment',
+			'icon'    => 'dashicons-clock',
 			'enabled' => true,
 		),
 		array(
