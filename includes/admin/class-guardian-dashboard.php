@@ -116,9 +116,6 @@ class Guardian_Dashboard {
 		?>
 		<script>
 		function wpshadowToggleGuardian() {
-			// Try to use WPShadowModal if available, otherwise use browser confirm
-			const useWPShadowModal = typeof WPShadowModal !== "undefined";
-			
 			const confirmMessage = '<?php echo esc_js( $is_enabled ? __( 'Disable Guardian?', 'wpshadow' ) : __( 'Enable Guardian?', 'wpshadow' ) ); ?>';
 			const confirmDetails = '<?php echo esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ); ?>';
 			
@@ -132,12 +129,12 @@ class Guardian_Dashboard {
 						location.reload();
 					} else {
 						var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
-						if (useWPShadowModal && typeof WPShadowModal !== "undefined") {
-							WPShadowModal.alert(
-								'<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
-								message,
-								'error'
-							);
+						if (typeof WPShadowModal !== "undefined") {
+							WPShadowModal.alert({
+								title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+								message: message,
+								type: 'error'
+							});
 						} else {
 							alert(message);
 						}
@@ -145,20 +142,18 @@ class Guardian_Dashboard {
 				});
 			};
 			
-			if (useWPShadowModal) {
-				WPShadowModal.confirm(
-					confirmMessage,
-					confirmDetails,
-					proceedWithToggle,
-					null,
-					{
-						type: '<?php echo $is_enabled ? 'warning' : 'info'; ?>',
-						confirmText: '<?php echo esc_js( __( 'Confirm', 'wpshadow' ) ); ?>',
-						cancelText: '<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>'
-					}
-				);
+			// Use WPShadowModal for consistent, accessible modal dialogs
+			if (typeof WPShadowModal !== "undefined") {
+				WPShadowModal.confirm({
+					title: confirmMessage,
+					message: confirmDetails,
+					type: '<?php echo $is_enabled ? 'warning' : 'info'; ?>',
+					confirmText: '<?php echo esc_js( __( 'Confirm', 'wpshadow' ) ); ?>',
+					cancelText: '<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>',
+					onConfirm: proceedWithToggle
+				});
 			} else {
-				// Fallback to browser confirm
+				// Fallback to browser confirm if modal system isn't loaded
 				if (confirm(confirmMessage + '\n\n' + confirmDetails)) {
 					proceedWithToggle();
 				}
