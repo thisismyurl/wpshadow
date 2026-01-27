@@ -66,7 +66,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 
 		wp_enqueue_style(
 			'wpshadow-guardian-dashboard-settings',
-			WPSHADOW_URL . 'assets/css/guardian-dashboard-settings.css',
+			WPSHADOW_URL . 'assets/css/guardian-dashboard.css',
 			array(),
 			WPSHADOW_VERSION
 		);
@@ -92,7 +92,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		// Enqueue consolidated Guardian assets
 		wp_enqueue_style(
 			'wpshadow-guardian',
-			WPSHADOW_URL . 'assets/css/guardian.css',
+			WPSHADOW_URL . 'assets/css/guardian-dashboard.css',
 			array( 'wpshadow-admin-pages' ),
 			WPSHADOW_VERSION
 		);
@@ -192,7 +192,7 @@ function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
 
 	wp_enqueue_style(
 		'wpshadow-mobile-friendliness',
-		WPSHADOW_URL . 'assets/css/mobile-friendliness.css',
+		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
 		array(),
 		WPSHADOW_VERSION
 	);
@@ -233,7 +233,7 @@ function wpshadow_enqueue_site_health_assets( $hook ) {
 
 	wp_enqueue_style(
 		'wpshadow-site-health-explanations',
-		WPSHADOW_URL . 'assets/css/site-health-explanations.css',
+		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
 		array(),
 		WPSHADOW_VERSION
 	);

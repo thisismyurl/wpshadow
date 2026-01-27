@@ -323,22 +323,24 @@ class Hooks_Initializer {
 
 		wp_enqueue_style(
 			'wpshadow-safety-warnings',
-			WPSHADOW_URL . 'assets/css/safety-warnings.css',
+			WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
 			array( 'wpshadow-design-system' ),
 			WPSHADOW_VERSION
 		);
 
 		wp_enqueue_style(
 			'wpshadow-kanban-board',
-			WPSHADOW_URL . 'assets/css/kanban-board.css',
+			WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
 			array( 'wpshadow-design-system' ),
 			WPSHADOW_VERSION
 		);
 
+		// Note: kanban-board-modern.css is now consolidated into kanban-board-consolidated.css
+		// This dependency is kept for backwards compatibility
 		wp_enqueue_style(
 			'wpshadow-kanban-board-modern',
-			WPSHADOW_URL . 'assets/css/kanban-board-modern.css',
-			array( 'wpshadow-design-system', 'wpshadow-kanban-board' ),
+			WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
+			array( 'wpshadow-design-system' ),
 			WPSHADOW_VERSION
 		);
 
@@ -471,7 +473,7 @@ class Hooks_Initializer {
 	public static function on_wp_enqueue_scripts() {
 		wp_enqueue_style(
 			'wpshadow-safety-warnings-frontend',
-			WPSHADOW_URL . 'assets/css/safety-warnings.css',
+			WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
 			array(),
 			WPSHADOW_VERSION
 		);

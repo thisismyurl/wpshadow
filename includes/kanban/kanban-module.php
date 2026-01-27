@@ -47,7 +47,7 @@ function wpshadow_enqueue_kanban_assets( string $hook ): void {
 	// Kanban board styles
 	wp_enqueue_style(
 		'wpshadow-kanban-board',
-		WPSHADOW_URL . 'assets/css/kanban-board.css',
+		WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
 		array(),
 		WPSHADOW_VERSION
 	);

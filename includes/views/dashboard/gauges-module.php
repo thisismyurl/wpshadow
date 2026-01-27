@@ -37,7 +37,7 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 
 	wp_enqueue_style(
 		'wpshadow-safety-warnings',
-		WPSHADOW_URL . 'assets/css/safety-warnings.css',
+		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
 		array(),
 		WPSHADOW_VERSION
 	);
