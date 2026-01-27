@@ -232,16 +232,8 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 				<p class="wps-health-gauge-message"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
 			</div>
 
-			<!-- Quick Scan and Deep Scan Buttons -->
+			<!-- Fullscreen Button Only -->
 			<div class="wps-health-gauge-actions">
-				<button type="button" id="wpshadow-quick-scan-btn" class="wps-btn wps-btn-success wps-btn-icon-left wps-btn-scan" aria-label="<?php esc_attr_e( 'Run quick site scan', 'wpshadow' ); ?>">
-					<span class="dashicons dashicons-update" aria-hidden="true"></span>
-					<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
-				</button>
-				<button type="button" id="wpshadow-deep-scan-btn" class="wps-btn wps-btn-secondary wps-btn-icon-left wps-btn-scan" aria-label="<?php esc_attr_e( 'Run comprehensive deep scan', 'wpshadow' ); ?>">
-					<span class="dashicons dashicons-search" aria-hidden="true"></span>
-					<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
-				</button>
 				<button id="wpshadow-fullscreen-toggle" class="button wps-btn-scan" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>" aria-label="<?php esc_attr_e( 'Toggle fullscreen mode', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-fullscreen-alt" aria-hidden="true"></span>
 					<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>

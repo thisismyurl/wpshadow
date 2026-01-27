@@ -149,8 +149,8 @@ function wpshadow_render_recent_activity(): void {
 	<div class="wps-activity-section wps-mt-8">
 		<div class="wps-activity-header">
 			<h2 class="wps-activity-title"><?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity' ) ); ?>" class="wps-activity-link">
-				<?php esc_html_e( 'View All Activity', 'wpshadow' ); ?>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>" class="wps-activity-link">
+				<?php esc_html_e( 'View Full Report', 'wpshadow' ); ?>
 				<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
 			</a>
 		</div>
@@ -158,8 +158,8 @@ function wpshadow_render_recent_activity(): void {
 			<?php
 			$count = 0;
 			foreach ( $activity as $entry ) :
-				if ( $count >= 7 ) {
-					break; // Show only first 7 activities
+				if ( $count >= 5 ) {
+					break; // Show only first 5 activities
 				}
 				++$count;
 
