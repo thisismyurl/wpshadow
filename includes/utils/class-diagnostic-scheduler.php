@@ -323,33 +323,37 @@ class Diagnostic_Scheduler {
 	 * Process diagnostics via WordPress Heartbeat
 	 *
 	 * Runs background diagnostics during heartbeat to keep data fresh
-	 * without impacting dashboard load time
+	 * without impacting dashboard load time.
+	 *
+	 * This method is called automatically by WordPress heartbeat and executes
+	 * background-safe diagnostics via Guardian_Executor.
+	 *
+	 * @since  1.2601.2148
+	 * @param  array $response Heartbeat response data.
+	 * @param  array $data     Heartbeat request data.
+	 * @return array Modified heartbeat response with Guardian data.
 	 */
 	public static function process_heartbeat( array $response, array $data ): array {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return $response;
 		}
 
-		// Get all registered diagnostics and check which should run
-		$diagnostics_to_run = array();
+		// Execute background diagnostics via Guardian
+		if ( class_exists( 'WPShadow\Core\Guardian_Executor' ) ) {
+			$result = Guardian_Executor::execute_background_diagnostics();
 
-		// This will be integrated with the diagnostic registry
-		// For now, we'll process a few critical ones
-		$critical_diagnostics = array(
-			'backup',
-			'ssl',
-			'database-health',
-			'outdated-plugins',
-		);
+			// Add Guardian data to heartbeat response
+			$response['wpshadow_guardian'] = array(
+				'executed'        => $result['executed'],
+				'findings_count'  => $result['findings_count'],
+				'execution_time'  => $result['execution_time'],
+				'diagnostics_run' => $result['diagnostics_run'],
+			);
 
-		foreach ( $critical_diagnostics as $slug ) {
-			if ( self::should_run( $slug ) ) {
-				$diagnostics_to_run[] = $slug;
+			// Add findings to response if any detected
+			if ( ! empty( $result['findings'] ) ) {
+				$response['wpshadow_guardian']['new_findings'] = $result['findings'];
 			}
-		}
-
-		if ( ! empty( $diagnostics_to_run ) ) {
-			$response['wpshadow_diagnostics_pending'] = $diagnostics_to_run;
 		}
 
 		return $response;

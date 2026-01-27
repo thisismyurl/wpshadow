@@ -139,6 +139,24 @@ class Plugin_Bootstrap {
 		if ( file_exists( $core_path . 'class-visual-comparator.php' ) ) {
 			require_once $core_path . 'class-visual-comparator.php';
 		}
+
+		// Load performance impact classifier (required by Guardian)
+		if ( file_exists( $core_path . 'class-performance-impact-classifier.php' ) ) {
+			require_once $core_path . 'class-performance-impact-classifier.php';
+		}
+
+		// Load Guardian executor
+		if ( file_exists( $core_path . 'class-guardian-executor.php' ) ) {
+			require_once $core_path . 'class-guardian-executor.php';
+			Guardian_Executor::init();
+		}
+
+		// Load diagnostic scheduler
+		$scheduler_path = WPSHADOW_PATH . 'includes/utils/';
+		if ( file_exists( $scheduler_path . 'class-diagnostic-scheduler.php' ) ) {
+			require_once $scheduler_path . 'class-diagnostic-scheduler.php';
+			Diagnostic_Scheduler::init();
+		}
 	}
 
 	/**
