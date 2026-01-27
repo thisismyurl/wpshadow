@@ -83,7 +83,7 @@ function wpshadow_render_help() {
 		<!-- Page Header -->
 		<div class="wps-page-header">
 			<h1 class="wps-page-title">
-				<span class="dashicons dashicons-editor-help" style="color: var(--wps-primary);"></span>
+				<span class="dashicons dashicons-editor-help"></span>
 				<?php esc_html_e( 'WPShadow Help & Learning', 'wpshadow' ); ?>
 			</h1>
 			<p class="wps-page-subtitle">
@@ -95,37 +95,34 @@ function wpshadow_render_help() {
 		<div class="wps-grid wps-grid-auto-320">
 			<?php foreach ( $catalog as $item ) : ?>
 				<div class="wps-card">
-					<div class="wps-card-header" style="padding-bottom: 12px; border-bottom: 1px solid #eee;">
-						<div class="wps-flex-gap-12-items-flex-start">
-							<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?>" 
-									style="font-size: 32px; width: 32px; height: 32px; color: #0073aa;"></span>
+					<div class="wps-card-header wps-pb-3 wps-border-bottom">
+						<div class="wps-flex wps-gap-3 wps-items-start">
+							<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?> wps-text-3xl wps-text-primary"></span>
 							<div>
-								<h3 class="wps-card-title" class="wps-m-0">
+								<h3 class="wps-card-title wps-m-0">
 									<?php echo esc_html( $item['title'] ); ?>
 								</h3>
-								<p class="wps-card-description" class="wps-m-0">
+								<p class="wps-card-description wps-m-0">
 									<?php echo esc_html( $item['description'] ); ?>
 								</p>
 							</div>
 						</div>
 					</div>
-					<div class="wps-card-body" class="wps-p-12">
-						<div class="wps-flex-gap-8">
+					<div class="wps-card-body">
+						<div class="wps-flex wps-gap-2">
 							<?php if ( ! empty( $item['url'] ) ) : ?>
 								<a href="<?php echo esc_url( $item['url'] ); ?>" 
 									target="_blank" rel="noopener noreferrer"
-									class="wps-btn wps-btn-secondary"
-									class="wps-p-6">
-									<span class="dashicons dashicons-external" style="margin-right: 4px; font-size: 14px;"></span>
+									class="wps-btn wps-btn--secondary">
+									<span class="dashicons dashicons-external"></span>
 									<?php esc_html_e( 'Read Article', 'wpshadow' ); ?>
 								</a>
 							<?php endif; ?>
 							<?php if ( ! empty( $item['video'] ) ) : ?>
 								<a href="<?php echo esc_url( $item['video'] ); ?>" 
 									target="_blank" rel="noopener noreferrer"
-									class="wps-btn wps-btn-secondary"
-									class="wps-p-6">
-									<span class="dashicons dashicons-video-alt2" style="margin-right: 4px; font-size: 14px;"></span>
+									class="wps-btn wps-btn--secondary">
+									<span class="dashicons dashicons-video-alt2"></span>
 									<?php esc_html_e( 'Watch Video', 'wpshadow' ); ?>
 								</a>
 							<?php endif; ?>
@@ -139,25 +136,25 @@ function wpshadow_render_help() {
 		<div class="wps-card wps-mt-8">
 			<div class="wps-card-header">
 				<div>
-					<h2 class="wps-card-title" class="wps-m-0">
+					<h2 class="wps-card-title wps-m-0">
 						<span class="dashicons dashicons-sos"></span>
 						<?php esc_html_e( 'Need More Help?', 'wpshadow' ); ?>
 					</h2>
-					<p class="wps-card-description" class="wps-m-0">
+					<p class="wps-card-description wps-m-0">
 						<?php esc_html_e( 'Access our knowledge base, training videos, and community support.', 'wpshadow' ); ?>
 					</p>
 				</div>
 			</div>
-			<div class="wps-card-body" class="wps-flex-gap-12">
-				<a href="https://github.com/thisismyurl/wpshadow/issues" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn-primary">
+			<div class="wps-card-body wps-flex wps-gap-3">
+				<a href="https://github.com/thisismyurl/wpshadow/issues" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--primary">
 					<span class="dashicons dashicons-admin-comments"></span>
 					<?php esc_html_e( 'Contact Support', 'wpshadow' ); ?>
 				</a>
-				<a href="https://wpshadow.com/training" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn-secondary">
+				<a href="https://wpshadow.com/training" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
 					<span class="dashicons dashicons-video-alt2"></span>
 					<?php esc_html_e( 'Online Training', 'wpshadow' ); ?>
 				</a>
-				<a href="https://wpshadow.com/kb" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn-secondary">
+				<a href="https://wpshadow.com/kb" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
 					<span class="dashicons dashicons-book"></span>
 					<?php esc_html_e( 'Knowledge Base', 'wpshadow' ); ?>
 				</a>
