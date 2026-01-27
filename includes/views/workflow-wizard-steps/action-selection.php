@@ -345,7 +345,11 @@ jQuery(document).ready(function($) {
 	// Continue to review/config
 	$('#continue-to-review').on('click', function() {
 		if (selectedActions.length === 0) {
-			alert('<?php echo esc_js( __( 'Please select an action.', 'wpshadow' ) ); ?>');
+			WPShadowModal.alert({
+				title: '<?php echo esc_js( __( 'Validation', 'wpshadow' ) ); ?>',
+				message: '<?php echo esc_js( __( 'Please select an action.', 'wpshadow' ) ); ?>',
+				type: 'warning'
+			});
 			return;
 		}
 		

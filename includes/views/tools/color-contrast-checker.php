@@ -122,7 +122,11 @@ Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __(
 <script>
 document.getElementById( 'wpshadow-contrast-checker' )?.addEventListener( 'submit', function( e ) {
 	e.preventDefault();
-	alert( '<?php esc_attr_e( 'Contrast check feature coming soon!', 'wpshadow' ); ?>' );
+		WPShadowModal.alert({
+			title: '<?php esc_attr_e( 'Coming Soon', 'wpshadow' ); ?>',
+			message: '<?php esc_attr_e( 'Contrast check feature coming soon!', 'wpshadow' ); ?>',
+			type: 'info'
+		});
 } );
 
 document.querySelectorAll( '.wpshadow-tool-section button[data-text]' ).forEach( function( btn ) {

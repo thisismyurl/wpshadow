@@ -126,10 +126,18 @@ function wpshadow_render_scan_settings() {
 							item.enabled = !!resp.data.enabled;
 							toggle.textContent = item.enabled ? '<?php echo esc_js( __( 'Disable', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Enable', 'wpshadow' ) ); ?>';
 						} else {
-							alert((resp && resp.data && resp.data.message) || '<?php echo esc_js( __( 'Operation failed', 'wpshadow' ) ); ?>');
+							WPShadowModal.alert({
+								title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+								message: (resp && resp.data && resp.data.message) || '<?php echo esc_js( __( 'Operation failed', 'wpshadow' ) ); ?>',
+								type: 'error'
+							});
 						}
 					}).catch(function(){
-						alert('<?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?>');
+					WPShadowModal.alert({
+						title: '<?php echo esc_js( __( 'Network Error', 'wpshadow' ) ); ?>',
+						message: '<?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?>',
+						type: 'error'
+					});
 					}).finally(function(){ toggle.disabled = false; });
 				});
 				row.appendChild(info);
@@ -176,10 +184,18 @@ function wpshadow_render_scan_settings() {
 							item.enabled = !!resp.data.enabled;
 							toggle.textContent = item.enabled ? '<?php echo esc_js( __( 'Disable', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Enable', 'wpshadow' ) ); ?>';
 						} else {
-							alert((resp && resp.data && resp.data.message) || '<?php echo esc_js( __( 'Operation failed', 'wpshadow' ) ); ?>');
+							WPShadowModal.alert({
+								title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+								message: (resp && resp.data && resp.data.message) || '<?php echo esc_js( __( 'Operation failed', 'wpshadow' ) ); ?>',
+								type: 'error'
+							});
 						}
 					}).catch(function(){
-						alert('<?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?>');
+						WPShadowModal.alert({
+							title: '<?php echo esc_js( __( 'Network Error', 'wpshadow' ) ); ?>',
+							message: '<?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?>',
+							type: 'error'
+						});
 					}).finally(function(){ toggle.disabled = false; });
 				});
 				row.appendChild(info);

@@ -89,7 +89,7 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 					// Validate same-site
 					if (urlObj.hostname !== siteHost) {
 						$(this).val('/');
-						alert('<?php esc_attr_e( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ); ?>');
+						WPShadowModal.alert({title: '<?php esc_attr_e( 'Invalid URL', 'wpshadow' ); ?>', message: '<?php esc_attr_e( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ); ?>', type: 'warning'});
 						return;
 					}
 
@@ -98,7 +98,7 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 					$(this).val(path || '/');
 				} catch (e) {
 					$(this).val('/');
-					alert('<?php esc_attr_e( 'Invalid URL format. Please enter a valid path or URL.', 'wpshadow' ); ?>');
+					WPShadowModal.alert({title: '<?php esc_attr_e( 'Invalid Format', 'wpshadow' ); ?>', message: '<?php esc_attr_e( 'Invalid URL format. Please enter a valid path or URL.', 'wpshadow' ); ?>', type: 'warning'});
 				}
 			} else if (!value.startsWith('/')) {
 				// Ensure path starts with /

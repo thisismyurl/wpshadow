@@ -650,7 +650,11 @@ $severity_legend = array(
 
 						updateColumnCounts();
 					} else {
-						alert('Error: ' + (response.data.message || 'Could not update status'));
+						WPShadowModal.alert({
+							title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+							message: 'Error: ' + (response.data.message || 'Could not update status'),
+							type: 'error'
+						});
 						$(draggedElement).css('opacity', '1');
 					}
 				});
@@ -690,13 +694,16 @@ $severity_legend = array(
 						);
 						updateColumnCounts();
 					}, 1500);
-				} else {
-					alert('Error: ' + (response.data.message || 'Could not auto-fix'));
-					$btn.prop('disabled', false).text('Fix Now');
-				}
-			});
+			} else {
+				WPShadowModal.alert({
+					title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+					message: 'Error: ' + (response.data.message || 'Could not auto-fix'),
+					type: 'error'
+				});
+				$btn.prop('disabled', false).text('Fix Now');
+			}
 		});
-
+	});
 		// Workflow Creation Modal
 		$(document).on('click', '.wpshadow-create-workflow-btn', function(e) {
 			e.preventDefault();
@@ -749,12 +756,15 @@ $severity_legend = array(
 					// Redirect to workflow builder with pre-filled data
 					window.location.href = ajaxurl.replace('admin-ajax.php', '') + 'admin.php?page=wpshadow-workflows&workflow_id=' + workflowId + '&new=1';
 				} else {
-					alert('Error: ' + (response.data.message || 'Could not create workflow'));
-					$btn.prop('disabled', false).text('Create & Configure');
-				}
-			});
+				WPShadowModal.alert({
+					title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+					message: 'Error: ' + (response.data.message || 'Could not create workflow'),
+					type: 'error'
+				});
+				$btn.prop('disabled', false).text('Create & Configure');
+			}
 		});
-
+	});
 		// Just close modal button
 		$(document).on('click', '#wpshadow-workflow-modal-cancel', function(e) {
 			e.preventDefault();
@@ -765,7 +775,11 @@ $severity_legend = array(
 		$(document).on('click', '.finding-details', function(e) {
 			e.preventDefault();
 			const findingId = $(this).data('finding-id');
-			alert('Finding details modal: ' + findingId); // TODO: Implement details modal
+			WPShadowModal.alert({
+				title: '<?php echo esc_js( __( 'Finding Details', 'wpshadow' ) ); ?>',
+				message: 'Finding details modal for: ' + findingId,
+				type: 'info'
+			}); // TODO: Implement details modal
 		});
 
 		// Update column counts (only count visible items)

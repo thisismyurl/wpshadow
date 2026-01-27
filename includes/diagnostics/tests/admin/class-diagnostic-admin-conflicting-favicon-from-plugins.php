@@ -38,34 +38,49 @@ class Diagnostic_Admin_Conflicting_Favicon_From_Plugins extends Diagnostic_Base 
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		// Check if multiple plugins are hooking into admin_head to add favicons.
+		$favicon_actions = array();
+		global $wp_filter;
+
+		if ( isset( $wp_filter['admin_head'] ) && is_object( $wp_filter['admin_head'] ) ) {
+			foreach ( $wp_filter['admin_head']->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $callback ) {
+					if ( isset( $callback['function'] ) ) {
+						$function = $callback['function'];
+						
+						// Check if callback name suggests favicon injection.
+						if ( is_string( $function ) && 
+						     ( stripos( $function, 'favicon' ) !== false || stripos( $function, 'icon' ) !== false ) ) {
+							$favicon_actions[] = $function;
+						} elseif ( is_array( $function ) && isset( $function[1] ) && is_string( $function[1] ) &&
+						           ( stripos( $function[1], 'favicon' ) !== false || stripos( $function[1], 'icon' ) !== false ) ) {
+							$favicon_actions[] = ( is_object( $function[0] ) ? get_class( $function[0] ) : $function[0] ) . '::' . $function[1];
+						}
+					}
+				}
+			}
 		}
 
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
-		
-		if ( false === $html ) {
-			return null;
-		}
-
-		// Count favicon link tags.
-		$favicon_count = preg_match_all( '/rel=(["\'])(?:shortcut )?icon\1/i', $html, $matches );
-
-		if ( $favicon_count > 1 ) {
+		// If multiple favicon-related actions found, flag as potential conflict.
+		if ( count( $favicon_actions ) > 1 ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
-					__( 'Found %d favicon declarations in admin. Multiple favicons cause conflicts and browser inconsistencies.', 'wpshadow' ),
-					$favicon_count
+					__( 'Found %d plugins/themes hooking into admin_head to potentially add favicons: %s. Multiple favicon declarations can cause conflicts and browser inconsistencies.', 'wpshadow' ),
+					count( $favicon_actions ),
+					implode( ', ', array_slice( $favicon_actions, 0, 3 ) ) . ( count( $favicon_actions ) > 3 ? '...' : '' )
 				),
 				'severity'     => 'medium',
 				'threat_level' => 25,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+				'meta'         => array(
+					'favicon_actions' => $favicon_actions,
+				),
 			);
 		}
 
-		return null;
+		return null; // No conflicting favicon actions detected.
 	}
 }

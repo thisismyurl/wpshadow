@@ -300,10 +300,18 @@ class Dashboard_Customization {
 					nonce: wpshadow.nonce,
 					prefs: pinStates
 				}).done( function( response ) {
-					alert( '<?php echo esc_js( __( 'Dashboard preferences saved!', 'wpshadow' ) ); ?>' );
-					location.reload();
-				}).fail( function( error ) {
-					alert( 'Error saving preferences: ' + error );
+				WPShadowModal.alert({
+					title: '<?php echo esc_js( __( 'Success', 'wpshadow' ) ); ?>',
+					message: '<?php echo esc_js( __( 'Dashboard preferences saved!', 'wpshadow' ) ); ?>',
+					type: 'success'
+				});
+				location.reload();
+			}).fail( function( error ) {
+				WPShadowModal.alert({
+					title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+					message: 'Error saving preferences: ' + error,
+					type: 'error'
+				});
 				});
 			});
 		});

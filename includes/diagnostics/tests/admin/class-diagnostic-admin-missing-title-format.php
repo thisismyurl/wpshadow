@@ -69,69 +69,72 @@ class Diagnostic_Admin_Missing_Title_Format extends Diagnostic_Base {
 			return null;
 		}
 
-		// Load Admin_Page_Scanner helper.
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
-		}
+		// Check if admin_title filter has been modified improperly.
+		global $wp_filter;
+		$site_name = get_bloginfo( 'name' );
+		$issues = array();
 
-		$pages_to_check = array(
-			'index.php'              => 'Dashboard',
-			'options-general.php'    => 'General Settings',
-			'plugins.php'            => 'Plugins',
+		// Test title generation for common admin pages.
+		$test_titles = array(
+			'Dashboard' => 'Dashboard',
+			'Settings' => 'General Settings',
+			'Plugins' => 'Plugins',
 		);
 
-		$site_name = get_bloginfo( 'name' );
-		$incorrect_titles = array();
+		foreach ( $test_titles as $page_title => $expected_page ) {
+			// Simulate admin_title filter.
+			$title = apply_filters( 'admin_title', $page_title, '' );
 
-		foreach ( $pages_to_check as $page_slug => $page_name ) {
-			$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( $page_slug );
-			
-			if ( false === $html ) {
-				continue;
+			// Check if title contains site name.
+			if ( false === stripos( $title, $site_name ) ) {
+				$issues[] = sprintf(
+					__( 'Page "%s" title does not include site name', 'wpshadow' ),
+					esc_html( $expected_page )
+				);
 			}
 
-			// Extract title.
-			if ( preg_match( '/<title[^>]*>(.*?)<\/title>/is', $html, $matches ) ) {
-				$title_content = strip_tags( $matches[1] );
-				
-				// Check if title contains site name.
-				if ( false === stripos( $title_content, $site_name ) ) {
-					$incorrect_titles[] = $page_name . ': "' . $title_content . '"';
-				}
-				
-				// Check if title follows WordPress format (contains ‹ or |).
-				if ( false === strpos( $title_content, '‹' ) && false === strpos( $title_content, '|' ) && false === strpos( $title_content, '-' ) ) {
-					$incorrect_titles[] = $page_name . ': No separator found';
-				}
+			// Check if title has proper separators (WordPress uses ‹ or — or | or -).
+			$has_separator = (
+				false !== strpos( $title, '‹' ) ||
+				false !== strpos( $title, '—' ) ||
+				false !== strpos( $title, '|' ) ||
+				false !== strpos( $title, '-' )
+			);
+
+			if ( ! $has_separator && $site_name !== $page_title ) {
+				$issues[] = sprintf(
+					__( 'Page "%s" title missing separator character', 'wpshadow' ),
+					esc_html( $expected_page )
+				);
 			}
 		}
 
-		if ( ! empty( $incorrect_titles ) ) {
+		if ( ! empty( $issues ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
-					/* translators: %d: number of pages, %s: list of pages */
+					/* translators: %d: number of issues, %s: list of issues */
 					_n(
 						'%d admin page has incorrect title format: %s. Proper format should be: "Page Name ‹ Site Name — WordPress"',
 						'%d admin pages have incorrect title format: %s. Proper format should be: "Page Name ‹ Site Name — WordPress"',
-						count( $incorrect_titles ),
+						count( $issues ),
 						'wpshadow'
 					),
-					count( $incorrect_titles ),
-					implode( '; ', $incorrect_titles )
+					count( $issues ),
+					implode( '; ', $issues )
 				),
 				'severity'     => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/admin-missing-title-format',
 				'meta'         => array(
-					'incorrect_pages' => $incorrect_titles,
-					'site_name'       => $site_name,
+					'issues'    => $issues,
+					'site_name' => $site_name,
 				),
 			);
 		}
 
-		return null;
+		return null; // All admin page titles have proper format.
 	}
 }

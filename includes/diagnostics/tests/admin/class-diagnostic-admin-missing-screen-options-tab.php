@@ -38,30 +38,46 @@ class Diagnostic_Admin_Missing_Screen_Options_Tab extends Diagnostic_Base {
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
-		}
-
-		// Pages that should have screen options.
+		// Pages that should typically have screen options.
 		$pages_to_check = array(
-			'edit.php'    => 'Posts',
-			'edit.php?post_type=page' => 'Pages',
+			'edit' => 'Posts',
+			'edit-page' => 'Pages',
+			'edit-comments' => 'Comments',
+			'plugins' => 'Plugins',
 		);
 
 		$missing_options = array();
 
-		foreach ( $pages_to_check as $page_slug => $page_name ) {
-			$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( $page_slug );
-			
-			if ( false === $html ) {
+		// Check if screen options are registered for these screen IDs.
+		foreach ( $pages_to_check as $screen_id => $page_name ) {
+			// Temporarily set the current screen to check.
+			set_current_screen( $screen_id );
+			$screen = get_current_screen();
+
+			if ( ! $screen ) {
 				continue;
 			}
 
-			// Check for screen options button.
-			$has_screen_options = ( false !== strpos( $html, 'id="screen-options-link-wrap"' ) ||
-			                        false !== strpos( $html, 'show-settings-link' ) );
+			// Check if screen has options or columns.
+			$has_options = false;
 
-			if ( ! $has_screen_options ) {
+			// Check for columns (most common screen option).
+			if ( method_exists( $screen, 'get_columns' ) ) {
+				$columns = $screen->get_columns();
+				if ( ! empty( $columns ) ) {
+					$has_options = true;
+				}
+			}
+
+			// Check for per_page option.
+			if ( ! $has_options && method_exists( $screen, 'get_option' ) ) {
+				$per_page = $screen->get_option( 'per_page' );
+				if ( ! empty( $per_page ) ) {
+					$has_options = true;
+				}
+			}
+
+			if ( ! $has_options ) {
 				$missing_options[] = $page_name;
 			}
 		}
@@ -71,7 +87,7 @@ class Diagnostic_Admin_Missing_Screen_Options_Tab extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
-					__( 'Screen options are missing from: %s. This limits user customization of admin interface.', 'wpshadow' ),
+					__( 'Screen options are missing or not properly registered for: %s. This limits user customization of admin interface.', 'wpshadow' ),
 					implode( ', ', $missing_options )
 				),
 				'severity'     => 'low',
@@ -81,6 +97,6 @@ class Diagnostic_Admin_Missing_Screen_Options_Tab extends Diagnostic_Base {
 			);
 		}
 
-		return null;
+		return null; // Screen options properly registered.
 	}
 }

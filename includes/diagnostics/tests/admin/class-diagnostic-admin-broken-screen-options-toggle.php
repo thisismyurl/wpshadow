@@ -38,33 +38,67 @@ class Diagnostic_Admin_Broken_Screen_Options_Toggle extends Diagnostic_Base {
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		// Test on Posts page which should have screen options.
+		set_current_screen( 'edit' );
+		$screen = get_current_screen();
+
+		if ( ! $screen ) {
+			return null; // Cannot determine screen.
 		}
 
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'edit.php' );
-		
-		if ( false === $html ) {
-			return null;
-		}
-
-		// Check for screen options link without corresponding panel.
-		$has_link = ( false !== strpos( $html, 'id="screen-options-link-wrap"' ) );
-		$has_panel = ( false !== strpos( $html, 'id="screen-meta"' ) ||
-		               false !== strpos( $html, 'id="screen-options-wrap"' ) );
-
-		if ( $has_link && ! $has_panel ) {
+		// Check if screen object has render_screen_meta method (handles screen options).
+		if ( ! method_exists( $screen, 'render_screen_meta' ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Screen options link exists but the panel is missing. Users cannot customize the admin interface.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 30,
+				'description'  => __( 'Screen options rendering method is missing from WP_Screen class. This indicates a core WordPress issue or conflict. Users cannot access screen options.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 50,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
 			);
 		}
 
-		return null;
+		// Check if columns are registered but screen options don't work.
+		$columns = $screen->get_columns();
+		
+		if ( ! empty( $columns ) ) {
+			// Columns exist, which means screen options should be functional.
+			// Check if the screen options can be rendered.
+			ob_start();
+			try {
+				$screen->render_screen_meta();
+				$output = ob_get_clean();
+
+				// If render_screen_meta produces no output but columns exist, toggle is broken.
+				if ( empty( $output ) ) {
+					return array(
+						'id'           => self::$slug,
+						'title'        => self::$title,
+						'description'  => __( 'Screen options are registered but the toggle/panel does not render properly. Users cannot customize the admin interface despite options being available.', 'wpshadow' ),
+						'severity'     => 'medium',
+						'threat_level' => 30,
+						'auto_fixable' => false,
+						'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+					);
+				}
+			} catch ( \Exception $e ) {
+				ob_end_clean();
+				return array(
+					'id'           => self::$slug,
+					'title'        => self::$title,
+					'description'  => sprintf(
+						__( 'Screen options toggle threw an error: %s. This prevents users from customizing the admin interface.', 'wpshadow' ),
+						esc_html( $e->getMessage() )
+					),
+					'severity'     => 'high',
+					'threat_level' => 40,
+					'auto_fixable' => false,
+					'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+				);
+			}
+		}
+
+		return null; // Screen options toggle is functional.
 	}
 }

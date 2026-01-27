@@ -38,42 +38,82 @@ class Diagnostic_Admin_Screen_Options_Missing_Expected_Checkboxes extends Diagno
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		// Test on Posts page which should have column checkboxes.
+		set_current_screen( 'edit' );
+		$screen = get_current_screen();
+
+		if ( ! $screen ) {
+			return null; // Cannot determine screen.
 		}
 
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'edit.php' );
-		
-		if ( false === $html ) {
+		// Get available columns.
+		$columns = $screen->get_columns();
+
+		if ( empty( $columns ) ) {
+			// No columns registered means no checkboxes expected - this is normal for some screens.
 			return null;
 		}
 
-		// Check for screen options panel.
-		if ( false === strpos( $html, 'id="screen-meta"' ) && 
-		     false === strpos( $html, 'id="screen-options-wrap"' ) ) {
-			return null; // No screen options at all.
+		// Get hidden columns for current user.
+		$hidden = get_user_option( 'manage' . $screen->id . 'columnshidden' );
+
+		// If columns exist but user has no hidden columns option set, checkboxes may not be rendering.
+		// However, this could just mean user hasn't customized yet. Let's check if render method exists.
+		if ( ! method_exists( $screen, 'render_screen_options' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Screen options rendering method is missing. Columns are registered but users cannot access checkboxes to show/hide them.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 25,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
 		}
 
-		// Extract screen options panel.
-		if ( preg_match( '/<div[^>]*id=["\']screen-meta["\'][^>]*>(.*?)<\/div>/is', $html, $matches ) ) {
-			$panel_html = $matches[1];
-			
-			// Check for checkboxes.
-			$checkbox_count = preg_match_all( '/<input[^>]*type=["\']checkbox["\'][^>]*>/', $panel_html, $checkbox_matches );
-			
-			if ( $checkbox_count === 0 ) {
+		// Try to render screen options to verify checkboxes are generated.
+		ob_start();
+		try {
+			$screen->render_screen_options();
+			$output = ob_get_clean();
+
+			// Check if output contains column checkboxes.
+			$checkbox_count = substr_count( $output, 'type="checkbox"' );
+
+			if ( count( $columns ) > 0 && $checkbox_count === 0 ) {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Screen options panel exists but contains no checkboxes. Users cannot customize column visibility.', 'wpshadow' ),
+					'description'  => sprintf(
+						__( 'Screen has %d columns registered but screen options panel contains no checkboxes. Users cannot customize column visibility.', 'wpshadow' ),
+						count( $columns )
+					),
 					'severity'     => 'medium',
 					'threat_level' => 25,
 					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+					'meta'         => array(
+						'expected_columns' => count( $columns ),
+						'checkbox_count'   => $checkbox_count,
+					),
 				);
 			}
+		} catch ( \Exception $e ) {
+			ob_end_clean();
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					__( 'Error rendering screen options: %s. Users cannot access column checkboxes.', 'wpshadow' ),
+					esc_html( $e->getMessage() )
+				),
+				'severity'     => 'medium',
+				'threat_level' => 30,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
 		}
 
-		return null;
+		return null; // Screen options checkboxes are present and functional.
 	}
 }

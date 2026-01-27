@@ -158,7 +158,7 @@ jQuery(document).ready(function($) {
 						'<p><?php esc_attr_e( 'Link:', 'wpshadow' ); ?></p>' +
 						'<code class="wps-block-m-10-p-10">' + response.data.magic_link + '</code>' +
 						'<p><?php esc_attr_e( 'Expires:', 'wpshadow' ); ?> ' + response.data.expires_at + '</p>' +
-						'<button type="button" class="wps-btn wps-btn-secondary" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
+						'<button type="button" class="wps-btn wps-btn-secondary" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); WPShadowModal.alert({title:\'<?php esc_attr_e( 'Success', 'wpshadow' ); ?>\',message:\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\',type:\'success\'});"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
 						'</div>';
 					$message.html(html).show();
 					$form[0].reset();
@@ -200,15 +200,29 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success) {
-					alert(response.data.message);
-					location.reload();
+					WPShadowModal.alert({
+						title: '<?php esc_attr_e( 'Success', 'wpshadow' ); ?>',
+						message: response.data.message,
+						type: 'success'
+					});
+					setTimeout(function() {
+						location.reload();
+					}, 1500);
 				} else {
-					alert(response.data && response.data.message ? response.data.message : '<?php esc_attr_e( 'Error revoking link.', 'wpshadow' ); ?>');
+					WPShadowModal.alert({
+						title: '<?php esc_attr_e( 'Error', 'wpshadow' ); ?>',
+						message: response.data && response.data.message ? response.data.message : '<?php esc_attr_e( 'Error revoking link.', 'wpshadow' ); ?>',
+						type: 'error'
+					});
 					$btn.prop('disabled', false).text('<?php esc_attr_e( 'Revoke', 'wpshadow' ); ?>');
 				}
 			},
 			error: function() {
-				alert('<?php esc_attr_e( 'Error revoking link.', 'wpshadow' ); ?>');
+				WPShadowModal.alert({
+					title: '<?php esc_attr_e( 'Error', 'wpshadow' ); ?>',
+					message: '<?php esc_attr_e( 'Error revoking link.', 'wpshadow' ); ?>',
+					type: 'error'
+				});
 				$btn.prop('disabled', false).text('<?php esc_attr_e( 'Revoke', 'wpshadow' ); ?>');
 			}
 		});

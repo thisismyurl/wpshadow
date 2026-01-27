@@ -102,7 +102,11 @@ class Guardian_Dashboard {
 			function wpshadowToggleGuardian() {
 				if (typeof WPShadowModal === "undefined") {
 					console.error("WPShadowModal not loaded");
-					alert("Error: Modal system not loaded. Please refresh the page.");
+					WPShadowModal.alert({
+						title: '<?php esc_js( __( 'Error', 'wpshadow' ) ); ?>',
+						message: 'Error: Modal system not loaded. Please refresh the page.',
+						type: 'error'
+					});
 					return;
 				}
 				

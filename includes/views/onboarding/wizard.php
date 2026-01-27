@@ -735,13 +735,13 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 				if (response.success) {
 					window.location.reload();
 				} else {
-					alert(response.data || '<?php echo esc_js( __( 'Something went wrong. Please try again.', 'wpshadow' ) ); ?>');
+					WPShadowModal.alert({title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>', message: response.data || '<?php echo esc_js( __( 'Something went wrong. Please try again.', 'wpshadow' ) ); ?>');
 					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
 				}
 			},
 			error: function(xhr, status, error) {
 				console.error('AJAX Error:', status, error, xhr.responseText);
-				alert('<?php echo esc_js( __( 'Connection error. Please try again.', 'wpshadow' ) ); ?>');
+				WPShadowModal.alert({title: '<?php echo esc_js( __( 'Connection Error', 'wpshadow' ) ); ?>', message: '<?php echo esc_js( __( 'Connection error. Please try again.', 'wpshadow' ) ); ?>', type: 'error'});
 				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
 			}
 		});

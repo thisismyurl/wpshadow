@@ -121,7 +121,7 @@ class WPShadow_Top_Issues_Widget {
 							$(this).fadeIn(200);
 						});
 					} else {
-						alert('Error: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+						WPShadowModal.alert({title: '<?php esc_html_e( 'Error', 'wpshadow' ); ?>', message: (response.data && response.data.message ? response.data.message : 'Unknown error'), type: 'error'}));
 						$btn.prop('disabled', false).text('<?php esc_html_e( 'Fix Now', 'wpshadow' ); ?>');
 					}
 				});

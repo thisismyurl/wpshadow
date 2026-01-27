@@ -159,18 +159,30 @@ document.getElementById( 'wpshadow-generate-audit' )?.addEventListener( 'click',
 	this.textContent = '<?php esc_attr_e( 'Generating...', 'wpshadow' ); ?>';
 	// AJAX call would go here
 	setTimeout( function() {
-		alert( '<?php esc_attr_e( 'Audit generation feature coming soon!', 'wpshadow' ); ?>' );
+		WPShadowModal.alert({
+			title: '<?php esc_attr_e( 'Coming Soon', 'wpshadow' ); ?>',
+			message: '<?php esc_attr_e( 'Audit generation feature coming soon!', 'wpshadow' ); ?>',
+			type: 'info'
+		});
 		location.reload();
 	}, 1000 );
 } );
 
 document.getElementById( 'wpshadow-export-audit' )?.addEventListener( 'click', function() {
-	alert( '<?php esc_attr_e( 'Export feature coming soon!', 'wpshadow' ); ?>' );
+	WPShadowModal.alert({
+		title: '<?php esc_attr_e( 'Coming Soon', 'wpshadow' ); ?>',
+		message: '<?php esc_attr_e( 'Export feature coming soon!', 'wpshadow' ); ?>',
+		type: 'info'
+	});
 } );
 
 document.querySelectorAll( '.wpshadow-view-report' ).forEach( function( btn ) {
 	btn.addEventListener( 'click', function() {
-		alert( '<?php esc_attr_e( 'Report viewer coming soon!', 'wpshadow' ); ?>' );
+		WPShadowModal.alert({
+			title: '<?php esc_attr_e( 'Coming Soon', 'wpshadow' ); ?>',
+			message: '<?php esc_attr_e( 'Report viewer coming soon!', 'wpshadow' ); ?>',
+			type: 'info'
+		});
 	} );
 } );
 </script>

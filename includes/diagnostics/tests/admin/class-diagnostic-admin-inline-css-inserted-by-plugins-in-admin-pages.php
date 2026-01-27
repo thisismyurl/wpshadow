@@ -68,33 +68,7 @@ class Diagnostic_Admin_Inline_Css_Inserted_By_Plugins_In_Admin_Pages extends Dia
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
-		}
-
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
-		
-		if ( false === $html ) {
-			return null;
-		}
-
-		$inline_styles_count = preg_match_all( '/<style[^>]*>(.*?)<\/style>/is', $html, $style_matches );
-
-		if ( $inline_styles_count > 5 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					__( 'Found %d inline style blocks in admin. This can slow page load and cause maintenance issues.', 'wpshadow' ),
-					$inline_styles_count
-				),
-				'severity'     => 'low',
-				'threat_level' => 20,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
-			);
-		}
-
+		// Check for inline styles registered by plugins (not core) using WordPress API.
 		$plugin_inline_styles = array();
 
 		// Check for inline styles registered by plugins (not core).

@@ -43,24 +43,15 @@ class Diagnostic_Admin_Missing_Admin_Bar_Element extends Diagnostic_Base {
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
-		}
+		// Check if the admin bar global is properly initialized.
+		global $wp_admin_bar;
 
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
-		
-		if ( false === $html ) {
-			return null;
-		}
-
-		// Check for admin bar element.
-		$has_admin_bar = ( false !== strpos( $html, 'id="wpadminbar"' ) );
-
-		if ( ! $has_admin_bar ) {
+		// If admin bar should be showing but the global doesn't exist or isn't initialized, there's an issue.
+		if ( ! isset( $wp_admin_bar ) || ! is_object( $wp_admin_bar ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The WordPress admin bar (#wpadminbar) is missing from admin pages. This may indicate a theme or plugin conflict.', 'wpshadow' ),
+				'description'  => __( 'The WordPress admin bar ($wp_admin_bar) is not properly initialized despite being enabled. This may indicate a theme or plugin conflict preventing the admin bar from loading.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 30,
 				'auto_fixable' => false,
@@ -68,6 +59,19 @@ class Diagnostic_Admin_Missing_Admin_Bar_Element extends Diagnostic_Base {
 			);
 		}
 
-		return null;
+		// Check if the admin bar has the necessary methods (indicates proper initialization).
+		if ( ! method_exists( $wp_admin_bar, 'render' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'The WordPress admin bar object exists but is not properly instantiated. This may indicate a theme or plugin is overriding the admin bar incorrectly.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 30,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
+		return null; // Admin bar is properly initialized.
 	}
 }

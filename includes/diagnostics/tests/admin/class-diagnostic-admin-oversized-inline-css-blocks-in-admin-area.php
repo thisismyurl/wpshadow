@@ -75,39 +75,7 @@ class Diagnostic_Admin_Oversized_Inline_Css_Blocks_In_Admin_Area extends Diagnos
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
-		}
-
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
-		if ( false === $html ) {
-			return null;
-		}
-
-		preg_match_all( '/<style[^>]*>(.*?)<\/style>/is', $html, $style_matches );
-		$oversized_count = 0;
-
-		foreach ( $style_matches[1] as $style_content ) {
-			if ( strlen( $style_content ) > self::$size_threshold ) {
-				$oversized_count++;
-			}
-		}
-
-		if ( $oversized_count > 0 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					__( 'Found %d oversized inline CSS block(s) (>10KB each). These should be moved to external files.', 'wpshadow' ),
-					$oversized_count
-				),
-				'severity'     => 'medium',
-				'threat_level' => 30,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
-			);
-		}
-
+		// Check for large inline styles in registered styles using WordPress API.
 		$large_inline_styles = array();
 
 		// Check for large inline styles in registered styles.

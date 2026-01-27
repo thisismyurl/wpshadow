@@ -38,32 +38,29 @@ class Diagnostic_Admin_Missing_WordPress_Admin_Favicon extends Diagnostic_Base {
 			return null;
 		}
 
-		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
-			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		// Use WordPress native function to check for site icon.
+		$has_site_icon = has_site_icon();
+
+		// If no site icon set, check if WordPress is using default favicon.
+		if ( ! $has_site_icon ) {
+			// WordPress uses wp-admin/images/w-logo-blue.png as default favicon.
+			// This is acceptable, so only flag if completely missing.
+			$admin_images_path = ABSPATH . 'wp-admin/images/';
+			$default_favicon_exists = file_exists( $admin_images_path . 'w-logo-blue.png' );
+
+			if ( ! $default_favicon_exists ) {
+				return array(
+					'id'           => self::$slug,
+					'title'        => self::$title,
+					'description'  => __( 'Admin pages are missing the WordPress favicon. Neither a custom site icon nor the default WordPress favicon is available. This affects branding and browser tab identification.', 'wpshadow' ),
+					'severity'     => 'low',
+					'threat_level' => 15,
+					'auto_fixable' => false,
+					'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+				);
+			}
 		}
 
-		$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( 'index.php' );
-		
-		if ( false === $html ) {
-			return null;
-		}
-
-		// Check for favicon link tag.
-		$has_favicon = ( false !== strpos( $html, 'rel="icon"' ) || 
-		                 false !== strpos( $html, 'rel="shortcut icon"' ) );
-
-		if ( ! $has_favicon ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Admin pages are missing the WordPress favicon. This affects branding and browser tab identification.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 15,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
-			);
-		}
-
-		return null;
+		return null; // Favicon present (either custom or default).
 	}
 }
