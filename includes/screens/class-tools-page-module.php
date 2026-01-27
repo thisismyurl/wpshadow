@@ -171,26 +171,6 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 
 		<!-- Tools Tabbed Interface -->
 		<div class="wps-tools-tab-container">
-			<!-- Tab Navigation -->
-			<div class="wps-tools-tab-nav" role="tablist">
-				<div class="wps-tools-tab-index" id="wps-tools-tab-index" role="tab" aria-selected="true" aria-controls="wps-tools-tab-pane-index">
-					<?php esc_html_e( 'All Tools', 'wpshadow' ); ?>
-				</div>
-				<?php foreach ( $catalog as $item ) : ?>
-					<div 
-						class="wps-tools-tab-button" 
-						id="wps-tools-tab-<?php echo esc_attr( $item['tool'] ); ?>" 
-						role="tab" 
-						aria-selected="false" 
-						aria-controls="wps-tools-tab-pane-<?php echo esc_attr( $item['tool'] ); ?>"
-						data-tool="<?php echo esc_attr( $item['tool'] ); ?>"
-					>
-						<span class="dashicons <?php echo esc_attr( ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic' ); ?>"></span>
-						<?php echo esc_html( $item['title'] ); ?>
-					</div>
-				<?php endforeach; ?>
-			</div>
-
 			<!-- Tab Content Panes -->
 			<div class="wps-tools-tab-content">
 				<!-- Index Pane -->
@@ -256,45 +236,6 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 			display: flex;
 			flex-direction: column;
 			gap: 0;
-		}
-
-		.wps-tools-tab-nav {
-			display: flex;
-			gap: 0;
-			border-bottom: 2px solid #e5e5e5;
-			overflow-x: auto;
-			-webkit-overflow-scrolling: touch;
-		}
-
-		.wps-tools-tab-index,
-		.wps-tools-tab-button {
-			padding: 12px 20px;
-			cursor: pointer;
-			background: none;
-			border: none;
-			border-bottom: 3px solid transparent;
-			font-size: 14px;
-			font-weight: 500;
-			color: #666;
-			transition: all 0.2s ease;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			white-space: nowrap;
-			margin-bottom: -2px;
-			position: relative;
-		}
-
-		.wps-tools-tab-index:hover,
-		.wps-tools-tab-button:hover {
-			color: #0073aa;
-			background-color: #f5f5f5;
-		}
-
-		.wps-tools-tab-index[aria-selected="true"],
-		.wps-tools-tab-button[aria-selected="true"] {
-			color: #0073aa;
-			border-bottom-color: #0073aa;
 		}
 
 		.wps-tools-tab-content {
