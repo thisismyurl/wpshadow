@@ -2,11 +2,17 @@
 /**
  * Run All Diagnostics and Output Results
  *
- * Usage: php run-all-diagnostics.php
- * Or via WP-CLI: wp eval-file run-all-diagnostics.php
+ * IMPORTANT: This file must be placed in your WordPress ROOT directory
+ * (same directory as wp-config.php, wp-load.php)
  *
- * This script loads the plugin and runs all registered diagnostics,
- * outputting results in a structured format for manual verification.
+ * Usage:
+ *   1. Copy this file to WordPress root: /public_html/wpshadow/
+ *   2. Access via browser: https://wpshadow.com/run-all-diagnostics.php
+ *   3. Or via command line: php run-all-diagnostics.php
+ *   4. Or via WP-CLI: wp eval-file run-all-diagnostics.php
+ *
+ * This script loads WordPress and the WPShadow plugin, then runs all
+ * registered diagnostics, outputting results for manual verification.
  */
 
 // Detect if running via WP-CLI or direct PHP
