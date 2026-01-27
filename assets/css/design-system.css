@@ -3506,6 +3506,24 @@ a:focus-visible {
     margin-bottom: 12px;
 }
 
+/**
+ * Help & Documentation Styles
+ */
+.wps-help-container {
+    max-width: 900px;
+}
+
+.wps-help-subtitle {
+    font-size: 16px;
+    color: var(--wps-gray-600);
+    margin-top: 10px;
+}
+
+.wps-help-list {
+    list-style: disc;
+    padding-left: 20px;
+}
+
 }
 }
 }
