@@ -4064,3 +4064,61 @@ a:focus-visible {
 .wps-status-text {
     font-weight: bold;
 }
+
+/**
+ * Action Selection Workflow Styles
+ */
+.wps-action-back-button {
+    margin-right: var(--wps-space-3);
+}
+
+.wps-action-back-icon {
+    font-size: 18px;
+}
+
+.wps-action-trigger-info {
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-action-trigger-label {
+    color: var(--wps-primary);
+}
+
+.wps-action-trigger-value {
+    font-weight: 500;
+}
+
+.wps-action-description {
+    margin-top: var(--wps-space-2);
+    font-style: italic;
+}
+
+.wps-action-page-description {
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-action-selected-container {
+    display: none;
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-action-selected-visible {
+    display: block;
+}
+
+.wps-action-selected-note {
+    margin-bottom: var(--wps-space-3);
+}
+
+.wps-action-continue-button {
+    margin-top: var(--wps-space-4);
+}
+
+.wps-action-next-icon {
+    font-size: 16px;
+    margin-left: var(--wps-space-1);
+}
+
+.wps-action-category-icon {
+    margin-right: var(--wps-space-2);
+}

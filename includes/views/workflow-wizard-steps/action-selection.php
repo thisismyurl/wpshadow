@@ -39,8 +39,8 @@ foreach ( $trigger_categories as $category ) {
 
 <div class="wps-page-container">
 	<div class="wps-page-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
-			<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" class="wps-action-back-button">
+			<span class="dashicons dashicons-arrow-left-alt2" class="wps-action-back-icon"></span>
 			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 		</a>
 		<div>
@@ -49,34 +49,34 @@ foreach ( $trigger_categories as $category ) {
 
 	<!-- Trigger Context Display -->
 	<?php if ( ! empty( $trigger_label ) ) : ?>
-		<div class="wps-alert wps-alert--info" style="margin-bottom: var(--wps-space-6);">
-			<strong style="color: var(--wps-primary);"><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong> 
-			<span style="font-weight: 500;"><?php echo esc_html( $trigger_label ); ?></span>
+		<div class="wps-alert wps-alert--info" class="wps-action-trigger-info">
+			<strong class="wps-action-trigger-label"><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong> 
+			<span class="wps-action-trigger-value"><?php echo esc_html( $trigger_label ); ?></span>
 			<?php if ( ! empty( $trigger_description ) ) : ?>
-				<p class="wps-text-sm wps-text-muted" style="margin-top: var(--wps-space-2); font-style: italic;">
+				<p class="wps-text-sm wps-text-muted" class="wps-action-description">
 					<?php echo esc_html( $trigger_description ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 
-	<p class="wps-page-description" style="margin-bottom: var(--wps-space-6);">
+	<p class="wps-page-description" class="wps-action-trigger-info">
 		<?php esc_html_e( 'Select one action to run when this trigger fires. WPShadow Pro unlocks multiple actions per trigger.', 'wpshadow' ); ?>
 	</p>
 
 	<!-- Selected Actions -->
-	<div id="selected-actions" class="wps-card wps-card-primary" style="display: none; margin-bottom: var(--wps-space-6);">
+	<div id="selected-actions" class="wps-card wps-card-primary" class="wps-action-selected-container">
 		<div class="wps-card-header">
 			<h3 class="wps-card-title"><?php esc_html_e( 'Selected Action', 'wpshadow' ); ?></h3>
 		</div>
 		<div class="wps-card-body">
-			<p class="wps-text-sm wps-text-muted" style="margin-bottom: var(--wps-space-3);">
+			<p class="wps-text-sm wps-text-muted" class="wps-action-selected-note">
 				<?php esc_html_e( 'One action per workflow in this version. Upgrade to add more.', 'wpshadow' ); ?>
 			</p>
 			<div id="selected-actions-list" class="wps-layout-stack wps-layout-stack-sm"></div>
-			<button type="button" id="continue-to-review" class="wps-btn wps-btn--primary" style="margin-top: var(--wps-space-4);">
+			<button type="button" id="continue-to-review" class="wps-btn wps-btn--primary" class="wps-action-continue-button">
 				<?php esc_html_e( 'Continue to Review', 'wpshadow' ); ?>
-				<span class="dashicons dashicons-arrow-right-alt2" style="font-size: 16px; margin-left: var(--wps-space-1);"></span>
+				<span class="dashicons dashicons-arrow-right-alt2" class="wps-action-next-icon"></span>
 			</button>
 		</div>
 	</div>
@@ -87,7 +87,7 @@ foreach ( $trigger_categories as $category ) {
 			<div class="wps-card">
 				<div class="wps-card-header">
 					<h3 class="wps-card-title">
-						<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ); ?>" style="margin-right: var(--wps-space-2);"></span>
+						<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ); ?>" class="wps-action-category-icon"></span>
 						<?php echo esc_html( $category['label'] ); ?>
 					</h3>
 				</div>
