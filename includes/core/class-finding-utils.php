@@ -64,7 +64,7 @@ function wpshadow_get_cached_findings(): array {
  * @return array Gauge snapshot.
  */
 function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = array() ): array {
-	$meta           = ! empty( $category_meta ) ? $category_meta : wpshadow_get_gauge_category_meta();
+	$meta           = ! empty( $category_meta ) ? $category_meta : wpshadow_get_category_metadata();
 	$by_category    = array();
 	$gauges         = array();
 	$total_findings = 0;

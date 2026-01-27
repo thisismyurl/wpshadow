@@ -36,7 +36,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			// Verify security (read-only, minimal capability)
 			self::verify_request( 'wpshadow_dashboard_nonce', 'read' );
 
-			$category_meta = \wpshadow_get_gauge_category_meta();
+			$category_meta = \wpshadow_get_category_metadata();
 
 			$findings = \wpshadow_get_cached_findings();
 			if ( empty( $findings ) ) {
