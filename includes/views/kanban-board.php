@@ -141,7 +141,7 @@ $severity_legend = array(
 <div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
 	<div class="wps-alert wps-alert--info wps-mb-6">
 		<div class="wps-flex wps-items-start wps-gap-4">
-			<span class="dashicons dashicons-info wps-text-primary" style="font-size: 28px; width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px;" aria-hidden="true"></span>
+			<span class="dashicons dashicons-info wps-text-primary" class="wps-icon-lg wps-icon-info" aria-hidden="true"></span>
 			<div class="wps-flex-1">
 				<h3 class="wps-m-0 wps-mb-2 wps-text-lg wps-font-bold">
 					<?php esc_html_e( 'Organize Your Findings', 'wpshadow' ); ?>
@@ -164,7 +164,7 @@ $severity_legend = array(
 		<div class="wps-m-3 wps-p-8 wps-rounded-lg">
 			<button class="wpshadow-autofix-modal-close wps-absolute wps-top-4 wps-right-4 wps-bg-transparent wps-border-none wps-text-4xl wps-cursor-pointer wps-text-gray-400 wps-leading-none">×</button>
 			<h2 class="wps-mt-0 wps-text-success wps-flex wps-items-center wps-gap-2">
-				<span class="dashicons dashicons-update" style="font-size: 28px; width: 28px; height: 28px;"></span>
+				<span class="dashicons dashicons-update" class="wps-icon-lg"></span>
 				Create Workflow
 			</h2>
 			<p class="wps-m-15">
@@ -198,14 +198,14 @@ $severity_legend = array(
 		<div class="wps-m-3 wps-p-8 wps-rounded-lg">
 			<button class="wpshadow-workflow-modal-close wps-absolute wps-top-4 wps-right-4 wps-bg-transparent wps-border-none wps-text-4xl wps-cursor-pointer wps-text-gray-400 wps-leading-none">×</button>
 			<h2 class="wps-mt-0 wps-text-primary wps-flex wps-items-center wps-gap-2">
-				<span class="dashicons dashicons-update" style="font-size: 28px; width: 28px; height: 28px;"></span>
+				<span class="dashicons dashicons-update" class="wps-icon-lg"></span>
 				Create Workflow
 			</h2>
 
 			<!-- Finding Details -->
 			<div class="wps-m-4 wps-p-4 wps-rounded">
 				<p class="wps-m-0">
-					<span class="dashicons dashicons-yes-alt" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;"></span>
+					<span class="dashicons dashicons-yes-alt" class="wps-icon-md"></span>
 					Finding:
 				</p>
 				<p class="wps-m-0 workflow-finding-title"></p>
@@ -275,7 +275,7 @@ $severity_legend = array(
 					<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 				</button>
 				<button type="button" id="wpshadow-workflow-modal-create" class="wps-btn wps-btn--primary wps-btn-icon-left wps-p-3">
-					<span class="dashicons dashicons-update" style="font-size: 16px; vertical-align: middle;"></span>
+					<span class="dashicons dashicons-update" class="wps-icon-md"></span>
 					<?php esc_html_e( 'Create & Configure', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -287,7 +287,7 @@ $severity_legend = array(
 		<div class="wps-m-3 wps-p-8 wps-rounded-lg">
 			<button class="wpshadow-family-fix-modal-close wps-absolute wps-top-4 wps-right-4 wps-bg-transparent wps-border-none wps-text-4xl wps-cursor-pointer wps-text-gray-400 wps-leading-none">×</button>
 			<h2 class="wps-mt-0 wps-text-primary wps-flex wps-items-center wps-gap-2">
-				<span class="dashicons dashicons-groups" style="font-size: 28px; width: 28px; height: 28px;"></span>
+				<span class="dashicons dashicons-groups" class="wps-icon-lg"></span>
 				Fix Related Issues
 			</h2>
 			<p class="wps-m-4">
@@ -345,7 +345,7 @@ $severity_legend = array(
 								aria-label="<?php echo esc_attr( sprintf( __( 'Workflow: %s', 'wpshadow' ), $workflow_name ) ); ?>">
 								<!-- Workflow Title -->
 						<div class="wps-flex wps-gap-2 wps-items-center wps-m-0">
-							<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: var(--wps-success);" aria-hidden="true"></span>
+							<span class="dashicons dashicons-update" class="wps-icon-md" aria-hidden="true"></span>
 							<strong><?php echo esc_html( $workflow_name ); ?></strong>
 							<?php if ( ! $workflow_enabled ) : ?>
 								<span class="wps-p-1 wps-rounded-sm"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
@@ -353,7 +353,7 @@ $severity_legend = array(
 								</div>
 
 								<!-- Workflow Stats -->
-								<div style="font-size: 11px; color: var(--wps-gray-600); margin-bottom: 8px;">
+								<div class="wps-activity-meta">
 									<?php
 									echo esc_html(
 										sprintf(
@@ -366,7 +366,7 @@ $severity_legend = array(
 										)
 									);
 									?>
-								<div style="font-size: 11px; color: #666; margin-bottom: 8px;">
+								<div class="wps-activity-meta">
 									<?php echo (int) $workflow_triggers; ?> trigger<?php echo 1 !== $workflow_triggers ? 's' : ''; ?> •
 									<?php echo (int) $workflow_actions; ?> action<?php echo 1 !== $workflow_actions ? 's' : ''; ?>
 								</div>
@@ -543,7 +543,7 @@ $severity_legend = array(
 			</div>
 		<?php endforeach; ?>
 		<div class="wpshadow-kanban-legend" class="wps-flex-gap-12-items-center-m-10-p-10-round">
-			<p style="font-weight: 600; color: #333; font-size: 12px;">Color legend</p>
+			<p class="wps-kanban-legend-label">Color legend</p>
 			<?php foreach ( $severity_legend as $legend ) : ?>
 				<p class="wps-inline-flex">
 					<span style="
@@ -557,7 +557,7 @@ $severity_legend = array(
 					<span><?php echo esc_html( $legend['label'] ); ?></span>
 				</p>
 			<?php endforeach; ?>
-			<span style="font-size: 12px; color: #666; margin-left: auto;">Column dots match status colors</span>
+			<span class="wps-kanban-status-text" style="margin-left: auto;">Column dots match status colors</span>
 		</div>
 	</div>
 

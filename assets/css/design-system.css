@@ -3524,6 +3524,51 @@ a:focus-visible {
     padding-left: 20px;
 }
 
+/**
+ * Kanban & Icon Sizing Utilities
+ */
+.wps-icon-lg {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+}
+
+.wps-icon-md {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.wps-icon-info {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.wps-kanban-legend-label {
+    font-weight: 600;
+    color: var(--wps-gray-800);
+    font-size: 12px;
+}
+
+.wps-kanban-status-text {
+    font-size: 12px;
+    color: var(--wps-gray-600);
+}
+
+.wps-kanban-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.wps-activity-meta {
+    font-size: 11px;
+    color: var(--wps-gray-600);
+    margin-bottom: 8px;
+}
+
 }
 }
 }
