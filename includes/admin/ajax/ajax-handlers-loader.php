@@ -68,6 +68,9 @@ require_once $ajax_path . 'Load_Workflows_Handler.php';
 require_once $ajax_path . 'Get_Workflow_Handler.php';
 require_once $ajax_path . 'Delete_Workflow_Handler.php';
 require_once $ajax_path . 'Toggle_Workflow_Handler.php';
+
+// Activity tracking operations
+require_once $ajax_path . 'class-get-activities-handler.php';
 require_once $ajax_path . 'Generate_Workflow_Name_Handler.php';
 require_once $ajax_path . 'Get_Available_Actions_Handler.php';
 require_once $ajax_path . 'Get_Action_Config_Handler.php';
