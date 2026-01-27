@@ -48,6 +48,22 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 
 	// Guardian Dashboard and Settings assets (Phase 8)
 	if ( strpos( $hook, 'wpshadow-guardian' ) !== false ) {
+		// Enqueue modal system (required for Guardian toggle button)
+		wp_enqueue_style(
+			'wpshadow-modal',
+			WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-modal',
+			WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
 		wp_enqueue_style(
 			'wpshadow-guardian-dashboard-settings',
 			WPSHADOW_URL . 'assets/css/guardian-dashboard-settings.css',
@@ -58,7 +74,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		wp_enqueue_script(
 			'wpshadow-guardian-dashboard-settings',
 			WPSHADOW_URL . 'assets/js/guardian-dashboard-settings.js',
-			array( 'jquery' ),
+			array( 'jquery', 'wpshadow-modal' ),
 			WPSHADOW_VERSION,
 			true
 		);
@@ -84,7 +100,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		wp_enqueue_script(
 			'wpshadow-guardian',
 			WPSHADOW_URL . 'assets/js/guardian.js',
-			array( 'jquery', 'wpshadow-admin-pages' ),
+			array( 'jquery', 'wpshadow-admin-pages', 'wpshadow-modal' ),
 			WPSHADOW_VERSION,
 			true
 		);
