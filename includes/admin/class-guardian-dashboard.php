@@ -115,15 +115,15 @@ class Guardian_Dashboard {
 				'<?php echo esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ); ?>',
 				function() {
 					// User confirmed
-					jQuery.post(ajaxurl, {
-						action: "wpshadow_toggle_guardian",
-						nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
-						enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
-					}, function(response) {
-						if (response.success) {
-							location.reload();
-						} else {
-							var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
+			jQuery.post(ajaxurl, {
+				action: "wpshadow_toggle_guardian",
+				nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
+				enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
+			}, function(response) {
+				if (response.success) {
+					location.reload();
+				} else {
+					var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
 							WPShadowModal.alert(
 								'<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
 								message,
