@@ -156,6 +156,9 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 			wp_die( 'Insufficient permissions.' );
 		}
 
+		// Check for legacy ?tool= parameter
+		$requested_tool = Form_Param_Helper::get( 'tool', 'key', '' );
+
 		$catalog = wpshadow_get_tools_catalog();
 		?>
 	<div class="wps-page-container">
@@ -470,6 +473,17 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 					}
 				});
 			});
+
+			// Auto-open tool if requested via URL parameter (backward compatibility)
+			<?php if ( ! empty( $requested_tool ) ) : ?>
+				const autoTool = '<?php echo esc_js( $requested_tool ); ?>';
+				const autoTabButton = document.getElementById('wps-tools-tab-' + autoTool);
+				if (autoTabButton) {
+					setTimeout(function() {
+						switchTab(autoTabButton);
+					}, 100);
+				}
+			<?php endif; ?>
 		});
 	</script>
 		<?php
