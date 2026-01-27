@@ -78,15 +78,15 @@ class Menu_Manager {
 			__( 'Findings', 'wpshadow' ),
 			__( 'Findings', 'wpshadow' ),
 			'read',
-			'wpshadow-action-items',
+			'wpshadow-findings',
 			'wpshadow_render_action_items'
 		);
 
-		// Workflows (Automation)
+		// Automations (Workflow Automation)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Workflows', 'wpshadow' ),
-			__( 'Workflows', 'wpshadow' ),
+			__( 'Automations', 'wpshadow' ),
+			__( 'Automations', 'wpshadow' ),
 			'read',
 			'wpshadow-workflows',
 			'wpshadow_render_workflow_builder'
