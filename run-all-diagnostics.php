@@ -51,13 +51,20 @@ if ( ! defined( 'WPSHADOW_VERSION' ) ) {
 	}
 }
 
-// Verify plugin loaded
+// Verify plugin loaded and get the actual plugin path
 if ( ! defined( 'WPSHADOW_VERSION' ) ) {
 	die( "Error: WPShadow plugin failed to initialize.\n" );
 }
 
+// Get the actual plugin path (handle different installation scenarios)
+if ( defined( 'WPSHADOW_PATH' ) ) {
+	$plugin_path = WPSHADOW_PATH;
+} else {
+	$plugin_path = WP_PLUGIN_DIR . '/wpshadow/';
+}
+
 // Ensure the diagnostics registry is loaded
-$registry_file = WP_PLUGIN_DIR . '/wpshadow/includes/diagnostics/class-diagnostic-registry.php';
+$registry_file = $plugin_path . 'includes/diagnostics/class-diagnostic-registry.php';
 if ( file_exists( $registry_file ) ) {
 	require_once $registry_file;
 } else {
