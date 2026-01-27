@@ -58,13 +58,12 @@
 			$('.wps-canvas-viewport').prepend('<svg class="wps-workflow-connections"><g></g></svg>');
 		},
 
-		/**
+			/**
 		 * Add canvas controls (removed zoom buttons per #1677)
 		 */
 		addCanvasControls: function() {
 			// Zoom controls removed - users can use browser zoom
 			// Keeping pan controls functional
-		},
 
 			// Mouse wheel zoom
 			$('.wps-workflow-canvas').on('wheel', (e) => {
