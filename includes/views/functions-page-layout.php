@@ -56,7 +56,10 @@ function wpshadow_render_page_footer() {
  */
 function wpshadow_load_page_activities_component() {
 	if ( ! function_exists( 'wpshadow_render_page_activities' ) ) {
-		require_once WPSHADOW_PATH . 'includes/views/components/page-activities.php';
+		$component_file = WPSHADOW_PATH . 'includes/views/components/page-activities.php';
+		if ( file_exists( $component_file ) ) {
+			require_once $component_file;
+		}
 	}
 }
 
