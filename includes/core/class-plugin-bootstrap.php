@@ -152,6 +152,17 @@ class Plugin_Bootstrap {
 			require_once $dashboard_file;
 		}
 
+		// Load dashboard modules
+		$gauges_module = WPSHADOW_PATH . 'includes/views/dashboard/gauges-module.php';
+		if ( file_exists( $gauges_module ) ) {
+			require_once $gauges_module;
+		}
+
+		$activity_module = WPSHADOW_PATH . 'includes/views/dashboard/activity-module.php';
+		if ( file_exists( $activity_module ) ) {
+			require_once $activity_module;
+		}
+
 		// Load visual comparisons page
 		$visual_comparisons_file = WPSHADOW_PATH . 'includes/views/visual-comparisons-page.php';
 		if ( file_exists( $visual_comparisons_file ) ) {
