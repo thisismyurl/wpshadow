@@ -4,6 +4,22 @@
 
 > **Note:** This guide describes the intended Kanban-based dashboard layout. Some features may be in development or phase-gated. Core site health display and recent activity sections are implemented and active.
 
+---
+
+## ✅ Core Values Embedded
+
+**Commandment #7 - Ridiculously Good for Free:** Complete site health dashboard with KPI tracking, activity logging, and workflow automation—all in the free version.
+
+**Commandment #8 - Inspire Confidence:** Visual health status, clear severity indicators, before/after metrics, and success feedback for all actions.
+
+**Commandment #11 - Talk-About-Worthy:** Beautiful, modern dashboard that rivals premium plugins—makes site administration feel easy and organized.
+
+**Accessibility Pillar 🌍 - Accessibility First:** Kanban board with keyboard navigation, screen reader support, high contrast indicators, and semantic HTML.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESSIBILITY_TESTING_GUIDE.md](../../TESTING/ACCESSIBILITY_TESTING_GUIDE.md)
+
+---
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    WPShadow Site Health Diagnostic           │

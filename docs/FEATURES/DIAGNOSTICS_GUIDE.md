@@ -28,6 +28,24 @@ Every diagnostic check embodies our 11 commandments:
 
 ---
 
+## ✅ Core Values Embedded
+
+**Commandment #1 - Helpful Neighbor:** Diagnostics anticipate problems before they become critical, providing friendly explanations rather than technical jargon.
+
+**Commandment #5 - Drive to Knowledge Base:** Every finding links to a detailed KB article explaining the issue, why it matters, and how to fix it.
+
+**Commandment #7 - Ridiculously Good for Free:** All 57 diagnostics included free—no paywalls, no artificial limitations.
+
+**Commandment #8 - Inspire Confidence:** Clear severity indicators, before/after explanations, and step-by-step remediation guidance.
+
+**Commandment #9 - Everything Has a KPI:** Every diagnostic logs findings to Activity Logger, tracking issues found, resolutions applied, and site health improvement.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACCESSIBILITY.md](../../PHILOSOPHY/ACCESSIBILITY.md)
+
+---
+
+---
+
 ## 📋 Live Diagnostics (57 Production-Ready)
 
 ### Security Checks (12)

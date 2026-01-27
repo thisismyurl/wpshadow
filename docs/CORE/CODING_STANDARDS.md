@@ -2,6 +2,20 @@
 
 This document establishes consistent naming conventions and coding patterns for the WPShadow plugin. Following these standards ensures code readability, maintainability, and predictability across all files.
 
+---
+
+## ✅ Core Values Embedded
+
+**Commandment #10 - Beyond Pure (Privacy First):** Security is embedded in our coding standards through strict input validation, output escaping, and SQL preparation.
+
+**Commandment #8 - Inspire Confidence:** Consistent, predictable code standards enable other developers to contribute confidently.
+
+**Accessibility Pillar 🌐 - Culturally Respectful:** Standards support inclusive development practices and diverse developer backgrounds.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACCESSIBILITY.md](../../PHILOSOPHY/ACCESSIBILITY.md)
+
+---
+
 ## 1. Naming Conventions
 
 ### Constants
@@ -38,6 +52,7 @@ function wpshadow_filter_parent_file( string $parent_file ): string { ... }
 - Lowercase prefix prevents namespace collision
 - Verb-first naming clarifies function purpose
 - Consistent across WordPress plugins
+
 - Easy to grep/search for all WPShadow functions
 
 ---

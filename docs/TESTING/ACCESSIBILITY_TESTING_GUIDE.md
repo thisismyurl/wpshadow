@@ -15,6 +15,20 @@ This guide provides comprehensive instructions for testing WPShadow's accessibil
 
 ---
 
+## ✅ Core Values Embedded
+
+**Accessibility Pillar 🌍 - Accessibility First:** This guide embodies our foundational commitment: accessibility is not optional, and every feature must work for everyone.
+
+**Accessibility Pillar 🎓 - Learning Inclusive:** Testing procedures are written for all experience levels—beginners and accessibility experts both.
+
+**Accessibility Pillar 🌐 - Culturally Respectful:** Our testing standards respect diverse abilities and ensure inclusive design globally.
+
+**Commandment #8 - Inspire Confidence:** Comprehensive testing builds confidence that WPShadow works reliably for all users.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACCESSIBILITY.md](../../PHILOSOPHY/ACCESSIBILITY.md)
+
+---
+
 ## Table of Contents
 
 1. [Quick Start Checklist](#quick-start-checklist)
@@ -27,7 +41,6 @@ This guide provides comprehensive instructions for testing WPShadow's accessibil
 8. [Common Issues & Fixes](#common-issues-fixes)
 
 ---
-
 ## Quick Start Checklist
 
 Before marking any feature as "complete," verify these accessibility requirements:

@@ -16,6 +16,24 @@ Workflow automation system with modern Scratch-style visual interface enabling a
 - ✅ Responsive design for mobile/tablet
 - ✅ Touch-friendly with 44x44px minimum targets
 
+---
+
+## ✅ Core Values Embedded
+
+**Commandment #1 - Helpful Neighbor:** Workflow builder provides visual, intuitive interface—no technical knowledge required. Friendly error messages guide users toward successful automation.
+
+**Commandment #8 - Inspire Confidence:** Clear visual feedback on workflow creation, preview before execution, and undo functionality for all changes.
+
+**Commandment #9 - Everything Has a KPI:** Every workflow execution logged to Activity Logger, tracking automations run, actions executed, and system impact.
+
+**Commandment #11 - Talk-About-Worthy:** Modern, beautiful UI that makes automation accessible to non-technical users—the kind of feature that gets shared.
+
+**Accessibility Pillar 🌍 - Accessibility First:** WCAG AA compliant with keyboard navigation, screen reader support, focus management, and accessible blocks.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESSIBILITY_TESTING_GUIDE.md](../../TESTING/ACCESSIBILITY_TESTING_GUIDE.md)
+
+---
+
 **System Files:**
 - `includes/workflow/class-workflow-manager.php` - Central workflow engine
 - `includes/workflow/class-workflow-executor.php` - Execution and trigger handling

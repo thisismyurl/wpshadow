@@ -19,6 +19,8 @@
 # Deployment credentials (NEVER commit)
 .sftp-config.env
 .deploy-git.env
+.deploy-ftp.env
+.deploy-password
 
 # Python
 __pycache__/

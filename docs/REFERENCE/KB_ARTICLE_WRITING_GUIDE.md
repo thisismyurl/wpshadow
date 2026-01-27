@@ -7,6 +7,18 @@ This guide defines our writing standards, structure, and shortcode usage for all
 
 ---
 
+## ✅ Core Values Embedded
+
+**Commandment #5 - Drive to Knowledge Base:** This guide ensures our KB contains genuinely helpful, comprehensive articles that empower users.
+
+**Commandment #6 - Drive to Free Training:** All KB articles are free and accessible, supporting the learning of every user.
+
+**Accessibility Pillar 🎓 - Learning Inclusive:** Articles serve diverse learning styles with clear explanations, screenshots, step-by-step instructions, and troubleshooting.
+
+Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACCESSIBILITY.md](../../PHILOSOPHY/ACCESSIBILITY.md)
+
+---
+
 ## 📋 Table of Contents
 1. [Article Structure Template](#article-structure-template)
 2. [Writing Style Guidelines](#writing-style-guidelines)
