@@ -311,37 +311,8 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			const tabIndex = document.getElementById('wps-tools-tab-index');
-			const tabButtons = document.querySelectorAll('.wps-tools-tab-button');
 			const openButtons = document.querySelectorAll('.wps-tool-open-btn');
 			const tabLinks = document.querySelectorAll('.wps-tool-link');
-
-			function switchTab(tabElement) {
-				// Deactivate all tabs
-				document.querySelectorAll('.wps-tools-tab-index, .wps-tools-tab-button').forEach(tab => {
-					tab.setAttribute('aria-selected', 'false');
-				});
-
-				// Hide all panes
-				document.querySelectorAll('.wps-tools-tab-pane').forEach(pane => {
-					pane.classList.remove('wps-tools-tab-pane-active');
-				});
-
-				// Activate clicked tab
-				tabElement.setAttribute('aria-selected', 'true');
-
-				// Show corresponding pane
-				const paneId = tabElement.getAttribute('aria-controls');
-				const pane = document.getElementById(paneId);
-				if (pane) {
-					pane.classList.add('wps-tools-tab-pane-active');
-
-					// Load tool if not already loaded
-					if (pane.classList.contains('wps-tools-tab-pane-loading')) {
-						loadTool(pane);
-					}
-				}
-			}
 
 			function loadTool(pane) {
 				const tool = pane.getAttribute('data-tool');
@@ -377,28 +348,19 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 				});
 			}
 
-			// Tab index (All Tools)
-			if (tabIndex) {
-				tabIndex.addEventListener('click', function() {
-					switchTab(this);
-				});
-			}
-
-			// Tab buttons
-			tabButtons.forEach(button => {
-				button.addEventListener('click', function() {
-					switchTab(this);
-				});
-			});
-
 			// Open buttons
 			openButtons.forEach(button => {
 				button.addEventListener('click', function(e) {
 					e.preventDefault();
 					const tool = this.getAttribute('data-tool');
-					const tabButton = document.getElementById('wps-tools-tab-' + tool);
-					if (tabButton) {
-						switchTab(tabButton);
+					const pane = document.getElementById('wps-tools-tab-pane-' + tool);
+					if (pane) {
+						pane.classList.add('wps-tools-tab-pane-active');
+						if (pane.classList.contains('wps-tools-tab-pane-loading')) {
+							loadTool(pane);
+						}
+						// Scroll to pane
+						pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
 					}
 				});
 			});
@@ -408,16 +370,19 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 				link.addEventListener('click', function(e) {
 					e.preventDefault();
 					const tool = this.getAttribute('data-tool');
-					const tabButton = document.getElementById('wps-tools-tab-' + tool);
-					if (tabButton) {
-						switchTab(tabButton);
+					const pane = document.getElementById('wps-tools-tab-pane-' + tool);
+					if (pane) {
+						pane.classList.add('wps-tools-tab-pane-active');
+						if (pane.classList.contains('wps-tools-tab-pane-loading')) {
+							loadTool(pane);
+						}
+						// Scroll to pane
+						pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
 					}
 				});
 			});
-
-			// Auto-open tool if requested via URL parameter (backward compatibility)
-			<?php if ( ! empty( $requested_tool ) ) : ?>
-				const autoTool = '<?php echo esc_js( $requested_tool ); ?>';
+		});
+	</script>
 				const autoTabButton = document.getElementById('wps-tools-tab-' + autoTool);
 				if (autoTabButton) {
 					setTimeout(function() {
