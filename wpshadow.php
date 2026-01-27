@@ -88,6 +88,10 @@ require_once WPSHADOW_PATH . 'includes/admin/ajax/ajax-handlers-loader.php';
 require_once WPSHADOW_PATH . 'includes/admin/class-auto-deploy.php';
 \WPShadow\Admin\Auto_Deploy::init();
 
+// Load Guardian inactive notice
+require_once WPSHADOW_PATH . 'includes/admin/class-guardian-inactive-notice.php';
+\WPShadow\Admin\Guardian_Inactive_Notice::init();
+
 add_action(
 	'plugins_loaded',
 	function () {
