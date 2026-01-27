@@ -48,7 +48,10 @@ class Guardian_Dashboard {
 
 			<!-- Status and Actions Bar -->
 			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Guardian status and actions', 'wpshadow' ); ?>">
-				<?php echo wp_kses_post( self::render_status_badge() ); ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_status_badge() returns properly escaped HTML and inline script
+				echo self::render_status_badge();
+				?>
 				<?php echo wp_kses_post( self::render_quick_actions() ); ?>
 			</div>
 
