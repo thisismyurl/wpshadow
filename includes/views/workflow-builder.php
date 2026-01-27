@@ -41,25 +41,26 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 			<h1 class="wps-workflow-builder-title">
 				<span class="dashicons dashicons-block-default" aria-hidden="true"></span>
 				<?php esc_html_e( 'Visual Workflow Builder', 'wpshadow' ); ?>
+				<small class="wps-text-gray-500">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>
 			</h1>
 			<p class="wps-workflow-builder-description">
 				<?php esc_html_e( 'Build automation workflows using visual blocks. Create "if-then" rules like Scratch programming.', 'wpshadow' ); ?>
 			</p>
 		</div>
 		<div class="wps-workflow-toolbar">
-			<button id="wps-save-workflow" class="wps-btn wps-btn-primary" aria-label="<?php esc_attr_e( 'Save workflow', 'wpshadow' ); ?>">
+			<button id="wps-save-workflow" class="wps-btn wps-btn--primary" aria-label="<?php esc_attr_e( 'Save workflow', 'wpshadow' ); ?>">
 				<span class="dashicons dashicons-cloud-saved" aria-hidden="true"></span>
 				<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
 			</button>
-			<button id="wps-test-workflow" class="wps-btn wps-btn-secondary" aria-label="<?php esc_attr_e( 'Test workflow', 'wpshadow' ); ?>">
+			<button id="wps-test-workflow" class="wps-btn wps-btn--secondary" aria-label="<?php esc_attr_e( 'Test workflow', 'wpshadow' ); ?>">
 				<span class="dashicons dashicons-media-play" aria-hidden="true"></span>
 				<?php esc_html_e( 'Test Run', 'wpshadow' ); ?>
 			</button>
-			<button id="wps-clear-canvas" class="wps-btn wps-btn-ghost" aria-label="<?php esc_attr_e( 'Clear canvas', 'wpshadow' ); ?>">
+			<button id="wps-clear-canvas" class="wps-btn wps-btn--ghost" aria-label="<?php esc_attr_e( 'Clear canvas', 'wpshadow' ); ?>">
 				<span class="dashicons dashicons-trash" aria-hidden="true"></span>
 				<?php esc_html_e( 'Clear', 'wpshadow' ); ?>
 			</button>
-			<a href="<?php echo esc_url( 'https://wpshadow.com/kb/workflows' ); ?>" class="wps-btn wps-btn-ghost" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'Learn about workflows (opens in new window)', 'wpshadow' ); ?>">
+			<a href="<?php echo esc_url( 'https://wpshadow.com/kb/workflows' ); ?>" class="wps-btn wps-btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'Learn about workflows (opens in new window)', 'wpshadow' ); ?>">
 				<span class="dashicons dashicons-book" aria-hidden="true"></span>
 				<?php esc_html_e( 'Learn Workflows', 'wpshadow' ); ?>
 			</a>
