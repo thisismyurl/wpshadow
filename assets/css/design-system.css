@@ -3872,6 +3872,47 @@ a:focus-visible {
     margin-top: 20px;
 }
 
+/**
+ * Data Retention Manager Styles
+ */
+.wps-retention-container {
+    max-width: 800px;
+}
+
+.wps-retention-icon {
+    font-size: 24px;
+    color: var(--wps-primary);
+}
+
+.wps-retention-flex-item {
+    flex: 1;
+}
+
+.wps-retention-margin-top {
+    margin-top: 12px;
+}
+
+.wps-retention-status {
+    margin-left: 10px;
+}
+
+.wps-retention-action-icon {
+    font-size: 24px;
+    color: #e65100;
+}
+
+.wps-retention-action-label {
+    color: #e65100;
+}
+
+.wps-retention-button {
+    flex-shrink: 0;
+}
+
+.wps-retention-result {
+    margin-top: 12px;
+}
+
 }
 }
 }

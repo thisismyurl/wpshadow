@@ -219,11 +219,11 @@ class Data_Retention_Manager {
 	public static function render_retention_ui() {
 		$settings = self::get_retention_settings();
 		?>
-		<div style="max-width: 800px;">
+		<div class="wps-retention-container">
 			<!-- Retention Policies -->
 			<div class="wps-p-24-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-database" style="font-size: 24px; color: #0073aa;"></span>
+					<span class="dashicons dashicons-database" class="wps-retention-icon"></span>
 					<h3 class="wps-m-0"><?php esc_html_e( 'Data Retention Policies', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0">
@@ -335,8 +335,8 @@ class Data_Retention_Manager {
 						<legend class="wps-p-0"><?php esc_html_e( 'Automatic Cleanup', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="auto_cleanup_enabled" <?php checked( $settings['auto_cleanup_enabled'] ); ?> id="auto-cleanup-enabled" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
-							<div style="flex: 1;">
+							<input type="checkbox" name="auto_cleanup_enabled" <?php checked( $settings['auto_cleanup_enabled'] ); ?> id="auto-cleanup-enabled" class="wps-checkbox-large" />
+							<div class="wps-retention-flex-item">
 								<label for="auto-cleanup-enabled" class="wps-block">
 									<?php esc_html_e( 'Enable automatic cleanup', 'wpshadow' ); ?>
 								</label>
@@ -346,7 +346,7 @@ class Data_Retention_Manager {
 							</div>
 						</div>
 						
-						<div style="margin-top: 12px;">
+						<div class="wps-retention-margin-top">
 							<label class="wps-block">
 								<?php esc_html_e( 'Cleanup Time:', 'wpshadow' ); ?>
 							</label>
@@ -361,25 +361,25 @@ class Data_Retention_Manager {
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Retention Settings', 'wpshadow' ); ?>
 					</button>
-					<span id="wpshadow-retention-status" style="margin-left: 10px;"></span>
+					<span id="wpshadow-retention-status" class="wps-retention-status"></span>
 				</form>
 			</div>
 
 			<!-- Manual Cleanup -->
 			<div class="wps-p-16-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
-					<span class="dashicons dashicons-update" style="font-size: 24px; color: #e65100;"></span>
-					<div style="flex: 1;">
-						<strong style="color: #e65100;"><?php esc_html_e( 'Run Cleanup Now', 'wpshadow' ); ?></strong>
+					<span class="dashicons dashicons-update" class="wps-retention-action-icon"></span>
+					<div class="wps-retention-flex-item">
+						<strong class="wps-retention-action-label"><?php esc_html_e( 'Run Cleanup Now', 'wpshadow' ); ?></strong>
 						<p class="wps-m-4">
 							<?php esc_html_e( 'Manually trigger data cleanup to remove old logs immediately.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					<button type="button" id="wpshadow-cleanup-now-btn" class="button" style="flex-shrink: 0;">
+					<button type="button" id="wpshadow-cleanup-now-btn" class="button" class="wps-retention-button">
 						<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
 					</button>
 				</div>
-				<div id="wpshadow-cleanup-result" style="margin-top: 12px;"></div>
+				<div id="wpshadow-cleanup-result" class="wps-retention-margin-top"></div>
 			</div>
 		</div>
 
@@ -407,9 +407,9 @@ class Data_Retention_Manager {
 				
 				$.post(ajaxurl, data, function(response) {
 					if (response.success) {
-						$status.html('<span style="color: #2e7d32;">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
+						$status.html('<span class="wps-status-success">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
 					} else {
-						$status.html('<span style="color: #c62828;">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
+						$status.html('<span class="wps-status-error">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
 					}
 					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Retention Settings', 'wpshadow' ) ); ?>');
 				});
