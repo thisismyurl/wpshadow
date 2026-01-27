@@ -37,52 +37,62 @@ foreach ( $trigger_categories as $category ) {
 }
 ?>
 
-<div class="wizard-step action-selection">
-	<div class="step-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="back-button">
-			<span class="dashicons dashicons-arrow-left-alt2"></span>
+<div class="wps-page-container">
+	<div class="wps-page-header">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
+			<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
 			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 		</a>
-		<h2><?php esc_html_e( 'Choose Actions', 'wpshadow' ); ?></h2>
+		<div>
+			<h1 class="wps-page-title"><?php esc_html_e( 'Choose Actions', 'wpshadow' ); ?></h1>		</div>
 	</div>
 
 	<!-- Trigger Context Display -->
 	<?php if ( ! empty( $trigger_label ) ) : ?>
-		<div class="trigger-context">
-			<div class="trigger-context-content">
-				<strong><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong> 
-				<span><?php echo esc_html( $trigger_label ); ?></span>
-				<?php if ( ! empty( $trigger_description ) ) : ?>
-					<p class="trigger-description"><?php echo esc_html( $trigger_description ); ?></p>
-				<?php endif; ?>
-			</div>
+		<div class="wps-alert wps-alert--info" style="margin-bottom: var(--wps-space-6);">
+			<strong style="color: var(--wps-primary);"><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong> 
+			<span style="font-weight: 500;"><?php echo esc_html( $trigger_label ); ?></span>
+			<?php if ( ! empty( $trigger_description ) ) : ?>
+				<p class="wps-text-sm wps-text-muted" style="margin-top: var(--wps-space-2); font-style: italic;">
+					<?php echo esc_html( $trigger_description ); ?>
+				</p>
+			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 
-	<p class="description">
+	<p class="wps-page-description" style="margin-bottom: var(--wps-space-6);">
 		<?php esc_html_e( 'Select one action to run when this trigger fires. WPShadow Pro unlocks multiple actions per trigger.', 'wpshadow' ); ?>
 	</p>
 
 	<!-- Selected Actions -->
-	<div id="selected-actions" class="selected-actions" style="display: none;">
-		<h3><?php esc_html_e( 'Selected Action', 'wpshadow' ); ?></h3>
-		<div class="selected-actions-note"><?php esc_html_e( 'One action per workflow in this version. Upgrade to add more.', 'wpshadow' ); ?></div>
-		<div id="selected-actions-list" class="selected-actions-list"></div>
-		<button type="button" id="continue-to-review" class="wps-btn wps-btn--primary">
-			<?php esc_html_e( 'Continue to Review', 'wpshadow' ); ?>
-			<span class="dashicons dashicons-arrow-right-alt2"></span>
-		</button>
+	<div id="selected-actions" class="wps-card wps-card-primary" style="display: none; margin-bottom: var(--wps-space-6);">
+		<div class="wps-card-header">
+			<h3 class="wps-card-title"><?php esc_html_e( 'Selected Action', 'wpshadow' ); ?></h3>
+		</div>
+		<div class="wps-card-body">
+			<p class="wps-text-sm wps-text-muted" style="margin-bottom: var(--wps-space-3);">
+				<?php esc_html_e( 'One action per workflow in this version. Upgrade to add more.', 'wpshadow' ); ?>
+			</p>
+			<div id="selected-actions-list" class="wps-layout-stack wps-layout-stack-sm"></div>
+			<button type="button" id="continue-to-review" class="wps-btn wps-btn--primary" style="margin-top: var(--wps-space-4);">
+				<?php esc_html_e( 'Continue to Review', 'wpshadow' ); ?>
+				<span class="dashicons dashicons-arrow-right-alt2" style="font-size: 16px; margin-left: var(--wps-space-1);"></span>
+			</button>
+		</div>
 	</div>
 
 	<!-- Available Actions -->
-	<div class="action-categories">
+	<div class="wps-layout-stack wps-layout-stack-lg">
 		<?php foreach ( $action_categories as $category_id => $category ) : ?>
-			<div class="action-category">
-				<h3>
-					<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ); ?>"></span>
-					<?php echo esc_html( $category['label'] ); ?>
-				</h3>
-				<div class="action-options">
+			<div class="wps-card">
+				<div class="wps-card-header">
+					<h3 class="wps-card-title">
+						<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ); ?>" style="margin-right: var(--wps-space-2);"></span>
+						<?php echo esc_html( $category['label'] ); ?>
+					</h3>
+				</div>
+				<div class="wps-card-body">
+					<div class="wps-grid wps-grid-cols-2">
 					<?php foreach ( $category['actions'] as $action_id => $action ) : ?>
 						<?php
 						$action_config = \WPShadow\Workflow\Workflow_Wizard::get_action_config( $action_id );
@@ -101,6 +111,7 @@ foreach ( $trigger_categories as $category ) {
 							</span>
 						</button>
 					<?php endforeach; ?>
+					</div>
 				</div>
 			</div>
 		<?php endforeach; ?>
@@ -108,43 +119,15 @@ foreach ( $trigger_categories as $category ) {
 </div>
 
 <style>
-.action-categories {
-	display: flex;
-	flex-direction: column;
-	gap: 30px;
-	margin-top: 30px;
-}
-
-.action-category h3 {
-	font-size: 16px;
-	font-weight: 600;
-	margin: 0 0 15px 0;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	color: #2271b1;
-}
-
-.action-category h3 .dashicons {
-	width: 20px;
-	height: 20px;
-	font-size: 20px;
-}
-
-.action-options {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 12px;
-}
-
+/* Action Option Buttons */
 .action-option {
 	display: flex;
 	align-items: center;
-	gap: 15px;
-	padding: 16px;
-	background: #f9f9f9;
-	border: 2px solid #ddd;
-	border-radius: 6px;
+	gap: var(--wps-space-4);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border: 2px solid var(--wps-border-color);
+	border-radius: var(--wps-radius-md);
 	cursor: pointer;
 	transition: all 0.2s ease;
 	text-align: left;
@@ -153,14 +136,19 @@ foreach ( $trigger_categories as $category ) {
 
 .action-option:hover {
 	background: #fff;
-	border-color: #00a32a;
+	border-color: var(--wps-success-dark);
 	transform: translateY(-2px);
-	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	box-shadow: var(--wps-shadow-md);
+}
+
+.action-option:focus-visible {
+	outline: 3px solid var(--wps-focus-ring);
+	outline-offset: 2px;
 }
 
 .action-option.selected {
-	background: #e7f7e7;
-	border-color: #00a32a;
+	background: var(--wps-success-lightest);
+	border-color: var(--wps-success-dark);
 }
 
 .action-icon {
@@ -170,8 +158,8 @@ foreach ( $trigger_categories as $category ) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #00a32a;
-	border-radius: 8px;
+	background: var(--wps-success-dark);
+	border-radius: var(--wps-radius-md);
 	color: #fff;
 }
 
@@ -185,25 +173,25 @@ foreach ( $trigger_categories as $category ) {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: var(--wps-space-1);
 }
 
 .action-label {
-	font-size: 14px;
+	font-size: var(--wps-text-sm);
 	font-weight: 600;
-	color: #000;
+	color: var(--wps-gray-900);
 	display: block;
 }
 
 .action-description {
-	font-size: 12px;
-	color: #666;
+	font-size: var(--wps-text-xs);
+	color: var(--wps-gray-600);
 	display: block;
 }
 
 .action-arrow {
 	flex-shrink: 0;
-	color: #00a32a;
+	color: var(--wps-success-dark);
 	opacity: 0;
 	transition: opacity 0.2s ease;
 }
@@ -218,42 +206,15 @@ foreach ( $trigger_categories as $category ) {
 	font-size: 20px;
 }
 
-/* Selected Actions */
-.selected-actions {
-	background: #f0f6ff;
-	border: 2px solid #2271b1;
-	border-radius: 8px;
-	padding: 20px;
-	margin-bottom: 30px;
-}
-
-.selected-actions h3 {
-	margin: 0 0 10px 0;
-	font-size: 16px;
-	color: #2271b1;
-}
-
-.selected-actions-note {
-	margin: 0 0 12px 0;
-	font-size: 12px;
-	color: #555;
-}
-
-.selected-actions-list {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	margin-bottom: 20px;
-}
-
+/* Selected Action Item */
 .selected-action-item {
 	display: flex;
 	align-items: center;
-	gap: 12px;
-	padding: 12px;
+	gap: var(--wps-space-3);
+	padding: var(--wps-space-3);
 	background: #fff;
-	border: 1px solid #2271b1;
-	border-radius: 4px;
+	border: 1px solid var(--wps-primary);
+	border-radius: var(--wps-radius-md);
 }
 
 .selected-action-item .action-number {
@@ -263,11 +224,11 @@ foreach ( $trigger_categories as $category ) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #2271b1;
+	background: var(--wps-primary);
 	color: #fff;
 	border-radius: 50%;
 	font-weight: 600;
-	font-size: 13px;
+	font-size: var(--wps-text-sm);
 }
 
 .selected-action-item .action-label {
@@ -278,8 +239,8 @@ foreach ( $trigger_categories as $category ) {
 .selected-action-item .remove-action {
 	flex-shrink: 0;
 	cursor: pointer;
-	color: #d63638;
-	padding: 4px;
+	color: var(--wps-danger-dark);
+	padding: var(--wps-space-1);
 	border: none;
 	background: none;
 }
@@ -290,37 +251,11 @@ foreach ( $trigger_categories as $category ) {
 	font-size: 20px;
 }
 
-/* Trigger Context Display */
-.trigger-context {
-	background: #f3f7ff;
-	border-left: 4px solid #2271b1;
-	border-radius: 4px;
-	padding: 16px;
-	margin-bottom: 25px;
-}
-
-.trigger-context-content {
+/* Page Header Flex Layout */
+.wps-page-header {
 	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.trigger-context-content strong {
-	color: #2271b1;
-	font-weight: 600;
-}
-
-.trigger-context-content span {
-	color: #2c3338;
-	font-size: 15px;
-	font-weight: 500;
-}
-
-.trigger-description {
-	font-size: 13px;
-	color: #555;
-	margin: 8px 0 0 0;
-	font-style: italic;
+	align-items: flex-start;
+	gap: var(--wps-space-3);
 }
 </style>
 

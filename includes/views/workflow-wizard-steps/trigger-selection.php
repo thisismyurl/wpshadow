@@ -12,11 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 ?>
 
-<div class="wizard-step trigger-selection">
-	<h2><?php esc_html_e( 'Choose a Trigger', 'wpshadow' ); ?></h2>
-	<p class="description">
-		<?php esc_html_e( 'Choose what triggers your workflow. When this event occurs, your chosen actions will run automatically.', 'wpshadow' ); ?>
-	</p>
+<div class="wps-page-container">
+	<div class="wps-page-header">
+		<h1 class="wps-page-title"><?php esc_html_e( 'Choose a Trigger', 'wpshadow' ); ?></h1>
+		<p class="wps-page-description">
+			<?php esc_html_e( 'Choose what triggers your workflow. When this event occurs, your chosen actions will run automatically.', 'wpshadow' ); ?>
+		</p>
+	</div>
 
 	<?php
 	// Store current trigger info for display at bottom
@@ -78,14 +80,17 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 	}
 	?>
 
-	<div class="trigger-categories">
+	<div class="wps-layout-stack wps-layout-stack-lg">
 		<?php foreach ( $categories as $category_id => $category ) : ?>
-			<div class="trigger-category">
-				<h3>
-					<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ); ?>"></span>
-					<?php echo esc_html( $category['label'] ); ?>
-				</h3>
-				<div class="trigger-options">
+			<div class="wps-card">
+				<div class="wps-card-header">
+					<h3 class="wps-card-title">
+						<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ); ?>" style="margin-right: var(--wps-space-2);"></span>
+						<?php echo esc_html( $category['label'] ); ?>
+					</h3>
+				</div>
+				<div class="wps-card-body">
+					<div class="wps-grid wps-grid-cols-2">
 					<?php foreach ( $category['triggers'] as $trigger_id => $trigger ) : ?>
 						<?php
 						// Check if this is the current trigger when editing
@@ -126,6 +131,7 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 							</span>
 						</a>
 					<?php endforeach; ?>
+					</div>
 				</div>
 			</div>
 		<?php endforeach; ?>
@@ -135,29 +141,31 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 	// Display current trigger banner at bottom if editing
 	if ( $current_trigger ) {
 		?>
-		<div class="current-trigger-banner">
-			<div class="banner-icon">
-				<span class="dashicons dashicons-<?php echo esc_attr( $current_trigger['icon'] ); ?>"></span>
-			</div>
-			<div class="banner-content">
-				<div class="banner-label">
-					<?php esc_html_e( 'Currently Active Trigger', 'wpshadow' ); ?>
+		<div class="wps-card wps-card-success" style="margin-top: var(--wps-space-8);">
+			<div class="wps-card-body" style="display: flex; align-items: center; gap: var(--wps-space-4);">
+				<div style="flex-shrink: 0; font-size: 32px; color: var(--wps-success-dark);">
+					<span class="dashicons dashicons-<?php echo esc_attr( $current_trigger['icon'] ); ?>"></span>
 				</div>
-				<div class="banner-title">
-					<?php echo esc_html( $current_trigger['label'] ); ?>
-				</div>
-				<?php if ( ! empty( $schedule_display ) ) : ?>
-					<div class="banner-schedule">
-						<?php echo esc_html( $schedule_display ); ?>
+				<div style="flex: 1;">
+					<div class="wps-text-xs wps-text-muted" style="text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+						<?php esc_html_e( 'Currently Active Trigger', 'wpshadow' ); ?>
 					</div>
-				<?php endif; ?>
-				<div class="banner-description">
-					<?php echo esc_html( $current_trigger['description'] ); ?>
+					<h3 class="wps-text-lg" style="margin: var(--wps-space-1) 0;">
+						<?php echo esc_html( $current_trigger['label'] ); ?>
+					</h3>
+					<?php if ( ! empty( $schedule_display ) ) : ?>
+						<div class="wps-text-sm wps-text-muted" style="font-style: italic; margin-bottom: var(--wps-space-1);">
+							<?php echo esc_html( $schedule_display ); ?>
+						</div>
+					<?php endif; ?>
+					<p class="wps-text-sm" style="margin: 0; color: var(--wps-gray-600);">
+						<?php echo esc_html( $current_trigger['description'] ); ?>
+					</p>
 				</div>
-			</div>
-			<div class="banner-badge">
-				<span class="dashicons dashicons-yes-alt"></span>
-				<span class="badge-text"><?php esc_html_e( 'Active', 'wpshadow' ); ?></span>
+				<div class="wps-badge wps-badge-success">
+					<span class="dashicons dashicons-yes-alt" style="font-size: 16px; margin-right: var(--wps-space-1);"></span>
+					<?php esc_html_e( 'Active', 'wpshadow' ); ?>
+				</div>
 			</div>
 		</div>
 		<?php
@@ -166,142 +174,15 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 </div>
 
 <style>
-.wizard-step h2 {
-	margin-top: 0;
-	font-size: 24px;
-	margin-bottom: 10px;
-}
-
-.wizard-step .description {
-	font-size: 14px;
-	margin-bottom: 30px;
-}
-
-.current-trigger-banner {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-	border: 3px solid #ff9800;
-	border-radius: 8px;
-	padding: 20px;
-	margin-top: 32px;
-	box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1);
-	animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-	0%, 100% {
-		box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1);
-	}
-	50% {
-		box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5), inset 0 0 30px rgba(255, 255, 255, 0.2);
-	}
-}
-
-.banner-icon {
-	flex-shrink: 0;
-	font-size: 32px;
-	color: #ff9800;
-}
-
-.banner-content {
-	flex: 1;
-	color: white;
-}
-
-.banner-label {
-	font-size: 11px;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: #ffb74d;
-	font-weight: 600;
-	margin-bottom: 4px;
-}
-
-.banner-title {
-	font-size: 18px;
-	font-weight: bold;
-	color: #fff;
-	margin-bottom: 6px;
-}
-
-.banner-schedule {
-	font-size: 13px;
-	color: #b3e5fc;
-	margin-bottom: 6px;
-	font-style: italic;
-}
-
-.banner-description {
-	font-size: 13px;
-	color: #e0f2f1;
-	margin-top: 8px;
-	opacity: 0.9;
-}
-
-.banner-badge {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 6px;
-	background-color: rgba(76, 175, 80, 0.2);
-	border-radius: 8px;
-	padding: 12px 16px;
-	flex-shrink: 0;
-	border: 2px solid #4caf50;
-}
-
-.banner-badge .dashicons {
-	font-size: 28px;
-	color: #4caf50;
-	width: 28px;
-	height: 28px;
-}
-
-.badge-text {
-	font-size: 11px;
-	font-weight: bold;
-	color: #4caf50;
-	text-transform: uppercase;
-}
-
-.trigger-categories {
-	display: flex;
-	flex-direction: column;
-	gap: 30px;
-}
-
-.trigger-category h3 {
-	font-size: 16px;
-	font-weight: 600;
-	margin: 0 0 15px 0;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	color: #2271b1;
-}
-
-.trigger-category h3 .dashicons {
-	width: 20px;
-	height: 20px;
-	font-size: 20px;
-}
-
-.trigger-options {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 12px;
-}
-
+/* Trigger Option Cards - Custom Styling */
 .trigger-option {
 	display: flex;
 	align-items: center;
-	gap: 15px;
-	padding: 16px;
-	background: #f9f9f9;
-	border: 2px solid #ddd;
-	border-radius: 6px;
+	gap: var(--wps-space-4);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border: 2px solid var(--wps-border-color);
+	border-radius: var(--wps-radius-md);
 	cursor: pointer;
 	transition: all 0.2s ease;
 	text-align: left;
@@ -313,72 +194,52 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 
 .trigger-option:hover {
 	background: #fff;
-	border-color: #2271b1;
+	border-color: var(--wps-primary);
 	transform: translateY(-2px);
-	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	box-shadow: var(--wps-shadow-md);
 }
 
+.trigger-option:focus-visible {
+	outline: 3px solid var(--wps-focus-ring);
+	outline-offset: 2px;
+}
+
+/* Active Trigger Highlight */
 .trigger-option-current {
-	background: linear-gradient(135deg, #fff9c4 0%, #fffde7 100%);
-	border: 3px solid #fbc02d;
-	box-shadow: 0 0 0 6px rgba(251, 192, 45, 0.2), inset 0 0 15px rgba(251, 192, 45, 0.1);
+	background: var(--wps-warning-lightest);
+	border: 3px solid var(--wps-warning);
+	box-shadow: 0 0 0 6px rgba(251, 192, 45, 0.15);
 	position: relative;
-	padding-top: 36px;
+	padding-top: calc(var(--wps-space-9));
 }
 
 .trigger-option-current::before {
 	content: '★ ACTIVE TRIGGER ★';
 	position: absolute;
-	top: 6px;
-	left: 16px;
-	right: 16px;
-	background-color: #ff6f00;
-	color: white;
-	font-size: 11px;
-	font-weight: bold;
-	padding: 4px 8px;
-	border-radius: 3px;
+	top: var(--wps-space-2);
+	left: var(--wps-space-4);
+	right: var(--wps-space-4);
+	background-color: var(--wps-warning-dark);
+	color: #fff;
+	font-size: var(--wps-text-xs);
+	font-weight: 700;
+	padding: var(--wps-space-1) var(--wps-space-2);
+	border-radius: var(--wps-radius-sm);
 	text-align: center;
-	letter-spacing: 0.5px;
-	z-index: 5;
-	box-shadow: 0 2px 4px rgba(255, 111, 0, 0.3);
+	letter-spacing: 0.05em;
 }
 
 .trigger-option-current .trigger-icon {
-	background: #fbc02d;
-	color: #ff6f00;
-	font-weight: bold;
+	background: var(--wps-warning);
+	color: var(--wps-warning-dark);
 }
 
 .trigger-option-current .trigger-label {
-	color: #333;
+	color: var(--wps-gray-900);
 	font-weight: 700;
 }
 
-.current-badge {
-	position: absolute;
-	top: -8px;
-	right: -8px;
-	background: #00a32a;
-	color: white;
-	border-radius: 50%;
-	width: 28px;
-	height: 28px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 3px solid white;
-	font-size: 18px;
-	font-weight: bold;
-	box-shadow: 0 2px 8px rgba(0, 163, 42, 0.4);
-}
-
-.current-badge .dashicons {
-	width: 18px;
-	height: 18px;
-	font-size: 18px;
-}
-
+/* Trigger Components */
 .trigger-icon {
 	flex-shrink: 0;
 	width: 40px;
@@ -386,8 +247,8 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #2271b1;
-	border-radius: 8px;
+	background: var(--wps-primary);
+	border-radius: var(--wps-radius-md);
 	color: #fff;
 }
 
@@ -401,25 +262,25 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: var(--wps-space-1);
 }
 
 .trigger-label {
-	font-size: 14px;
+	font-size: var(--wps-text-sm);
 	font-weight: 600;
-	color: #000;
+	color: var(--wps-gray-900);
 	display: block;
 }
 
 .trigger-description {
-	font-size: 12px;
-	color: #666;
+	font-size: var(--wps-text-xs);
+	color: var(--wps-gray-600);
 	display: block;
 }
 
 .trigger-arrow {
 	flex-shrink: 0;
-	color: #2271b1;
+	color: var(--wps-primary);
 	opacity: 0;
 	transition: opacity 0.2s ease;
 }
@@ -433,6 +294,28 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 	height: 20px;
 	font-size: 20px;
 }
+
+.current-badge {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	background: var(--wps-success-dark);
+	color: white;
+	border-radius: 50%;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 3px solid white;
+	box-shadow: var(--wps-shadow-md);
+}
+
+.current-badge .dashicons {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+}
 </style>
 
 <script>
@@ -443,7 +326,7 @@ jQuery(document).ready(function($) {
 		// Scroll the banner and trigger into view with a small delay
 		setTimeout(function() {
 			// First scroll to the banner
-			const banner = $('.current-trigger-banner');
+			const banner = $('.wps-card-success');
 			if (banner.length > 0) {
 				$('html, body').animate({
 					scrollTop: banner.offset().top - 100
@@ -455,27 +338,8 @@ jQuery(document).ready(function($) {
 				$('html, body').animate({
 					scrollTop: currentTriggerElement.offset().top - 200
 				}, 300);
-				
-				// Add a pulse animation to draw attention
-				currentTriggerElement.addClass('pulse-highlight');
 			}, 500);
 		}, 300);
 	}
 });
-</script>
-
-<style>
-.pulse-highlight {
-	animation: pulse-highlight-animation 1s ease-in-out 3 !important;
-}
-
-@keyframes pulse-highlight-animation {
-	0%, 100% {
-		box-shadow: 0 0 0 6px rgba(251, 192, 45, 0.2), inset 0 0 15px rgba(251, 192, 45, 0.1);
-	}
-	50% {
-		box-shadow: 0 0 0 12px rgba(251, 192, 45, 0.5), inset 0 0 25px rgba(251, 192, 45, 0.3);
-	}
-}
-</style>
 </script>

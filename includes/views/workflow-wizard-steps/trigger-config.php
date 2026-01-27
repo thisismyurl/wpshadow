@@ -41,32 +41,35 @@ $config_fields = \WPShadow\Workflow\Workflow_Wizard::get_trigger_config( $trigge
 $has_config    = ! empty( $config_fields );
 ?>
 
-<div class="wizard-step trigger-config">
-	<div class="step-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="back-button">
-			<span class="dashicons dashicons-arrow-left-alt2"></span>
+<div class="wps-page-container">
+	<div class="wps-page-header">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
+			<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
 			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 		</a>
-		<h2><?php echo esc_html( $trigger_data['label'] ); ?></h2>
+		<div>
+			<h1 class="wps-page-title"><?php echo esc_html( $trigger_data['label'] ); ?></h1>
+			<p class="wps-page-description" style="margin-top: var(--wps-space-2);">
+				<?php echo esc_html( $trigger_data['description'] ); ?>
+			</p>
+		</div>
 	</div>
 
-	<p class="description">
-		<?php echo esc_html( $trigger_data['description'] ); ?>
-	</p>
-
 	<?php if ( $has_config ) : ?>
-		<form id="trigger-config-form" class="config-form">
-			<input type="hidden" name="trigger_id" value="<?php echo esc_attr( $trigger_id ); ?>">
-			<input type="hidden" name="workflow_id" value="<?php echo esc_attr( $workflow_id ); ?>">
-			
-			<?php foreach ( $config_fields as $field ) : ?>
-				<div class="form-field">
-					<label for="field_<?php echo esc_attr( $field['id'] ); ?>">
-						<?php echo esc_html( $field['label'] ); ?>
-						<?php if ( ! empty( $field['required'] ) ) : ?>
-							<span class="required">*</span>
-						<?php endif; ?>
-					</label>
+		<div class="wps-card" style="margin-top: var(--wps-space-6);">
+			<div class="wps-card-body">
+				<form id="trigger-config-form" class="wps-form">
+					<input type="hidden" name="trigger_id" value="<?php echo esc_attr( $trigger_id ); ?>">
+					<input type="hidden" name="workflow_id" value="<?php echo esc_attr( $workflow_id ); ?>">
+					
+					<?php foreach ( $config_fields as $field ) : ?>
+						<div class="wps-form-group">
+						<label for="field_<?php echo esc_attr( $field['id'] ); ?>" class="wps-form-label">
+							<?php echo esc_html( $field['label'] ); ?>
+							<?php if ( ! empty( $field['required'] ) ) : ?>
+								<span class="wps-text-danger">*</span>
+							<?php endif; ?>
+						</label>
 
 					<?php
 					switch ( $field['type'] ) {
@@ -86,39 +89,41 @@ $has_config    = ! empty( $config_fields );
 
 						case 'number':
 							?>
-							<input 
-								type="number" 
-								id="field_<?php echo esc_attr( $field['id'] ); ?>" 
-								name="<?php echo esc_attr( $field['id'] ); ?>"
-								placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
-								value="<?php echo esc_attr( $field['default'] ?? '' ); ?>"
-								<?php echo isset( $field['min'] ) ? 'min="' . esc_attr( $field['min'] ) . '"' : ''; ?>
-								<?php echo isset( $field['max'] ) ? 'max="' . esc_attr( $field['max'] ) . '"' : ''; ?>
-								<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
-								class="small-text"
-							>
+								<input 
+									type="number" 
+									id="field_<?php echo esc_attr( $field['id'] ); ?>" 
+									name="<?php echo esc_attr( $field['id'] ); ?>"
+									placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
+									value="<?php echo esc_attr( $field['default'] ?? '' ); ?>"
+									<?php echo isset( $field['min'] ) ? 'min="' . esc_attr( $field['min'] ) . '"' : ''; ?>
+									<?php echo isset( $field['max'] ) ? 'max="' . esc_attr( $field['max'] ) . '"' : ''; ?>
+									<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
+									class="wps-input" style="max-width: 150px;"
+								>
 							<?php
 							break;
 
 						case 'time':
 							?>
-							<input 
-								type="time" 
-								id="field_<?php echo esc_attr( $field['id'] ); ?>" 
-								name="<?php echo esc_attr( $field['id'] ); ?>"
-								value="<?php echo esc_attr( $field['default'] ?? '' ); ?>"
-								<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
-							>
+								<input 
+									type="time" 
+									id="field_<?php echo esc_attr( $field['id'] ); ?>" 
+									name="<?php echo esc_attr( $field['id'] ); ?>"
+									value="<?php echo esc_attr( $field['default'] ?? '' ); ?>"
+									<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
+									class="wps-input" style="max-width: 200px;"
+								>
 							<?php
 							break;
 
 						case 'select':
 							?>
-							<select 
-								id="field_<?php echo esc_attr( $field['id'] ); ?>" 
-								name="<?php echo esc_attr( $field['id'] ); ?>"
-								<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
-							>
+								<select 
+									id="field_<?php echo esc_attr( $field['id'] ); ?>" 
+									name="<?php echo esc_attr( $field['id'] ); ?>"
+									<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
+									class="wps-select"
+								>
 								<?php foreach ( $field['options'] as $value => $label ) : ?>
 									<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $field['default'] ?? '', $value ); ?>>
 										<?php echo esc_html( $label ); ?>
@@ -130,14 +135,14 @@ $has_config    = ! empty( $config_fields );
 
 						case 'textarea':
 							?>
-							<textarea 
-								id="field_<?php echo esc_attr( $field['id'] ); ?>" 
-								name="<?php echo esc_attr( $field['id'] ); ?>"
-								placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
-								rows="<?php echo esc_attr( $field['rows'] ?? 3 ); ?>"
-								<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
-								class="large-text"
-							><?php echo esc_textarea( $field['default'] ?? '' ); ?></textarea>
+								<textarea 
+									id="field_<?php echo esc_attr( $field['id'] ); ?>" 
+									name="<?php echo esc_attr( $field['id'] ); ?>"
+									placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
+									rows="<?php echo esc_attr( $field['rows'] ?? 3 ); ?>"
+									<?php echo ! empty( $field['required'] ) ? 'required' : ''; ?>
+									class="wps-textarea"
+								><?php echo esc_textarea( $field['default'] ?? '' ); ?></textarea>
 							<?php
 							break;
 
@@ -164,18 +169,27 @@ $has_config    = ! empty( $config_fields );
 							break;
 					}
 					?>
-				</div>
-			<?php endforeach; ?>
+						</div>
+					<?php endforeach; ?>
 
-			<div class="form-actions">
-				<button type="submit" class="wps-btn wps-btn--primary">
-					<?php esc_html_e( 'Continue to Actions', 'wpshadow' ); ?>
-					<span class="dashicons dashicons-arrow-right-alt2"></span>
-				</button>
+					<div class="wps-form-actions" style="margin-top: var(--wps-space-6); padding-top: var(--wps-space-4); border-top: 1px solid var(--wps-border-color);">
+						<button type="submit" class="wps-btn wps-btn--primary">
+							<?php esc_html_e( 'Continue to Actions', 'wpshadow' ); ?>
+							<span class="dashicons dashicons-arrow-right-alt2" style="font-size: 16px; margin-left: var(--wps-space-1);"></span>
+						</button>
+					</div>
+				</form>
 			</div>
-		</form>
+		</div>
 	<?php else : ?>
 		<!-- No configuration needed - Auto-advance to action selection -->
+		<div class="wps-card" style="margin-top: var(--wps-space-6); text-align: center;">
+			<div class="wps-card-body" style="padding: var(--wps-space-8);">
+				<p class="wps-text-base wps-text-muted">
+					<?php esc_html_e( 'This trigger doesn\'t need any additional configuration. Proceeding to actions...', 'wpshadow' ); ?>
+				</p>
+			</div>
+		</div>
 		<script>
 			// Auto-advance to action selection step since this trigger doesn't need configuration
 			const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
@@ -183,111 +197,34 @@ $has_config    = ! empty( $config_fields );
 			const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
 			window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 		</script>
-		<p><?php esc_html_e( 'This trigger doesn\'t need any additional configuration. Proceeding to actions...', 'wpshadow' ); ?></p>
 	<?php endif; ?>
 </div>
 
 <style>
-.step-header {
-	display: flex;
-	align-items: center;
-	gap: 15px;
-	margin-bottom: 20px;
-}
-
-.back-button {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	text-decoration: none;
-	color: #2271b1;
-	font-weight: 500;
-}
-
-.back-button:hover {
-	color: #135e96;
-}
-
-.back-button .dashicons {
-	width: 20px;
-	height: 20px;
-	font-size: 20px;
-}
-
-.step-header h2 {
-	margin: 0;
-	font-size: 24px;
-}
-
-.config-form {
-	max-width: 600px;
-	margin-top: 30px;
-}
-
-.form-field {
-	margin-bottom: 25px;
-}
-
-.form-field label {
-	display: block;
-	font-weight: 600;
-	margin-bottom: 8px;
-	font-size: 14px;
-}
-
-.required {
-	color: #d63638;
-}
-
+/* Checkbox Group Styling */
 .checkbox-group {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: var(--wps-space-2);
 }
 
 .checkbox-label {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: var(--wps-space-2);
 	cursor: pointer;
+	font-size: var(--wps-text-sm);
 }
 
 .checkbox-label input[type="checkbox"] {
 	margin: 0;
 }
 
-.form-actions {
-	margin-top: 30px;
-	padding-top: 20px;
-	border-top: 1px solid #ddd;
-}
-
-.button-large {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 24px;
-	height: auto;
-	font-size: 14px;
-}
-
-.button-large .dashicons {
-	width: 18px;
-	height: 18px;
-	font-size: 18px;
-}
-
-.no-config-message {
-	text-align: center;
-	padding: 60px 20px;
-	background: #f9f9f9;
-	border-radius: 8px;
-	margin-top: 30px;
-}
-
-.no-config-message p {
-	font-size: 16px;
-	margin-bottom: 20px;
+/* Page Header Flex Layout */
+.wps-page-header {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--wps-space-3);
 }
 </style>
 

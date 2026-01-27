@@ -23,78 +23,81 @@ if ( empty( $trigger_id ) ) {
 }
 ?>
 
-<div class="wizard-step review-step">
-	<h2><?php esc_html_e( 'Review & Save', 'wpshadow' ); ?></h2>
-	<p class="description">
-		<?php esc_html_e( 'Review your workflow and give it a name (or we\'ll generate a silly one for you!)', 'wpshadow' ); ?>
-	</p>
+<div class="wps-page-container">
+	<div class="wps-page-header">
+		<h1 class="wps-page-title"><?php esc_html_e( 'Review & Save', 'wpshadow' ); ?></h1>
+		<p class="wps-page-description">
+			<?php esc_html_e( 'Review your workflow and give it a name (or we\'ll generate a silly one for you!)', 'wpshadow' ); ?>
+		</p>
+	</div>
 
-	<div id="workflow-summary" class="workflow-summary"></div>
+	<div id="workflow-summary" class="wps-card" style="margin-top: var(--wps-space-6);"></div>
 
-	<form id="save-workflow-form" class="save-form">
-		<div class="form-field">
-			<label for="workflow_name">
-				<?php esc_html_e( 'Workflow Name', 'wpshadow' ); ?>
-			</label>
-			<input 
-				type="text" 
-				id="workflow_name" 
-				name="workflow_name" 
-				placeholder="<?php esc_attr_e( 'Leave blank for a randomly generated name', 'wpshadow' ); ?>"
-			class="wps-input"
-			>
-			<p class="description">
-				<?php esc_html_e( 'If left blank, we\'ll generate a silly name like "Brave Balloon" or "Dancing Dolphin"!', 'wpshadow' ); ?>
-			</p>
+	<div class="wps-card" style="margin-top: var(--wps-space-6);">
+		<div class="wps-card-body">
+			<form id="save-workflow-form" class="wps-form">
+				<div class="wps-form-group">
+					<label for="workflow_name" class="wps-form-label">
+						<?php esc_html_e( 'Workflow Name', 'wpshadow' ); ?>
+					</label>
+					<input 
+						type="text" 
+						id="workflow_name" 
+						name="workflow_name" 
+						placeholder="<?php esc_attr_e( 'Leave blank for a randomly generated name', 'wpshadow' ); ?>"
+						class="wps-input"
+					>
+					<p class="wps-form-help wps-text-sm">
+						<?php esc_html_e( 'If left blank, we\'ll generate a silly name like "Brave Balloon" or "Dancing Dolphin"!', 'wpshadow' ); ?>
+					</p>
+				</div>
+
+				<div class="wps-form-actions" style="margin-top: var(--wps-space-6); padding-top: var(--wps-space-4); border-top: 1px solid var(--wps-border-color); display: flex; gap: var(--wps-space-3);">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--secondary">
+						<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 16px; margin-right: var(--wps-space-1);"></span>
+						<?php esc_html_e( 'Back to Actions', 'wpshadow' ); ?>
+					</a>
+					<button type="submit" class="wps-btn wps-btn--primary">
+						<span class="dashicons dashicons-saved" style="font-size: 16px; margin-right: var(--wps-space-1);"></span>
+						<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
+					</button>
+				</div>
+
+				<div id="save-result" class="save-result" style="display: none;"></div>
+			</form>
 		</div>
-
-		<div class="form-actions">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--secondary">
-				<span class="dashicons dashicons-arrow-left-alt2"></span>
-				<?php esc_html_e( 'Back to Actions', 'wpshadow' ); ?>
-			</a>
-			<button type="submit" class="wps-btn wps-btn--primary">
-				<span class="dashicons dashicons-saved"></span>
-				<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
-			</button>
-		</div>
-
-		<div id="save-result" class="save-result" style="display: none;"></div>
-	</form>
+	</div>
 </div>
 
 <style>
-.workflow-summary {
-	background: #fff;
-	border: 2px solid #2271b1;
-	border-radius: 8px;
-	padding: 25px;
-	margin: 30px 0;
-}
-
+/* Summary Sections */
 .summary-section {
-	margin-bottom: 25px;
+	margin-bottom: var(--wps-space-6);
+	padding: var(--wps-space-5);
+	border-bottom: 1px solid var(--wps-border-color);
 }
 
 .summary-section:last-child {
 	margin-bottom: 0;
+	border-bottom: none;
 }
 
 .summary-section h3 {
-	margin: 0 0 10px 0;
-	font-size: 14px;
+	margin: 0 0 var(--wps-space-3) 0;
+	font-size: var(--wps-text-sm);
 	text-transform: uppercase;
-	color: #666;
+	color: var(--wps-gray-600);
 	font-weight: 600;
+	letter-spacing: 0.05em;
 }
 
 .summary-content {
 	display: flex;
 	align-items: flex-start;
-	gap: 15px;
-	padding: 15px;
-	background: #f9f9f9;
-	border-radius: 6px;
+	gap: var(--wps-space-4);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-md);
 }
 
 .summary-icon {
@@ -104,8 +107,8 @@ if ( empty( $trigger_id ) ) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #2271b1;
-	border-radius: 8px;
+	background: var(--wps-primary);
+	border-radius: var(--wps-radius-md);
 	color: #fff;
 }
 
@@ -121,38 +124,40 @@ if ( empty( $trigger_id ) ) {
 
 .summary-title {
 	font-weight: 600;
-	font-size: 15px;
-	margin-bottom: 5px;
+	font-size: var(--wps-text-base);
+	margin-bottom: var(--wps-space-1);
+	color: var(--wps-gray-900);
 }
 
 .summary-description {
-	font-size: 13px;
-	color: #666;
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
 }
 
 .summary-config {
-	margin-top: 10px;
-	padding: 10px;
+	margin-top: var(--wps-space-2);
+	padding: var(--wps-space-2);
 	background: #fff;
-	border-radius: 4px;
-	font-size: 12px;
+	border-radius: var(--wps-radius-sm);
+	font-size: var(--wps-text-xs);
 	font-family: monospace;
+	color: var(--wps-gray-700);
 }
 
 .action-list {
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: var(--wps-space-3);
 }
 
 .action-item {
 	display: flex;
 	align-items: flex-start;
-	gap: 12px;
-	padding: 15px;
-	background: #f9f9f9;
-	border-radius: 6px;
-	border-left: 3px solid #00a32a;
+	gap: var(--wps-space-3);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-md);
+	border-left: 3px solid var(--wps-success-dark);
 }
 
 .action-number {
@@ -162,37 +167,33 @@ if ( empty( $trigger_id ) ) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #00a32a;
+	background: var(--wps-success-dark);
 	color: #fff;
 	border-radius: 50%;
 	font-weight: 600;
-	font-size: 13px;
+	font-size: var(--wps-text-sm);
 }
 
-.save-form {
-	max-width: 600px;
-	margin-top: 40px;
-}
-
+/* Save Result Messages */
 .save-result.success {
 	display: block !important;
-	padding: 15px;
-	background: #d5f4d8;
-	border: 1px solid #00a32a;
-	border-radius: 4px;
-	margin-top: 20px;
-	color: #00a32a;
+	padding: var(--wps-space-4);
+	background: var(--wps-success-lightest);
+	border: 1px solid var(--wps-success-dark);
+	border-radius: var(--wps-radius-md);
+	margin-top: var(--wps-space-4);
+	color: var(--wps-success-dark);
 	font-weight: 600;
 }
 
 .save-result.error {
 	display: block !important;
-	padding: 15px;
-	background: #ffd8d8;
-	border: 1px solid #d63638;
-	border-radius: 4px;
-	margin-top: 20px;
-	color: #d63638;
+	padding: var(--wps-space-4);
+	background: var(--wps-danger-lightest);
+	border: 1px solid var(--wps-danger-dark);
+	border-radius: var(--wps-radius-md);
+	margin-top: var(--wps-space-4);
+	color: var(--wps-danger-dark);
 	font-weight: 600;
 }
 </style>
