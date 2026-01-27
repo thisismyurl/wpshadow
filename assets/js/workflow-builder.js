@@ -812,7 +812,7 @@
 					<div class="wps-block-header">
 						<div class="wps-block-label">
 							<span class="dashicons ${iconClass}" aria-hidden="true"></span>
-							<span>${blockType === 'trigger' ? 'WHEN' : 'THEN'}: ${label}</span>
+							<span>${label}</span>
 						</div>
 						<button class="wps-block-remove" 
 						        data-block-id="${uniqueId}" 
