@@ -138,24 +138,34 @@ $severity_legend = array(
 );
 ?>
 
-<div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
-	<div class="wps-alert wps-alert--info wps-mb-6">
-		<div class="wps-flex wps-items-start wps-gap-4">
-			<span class="dashicons dashicons-info wps-text-primary" class="wps-icon-lg wps-icon-info" aria-hidden="true"></span>
-			<div class="wps-flex-1">
-				<h3 class="wps-m-0 wps-mb-2 wps-text-lg wps-font-bold">
-					<?php esc_html_e( 'Organize Your Findings', 'wpshadow' ); ?>
-					<small class="wps-text-gray-500 wps-font-normal">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>
-				</h3>
-				<p class="wps-m-0 wps-leading-relaxed">
-					<?php esc_html_e( 'Drag findings between columns to decide how to handle them. Use your keyboard (Enter/Space) for accessibility.', 'wpshadow' ); ?>
-					<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" class="wps-text-primary wps-font-semibold wps-no-underline wps-ml-1" aria-label="<?php esc_attr_e( 'Learn about the Kanban workflow (opens in new tab)', 'wpshadow' ); ?>">
-						<?php esc_html_e( 'Learn about the workflow', 'wpshadow' ); ?> →
-					</a>
-				</p>
+<div class="wrap wpshadow-action-items wps-page-container">
+	<!-- Page Header -->
+	<div class="wps-page-header">
+		<h1 class="wps-page-title">
+			<span class="dashicons dashicons-grid-view"></span>
+			<?php esc_html_e( 'Action Items', 'wpshadow' ); ?>
+			<small style="font-size: 14px; color: #666; margin-left: 12px;">v<?php echo esc_html( WPSHADOW_VERSION ); ?></small>
+		</h1>
+		<p class="wps-page-subtitle">
+			<?php esc_html_e( 'Organize and manage your findings by drag-and-dropping them between status columns.', 'wpshadow' ); ?>
+		</p>
+	</div>
+
+	<!-- Kanban Board -->
+	<div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
+		<div class="wps-alert wps-alert--info wps-mb-6">
+			<div class="wps-flex wps-items-start wps-gap-4">
+				<span class="dashicons dashicons-info wps-text-primary" class="wps-icon-lg wps-icon-info" aria-hidden="true"></span>
+				<div class="wps-flex-1">
+					<p class="wps-m-0 wps-leading-relaxed">
+						<?php esc_html_e( 'Drag findings between columns to decide how to handle them. Use your keyboard (Enter/Space) for accessibility.', 'wpshadow' ); ?>
+						<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" class="wps-text-primary wps-font-semibold wps-no-underline wps-ml-1" aria-label="<?php esc_attr_e( 'Learn about the Kanban workflow (opens in new tab)', 'wpshadow' ); ?>">
+							<?php esc_html_e( 'Learn about the workflow', 'wpshadow' ); ?> →
+						</a>
+					</p>
+				</div>
 			</div>
 		</div>
-	</div>
 	<div id="wpshadow-kanban-status" class="wps-none wps-m-0 wps-p-3 wps-rounded-md" role="status" aria-live="polite" aria-atomic="true"></div>
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
 
@@ -562,6 +572,8 @@ $severity_legend = array(
 			<?php endforeach; ?>
 			<span class="wps-kanban-status-text wps-ml-auto wps-m-0 wps-text-gray-600 wps-text-sm">Column dots match status colors</span>
 		</div>
+
+	</div>
 
 </div>
 

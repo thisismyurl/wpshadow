@@ -62,9 +62,8 @@ class Guardian_Dashboard {
 
 			<!-- Main Content Grid -->
 			<div class="wps-grid wps-grid-auto-320 wps-gap-4">
-				<!-- Left Column: Activity & Stats -->
-				<div role="region" aria-labelledby="activity-heading">
-					<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
+				<!-- Left Column: Stats -->
+				<div role="region" aria-labelledby="stats-heading">
 					<?php echo wp_kses_post( self::render_auto_fix_stats() ); ?>
 				</div>
 
@@ -73,6 +72,11 @@ class Guardian_Dashboard {
 					<?php echo wp_kses_post( self::render_recovery_widget() ); ?>
 					<?php echo wp_kses_post( self::render_system_health() ); ?>
 				</div>
+			</div>
+
+			<!-- Activity Log (Full Width) -->
+			<div class="wps-mt-4" role="region" aria-labelledby="activity-heading">
+				<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
 			</div>
 		</div>
 		<?php
@@ -255,20 +259,25 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_activity_timeline(): string {
-		$activities = Guardian_Activity_Logger::get_activity_log( 10 );
+		// Get activities from Activity_Logger (which logs Guardian executions)
+		if ( ! class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
+			return '';
+		}
+
+		$activities = \WPShadow\Core\Activity_Logger::get_recent( 20 );
 
 		if ( empty( $activities ) ) {
 			return '<div class="wps-card">
 				<div class="wps-card-header">
 					<h3 class="wps-card-title wps-m-0" id="activity-heading">
 						<span class="dashicons dashicons-clock wps-icon-mr-2" aria-hidden="true"></span>
-						' . esc_html__( 'Recent Activity', 'wpshadow' ) . '
+						' . esc_html__( 'Guardian Activity Log', 'wpshadow' ) . '
 					</h3>
 				</div>
 				<div class="wps-card-body">
 					<div class="wps-activity-empty">
 						<span class="dashicons dashicons-admin-post wps-activity-empty-icon" aria-hidden="true"></span>
-						<p class="wps-m-0">' . esc_html__( 'No recent activity', 'wpshadow' ) . '</p>
+						<p class="wps-m-0">' . esc_html__( 'No recent activity. Guardian will start logging once enabled.', 'wpshadow' ) . '</p>
 					</div>
 				</div>
 			</div>';
@@ -278,7 +287,7 @@ class Guardian_Dashboard {
 			<div class="wps-card-header">
 				<h3 class="wps-card-title wps-m-0" id="activity-heading">
 					<span class="dashicons dashicons-clock wps-icon-mr-2" aria-hidden="true"></span>
-					' . esc_html__( 'Recent Activity', 'wpshadow' ) . '
+					' . esc_html__( 'Guardian Activity Log', 'wpshadow' ) . '
 				</h3>
 			</div>
 			<div class="wps-card-body">
@@ -288,17 +297,12 @@ class Guardian_Dashboard {
 		$index          = 0;
 		foreach ( $activities as $activity ) {
 			$is_last     = ( ++$index === $activity_count );
-			$action_text = self::format_activity_action( $activity );
-			$icon_class  = self::get_activity_icon( $activity );
-			$icon_color  = self::get_activity_color( $activity );
+			$action_text = self::format_activity_action_new( $activity );
+			$icon_class  = self::get_activity_icon_new( $activity );
+			$icon_color  = self::get_activity_color_new( $activity );
 
-			$time_text = 'Unknown';
-			if ( ! empty( $activity['timestamp'] ) ) {
-				$timestamp = strtotime( $activity['timestamp'] );
-				if ( $timestamp !== false ) {
-					$time_text = human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago';
-				}
-			}
+			$timestamp = isset( $activity['timestamp'] ) ? (int) $activity['timestamp'] : current_time( 'timestamp' );
+			$time_text = human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago';
 
 			$html .= sprintf(
 				'<div class="wps-activity-item %s" role="article">
@@ -414,6 +418,133 @@ class Guardian_Dashboard {
 
 			default:
 				return __( 'Unknown activity', 'wpshadow' );
+		}
+	}
+
+	/**
+	 * Format activity action for display (new format for Activity_Logger)
+	 *
+	 * @param array $activity Activity log entry from Activity_Logger.
+	 * @return string Formatted action text.
+	 */
+	private static function format_activity_action_new( array $activity ): string {
+		if ( empty( $activity ) ) {
+			return __( 'Unknown activity', 'wpshadow' );
+		}
+
+		$action  = $activity['action'] ?? 'unknown';
+		$details = isset( $activity['details'] ) && ! empty( $activity['details'] ) ? trim( (string) $activity['details'] ) : '';
+
+		// Map actions to human-readable labels
+		$action_labels = array(
+			'guardian_execution'        => __( 'Guardian executed background diagnostics', 'wpshadow' ),
+			'guardian_deep_scan'        => __( 'Guardian executed scheduled deep scan', 'wpshadow' ),
+			'diagnostic_finding'        => __( 'Issue detected', 'wpshadow' ),
+			'finding_resolved'          => __( 'Issue resolved', 'wpshadow' ),
+			'diagnostic_run'            => __( 'Diagnostic executed', 'wpshadow' ),
+			'diagnostic_failed'         => __( 'Diagnostic failed', 'wpshadow' ),
+			'treatment_applied'         => __( 'Auto-fix applied', 'wpshadow' ),
+			'treatment_undone'          => __( 'Auto-fix reverted', 'wpshadow' ),
+			'finding_dismissed'         => __( 'Finding dismissed', 'wpshadow' ),
+			'guardian_enabled'          => __( 'Guardian enabled', 'wpshadow' ),
+			'guardian_disabled'         => __( 'Guardian disabled', 'wpshadow' ),
+			'workflow_executed'         => __( 'Workflow executed', 'wpshadow' ),
+			'workflow_created'          => __( 'Workflow created', 'wpshadow' ),
+			'settings_changed'          => __( 'Settings changed', 'wpshadow' ),
+		);
+
+		$label = $action_labels[ $action ] ?? ucwords( str_replace( '_', ' ', $action ) );
+
+		// Add details if available
+		if ( ! empty( $details ) ) {
+			return $label . ': ' . $details;
+		}
+
+		return $label;
+	}
+
+	/**
+	 * Get icon for activity type (new format for Activity_Logger)
+	 *
+	 * @param array $activity Activity log entry.
+	 * @return string Dashicon class.
+	 */
+	private static function get_activity_icon_new( array $activity ): string {
+		$action = $activity['action'] ?? 'unknown';
+
+		switch ( $action ) {
+			case 'guardian_execution':
+			case 'guardian_deep_scan':
+				return 'dashicons-shield-alt';
+			case 'diagnostic_finding':
+				return 'dashicons-warning';
+			case 'finding_resolved':
+				return 'dashicons-yes-alt';
+			case 'diagnostic_run':
+				return 'dashicons-search';
+			case 'diagnostic_failed':
+				return 'dashicons-dismiss';
+			case 'treatment_applied':
+				return 'dashicons-admin-tools';
+			case 'treatment_undone':
+				return 'dashicons-undo';
+			case 'guardian_enabled':
+				return 'dashicons-yes';
+			case 'guardian_disabled':
+				return 'dashicons-no';
+			case 'workflow_executed':
+			case 'workflow_created':
+				return 'dashicons-admin-generic';
+			case 'settings_changed':
+				return 'dashicons-admin-settings';
+			default:
+				return 'dashicons-marker';
+		}
+	}
+
+	/**
+	 * Get color for activity type (new format for Activity_Logger)
+	 *
+	 * @param array $activity Activity log entry.
+	 * @return string Hex color code.
+	 */
+	private static function get_activity_color_new( array $activity ): string {
+		$action   = $activity['action'] ?? 'unknown';
+		$category = $activity['category'] ?? '';
+
+		// Priority for action-specific colors
+		switch ( $action ) {
+			case 'guardian_execution':
+			case 'guardian_deep_scan':
+			case 'guardian_enabled':
+				return '#3b82f6'; // Blue
+			case 'diagnostic_finding':
+				return '#f59e0b'; // Orange
+			case 'finding_resolved':
+			case 'treatment_applied':
+				return '#10b981'; // Green
+			case 'diagnostic_failed':
+			case 'guardian_disabled':
+			case 'treatment_undone':
+				return '#ef4444'; // Red
+			case 'workflow_executed':
+			case 'workflow_created':
+				return '#8b5cf6'; // Purple
+			default:
+				// Fallback to category-based colors
+				switch ( $category ) {
+					case 'security':
+						return '#dc2626'; // Red
+					case 'performance':
+						return '#3b82f6'; // Blue
+					case 'guardian':
+					case 'monitoring':
+						return '#3b82f6'; // Blue
+					case 'workflow':
+						return '#8b5cf6'; // Purple
+					default:
+						return '#6b7280'; // Gray
+				}
 		}
 	}
 
