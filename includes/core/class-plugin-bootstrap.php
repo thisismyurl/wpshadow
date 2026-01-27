@@ -38,6 +38,10 @@ class Plugin_Bootstrap {
 		// 2. Register hooks (must be early, before other systems)
 		Hooks_Initializer::init();
 		
+		// 2.25 Initialize WordPress activity tracking (logs all admin actions)
+		// Must be done early so all WordPress hooks are registered for activity logging
+		\WPShadow\Monitoring\WordPress_Hooks_Tracker::init();
+		
 		// 2.5 Register AJAX handlers FIRST (before other plugins_loaded stuff)
 		// This must be done early so AJAX endpoints work on the first request
 		\WPShadow\Core\AJAX_Router::init();

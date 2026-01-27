@@ -72,6 +72,9 @@ require_once WPSHADOW_PATH . 'includes/core/class-ajax-router.php';
 require_once WPSHADOW_PATH . 'includes/core/class-hooks-initializer.php';
 require_once WPSHADOW_PATH . 'includes/core/class-plugin-bootstrap.php';
 
+// Load monitoring/tracking classes (activity logging)
+require_once WPSHADOW_PATH . 'includes/monitoring/class-wordpress-hooks-tracker.php';
+
 // Load privacy classes (required by AJAX handlers)
 require_once WPSHADOW_PATH . 'includes/privacy/class-consent-preferences.php';
 require_once WPSHADOW_PATH . 'includes/privacy/class-first-run-consent.php';
