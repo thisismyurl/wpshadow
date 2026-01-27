@@ -323,10 +323,10 @@ $admin_pages = array(
 ```php
 $wpshadow_pages = array(
     'admin.php?page=wpshadow'                => 'Dashboard',
-    'admin.php?page=wpshadow-action-items'   => 'Action Items',
+    'admin.php?page=wpshadow-findings'   => 'Findings',
     'admin.php?page=wpshadow-guardian'       => 'Guardian',
     'admin.php?page=wpshadow-settings'       => 'Settings',
-    'admin.php?page=wpshadow-workflows'      => 'Workflows',
+    'admin.php?page=wpshadow-automations'      => 'Workflows',
 );
 ```
 

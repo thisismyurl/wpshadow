@@ -79,7 +79,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 					$title
 				),
 				'workflow_id' => $workflow_id,
-				'redirect'    => admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow_id ),
+				'redirect'    => admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id ),
 			)
 		);
 	}

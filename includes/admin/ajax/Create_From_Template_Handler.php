@@ -52,7 +52,7 @@ class Create_From_Template_Handler extends AJAX_Handler_Base {
 					$result['name']
 				),
 				'workflow_id' => $result['id'],
-				'redirect'    => admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $result['id'] ),
+				'redirect'    => admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $result['id'] ),
 			)
 		);
 	}

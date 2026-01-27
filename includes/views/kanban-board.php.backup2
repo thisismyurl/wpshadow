@@ -793,7 +793,7 @@ $severity_legend = array(
 					const workflowId = response.data.workflow_id;
 
 					// Redirect to workflow builder with pre-filled data
-					window.location.href = ajaxurl.replace('admin-ajax.php', '') + 'admin.php?page=wpshadow-workflows&workflow_id=' + workflowId + '&new=1';
+					window.location.href = ajaxurl.replace('admin-ajax.php', '') + 'admin.php?page=wpshadow-automations&workflow_id=' + workflowId + '&new=1';
 				} else {
 					alert('Error: ' + (response.data.message || 'Could not create workflow'));
 					$btn.prop('disabled', false).text('Create & Configure');

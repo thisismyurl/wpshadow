@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
 	/**
-	 * Render Action Items page (Kanban Board)
+	 * Render Findings page (Kanban Board)
 	 */
 	function wpshadow_render_action_items() {
 		// Load the kanban board view
 		if ( file_exists( WPSHADOW_PATH . 'includes/views/kanban-board.php' ) ) {
 			require_once WPSHADOW_PATH . 'includes/views/kanban-board.php';
 		} else {
-			echo '<div class="wrap"><h1>Action Items</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Loading action items...</p></div>';
+			echo '<div class="wrap"><h1>Findings</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Loading findings...</p></div>';
 		}
 	}
 }

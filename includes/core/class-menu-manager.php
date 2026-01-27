@@ -88,7 +88,7 @@ class Menu_Manager {
 			__( 'Automations', 'wpshadow' ),
 			__( 'Automations', 'wpshadow' ),
 			'read',
-			'wpshadow-workflows',
+			'wpshadow-automations',
 			'wpshadow_render_workflow_builder'
 		);
 

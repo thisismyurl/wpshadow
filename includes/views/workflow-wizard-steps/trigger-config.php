@@ -43,7 +43,7 @@ $has_config    = ! empty( $config_fields );
 
 <div class="wps-page-container">
 	<div class="wps-page-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
 			<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
 			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 		</a>
@@ -194,7 +194,7 @@ $has_config    = ! empty( $config_fields );
 			// Auto-advance to action selection step since this trigger doesn't need configuration
 			const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
 			const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
-			const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+			const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
 			window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 		</script>
 	<?php endif; ?>
@@ -253,7 +253,7 @@ jQuery(document).ready(function($) {
 		// Navigate to action selection - preserve workflow ID if editing
 		const triggerId = formData.trigger_id;
 		const workflowId = formData.workflow_id;
-		const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+		const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
 		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 	});
 });

@@ -105,7 +105,7 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 						}
 
 						// Build the URL for trigger config
-						$trigger_url = admin_url( 'admin.php?page=wpshadow-workflows' );
+						$trigger_url = admin_url( 'admin.php?page=wpshadow-automations' );
 						if ( ! empty( $workflow ) && ! empty( $workflow['id'] ) ) {
 							$trigger_url .= '&action=edit&workflow=' . $workflow['id'];
 						} else {

@@ -29,8 +29,8 @@ return array(
 		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-wpshadow-dashboard',
 	),
 	array(
-		'id'       => 'nav-wpshadow-workflows',
-		'selector' => '#menu-wpshadow li a[href*="page=wpshadow-workflows"]',
+		'id'       => 'nav-wpshadow-automations',
+		'selector' => '#menu-wpshadow li a[href*="page=wpshadow-automations"]',
 		'title'    => __( 'Workflow Manager', 'wpshadow' ),
 		'message'  => __( 'Create and manage automated workflows to standardize site maintenance tasks.', 'wpshadow' ),
 		'category' => 'navigation',

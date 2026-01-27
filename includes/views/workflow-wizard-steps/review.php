@@ -15,9 +15,9 @@ $trigger_id  = Form_Param_Helper::get( 'trigger', 'key', '' );
 $workflow_id = Form_Param_Helper::get( 'workflow', 'key', '' );
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow_id . '&step=action' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id . '&step=action' ) );
 	} else {
-		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) );
 	}
 	exit;
 }
@@ -53,7 +53,7 @@ if ( empty( $trigger_id ) ) {
 				</div>
 
 				<div class="wps-form-actions" style="margin-top: var(--wps-space-6); padding-top: var(--wps-space-4); border-top: 1px solid var(--wps-border-color); display: flex; gap: var(--wps-space-3);">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--secondary">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--secondary">
 						<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 16px; margin-right: var(--wps-space-1);"></span>
 						<?php esc_html_e( 'Back to Actions', 'wpshadow' ); ?>
 					</a>
@@ -202,7 +202,7 @@ if ( empty( $trigger_id ) ) {
 jQuery(document).ready(function($) {
 	const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
 	const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
-	const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+	const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
 	
 	// Load workflow data from sessionStorage
 	const triggerConfig = JSON.parse(sessionStorage.getItem('workflow_trigger_config') || '{}');
@@ -320,7 +320,7 @@ jQuery(document).ready(function($) {
 				
 			// Redirect after 1 second - go back to list
 			setTimeout(function() {
-				window.location.href = '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' ) ); ?>';
+				window.location.href = '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' ) ); ?>';
 				}, 1000);
 			} else {
 				$('#save-result').addClass('error').text(response.data.message || '<?php esc_html_e( 'Error saving workflow', 'wpshadow' ); ?>');

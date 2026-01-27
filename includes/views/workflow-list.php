@@ -39,7 +39,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 	<?php if ( empty( $workflows ) ) : ?>
 		<!-- Create Workflow Button Section -->
 		<div class="workflow-cta-section">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="wps-btn wps-btn-primary wps-btn-lg">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>" class="wps-btn wps-btn-primary wps-btn-lg">
 				<?php esc_html_e( 'Create a Workflow', 'wpshadow' ); ?>
 			</a>
 		</div>
@@ -55,7 +55,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 				printf(
 					/* translators: %s: link to build workflow */
 					esc_html__( 'Start with a smart suggestion tailored to your site, or %s.', 'wpshadow' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ) . '">' . esc_html__( 'build your own workflow', 'wpshadow' ) . '</a>'
+					'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ) . '">' . esc_html__( 'build your own workflow', 'wpshadow' ) . '</a>'
 				);
 				?>
 			</p>
@@ -95,7 +95,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 						<h3><?php esc_html_e( 'Suggested Workflows', 'wpshadow' ); ?></h3>
 						<p class="suggested-intro"><?php esc_html_e( 'High-impact automations tuned to your site. Add any with one click.', 'wpshadow' ); ?></p>
 					</div>
-					<a class="wps-btn wps-btn-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>"><?php esc_html_e( 'Build your own', 'wpshadow' ); ?></a>
+					<a class="wps-btn wps-btn-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>"><?php esc_html_e( 'Build your own', 'wpshadow' ); ?></a>
 				</div>
 				<div class="suggested-grid suggested-workflows-grid">
 					<?php foreach ( $suggestions as $suggestion ) : ?>
@@ -119,7 +119,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 			</div>
 		<?php endif; ?>
 
-		<div class="wpshadow-workflows">
+		<div class="wpshadow-automations">
 			<?php foreach ( $workflows as $workflow ) : ?>
 				<?php
 				$trigger_label = wpshadow_workflow_get_trigger_summary( $workflow );
@@ -151,7 +151,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 					</div>
 
 				<div class="workflow-buttons">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="wps-btn wps-btn-primary wps-btn-sm">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="wps-btn wps-btn-primary wps-btn-sm">
 							<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 						</a>
 						<button type="button" class="wps-btn wps-btn-secondary wps-btn-sm workflow-test-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
@@ -420,7 +420,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 }
 
 /* Workflow Cards */
-.wpshadow-workflows {
+.wpshadow-automations {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 	gap: 20px;

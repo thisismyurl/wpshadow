@@ -22,7 +22,7 @@ class WPShadow_Top_Issues_Widget {
 		<div class="wps-my-8">
 			<div class="wps-flex-items-center-justify-space-between">
 				<h2 class="wps-m-0"><?php esc_html_e( 'Top Issues to Address', 'wpshadow' ); ?></h2>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-action-items' ) ); ?>" style="font-size: 12px; color: #0073aa; text-decoration: none; font-weight: 600;">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-findings' ) ); ?>" style="font-size: 12px; color: #0073aa; text-decoration: none; font-weight: 600;">
 					<?php esc_html_e( 'View All →', 'wpshadow' ); ?>
 				</a>
 			</div>
@@ -65,7 +65,7 @@ class WPShadow_Top_Issues_Widget {
 								
 								<!-- Action Buttons -->
 								<div class="wps-flex wps-gap-2 wps-mt-3">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-action-items&finding_id=' . $finding_id ) ); ?>" class="wps-btn wps-btn-secondary" class="wps-justify-center">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-findings&finding_id=' . $finding_id ) ); ?>" class="wps-btn wps-btn-secondary" class="wps-justify-center">
 										<?php esc_html_e( 'View', 'wpshadow' ); ?>
 									</a>
 									<button class="wps-btn wps-btn-primary wpshadow-quick-autofix" data-finding-id="<?php echo esc_attr( $finding_id ); ?>" class="wps-justify-center">

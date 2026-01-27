@@ -47,7 +47,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESS
 ## User Flow
 
 ### 1. Workflow List (Landing Page)
-**URL:** `admin.php?page=wpshadow-workflows`
+**URL:** `admin.php?page=wpshadow-automations`
 
 **Features:**
 - View all existing workflows in card layout
@@ -65,7 +65,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESS
 ### 2. Create Workflow Wizard
 
 #### Step 1: Choose Trigger (IF)
-**URL:** `admin.php?page=wpshadow-workflows&action=create&step=trigger`
+**URL:** `admin.php?page=wpshadow-automations&action=create&step=trigger`
 
 **Features:**
   - **Schedule:** Daily, Weekly, Hourly
@@ -76,7 +76,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESS
 **File:** [`includes/views/workflow-wizard-steps/trigger-selection.php`](includes/views/workflow-wizard-steps/trigger-selection.php)
 
 #### Step 2: Configure Trigger
-**URL:** `admin.php?page=wpshadow-workflows&action=create&step=trigger-config&trigger={id}`
+**URL:** `admin.php?page=wpshadow-automations&action=create&step=trigger-config&trigger={id}`
 
 **Features:**
   - **Time Weekly:** Select days of week + time
@@ -87,7 +87,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESS
 **File:** [`includes/views/workflow-wizard-steps/trigger-config.php`](includes/views/workflow-wizard-steps/trigger-config.php)
 
 #### Step 3: Choose Actions (THEN)
-**URL:** `admin.php?page=wpshadow-workflows&action=create&step=action&trigger={id}`
+**URL:** `admin.php?page=wpshadow-automations&action=create&step=action&trigger={id}`
 
 **Features:**
   - **Diagnostics:** Full scan, Check external fonts, Check memory, Check SSL, Check plugins, Security scan
@@ -98,7 +98,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESS
 **File:** [`includes/views/workflow-wizard-steps/action-selection.php`](includes/views/workflow-wizard-steps/action-selection.php)
 
 #### Step 4: Configure Actions
-**URL:** `admin.php?page=wpshadow-workflows&action=create&step=action-config&trigger={id}&action_index={n}`
+**URL:** `admin.php?page=wpshadow-automations&action=create&step=action-config&trigger={id}&action_index={n}`
 
 **Features:**
   - **Send Email:** To, Subject, Message
@@ -109,7 +109,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [TESTING/ACCESS
 **File:** [`includes/views/workflow-wizard-steps/action-config.php`](includes/views/workflow-wizard-steps/action-config.php)
 
 #### Step 5: Review & Save
-**URL:** `admin.php?page=wpshadow-workflows&action=create&step=review&trigger={id}`
+**URL:** `admin.php?page=wpshadow-automations&action=create&step=review&trigger={id}`
 
 **Features:**
   - "IF This Happens" section with trigger details

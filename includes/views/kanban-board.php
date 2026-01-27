@@ -138,11 +138,11 @@ $severity_legend = array(
 );
 ?>
 
-<div class="wrap wpshadow-action-items wps-page-container">
+<div class="wrap wpshadow-findings wps-page-container">
 	<!-- Page Header -->
 	<?php wpshadow_render_page_header(
-		__( 'Action Items', 'wpshadow' ),
-		__( 'Organize and manage your findings by drag-and-dropping them between status columns.', 'wpshadow' ),
+		__( 'Findings', 'wpshadow' ),
+		__( 'Organize and prioritize your site issues using drag-and-drop.', 'wpshadow' ),
 		'dashicons-grid-view'
 	); ?>
 
@@ -757,7 +757,7 @@ if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
 					const workflowId = response.data.workflow_id;
 
 					// Redirect to workflow builder with pre-filled data
-					window.location.href = ajaxurl.replace('admin-ajax.php', '') + 'admin.php?page=wpshadow-workflows&workflow_id=' + workflowId + '&new=1';
+					window.location.href = ajaxurl.replace('admin-ajax.php', '') + 'admin.php?page=wpshadow-automations&workflow_id=' + workflowId + '&new=1';
 				} else {
 				WPShadowModal.alert({
 					title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',

@@ -430,7 +430,7 @@ class Hooks_Initializer {
 		);
 
 		// Workflow list scripts
-		if ( is_string( $hook ) && ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-workflows' ) !== false ) ) {
+		if ( is_string( $hook ) && ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-automations' ) !== false ) ) {
 			wp_enqueue_script(
 				'wpshadow-workflow-list',
 				WPSHADOW_URL . 'assets/js/workflow-list.js',

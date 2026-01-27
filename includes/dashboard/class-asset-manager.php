@@ -28,7 +28,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 	}
 
 	// Workflow list scripts
-	if ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-workflows' ) !== false ) {
+	if ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-automations' ) !== false ) {
 		wp_enqueue_script(
 			'wpshadow-workflow-list',
 			WPSHADOW_URL . 'assets/js/workflow-list.js',

@@ -12,7 +12,7 @@ use WPShadow\Guardian\Recovery_System;
 use WPShadow\Reporting\Event_Logger;
 
 /**
- * WPShadow Guardian Dashboard Tab
+ * WPShadow Guardian
  *
  * Main dashboard for WPShadow Guardian system.
  * Shows KPIs, recent activity, auto-fix stats, recovery points.
@@ -23,6 +23,8 @@ use WPShadow\Reporting\Event_Logger;
  * - Auto-fix statistics
  * - Recovery points widget
  * - System health status
+ *
+ * @since 1.2601.2148
  */
 class Guardian_Dashboard {
 
@@ -30,21 +32,19 @@ class Guardian_Dashboard {
 	/**
 	 * Render the dashboard
 	 *
+	 * @since  1.2601.2148
 	 * @return string HTML output
 	 */
 	public static function render(): string {
 		ob_start();
 		?>
-		<div class="wps-page-container" role="main" aria-labelledby="guardian-dashboard-title">
+		<div class="wps-page-container" role="main">
 			<!-- Page Header -->
-			<div class="wps-page-header">
-				<h1 class="wps-page-title" id="guardian-dashboard-title">
-					<span class="dashicons dashicons-shield-alt wps-icon-primary" aria-hidden="true"></span>
-					<?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?>				<small class="wps-text-gray-500">(v<?php echo esc_html( WPSHADOW_VERSION ); ?>)</small>				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Automated health monitoring and intelligent fixes', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php wpshadow_render_page_header(
+				__( 'WPShadow Guardian', 'wpshadow' ),
+				__( 'Automated health monitoring and intelligent fixes', 'wpshadow' ),
+				'dashicons-shield-alt'
+			); ?>
 
 			<!-- Status and Actions Bar -->
 			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Guardian status and actions', 'wpshadow' ); ?>">

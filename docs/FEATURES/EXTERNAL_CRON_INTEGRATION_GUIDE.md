@@ -222,7 +222,7 @@ Enable debugging in `wp-config.php`:
 define( 'WPSHADOW_DEBUG_WORKFLOWS', true );
 ```
 
-This will log all workflow executions to `wp-content/wpshadow-workflows.log`.
+This will log all workflow executions to `wp-content/wpshadow-automations.log`.
 
 ### Server Logs
 
