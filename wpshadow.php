@@ -78,6 +78,10 @@ require_once WPSHADOW_PATH . 'includes/privacy/class-first-run-consent.php';
 // Load AJAX handlers (requires privacy classes to be loaded first)
 require_once WPSHADOW_PATH . 'includes/admin/ajax/ajax-handlers-loader.php';
 
+// Load auto-deploy feature (only active if WPSHADOW_AUTO_DEPLOY is true)
+require_once WPSHADOW_PATH . 'includes/admin/class-auto-deploy.php';
+\WPShadow\Admin\Auto_Deploy::init();
+
 add_action(
 	'plugins_loaded',
 	function () {
