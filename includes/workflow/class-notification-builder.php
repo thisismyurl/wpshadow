@@ -361,10 +361,10 @@ class Notification_Builder {
 			</button>
 
 			<!-- Rules List -->
-			<div class="wps-notification-rules" style="margin-top: 24px;">
+			<div class="wps-notification-rules" class="wps-notification-rules">
 				<?php if ( empty( $rules ) ) : ?>
 					<div class="wps-empty-state" class="wps-p-40-rounded-8">
-						<span class="dashicons" style="font-size: 48px; color: #ccc; margin-bottom: 16px;"></span>
+						<span class="dashicons" class="wps-notification-empty-icon"></span>
 						<p class="wps-m-0">
 							<?php echo $mode === 'email' ? esc_html__( 'No email rules yet. Create one to get started!', 'wpshadow' ) : esc_html__( 'No notification rules yet. Create one to get started!', 'wpshadow' ); ?>
 						</p>
@@ -372,7 +372,7 @@ class Notification_Builder {
 				<?php else : ?>
 					<?php foreach ( $rules as $rule_id => $rule ) : ?>
 						<div class="wps-notification-rule-card" data-rule-id="<?php echo esc_attr( $rule_id ); ?>" class="wps-flex-items-center-justify-space-between-">
-							<div style="flex: 1;">
+							<div class="wps-notification-flex-container">
 								<h4 class="wps-m-0">
 									<?php echo esc_html( $rule['name'] ?? __( 'Unnamed Rule', 'wpshadow' ) ); ?>
 								</h4>
@@ -427,8 +427,8 @@ class Notification_Builder {
 			<!-- Builder Modal -->
 		<div id="wpshadow-notification-builder-modal" class="wps-modal" class="wps-none">
 			<div class="wps-modal-content" class="wps-p-40-rounded-12">
-				<button type="button" class="wps-modal-close" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 32px; cursor: pointer; color: #999; line-height: 1;">×</button>
-					<h2 style="margin-top: 0; color: #0073aa;">
+				<button type="button" class="wps-modal-close" class="wps-modal-close-btn">×</button>
+					<h2 class="wps-notification-modal-title">
 						<?php echo $mode === 'email' ? esc_html__( 'Create Email Rule', 'wpshadow' ) : esc_html__( 'Create Notification Rule', 'wpshadow' ); ?>
 					</h2>
 
@@ -441,7 +441,7 @@ class Notification_Builder {
 						<div class="wps-form-group">
 							<label class="wps-form-label">
 								<?php esc_html_e( 'Rule Name', 'wpshadow' ); ?>
-								<span style="color: #d32f2f;">*</span>
+								<span class="wps-form-required">*</span>
 							</label>
 							<input type="text" name="rule_name" class="wps-input" placeholder="<?php esc_attr_e( 'E.g., Alert on RSS Diagnostic', 'wpshadow' ); ?>" required />
 							<p class="wps-form-help">
@@ -453,15 +453,15 @@ class Notification_Builder {
 						<div class="wps-form-group">
 							<label class="wps-form-label">
 								<?php esc_html_e( 'When This Happens', 'wpshadow' ); ?>
-								<span style="color: #d32f2f;">*</span>
+								<span class="wps-form-required">*</span>
 							</label>
-						<p class="wps-form-help" style="margin-top: 4px; margin-bottom: 12px;">
+						<p class="wps-form-help" class="wps-form-help">
 							<?php esc_html_e( 'Choose from scheduled tasks, content events, system changes, or diagnostic test results.', 'wpshadow' ); ?>
 						</p>
 						<div id="wpshadow-trigger-categories" class="wps-grid wps-grid-auto-160 wps-gap-3 wps-mb-4" class="wps-grid">
 							<?php foreach ( $triggers as $category_key => $category ) : ?>
 								<button type="button" class="wps-trigger-category-btn" data-category="<?php echo esc_attr( $category_key ); ?>" class="wps-p-14-rounded-8">
-									<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ?? 'admin-generic' ); ?>" style="vertical-align: middle; margin-right: 6px; font-size: 18px; color: var(--wps-primary, #123456);"></span>
+									<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ?? 'admin-generic' ); ?>" class="wps-notification-category-icon"></span>
 										<strong><?php echo esc_html( $category['label'] ); ?></strong>
 									</button>
 								<?php endforeach; ?>
@@ -476,7 +476,7 @@ class Notification_Builder {
 
 						<!-- Then Action Section -->
 						<div class="wps-m-20-p-12-rounded-6">
-							<strong style="color: #1976d2;"><?php esc_html_e( 'Then', 'wpshadow' ); ?></strong>
+							<strong class="wps-workflow-then-label"><?php esc_html_e( 'Then', 'wpshadow' ); ?></strong>
 						</div>
 
 						<!-- Action Configuration -->
@@ -495,7 +495,7 @@ class Notification_Builder {
 									<div class="wps-form-group">
 										<label class="wps-form-label">
 											<?php esc_html_e( 'Email Subject', 'wpshadow' ); ?>
-											<span style="color: #d32f2f;">*</span>
+											<span class="wps-form-required">*</span>
 										</label>
 										<input type="text" name="action_subject" class="wps-input" placeholder="<?php esc_attr_e( 'E.g., RSS Diagnostic Test Found an Issue', 'wpshadow' ); ?>" required />
 										<p class="wps-form-help">
@@ -506,7 +506,7 @@ class Notification_Builder {
 									<div class="wps-form-group">
 										<label class="wps-form-label">
 											<?php esc_html_e( 'Email Message', 'wpshadow' ); ?>
-											<span style="color: #d32f2f;">*</span>
+											<span class="wps-form-required">*</span>
 										</label>
 										<textarea name="action_message" class="wps-textarea" rows="6" placeholder="<?php esc_attr_e( 'Enter email body...', 'wpshadow' ); ?>" required></textarea>
 										<p class="wps-form-help">
@@ -517,7 +517,7 @@ class Notification_Builder {
 									<div class="wps-form-group">
 										<label class="wps-form-label">
 											<?php esc_html_e( 'Notification Message', 'wpshadow' ); ?>
-											<span style="color: #d32f2f;">*</span>
+											<span class="wps-form-required">*</span>
 										</label>
 										<textarea name="action_message" class="wps-textarea" rows="4" placeholder="<?php esc_attr_e( 'Enter notification message...', 'wpshadow' ); ?>" required></textarea>
 										<p class="wps-form-help">
@@ -566,8 +566,8 @@ class Notification_Builder {
 				const categoryData = triggers[category];
 				const itemsHtml = Object.entries(categoryData.triggers || {}).map(([key, trigger]) => {
 					return `<label class="wps-block-m-8-p-12-rounded-6">
-						<input type="radio" name="trigger_type" value="${key}" class="wps-trigger-item" style="margin-right: 8px;" />
-						<strong style="font-size: 14px;">${trigger.label}</strong>
+						<input type="radio" name="trigger_type" value="${key}" class="wps-trigger-item" class="wps-trigger-item-input" />
+						<strong class="wps-trigger-item-label">${trigger.label}</strong>
 						<p class="wps-m-4">${trigger.description}</p>
 					</label>`;
 				}).join('');

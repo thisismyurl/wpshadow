@@ -3715,6 +3715,67 @@ a:focus-visible {
     font-size: 12px;
 }
 
+/**
+ * Notification Builder Styles
+ */
+.wps-notification-rules {
+    margin-top: 24px;
+}
+
+.wps-notification-empty-icon {
+    font-size: 48px;
+    color: var(--wps-gray-300);
+    margin-bottom: 16px;
+}
+
+.wps-notification-flex-container {
+    flex: 1;
+}
+
+.wps-modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: var(--wps-gray-400);
+    line-height: 1;
+}
+
+.wps-notification-modal-title {
+    margin-top: 0;
+    color: var(--wps-primary);
+}
+
+.wps-form-required {
+    color: #d32f2f;
+}
+
+.wps-form-help {
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
+.wps-notification-category-icon {
+    vertical-align: middle;
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+.wps-workflow-then-label {
+    color: #1976d2;
+}
+
+.wps-trigger-item-input {
+    margin-right: 8px;
+}
+
+.wps-trigger-item-label {
+    font-size: 14px;
+}
+
 }
 }
 }
