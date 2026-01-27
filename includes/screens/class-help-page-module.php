@@ -101,7 +101,13 @@ function wpshadow_render_help() {
 							<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?> wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
+								<?php if ( ! empty( $item['url'] ) ) : ?>
+									<a href="<?php echo esc_url( $item['url'] ); ?>" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+										<?php echo esc_html( $item['title'] ); ?>
+									</a>
+								<?php else : ?>
 									<?php echo esc_html( $item['title'] ); ?>
+								<?php endif; ?>
 								</h3>
 								<p class="wps-card-description wps-m-0">
 									<?php echo esc_html( $item['description'] ); ?>
