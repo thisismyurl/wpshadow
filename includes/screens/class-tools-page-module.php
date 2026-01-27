@@ -157,7 +157,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 		</div>
 
 		<!-- Tools Grid -->
-		<div class="wps-grid wps-grid-2">
+		<div class="wps-grid wps-grid-3">
 			<?php
 			foreach ( $catalog as $item ) :
 				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
