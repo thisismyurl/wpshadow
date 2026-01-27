@@ -3336,7 +3336,110 @@ a:focus-visible {
     .wps-toggle + .wps-toggle {
         margin-left: var(--wps-space-2);
     }
-}}
+}
+
+/* ============================================================================
+   KPI Card Components
+   ============================================================================ */
+
+/**
+ * KPI Summary Card - Main container
+ */
+.wps-kpi-summary-card {
+    margin-bottom: 20px;
+}
+
+/**
+ * KPI Card Header - Section titles
+ */
+.wps-kpi-card-header {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--wps-gray-600);
+}
+
+/**
+ * KPI Card Value - Large prominent number
+ */
+.wps-kpi-card-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    line-height: 1.2;
+    color: var(--wps-gray-900);
+}
+
+/**
+ * KPI Card Description - Supporting text
+ */
+.wps-kpi-card-description {
+    font-size: 13px;
+    opacity: 0.8;
+    color: var(--wps-gray-700);
+}
+
+/**
+ * KPI Icon - Chart/dashboard icon sizing
+ */
+.wps-kpi-icon {
+    font-size: 28px;
+    display: inline-block;
+    line-height: 1;
+}
+
+/**
+ * KPI Container - Flex-based layout for metric rows
+ */
+.wps-kpi-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wps-space-2);
+}
+
+/**
+ * KPI Metric Row - Horizontal metric display
+ */
+.wps-kpi-metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--wps-space-3);
+    border-bottom: 1px solid var(--wps-gray-200);
+}
+
+.wps-kpi-metric-row:last-child {
+    border-bottom: none;
+}
+
+/**
+ * KPI Metric Label
+ */
+.wps-kpi-metric-label {
+    font-size: 13px;
+    color: var(--wps-gray-600);
+    font-weight: 500;
+}
+
+/**
+ * KPI Metric Value
+ */
+.wps-kpi-metric-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--wps-primary);
+}
+
+/**
+ * Dashboard Icon sizing
+ */
+.wps-dashboard-icon {
+    font-size: 28px;
+    width: auto;
+    height: auto;
+}
 }
 }
 }

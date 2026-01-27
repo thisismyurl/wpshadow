@@ -25,12 +25,12 @@ class KPI_Summary_Card {
 	public static function render() {
 		$kpis = KPI_Tracker::get_kpi_summary();
 		?>
-		<div class="wpshadow-kpi-summary-card" class="wps-m-30-p-24-rounded-12">
+		<div class="wpshadow-kpi-summary-card wps-m-30-p-24-rounded-12">
 			
 			<!-- Header -->
-			<div style="margin-bottom: 20px;">
+			<div class="wps-m-20-b">
 				<h2 class="wps-flex-gap-8-items-center-m-0">
-					<span class="dashicons dashicons-chart-line" style="font-size: 28px;"></span>
+					<span class="dashicons dashicons-chart-line wps-kpi-icon"></span>
 				<?php esc_html_e( 'WPShadow Impact', 'wpshadow' ); ?>
 				</h2>
 				<p class="wps-m-0">
@@ -53,52 +53,52 @@ class KPI_Summary_Card {
 				
 				<!-- Time Saved Card -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '⏱️ Time Saved', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					<?php echo esc_html( isset( $kpis['time_saved_display'] ) && $kpis['time_saved_display'] ? $kpis['time_saved_display'] : '0m' ); ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 					<?php echo esc_html( sprintf( __( 'That\'s %d hours of manual work avoided', 'wpshadow' ), isset( $kpis['time_saved_hours'] ) ? (int) $kpis['time_saved_hours'] : 0 ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Issues Fixed Card -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '🛡️ Issues Fixed', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					<?php echo isset( $kpis['issues_fixed'] ) ? (int) $kpis['issues_fixed'] : 0; ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( __( 'Problems you fixed or auto-fixed', 'wpshadow' ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Security Improvements Card -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '🔒 Security Wins', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					<?php echo isset( $kpis['security_improvements'] ) ? (int) $kpis['security_improvements'] : 0; ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( __( 'Vulnerabilities eliminated', 'wpshadow' ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Health Improvement Card -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '📈 Health Trend', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					<?php echo esc_html( isset( $kpis['confidence_trend'] ) && $kpis['confidence_trend'] ? $kpis['confidence_trend'] : '0%' ); ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( __( 'Better than 30 days ago', 'wpshadow' ) ); ?>
 					</div>
 				</div>
@@ -106,56 +106,56 @@ class KPI_Summary_Card {
 			</div>
 			
 			<!-- Executive Value View (Hidden by default) -->
-			<div class="wpshadow-kpi-executive-view wps-grid wps-grid-auto-200 wps-gap-4" class="wps-none">
+			<div class="wpshadow-kpi-executive-view wps-grid wps-grid-auto-200 wps-gap-4 wps-none">
 				
 				<!-- ROI Card -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '💰 Labor Cost Avoided', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					$<?php echo isset( $kpis['labor_cost_avoided'] ) ? number_format( (int) $kpis['labor_cost_avoided'] ) : '0'; ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( sprintf( __( '%d hours @ $50/hr', 'wpshadow' ), $kpis['time_saved_hours'] ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Critical Risks Mitigated -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '⚠️ Critical Risks Mitigated', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					<?php echo isset( $kpis['critical_risks_mitigated'] ) ? (int) $kpis['critical_risks_mitigated'] : 0; ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( __( 'High-severity vulnerabilities resolved', 'wpshadow' ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Performance Optimizations -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '⚡ Performance Gains', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 					<?php echo isset( $kpis['performance_optimizations'] ) ? (int) $kpis['performance_optimizations'] : 0; ?>
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( __( 'Optimizations implemented', 'wpshadow' ) ); ?>
 					</div>
 				</div>
 				
 				<!-- Health Score Improvement -->
 				<div class="wps-p-16-rounded-8">
-					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+					<div class="wps-kpi-card-header">
 						<?php esc_html_e( '📊 Health Score Growth', 'wpshadow' ); ?>
 					</div>
-					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
+					<div class="wps-kpi-card-value">
 						<?php echo esc_html( isset( $kpis['health_improvement'] ) ? $kpis['health_improvement'] : 0 ); ?>%
 					</div>
-					<div style="font-size: 13px; opacity: 0.8;">
+					<div class="wps-kpi-card-description">
 						<?php echo esc_html( sprintf( __( '%1$d → %2$d score in 30 days', 'wpshadow' ), $kpis['health_score_30_days_ago'], $kpis['health_score_today'] ) ); ?>
 					</div>
 				</div>
@@ -174,13 +174,9 @@ class KPI_Summary_Card {
 				button.addEventListener( 'click', function() {
 					const view = this.dataset.view;
 					buttons.forEach( b => {
-						b.style.background = 'rgba(255,255,255,0.2)';
-						b.style.color = 'rgba(255,255,255,0.7)';
-						b.style.borderColor = 'rgba(255,255,255,0.3)';
+						b.classList.remove( 'wps-kpi-toggle-active' );
 					});
-					this.style.background = 'rgba(255,255,255,0.3)';
-					this.style.color = 'white';
-					this.style.borderColor = 'rgba(255,255,255,0.5)';
+					this.classList.add( 'wps-kpi-toggle-active' );
 					
 					if ( view === 'human' ) {
 						humanView.style.display = 'grid';
