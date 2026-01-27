@@ -69,64 +69,69 @@ class Diagnostic_Admin_Missing_Title_Format extends Diagnostic_Base {
 			return null;
 		}
 
-		// Start output buffering to capture admin page output.
-		ob_start();
-		
-		// Hook into admin_head to capture the title.
-		$title_found = false;
-		$title_content = '';
-		
-		add_action( 'admin_head', function() use ( &$title_found, &$title_content ) {
-			// Get the current page title from wp_get_document_title().
-			if ( function_exists( 'wp_get_document_title' ) ) {
-				$title_content = wp_get_document_title();
-				$title_found = true;
+		// Load Admin_Page_Scanner helper.
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Admin_Page_Scanner' ) ) {
+			require_once WPSHADOW_PATH . 'includes/diagnostics/helpers/class-admin-page-scanner.php';
+		}
+
+		$pages_to_check = array(
+			'index.php'              => 'Dashboard',
+			'options-general.php'    => 'General Settings',
+			'plugins.php'            => 'Plugins',
+		);
+
+		$site_name = get_bloginfo( 'name' );
+		$incorrect_titles = array();
+
+		foreach ( $pages_to_check as $page_slug => $page_name ) {
+			$html = \WPShadow\Diagnostics\Helpers\Admin_Page_Scanner::capture_admin_page( $page_slug );
+			
+			if ( false === $html ) {
+				continue;
 			}
-		}, 1 );
 
-		// Check if title filter is being used properly.
-		$has_title_filter = has_filter( 'document_title_parts' ) || has_filter( 'admin_title' );
+			// Extract title.
+			if ( preg_match( '/<title[^>]*>(.*?)<\/title>/is', $html, $matches ) ) {
+				$title_content = strip_tags( $matches[1] );
+				
+				// Check if title contains site name.
+				if ( false === stripos( $title_content, $site_name ) ) {
+					$incorrect_titles[] = $page_name . ': "' . $title_content . '"';
+				}
+				
+				// Check if title follows WordPress format (contains ‹ or |).
+				if ( false === strpos( $title_content, '‹' ) && false === strpos( $title_content, '|' ) && false === strpos( $title_content, '-' ) ) {
+					$incorrect_titles[] = $page_name . ': No separator found';
+				}
+			}
+		}
 
-		if ( ! $has_title_filter ) {
+		if ( ! empty( $incorrect_titles ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __(
-					'Admin pages should have properly formatted page titles that include both the page name and site name. This improves browser tab identification and SEO. Ensure the document_title_parts or admin_title filter is not being removed.',
-					'wpshadow'
+				'description'  => sprintf(
+					/* translators: %d: number of pages, %s: list of pages */
+					_n(
+						'%d admin page has incorrect title format: %s. Proper format should be: "Page Name ‹ Site Name — WordPress"',
+						'%d admin pages have incorrect title format: %s. Proper format should be: "Page Name ‹ Site Name — WordPress"',
+						count( $incorrect_titles ),
+						'wpshadow'
+					),
+					count( $incorrect_titles ),
+					implode( '; ', $incorrect_titles )
 				),
 				'severity'     => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/admin-missing-title-format',
+				'meta'         => array(
+					'incorrect_pages' => $incorrect_titles,
+					'site_name'       => $site_name,
+				),
 			);
 		}
 
-		// If we're in an actual admin page request, check the title format.
-		if ( $title_found && ! empty( $title_content ) ) {
-			$site_name = get_bloginfo( 'name' );
-			
-			// Check if title contains site name.
-			if ( false === strpos( $title_content, $site_name ) ) {
-				return array(
-					'id'           => self::$slug,
-					'title'        => self::$title,
-					'description'  => sprintf(
-						/* translators: 1: Current title, 2: Site name */
-						__( 'Admin page title "%1$s" does not include the site name "%2$s". Proper format should be: "Page Name ‹ Site Name — WordPress"', 'wpshadow' ),
-						esc_html( $title_content ),
-						esc_html( $site_name )
-					),
-					'severity'     => 'medium',
-					'threat_level' => 35,
-					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/admin-missing-title-format',
-				);
-			}
-		}
-
-		ob_end_clean();
-
-		return null; // Title format is acceptable.
+		return null;
 	}
 }
