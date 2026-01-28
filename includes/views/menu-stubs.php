@@ -353,7 +353,7 @@ if ( ! function_exists( 'wpshadow_render_scan_settings' ) ) {
 // Load Utilities module (defines wpshadow_render_utilities if not already defined)
 // Legacy: Also define wpshadow_render_tools for backward compatibility
 if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
-	require_once WPSHADOW_PATH . 'includes/screens/class-tools-page-module.php';
+	require_once WPSHADOW_PATH . 'includes/screens/class-utilities-page-module.php';
 }
 
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {

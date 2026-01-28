@@ -620,7 +620,7 @@ class Hooks_Initializer {
 			return;
 		}
 
-		$catalog = wpshadow_get_tools_catalog();
+		$catalog = wpshadow_get_utilities_catalog();
 		foreach ( $catalog as $item ) {
 			if ( empty( $item['enabled'] ) ) {
 				continue;
