@@ -30,42 +30,42 @@ function wpshadow_get_help_catalog() {
 			'title'       => __( 'Getting Started with WPShadow', 'wpshadow' ),
 			'description' => __( 'Learn the basics of how WPShadow helps you maintain a healthy WordPress site.', 'wpshadow' ),
 			'icon'        => 'dashicons-info',
-			'url'         => $utm::kb_link( 'getting-started', 'help_page', 'kb_link' ),
+			'url'         => $utm::kb_link( 'getting-started', 'help_page' ),
 			'video'       => 'https://wpshadow.com/academy/getting-started?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_getting_started',
 		),
 		array(
 			'title'       => __( 'Understanding Diagnostics', 'wpshadow' ),
 			'description' => __( 'Discover what each diagnostic check does and what issues it helps identify.', 'wpshadow' ),
 			'icon'        => 'dashicons-search',
-			'url'         => $utm::kb_link( 'diagnostics', 'help_page', 'kb_link' ),
+			'url'         => $utm::kb_link( 'diagnostics', 'help_page' ),
 			'video'       => 'https://wpshadow.com/academy/diagnostics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_diagnostics',
 		),
 		array(
 			'title'       => __( 'Applying Treatments', 'wpshadow' ),
 			'description' => __( 'Learn how to safely apply fixes to your site with one-click treatments and undo support.', 'wpshadow' ),
 			'icon'        => 'dashicons-admin-tools',
-			'url'         => $utm::kb_link( 'treatments', 'help_page', 'kb_link' ),
+			'url'         => $utm::kb_link( 'treatments', 'help_page' ),
 			'video'       => 'https://wpshadow.com/academy/treatments?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_treatments',
 		),
 		array(
 			'title'       => __( 'Workflows & Automation', 'wpshadow' ),
 			'description' => __( 'Set up automated workflows to keep your site healthy without manual intervention.', 'wpshadow' ),
 			'icon'        => 'dashicons-schedule',
-			'url'         => $utm::kb_link( 'workflows', 'help_page', 'kb_link' ),
+			'url'         => $utm::kb_link( 'workflows', 'help_page' ),
 			'video'       => 'https://wpshadow.com/academy/workflows?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_workflows',
 		),
 		array(
 			'title'       => __( 'Monitoring & Alerts', 'wpshadow' ),
 			'description' => __( 'Stay informed with real-time monitoring and custom alert notifications.', 'wpshadow' ),
 			'icon'        => 'dashicons-bell',
-			'url'         => $utm::kb_link( 'monitoring', 'help_page', 'kb_link' ),
+			'url'         => $utm::kb_link( 'monitoring', 'help_page' ),
 			'video'       => 'https://wpshadow.com/academy/monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_monitoring',
 		),
 		array(
 			'title'       => __( 'Privacy & Security', 'wpshadow' ),
 			'description' => __( 'Learn about our privacy-first approach and how your data is protected.', 'wpshadow' ),
 			'icon'        => 'dashicons-lock',
-			'url'         => $utm::kb_link( 'privacy', 'help_page', 'kb_link' ),
+			'url'         => $utm::kb_link( 'privacy', 'help_page' ),
 			'video'       => 'https://wpshadow.com/academy/privacy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_privacy',
 		),
 	);
@@ -161,7 +161,7 @@ function wpshadow_render_help() {
 					<span class="dashicons dashicons-video-alt2"></span>
 					<?php esc_html_e( 'Online Training', 'wpshadow' ); ?>
 				</a>
-				<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( '', 'help_page', 'kb_cta' ) ); ?>" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
+				<a href="<?php echo esc_url( UTM_Link_Manager::kb_link( '', 'help_page' ) ); ?>" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
 					<span class="dashicons dashicons-book"></span>
 					<?php esc_html_e( 'Knowledge Base', 'wpshadow' ); ?>
 				</a>
