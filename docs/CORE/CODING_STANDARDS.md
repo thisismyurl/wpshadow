@@ -24,7 +24,7 @@ Learn more: [PHILOSOPHY/VISION.md](../../PHILOSOPHY/VISION.md) | [PHILOSOPHY/ACC
 Used for plugin-wide constants that don't change during runtime.
 
 ```php
-define( 'WPSHADOW_VERSION', '1.YDDD.HHMM' ); // Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time (America/Toronto)
+define( 'WPSHADOW_VERSION', '1.2601.2112' );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_MIN_PHP', '8.1' );
 define( 'WPSHADOW_TEXT_DOMAIN', 'wpshadow' );
