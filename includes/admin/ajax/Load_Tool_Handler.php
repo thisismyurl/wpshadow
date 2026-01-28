@@ -8,6 +8,7 @@
  * @subpackage Admin/AJAX
  */
 
+
 declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
