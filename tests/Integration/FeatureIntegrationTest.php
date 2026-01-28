@@ -48,11 +48,11 @@ class FeatureIntegrationTest extends TestCase {
 	public function testPluginVersionFormat(): void {
 		$version = $this->getPluginVersion();
 		
-		// Version should match format: X.XXXX.XXXX
+		// Version should match format: 1.YDDD.HHMM (1.{last year digit}{julian day}.{hour}{minute} in Toronto time)
 		$this->assertMatchesRegularExpression(
-			'/^\d+\.\d{4}\.\d{4}$/',
+			'/^1\.\d{3,4}\.\d{4}$/',
 			$version,
-			'Plugin version must follow format: X.XXXX.XXXX'
+			'Plugin version must follow format: 1.YDDD.HHMM in Toronto time (e.g., 1.6028.1430)'
 		);
 	}
 

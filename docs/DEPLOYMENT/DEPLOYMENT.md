@@ -43,11 +43,13 @@
 
 ```bash
 # 1. Update version in wpshadow.php
-# Format: 1.YYMM.DDHH (e.g., 1.2601.2112 = 2026-01-22 21:12)
+# Format: 1.YDDD.HHMM (e.g., 1.6028.1430 = 2026, Jan 28, 14:30 Toronto time)
+# Y = last digit of year, DDD = julian day, HH = hour, MM = minute
+# All times in Toronto timezone (America/Toronto)
 
 # 2. Commit changes
 git add .
-git commit -m "Release v1.YYMM.DDHH - [Brief Description]"
+git commit -m "Release v1.YDDD.HHMM - [Brief Description]"
 
 # 3. Create annotated tag
 git tag -a v1.YYMM.DDHH -m "WPShadow v1.YYMM.DDHH - [Description]"

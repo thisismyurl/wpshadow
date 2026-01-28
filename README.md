@@ -2,10 +2,10 @@
 
 > **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**
 
-**Version:** 1.2601.2148  
+**Version:** 1.YDDD.HHMM (Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time)  
 **Status:** ✅ Core Plugin Production Ready | SaaS & Ecosystem In Development  
 **License:** GPL v2 or later  
-**Last Updated:** January 26, 2026
+**Last Updated:** January 28, 2026
 
 ---
 

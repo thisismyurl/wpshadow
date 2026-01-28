@@ -4,6 +4,7 @@
 **Created:** January 24, 2026  
 **Status:** Active  
 **Scope:** AI Assistant configuration for WPShadow plugin development
+**WPShadow Version Format:** 1.YDDD.HHMM (1.{last year digit}{julian day}.{hour}{minute} in Toronto time)
 
 ---
 
@@ -207,7 +208,7 @@ This agent is designed to guide development of WPShadow with deep understanding 
 /**
  * Plugin Name: WPShadow
  * Description: WordPress health diagnostics and protection
- * Version: 1.2601.2148
+ * Version: 1.YDDD.HHMM
  * Author: thisismyurl
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

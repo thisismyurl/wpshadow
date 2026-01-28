@@ -102,7 +102,7 @@ tests/
 
 **FeatureIntegrationTest** - 10 tests:
 - ✅ Plugin constants defined (WPSHADOW_VERSION, WPSHADOW_PATH, etc.)
-- ✅ Version format validation (X.XXXX.XXXX)
+- ✅ Version format validation (1.YDDD.HHMM in Toronto time)
 - ✅ Diagnostic/treatment file pairing
 - ✅ File structure integrity
 - ✅ Required files exist

@@ -57,7 +57,7 @@ Every public method needs:
  *
  * Longer explanation of behavior and usage.
  *
- * @since  1.2601.2148
+ * @since  1.YDDD.HHMM
  * @param  string $param Description.
  * @return array {
  *     Description of return structure.
@@ -77,7 +77,7 @@ Every public method needs:
  *
  * @package    WPShadow
  * @subpackage [Subsystem]
- * @since      1.2601.2148
+ * @since      1.YDDD.HHMM
  */
 
 declare(strict_types=1);
@@ -95,7 +95,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * [Detailed class description]
  *
- * @since 1.2601.2148
+ * @since 1.YDDD.HHMM
  */
 class [Class_Name] extends [Base_Class] {
     // Implementation
@@ -119,7 +119,7 @@ When creating a new diagnostic:
 **Purpose:** Foundational WordPress plugin providing the architecture for all wpshadow-pro-* modules  
 **Type:** Core Plugin (Free)  
 **WordPress.org:** https://wordpress.org/plugins/wpshadow/  
-**Version:** 1.2601.2148  
+**Version:** 1.YDDD.HHMM (Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time)  
 **PHP:** 8.1+  
 **WordPress:** 6.4+  
 

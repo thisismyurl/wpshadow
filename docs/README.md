@@ -453,7 +453,7 @@ See [FILE_STRUCTURE_GUIDE.md](FILE_STRUCTURE_GUIDE.md) for detailed reference.
   - Sanitize all inputs (`sanitize_text_field`, `sanitize_key`, etc.)
   - Escape all outputs (`esc_html`, `esc_attr`, `wp_kses_post`)
 - **Text domain:** `wpshadow` (internationalization)
-- **Asset versioning:** Use `WPSHADOW_VERSION` constant (format: `1.YYMM.DDHH`)
+- **Asset versioning:** Use `WPSHADOW_VERSION` constant (format: `1.YDDD.HHMM` in Toronto time - e.g., 1.6028.1430)
 - **No inline CSS/JS:** Always enqueue via handles
 - **WordPress Coding Standards:** Follow WordPress PHP Coding Standards (enforced via `composer phpcs`)
 

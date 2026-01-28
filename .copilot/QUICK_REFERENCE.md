@@ -103,7 +103,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Short description
- * Version: 1.2601.2148
+ * Version: 1.YDDD.HHMM
  * Author: thisismyurl
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
