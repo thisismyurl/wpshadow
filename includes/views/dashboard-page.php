@@ -223,7 +223,11 @@ function wpshadow_render_dashboard() {
 							location.reload();
 						}, 1500);
 					} else {
-						$progressText.text('<?php esc_html_e( 'Error:', 'wpshadow' ); ?> ' + (response.data || '<?php esc_html_e( 'Unknown error', 'wpshadow' ); ?>'));
+						var errorMsg = '<?php esc_html_e( 'Unknown error', 'wpshadow' ); ?>';
+						if (response.data) {
+							errorMsg = typeof response.data === 'string' ? response.data : (response.data.message || errorMsg);
+						}
+						$progressText.text('<?php esc_html_e( 'Error:', 'wpshadow' ); ?> ' + errorMsg);
 					}
 				},
 				error: function() {
