@@ -109,6 +109,16 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 				// Build full class name with namespace
 				$class_name = 'WPShadow\\Diagnostics\\' . $diagnostic_class;
 
+				// Load the diagnostic class file on-demand to avoid memory exhaustion
+				// Only load when needed, not all at once
+				if ( ! class_exists( $class_name ) ) {
+					// Try to find and require the diagnostic file
+					$diagnostic_file = self::find_diagnostic_file( $diagnostic_class );
+					if ( $diagnostic_file && file_exists( $diagnostic_file ) ) {
+						require_once $diagnostic_file;
+					}
+				}
+
 				if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
 					$result = call_user_func( array( $class_name, 'check' ) );
 					if ( null !== $result && is_array( $result ) ) {
@@ -262,5 +272,46 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 			'next_run'  => wp_next_scheduled( 'wpshadow_scheduled_quick_scan' ),
 			'message'   => __( 'Quick Scan scheduled to run daily at 3:00 AM.', 'wpshadow' ),
 		);
+	}
+
+	/**
+	 * Find the file for a diagnostic class
+	 *
+	 * Searches for the class file in the diagnostic directories.
+	 *
+	 * @param string $class_name Class name (e.g., "Diagnostic_Ssl")
+	 * @return string|null File path if found, null otherwise
+	 */
+	private static function find_diagnostic_file( string $class_name ): ?string {
+		$base_dir = __DIR__;
+		// Go up to includes/diagnostics/
+		$base_dir = dirname( dirname( $base_dir ) ) . '/diagnostics';
+
+		$subdirs = array( 'tests', 'help', 'todo', 'verified' );
+
+		// Convert class name to file name (e.g., "Diagnostic_Ssl" -> "class-diagnostic-ssl.php")
+		$class_file = 'class-' . str_replace( '_', '-', strtolower( $class_name ) ) . '.php';
+
+		foreach ( $subdirs as $subdir ) {
+			$dir = $base_dir . '/' . $subdir;
+
+			if ( ! is_dir( $dir ) ) {
+				continue;
+			}
+
+			// Search recursively for the file
+			$files = glob( $dir . '/**/' . $class_file, GLOB_BRACE );
+			if ( ! empty( $files ) && file_exists( $files[0] ) ) {
+				return $files[0];
+			}
+
+			// Also check in root of directory
+			$root_file = $dir . '/' . $class_file;
+			if ( file_exists( $root_file ) ) {
+				return $root_file;
+			}
+		}
+
+		return null;
 	}
 }

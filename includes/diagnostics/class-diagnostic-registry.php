@@ -127,18 +127,48 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Called during plugins_loaded. Loads all discovered diagnostic files.
 	 */
 	public static function init(): void {
-		self::load_diagnostics();
+		// Don't load all diagnostics at once (causes memory exhaustion)
+		// They will be loaded on-demand when needed
 	}
 
 	/**
-	 * Load all diagnostic class files
+	 * Load a specific diagnostic class file
 	 *
-	 * Requires all diagnostic files from subdirectories recursively.
-	 * Loads both class-diagnostic-*.php and class-test-*.php patterns.
+	 * Loads the class file for a given diagnostic class name if it hasn't been loaded yet.
+	 *
+	 * @param string $class_name Class name without namespace (e.g., "Diagnostic_Ssl")
+	 * @return bool True if loaded or already exists, false otherwise
 	 */
-	private static function load_diagnostics(): void {
+	private static function load_diagnostic_class( string $class_name ): bool {
+		// Check if class already exists
+		if ( class_exists( __NAMESPACE__ . '\\' . $class_name ) ) {
+			return true;
+		}
+
+		// Find and load the class file
+		$file = self::find_diagnostic_file( $class_name );
+		if ( $file && file_exists( $file ) ) {
+			require_once $file;
+			return class_exists( __NAMESPACE__ . '\\' . $class_name );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the file for a diagnostic class
+	 *
+	 * Searches for the class file in the diagnostic directories.
+	 *
+	 * @param string $class_name Class name (e.g., "Diagnostic_Ssl")
+	 * @return string|null File path if found, null otherwise
+	 */
+	private static function find_diagnostic_file( string $class_name ): ?string {
 		$base_dir = __DIR__;
 		$subdirs  = array( 'tests', 'help', 'todo', 'verified' );
+
+		// Convert class name to file name (e.g., "Diagnostic_Ssl" -> "class-diagnostic-ssl.php")
+		$class_file = 'class-' . str_replace( '_', '-', strtolower( $class_name ) ) . '.php';
 
 		foreach ( $subdirs as $subdir ) {
 			$dir = $base_dir . '/' . $subdir;
@@ -147,24 +177,20 @@ class Diagnostic_Registry extends Abstract_Registry {
 				continue;
 			}
 
-			// Load both diagnostic and test files recursively
-			$diagnostic_files = glob( $dir . '/**/class-diagnostic-*.php', GLOB_BRACE );
-			$test_files       = glob( $dir . '/**/class-test-*.php', GLOB_BRACE );
-			// Also load files in the root of the directory
-			$diagnostic_root  = glob( $dir . '/class-diagnostic-*.php' );
-			$test_root        = glob( $dir . '/class-test-*.php' );
-			$files            = array_merge( (array) $diagnostic_files, (array) $test_files, (array) $diagnostic_root, (array) $test_root );
-
-			if ( empty( $files ) ) {
-				continue;
+			// Search recursively for the file
+			$files = glob( $dir . '/**/' . $class_file, GLOB_BRACE );
+			if ( ! empty( $files ) && file_exists( $files[0] ) ) {
+				return $files[0];
 			}
 
-			foreach ( $files as $file ) {
-				if ( file_exists( $file ) ) {
-					require_once $file;
-				}
+			// Also check in root of directory
+			$root_file = $dir . '/' . $class_file;
+			if ( file_exists( $root_file ) ) {
+				return $root_file;
 			}
 		}
+
+		return null;
 	}
 
 	/**
