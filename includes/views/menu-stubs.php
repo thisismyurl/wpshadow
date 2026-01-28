@@ -35,6 +35,9 @@ if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
 	 * @deprecated Use wpshadow_render_findings() instead
 	 */
 	function wpshadow_render_action_items() {
+		if ( function_exists( '_deprecated_function' ) ) {
+			_deprecated_function( __FUNCTION__, '1.2601.2200', 'wpshadow_render_findings' );
+		}
 		wpshadow_render_findings();
 	}
 }
@@ -363,6 +366,9 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	 * @deprecated Use wpshadow_render_utilities() instead
 	 */
 	function wpshadow_render_tools() {
+		if ( function_exists( '_deprecated_function' ) ) {
+			_deprecated_function( __FUNCTION__, '1.2601.2200', 'wpshadow_render_utilities' );
+		}
 		wpshadow_render_utilities();
 	}
 }

@@ -243,6 +243,9 @@ class Email_Recipient_Manager {
 	 * Handle email verification from verification link
 	 */
 	public static function handle_verify_email() {
+		if ( function_exists( '_deprecated_function' ) ) {
+			_deprecated_function( __FUNCTION__, '1.2601.2200', 'WPShadow\\Admin\\Add_Email_Recipient_Handler' );
+		}
 		$token = Form_Param_Helper::get( 'token', 'text', '' );
 
 		if ( empty( $token ) ) {
