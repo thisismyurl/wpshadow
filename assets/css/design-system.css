@@ -4329,6 +4329,67 @@ a:focus-visible {
     margin-top: var(--wps-space-5);
 }
 
+/* Table cell padding utilities */
+.wps-td-p-2 {
+    padding: 8px;
+}
+
+.wps-th-p-2-bold {
+    padding: 8px;
+    font-weight: bold;
+}
+
+/* Monospace utilities for code/paths */
+.wps-font-mono-xs {
+    font-family: var(--wps-font-mono);
+    font-size: 11px;
+}
+
+/* Border utilities */
+.wps-border-b-gray-ddd {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Font size utilities */
+.wps-text-24 {
+    font-size: 24px;
+}
+
+.wps-text-20 {
+    font-size: 20px;
+}
+
+.wps-text-12-opacity {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Flex utilities */
+.wps-flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+.wps-flex-1 {
+    flex: 1;
+}
+
+/* Line height */
+.wps-line-height-normal {
+    line-height: 1.6;
+}
+
+/* Table utilities */
+.wps-table-collapse {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Margin combination utilities */
+.wps-m-10-0-pl-20 {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
 .wps-card-warning {
     background: #fff3cd;
     border-left: 4px solid #ffc107;

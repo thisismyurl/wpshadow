@@ -169,7 +169,7 @@ class Recommendation_Engine {
 		?>
 		<div class="wpshadow-recommendations" class="wps-m-20-p-20-rounded-6">
 			<h3 class="wps-flex-gap-8-items-center">
-				<span style="font-size: 20px;">🎯</span>
+				<span class="wps-text-xl">🎯</span>
 				<?php esc_html_e( 'Recommended Actions', 'wpshadow' ); ?>
 			</h3>
 			<p class="wps-m-8">
@@ -185,7 +185,7 @@ class Recommendation_Engine {
 						</div>
 						
 						<!-- Finding details -->
-						<div style="flex: 1;">
+						<div class="wps-flex-1">
 							<h4 class="wps-m-0">
 								<?php echo esc_html( $rec['title'] ?? 'Unknown Issue' ); ?>
 							</h4>
@@ -227,7 +227,7 @@ class Recommendation_Engine {
 						</div>
 						
 						<!-- Action button -->
-						<div style="flex-shrink: 0;">
+						<div class="wps-flex-shrink-0">
 							<?php if ( isset( $rec['auto_fixable'] ) && $rec['auto_fixable'] ) : ?>
 								<button class="wpshadow-quick-fix" data-finding-id="<?php echo esc_attr( $rec['id'] ?? '' ); ?>" class="wps-p-6-rounded-4">
 									<?php esc_html_e( 'Fix Now', 'wpshadow' ); ?>

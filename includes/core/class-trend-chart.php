@@ -176,7 +176,7 @@ class Trend_Chart {
 					<?php elseif ( $trend_direction === 'down' ) : ?>
 						<span style="color: #ef4444; font-weight: bold;">📉 -<?php echo (float) abs( $trend_pct ); ?>%</span>
 					<?php else : ?>
-						<span style="color: #f59e0b; font-weight: bold;">➡️ Stable</span>
+						<span class="wps-font-bold" style="color: #f59e0b;">➡️ Stable</span>
 					<?php endif; ?>
 				</div>
 			</div>

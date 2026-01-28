@@ -342,24 +342,24 @@ class Advanced_Settings_Page {
 					<div class="wps-card-body">
 						<table class="wps-table" style="width: 100%; border-collapse: collapse;">
 							<tr style="border-bottom: 1px solid #ddd;">
-								<td style="padding: 8px; font-weight: bold;"><?php esc_html_e( 'WPShadow Version', 'wpshadow' ); ?></td>
-								<td style="padding: 8px;"><?php echo esc_html( WPSHADOW_VERSION ); ?></td>
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'WPShadow Version', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2"><?php echo esc_html( WPSHADOW_VERSION ); ?></td>
 							</tr>
 							<tr style="border-bottom: 1px solid #ddd;">
-								<td style="padding: 8px; font-weight: bold;"><?php esc_html_e( 'WordPress Version', 'wpshadow' ); ?></td>
-								<td style="padding: 8px;"><?php echo esc_html( get_bloginfo( 'version' ) ); ?></td>
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'WordPress Version', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2"><?php echo esc_html( get_bloginfo( 'version' ) ); ?></td>
 							</tr>
 							<tr style="border-bottom: 1px solid #ddd;">
-								<td style="padding: 8px; font-weight: bold;"><?php esc_html_e( 'PHP Version', 'wpshadow' ); ?></td>
-								<td style="padding: 8px;"><?php echo esc_html( phpversion() ); ?></td>
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'PHP Version', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2"><?php echo esc_html( phpversion() ); ?></td>
 							</tr>
 							<tr style="border-bottom: 1px solid #ddd;">
-								<td style="padding: 8px; font-weight: bold;"><?php esc_html_e( 'Installation Path', 'wpshadow' ); ?></td>
-								<td style="padding: 8px; font-family: monospace; font-size: 11px;"><?php echo esc_html( WPSHADOW_PATH ); ?></td>
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'Installation Path', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2 wps-font-mono-xs"><?php echo esc_html( WPSHADOW_PATH ); ?></td>
 							</tr>
 							<tr>
-								<td style="padding: 8px; font-weight: bold;"><?php esc_html_e( 'Database Prefix', 'wpshadow' ); ?></td>
-								<td style="padding: 8px; font-family: monospace; font-size: 11px;"><?php echo esc_html( $GLOBALS['table_prefix'] ); ?></td>
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'Database Prefix', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2 wps-font-mono-xs"><?php echo esc_html( $GLOBALS['table_prefix'] ); ?></td>
 							</tr>
 						</table>
 					</div>
