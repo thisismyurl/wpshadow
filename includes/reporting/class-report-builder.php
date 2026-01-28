@@ -41,7 +41,7 @@ class Report_Builder {
 				</p>
 			</div>
 
-			<div class="wps-grid wps-gap-4" style="grid-template-columns: minmax(320px, 380px) 1fr;">
+			<div class="wps-grid wps-gap-4" class="wps-grid-cols-320-1fr">
 				<!-- Left Sidebar: Report Builder Form -->
 				<div class="wps-card">
 					<div class="wps-card-header">
@@ -135,17 +135,17 @@ class Report_Builder {
 
 							<!-- Action Buttons -->
 							<div class="wps-grid wps-grid-auto-200 wps-gap-2 wps-mt-4">
-								<button type="submit" class="wps-btn wps-btn-primary" style="width: 100%;">
+								<button type="submit" class="wps-btn wps-btn-primary wps-w-full">
 									<?php esc_html_e( 'Generate', 'wpshadow' ); ?>
 								</button>
-								<button type="button" class="wps-btn wps-btn-secondary" id="compare-periods-btn" style="width: 100%;">
+								<button type="button" class="wps-btn wps-btn-secondary wps-w-full" id="compare-periods-btn">
 									<?php esc_html_e( 'Compare', 'wpshadow' ); ?>
 								</button>
 							</div>
 
 							<!-- Email Option -->
 							<div class="wps-form-group wps-mt-4" style="border-top: 1px solid var(--wps-gray-200); padding-top: var(--wps-space-4);">
-								<label class="wps-flex wps-items-center wps-gap-2" style="cursor: pointer;">
+								<label class="wps-flex wps-items-center wps-gap-2 wps-cursor-pointer">
 									<input type="checkbox" name="email_report" id="email_report" />
 									<?php esc_html_e( 'Email this report', 'wpshadow' ); ?>
 								</label>
@@ -164,7 +164,7 @@ class Report_Builder {
 
 				<!-- Right Content: Report Display -->
 				<div class="report-display-area">
-					<div id="report-content" class="wps-card" style="min-height: 500px;">
+					<div id="report-content" class="wps-card" class="wps-min-h-500">
 						<p class="wps-p-40">
 							<?php esc_html_e( 'Build a report using the form on the left to see results here.', 'wpshadow' ); ?>
 						</p>

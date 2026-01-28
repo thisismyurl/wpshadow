@@ -4390,6 +4390,21 @@ a:focus-visible {
     padding-left: 20px;
 }
 
+/* Width full */
+.wps-w-full {
+    width: 100%;
+}
+
+/* Min height for cards */
+.wps-min-h-500 {
+    min-height: 500px;
+}
+
+/* Grid template columns utility */
+.wps-grid-cols-320-1fr {
+    grid-template-columns: minmax(320px, 380px) 1fr;
+}
+
 .wps-card-warning {
     background: #fff3cd;
     border-left: 4px solid #ffc107;
