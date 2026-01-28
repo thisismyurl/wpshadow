@@ -293,7 +293,7 @@ class Auto_Deploy {
 				</div>
 			<?php endif; ?>
 
-			<div class="wps-card" style="max-width: 800px; margin-top: 20px;">
+			<div class="wps-card wps-card-narrow">
 				<h2><?php esc_html_e( 'Webhook Configuration', 'wpshadow' ); ?></h2>
 
 				<form method="post" action="">
@@ -331,7 +331,7 @@ class Auto_Deploy {
 				</form>
 			</div>
 
-			<div class="wps-card" style="max-width: 800px; margin-top: 20px;">
+			<div class="wps-card wps-card-narrow">
 				<h2><?php esc_html_e( 'GitHub Setup Instructions', 'wpshadow' ); ?></h2>
 				<ol>
 					<li><?php esc_html_e( 'Go to your GitHub repository: Settings → Webhooks → Add webhook', 'wpshadow' ); ?></li>
@@ -344,7 +344,7 @@ class Auto_Deploy {
 			</div>
 
 			<?php if ( ! empty( $logs ) ) : ?>
-				<div class="wps-card" style="max-width: 1200px; margin-top: 20px;">
+				<div class="wps-card wps-card-wide">
 					<h2><?php esc_html_e( 'Recent Deployments', 'wpshadow' ); ?></h2>
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
@@ -369,7 +369,7 @@ class Auto_Deploy {
 				</div>
 			<?php endif; ?>
 
-			<div class="wps-card" style="max-width: 800px; margin-top: 20px; background: #fff3cd; border-left: 4px solid #ffc107;">
+			<div class="wps-card wps-card-warning">
 				<h3>⚠️ <?php esc_html_e( 'Security Notice', 'wpshadow' ); ?></h3>
 				<ul>
 					<li><?php esc_html_e( 'Only enable auto-deploy on TEST/STAGING servers', 'wpshadow' ); ?></li>

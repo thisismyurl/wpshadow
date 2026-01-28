@@ -4226,3 +4226,119 @@ a:focus-visible {
     font-size: 9px;
     margin-top: 4px;
 }
+
+/* ============================================================================
+   17. ADDITIONAL UTILITY CLASSES - Eliminate Inline Styles
+   ============================================================================ */
+
+/* Max-width utilities */
+.wps-max-w-600 {
+    max-width: 600px;
+}
+
+.wps-max-w-800 {
+    max-width: 800px;
+}
+
+.wps-max-w-1200 {
+    max-width: 1200px;
+}
+
+/* Cursor utilities */
+.wps-cursor-pointer {
+    cursor: pointer;
+}
+
+.wps-cursor-not-allowed {
+    cursor: not-allowed;
+}
+
+/* Overflow utilities */
+.wps-overflow-auto {
+    overflow: auto;
+}
+
+.wps-overflow-x-auto {
+    overflow-x-auto;
+}
+
+/* Position utilities */
+.wps-relative {
+    position: relative;
+}
+
+.wps-absolute {
+    position: absolute;
+}
+
+/* Size utilities */
+.wps-w-18 {
+    width: 18px;
+}
+
+.wps-h-18 {
+    height: 18px;
+}
+
+/* Text alignment */
+.wps-text-center {
+    text-align: center;
+}
+
+/* Opacity utilities */
+.wps-opacity-30 {
+    opacity: 0.3;
+}
+
+.wps-opacity-80 {
+    opacity: 0.8;
+}
+
+/* Margin auto */
+.wps-ml-auto {
+    margin-left: auto;
+}
+
+.wps-mr-auto {
+    margin-right: auto;
+}
+
+/* Large font size for emojis */
+.wps-text-4xl {
+    font-size: 40px;
+}
+
+/* Padding left utilities */
+.wps-pl-11 {
+    padding-left: 44px;
+}
+
+/* Border color warning */
+.wps-border-warning {
+    border-left-color: var(--wps-warning);
+}
+
+/* Additional specific card styles */
+.wps-card-narrow {
+    max-width: 800px;
+    margin-top: var(--wps-space-5);
+}
+
+.wps-card-wide {
+    max-width: 1200px;
+    margin-top: var(--wps-space-5);
+}
+
+.wps-card-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    max-width: 800px;
+    margin-top: var(--wps-space-5);
+}
+
+/* Section divider */
+.wps-section-divider {
+    margin-top: 60px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 40px;
+}
