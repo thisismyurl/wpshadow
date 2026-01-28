@@ -221,54 +221,59 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_engage_system() {
-		$engage_path = WPSHADOW_PATH . 'includes/engagement/';
+		try {
+			$engage_path = WPSHADOW_PATH . 'includes/engagement/';
 
-		$engage_classes = array(
-			'class-achievement-system.php',
-			'class-streak-tracker.php',
-			'class-leaderboard-manager.php',
-			'class-badge-manager.php',
-			'class-milestone-notifier.php',
-			'class-exit-interview.php',
-		);
+			$engage_classes = array(
+				'class-achievement-system.php',
+				'class-streak-tracker.php',
+				'class-leaderboard-manager.php',
+				'class-badge-manager.php',
+				'class-milestone-notifier.php',
+				'class-exit-interview.php',
+			);
 
-		foreach ( $engage_classes as $file ) {
-			if ( file_exists( $engage_path . $file ) ) {
-				require_once $engage_path . $file;
+			foreach ( $engage_classes as $file ) {
+				if ( file_exists( $engage_path . $file ) ) {
+					require_once $engage_path . $file;
+				}
 			}
-		}
 
-		// Initialize gamification systems
-		// Note: Most gamification classes are static and don't require initialization
-		// Only initialize if init() method exists
-		
-		// Achievement_System doesn't have init() method - uses static methods only
-		// if ( class_exists( '\\WPShadow\\Gamification\\Achievement_System' ) && method_exists( '\\WPShadow\\Gamification\\Achievement_System', 'init' ) ) {
-		// 	\WPShadow\Gamification\Achievement_System::init();
-		// }
+			// Initialize gamification systems
+			// Note: Most gamification classes are static and don't require initialization
+			// Only initialize if init() method exists
+			
+			// Achievement_System doesn't have init() method - uses static methods only
+			if ( class_exists( '\\WPShadow\\Gamification\\Achievement_System' ) && method_exists( '\\WPShadow\\Gamification\\Achievement_System', 'init' ) ) {
+				\WPShadow\Gamification\Achievement_System::init();
+			}
 
-		// Streak_Tracker doesn't have init() method - uses static methods only
-		// if ( class_exists( '\\WPShadow\\Gamification\\Streak_Tracker' ) && method_exists( '\\WPShadow\\Gamification\\Streak_Tracker', 'init' ) ) {
-		// 	\WPShadow\Gamification\Streak_Tracker::init();
-		// }
+			// Streak_Tracker doesn't have init() method - uses static methods only
+			if ( class_exists( '\\WPShadow\\Gamification\\Streak_Tracker' ) && method_exists( '\\WPShadow\\Gamification\\Streak_Tracker', 'init' ) ) {
+				\WPShadow\Gamification\Streak_Tracker::init();
+			}
 
-		// Leaderboard_Manager doesn't have init() method - uses static methods only
-		// if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager', 'init' ) ) {
-		// 	\WPShadow\Gamification\Leaderboard_Manager::init();
-		// }
+			// Leaderboard_Manager doesn't have init() method - uses static methods only
+			if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager', 'init' ) ) {
+				\WPShadow\Gamification\Leaderboard_Manager::init();
+			}
 
-		// Badge_Manager doesn't have init() method - uses static methods only
-		// if ( class_exists( '\\WPShadow\\Gamification\\Badge_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Badge_Manager', 'init' ) ) {
-		// 	\WPShadow\Gamification\Badge_Manager::init();
-		// }
+			// Badge_Manager doesn't have init() method - uses static methods only
+			if ( class_exists( '\\WPShadow\\Gamification\\Badge_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Badge_Manager', 'init' ) ) {
+				\WPShadow\Gamification\Badge_Manager::init();
+			}
 
-		if ( class_exists( '\\WPShadow\\Gamification\\Milestone_Notifier' ) && method_exists( '\\WPShadow\\Gamification\\Milestone_Notifier', 'init' ) ) {
-			\WPShadow\Gamification\Milestone_Notifier::init();
-		}
+			if ( class_exists( '\\WPShadow\\Gamification\\Milestone_Notifier' ) && method_exists( '\\WPShadow\\Gamification\\Milestone_Notifier', 'init' ) ) {
+				\WPShadow\Gamification\Milestone_Notifier::init();
+			}
 
-		// Initialize exit interview system
-		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) && method_exists( '\\WPShadow\\Engagement\\Exit_Interview', 'init' ) ) {
-			\WPShadow\Engagement\Exit_Interview::init();
+			// Initialize exit interview system
+			if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) && method_exists( '\\WPShadow\\Engagement\\Exit_Interview', 'init' ) ) {
+				\WPShadow\Engagement\Exit_Interview::init();
+			}
+		} catch ( \Exception $e ) {
+			// Log error but don't crash the plugin
+			\WPShadow\Core\Error_Handler::log_error( 'Gamification system load failed: ' . $e->getMessage(), $e );
 		}
 	}
 
