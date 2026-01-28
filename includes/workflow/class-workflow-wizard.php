@@ -404,8 +404,8 @@ class Workflow_Wizard {
 						'icon'        => 'clock',
 					),
 					'run_tool_simple_cache'        => array(
-						'label'       => 'Run Simple Cache Check',
-						'description' => 'Validate simple cache settings',
+						'label'       => 'Run WPShadow Cache Check',
+						'description' => 'Validate WPShadow Cache settings',
 						'icon'        => 'admin-settings',
 					),
 					'run_tool_magic_link_support'  => array(

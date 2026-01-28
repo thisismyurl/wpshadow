@@ -62,7 +62,7 @@ function wpshadow_get_utilities_catalog() {
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Cache Management', 'wpshadow' ),
+			'title'   => __( 'WPShadow Cache', 'wpshadow' ),
 			'desc'    => __( 'Manage site caching and clear cache when needed.', 'wpshadow' ),
 			'tool'    => 'simple-cache',
 			'icon'    => 'dashicons-database',

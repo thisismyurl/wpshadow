@@ -1,6 +1,6 @@
 <?php
 /**
- * Simple Cache Tool
+ * WPShadow Cache Tool
  *
  * @package WPShadow
  */
@@ -22,7 +22,7 @@ Tool_View_Base::verify_access( 'manage_options' );
 Tool_View_Base::enqueue_assets( 'simple-cache' );
 
 // Render header
-Tool_View_Base::render_header( __( 'Simple Cache Management', 'wpshadow' ) );
+Tool_View_Base::render_header( __( 'WPShadow Cache', 'wpshadow' ) );
 
 $cache_dir  = WP_CONTENT_DIR . '/cache/wpshadow';
 $cache_size = 0;
@@ -70,7 +70,7 @@ $kanban_cards = array(
 ?>
 
 <div class="wpshadow-tool-container">
-	<h2><?php esc_html_e( 'Page Cache Manager', 'wpshadow' ); ?></h2>
+	<h2><?php esc_html_e( 'WPShadow Cache', 'wpshadow' ); ?></h2>
 	<p><?php esc_html_e( 'Save copies of your pages so they load instantly for visitors.', 'wpshadow' ); ?></p>
 
 	<style>

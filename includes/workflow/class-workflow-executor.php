@@ -1123,7 +1123,7 @@ class Workflow_Executor {
 	}
 
 	/**
-	 * Execute simple cache tool
+	 * Execute WPShadow Cache tool
 	 */
 	private static function execute_simple_cache( $config, $context ) {
 		$action = isset( $config['action'] ) ? $config['action'] : 'status';
