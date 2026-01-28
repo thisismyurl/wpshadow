@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use WPShadow\Core\UTM_Link_Manager;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -21,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_get_help_catalog() {
 	// Initialize UTM Link Manager for tracking
-	$utm = \WPShadow\Core\UTM_Link_Manager::class;
+	$utm = UTM_Link_Manager::class;
 	
 	return array(
 		array(
