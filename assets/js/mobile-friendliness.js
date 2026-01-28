@@ -13,36 +13,112 @@
 	const siteHost = siteUrlObj.hostname;
 
 	const pathInput = document.getElementById('wpshadow-mobile-path');
-	const submitBtn = form.querySelector('button[type="submit"]');
+	const submitBtn = document.getElementById('wpshadow-mobile-submit-btn');
 	const errorBox = document.getElementById('wpshadow-mobile-error');
 	const resultsWrap = document.getElementById('wpshadow-mobile-results');
 	const checksWrap = document.getElementById('wpshadow-mobile-checks');
+	const progressWrap = document.getElementById('wpshadow-mobile-progress');
+	const progressBar = document.getElementById('wpshadow-mobile-progress-bar');
+	const progressText = document.getElementById('wpshadow-mobile-progress-text');
+	const progressStatus = document.getElementById('wpshadow-mobile-progress-status');
 	const pillPass = document.querySelector('[data-mobile-summary="pass"]');
 	const pillWarn = document.querySelector('[data-mobile-summary="warn"]');
 	const pillFail = document.querySelector('[data-mobile-summary="fail"]');
 	const lastUrl = document.getElementById('wpshadow-mobile-last-url');
 
+	let progressInterval = null;
+
 	function setLoading(state) {
 		if (submitBtn) {
 			submitBtn.disabled = state;
-			submitBtn.textContent = state ? (settings.i18nRunning || 'Checking...') : (settings.i18nRun || 'Run check');
+			if (state) {
+				const icon = submitBtn.querySelector('.dashicons');
+				if (icon) {
+					icon.classList.add('wps-spin');
+				}
+				const textNode = Array.from(submitBtn.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+				if (textNode) {
+					textNode.textContent = settings.i18nRunning || 'Checking...';
+				}
+			} else {
+				const icon = submitBtn.querySelector('.dashicons');
+				if (icon) {
+					icon.classList.remove('wps-spin');
+				}
+				const textNode = Array.from(submitBtn.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+				if (textNode) {
+					textNode.textContent = settings.i18nRun || 'Run Mobile Check';
+				}
+			}
+		}
+	}
+
+	function showProgress() {
+		if (!progressWrap || !progressBar || !progressText || !progressStatus) {
+			return;
+		}
+		
+		// Reset
+		progressBar.style.width = '0%';
+		progressText.textContent = '0%';
+		progressWrap.classList.remove('wps-none');
+		
+		// Simulate progress stages
+		const stages = [
+			{ percent: 10, text: settings.i18nStage1 || 'Fetching page content...' },
+			{ percent: 30, text: settings.i18nStage2 || 'Analyzing viewport settings...' },
+			{ percent: 50, text: settings.i18nStage3 || 'Checking responsive design...' },
+			{ percent: 70, text: settings.i18nStage4 || 'Testing mobile usability...' },
+			{ percent: 85, text: settings.i18nStage5 || 'Running final checks...' },
+			{ percent: 95, text: settings.i18nStage6 || 'Compiling results...' }
+		];
+		
+		let currentStage = 0;
+		clearInterval(progressInterval);
+		progressInterval = setInterval(function() {
+			if (currentStage < stages.length) {
+				const stage = stages[currentStage];
+				progressBar.style.width = stage.percent + '%';
+				progressText.textContent = stage.percent + '%';
+				progressStatus.textContent = stage.text;
+				currentStage++;
+			}
+		}, 800);
+	}
+
+	function completeProgress() {
+		clearInterval(progressInterval);
+		if (progressBar && progressText && progressStatus) {
+			progressBar.style.width = '100%';
+			progressText.textContent = '100%';
+			progressStatus.textContent = settings.i18nComplete || 'Scan complete!';
+			
+			setTimeout(function() {
+				if (progressWrap) {
+					progressWrap.classList.add('wps-none');
+				}
+			}, 500);
 		}
 	}
 
 	function showError(message) {
+		clearInterval(progressInterval);
+		if (progressWrap) {
+			progressWrap.classList.add('wps-none');
+		}
 		if (!errorBox) {
 			return;
 		}
-		errorBox.style.display = 'block';
+		errorBox.classList.remove('wps-none');
 		errorBox.textContent = message || settings.i18nError || 'Something went wrong. Please try again.';
 		if (resultsWrap) {
-			resultsWrap.classList.add('is-hidden');
+			resultsWrap.classList.add('wps-none');
 		}
 	}
 
 	function clearError() {
 		if (errorBox) {
-			errorBox.style.display = 'none';
+			errorBox.classList.add('wps-none');
 			errorBox.textContent = '';
 		}
 	}
@@ -137,13 +213,18 @@
 			lastUrl.textContent = payload.url;
 		}
 
-		resultsWrap.classList.remove('is-hidden');
+		resultsWrap.classList.remove('wps-none');
 	}
 
 	form.addEventListener('submit', function(e) {
 		e.preventDefault();
 		clearError();
 		setLoading(true);
+		showProgress();
+
+		if (resultsWrap) {
+			resultsWrap.classList.add('wps-none');
+		}
 
 		let path = (pathInput && pathInput.value) ? pathInput.value.trim() : '/';
 		if (!path.startsWith('/')) {
@@ -165,13 +246,17 @@
 		})
 			.then((response) => response.json())
 			.then((data) => {
+				completeProgress();
 				if (!data || !data.success) {
 					showError((data && data.data && data.data.message) || settings.i18nError);
 					return;
 				}
-				renderResults(data.data || {});
+				setTimeout(function() {
+					renderResults(data.data || {});
+				}, 500);
 			})
 			.catch(() => {
+				completeProgress();
 				showError(settings.i18nError);
 			})
 			.finally(() => {

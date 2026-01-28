@@ -46,14 +46,23 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 				</div>
 			
 				<p class="submit">
-					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" aria-label="<?php esc_attr_e( 'Run a mobile readiness check for the provided page path', 'wpshadow' ); ?>">
-						<span class="dashicons dashicons-update"></span>
-						<?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?>
-					</button>
-				</p>
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="wpshadow-mobile-submit-btn" aria-label="<?php esc_attr_e( 'Run a mobile readiness check for the provided page path', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-update"></span>
+					<?php esc_html_e( 'Run Mobile Check', 'wpshadow' ); ?>
+				</button>
+			</p>
 
-				<div id="wpshadow-mobile-error" class="notice notice-error" role="alert" aria-live="assertive"></div>
-			</form>
+			<!-- Progress Bar Container -->
+			<div id="wpshadow-mobile-progress" class="wps-none" style="margin-top: 20px;">
+				<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+					<div id="wpshadow-mobile-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
+						<span id="wpshadow-mobile-progress-text">0%</span>
+					</div>
+				</div>
+				<div id="wpshadow-mobile-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
+			</div>
+
+			<div id="wpshadow-mobile-error" class="notice notice-error wps-none" role="alert" aria-live="assertive"></div>
 		</div>
 
 		<div class="wpshadow-mobile-panel wps-card" role="region" aria-labelledby="wpshadow-mobile-checklist-heading">
@@ -68,17 +77,41 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 		</div>
 	</div>
 
-	<div class="wpshadow-mobile-panel wpshadow-mobile-results is-hidden wps-card" id="wpshadow-mobile-results" role="region" aria-live="polite" aria-labelledby="wpshadow-mobile-results-heading">
-		<h3 id="wpshadow-mobile-results-heading"><?php esc_html_e( 'Results', 'wpshadow' ); ?></h3>
+	<!-- Results Section (Full Width) -->
+	<div class="wpshadow-mobile-results wps-none wps-card" id="wpshadow-mobile-results" role="region" aria-live="polite" aria-labelledby="wpshadow-mobile-results-heading" style="margin-top: 20px;">
+		<h3 id="wpshadow-mobile-results-heading"><?php esc_html_e( 'Scan Results', 'wpshadow' ); ?></h3>
 		<p><strong><?php esc_html_e( 'Checked URL:', 'wpshadow' ); ?></strong> <span id="wpshadow-mobile-last-url"></span></p>
-		<div class="wpshadow-mobile-summary">
-			<span class="wpshadow-mobile-pill is-pass" data-mobile-summary="pass"><?php esc_html_e( 'Passes', 'wpshadow' ); ?>: <strong>0</strong></span>
-			<span class="wpshadow-mobile-pill is-warn" data-mobile-summary="warn"><?php esc_html_e( 'Warnings', 'wpshadow' ); ?>: <strong>0</strong></span>
-			<span class="wpshadow-mobile-pill is-fail" data-mobile-summary="fail"><?php esc_html_e( 'Fails', 'wpshadow' ); ?>: <strong>0</strong></span>
+		<div class="wpshadow-mobile-summary" style="display: flex; gap: 15px; margin: 20px 0;">
+			<span class="wpshadow-mobile-pill is-pass" data-mobile-summary="pass" style="padding: 8px 16px; border-radius: 4px; background: #f0f6f2; color: #28a745; font-weight: 600;">
+				<?php esc_html_e( 'Passes', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+			<span class="wpshadow-mobile-pill is-warn" data-mobile-summary="warn" style="padding: 8px 16px; border-radius: 4px; background: #fffbf0; color: #d98300; font-weight: 600;">
+				<?php esc_html_e( 'Warnings', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+			<span class="wpshadow-mobile-pill is-fail" data-mobile-summary="fail" style="padding: 8px 16px; border-radius: 4px; background: #fdf7f7; color: #dc3545; font-weight: 600;">
+				<?php esc_html_e( 'Fails', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
 		</div>
 		<div id="wpshadow-mobile-checks"></div>
 	</div>
 </div>
+
+<style>
+	@keyframes wps-spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+	.wps-spin {
+		animation: wps-spin 1s linear infinite;
+		display: inline-block;
+	}
+	.wpshadow-mobile-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 20px;
+		margin-bottom: 20px;
+	}
+</style>
 
 <?php Tool_View_Base::render_footer(); ?>
 

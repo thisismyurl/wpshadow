@@ -22,12 +22,11 @@ Tool_View_Base::enqueue_assets( 'color-contrast-checker' );
 Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __( 'Check if your text colors stand out enough from the background so everyone can read them easily.', 'wpshadow' ) );
 ?>
 
-<div class="wpshadow-tool-container">
-	<h2><?php esc_html_e( 'Text Readability Checker', 'wpshadow' ); ?></h2>
-	<p><?php esc_html_e( 'Check if your text colors stand out enough from the background so everyone can read them easily.', 'wpshadow' ); ?></p>
+<div class="wpshadow-contrast-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
+	<div class="wpshadow-tool-section wps-card wps-form-card">
+		<h2><?php esc_html_e( 'Color Contrast Check', 'wpshadow' ); ?></h2>
+		<p><?php esc_html_e( 'Check if your text colors stand out enough from the background so everyone can read them easily.', 'wpshadow' ); ?></p>
 
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Color Contrast Check', 'wpshadow' ); ?></h3>
 		<form id="wpshadow-contrast-checker">
 			<div class="wps-settings-section">
 				<div class="wps-form-group">
@@ -54,7 +53,7 @@ Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __(
 					<label class="wps-label" for="text-size">
 						<?php esc_html_e( 'Text Type', 'wpshadow' ); ?>
 					</label>
-					<select id="text-size" name="text_size">
+					<select id="text-size" name="text_size" class="wps-input">
 						<option value="normal"><?php esc_html_e( 'Normal text (less than 18px)', 'wpshadow' ); ?></option>
 						<option value="large"><?php esc_html_e( 'Large text (18px or more)', 'wpshadow' ); ?></option>
 					</select>
@@ -63,19 +62,35 @@ Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __(
 					</span>
 				</div>
 			</div>
-			<button type="submit" class="wps-btn wps-btn-primary">
-				<?php esc_html_e( 'Check Contrast', 'wpshadow' ); ?>
-			</button>
+
+			<p class="submit">
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="check-contrast-btn">
+					<span class="dashicons dashicons-visibility"></span>
+					<?php esc_html_e( 'Check Contrast', 'wpshadow' ); ?>
+				</button>
+			</p>
+
+			<div id="contrast-error" class="wps-notice wps-notice-error wps-none" role="alert"></div>
 		</form>
+
+		<div class="wpshadow-tool-section" style="margin-top: 20px;">
+			<h3><?php esc_html_e( 'Quick Examples', 'wpshadow' ); ?></h3>
+			<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+				<button type="button" class="wps-btn wps-btn-secondary" data-text="#000000" data-bg="#FFFFFF">
+					<?php esc_html_e( 'Black on White', 'wpshadow' ); ?>
+				</button>
+				<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#000000">
+					<?php esc_html_e( 'White on Black', 'wpshadow' ); ?>
+				</button>
+				<button type="button" class="wps-btn wps-btn-secondary" data-text="#003366" data-bg="#FFFFFF">
+					<?php esc_html_e( 'Dark Blue on White', 'wpshadow' ); ?>
+				</button>
+			</div>
+		</div>
 	</div>
 
-	<div class="wpshadow-tool-section" id="wpshadow-contrast-results" style="display: none;">
-		<h3><?php esc_html_e( 'Results', 'wpshadow' ); ?></h3>
-		<div id="wpshadow-results-content"></div>
-	</div>
-
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Accessibility Standards', 'wpshadow' ); ?></h3>
+	<div class="wpshadow-tool-section wps-card">
+		<h2><?php esc_html_e( 'Accessibility Standards', 'wpshadow' ); ?></h2>
 		<table class="widefat">
 			<thead>
 				<tr>
@@ -101,39 +116,22 @@ Tool_View_Base::render_header( __( 'Text Readability Checker', 'wpshadow' ), __(
 			<?php esc_html_e( 'WCAG AA is the minimum recommended standard. AAA is better for maximum accessibility.', 'wpshadow' ); ?>
 		</p>
 	</div>
+</div>
 
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Common Color Pairs', 'wpshadow' ); ?></h3>
-		<button type="button" class="wps-btn wps-btn-secondary" data-text="#000000" data-bg="#FFFFFF">
-			Black on White
-		</button>
-		<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#000000">
-			White on Black
-		</button>
-		<button type="button" class="wps-btn wps-btn-secondary" data-text="#003366" data-bg="#FFFFFF">
-			Dark Blue on White
-		</button>
-		<button type="button" class="wps-btn wps-btn-secondary" data-text="#FFFFFF" data-bg="#003366">
-			White on Dark Blue
-		</button>
-	</div>
+<!-- Full-width Results Section -->
+<div class="wpshadow-tool-section wps-card wps-none" id="wpshadow-contrast-results" style="width: 100%;">
+	<h3><?php esc_html_e( 'Results', 'wpshadow' ); ?></h3>
+	<div id="wpshadow-results-content"></div>
+</div>
 </div>
 
 <script>
-document.getElementById( 'wpshadow-contrast-checker' )?.addEventListener( 'submit', function( e ) {
-	e.preventDefault();
-		WPShadowModal.alert({
-			title: '<?php esc_attr_e( 'Coming Soon', 'wpshadow' ); ?>',
-			message: '<?php esc_attr_e( 'Contrast check feature coming soon!', 'wpshadow' ); ?>',
-			type: 'info'
-		});
-} );
-
-document.querySelectorAll( '.wpshadow-tool-section button[data-text]' ).forEach( function( btn ) {
-	btn.addEventListener( 'click', function() {
-		document.getElementById( 'text-color' ).value = this.dataset.text;
-		document.getElementById( 'background-color' ).value = this.dataset.bg;
-	} );
-} );
+// Sample button handlers
+document.querySelectorAll('button[data-text][data-bg]').forEach(function(btn) {
+	btn.addEventListener('click', function() {
+		document.getElementById('text-color').value = this.dataset.text;
+		document.getElementById('background-color').value = this.dataset.bg;
+	});
+});
 </script>
 
