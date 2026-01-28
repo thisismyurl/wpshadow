@@ -241,7 +241,7 @@ class Milestone_Notifier {
 				opacity: <?php echo $notification['read'] ? '0.6' : '1'; ?>;
 			">
 			<?php echo esc_html( $notification['message'] ); ?>
-			<div style="font-size: 11px; margin-top: 6px; opacity: 0.8;">
+			<div class="wps-text-xs wps-mt-1 wps-opacity-80">
 				<?php
 					$time = strtotime( $notification['timestamp'] );
 					printf(
@@ -294,7 +294,7 @@ class Milestone_Notifier {
 		);
 
 		if ( empty( $unread ) ) {
-			echo '<p style="text-align: center; color: #999;">' . esc_html__( 'No new notifications', 'wpshadow' ) . '</p>';
+			echo '<p class="wps-text-center" style="color: #999;">' . esc_html__( 'No new notifications', 'wpshadow' ) . '</p>';
 			return;
 		}
 

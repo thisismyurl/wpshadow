@@ -141,10 +141,10 @@ class Leaderboard_Manager {
 				<h3 class="wps-m-0"><?php esc_html_e( 'Top Achievers', 'wpshadow' ); ?></h3>
 			</div>
 			
-			<div style="overflow-x: auto;">
-				<table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+			<div class="wps-overflow-x-auto">
+				<table class="wps-table-collapse wps-text-sm">
 					<thead>
-						<tr style="border-bottom: 2px solid #f0f0f0;">
+						<tr class="wps-border-b" style="border-bottom: 2px solid #f0f0f0;">
 							<th class="wps-p-8">Rank</th>
 							<th class="wps-p-8">User</th>
 							<th class="wps-p-8">Points</th>

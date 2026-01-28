@@ -193,10 +193,10 @@ class Badge_Manager {
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 			margin: 4px;
 		" title="<?php echo esc_attr( $badge['description'] ?? '' ); ?>">
-			<div style="font-size: 24px; margin-bottom: 4px;">
+			<div class="wps-text-24 wps-mb-1">
 				<?php echo esc_html( $badge['icon'] ?? '' ); ?>
 			</div>
-			<div style="font-size: 10px; font-weight: 500; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+			<div class="wps-text-xs wps-font-medium" style="color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
 				<?php echo esc_html( $badge['name'] ); ?>
 			</div>
 		</div>

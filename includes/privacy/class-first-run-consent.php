@@ -79,15 +79,15 @@ class First_Run_Consent {
 				<span class="dashicons dashicons-no-alt"></span>
 			</button>
 			<div class="wpshadow-consent-header">
-				<h3 style="margin-top: 0;">' . esc_html( __( 'Your Privacy Matters', 'wpshadow' ) ) . '</h3>
-				<p style="margin: 10px 0;">' .
+				<h3 class="wps-mt-0">' . esc_html( __( 'Your Privacy Matters', 'wpshadow' ) ) . '</h3>
+				<p class="wps-my-2">' .
 					esc_html( __( 'WPShadow respects your privacy. Here\'s what we collect and how we use it.', 'wpshadow' ) ) .
 				'</p>
 			</div>
 
 			<div class="wpshadow-consent-options" class="wps-m-20">
 				<label class="wps-flex-items-center-m-12">
-					<input type="checkbox" name="functional_cookies" checked disabled style="margin-right: 10px; cursor: not-allowed;" />
+					<input type="checkbox" name="functional_cookies" checked disabled class="wps-mr-2 wps-cursor-not-allowed" />
 					<span>
 						<strong>' . esc_html( __( 'Essential Functions', 'wpshadow' ) ) . '</strong>
 						<br />
@@ -98,7 +98,7 @@ class First_Run_Consent {
 				</label>
 
 				<label class="wps-flex-items-center-m-12">
-					<input type="checkbox" name="error_reporting" checked disabled style="margin-right: 10px; cursor: not-allowed;" />
+					<input type="checkbox" name="error_reporting" checked disabled class="wps-mr-2 wps-cursor-not-allowed" />
 					<span>
 						<strong>' . esc_html( __( 'Error Reporting', 'wpshadow' ) ) . '</strong>
 						<br />
@@ -109,7 +109,7 @@ class First_Run_Consent {
 				</label>
 
 				<label class="wps-flex-items-center-m-12">
-					<input type="checkbox" name="anonymized_telemetry" style="margin-right: 10px;" />
+					<input type="checkbox" name="anonymized_telemetry" class="wps-mr-2" />
 					<span>
 						<strong>' . esc_html( __( 'Anonymous Analytics', 'wpshadow' ) ) . '</strong>
 						<br />
