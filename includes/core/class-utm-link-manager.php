@@ -80,17 +80,26 @@ class UTM_Link_Manager {
 	/**
 	 * Generate KB article link
 	 *
+	 * KB links always include UTM parameters as they track content effectiveness,
+	 * not user behavior. This is considered essential analytics.
+	 *
 	 * @param string $slug     Article slug (without /kb/ prefix)
 	 * @param string $campaign Optional campaign name
 	 * @return string Full KB article URL with UTM parameters
 	 */
 	public static function kb_link( $slug, $campaign = 'kb-article' ) {
-		return self::build_link(
-			'/kb/' . $slug,
-			'wp-plugin',
-			'kb-link',
-			$campaign
+		$base_url = 'https://wpshadow.com/kb/' . $slug;
+		
+		// Build UTM parameters (always included for content tracking)
+		$utm_params = array(
+			'utm_source'   => 'wpshadow',
+			'utm_medium'   => 'plugin',
+			'utm_campaign' => $campaign,
 		);
+		
+		// Append to base URL
+		$separator = strpos( $base_url, '?' ) !== false ? '&' : '?';
+		return $base_url . $separator . http_build_query( $utm_params );
 	}
 
 	/**
