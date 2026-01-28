@@ -138,6 +138,10 @@ mkdir -p "$BUILD_DIR"
 
 # Copy only changed files preserving directory structure
 for file in "${FILTERED_FILES[@]}"; do
+    if [ ! -f "$file" ]; then
+        echo -e "${YELLOW}Skipping deleted file: $file${NC}"
+        continue
+    fi
     mkdir -p "$BUILD_DIR/$(dirname "$file")"
     cp "$file" "$BUILD_DIR/$file"
 done
