@@ -26,25 +26,47 @@ require_once WPSHADOW_PATH . 'includes/dashboard/widgets/class-tooltip-manager.p
  */
 function wpshadow_get_utilities_catalog() {
 	return array(
+		// Page Analysis Tools
 		array(
 			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
-			'desc'    => __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ),
+			'desc'    => __( 'Scan a page for accessibility issues and WCAG compliance.', 'wpshadow' ),
 			'tool'    => 'a11y-audit',
 			'icon'    => 'dashicons-universal-access',
+			'family'  => 'page-analysis',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Broken Link Checker', 'wpshadow' ),
-			'desc'    => __( 'Find and fix broken links across your site.', 'wpshadow' ),
+			'desc'    => __( 'Check a page for broken internal and external links.', 'wpshadow' ),
 			'tool'    => 'broken-links',
 			'icon'    => 'dashicons-admin-links',
+			'family'  => 'page-analysis',
 			'enabled' => true,
 		),
 		array(
 			'title'   => __( 'Color Contrast Checker', 'wpshadow' ),
-			'desc'    => __( 'Check color combinations for accessibility compliance.', 'wpshadow' ),
+			'desc'    => __( 'Analyze color contrast issues on a specific page.', 'wpshadow' ),
 			'tool'    => 'color-contrast-checker',
 			'icon'    => 'dashicons-art',
+			'family'  => 'page-analysis',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Mobile Friendliness', 'wpshadow' ),
+			'desc'    => __( 'Test a page for mobile compatibility and responsive design.', 'wpshadow' ),
+			'tool'    => 'mobile-friendliness',
+			'icon'    => 'dashicons-smartphone',
+			'family'  => 'page-analysis',
+			'enabled' => true,
+		),
+		
+		// Site Management Tools
+		array(
+			'title'   => __( 'WPShadow Cache', 'wpshadow' ),
+			'desc'    => __( 'Manage site caching and clear cache when needed.', 'wpshadow' ),
+			'tool'    => 'simple-cache',
+			'icon'    => 'dashicons-database',
+			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
@@ -52,6 +74,7 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ),
 			'tool'    => 'dark-mode',
 			'icon'    => 'dashicons-visibility',
+			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
@@ -59,13 +82,7 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Test email delivery and configure From Name/Email to ensure emails are sent properly.', 'wpshadow' ),
 			'tool'    => 'email-test',
 			'icon'    => 'dashicons-email',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'WPShadow Cache', 'wpshadow' ),
-			'desc'    => __( 'Manage site caching and clear cache when needed.', 'wpshadow' ),
-			'tool'    => 'simple-cache',
-			'icon'    => 'dashicons-database',
+			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
@@ -73,13 +90,7 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Generate secure one-time access links for support staff.', 'wpshadow' ),
 			'tool'    => 'magic-link-support',
 			'icon'    => 'dashicons-admin-users',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Mobile Friendliness', 'wpshadow' ),
-			'desc'    => __( 'Test your site for mobile compatibility and responsive design.', 'wpshadow' ),
-			'tool'    => 'mobile-friendliness',
-			'icon'    => 'dashicons-smartphone',
+			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
@@ -87,13 +98,7 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Friendly tooltips across wp-admin with opt-out controls and helpful guidance for beginners.', 'wpshadow' ),
 			'tool'    => 'tips-coach',
 			'icon'    => 'dashicons-lightbulb',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Customization Audit', 'wpshadow' ),
-			'desc'    => __( 'Analyze custom themes, plugins, and code modifications for potential issues.', 'wpshadow' ),
-			'tool'    => 'customization-audit',
-			'icon'    => 'dashicons-admin-generic',
+			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
@@ -101,6 +106,15 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Verify and align your server, browser, and WordPress timezone settings.', 'wpshadow' ),
 			'tool'    => 'timezone-alignment',
 			'icon'    => 'dashicons-clock',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Customization Audit', 'wpshadow' ),
+			'desc'    => __( 'Analyze custom themes, plugins, and code modifications for potential issues.', 'wpshadow' ),
+			'tool'    => 'customization-audit',
+			'icon'    => 'dashicons-admin-generic',
+			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
@@ -108,6 +122,7 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Visual regression testing and screenshot comparison tool.', 'wpshadow' ),
 			'tool'    => 'visual-comparisons',
 			'icon'    => 'dashicons-format-image',
+			'family'  => 'site-management',
 			'enabled' => false, // Coming soon
 		),
 	);
@@ -202,6 +217,21 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 		}
 
 		// Show utilities overview grid
+		// Group utilities by family
+		$families = array();
+		foreach ( $catalog as $item ) {
+			$family = ! empty( $item['family'] ) ? $item['family'] : 'other';
+			if ( ! isset( $families[ $family ] ) ) {
+				$families[ $family ] = array();
+			}
+			$families[ $family ][] = $item;
+		}
+		
+		$family_titles = array(
+			'page-analysis'    => __( 'Page Analysis Tools', 'wpshadow' ),
+			'site-management'  => __( 'Site Management', 'wpshadow' ),
+			'other'            => __( 'Other Utilities', 'wpshadow' ),
+		);
 		?>
 	<div class="wps-page-container">
 		<!-- Page Header -->
@@ -211,13 +241,21 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			'dashicons-admin-tools'
 		); ?>
 
-		<!-- Utilities Grid -->
-		<div class="wps-grid wps-grid-auto-320">
-			<?php
-			foreach ( $catalog as $item ) :
-				$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
-				$utility_url = admin_url( 'admin.php?page=wpshadow-utilities&tab=' . $item['tool'] );
-				?>
+		<?php foreach ( $families as $family_key => $family_items ) : ?>
+			<?php if ( ! empty( $family_items ) ) : ?>
+				<!-- Family Section -->
+				<div class="wps-utilities-family" style="margin-bottom: 40px;">
+					<h2 style="font-size: 20px; margin-bottom: 15px; color: #1d2327;">
+						<?php echo esc_html( isset( $family_titles[ $family_key ] ) ? $family_titles[ $family_key ] : ucwords( str_replace( '-', ' ', $family_key ) ) ); ?>
+					</h2>
+					
+					<!-- Utilities Grid -->
+					<div class="wps-grid wps-grid-auto-320">
+						<?php
+						foreach ( $family_items as $item ) :
+							$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
+							$utility_url = admin_url( 'admin.php?page=wpshadow-utilities&tab=' . $item['tool'] );
+							?>
 			<div class="wps-card">
 				<div class="wps-card-header wps-pb-3 wps-border-bottom">
 					<div class="wps-flex wps-gap-3 wps-items-start">
@@ -253,7 +291,10 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 				</div>
 			</div>
 			<?php endforeach; ?>
-		</div>
+					</div>
+				</div>
+			<?php endif; ?>
+		<?php endforeach; ?>
 	</div>
 
 	<!-- Activity History Section -->
