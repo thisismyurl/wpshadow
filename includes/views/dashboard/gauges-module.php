@@ -31,7 +31,7 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 	wp_enqueue_style(
 		'wpshadow-gauges',
 		WPSHADOW_URL . 'assets/css/gauges.css',
-		array(),
+		array( 'wpshadow-design-system' ), // Depends on design system for CSS variables
 		WPSHADOW_VERSION
 	);
 
