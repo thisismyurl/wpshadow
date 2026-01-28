@@ -254,7 +254,7 @@ class Backup_Settings_Page {
 					</div>
 					<div class="wps-card-body">
 						<p><?php esc_html_e( 'You can view, download, and delete backups from the Activity Log.', 'wpshadow' ); ?></p>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-tools&tool=activity-history' ) ); ?>" class="wps-btn wps-btn--secondary wps-mt-2">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tool=activity-history' ) ); ?>" class="wps-btn wps-btn--secondary wps-mt-2">
 							<span class="dashicons dashicons-archive"></span>
 							<?php esc_html_e( 'View All Backups', 'wpshadow' ); ?>
 						</a>

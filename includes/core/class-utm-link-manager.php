@@ -156,4 +156,20 @@ class UTM_Link_Manager {
 			$campaign
 		);
 	}
+
+	/**
+	 * Generate KB link
+	 *
+	 * @param string $article_slug KB article slug (e.g., 'security-https-enabled')
+	 * @param string $campaign     Optional campaign name
+	 * @return string Full URL with UTM parameters
+	 */
+	public static function kb_link( $article_slug = '', $campaign = 'kb' ) {
+		return self::build_link(
+			'/kb/' . $article_slug,
+			'wp-plugin',
+			'kb-link',
+			$campaign
+		);
+	}
 }

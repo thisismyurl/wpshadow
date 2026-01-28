@@ -47,6 +47,9 @@ class Hooks_Initializer {
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
 
+		// Diagnostic filters (UTM tracking for KB links)
+		add_filter( 'wpshadow_diagnostic_result', array( __CLASS__, 'add_utm_to_kb_links' ), 10, 3 );
+
 		// Front-end assets
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'on_wp_enqueue_scripts' ) );
 
@@ -1145,6 +1148,38 @@ class Hooks_Initializer {
 		}
 
 		return (string) $value;
+	}
+
+	/**
+	 * Add UTM parameters to KB links in diagnostic findings
+	 *
+	 * Automatically wraps KB links with UTM tracking parameters based on user's
+	 * privacy consent settings. This helps us understand which KB articles are
+	 * most helpful for users.
+	 *
+	 * @since  1.2601.2200
+	 * @param  array|null $finding   Diagnostic finding result
+	 * @param  string     $class     Diagnostic class name
+	 * @param  string     $slug      Diagnostic slug
+	 * @return array|null Modified finding with UTM-wrapped KB links
+	 */
+	public static function add_utm_to_kb_links( $finding, $class, $slug ) {
+		// Only process arrays (findings with data)
+		if ( ! is_array( $finding ) || empty( $finding ) ) {
+			return $finding;
+		}
+
+		// Wrap kb_link if present
+		if ( ! empty( $finding['kb_link'] ) && strpos( $finding['kb_link'], 'wpshadow.com/kb/' ) !== false ) {
+			// Extract article slug from URL (e.g., 'https://wpshadow.com/kb/security-https' -> 'security-https')
+			preg_match( '/\/kb\/([a-z0-9-]+)/', $finding['kb_link'], $matches );
+			if ( ! empty( $matches[1] ) ) {
+				$article_slug = $matches[1];
+				$finding['kb_link'] = UTM_Link_Manager::kb_link( $article_slug, $slug );
+			}
+		}
+
+		return $finding;
 	}
 
 	/**
