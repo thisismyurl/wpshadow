@@ -78,7 +78,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 		<h2><?php esc_html_e( 'Get Help', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'If you need immediate assistance:', 'wpshadow' ); ?></p>
 		<ul>
-			<li><a href="https://github.com/thisismyurl/wpshadow/issues" target="_blank"><?php esc_html_e( 'Report an Issue on GitHub', 'wpshadow' ); ?></a></li>
+			<li><a href="https://github.com/thisismyurl/wpshadow/issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=emergency_support&utm_content=github_issues" target="_blank"><?php esc_html_e( 'Report an Issue on GitHub', 'wpshadow' ); ?></a></li>
 			<li><a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>"><?php esc_html_e( 'WordPress Site Health', 'wpshadow' ); ?></a></li>
 		</ul>
 	</div>

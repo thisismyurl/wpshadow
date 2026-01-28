@@ -151,7 +151,7 @@ function wpshadow_render_help() {
 				</div>
 			</div>
 			<div class="wps-card-body wps-flex wps-gap-3">
-				<a href="https://github.com/thisismyurl/wpshadow/issues" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--primary">
+				<a href="https://github.com/thisismyurl/wpshadow/issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=contact_support" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--primary">
 					<span class="dashicons dashicons-admin-comments"></span>
 					<?php esc_html_e( 'Contact Support', 'wpshadow' ); ?>
 				</a>
