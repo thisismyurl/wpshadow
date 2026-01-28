@@ -142,16 +142,12 @@ function wpshadow_get_tools_catalog() {
 }
 
 /**
- * Render tools page.
- *
- * NOTE: This function is already declared in wpshadow.php (line 1443)
- * This file only provides helper functions like wpshadow_run_broken_links_scan()
- * If wpshadow_render_tools() is not yet declared, uncomment below.
+ * Render utilities page.
  *
  * @return void
  */
-if ( ! function_exists( 'wpshadow_render_tools' ) ) {
-	function wpshadow_render_tools() {
+if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
+	function wpshadow_render_utilities() {
 		if ( ! current_user_can( 'read' ) ) {
 			wp_die( 'Insufficient permissions.' );
 		}
@@ -164,8 +160,8 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	<div class="wps-page-container">
 		<!-- Page Header -->
 		<?php wpshadow_render_page_header(
-			__( 'WPShadow Tools', 'wpshadow' ),
-			__( 'Additional tools for site analysis and optimization.', 'wpshadow' ),
+			__( 'WPShadow Utilities', 'wpshadow' ),
+			__( 'Additional utilities for site analysis and optimization.', 'wpshadow' ),
 			'dashicons-admin-tools'
 		); ?>
 
@@ -395,7 +391,19 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 
 		<?php
 	}
-} // End if ( ! function_exists( 'wpshadow_render_tools' ) )
+} // End if ( ! function_exists( 'wpshadow_render_utilities' ) )
+
+// Legacy compatibility alias
+if ( ! function_exists( 'wpshadow_render_tools' ) ) {
+	/**
+	 * Legacy function name - redirects to wpshadow_render_utilities()
+	 * 
+	 * @deprecated Use wpshadow_render_utilities() instead
+	 */
+	function wpshadow_render_tools() {
+		wpshadow_render_utilities();
+	}
+}
 
 /**
  * Run broken links scan programmatically for tools/workflows.
