@@ -46,6 +46,10 @@ class Plugin_Bootstrap {
 		// This must be done early so AJAX endpoints work on the first request
 		\WPShadow\Core\AJAX_Router::init();
 
+		// 2.6 Initialize diagnostic registry (required for scans)
+		// Must be done early so diagnostics are available for Quick_Scan and Deep_Scan
+		\WPShadow\Diagnostics\Diagnostic_Registry::init();
+
 		// 3. Initialize menu system
 		Menu_Manager::init();
 
