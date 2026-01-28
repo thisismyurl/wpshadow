@@ -81,3 +81,4 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 </div>
 
 <?php Tool_View_Base::render_footer(); ?>
+

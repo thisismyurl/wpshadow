@@ -302,3 +302,4 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 		}
 	});
 </script>
+

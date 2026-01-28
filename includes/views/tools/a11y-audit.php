@@ -173,3 +173,4 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 </script>
 
 <?php Tool_View_Base::render_footer(); ?>
+

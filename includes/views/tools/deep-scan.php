@@ -74,3 +74,4 @@ Tool_View_Base::render_header( __( 'Deep Scan', 'wpshadow' ) );
 </div>
 
 <?php Tool_View_Base::render_footer(); ?>
+

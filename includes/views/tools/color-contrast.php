@@ -113,3 +113,4 @@ Tool_View_Base::render_header( __( 'Color Contrast Checker', 'wpshadow' ), __( '
 </div>
 
 <?php Tool_View_Base::render_footer(); ?>
+

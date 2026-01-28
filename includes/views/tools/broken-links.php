@@ -147,3 +147,4 @@ Tool_View_Base::render_header( __( 'Broken Links', 'wpshadow' ), __( 'Scan your 
 </script>
 
 <?php Tool_View_Base::render_footer(); ?>
+

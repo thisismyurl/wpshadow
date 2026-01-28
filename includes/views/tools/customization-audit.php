@@ -186,3 +186,4 @@ document.querySelectorAll( '.wpshadow-view-report' ).forEach( function( btn ) {
 	} );
 } );
 </script>
+

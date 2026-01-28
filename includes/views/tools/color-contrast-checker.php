@@ -136,3 +136,4 @@ document.querySelectorAll( '.wpshadow-tool-section button[data-text]' ).forEach(
 	} );
 } );
 </script>
+

@@ -74,3 +74,4 @@ Tool_View_Base::render_header( __( 'Quick Scan', 'wpshadow' ) );
 </div>
 
 <?php Tool_View_Base::render_footer(); ?>
+

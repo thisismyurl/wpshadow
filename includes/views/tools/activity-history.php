@@ -20,3 +20,4 @@ Tool_View_Base::verify_access( 'read' );
 
 // Include the activity history view
 require WPSHADOW_PATH . 'includes/views/activity-history.php';
+

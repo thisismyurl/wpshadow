@@ -20,3 +20,4 @@ Tool_View_Base::verify_access( 'read' );
 
 // Include the kanban board view
 require WPSHADOW_PATH . 'includes/views/kanban-board.php';
+
