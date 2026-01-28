@@ -175,7 +175,7 @@ class General_Settings_Page {
 			</form>
 
 			<!-- Page-Specific Activity History Section -->
-			<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
+			<div class="wps-section-divider">
 				<?php
 				if ( function_exists( 'wpshadow_render_page_activities' ) ) {
 					wpshadow_render_page_activities( 'settings', 10 );

@@ -44,7 +44,7 @@ class WPShadow_Top_Issues_Widget {
 							</div>
 							
 							<!-- Content -->
-							<div style="padding-left: 44px;">
+							<div class="wps-pl-11">
 								<!-- Title -->
 								<h3 class="wps-m-0">
 									<?php echo esc_html( isset( $issue['title'] ) ? $issue['title'] : 'Unknown Issue' ); ?>
@@ -79,17 +79,17 @@ class WPShadow_Top_Issues_Widget {
 				
 				<!-- Bulk Action -->
 				<div class="wps-flex wps-items-center wps-gap-3 wps-mt-4" class="wps-p-12-rounded-6">
-					<input type="checkbox" id="wpshadow-select-all-top-issues" style="cursor: pointer;">
+					<input type="checkbox" id="wpshadow-select-all-top-issues" class="wps-cursor-pointer">
 					<label for="wpshadow-select-all-top-issues" class="wps-m-0">
 						<?php esc_html_e( 'Select all', 'wpshadow' ); ?>
 					</label>
-					<button id="wpshadow-bulk-create-workflow" class="wps-btn wps-btn-secondary" style="margin-left: auto;">
+					<button id="wpshadow-bulk-create-workflow" class="wps-btn wps-btn-secondary" class="wps-ml-auto">
 						<?php esc_html_e( 'Create Workflow for Selected', 'wpshadow' ); ?>
 					</button>
 				</div>
 			<?php else : ?>
 				<div class="wps-p-32-rounded-8">
-					<div style="font-size: 40px; margin-bottom: 12px;">✨</div>
+					<div class="wps-text-4xl wps-mb-3">✨</div>
 					<p class="wps-m-0">
 						<?php esc_html_e( 'No Issues Detected!', 'wpshadow' ); ?>
 					</p>

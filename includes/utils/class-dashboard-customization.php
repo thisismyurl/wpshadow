@@ -242,7 +242,7 @@ class Dashboard_Customization {
 							class="wpshadow-category-toggle" 
 							data-category="<?php echo esc_attr( $key ); ?>"
 							<?php checked( $prefs[ $key ]['visible'] ?? true ); ?>
-							style="cursor: pointer; width: 18px; height: 18px;"
+							class="wps-cursor-pointer wps-w-18 wps-h-18"
 						/>
 						<label class="wps-m-0">
 							<?php echo esc_html( $label ); ?>
