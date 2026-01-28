@@ -124,10 +124,84 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			wp_die( 'Insufficient permissions.' );
 		}
 
-		// Check for legacy ?tool= parameter
-		$requested_tool = Form_Param_Helper::get( 'tool', 'key', '' );
+		// Check if a specific utility is requested via tab parameter
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
 
+		// Get utilities catalog
 		$catalog = wpshadow_get_utilities_catalog();
+
+		// If a specific utility is requested, load and render it
+		if ( ! empty( $tab ) ) {
+			// Find the requested utility in the catalog
+			$found_utility = null;
+			foreach ( $catalog as $item ) {
+				if ( $item['tool'] === $tab ) {
+					$found_utility = $item;
+					break;
+				}
+			}
+
+			// If utility not found or not enabled, show error
+			if ( ! $found_utility || empty( $found_utility['enabled'] ) ) {
+				?>
+				<div class="wps-page-container">
+					<?php wpshadow_render_page_header(
+						__( 'Utility Not Found', 'wpshadow' ),
+						'',
+						'dashicons-admin-tools'
+					); ?>
+					
+					<div class="wps-card wps-card--warning">
+						<div class="wps-card-body">
+							<p>
+								<?php esc_html_e( 'This utility is not available. Please check the URL or select a different utility.', 'wpshadow' ); ?>
+							</p>
+							<p>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
+									&larr; <?php esc_html_e( 'Back to Utilities', 'wpshadow' ); ?>
+								</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<?php
+				return;
+			}
+
+			// Load and render the utility
+			$utility_file = WPSHADOW_PATH . 'includes/views/tools/' . $tab . '.php';
+			if ( file_exists( $utility_file ) ) {
+				require $utility_file;
+				return;
+			}
+
+			// Fallback if file doesn't exist
+			?>
+			<div class="wps-page-container">
+				<?php wpshadow_render_page_header(
+					esc_html( $found_utility['title'] ),
+					'',
+					'dashicons-admin-tools'
+				); ?>
+				
+				<div class="wps-card wps-card--error">
+					<div class="wps-card-body">
+						<p>
+							<?php esc_html_e( 'This utility could not be loaded. The utility file may be missing.', 'wpshadow' ); ?>
+						</p>
+						<p>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
+								&larr; <?php esc_html_e( 'Back to Utilities', 'wpshadow' ); ?>
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		// Show utilities overview grid
 		?>
 	<div class="wps-page-container">
 		<!-- Page Header -->
@@ -137,226 +211,56 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			'dashicons-admin-tools'
 		); ?>
 
-		<!-- Tools Tabbed Interface -->
-		<div class="wps-tools-tab-container">
-			<!-- Tab Content Panes -->
-			<div class="wps-tools-tab-content">
-				<!-- Index Pane -->
-				<div class="wps-tools-tab-pane wps-tools-tab-pane-active" id="wps-tools-tab-pane-index" role="tabpanel" aria-labelledby="wps-tools-tab-index">
-					<div class="wps-grid wps-grid-auto-320">
-						<?php
-						foreach ( $catalog as $item ) :
-							$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
-							?>
-						<div class="wps-card">
-							<div class="wps-card-header wps-pb-3 wps-border-bottom">
-								<div class="wps-flex wps-gap-3 wps-items-start">
-									<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-3xl wps-text-primary"></span>
-									<div>
-										<h3 class="wps-card-title wps-m-0">
-										<?php if ( ! empty( $item['enabled'] ) ) : ?>
-											<a href="#" class="wps-tool-link" data-tool="<?php echo esc_attr( $item['tool'] ); ?>" style="color: inherit; text-decoration: none;">
-												<?php echo esc_html( $item['title'] ); ?>
-											</a>
-										<?php else : ?>
-											<?php echo esc_html( $item['title'] ); ?>
-										<?php endif; ?>
-						</h3>
-										<p class="wps-card-description wps-m-0">
-											<?php echo esc_html( $item['desc'] ); ?>
-										</p>
-									</div>
-								</div>
-							</div>
-							<div class="wps-card-body">
-								<?php if ( ! empty( $item['enabled'] ) ) : ?>
-									<button class="wps-btn wps-btn--secondary wps-tool-open-btn" data-tool="<?php echo esc_attr( $item['tool'] ); ?>">
-										<span class="dashicons dashicons-external"></span>
-										<?php esc_html_e( 'Open Tool', 'wpshadow' ); ?>
-									</button>
-								<?php else : ?>
-									<button class="wps-btn wps-btn--secondary" disabled>
-										<span class="dashicons dashicons-hourglass"></span>
-										<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
-									</button>
-								<?php endif; ?>
-							</div>
+		<!-- Utilities Grid -->
+		<div class="wps-grid wps-grid-auto-320">
+			<?php
+			foreach ( $catalog as $item ) :
+				$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
+				$utility_url = admin_url( 'admin.php?page=wpshadow-utilities&tab=' . $item['tool'] );
+				?>
+			<div class="wps-card">
+				<div class="wps-card-header wps-pb-3 wps-border-bottom">
+					<div class="wps-flex wps-gap-3 wps-items-start">
+						<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-3xl wps-text-primary"></span>
+						<div>
+							<h3 class="wps-card-title wps-m-0">
+							<?php if ( ! empty( $item['enabled'] ) ) : ?>
+								<a href="<?php echo esc_url( $utility_url ); ?>" style="color: inherit; text-decoration: none;">
+									<?php echo esc_html( $item['title'] ); ?>
+								</a>
+							<?php else : ?>
+								<?php echo esc_html( $item['title'] ); ?>
+							<?php endif; ?>
+			</h3>
+							<p class="wps-card-description wps-m-0">
+								<?php echo esc_html( $item['desc'] ); ?>
+							</p>
 						</div>
-						<?php endforeach; ?>
 					</div>
 				</div>
-
-				<!-- Tool Panes -->
-				<?php foreach ( $catalog as $item ) : ?>
-					<div class="wps-tools-tab-pane wps-tools-tab-pane-loading" id="wps-tools-tab-pane-<?php echo esc_attr( $item['tool'] ); ?>" role="tabpanel" aria-labelledby="wps-tools-tab-<?php echo esc_attr( $item['tool'] ); ?>" data-tool="<?php echo esc_attr( $item['tool'] ); ?>">
-						<div class="wps-loading-spinner">
-							<span class="spinner"></span>
-							<?php esc_html_e( 'Loading tool...', 'wpshadow' ); ?>
-						</div>
-					</div>
-				<?php endforeach; ?>
+				<div class="wps-card-body">
+					<?php if ( ! empty( $item['enabled'] ) ) : ?>
+						<a href="<?php echo esc_url( $utility_url ); ?>" class="wps-btn wps-btn--secondary">
+							<span class="dashicons dashicons-external"></span>
+							<?php esc_html_e( 'Open Utility', 'wpshadow' ); ?>
+						</a>
+					<?php else : ?>
+						<button class="wps-btn wps-btn--secondary" disabled>
+							<span class="dashicons dashicons-hourglass"></span>
+							<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
+						</button>
+					<?php endif; ?>
+				</div>
 			</div>
+			<?php endforeach; ?>
 		</div>
 	</div>
-
-	<style>
-		.wps-tools-tab-container {
-			display: flex;
-			flex-direction: column;
-			gap: 0;
-		}
-
-		.wps-tools-tab-content {
-			flex: 1;
-			position: relative;
-		}
-
-		.wps-tools-tab-pane {
-			display: none;
-			animation: fadeIn 0.2s ease;
-		}
-
-		.wps-tools-tab-pane-active {
-			display: block;
-		}
-
-		.wps-tools-tab-pane-active.wps-tools-tab-pane-loading {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			min-height: 400px;
-			gap: 12px;
-		}
-
-		.wps-loading-spinner {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			font-size: 14px;
-			color: #666;
-		}
-
-		.wps-loading-spinner .spinner {
-			display: inline-block;
-			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSI4IiBzdHJva2U9IiNkZGQiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0xOCAxMGExIDEgMCAwIDEtMiAwIiBzdHJva2U9IiMwMDczYWEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBmaWxsPSJub25lIiBzdHJva2Utb3BhY2l0eT0iMC44Ii8+PC9zdmc+');
-			background-size: 20px 20px;
-			width: 20px;
-			height: 20px;
-			animation: spin 1s linear infinite;
-		}
-
-		@keyframes spin {
-			to {
-				transform: rotate(360deg);
-			}
-		}
-
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-			}
-			to {
-				opacity: 1;
-			}
-		}
-
-		.wps-tools-tab-pane-loading .spinner {
-			background-color: transparent;
-		}
-
-		@media (max-width: 768px) {
-			.wps-tools-tab-index,
-			.wps-tools-tab-button {
-				padding: 10px 12px;
-				font-size: 12px;
-			}
-
-			.wps-tools-tab-button .dashicons {
-				display: none;
-			}
-		}
-	</style>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			const openButtons = document.querySelectorAll('.wps-tool-open-btn');
-			const tabLinks = document.querySelectorAll('.wps-tool-link');
-
-			function loadTool(pane) {
-				const tool = pane.getAttribute('data-tool');
-				if (!tool) return;
-
-				// Set loading state
-				pane.innerHTML = '<div class="wps-loading-spinner"><span class="spinner"></span><?php esc_html_e( 'Loading tool...', 'wpshadow' ); ?></div>';
-
-				// Fetch tool content via AJAX
-				fetch(ajaxurl, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					body: new URLSearchParams({
-						action: 'wpshadow_load_tool',
-						tool: tool,
-						nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_load_tool' ) ); ?>'
-					})
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.success) {
-						pane.innerHTML = data.data.content;
-						pane.classList.remove('wps-tools-tab-pane-loading');
-					} else {
-						pane.innerHTML = '<div class="wps-alert wps-alert--error"><p><?php esc_html_e( 'Failed to load tool.', 'wpshadow' ); ?></p></div>';
-					}
-				})
-				.catch(error => {
-					console.error('Error loading tool:', error);
-					pane.innerHTML = '<div class="wps-alert wps-alert--error"><p><?php esc_html_e( 'Error loading tool.', 'wpshadow' ); ?></p></div>';
-				});
-			}
-
-			// Open buttons
-			openButtons.forEach(button => {
-				button.addEventListener('click', function(e) {
-					e.preventDefault();
-					const tool = this.getAttribute('data-tool');
-					const pane = document.getElementById('wps-tools-tab-pane-' + tool);
-					if (pane) {
-						pane.classList.add('wps-tools-tab-pane-active');
-						if (pane.classList.contains('wps-tools-tab-pane-loading')) {
-							loadTool(pane);
-						}
-						// Scroll to pane
-						pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
-					}
-				});
-			});
-
-			// Tool links
-			tabLinks.forEach(link => {
-				link.addEventListener('click', function(e) {
-					e.preventDefault();
-					const tool = this.getAttribute('data-tool');
-					const pane = document.getElementById('wps-tools-tab-pane-' + tool);
-					if (pane) {
-						pane.classList.add('wps-tools-tab-pane-active');
-						if (pane.classList.contains('wps-tools-tab-pane-loading')) {
-							loadTool(pane);
-						}
-						// Scroll to pane
-						pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
-					}
-				});
-			});
-		});
-	</script>
 
 	<!-- Activity History Section -->
 	<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
 		<?php
 		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-			wpshadow_render_page_activities( 'tools', 10 );
+			wpshadow_render_page_activities( 'utilities', 10 );
 		}
 		?>
 	</div>
