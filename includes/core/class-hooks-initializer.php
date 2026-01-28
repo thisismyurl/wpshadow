@@ -576,7 +576,7 @@ class Hooks_Initializer {
 
 		if ( $email_test_status === 'passed' ) {
 			$time_ago = ( $email_test_time > 0 ) ? human_time_diff( $email_test_time, current_time( 'timestamp' ) ) : __( 'unknown time', 'wpshadow' );
-			echo '<div class="notice notice-success" style="margin-top: 15px;">';
+			echo '<div class="notice notice-success wps-mt-5">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> ';
 			printf(
@@ -588,7 +588,7 @@ class Hooks_Initializer {
 			);
 			echo '</p></div>';
 		} elseif ( $email_test_status === 'failed' ) {
-			echo '<div class="notice notice-error" style="margin-top: 15px;">';
+			echo '<div class="notice notice-error wps-mt-5">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-warning" style="color: #d63638;"></span> ';
 			printf(
@@ -599,7 +599,7 @@ class Hooks_Initializer {
 			);
 			echo '</p></div>';
 		} else {
-			echo '<div class="notice notice-warning" style="margin-top: 15px;">';
+			echo '<div class="notice notice-warning wps-mt-5">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-info" style="color: #f0b849;"></span> ';
 			printf(
@@ -642,7 +642,7 @@ class Hooks_Initializer {
 	public static function on_show_user_profile( $user ) {
 		$dark_mode_pref = get_user_meta( $user->ID, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
 		?>
-		<div class="wps-settings-section" style="max-width: 600px;">
+		<div class="wps-settings-section wps-max-w-600">
 			<div class="wps-settings-section-header">
 				<h3 class="wps-settings-section-title"><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></h3>
 				<p class="wps-settings-section-description">

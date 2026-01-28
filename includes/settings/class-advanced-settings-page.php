@@ -340,7 +340,7 @@ class Advanced_Settings_Page {
 						</p>
 					</div>
 					<div class="wps-card-body">
-						<table class="wps-table" style="width: 100%; border-collapse: collapse;">
+						<table class="wps-table wps-table-collapse">
 							<tr style="border-bottom: 1px solid #ddd;">
 								<td class="wps-th-p-2-bold"><?php esc_html_e( 'WPShadow Version', 'wpshadow' ); ?></td>
 								<td class="wps-td-p-2"><?php echo esc_html( WPSHADOW_VERSION ); ?></td>
