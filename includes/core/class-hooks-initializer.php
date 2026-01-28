@@ -569,7 +569,7 @@ class Hooks_Initializer {
 	private static function show_export_personal_data_email_notice() {
 		$email_test_status = get_option( 'wpshadow_last_email_test_status', 'not_tested' );
 		$email_test_time   = get_option( 'wpshadow_last_email_test_time', 0 );
-		$email_tool_url    = admin_url( 'admin.php?page=wpshadow-tools&tool=email-test' );
+		$email_tool_url    = admin_url( 'admin.php?page=wpshadow-utilities&tool=email-test' );
 
 		if ( $email_test_status === 'passed' ) {
 			$time_ago = ( $email_test_time > 0 ) ? human_time_diff( $email_test_time, current_time( 'timestamp' ) ) : __( 'unknown time', 'wpshadow' );
@@ -623,7 +623,7 @@ class Hooks_Initializer {
 				continue;
 			}
 
-			$url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
+			$url = admin_url( 'admin.php?page=wpshadow-utilities&tool=' . $item['tool'] );
 
 			echo '<div class="card">';
 			echo '<h3>' . esc_html( $item['title'] ) . '</h3>';

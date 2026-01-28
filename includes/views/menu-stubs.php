@@ -350,9 +350,21 @@ if ( ! function_exists( 'wpshadow_render_scan_settings' ) ) {
 	}
 }
 
-// Load Tools module (defines wpshadow_render_tools if not already defined)
-if ( ! function_exists( 'wpshadow_render_tools' ) ) {
+// Load Utilities module (defines wpshadow_render_utilities if not already defined)
+// Legacy: Also define wpshadow_render_tools for backward compatibility
+if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 	require_once WPSHADOW_PATH . 'includes/screens/class-tools-page-module.php';
+}
+
+if ( ! function_exists( 'wpshadow_render_tools' ) ) {
+	/**
+	 * Legacy function name - redirects to wpshadow_render_utilities()
+	 * 
+	 * @deprecated Use wpshadow_render_utilities() instead
+	 */
+	function wpshadow_render_tools() {
+		wpshadow_render_utilities();
+	}
 }
 
 // Load Help module (defines wpshadow_render_help if not already defined)

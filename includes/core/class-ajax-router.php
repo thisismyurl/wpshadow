@@ -138,7 +138,7 @@ class AJAX_Router {
 		\WPShadow\Admin\Ajax\Get_Visual_Comparisons_Handler::register();
 		\WPShadow\Admin\Ajax\Get_Visual_Comparison_Handler::register();
 
-		// Tools operations
+		// Utilities operations
 		\WPShadow\Admin\Ajax\Load_Tool_Handler::register();
 
 		// Exit interview operations

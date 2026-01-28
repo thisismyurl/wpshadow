@@ -122,7 +122,7 @@ require_once $ajax_path . 'Set_Timezone_Handler.php';
 require_once $ajax_path . 'Get_Visual_Comparisons_Handler.php';
 require_once $ajax_path . 'Get_Visual_Comparison_Handler.php';
 
-// Tools operations
+// Utilities operations
 require_once $ajax_path . 'Load_Tool_Handler.php';
 
 // Exit interview operations

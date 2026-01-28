@@ -115,14 +115,14 @@ class Menu_Manager {
 		// Scan Settings is now a tab on Settings page, not a separate menu
 		// Legacy redirect handled in handle_legacy_redirects()
 
-		// Tools (Utilities & Features)
+		// Utilities (Advanced Features & Tools)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Tools', 'wpshadow' ),
-			__( 'Tools', 'wpshadow' ),
+			__( 'Utilities', 'wpshadow' ),
+			__( 'Utilities', 'wpshadow' ),
 			'read',
-			'wpshadow-tools',
-			'wpshadow_render_tools'
+			'wpshadow-utilities',
+			'wpshadow_render_utilities'
 		);
 
 		// Help & Documentation

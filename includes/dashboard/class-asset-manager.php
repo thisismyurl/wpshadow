@@ -133,7 +133,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
  * @return void
  */
 function wpshadow_enqueue_color_contrast_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-tools' ) === false ) {
+	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
 		return;
 	}
 
@@ -181,7 +181,7 @@ function wpshadow_enqueue_color_contrast_assets( $hook ) {
  * @return void
  */
 function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-tools' ) === false ) {
+	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
 		return;
 	}
 
