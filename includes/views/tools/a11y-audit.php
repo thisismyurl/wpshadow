@@ -57,6 +57,16 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 		</form>
 
 		<div id="scan-results" class="wps-none" role="status" aria-live="polite" aria-label="<?php esc_attr_e( 'Accessibility scan results', 'wpshadow' ); ?>"></div>
+		
+		<!-- Progress Bar Container -->
+		<div id="scan-progress" class="wps-none" style="margin-top: 20px;">
+			<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+				<div id="scan-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
+					<span id="scan-progress-text">0%</span>
+				</div>
+			</div>
+			<div id="scan-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
+		</div>
 	</div>
 
 	<div class="wpshadow-tool-section wps-card" role="region" aria-labelledby="wpshadow-a11y-common-heading">
@@ -70,6 +80,17 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 		</ul>
 	</div>
 </div>
+
+<style>
+	@keyframes wps-spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+	.wps-spin {
+		animation: wps-spin 1s linear infinite;
+		display: inline-block;
+	}
+</style>
 
 <script>
 	jQuery(document).ready(function($) {
@@ -110,6 +131,10 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 			e.preventDefault();
 			var $btn = $('#run-scan');
 			var $results = $('#scan-results');
+			var $progress = $('#scan-progress');
+			var $progressBar = $('#scan-progress-bar');
+			var $progressText = $('#scan-progress-text');
+			var $progressStatus = $('#scan-progress-status');
 
 			var path = $('input[name="page_path"]').val().trim();
 			if (!path.startsWith('/')) {
@@ -125,10 +150,48 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 				page_url: fullUrl
 			};
 
-			$btn.prop('disabled', true).text('<?php esc_js( esc_html_e( 'Scanning...', 'wpshadow' ) ); ?>');
-			$results.html('<p><?php esc_js( esc_html_e( 'Scanning page for accessibility issues...', 'wpshadow' ) ); ?></p>').show();
+			// Reset and show progress
+			$btn.prop('disabled', true).html('<span class="dashicons dashicons-update wps-spin"></span> <?php esc_js( esc_html_e( 'Scanning...', 'wpshadow' ) ); ?>');
+			$results.hide();
+			$progress.removeClass('wps-none').show();
+			
+			// Simulate progress stages
+			var scanStages = [
+				{ percent: 10, text: '<?php esc_js( esc_html_e( 'Fetching page content...', 'wpshadow' ) ); ?>' },
+				{ percent: 30, text: '<?php esc_js( esc_html_e( 'Analyzing HTML structure...', 'wpshadow' ) ); ?>' },
+				{ percent: 50, text: '<?php esc_js( esc_html_e( 'Checking ARIA labels...', 'wpshadow' ) ); ?>' },
+				{ percent: 70, text: '<?php esc_js( esc_html_e( 'Validating alt attributes...', 'wpshadow' ) ); ?>' },
+				{ percent: 85, text: '<?php esc_js( esc_html_e( 'Testing keyboard navigation...', 'wpshadow' ) ); ?>' },
+				{ percent: 95, text: '<?php esc_js( esc_html_e( 'Finalizing report...', 'wpshadow' ) ); ?>' }
+			];
+			
+			var currentStage = 0;
+			var progressInterval = setInterval(function() {
+				if (currentStage < scanStages.length) {
+					var stage = scanStages[currentStage];
+					$progressBar.css('width', stage.percent + '%');
+					$progressText.text(stage.percent + '%');
+					$progressStatus.text(stage.text);
+					currentStage++;
+				}
+			}, 800); // Update every 800ms
 
 			$.post(ajaxurl, formData, function(response) {
+				// Clear progress interval
+				clearInterval(progressInterval);
+				
+				// Complete the progress bar
+				$progressBar.css('width', '100%');
+				$progressText.text('100%');
+				$progressStatus.text('<?php esc_js( esc_html_e( 'Scan complete!', 'wpshadow' ) ); ?>');
+				
+				// Hide progress after brief delay and show results
+				setTimeout(function() {
+					$progress.fadeOut(300, function() {
+						$results.show();
+					});
+				}, 500);
+				
 				if (response.success) {
 					var data = response.data;
 					var html = '<h3><?php esc_js( esc_html_e( 'Scan Results', 'wpshadow' ) ); ?></h3>';
@@ -166,7 +229,13 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 						'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + (response.data && response.data.message ? response.data.message : '<?php esc_js( esc_html_e( 'Unable to scan page.', 'wpshadow' ) ); ?>') + '</div>');
 				}
 
-				$btn.prop('disabled', false).text('<?php esc_js( esc_html_e( 'Run Accessibility Scan', 'wpshadow' ) ); ?>');
+				$btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> <?php esc_js( esc_html_e( 'Run Accessibility Scan', 'wpshadow' ) ); ?>');
+			}).fail(function() {
+				clearInterval(progressInterval);
+				$progress.hide();
+				$results.html('<div class="wps-p-15">' +
+					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> <?php esc_js( esc_html_e( 'Unable to connect to server. Please try again.', 'wpshadow' ) ); ?></div>').show();
+				$btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> <?php esc_js( esc_html_e( 'Run Accessibility Scan', 'wpshadow' ) ); ?>');
 			});
 		});
 	});
