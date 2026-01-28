@@ -13,17 +13,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
+if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page (Kanban Board)
 	 */
-	function wpshadow_render_action_items() {
+	function wpshadow_render_findings() {
 		// Load the kanban board view
 		if ( file_exists( WPSHADOW_PATH . 'includes/views/kanban-board.php' ) ) {
 			require_once WPSHADOW_PATH . 'includes/views/kanban-board.php';
 		} else {
 			echo '<div class="wrap"><h1>Findings</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Loading findings...</p></div>';
 		}
+	}
+}
+
+// Legacy compatibility alias
+if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
+	/**
+	 * Legacy function name - redirects to wpshadow_render_findings()
+	 * 
+	 * @deprecated Use wpshadow_render_findings() instead
+	 */
+	function wpshadow_render_action_items() {
+		wpshadow_render_findings();
 	}
 }
 
