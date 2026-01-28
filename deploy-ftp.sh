@@ -189,6 +189,7 @@ else
         
         curl -s -T "$local_file" \
             --user "$FTP_USER:$FTP_PASSWORD" \
+            --ftp-create-dirs \
             "ftp://$FTP_HOST$FTP_REMOTE_PATH/$remote_file" || echo "Failed: $remote_file"
     }
     
