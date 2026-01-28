@@ -27,20 +27,6 @@ require_once WPSHADOW_PATH . 'includes/dashboard/widgets/class-tooltip-manager.p
 function wpshadow_get_tools_catalog() {
 	return array(
 		array(
-			'title'   => __( 'Quick Scan', 'wpshadow' ),
-			'desc'    => __( 'Run a fast, lightweight scan of your site for common issues and security concerns.', 'wpshadow' ),
-			'tool'    => 'quick-scan',
-			'icon'    => 'dashicons-performance',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Deep Scan', 'wpshadow' ),
-			'desc'    => __( 'Run a comprehensive scan that checks database health, performance, and advanced compatibility issues.', 'wpshadow' ),
-			'tool'    => 'deep-scan',
-			'icon'    => 'dashicons-search',
-			'enabled' => true,
-		),
-		array(
 			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
 			'desc'    => __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ),
 			'tool'    => 'a11y-audit',
@@ -101,20 +87,6 @@ function wpshadow_get_tools_catalog() {
 			'desc'    => __( 'Friendly tooltips across wp-admin with opt-out controls and helpful guidance for beginners.', 'wpshadow' ),
 			'tool'    => 'tips-coach',
 			'icon'    => 'dashicons-lightbulb',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Kanban Report', 'wpshadow' ),
-			'desc'    => __( 'Visual board to organize and track findings by status with drag-and-drop interface.', 'wpshadow' ),
-			'tool'    => 'kanban-report',
-			'icon'    => 'dashicons-grid-view',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Activity History', 'wpshadow' ),
-			'desc'    => __( 'Comprehensive audit log of all actions, changes, and fixes performed on your site.', 'wpshadow' ),
-			'tool'    => 'activity-history',
-			'icon'    => 'dashicons-backup',
 			'enabled' => true,
 		),
 		array(
