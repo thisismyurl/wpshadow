@@ -44,6 +44,7 @@ require_once WPSHADOW_PATH . 'includes/core/class-form-param-helper.php';
 require_once WPSHADOW_PATH . 'includes/core/class-abstract-registry.php';
 require_once WPSHADOW_PATH . 'includes/diagnostics/class-diagnostic-registry.php';
 require_once WPSHADOW_PATH . 'includes/core/functions-treatment.php';
+require_once WPSHADOW_PATH . 'includes/core/class-utm-link-manager.php';
 require_once WPSHADOW_PATH . 'includes/helpers/form-controls.php';
 require_once WPSHADOW_PATH . 'includes/helpers/html-fetcher-helpers.php';
 require_once WPSHADOW_PATH . 'includes/views/functions-page-layout.php';
