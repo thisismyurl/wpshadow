@@ -24,8 +24,6 @@ Tool_View_Base::verify_access( 'read' );
 // Enqueue assets
 Tool_View_Base::enqueue_assets( 'tips-coach' );
 
-// Render header
-Tool_View_Base::render_header( __( 'Tips & Coaching', 'wpshadow' ) );
 if ( ! current_user_can( 'read' ) ) {
 	wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
 }
@@ -48,12 +46,9 @@ foreach ( $catalog as $tip ) {
 	$tips_by_category[ $cat ][] = $tip;
 }
 
-
-<div class="wrap">
-	<?php wpshadow_render_page_header(
-		__( 'Tips & Guidance', 'wpshadow' ),
-		__( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' )
-	); ?>
+// Render header
+Tool_View_Base::render_header( __( 'Tips & Guidance', 'wpshadow' ), __( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ) );
+?>
 
 	<div class="wpshadow-tips-toolbar wps-m-20">
 		<button id="wpshadow-enable-all-tips" class="wps-btn wps-btn--secondary" style="margin-right: 10px;">

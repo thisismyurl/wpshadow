@@ -22,17 +22,10 @@ Tool_View_Base::verify_access( 'read' );
 Tool_View_Base::enqueue_assets( 'broken-links' );
 
 // Render header
-Tool_View_Base::render_header( __( 'Broken Links', 'wpshadow' ), __( 'Scan your site for broken internal and external links.', 'wpshadow' ) );
-?>
+Tool_View_Base::render_header( __( 'Broken Link Checker', 'wpshadow' ), __( 'Find and fix broken links across your site.', 'wpshadow' ) );
 ?>
 
-<div class="wrap">
-	<?php wpshadow_render_page_header(
-		__( 'Broken Link Checker', 'wpshadow' ),
-		__( 'Find and fix broken links across your site.', 'wpshadow' )
-	); ?>
-
-	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
+	<div class="wpshadow-tool-section wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Scan Site for Broken Links', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Check all posts and pages for broken internal and external links.', 'wpshadow' ); ?></p>
 

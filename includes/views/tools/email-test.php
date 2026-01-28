@@ -25,9 +25,6 @@ Tool_View_Base::verify_access( 'manage_options' );
 // Enqueue assets
 Tool_View_Base::enqueue_assets( 'email-test' );
 
-// Render header
-Tool_View_Base::render_header( __( 'Email Notification Test', 'wpshadow' ) );
-
 // Handle test email submission
 $test_results = null;
 if ( Form_Param_Helper::has_post( 'wpshadow_send_test_email' ) && check_admin_referer( 'wpshadow_email_test', 'wpshadow_email_test_nonce' ) ) {
@@ -107,13 +104,9 @@ $current_user_email = wp_get_current_user()->user_email;
 // Get WordPress defaults (what would be used without our override)
 $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
 
+// Render header
+Tool_View_Base::render_header( __( 'Email Test & Configuration', 'wpshadow' ), __( 'Test your WordPress email delivery and configure the From Name and From Email address.', 'wpshadow' ) );
 ?>
-
-<div class="wrap">
-	<?php wpshadow_render_page_header(
-		__( 'Email Test & Configuration', 'wpshadow' ),
-		__( 'Test your WordPress email delivery and configure the From Name and From Email address.', 'wpshadow' )
-	); ?>
 
 	<?php if ( $test_results ) : ?>
 		<div class="notice notice-<?php echo esc_attr( $test_results['success'] ? 'success' : 'error' ); ?> is-dismissible">

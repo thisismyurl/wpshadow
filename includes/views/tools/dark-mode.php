@@ -22,9 +22,6 @@ Tool_View_Base::verify_access( 'read' );
 // Enqueue assets
 Tool_View_Base::enqueue_assets( 'dark-mode' );
 
-// Render header
-Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ) );
-
 $user_id = get_current_user_id();
 
 // Process form submission BEFORE reading the preference
@@ -37,13 +34,10 @@ if ( Form_Param_Helper::has_post( 'save_dark_mode' ) && wp_verify_nonce( Form_Pa
 
 // Now read the current preference (which may have just been updated)
 $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
-?>
 
-<div class="wrap">
-	<?php wpshadow_render_page_header(
-		__( 'Dark Mode', 'wpshadow' ),
-		__( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' )
-	); ?>
+// Render header
+Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ), __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ) );
+?>
 
 	<?php echo wp_kses_post( $saved_message ); ?>
 
