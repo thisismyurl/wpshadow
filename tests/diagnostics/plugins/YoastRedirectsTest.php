@@ -1,12 +1,20 @@
 <?php
-declare(strict_types=1);
+/**
+ * Test for Yoast Redirect Manager
+ *
+ * @package WPShadow\Tests
+ */
 
-namespace WPShadow\Tests\Diagnostics\Plugins;
+namespace WPShadow\Tests\Diagnostics;
 
 use WP_Mock\Tools\TestCase;
 use WPShadow\Diagnostics\Diagnostic_YoastRedirects;
 
+/**
+ * YoastRedirectsTest Class
+ */
 class YoastRedirectsTest extends TestCase {
+
 	public function setUp(): void {
 		parent::setUp();
 		\WP_Mock::setUp();
@@ -17,43 +25,81 @@ class YoastRedirectsTest extends TestCase {
 		parent::tearDown();
 	}
 
-	public function test_detects_plugin_issues() {
-		$this->assertTrue( true );
+	public function test_diagnostic_class_exists() {
+		$this->assertTrue( class_exists( 'WPShadow\Diagnostics\\Diagnostic_YoastRedirects' ) );
 	}
 
-	public function test_validates_configuration() {
-		$this->assertTrue( true );
+	public function test_check_method_is_callable() {
+		$this->assertTrue( method_exists( 'WPShadow\Diagnostics\\Diagnostic_YoastRedirects', 'check' ) );
+		$this->assertTrue( is_callable( [ 'WPShadow\Diagnostics\\Diagnostic_YoastRedirects', 'check' ] ) );
 	}
 
-	public function test_checks_plugin_active() {
-		$this->assertTrue( true );
+	public function test_returns_null_when_plugin_not_active() {
+		// No specific plugin activation check
+		
+		$result = Diagnostic_YoastRedirects::check();
+		
+		// Should return null when plugin is not active
+		$this->assertNull( $result );
 	}
 
-	public function test_analyzes_settings() {
-		$this->assertTrue( true );
+	public function test_result_structure_when_issue_found() {
+		// No specific plugin activation check
+		
+		$result = Diagnostic_YoastRedirects::check();
+		
+		if ( is_array( $result ) ) {
+			$this->assertArrayHasKey( 'id', $result );
+			$this->assertArrayHasKey( 'title', $result );
+			$this->assertArrayHasKey( 'description', $result );
+			$this->assertArrayHasKey( 'severity', $result );
+			$this->assertArrayHasKey( 'threat_level', $result );
+			$this->assertArrayHasKey( 'auto_fixable', $result );
+			$this->assertArrayHasKey( 'kb_link', $result );
+		}
 	}
 
-	public function test_threat_level_appropriate() {
-		$this->assertTrue( true );
+	public function test_slug_property_matches_expected() {
+		$reflection = new \ReflectionClass( 'WPShadow\Diagnostics\\Diagnostic_YoastRedirects' );
+		$property = $reflection->getProperty( 'slug' );
+		$property->setAccessible( true );
+		$slug = $property->getValue();
+		
+		$this->assertEquals( 'yoast-redirects', $slug );
 	}
 
-	public function test_caches_results() {
-		$this->assertTrue( true );
+	public function test_family_property_is_valid() {
+		$reflection = new \ReflectionClass( 'WPShadow\Diagnostics\\Diagnostic_YoastRedirects' );
+		$property = $reflection->getProperty( 'family' );
+		$property->setAccessible( true );
+		$family = $property->getValue();
+		
+		$valid_families = [ 'security', 'performance', 'functionality' ];
+		$this->assertContains( $family, $valid_families, 
+			"Family must be one of: " . implode( ', ', $valid_families ) 
+		);
 	}
 
-	public function test_returns_null_when_optimal() {
-		$this->assertTrue( true );
+	public function test_threat_level_is_in_valid_range() {
+		// No specific plugin activation check
+		
+		$result = Diagnostic_YoastRedirects::check();
+		
+		if ( is_array( $result ) && isset( $result['threat_level'] ) ) {
+			$this->assertIsInt( $result['threat_level'] );
+			$this->assertGreaterThanOrEqual( 0, $result['threat_level'] );
+			$this->assertLessThanOrEqual( 100, $result['threat_level'] );
+		}
 	}
 
-	public function test_includes_actionable_data() {
-		$this->assertTrue( true );
-	}
-
-	public function test_provides_kb_links() {
-		$this->assertTrue( true );
-	}
-
-	public function test_severity_matches_threat() {
-		$this->assertTrue( true );
+	public function test_kb_link_format_is_valid() {
+		// No specific plugin activation check
+		
+		$result = Diagnostic_YoastRedirects::check();
+		
+		if ( is_array( $result ) && isset( $result['kb_link'] ) ) {
+			$this->assertIsString( $result['kb_link'] );
+			$this->assertStringContainsString( 'wpshadow.com/kb/', $result['kb_link'] );
+		}
 	}
 }
