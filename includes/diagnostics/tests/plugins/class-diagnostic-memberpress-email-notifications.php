@@ -36,25 +36,82 @@ class Diagnostic_MemberpressEmailNotifications extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		global $wpdb;
+		$issues = array();
+		$threat_level = 0;
+
+		// Check default from email
+		$from_email = get_option( 'mepr_email_from_email', '' );
+		if ( empty( $from_email ) ) {
+			$issues[] = 'no_from_email';
+			$threat_level += 15;
+		}
+
+		// Check email templates
+		$emails_table = $wpdb->prefix . 'mepr_emails';
+		$email_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$emails_table} WHERE enabled = 1" );
+		if ( $email_count < 3 ) {
+			$issues[] = 'insufficient_email_templates';
+			$threat_level += 10;
+		}
+
+		// Check for emails without subject
+		$emails_without_subject = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$emails_table} 
+				 WHERE enabled = %d AND (subject IS NULL OR subject = '')",
+				1
+			)
+		);
+		if ( $emails_without_subject > 0 ) {
+			$issues[] = 'emails_missing_subject';
+			$threat_level += 15;
+		}
+
+		// Check signup email
+		$signup_email = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$emails_table} 
+				 WHERE context = %s AND enabled = %d",
+				'user_signup',
+				1
+			)
+		);
+		if ( $signup_email === 0 ) {
+			$issues[] = 'no_signup_email';
+			$threat_level += 15;
+		}
+
+		// Check payment receipt email
+		$receipt_email = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$emails_table} 
+				 WHERE context = %s AND enabled = %d",
+				'payment_receipt',
+				1
+			)
+		);
+		if ( $receipt_email === 0 ) {
+			$issues[] = 'no_receipt_email';
+			$threat_level += 10;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of email notification issues */
+				__( 'MemberPress email notifications are misconfigured: %s. This prevents users from receiving important membership updates and payment confirmations.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/memberpress-email-notifications',
 			);
 		}
