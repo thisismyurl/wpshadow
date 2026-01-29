@@ -36,25 +36,74 @@ class Diagnostic_FormidableFormsPayment extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		$issues = array();
+		$threat_level = 0;
+
+		// Check if site is using SSL
+		if ( ! is_ssl() ) {
+			$issues[] = 'ssl_not_enabled';
+			$threat_level += 30;
+		}
+
+		// Check payment gateway settings
+		$payment_settings = get_option( 'frm_payment_settings', array() );
+
+		// Check Stripe settings
+		if ( isset( $payment_settings['stripe'] ) ) {
+			$stripe = $payment_settings['stripe'];
+			// Check if test mode is active in production
+			if ( ! isset( $stripe['test_mode'] ) || $stripe['test_mode'] === true ) {
+				$issues[] = 'stripe_test_mode_in_production';
+				$threat_level += 25;
+			}
+			// Check webhook signature
+			if ( empty( $stripe['webhook_secret'] ) ) {
+				$issues[] = 'stripe_webhook_not_secured';
+				$threat_level += 20;
+			}
+		}
+
+		// Check PayPal settings
+		if ( isset( $payment_settings['paypal'] ) ) {
+			$paypal = $payment_settings['paypal'];
+			// Check IPN validation
+			if ( empty( $paypal['ipn_validate'] ) ) {
+				$issues[] = 'paypal_ipn_not_validated';
+				$threat_level += 20;
+			}
+		}
+
+		// Check for payment forms
+		global $wpdb;
+		$payment_forms = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}frm_fields 
+			 WHERE type = 'credit_card'"
+		);
+		if ( $payment_forms > 0 ) {
+			// Check PCI compliance settings
+			$pci_compliant = get_option( 'frm_pci_compliant', false );
+			if ( ! $pci_compliant ) {
+				$issues[] = 'pci_compliance_not_configured';
+				$threat_level += 25;
+			}
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of payment security issues */
+				__( 'Formidable Forms payment security is weak: %s. This exposes payment data to interception and fraud.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/formidable-forms-payment',
 			);
 		}

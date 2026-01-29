@@ -36,25 +36,79 @@ class Diagnostic_CalderaFormsGdprCompliance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		$issues = array();
+		$threat_level = 0;
+
+		// Check GDPR settings
+		$gdpr_enabled = get_option( 'caldera_forms_gdpr', false );
+		if ( ! $gdpr_enabled ) {
+			$issues[] = 'gdpr_settings_not_enabled';
+			$threat_level += 25;
+		}
+
+		// Check forms for consent fields
+		global $wpdb;
+		$forms = $wpdb->get_results(
+			"SELECT * FROM {$wpdb->prefix}cf_forms WHERE is_active = 1"
+		);
+
+		if ( $forms ) {
+			$forms_without_consent = 0;
+			foreach ( $forms as $form ) {
+				$has_consent_field = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(*) FROM {$wpdb->prefix}cf_form_fields 
+						 WHERE form_id = %d AND (type = %s OR slug LIKE %s)",
+						$form->ID,
+						'checkbox',
+						'%consent%'
+					)
+				);
+				if ( ! $has_consent_field ) {
+					$forms_without_consent++;
+				}
+			}
+			if ( $forms_without_consent > 0 ) {
+				$issues[] = 'forms_missing_consent_checkboxes';
+				$threat_level += 20;
+			}
+		}
+
+		// Check data retention policy
+		$retention_period = get_option( 'caldera_forms_retention_period', 0 );
+		if ( $retention_period === 0 ) {
+			$issues[] = 'no_data_retention_policy';
+			$threat_level += 20;
+		}
+
+		// Check personal data export capability
+		if ( ! has_filter( 'wp_privacy_personal_data_exporters' ) ) {
+			$issues[] = 'no_data_export_functionality';
+			$threat_level += 15;
+		}
+
+		// Check personal data erasure capability
+		if ( ! has_filter( 'wp_privacy_personal_data_erasers' ) ) {
+			$issues[] = 'no_data_erasure_functionality';
+			$threat_level += 15;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of GDPR compliance issues */
+				__( 'Caldera Forms GDPR compliance has gaps: %s. This violates GDPR requirements and exposes you to legal liability.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/caldera-forms-gdpr-compliance',
 			);
 		}
