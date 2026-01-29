@@ -1,12 +1,12 @@
 <?php
 /**
- * Gravity Forms Spam Protection Diagnostic
+ * Formidable Forms Spam Protection Diagnostic
  *
- * Gravity Forms spam filtering inadequate.
+ * Formidable Forms spam protection disabled.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.255.0000
+ * @since      1.260.0000
  */
 
 declare(strict_types=1);
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gravity Forms Spam Protection Diagnostic Class
+ * Formidable Forms Spam Protection Diagnostic Class
  *
- * @since 1.255.0000
+ * @since 1.260.0000
  */
-class Diagnostic_GravityFormsSpamProtection extends Diagnostic_Base {
+class Diagnostic_FormidableFormsSpam extends Diagnostic_Base {
 
-	protected static $slug = 'gravity-forms-spam-protection';
-	protected static $title = 'Gravity Forms Spam Protection';
-	protected static $description = 'Gravity Forms spam filtering inadequate';
+	protected static $slug = 'formidable-forms-spam';
+	protected static $title = 'Formidable Forms Spam Protection';
+	protected static $description = 'Formidable Forms spam protection disabled';
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! class_exists( 'GFForms' ) ) {
+		if ( ! class_exists( 'FrmAppHelper' ) ) {
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ class Diagnostic_GravityFormsSpamProtection extends Diagnostic_Base {
 				'severity'    => self::calculate_severity( 55 ),
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gravity-forms-spam-protection',
+				'kb_link'     => 'https://wpshadow.com/kb/formidable-forms-spam',
 			);
 		}
 		

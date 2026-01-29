@@ -1,12 +1,12 @@
 <?php
 /**
- * Gravity Forms Spam Protection Diagnostic
+ * WPForms Spam Protection Diagnostic
  *
- * Gravity Forms spam filtering inadequate.
+ * WPForms anti-spam settings not configured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.255.0000
+ * @since      1.250.0000
  */
 
 declare(strict_types=1);
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gravity Forms Spam Protection Diagnostic Class
+ * WPForms Spam Protection Diagnostic Class
  *
- * @since 1.255.0000
+ * @since 1.250.0000
  */
-class Diagnostic_GravityFormsSpamProtection extends Diagnostic_Base {
+class Diagnostic_WpformsSpamProtection extends Diagnostic_Base {
 
-	protected static $slug = 'gravity-forms-spam-protection';
-	protected static $title = 'Gravity Forms Spam Protection';
-	protected static $description = 'Gravity Forms spam filtering inadequate';
+	protected static $slug = 'wpforms-spam-protection';
+	protected static $title = 'WPForms Spam Protection';
+	protected static $description = 'WPForms anti-spam settings not configured';
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! class_exists( 'GFForms' ) ) {
+		if ( ! function_exists( 'wpforms' ) ) {
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ class Diagnostic_GravityFormsSpamProtection extends Diagnostic_Base {
 				'severity'    => self::calculate_severity( 55 ),
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gravity-forms-spam-protection',
+				'kb_link'     => 'https://wpshadow.com/kb/wpforms-spam-protection',
 			);
 		}
 		

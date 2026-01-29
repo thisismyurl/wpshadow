@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 namespace WPShadow\Tests\Diagnostics\Plugins;
-use WPShadow\Diagnostics\Diagnostic_GravityFormsSpamProtection;
+use WPShadow\Diagnostics\Diagnostic_GravityFormsFileUpload;
 use WP_Mock\Tools\TestCase;
 
-class GravityFormsSpamProtectionTest extends TestCase {
+class GravityFormsFileUploadTest extends TestCase {
 	public function setUp(): void { parent::setUp(); \WP_Mock::setUp(); }
 	public function tearDown(): void { \WP_Mock::tearDown(); parent::tearDown(); }
 	
