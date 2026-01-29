@@ -36,25 +36,72 @@ class Diagnostic_WpSuperCacheExpertSettings extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		global $wp_cache_mod_rewrite, $wp_cache_mobile_enabled, $cache_compression;
+		$issues = array();
+		$threat_level = 0;
+
+		// Check caching mode
+		if ( ! isset( $wp_cache_mod_rewrite ) || ! $wp_cache_mod_rewrite ) {
+			$issues[] = 'mod_rewrite_not_enabled';
+			$threat_level += 15;
+		}
+
+		// Check compression
+		if ( ! isset( $cache_compression ) || ! $cache_compression ) {
+			$issues[] = 'compression_disabled';
+			$threat_level += 10;
+		}
+
+		// Check cache location
+		$cache_path = WP_CONTENT_DIR . '/cache/';
+		if ( ! is_dir( $cache_path ) || ! is_writable( $cache_path ) ) {
+			$issues[] = 'cache_directory_not_writable';
+			$threat_level += 20;
+		}
+
+		// Check cache rebuild
+		$cache_rebuild = get_option( 'wp_cache_rebuild_files', 0 );
+		if ( ! $cache_rebuild ) {
+			$issues[] = 'cache_rebuild_disabled';
+			$threat_level += 10;
+		}
+
+		// Check garbage collection
+		$cache_gc = get_option( 'wp_cache_gc_enabled', 0 );
+		if ( ! $cache_gc ) {
+			$issues[] = 'garbage_collection_disabled';
+			$threat_level += 10;
+		}
+
+		// Check mobile caching
+		if ( ! isset( $wp_cache_mobile_enabled ) || ! $wp_cache_mobile_enabled ) {
+			$issues[] = 'mobile_caching_disabled';
+			$threat_level += 15;
+		}
+
+		// Check CDN support
+		$cdn_enabled = get_option( 'ossdl_off_cdn_url', '' );
+		if ( empty( $cdn_enabled ) ) {
+			$issues[] = 'cdn_not_configured';
+			$threat_level += 5;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of expert setting issues */
+				__( 'WP Super Cache expert settings need optimization: %s. This reduces caching efficiency and misses performance opportunities.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-super-cache-expert-settings',
 			);
 		}
