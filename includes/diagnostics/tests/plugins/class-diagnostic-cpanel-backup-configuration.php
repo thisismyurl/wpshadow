@@ -32,29 +32,72 @@ class Diagnostic_CpanelBackupConfiguration extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check if on cPanel hosting
+		$is_cpanel = function_exists( 'cpanel_get_upcp_database_names' ) || file_exists( '/usr/local/cpanel/version' );
+		if ( ! $is_cpanel ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+		$threat_level = 0;
+
+		// Check backup directory
+		$backup_dir = ABSPATH . 'backups';
+		if ( file_exists( $backup_dir ) && is_readable( $backup_dir ) ) {
+			$issues[] = 'backups_in_public_directory';
+			$threat_level += 25;
+		}
+
+		// Check for .cpanel_backups directory
+		$cpanel_backup_dir = dirname( ABSPATH ) . '/.cpanel_backups';
+		if ( ! file_exists( $cpanel_backup_dir ) ) {
+			$issues[] = 'cpanel_backup_dir_missing';
+			$threat_level += 10;
+		}
+
+		// Check cron jobs for backups
+		$cron_jobs = _get_cron_array();
+		$has_backup_cron = false;
+		if ( $cron_jobs ) {
+			foreach ( $cron_jobs as $timestamp => $hooks ) {
+				foreach ( $hooks as $hook => $details ) {
+					if ( strpos( $hook, 'backup' ) !== false ) {
+						$has_backup_cron = true;
+						break 2;
+					}
+				}
+			}
+		}
+		if ( ! $has_backup_cron ) {
+			$issues[] = 'no_automated_backups';
+			$threat_level += 15;
+		}
+
+		// Check disk quota (if available)
+		if ( function_exists( 'disk_free_space' ) ) {
+			$free_space = disk_free_space( ABSPATH );
+			if ( $free_space !== false && $free_space < 1073741824 ) { // Less than 1GB
+				$issues[] = 'low_disk_space';
+				$threat_level += 20;
+			}
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of backup configuration issues */
+				__( 'cPanel backup configuration has problems: %s. This can prevent proper backups and data recovery.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/cpanel-backup-configuration',
 			);
 		}

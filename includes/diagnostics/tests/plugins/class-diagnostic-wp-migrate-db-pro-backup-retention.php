@@ -32,29 +32,79 @@ class Diagnostic_WpMigrateDbProBackupRetention extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check if WP Migrate DB Pro is installed
+		if ( ! class_exists( 'WPMDB_Pro' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+		$threat_level = 0;
+
+		// Check backup retention settings
+		$settings = get_option( 'wpmdb_settings', array() );
+		$backup_retention = isset( $settings['backup_retention'] ) ? $settings['backup_retention'] : 0;
+		if ( $backup_retention === 0 ) {
+			$issues[] = 'no_retention_policy';
+			$threat_level += 15;
+		}
+
+		// Check backup directory
+		$upload_dir = wp_upload_dir();
+		$backup_dir = $upload_dir['basedir'] . '/wpmdb-backups';
+
+		if ( ! file_exists( $backup_dir ) ) {
+			return null;
+		}
+
+		// Count backup files
+		$backup_files = glob( $backup_dir . '/*.sql' );
+		if ( $backup_files && count( $backup_files ) > 20 ) {
+			$issues[] = 'excessive_backup_files';
+			$threat_level += 15;
+		}
+
+		// Check disk space usage
+		$total_size = 0;
+		if ( $backup_files ) {
+			foreach ( $backup_files as $file ) {
+				$total_size += filesize( $file );
+			}
+		}
+		if ( $total_size > 1073741824 ) { // 1GB
+			$issues[] = 'backups_consuming_disk_space';
+			$threat_level += 20;
+		}
+
+		// Check for very old backups
+		$old_backups = 0;
+		if ( $backup_files ) {
+			foreach ( $backup_files as $file ) {
+				if ( ( time() - filemtime( $file ) ) > 7776000 ) { // 90 days
+					$old_backups++;
+				}
+			}
+		}
+		if ( $old_backups > 0 ) {
+			$issues[] = 'old_backups_not_removed';
+			$threat_level += 15;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of backup retention issues */
+				__( 'WP Migrate DB Pro backup retention has problems: %s. This wastes disk space and can cause hosting quota issues.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-migrate-db-pro-backup-retention',
 			);
 		}
