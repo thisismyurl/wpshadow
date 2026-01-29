@@ -1,12 +1,12 @@
 <?php
 /**
- * Slider Revolution Performance Diagnostic
+ * Polylang Performance Diagnostic
  *
- * Slider Revolution loading too many assets.
+ * Polylang queries not optimized.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.280.0000
+ * @since      1.310.0000
  */
 
 declare(strict_types=1);
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Slider Revolution Performance Diagnostic Class
+ * Polylang Performance Diagnostic Class
  *
- * @since 1.280.0000
+ * @since 1.310.0000
  */
-class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
+class Diagnostic_PolylangPerformanceOptimization extends Diagnostic_Base {
 
-	protected static $slug = 'slider-revolution-performance';
-	protected static $title = 'Slider Revolution Performance';
-	protected static $description = 'Slider Revolution loading too many assets';
+	protected static $slug = 'polylang-performance-optimization';
+	protected static $title = 'Polylang Performance';
+	protected static $description = 'Polylang queries not optimized';
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! defined( 'RS_REVISION' ) ) {
+		if ( ! defined( 'POLYLANG_VERSION' ) ) {
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
 				'severity'    => self::calculate_severity( 50 ),
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/slider-revolution-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/polylang-performance-optimization',
 			);
 		}
 		

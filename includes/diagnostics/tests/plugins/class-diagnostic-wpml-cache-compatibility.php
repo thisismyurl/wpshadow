@@ -1,12 +1,12 @@
 <?php
 /**
- * Slider Revolution Performance Diagnostic
+ * WPML Cache Compatibility Diagnostic
  *
- * Slider Revolution loading too many assets.
+ * WPML conflicting with caching plugins.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.280.0000
+ * @since      1.303.0000
  */
 
 declare(strict_types=1);
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Slider Revolution Performance Diagnostic Class
+ * WPML Cache Compatibility Diagnostic Class
  *
- * @since 1.280.0000
+ * @since 1.303.0000
  */
-class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
+class Diagnostic_WpmlCacheCompatibility extends Diagnostic_Base {
 
-	protected static $slug = 'slider-revolution-performance';
-	protected static $title = 'Slider Revolution Performance';
-	protected static $description = 'Slider Revolution loading too many assets';
+	protected static $slug = 'wpml-cache-compatibility';
+	protected static $title = 'WPML Cache Compatibility';
+	protected static $description = 'WPML conflicting with caching plugins';
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! defined( 'RS_REVISION' ) ) {
+		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
 				'severity'    => self::calculate_severity( 50 ),
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/slider-revolution-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/wpml-cache-compatibility',
 			);
 		}
 		

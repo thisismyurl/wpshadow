@@ -1,12 +1,12 @@
 <?php
 /**
- * Slider Revolution Performance Diagnostic
+ * Advanced Ads Cache Compatibility Diagnostic
  *
- * Slider Revolution loading too many assets.
+ * Advanced Ads breaking caching plugins.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.280.0000
+ * @since      1.290.0000
  */
 
 declare(strict_types=1);
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Slider Revolution Performance Diagnostic Class
+ * Advanced Ads Cache Compatibility Diagnostic Class
  *
- * @since 1.280.0000
+ * @since 1.290.0000
  */
-class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
+class Diagnostic_AdvancedAdsCacheCompatibility extends Diagnostic_Base {
 
-	protected static $slug = 'slider-revolution-performance';
-	protected static $title = 'Slider Revolution Performance';
-	protected static $description = 'Slider Revolution loading too many assets';
+	protected static $slug = 'advanced-ads-cache-compatibility';
+	protected static $title = 'Advanced Ads Cache Compatibility';
+	protected static $description = 'Advanced Ads breaking caching plugins';
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! defined( 'RS_REVISION' ) ) {
+		if ( ! defined( 'ADVADS_VERSION' ) ) {
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
 				'severity'    => self::calculate_severity( 50 ),
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/slider-revolution-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/advanced-ads-cache-compatibility',
 			);
 		}
 		

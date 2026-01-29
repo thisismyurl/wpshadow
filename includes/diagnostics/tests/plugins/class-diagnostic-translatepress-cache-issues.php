@@ -1,12 +1,12 @@
 <?php
 /**
- * Slider Revolution Performance Diagnostic
+ * TranslatePress Cache Issues Diagnostic
  *
- * Slider Revolution loading too many assets.
+ * TranslatePress caching conflicts.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.280.0000
+ * @since      1.317.0000
  */
 
 declare(strict_types=1);
@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Slider Revolution Performance Diagnostic Class
+ * TranslatePress Cache Issues Diagnostic Class
  *
- * @since 1.280.0000
+ * @since 1.317.0000
  */
-class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
+class Diagnostic_TranslatepressCacheIssues extends Diagnostic_Base {
 
-	protected static $slug = 'slider-revolution-performance';
-	protected static $title = 'Slider Revolution Performance';
-	protected static $description = 'Slider Revolution loading too many assets';
+	protected static $slug = 'translatepress-cache-issues';
+	protected static $title = 'TranslatePress Cache Issues';
+	protected static $description = 'TranslatePress caching conflicts';
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! defined( 'RS_REVISION' ) ) {
+		if ( ! defined( 'TRP_PLUGIN_VERSION' ) ) {
 			return null;
 		}
 		
@@ -46,7 +46,7 @@ class Diagnostic_SliderRevolutionPerformance extends Diagnostic_Base {
 				'severity'    => self::calculate_severity( 50 ),
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/slider-revolution-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/translatepress-cache-issues',
 			);
 		}
 		
