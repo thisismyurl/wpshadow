@@ -2,11 +2,11 @@
 /**
  * MonsterInsights Tracking Code Diagnostic
  *
- * MonsterInsights tracking code not properly installed.
+ * MonsterInsights tracking code errors.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.228.0000
+ * @since      1.425.0000
  */
 
 declare(strict_types=1);
@@ -22,13 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * MonsterInsights Tracking Code Diagnostic Class
  *
- * @since 1.228.0000
+ * @since 1.425.0000
  */
 class Diagnostic_MonsterinsightsTrackingCode extends Diagnostic_Base {
 
 	protected static $slug = 'monsterinsights-tracking-code';
 	protected static $title = 'MonsterInsights Tracking Code';
-	protected static $description = 'MonsterInsights tracking code not properly installed';
+	protected static $description = 'MonsterInsights tracking code errors';
 	protected static $family = 'functionality';
 
 	public static function check() {
@@ -43,8 +43,8 @@ class Diagnostic_MonsterinsightsTrackingCode extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/monsterinsights-tracking-code',
 			);

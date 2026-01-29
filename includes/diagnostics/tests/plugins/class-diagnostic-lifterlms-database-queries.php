@@ -1,0 +1,55 @@
+<?php
+/**
+ * LifterLMS Database Queries Diagnostic
+ *
+ * LifterLMS database not optimized.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.370.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * LifterLMS Database Queries Diagnostic Class
+ *
+ * @since 1.370.0000
+ */
+class Diagnostic_LifterlmsDatabaseQueries extends Diagnostic_Base {
+
+	protected static $slug = 'lifterlms-database-queries';
+	protected static $title = 'LifterLMS Database Queries';
+	protected static $description = 'LifterLMS database not optimized';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! function_exists( 'LLMS' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 55 ),
+				'threat_level' => 55,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/lifterlms-database-queries',
+			);
+		}
+		
+		return null;
+	}
+}

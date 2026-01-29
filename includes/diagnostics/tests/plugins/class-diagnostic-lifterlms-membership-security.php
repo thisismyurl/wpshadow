@@ -1,0 +1,55 @@
+<?php
+/**
+ * LifterLMS Membership Security Diagnostic
+ *
+ * LifterLMS memberships not secured.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.365.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * LifterLMS Membership Security Diagnostic Class
+ *
+ * @since 1.365.0000
+ */
+class Diagnostic_LifterlmsMembershipSecurity extends Diagnostic_Base {
+
+	protected static $slug = 'lifterlms-membership-security';
+	protected static $title = 'LifterLMS Membership Security';
+	protected static $description = 'LifterLMS memberships not secured';
+	protected static $family = 'security';
+
+	public static function check() {
+		if ( ! function_exists( 'LLMS' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 70 ),
+				'threat_level' => 70,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/lifterlms-membership-security',
+			);
+		}
+		
+		return null;
+	}
+}

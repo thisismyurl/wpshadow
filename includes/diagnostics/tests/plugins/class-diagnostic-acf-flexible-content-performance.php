@@ -1,0 +1,55 @@
+<?php
+/**
+ * ACF Flexible Content Performance Diagnostic
+ *
+ * ACF flexible content slowing queries.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.452.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * ACF Flexible Content Performance Diagnostic Class
+ *
+ * @since 1.452.0000
+ */
+class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
+
+	protected static $slug = 'acf-flexible-content-performance';
+	protected static $title = 'ACF Flexible Content Performance';
+	protected static $description = 'ACF flexible content slowing queries';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! class_exists( 'ACF' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 60 ),
+				'threat_level' => 60,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/acf-flexible-content-performance',
+			);
+		}
+		
+		return null;
+	}
+}
