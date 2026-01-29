@@ -32,29 +32,69 @@ class Diagnostic_AllInOneSeoSocialMeta extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check if AIOSEO is installed
+		if ( ! function_exists( 'aioseo' ) && ! defined( 'AIOSEO_VERSION' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+		$threat_level = 0;
+
+		// Get AIOSEO social settings
+		$aioseo_options = get_option( 'aioseo_options', array() );
+		$social_settings = isset( $aioseo_options['social'] ) ? $aioseo_options['social'] : array();
+
+		// Check Open Graph
+		$og_enabled = isset( $social_settings['facebook']['general']['enable'] ) ? $social_settings['facebook']['general']['enable'] : false;
+		if ( ! $og_enabled ) {
+			$issues[] = 'open_graph_disabled';
+			$threat_level += 25;
+		}
+
+		// Check Twitter Cards
+		$twitter_enabled = isset( $social_settings['twitter']['general']['enable'] ) ? $social_settings['twitter']['general']['enable'] : false;
+		if ( ! $twitter_enabled ) {
+			$issues[] = 'twitter_cards_disabled';
+			$threat_level += 20;
+		}
+
+		// Check default image
+		$default_image = isset( $social_settings['facebook']['general']['defaultImageSourcePosts'] ) ? $social_settings['facebook']['general']['defaultImageSourcePosts'] : '';
+		if ( empty( $default_image ) ) {
+			$issues[] = 'no_default_social_image';
+			$threat_level += 15;
+		}
+
+		// Check Facebook App ID
+		$fb_app_id = isset( $social_settings['facebook']['general']['appId'] ) ? $social_settings['facebook']['general']['appId'] : '';
+		if ( empty( $fb_app_id ) && $og_enabled ) {
+			$issues[] = 'facebook_app_id_missing';
+			$threat_level += 10;
+		}
+
+		// Check social profiles
+		$profiles = isset( $social_settings['profiles']['sameUsername'] ) ? $social_settings['profiles']['sameUsername'] : array();
+		if ( empty( $profiles['username'] ) ) {
+			$issues[] = 'social_profiles_not_configured';
+			$threat_level += 15;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of social meta issues */
+				__( 'All-in-One SEO social meta has configuration issues: %s. This reduces social media visibility and click-through rates.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-social-meta',
 			);
 		}
