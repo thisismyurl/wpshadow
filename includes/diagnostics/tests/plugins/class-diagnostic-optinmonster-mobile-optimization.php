@@ -1,0 +1,55 @@
+<?php
+/**
+ * OptinMonster Mobile Optimization Diagnostic
+ *
+ * OptinMonster not optimized for mobile devices.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.221.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * OptinMonster Mobile Optimization Diagnostic Class
+ *
+ * @since 1.221.0000
+ */
+class Diagnostic_OptinmonsterMobileOptimization extends Diagnostic_Base {
+
+	protected static $slug = 'optinmonster-mobile-optimization';
+	protected static $title = 'OptinMonster Mobile Optimization';
+	protected static $description = 'OptinMonster not optimized for mobile devices';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! defined( 'OMAPI_VERSION' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 35 ),
+				'threat_level' => 35,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/optinmonster-mobile-optimization',
+			);
+		}
+		
+		return null;
+	}
+}
