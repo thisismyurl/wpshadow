@@ -1,12 +1,12 @@
 <?php
 /**
- * WPML String Translation Diagnostic
+ * Wpml String Translation Performance Diagnostic
  *
- * WPML string translation queries slow.
+ * Wpml String Translation Performance misconfigured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.299.0000
+ * @since      1.1139.0000
  */
 
 declare(strict_types=1);
@@ -20,15 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPML String Translation Diagnostic Class
+ * Wpml String Translation Performance Diagnostic Class
  *
- * @since 1.299.0000
+ * @since 1.1139.0000
  */
 class Diagnostic_WpmlStringTranslationPerformance extends Diagnostic_Base {
 
 	protected static $slug = 'wpml-string-translation-performance';
-	protected static $title = 'WPML String Translation';
-	protected static $description = 'WPML string translation queries slow';
+	protected static $title = 'Wpml String Translation Performance';
+	protected static $description = 'Wpml String Translation Performance misconfigured';
 	protected static $family = 'performance';
 
 	public static function check() {

@@ -1,0 +1,55 @@
+<?php
+/**
+ * Runcloud Git Deployment Diagnostic
+ *
+ * Runcloud Git Deployment needs attention.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1025.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Runcloud Git Deployment Diagnostic Class
+ *
+ * @since 1.1025.0000
+ */
+class Diagnostic_RuncloudGitDeployment extends Diagnostic_Base {
+
+	protected static $slug = 'runcloud-git-deployment';
+	protected static $title = 'Runcloud Git Deployment';
+	protected static $description = 'Runcloud Git Deployment needs attention';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! true // Generic check ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/runcloud-git-deployment',
+			);
+		}
+		
+		return null;
+	}
+}

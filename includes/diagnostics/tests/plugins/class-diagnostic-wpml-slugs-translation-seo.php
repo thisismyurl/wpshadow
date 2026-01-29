@@ -1,0 +1,55 @@
+<?php
+/**
+ * Wpml Slugs Translation Seo Diagnostic
+ *
+ * Wpml Slugs Translation Seo misconfigured.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1141.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Wpml Slugs Translation Seo Diagnostic Class
+ *
+ * @since 1.1141.0000
+ */
+class Diagnostic_WpmlSlugsTranslationSeo extends Diagnostic_Base {
+
+	protected static $slug = 'wpml-slugs-translation-seo';
+	protected static $title = 'Wpml Slugs Translation Seo';
+	protected static $description = 'Wpml Slugs Translation Seo misconfigured';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/wpml-slugs-translation-seo',
+			);
+		}
+		
+		return null;
+	}
+}

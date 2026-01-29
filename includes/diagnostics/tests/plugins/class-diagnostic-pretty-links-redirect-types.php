@@ -1,0 +1,55 @@
+<?php
+/**
+ * Pretty Links Redirect Types Diagnostic
+ *
+ * Pretty Links Redirect Types issue found.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1425.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Pretty Links Redirect Types Diagnostic Class
+ *
+ * @since 1.1425.0000
+ */
+class Diagnostic_PrettyLinksRedirectTypes extends Diagnostic_Base {
+
+	protected static $slug = 'pretty-links-redirect-types';
+	protected static $title = 'Pretty Links Redirect Types';
+	protected static $description = 'Pretty Links Redirect Types issue found';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! true // Generic check ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/pretty-links-redirect-types',
+			);
+		}
+		
+		return null;
+	}
+}

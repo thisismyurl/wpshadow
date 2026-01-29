@@ -1,0 +1,55 @@
+<?php
+/**
+ * Matomo Analytics Visitor Tracking Diagnostic
+ *
+ * Matomo Analytics Visitor Tracking misconfigured.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1355.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Matomo Analytics Visitor Tracking Diagnostic Class
+ *
+ * @since 1.1355.0000
+ */
+class Diagnostic_MatomoAnalyticsVisitorTracking extends Diagnostic_Base {
+
+	protected static $slug = 'matomo-analytics-visitor-tracking';
+	protected static $title = 'Matomo Analytics Visitor Tracking';
+	protected static $description = 'Matomo Analytics Visitor Tracking misconfigured';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! defined( 'MATOMO_ANALYTICS_FILE' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/matomo-analytics-visitor-tracking',
+			);
+		}
+		
+		return null;
+	}
+}

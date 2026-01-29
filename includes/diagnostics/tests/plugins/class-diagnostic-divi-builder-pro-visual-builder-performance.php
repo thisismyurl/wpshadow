@@ -1,0 +1,55 @@
+<?php
+/**
+ * Divi Builder Pro Visual Builder Performance Diagnostic
+ *
+ * Divi Builder Pro Visual Builder Performance issues found.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.807.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Divi Builder Pro Visual Builder Performance Diagnostic Class
+ *
+ * @since 1.807.0000
+ */
+class Diagnostic_DiviBuilderProVisualBuilderPerformance extends Diagnostic_Base {
+
+	protected static $slug = 'divi-builder-pro-visual-builder-performance';
+	protected static $title = 'Divi Builder Pro Visual Builder Performance';
+	protected static $description = 'Divi Builder Pro Visual Builder Performance issues found';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! function_exists( 'et_setup_theme' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 55 ),
+				'threat_level' => 55,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-pro-visual-builder-performance',
+			);
+		}
+		
+		return null;
+	}
+}

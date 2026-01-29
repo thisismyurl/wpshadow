@@ -2,11 +2,11 @@
 /**
  * WP Job Manager Email Notifications Diagnostic
  *
- * Job alert emails not configured properly.
+ * WP Job Manager emails misconfigured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.246.0000
+ * @since      1.540.0000
  */
 
 declare(strict_types=1);
@@ -22,13 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WP Job Manager Email Notifications Diagnostic Class
  *
- * @since 1.246.0000
+ * @since 1.540.0000
  */
 class Diagnostic_WpJobManagerEmailNotifications extends Diagnostic_Base {
 
 	protected static $slug = 'wp-job-manager-email-notifications';
 	protected static $title = 'WP Job Manager Email Notifications';
-	protected static $description = 'Job alert emails not configured properly';
+	protected static $description = 'WP Job Manager emails misconfigured';
 	protected static $family = 'functionality';
 
 	public static function check() {
@@ -43,8 +43,8 @@ class Diagnostic_WpJobManagerEmailNotifications extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 40 ),
-				'threat_level' => 40,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-email-notifications',
 			);

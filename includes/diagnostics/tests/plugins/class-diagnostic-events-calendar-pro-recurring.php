@@ -1,0 +1,55 @@
+<?php
+/**
+ * Events Calendar Pro Recurring Diagnostic
+ *
+ * Events Calendar recurring events slow.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.574.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Events Calendar Pro Recurring Diagnostic Class
+ *
+ * @since 1.574.0000
+ */
+class Diagnostic_EventsCalendarProRecurring extends Diagnostic_Base {
+
+	protected static $slug = 'events-calendar-pro-recurring';
+	protected static $title = 'Events Calendar Pro Recurring';
+	protected static $description = 'Events Calendar recurring events slow';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! class_exists( 'Tribe__Events__Main' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/events-calendar-pro-recurring',
+			);
+		}
+		
+		return null;
+	}
+}

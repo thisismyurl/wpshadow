@@ -1,0 +1,55 @@
+<?php
+/**
+ * User Registration Social Login Diagnostic
+ *
+ * User Registration Social Login issue found.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1228.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * User Registration Social Login Diagnostic Class
+ *
+ * @since 1.1228.0000
+ */
+class Diagnostic_UserRegistrationSocialLogin extends Diagnostic_Base {
+
+	protected static $slug = 'user-registration-social-login';
+	protected static $title = 'User Registration Social Login';
+	protected static $description = 'User Registration Social Login issue found';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! true // Generic check ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/user-registration-social-login',
+			);
+		}
+		
+		return null;
+	}
+}

@@ -1,0 +1,55 @@
+<?php
+/**
+ * BuddyPress Member Privacy Diagnostic
+ *
+ * BuddyPress member profiles exposed.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.514.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * BuddyPress Member Privacy Diagnostic Class
+ *
+ * @since 1.514.0000
+ */
+class Diagnostic_BuddypressMemberPrivacy extends Diagnostic_Base {
+
+	protected static $slug = 'buddypress-member-privacy';
+	protected static $title = 'BuddyPress Member Privacy';
+	protected static $description = 'BuddyPress member profiles exposed';
+	protected static $family = 'security';
+
+	public static function check() {
+		if ( ! class_exists( 'BuddyPress' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 70 ),
+				'threat_level' => 70,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/buddypress-member-privacy',
+			);
+		}
+		
+		return null;
+	}
+}

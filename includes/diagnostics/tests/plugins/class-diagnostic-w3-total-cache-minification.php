@@ -1,0 +1,55 @@
+<?php
+/**
+ * W3 Total Cache Minification Diagnostic
+ *
+ * W3 Total Cache Minification not optimized.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.892.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * W3 Total Cache Minification Diagnostic Class
+ *
+ * @since 1.892.0000
+ */
+class Diagnostic_W3TotalCacheMinification extends Diagnostic_Base {
+
+	protected static $slug = 'w3-total-cache-minification';
+	protected static $title = 'W3 Total Cache Minification';
+	protected static $description = 'W3 Total Cache Minification not optimized';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! defined( 'W3TC' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/w3-total-cache-minification',
+			);
+		}
+		
+		return null;
+	}
+}

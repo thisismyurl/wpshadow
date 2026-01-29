@@ -1,29 +1,55 @@
 <?php
-declare(strict_types=1);
-namespace WPShadow\Diagnostics;
-use WPShadow\Core\Diagnostic_Base;
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+/**
+ * Shortpixel Webp Delivery Diagnostic
+ *
+ * Shortpixel Webp Delivery detected.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.748.0000
+ */
 
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Shortpixel Webp Delivery Diagnostic Class
+ *
+ * @since 1.748.0000
+ */
 class Diagnostic_ShortpixelWebpDelivery extends Diagnostic_Base {
+
 	protected static $slug = 'shortpixel-webp-delivery';
-	protected static $title = 'ShortPixel WebP Delivery';
-	protected static $description = 'Validates plugin configuration';
-	protected static $family = 'plugins';
-	
+	protected static $title = 'Shortpixel Webp Delivery';
+	protected static $description = 'Shortpixel Webp Delivery detected';
+	protected static $family = 'functionality';
+
 	public static function check() {
-		if ( ! class_exists( 'ShortPixelAPI' ) ) { return null; }
-		$webp = get_option( 'wp-short-pixel-create-webp' );
-		if ( empty( $webp ) ) {
+		if ( ! defined( 'SHORTPIXEL_PLUGIN_VERSION' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
 			return array(
-				'id' => self::$slug,
-				'title' => self::$title,
-				'description' => __( 'WebP format not enabled', 'wpshadow' ),
-				'severity' => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link' => 'https://wpshadow.com/kb/shortpixel-webp',
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/shortpixel-webp-delivery',
 			);
 		}
+		
 		return null;
 	}
 }

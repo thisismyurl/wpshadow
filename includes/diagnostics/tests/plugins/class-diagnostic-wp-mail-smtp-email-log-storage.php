@@ -1,0 +1,55 @@
+<?php
+/**
+ * Wp Mail Smtp Email Log Storage Diagnostic
+ *
+ * Wp Mail Smtp Email Log Storage issue found.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1458.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Wp Mail Smtp Email Log Storage Diagnostic Class
+ *
+ * @since 1.1458.0000
+ */
+class Diagnostic_WpMailSmtpEmailLogStorage extends Diagnostic_Base {
+
+	protected static $slug = 'wp-mail-smtp-email-log-storage';
+	protected static $title = 'Wp Mail Smtp Email Log Storage';
+	protected static $description = 'Wp Mail Smtp Email Log Storage issue found';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! defined( 'WPMS_PLUGIN_VER' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/wp-mail-smtp-email-log-storage',
+			);
+		}
+		
+		return null;
+	}
+}

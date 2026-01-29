@@ -2,11 +2,11 @@
 /**
  * bbPress Spam Protection Diagnostic
  *
- * bbPress spam protection inadequate.
+ * bbPress spam protection insufficient.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.240.0000
+ * @since      1.508.0000
  */
 
 declare(strict_types=1);
@@ -22,13 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * bbPress Spam Protection Diagnostic Class
  *
- * @since 1.240.0000
+ * @since 1.508.0000
  */
 class Diagnostic_BbpressSpamProtection extends Diagnostic_Base {
 
 	protected static $slug = 'bbpress-spam-protection';
 	protected static $title = 'bbPress Spam Protection';
-	protected static $description = 'bbPress spam protection inadequate';
+	protected static $description = 'bbPress spam protection insufficient';
 	protected static $family = 'security';
 
 	public static function check() {
@@ -43,8 +43,8 @@ class Diagnostic_BbpressSpamProtection extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
+				'severity'    => self::calculate_severity( 65 ),
+				'threat_level' => 65,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/bbpress-spam-protection',
 			);

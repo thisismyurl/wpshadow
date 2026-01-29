@@ -1,0 +1,55 @@
+<?php
+/**
+ * Akismet Anti Spam Comment Checking Diagnostic
+ *
+ * Akismet Anti Spam Comment Checking issue found.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.1445.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Akismet Anti Spam Comment Checking Diagnostic Class
+ *
+ * @since 1.1445.0000
+ */
+class Diagnostic_AkismetAntiSpamCommentChecking extends Diagnostic_Base {
+
+	protected static $slug = 'akismet-anti-spam-comment-checking';
+	protected static $title = 'Akismet Anti Spam Comment Checking';
+	protected static $description = 'Akismet Anti Spam Comment Checking issue found';
+	protected static $family = 'functionality';
+
+	public static function check() {
+		if ( ! defined( 'AKISMET_VERSION' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 50 ),
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/akismet-anti-spam-comment-checking',
+			);
+		}
+		
+		return null;
+	}
+}

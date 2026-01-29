@@ -1,0 +1,55 @@
+<?php
+/**
+ * Booking Reminder System Diagnostic
+ *
+ * Booking reminders flooding users.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.624.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Booking Reminder System Diagnostic Class
+ *
+ * @since 1.624.0000
+ */
+class Diagnostic_BookingReminderSystem extends Diagnostic_Base {
+
+	protected static $slug = 'booking-reminder-system';
+	protected static $title = 'Booking Reminder System';
+	protected static $description = 'Booking reminders flooding users';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! true // Generic plugin check ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 45 ),
+				'threat_level' => 45,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/booking-reminder-system',
+			);
+		}
+		
+		return null;
+	}
+}

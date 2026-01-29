@@ -1,0 +1,55 @@
+<?php
+/**
+ * Autoptimize Critical Css Diagnostic
+ *
+ * Autoptimize Critical Css not optimized.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.917.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Autoptimize Critical Css Diagnostic Class
+ *
+ * @since 1.917.0000
+ */
+class Diagnostic_AutoptimizeCriticalCss extends Diagnostic_Base {
+
+	protected static $slug = 'autoptimize-critical-css';
+	protected static $title = 'Autoptimize Critical Css';
+	protected static $description = 'Autoptimize Critical Css not optimized';
+	protected static $family = 'performance';
+
+	public static function check() {
+		if ( ! defined( 'AUTOPTIMIZE_PLUGIN_VERSION' ) ) {
+			return null;
+		}
+		
+		$has_issue = false;
+		
+		if ( $has_issue ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => self::$description,
+				'severity'    => self::calculate_severity( 45 ),
+				'threat_level' => 45,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/autoptimize-critical-css',
+			);
+		}
+		
+		return null;
+	}
+}
