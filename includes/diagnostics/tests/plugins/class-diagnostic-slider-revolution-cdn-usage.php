@@ -36,25 +36,74 @@ class Diagnostic_SliderRevolutionCdnUsage extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		$issues = array();
+		$threat_level = 0;
+
+		// Get Slider Revolution settings
+		$settings = get_option( 'revslider-global-settings', array() );
+
+		// Check lazy loading
+		$lazy_load = isset( $settings['lazyLoad'] ) ? $settings['lazyLoad'] : 'off';
+		if ( $lazy_load === 'off' ) {
+			$issues[] = 'lazy_loading_disabled';
+			$threat_level += 15;
+		}
+
+		// Check if using local assets vs CDN
+		global $wpdb;
+		$sliders = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}revslider_sliders" );
+		if ( $sliders ) {
+			$using_external_images = false;
+			foreach ( $sliders as $slider ) {
+				$params = maybe_unserialize( $slider->params );
+				if ( isset( $params['source_type'] ) && $params['source_type'] === 'external' ) {
+					$using_external_images = true;
+					break;
+				}
+			}
+			if ( ! $using_external_images ) {
+				$issues[] = 'not_using_cdn';
+				$threat_level += 10;
+			}
+		}
+
+		// Check image optimization
+		$optimize_images = isset( $settings['enable_webp'] ) ? $settings['enable_webp'] : false;
+		if ( ! $optimize_images ) {
+			$issues[] = 'image_optimization_disabled';
+			$threat_level += 15;
+		}
+
+		// Check JS/CSS minification
+		$load_js = isset( $settings['js_to_footer'] ) ? $settings['js_to_footer'] : 'off';
+		if ( $load_js === 'off' ) {
+			$issues[] = 'js_not_optimized';
+			$threat_level += 10;
+		}
+
+		// Check preload
+		$use_preload = isset( $settings['use_preload'] ) ? $settings['use_preload'] : false;
+		if ( ! $use_preload ) {
+			$issues[] = 'preload_disabled';
+			$threat_level += 5;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of CDN/optimization issues */
+				__( 'Slider Revolution performance optimization has issues: %s. This causes slower page loads and poor mobile performance.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 35 ),
-				'threat_level' => 35,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/slider-revolution-cdn-usage',
 			);
 		}

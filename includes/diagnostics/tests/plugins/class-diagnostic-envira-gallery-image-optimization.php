@@ -36,25 +36,73 @@ class Diagnostic_EnviraGalleryImageOptimization extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		$issues = array();
+		$threat_level = 0;
+
+		// Get Envira settings
+		$settings = get_option( 'envira_gallery_settings', array() );
+
+		// Check lazy loading
+		$lazy_load = isset( $settings['lazy_loading'] ) ? $settings['lazy_loading'] : false;
+		if ( ! $lazy_load ) {
+			$issues[] = 'lazy_loading_disabled';
+			$threat_level += 15;
+		}
+
+		// Check responsive images
+		$responsive = isset( $settings['responsive_images'] ) ? $settings['responsive_images'] : false;
+		if ( ! $responsive ) {
+			$issues[] = 'responsive_images_disabled';
+			$threat_level += 15;
+		}
+
+		// Check image compression
+		$compression = isset( $settings['image_quality'] ) ? $settings['image_quality'] : 100;
+		if ( $compression > 85 ) {
+			$issues[] = 'high_image_quality';
+			$threat_level += 10;
+		}
+
+		// Check thumbnail size configuration
+		global $wpdb;
+		$galleries = $wpdb->get_results( "SELECT * FROM {$wpdb->posts} WHERE post_type = 'envira'" );
+		if ( $galleries ) {
+			$large_images = 0;
+			foreach ( $galleries as $gallery ) {
+				$config = get_post_meta( $gallery->ID, '_eg_gallery_data', true );
+				if ( isset( $config['config']['dimensions_width'] ) && $config['config']['dimensions_width'] > 1920 ) {
+					$large_images++;
+				}
+			}
+			if ( $large_images > 0 ) {
+				$issues[] = 'oversized_images';
+				$threat_level += 15;
+			}
+		}
+
+		// Check CDN usage
+		$cdn = isset( $settings['cdn_url'] ) ? $settings['cdn_url'] : '';
+		if ( empty( $cdn ) ) {
+			$issues[] = 'cdn_not_configured';
+			$threat_level += 10;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of image optimization issues */
+				__( 'Envira Gallery image optimization needs improvement: %s. This causes slower page loads and higher bandwidth usage.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/envira-gallery-image-optimization',
 			);
 		}

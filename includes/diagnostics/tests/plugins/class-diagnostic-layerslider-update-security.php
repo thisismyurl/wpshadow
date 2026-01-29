@@ -36,25 +36,69 @@ class Diagnostic_LayersliderUpdateSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		$issues = array();
+		$threat_level = 0;
+
+		// Check license activation
+		$license = get_option( 'layerslider-authorized-site', '' );
+		if ( empty( $license ) ) {
+			$issues[] = 'license_not_activated';
+			$threat_level += 20;
+		}
+
+		// Check plugin version
+		$current_version = defined( 'LS_PLUGIN_VERSION' ) ? LS_PLUGIN_VERSION : '';
+		$update_data = get_site_transient( 'update_plugins' );
+		$has_update = false;
+		if ( $update_data && isset( $update_data->response ) ) {
+			foreach ( $update_data->response as $plugin => $data ) {
+				if ( strpos( $plugin, 'layerslider' ) !== false ) {
+					$has_update = true;
+					break;
+				}
+			}
+		}
+		if ( $has_update ) {
+			$issues[] = 'update_available';
+			$threat_level += 25;
+		}
+
+		// Check for known vulnerabilities (example versions)
+		if ( version_compare( $current_version, '7.9.0', '<' ) ) {
+			$issues[] = 'vulnerable_version';
+			$threat_level += 30;
+		}
+
+		// Check automatic updates
+		$auto_update = get_option( 'layerslider_auto_update', false );
+		if ( ! $auto_update ) {
+			$issues[] = 'auto_update_disabled';
+			$threat_level += 15;
+		}
+
+		// Check update channel
+		$update_channel = get_option( 'layerslider_update_channel', 'stable' );
+		if ( $update_channel !== 'stable' ) {
+			$issues[] = 'using_beta_channel';
+			$threat_level += 10;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of update security issues */
+				__( 'LayerSlider update security has problems: %s. This exposes your site to known vulnerabilities and security exploits.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 60 ),
-				'threat_level' => 60,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/layerslider-update-security',
 			);
 		}
