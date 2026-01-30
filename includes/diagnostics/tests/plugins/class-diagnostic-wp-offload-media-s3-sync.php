@@ -32,33 +32,93 @@ class Diagnostic_WpOffloadMediaS3Sync extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for WP Offload Media plugin
+		if ( ! class_exists( 'Amazon_S3_And_CloudFront' ) && ! function_exists( 'as3cf_init' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-offload-media-s3-sync',
-			);
+		// Check 1: S3 bucket configured
+		$bucket = get_option( 'tantan_wordpress_s3_bucket', '' );
+		if ( empty( $bucket ) ) {
+			$issues[] = __( 'S3 bucket not configured', 'wpshadow' );
+			return null;
 		}
 		
-		return null;
+		// Check 2: Access credentials
+		$access_key = defined( 'AS3CF_AWS_ACCESS_KEY_ID' ) ? AS3CF_AWS_ACCESS_KEY_ID : get_option( 'tantan_wordpress_s3_access_key', '' );
+		if ( empty( $access_key ) ) {
+			$issues[] = __( 'S3 access credentials not configured', 'wpshadow' );
+		}
+		
+		// Check 3: Failed uploads
+		$failed_uploads = get_option( 'as3cf_attachment_error_log', array() );
+		if ( is_array( $failed_uploads ) && count( $failed_uploads ) > 10 ) {
+			$issues[] = sprintf( __( '%d failed S3 uploads logged', 'wpshadow' ), count( $failed_uploads ) );
+		}
+		
+		// Check 4: URL rewriting enabled
+		$rewrite_urls = get_option( 'tantan_wordpress_s3_cloudfront', '' );
+		$serve_from_s3 = get_option( 'tantan_wordpress_s3_virtual_host', false );
+		
+		if ( ! $serve_from_s3 && empty( $rewrite_urls ) ) {
+			$issues[] = __( 'Media URLs not rewritten to S3/CDN', 'wpshadow' );
+		}
+		
+		// Check 5: Local media cleanup
+		$remove_local = get_option( 'tantan_wordpress_s3_remove_local_file', false );
+		$upload_dir = wp_upload_dir();
+		$upload_size = 0;
+		
+		if ( $remove_local ) {
+			// Check for orphaned local files
+			$local_files = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s",
+					'amazonS3_info',
+					''
+				)
+			);
+			
+			if ( $local_files > 50 ) {
+				$issues[] = sprintf( __( '%d media items not synced to S3', 'wpshadow' ), $local_files );
+			}
+		}
+		
+		// Check 6: CDN configuration
+		if ( ! empty( $rewrite_urls ) && strpos( $rewrite_urls, '.cloudfront.net' ) !== false ) {
+			$custom_domain = get_option( 'tantan_wordpress_s3_cloudfront_cname', '' );
+			if ( empty( $custom_domain ) ) {
+				$issues[] = __( 'CloudFront without custom domain (branding opportunity)', 'wpshadow' );
+			}
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 65;
+		} elseif ( count( $issues ) >= 2 ) {
+			$threat_level = 58;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of S3 sync issues */
+				__( 'WP Offload Media S3 sync has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-offload-media-s3-sync',
+		);
 	}
 }

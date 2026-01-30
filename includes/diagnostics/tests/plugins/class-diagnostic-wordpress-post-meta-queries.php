@@ -32,33 +32,89 @@ class Diagnostic_WordpressPostMetaQueries extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
+		global $wpdb;
+		$issues = array();
+		
+		// Check 1: Orphaned postmeta
+		$orphaned = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+			 LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+			 WHERE p.ID IS NULL"
+		);
+		
+		if ( $orphaned > 100 ) {
+			$issues[] = sprintf( __( '%d orphaned postmeta entries (no matching posts)', 'wpshadow' ), $orphaned );
+		}
+		
+		// Check 2: Postmeta table size
+		$table_size = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ROUND((data_length + index_length) / 1024 / 1024, 2)
+				 FROM information_schema.tables
+				 WHERE table_schema = %s AND table_name = %s",
+				DB_NAME,
+				$wpdb->postmeta
+			)
+		);
+		
+		if ( $table_size > 1000 ) {
+			$issues[] = sprintf( __( 'Postmeta table: %.2f MB (optimization needed)', 'wpshadow' ), $table_size );
+		}
+		
+		// Check 3: Meta key indexes
+		$indexes = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->postmeta} WHERE Column_name = 'meta_key'" );
+		if ( empty( $indexes ) ) {
+			$issues[] = __( 'Missing meta_key index (slow meta queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Large serialized meta values
+		$large_meta = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE LENGTH(meta_value) > 10000"
+		);
+		
+		if ( $large_meta > 50 ) {
+			$issues[] = sprintf( __( '%d postmeta entries with large values (>10KB)', 'wpshadow' ), $large_meta );
+		}
+		
+		// Check 5: Duplicate meta entries
+		$duplicates = $wpdb->get_var(
+			"SELECT COUNT(*) FROM (
+				 SELECT post_id, meta_key, COUNT(*) as cnt
+				 FROM {$wpdb->postmeta}
+				 WHERE meta_key NOT LIKE '\\_%%'
+				 GROUP BY post_id, meta_key
+				 HAVING cnt > 1
+			 ) as dupes"
+		);
+		
+		if ( $duplicates > 20 ) {
+			$issues[] = sprintf( __( '%d duplicate meta key entries found', 'wpshadow' ), $duplicates );
+		}
+		
+		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wordpress-post-meta-queries',
-			);
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 65;
+		} elseif ( count( $issues ) >= 2 ) {
+			$threat_level = 58;
 		}
 		
-		return null;
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of meta query issues */
+				__( 'WordPress postmeta queries have %d optimization issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/wordpress-post-meta-queries',
+		);
 	}
 }

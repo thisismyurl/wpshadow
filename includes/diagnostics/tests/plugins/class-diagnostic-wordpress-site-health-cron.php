@@ -32,33 +32,81 @@ class Diagnostic_WordpressSiteHealthCron extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
+		// WordPress Site Health cron (introduced in WP 5.2)
+		global $wp_version;
+		if ( version_compare( $wp_version, '5.2', '<' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Site Health cron scheduled
+		$cron_array = _get_cron_array();
+		$health_check_scheduled = false;
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wordpress-site-health-cron',
-			);
+		if ( is_array( $cron_array ) ) {
+			foreach ( $cron_array as $timestamp => $hooks ) {
+				if ( isset( $hooks['wp_site_health_scheduled_check'] ) ) {
+					$health_check_scheduled = true;
+					break;
+				}
+			}
 		}
 		
-		return null;
+		if ( ! $health_check_scheduled ) {
+			$issues[] = __( 'Site Health scheduled check not registered', 'wpshadow' );
+		}
+		
+		// Check 2: Last Site Health check time
+		$last_check = get_option( 'wp_site_health_last_check', 0 );
+		if ( $last_check > 0 ) {
+			$time_since = time() - $last_check;
+			if ( $time_since > 172800 ) { // 2 days
+				$issues[] = sprintf( __( 'Site Health not checked in %d days', 'wpshadow' ), floor( $time_since / 86400 ) );
+			}
+		}
+		
+		// Check 3: Site Health test results
+		$test_results = get_transient( 'health-check-site-status-result' );
+		if ( false === $test_results ) {
+			$issues[] = __( 'Site Health test results not cached (tests may be slow)', 'wpshadow' );
+		}
+		
+		// Check 4: Critical issues in Site Health
+		if ( is_array( $test_results ) && isset( $test_results['critical'] ) && $test_results['critical'] > 0 ) {
+			$issues[] = sprintf( __( '%d critical issues in Site Health', 'wpshadow' ), $test_results['critical'] );
+		}
+		
+		// Check 5: Loopback request status
+		$loopback_test = get_transient( 'health-check-site-status-loopback' );
+		if ( is_array( $loopback_test ) && isset( $loopback_test['status'] ) && 'good' !== $loopback_test['status'] ) {
+			$issues[] = __( 'Loopback requests failing (cron and scheduled events affected)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 65;
+		} elseif ( count( $issues ) >= 2 ) {
+			$threat_level = 58;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of site health issues */
+				__( 'WordPress Site Health cron has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/wordpress-site-health-cron',
+		);
 	}
 }
