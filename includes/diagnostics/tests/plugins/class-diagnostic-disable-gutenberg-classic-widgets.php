@@ -32,29 +32,62 @@ class Diagnostic_DisableGutenbergClassicWidgets extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
-			return null;
+		$issues = array();
+		
+		// Check 1: Classic widgets enabled
+		$classic_widgets = get_option( 'classic_widgets_enabled', 0 );
+		if ( ! $classic_widgets ) {
+			$issues[] = 'Classic widgets support not enabled';
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		// Check 2: Widget blocks migration
+		$migration = get_option( 'gutenberg_widget_migration_complete', 0 );
+		if ( ! $migration ) {
+			$issues[] = 'Widget block migration not complete';
+		}
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 3: Legacy widget support
+		$legacy = get_option( 'gutenberg_legacy_widget_support', 0 );
+		if ( ! $legacy ) {
+			$issues[] = 'Legacy widget support not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 4: Sidebar management
+		$sidebars = get_option( 'gutenberg_sidebar_management', 0 );
+		if ( ! $sidebars ) {
+			$issues[] = 'Sidebar management not configured';
+		}
+		
+		// Check 5: Widget compatibility mode
+		$compat_mode = get_option( 'gutenberg_widget_compat_mode', 0 );
+		if ( ! $compat_mode ) {
+			$issues[] = 'Widget compatibility mode not enabled';
+		}
+		
+		// Check 6: Block widget migration
+		$block_widgets = get_option( 'gutenberg_block_widgets_available', 0 );
+		if ( ! $block_widgets ) {
+			$issues[] = 'Block-based widgets not available';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 35;
+			$threat_multiplier = 6;
+			$max_threat = 65;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d classic widget issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/disable-gutenberg-classic-widgets',
 			);
 		}

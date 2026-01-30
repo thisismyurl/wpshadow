@@ -36,25 +36,62 @@ class Diagnostic_BeaverBuilderSeoOptimization extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Semantic HTML enabled
+		$semantic = get_option( 'bb_semantic_html_enabled', 0 );
+		if ( ! $semantic ) {
+			$issues[] = 'Semantic HTML not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Heading structure validation
+		$heading_struct = get_option( 'bb_heading_structure_validation', 0 );
+		if ( ! $heading_struct ) {
+			$issues[] = 'Heading structure validation not enabled';
+		}
+		
+		// Check 3: Alt text for images
+		$alt_text = get_option( 'bb_enforce_image_alt_text', 0 );
+		if ( ! $alt_text ) {
+			$issues[] = 'Image alt text not enforced';
+		}
+		
+		// Check 4: Meta descriptions
+		$meta_desc = get_option( 'bb_meta_description_enabled', 0 );
+		if ( ! $meta_desc ) {
+			$issues[] = 'Meta description support not configured';
+		}
+		
+		// Check 5: Structured data/schema
+		$schema = get_option( 'bb_structured_data_enabled', 0 );
+		if ( ! $schema ) {
+			$issues[] = 'Structured data/schema markup not enabled';
+		}
+		
+		// Check 6: Robot meta tags
+		$robots = get_option( 'bb_robots_meta_tags_enabled', 0 );
+		if ( ! $robots ) {
+			$issues[] = 'Robot meta tags not configured';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d SEO optimization issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/beaver-builder-seo-optimization',
 			);
 		}

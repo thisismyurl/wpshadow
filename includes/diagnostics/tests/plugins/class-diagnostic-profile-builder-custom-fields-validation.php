@@ -32,29 +32,66 @@ class Diagnostic_ProfileBuilderCustomFieldsValidation extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! get_option( 'profile_builder_enabled', '' ) && ! class_exists( 'Wppb_Main' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Field validation enabled
+		$validation = get_option( 'wppb_field_validation_enabled', 0 );
+		if ( ! $validation ) {
+			$issues[] = 'Field validation not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Email validation
+		$email_val = get_option( 'wppb_email_validation', 0 );
+		if ( ! $email_val ) {
+			$issues[] = 'Email field validation not enabled';
+		}
+		
+		// Check 3: Required fields enforcement
+		$required = get_option( 'wppb_required_fields_enforcement', 0 );
+		if ( ! $required ) {
+			$issues[] = 'Required fields enforcement not configured';
+		}
+		
+		// Check 4: Input sanitization
+		$sanitize = get_option( 'wppb_input_sanitization', 0 );
+		if ( ! $sanitize ) {
+			$issues[] = 'Input sanitization not enabled';
+		}
+		
+		// Check 5: Field length validation
+		$length = get_option( 'wppb_field_length_validation', 0 );
+		if ( ! $length ) {
+			$issues[] = 'Field length validation not enabled';
+		}
+		
+		// Check 6: AJAX validation
+		$ajax = get_option( 'wppb_ajax_validation_enabled', 0 );
+		if ( ! $ajax ) {
+			$issues[] = 'AJAX validation not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d field validation issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/profile-builder-custom-fields-validation',
 			);
 		}
