@@ -36,25 +36,62 @@ class Diagnostic_AutoptimizeCriticalCss extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify critical CSS is enabled
+		$critical_css = get_option( 'autoptimize_css_defer_inline', '' );
+		if ( empty( $critical_css ) ) {
+			$issues[] = 'Critical CSS not configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for CSS optimization enabled
+		$optimize_css = get_option( 'autoptimize_css', '' );
+		if ( $optimize_css !== 'on' ) {
+			$issues[] = 'CSS optimization not enabled';
+		}
+		
+		// Check 3: Verify inline CSS handling
+		$inline_css = get_option( 'autoptimize_css_inline', '' );
+		if ( $inline_css !== 'on' ) {
+			$issues[] = 'Inline CSS optimization not enabled';
+		}
+		
+		// Check 4: Check for CSS minification
+		$minify_css = get_option( 'autoptimize_css_minify', '' );
+		if ( $minify_css !== 'on' ) {
+			$issues[] = 'CSS minification not enabled';
+		}
+		
+		// Check 5: Verify excluded CSS files
+		$exclude_css = get_option( 'autoptimize_css_exclude', '' );
+		if ( ! empty( $exclude_css ) && strpos( $exclude_css, 'admin-bar' ) === false ) {
+			$issues[] = 'Admin bar CSS not excluded (may cause display issues)';
+		}
+		
+		// Check 6: Check for cache configuration
+		$cache_enabled = get_option( 'autoptimize_cache_nogzip', '' );
+		if ( $cache_enabled === 'on' ) {
+			$issues[] = 'Gzip compression disabled for cache files';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d Autoptimize critical CSS issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/autoptimize-critical-css',
 			);
 		}

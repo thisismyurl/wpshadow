@@ -32,29 +32,60 @@ class Diagnostic_AllInOneWpSecurityDatabaseSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'AIO_WP_Security' ) && ! defined( 'AIOWPSEC_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Database prefix changed.
+		global $wpdb;
+		if ( 'wp_' === $wpdb->prefix ) {
+			$issues[] = 'using default wp_ prefix (makes SQL injection easier)';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: DB backup scheduled.
+		$db_backup = get_option( 'aiowps_enable_automated_backups', '0' );
+		if ( '0' === $db_backup ) {
+			$issues[] = 'automated database backups not configured';
+		}
+		
+		// Check 3: Database credentials in wp-config.
+		$config_path = ABSPATH . 'wp-config.php';
+		if ( file_exists( $config_path ) ) {
+			$perms = fileperms( $config_path );
+			$world_readable = ( $perms & 0x0004 );
+			if ( $world_readable ) {
+				$issues[] = 'wp-config.php is world-readable (database credentials exposed)';
+			}
+		}
+		
+		// Check 4: DB optimization enabled.
+		$db_optimize = get_option( 'aiowps_enable_db_optimization', '0' );
+		if ( '0' === $db_optimize ) {
+			$issues[] = 'database optimization disabled (tables may have overhead)';
+		}
+		
+		// Check 5: Exposed SQL errors.
+		if ( ! defined( 'WP_DEBUG_DISPLAY' ) || WP_DEBUG_DISPLAY ) {
+			$issues[] = 'SQL errors displayed to users (information disclosure)';
+		}
+		
+		// Check 6: Direct database access.
+		$restrict_db_access = get_option( 'aiowps_enable_db_access_restriction', '0' );
+		if ( '0' === $restrict_db_access ) {
+			$issues[] = 'direct database access not restricted (phpMyAdmin exposure risk)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => 'AIOS database security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-wp-security-database-security',
 			);
 		}
