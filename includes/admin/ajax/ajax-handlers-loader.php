@@ -96,6 +96,7 @@ require_once $ajax_path . 'Schedule_Offpeak_Handler.php';
 require_once $ajax_path . 'Clear_Cache_Handler.php';
 require_once $ajax_path . 'Create_Magic_Link_Handler.php';
 require_once $ajax_path . 'Revoke_Magic_Link_Handler.php';
+require_once $ajax_path . 'Create_Permanent_User_Handler.php';
 require_once $ajax_path . 'Save_Cache_Options_Handler.php';
 require_once $ajax_path . 'Mobile_Check_Handler.php';
 require_once $ajax_path . 'A11y_Audit_Handler.php';

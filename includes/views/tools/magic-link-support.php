@@ -31,11 +31,21 @@ $active_links = array_filter(
 		return isset( $link['expires_at'] ) && $link['expires_at'] > current_time( 'timestamp' );
 	}
 );
+
+// Check for permanent user creation result
+$permanent_user_created = isset( $_GET['permanent_user_created'] ) ? sanitize_text_field( wp_unslash( $_GET['permanent_user_created'] ) ) : '';
+$permanent_user_message = isset( $_GET['permanent_user_message'] ) ? sanitize_text_field( wp_unslash( $_GET['permanent_user_message'] ) ) : '';
 ?>
 
 <div class="wpshadow-tool-container">
 	<h2><?php esc_html_e( 'Temporary User Access', 'wpshadow' ); ?></h2>
 	<p><?php esc_html_e( 'Create secure, temporary login links to invite contributors, editors, or administrators to your site without creating permanent accounts or sharing passwords.', 'wpshadow' ); ?></p>
+
+	<?php if ( ! empty( $permanent_user_created ) ) : ?>
+		<div class="notice notice-<?php echo '1' === $permanent_user_created ? 'success' : 'error'; ?> is-dismissible">
+			<p><?php echo esc_html( rawurldecode( $permanent_user_message ) ); ?></p>
+		</div>
+	<?php endif; ?>
 
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>

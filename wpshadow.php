@@ -52,6 +52,8 @@ require_once WPSHADOW_PATH . 'includes/views/functions-page-layout.php';
 require_once WPSHADOW_PATH . 'includes/views/menu-stubs.php';
 require_once WPSHADOW_PATH . 'includes/core/class-finding-utils.php';
 require_once WPSHADOW_PATH . 'includes/core/functions-category-metadata.php';
+require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-backup-manager.php';
+require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-backup-scheduler.php';
 
 /**
  * Initialize error handler early
@@ -87,6 +89,10 @@ require_once WPSHADOW_PATH . 'includes/privacy/class-first-run-consent.php';
 
 // Load AJAX handlers (requires privacy classes to be loaded first)
 require_once WPSHADOW_PATH . 'includes/admin/ajax/ajax-handlers-loader.php';
+
+// Load Magic Link Manager (for expiry notifications)
+require_once WPSHADOW_PATH . 'includes/utils/class-magic-link-manager.php';
+\WPShadow\Utils\Magic_Link_Manager::init();
 
 // Load auto-deploy feature (only active if WPSHADOW_AUTO_DEPLOY is true)
 require_once WPSHADOW_PATH . 'includes/admin/class-auto-deploy.php';

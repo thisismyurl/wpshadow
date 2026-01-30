@@ -304,6 +304,142 @@ class Settings_Registry {
 		);
 
 		// =================================================================
+		// BACKUP SETTINGS (Vault Light)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_enabled',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Enable backup snapshots before treatments', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_include_database',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Include database in Vault Light snapshots', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_retention_days',
+			array(
+				'type'              => 'integer',
+				'default'           => 7,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_retention_days' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Number of days to keep Vault Light backups', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_max_size_mb',
+			array(
+				'type'              => 'integer',
+				'default'           => 500,
+				'sanitize_callback' => 'absint',
+				'show_in_rest'      => false,
+				'description'       => __( 'Maximum total backup size (MB)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_compress',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Compress Vault Light backups', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_exclude_uploads',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Exclude uploads from Vault Light backups', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_verify',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Verify Vault Light backups after creation', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_magic_link_expiry_notifications',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Send email notifications when magic links expire', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_schedule_enabled',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Enable scheduled Vault Light backups', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_schedule_frequency',
+			array(
+				'type'              => 'string',
+				'default'           => 'weekly',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_backup_frequency' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'How often scheduled backups run', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_schedule_time',
+			array(
+				'type'              => 'string',
+				'default'           => '02:00',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_backup_time' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Time of day for scheduled backups (24h)', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
 		// DIAGNOSTIC & TREATMENT TOGGLES
 		// =================================================================
 
@@ -641,6 +777,33 @@ class Settings_Registry {
 	public static function sanitize_screenshot_dimension( $value ): int {
 		$int = absint( $value );
 		return min( max( $int, 400 ), 2560 ); // Clamp between 400-2560 pixels
+	}
+
+	/**
+	 * Sanitize backup frequency
+	 *
+	 * @param mixed $value Input value
+	 * @return string Sanitized frequency
+	 */
+	public static function sanitize_backup_frequency( $value ): string {
+		$allowed = array( 'daily', 'weekly', 'monthly' );
+		$value   = sanitize_key( (string) $value );
+		return in_array( $value, $allowed, true ) ? $value : 'weekly';
+	}
+
+	/**
+	 * Sanitize backup time (HH:MM 24h)
+	 *
+	 * @param mixed $value Input value
+	 * @return string Sanitized time
+	 */
+	public static function sanitize_backup_time( $value ): string {
+		$value = is_string( $value ) ? trim( $value ) : '';
+		if ( preg_match( '/^([01]\d|2[0-3]):([0-5]\d)$/', $value ) ) {
+			return $value;
+		}
+
+		return '02:00';
 	}
 
 	/**

@@ -252,6 +252,23 @@ class Advanced_Settings_Page {
 						</div>
 
 						<div class="wps-form-group wps-mt-4">
+							<label class="wps-toggle" for="wpshadow_magic_link_expiry_notifications">
+								<input 
+									type="checkbox" 
+									id="wpshadow_magic_link_expiry_notifications" 
+									name="wpshadow_magic_link_expiry_notifications" 
+									value="1"
+									<?php checked( get_option( 'wpshadow_magic_link_expiry_notifications', false ) ); ?>
+								/>
+								<span class="wps-toggle-slider"></span>
+								<?php esc_html_e( 'Magic Link Expiry Notifications', 'wpshadow' ); ?>
+							</label>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Send email notifications when temporary access links expire, with option to create permanent user accounts.', 'wpshadow' ); ?>
+							</p>
+						</div>
+
+						<div class="wps-form-group wps-mt-4">
 							<label class="wps-toggle" for="wpshadow_webhooks_enabled">
 								<input 
 									type="checkbox" 
@@ -352,6 +369,32 @@ class Advanced_Settings_Page {
 							<tr style="border-bottom: 1px solid #ddd;">
 								<td class="wps-th-p-2-bold"><?php esc_html_e( 'PHP Version', 'wpshadow' ); ?></td>
 								<td class="wps-td-p-2"><?php echo esc_html( phpversion() ); ?></td>
+							</tr>
+							<tr style="border-bottom: 1px solid #ddd;">
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'Registered Diagnostics', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2">
+									<?php
+									$diagnostic_count = \WPShadow\Diagnostics\Diagnostic_Registry::count();
+									echo esc_html( number_format_i18n( $diagnostic_count ) );
+									?>
+									<span class="description" style="display: block; font-size: 11px; margin-top: 2px;">
+										<?php esc_html_e( 'Total diagnostic tests available', 'wpshadow' ); ?>
+									</span>
+								</td>
+							</tr>
+							<tr style="border-bottom: 1px solid #ddd;">
+								<td class="wps-th-p-2-bold"><?php esc_html_e( 'Registered Treatments', 'wpshadow' ); ?></td>
+								<td class="wps-td-p-2">
+									<?php
+									$treatment_count = class_exists( '\WPShadow\Treatments\Treatment_Registry' ) 
+										? \WPShadow\Treatments\Treatment_Registry::count() 
+										: 0;
+									echo esc_html( number_format_i18n( $treatment_count ) );
+									?>
+									<span class="description" style="display: block; font-size: 11px; margin-top: 2px;">
+										<?php esc_html_e( 'Total auto-fix treatments available', 'wpshadow' ); ?>
+									</span>
+								</td>
 							</tr>
 							<tr style="border-bottom: 1px solid #ddd;">
 								<td class="wps-th-p-2-bold"><?php esc_html_e( 'Installation Path', 'wpshadow' ); ?></td>
