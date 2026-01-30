@@ -103,7 +103,6 @@ require_once $ajax_path . 'A11y_Audit_Handler.php';
 require_once $ajax_path . 'Save_Tip_Prefs_Handler.php';
 require_once $ajax_path . 'Dismiss_Tip_Handler.php';
 require_once $ajax_path . 'Check_Broken_Links_Handler.php';
-require_once $ajax_path . 'Color_Contrast_Handler.php';
 require_once $ajax_path . 'Generate_Password_Handler.php';
 require_once $ajax_path . 'Consent_Preferences_Handler.php';
 require_once $ajax_path . 'Error_Report_Handler.php';

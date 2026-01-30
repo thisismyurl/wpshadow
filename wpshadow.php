@@ -62,13 +62,21 @@ require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-backup-schedule
  */
 
 /**
- * Initialize Settings Registry
- *
- * Register all settings with WordPress Settings API for proper validation,
- * sanitization, and WordPress integration.
+ * Initialize error handler early
  */
-\WPShadow\Core\Settings_Registry::register();
 \WPShadow\Core\Error_Handler::init();
+
+/**
+ * Load translations and register settings on init.
+ */
+add_action(
+	'init',
+	function () {
+		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
+		\WPShadow\Core\Settings_Registry::register();
+	},
+	5
+);
 
 /**
  * Load bootstrap and initialize all systems on plugins_loaded

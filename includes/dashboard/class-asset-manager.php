@@ -127,54 +127,6 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 }
 
 /**
- * Enqueue color contrast checker assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_color_contrast_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
-		return;
-	}
-
-	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
-	if ( $tool !== 'color-contrast' ) {
-		return;
-	}
-
-	wp_enqueue_style(
-		'wpshadow-color-contrast',
-		WPSHADOW_URL . 'assets/css/color-contrast.css',
-		array(),
-		WPSHADOW_VERSION
-	);
-
-	wp_enqueue_script(
-		'wpshadow-color-contrast',
-		WPSHADOW_URL . 'assets/js/color-contrast.js',
-		array(),
-		WPSHADOW_VERSION,
-		true
-	);
-
-	wp_localize_script(
-		'wpshadow-color-contrast',
-		'wpshadowContrast',
-		array(
-			'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
-			'themeNonce'     => wp_create_nonce( 'wpshadow_theme_contrast' ),
-			'i18nInvalid'    => __( 'Please enter valid 6-digit hex colors.', 'wpshadow' ),
-			'i18nPass'       => __( 'Pass', 'wpshadow' ),
-			'i18nFail'       => __( 'Fail', 'wpshadow' ),
-			'i18nRatioLabel' => __( 'Contrast ratio', 'wpshadow' ),
-			'i18nThemeScan'  => __( 'Scan Active Theme', 'wpshadow' ),
-			'i18nThemeError' => __( 'Unable to scan the active theme. Please try again.', 'wpshadow' ),
-			'i18nThemeBg'    => __( 'Background', 'wpshadow' ),
-		)
-	);
-}
-
-/**
  * Enqueue mobile friendliness checker assets.
  *
  * @param string $hook Current admin hook.
@@ -304,51 +256,6 @@ function wpshadow_enqueue_broken_links_assets( $hook ) {
 			'defaultUrl'  => home_url(),
 			'i18nError'   => __( 'Unable to complete the link check. Please try again.', 'wpshadow' ),
 			'i18nRun'     => __( 'Check Links', 'wpshadow' ),
-			'i18nRunning' => __( 'Checking...', 'wpshadow' ),
-		)
-	);
-}
-
-/**
- * Enqueue color contrast checker assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_color_contrast_checker_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
-		return;
-	}
-
-	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
-	if ( $tool !== 'color-contrast-checker' ) {
-		return;
-	}
-
-	wp_enqueue_style(
-		'wpshadow-color-contrast-checker',
-		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
-		array(),
-		WPSHADOW_VERSION
-	);
-
-	wp_enqueue_script(
-		'wpshadow-color-contrast-checker',
-		WPSHADOW_URL . 'assets/js/color-contrast-checker.js',
-		array(),
-		WPSHADOW_VERSION,
-		true
-	);
-
-	wp_localize_script(
-		'wpshadow-color-contrast-checker',
-		'wpshadowColorContrast',
-		array(
-			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-			'nonce'       => wp_create_nonce( 'wpshadow_contrast_check' ),
-			'defaultUrl'  => home_url(),
-			'i18nError'   => __( 'Unable to complete the contrast check. Please try again.', 'wpshadow' ),
-			'i18nRun'     => __( 'Check Contrast', 'wpshadow' ),
 			'i18nRunning' => __( 'Checking...', 'wpshadow' ),
 		)
 	);
@@ -647,11 +554,9 @@ function wpshadow_enqueue_inline_styles_css( $hook ) {
 function wpshadow_register_asset_hooks() {
 	// Main page assets
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_workflow_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_color_contrast_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_mobile_friendliness_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_a11y_audit_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_broken_links_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_color_contrast_checker_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_dark_mode_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_tooltip_assets' );

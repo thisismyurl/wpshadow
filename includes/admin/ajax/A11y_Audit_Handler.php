@@ -159,15 +159,15 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 				return 'pass';
 		}
 	}
-}
 
 	/**
 	 * Analyze HTML for accessibility issues.
 	 *
-	 * @param string $html The HTML content to analyze.
+	 * @since  1.2601.2148
+	 * @param  string $html The HTML content to analyze.
 	 * @return array Array of accessibility checks.
 	 */
-	private static function analyze_a11y_html( $html ): array {
+	private static function analyze_a11y_html( string $html ): array {
 		$checks = array();
 
 		// Check for images without alt text

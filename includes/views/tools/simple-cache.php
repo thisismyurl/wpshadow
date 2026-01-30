@@ -81,9 +81,6 @@ $kanban_cards = array(
 		.wps-kanban-card.wps-status-ok { border-left-color: #46b450; }
 		.wps-kanban-card.wps-status-issue { border-left-color: #d63638; }
 		.wps-kanban-card.wps-status-action { border-left-color: #d98300; }
-		.wps-kanban-card.wps-status-check { border-left-color: #f0ad4e; }
-		.wps-activity-list { list-style: disc; padding-left: 18px; }
-		.wps-activity-list li { margin-bottom: 8px; }
 	</style>
 
 	<div class="notice notice-info" style="margin-top:10px;">
@@ -92,7 +89,7 @@ $kanban_cards = array(
 
 	<div class="notice notice-success" style="margin-top:10px;">
 		<p><strong><?php esc_html_e( 'Free Offsite Storage for Registered Users', 'wpshadow' ); ?></strong></p>
-		<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three backups and free restores whenever you need them.', 'wpshadow' ); ?> <a href="https://wpshadow.com/features/offsite-backup/" target="_blank"><?php esc_html_e( 'Learn more', 'wpshadow' ); ?></a></p>
+		<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three WPShadow Vault Light snapshots and free restores whenever you need them.', 'wpshadow' ); ?> <a href="https://wpshadow.com/features/offsite-backup/" target="_blank"><?php esc_html_e( 'Learn more', 'wpshadow' ); ?></a></p>
 	</div>
 
 	<div class="wpshadow-tool-section">

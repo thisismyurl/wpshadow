@@ -29,7 +29,7 @@ function wpshadow_get_utilities_catalog() {
 		// Page Analysis Tools
 		array(
 			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
-			'desc'    => __( 'Scan a page for accessibility issues and WCAG compliance.', 'wpshadow' ),
+			'desc'    => __( 'Scan a page for accessibility issues, WCAG compliance, and color contrast.', 'wpshadow' ),
 			'tool'    => 'a11y-audit',
 			'icon'    => 'dashicons-universal-access',
 			'family'  => 'page-analysis',
@@ -40,14 +40,6 @@ function wpshadow_get_utilities_catalog() {
 			'desc'    => __( 'Check a page for broken internal and external links.', 'wpshadow' ),
 			'tool'    => 'broken-links',
 			'icon'    => 'dashicons-admin-links',
-			'family'  => 'page-analysis',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Color Contrast Checker', 'wpshadow' ),
-			'desc'    => __( 'Analyze color contrast issues on a specific page.', 'wpshadow' ),
-			'tool'    => 'color-contrast-checker',
-			'icon'    => 'dashicons-art',
 			'family'  => 'page-analysis',
 			'enabled' => true,
 		),

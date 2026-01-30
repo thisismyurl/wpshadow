@@ -42,79 +42,262 @@ Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ), __( 'Enable dark m
 	<?php echo wp_kses_post( $saved_message ); ?>
 
 	<div class="wpshadow-tool-section wps-card wps-mt-20">
-		<h2><?php esc_html_e( 'Dark Mode Settings', 'wpshadow' ); ?></h2>
+		<h2><?php esc_html_e( 'Choose Your Display Preference', 'wpshadow' ); ?></h2>
+		<p class="wps-help-text" style="margin-bottom: 30px;">
+			<?php esc_html_e( 'Select how you want the WordPress admin interface to appear. Each mode has unique benefits for your workflow and well-being.', 'wpshadow' ); ?>
+		</p>
 
 		<form method="post" action="">
 			<?php wp_nonce_field( 'wpshadow_dark_mode', 'wpshadow_dark_mode_nonce' ); ?>
 
-			<div class="wps-settings-section">
-				<div class="wps-form-group">
-					<label class="wps-label">
-						<?php esc_html_e( 'Mode Preference', 'wpshadow' ); ?>
-					</label>
-					<fieldset>
-						<div style="display: flex; flex-direction: column; gap: 8px;">
-							<label>
-								<input type="radio" name="dark_mode_pref" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
-								<?php esc_html_e( 'Auto (follow system/WordPress theme)', 'wpshadow' ); ?>
-							</label>
-							<label>
-								<input type="radio" name="dark_mode_pref" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
-								<?php esc_html_e( 'Light mode', 'wpshadow' ); ?>
-							</label>
-							<label>
-								<input type="radio" name="dark_mode_pref" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
-								<?php esc_html_e( 'Dark mode', 'wpshadow' ); ?>
-							</label>
+			<div class="wpshadow-dark-mode-options">
+				<!-- Auto Mode -->
+				<div class="wpshadow-mode-card <?php echo ( 'auto' === $dark_mode_pref ) ? 'active' : ''; ?>">
+					<div class="wpshadow-mode-preview wpshadow-mode-preview-auto">
+						<div class="preview-header">
+							<div class="preview-icon">
+								<span class="dashicons dashicons-update"></span>
+							</div>
+							<div class="preview-content">
+								<div class="preview-title"><?php esc_html_e( 'Auto Mode', 'wpshadow' ); ?></div>
+								<div class="preview-text"><?php esc_html_e( 'Adapts to system', 'wpshadow' ); ?></div>
+							</div>
 						</div>
-					</fieldset>
-					<span class="wps-help-text">
-						<?php esc_html_e( 'Dark mode reduces eye strain in low-light environments and saves battery on OLED screens.', 'wpshadow' ); ?>
-					</span>
+					</div>
+					<h3><?php esc_html_e( 'Auto', 'wpshadow' ); ?></h3>
+					<p class="mode-description">
+						<?php esc_html_e( 'Automatically adapts to your system or WordPress theme preference. Changes seamlessly between light and dark modes based on your operating system settings or time of day.', 'wpshadow' ); ?>
+					</p>
+					<button 
+						type="submit" 
+						name="dark_mode_pref" 
+						value="auto"
+						class="wps-btn <?php echo ( 'auto' === $dark_mode_pref ) ? 'wps-btn-primary' : 'wps-btn-secondary'; ?>"
+						aria-pressed="<?php echo ( 'auto' === $dark_mode_pref ) ? 'true' : 'false'; ?>"
+					>
+						<?php
+						if ( 'auto' === $dark_mode_pref ) {
+							esc_html_e( '✓ Currently Selected', 'wpshadow' );
+						} else {
+							esc_html_e( 'Select Auto Mode', 'wpshadow' );
+						}
+						?>
+					</button>
+				</div>
+
+				<!-- Light Mode -->
+				<div class="wpshadow-mode-card <?php echo ( 'light' === $dark_mode_pref ) ? 'active' : ''; ?>">
+					<div class="wpshadow-mode-preview wpshadow-mode-preview-light">
+						<div class="preview-header">
+							<div class="preview-icon">
+								<span class="dashicons dashicons-admin-appearance"></span>
+							</div>
+							<div class="preview-content">
+								<div class="preview-title"><?php esc_html_e( 'Light Mode', 'wpshadow' ); ?></div>
+								<div class="preview-text"><?php esc_html_e( 'Bright & crisp', 'wpshadow' ); ?></div>
+							</div>
+						</div>
+					</div>
+					<h3><?php esc_html_e( 'Light', 'wpshadow' ); ?></h3>
+					<p class="mode-description">
+						<?php esc_html_e( 'Classic bright interface with high contrast. Ideal for well-lit environments. Light mode typically uses 15-20% more power on OLED displays compared to dark mode, but provides excellent readability in bright conditions.', 'wpshadow' ); ?>
+					</p>
+					<button 
+						type="submit" 
+						name="dark_mode_pref" 
+						value="light"
+						class="wps-btn <?php echo ( 'light' === $dark_mode_pref ) ? 'wps-btn-primary' : 'wps-btn-secondary'; ?>"
+						aria-pressed="<?php echo ( 'light' === $dark_mode_pref ) ? 'true' : 'false'; ?>"
+					>
+						<?php
+						if ( 'light' === $dark_mode_pref ) {
+							esc_html_e( '✓ Currently Selected', 'wpshadow' );
+						} else {
+							esc_html_e( 'Select Light Mode', 'wpshadow' );
+						}
+						?>
+					</button>
+				</div>
+
+				<!-- Dark Mode -->
+				<div class="wpshadow-mode-card <?php echo ( 'dark' === $dark_mode_pref ) ? 'active' : ''; ?>">
+					<div class="wpshadow-mode-preview wpshadow-mode-preview-dark">
+						<div class="preview-header">
+							<div class="preview-icon">
+								<span class="dashicons dashicons-admin-customizer"></span>
+							</div>
+							<div class="preview-content">
+								<div class="preview-title"><?php esc_html_e( 'Dark Mode', 'wpshadow' ); ?></div>
+								<div class="preview-text"><?php esc_html_e( 'Easy on the eyes', 'wpshadow' ); ?></div>
+							</div>
+						</div>
+					</div>
+					<h3><?php esc_html_e( 'Dark', 'wpshadow' ); ?></h3>
+					<p class="mode-description">
+						<?php esc_html_e( 'Eco-friendly and health-conscious. Reduces blue light exposure, helping to minimize eye strain and sleep disruption. Uses up to 63% less power on OLED screens, reducing your environmental impact while working late.', 'wpshadow' ); ?>
+					</p>
+					<button 
+						type="submit" 
+						name="dark_mode_pref" 
+						value="dark"
+						class="wps-btn <?php echo ( 'dark' === $dark_mode_pref ) ? 'wps-btn-primary' : 'wps-btn-secondary'; ?>"
+						aria-pressed="<?php echo ( 'dark' === $dark_mode_pref ) ? 'true' : 'false'; ?>"
+					>
+						<?php
+						if ( 'dark' === $dark_mode_pref ) {
+							esc_html_e( '✓ Currently Selected', 'wpshadow' );
+						} else {
+							esc_html_e( 'Select Dark Mode', 'wpshadow' );
+						}
+						?>
+					</button>
 				</div>
 			</div>
-			<?php
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
-			echo \WPShadow\Helpers\Form_Controls::button_group(
-				array(
-					'name'     => 'dark_mode_pref',
-					'label'    => __( 'Mode Preference', 'wpshadow' ),
-					'options'  => array(
-						array(
-							'value' => 'auto',
-							'label' => __( 'Auto', 'wpshadow' ),
-							'icon'  => 'dashicons-update',
-						),
-						array(
-							'value' => 'light',
-							'label' => __( 'Light', 'wpshadow' ),
-							'icon'  => 'dashicons-admin-appearance',
-						),
-						array(
-							'value' => 'dark',
-							'label' => __( 'Dark', 'wpshadow' ),
-							'icon'  => 'dashicons-admin-customizer',
-						),
-					),
-					'selected' => $dark_mode_pref,
-				)
-			);
-			?>
 
-			<p class="description" style="margin-top: -15px; margin-left: 15px;">
-				<?php esc_html_e( 'Dark mode reduces eye strain in low-light environments and saves battery on OLED screens.', 'wpshadow' ); ?>
-			</p>
-
-			<p class="submit">
-				<button type="submit" name="save_dark_mode" class="wps-btn wps-btn-primary">
-					<?php esc_html_e( 'Save Changes', 'wpshadow' ); ?>
-				</button>
-			</p>
+			<input type="hidden" name="save_dark_mode" value="1">
 		</form>
 	</div>
 </div>
 
 <style>
+	/* Three Column Layout for Mode Selection */
+	.wpshadow-dark-mode-options {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+		margin-bottom: 30px;
+	}
+
+	@media (max-width: 1200px) {
+		.wpshadow-dark-mode-options {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.wpshadow-mode-card {
+		background: #fff;
+		border: 2px solid #ddd;
+		border-radius: 8px;
+		padding: 20px;
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.wpshadow-mode-card:hover {
+		border-color: #2271b1;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		transform: translateY(-2px);
+	}
+
+	.wpshadow-mode-card.active {
+		border-color: #2271b1;
+		background: #f6f7f7;
+		box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.1);
+	}
+
+	.wpshadow-mode-preview {
+		background: #f9f9f9;
+		border: 1px solid #ddd;
+		border-radius: 6px;
+		padding: 20px;
+		margin-bottom: 16px;
+		min-height: 100px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.wpshadow-mode-preview-auto {
+		background: linear-gradient(135deg, #ffffff 50%, #2a2a2a 50%);
+	}
+
+	.wpshadow-mode-preview-auto .preview-header {
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+	}
+
+	.wpshadow-mode-preview-light {
+		background: #ffffff;
+		border-color: #ccc;
+	}
+
+	.wpshadow-mode-preview-light .preview-header {
+		background: #ffffff;
+		color: #333;
+	}
+
+	.wpshadow-mode-preview-dark {
+		background: #1e1e1e;
+		border-color: #444;
+	}
+
+	.wpshadow-mode-preview-dark .preview-header {
+		background: #2a2a2a;
+		color: #e0e0e0;
+	}
+
+	.preview-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px;
+		border-radius: 4px;
+		min-width: 200px;
+	}
+
+	.preview-icon {
+		font-size: 24px;
+		line-height: 1;
+	}
+
+	.wpshadow-mode-preview-light .preview-icon {
+		color: #f59e0b;
+	}
+
+	.wpshadow-mode-preview-dark .preview-icon {
+		color: #64b5f6;
+	}
+
+	.wpshadow-mode-preview-auto .preview-icon {
+		color: #2271b1;
+	}
+
+	.preview-content {
+		flex: 1;
+	}
+
+	.preview-title {
+		font-weight: 600;
+		font-size: 14px;
+		margin-bottom: 2px;
+	}
+
+	.preview-text {
+		font-size: 12px;
+		opacity: 0.7;
+	}
+
+	.wpshadow-mode-card h3 {
+		margin: 0 0 12px 0;
+		font-size: 18px;
+		font-weight: 600;
+		color: #1e1e1e;
+	}
+
+	.wpshadow-mode-card .mode-description {
+		flex: 1;
+		margin: 0 0 20px 0;
+		font-size: 14px;
+		line-height: 1.6;
+		color: #666;
+	}
+
+	.wpshadow-mode-card .wps-btn {
+		width: 100%;
+		margin-top: auto;
+	}
+
 	/* Dark Mode CSS for WPShadow Admin */
 	body.wpshadow-dark-mode {
 		--wp-admin-theme-color: #1e1e1e;

@@ -24,7 +24,7 @@ Tool_View_Base::enqueue_assets( 'a11y-audit' );
 // Render header
 Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ) );
 ?>
-	<p><?php esc_html_e( 'Scan a page for accessibility issues and WCAG compliance.', 'wpshadow' ); ?></p>
+	<p><?php esc_html_e( 'Scan a page for accessibility issues, WCAG compliance, and color contrast violations.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-a11y-grid">
 		<div class="wpshadow-a11y-panel wps-card wps-form-card" role="region" aria-labelledby="wpshadow-a11y-scan-heading">

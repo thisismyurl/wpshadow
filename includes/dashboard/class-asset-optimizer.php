@@ -65,12 +65,7 @@ class Asset_Optimizer {
 			'wpshadow-tooltips',
 			'wpshadow-kanban-board',
 			'wpshadow-workflow-list',
-			'wpshadow-color-contrast',
-			'wpshadow-mobile-friendliness',
-			'wpshadow-guardian-dashboard-settings',
-		);
 
-		// Don't modify critical scripts
 		if ( in_array( $handle, $critical_scripts, true ) ) {
 			return $tag;
 		}

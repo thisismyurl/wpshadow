@@ -43,7 +43,7 @@ class Vault_Light_Settings_Page {
 					<?php esc_html_e( 'WPShadow Vault Light', 'wpshadow' ); ?>
 				</h1>
 				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Configure lightweight scheduled backups and snapshots before treatments.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Configure WPShadow Vault Light snapshots before treatments.', 'wpshadow' ); ?>
 				</p>
 			</div>
 
@@ -52,7 +52,7 @@ class Vault_Light_Settings_Page {
 				<div class="wps-card-body">
 					<p>
 						<strong><?php esc_html_e( 'Safety First:', 'wpshadow' ); ?></strong>
-						<?php esc_html_e( 'WPShadow Vault Light creates scheduled snapshots and pre-treatment backups so you can recover fast. Vault upgrades are seamless later.', 'wpshadow' ); ?>
+						<?php esc_html_e( 'WPShadow Vault Light creates scheduled snapshots and pre-treatment safety points so you can recover fast. Vault upgrades are seamless later.', 'wpshadow' ); ?>
 					</p>
 				</div>
 			</div>
@@ -108,15 +108,15 @@ class Vault_Light_Settings_Page {
 					</div>
 				</div>
 
-				<!-- Scheduled Backups -->
+				<!-- Scheduled Vault Light Snapshots -->
 				<div class="wps-card">
 					<div class="wps-card-header">
 						<h3 class="wps-card-title">
 							<span class="dashicons dashicons-calendar"></span>
-							<?php esc_html_e( 'Scheduled Backups', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Scheduled Vault Light Snapshots', 'wpshadow' ); ?>
 						</h3>
 						<p class="wps-card-description">
-							<?php esc_html_e( 'Run Vault Light backups on a schedule (daily, weekly, or monthly).', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Run WPShadow Vault Light snapshots on a schedule (daily, weekly, or monthly).', 'wpshadow' ); ?>
 						</p>
 					</div>
 					<div class="wps-card-body">
@@ -130,7 +130,7 @@ class Vault_Light_Settings_Page {
 									<?php checked( get_option( 'wpshadow_backup_schedule_enabled', false ) ); ?>
 								/>
 								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Enable scheduled backups', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Enable scheduled Vault Light snapshots', 'wpshadow' ); ?>
 							</label>
 							<p class="wps-form-description">
 								<?php esc_html_e( 'Run lightweight snapshots automatically on your schedule.', 'wpshadow' ); ?>
@@ -159,7 +159,7 @@ class Vault_Light_Settings_Page {
 								</select>
 							</div>
 							<p class="wps-form-description">
-								<?php esc_html_e( 'How often to run scheduled backups.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'How often to run scheduled Vault Light snapshots.', 'wpshadow' ); ?>
 							</p>
 						</div>
 
@@ -177,13 +177,13 @@ class Vault_Light_Settings_Page {
 								/>
 							</div>
 							<p class="wps-form-description">
-								<?php esc_html_e( 'We run the backup at this time in your WordPress timezone.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'We run the snapshot at this time in your WordPress timezone.', 'wpshadow' ); ?>
 							</p>
 						</div>
 					</div>
 				</div>
 
-				<!-- Backup Storage -->
+				<!-- Snapshot Storage -->
 				<div class="wps-card">
 					<div class="wps-card-header">
 						<h3 class="wps-card-title">
@@ -250,7 +250,7 @@ class Vault_Light_Settings_Page {
 					</div>
 				</div>
 
-				<!-- Advanced Backup Options -->
+				<!-- Advanced Snapshot Options -->
 				<div class="wps-card">
 					<div class="wps-card-header">
 						<h3 class="wps-card-title">
@@ -315,7 +315,7 @@ class Vault_Light_Settings_Page {
 					</div>
 				</div>
 
-				<!-- Backup Management -->
+				<!-- Snapshot Management -->
 				<div class="wps-card">
 					<div class="wps-card-header">
 						<h3 class="wps-card-title">

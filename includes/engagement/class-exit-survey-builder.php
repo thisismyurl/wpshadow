@@ -202,7 +202,7 @@ class Exit_Survey_Builder {
 				'performance' => __( 'Performance optimization', 'wpshadow' ),
 				'analytics'   => __( 'Analytics and reporting', 'wpshadow' ),
 				'automation'  => __( 'Automation and workflows', 'wpshadow' ),
-				'backup'      => __( 'Backup and recovery', 'wpshadow' ),
+				'backup'      => __( 'WPShadow Vault Light', 'wpshadow' ),
 				'seo'         => __( 'SEO tools', 'wpshadow' ),
 				'integration' => __( 'Third-party integrations', 'wpshadow' ),
 				'other'       => __( 'Other', 'wpshadow' ),

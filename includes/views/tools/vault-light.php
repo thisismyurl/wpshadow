@@ -24,7 +24,7 @@ Tool_View_Base::enqueue_assets( 'vault-light' );
 // Render header
 Tool_View_Base::render_header( __( 'WPShadow Vault Light', 'wpshadow' ) );
 
-// Get backup settings
+// Get Vault Light settings
 $backup_enabled          = get_option( 'wpshadow_backup_enabled', true );
 $backup_include_database = get_option( 'wpshadow_backup_include_database', true );
 $backup_retention_days   = get_option( 'wpshadow_backup_retention_days', 7 );
@@ -66,15 +66,15 @@ if ( is_dir( $backup_dir ) ) {
 		<h3><?php esc_html_e( 'Vault Light Status', 'wpshadow' ); ?></h3>
 		<table class="widefat">
 			<tr>
-				<td><strong><?php esc_html_e( 'Backup Before Treatments', 'wpshadow' ); ?></strong></td>
+				<td><strong><?php esc_html_e( 'Vault Light Snapshot Before Treatments', 'wpshadow' ); ?></strong></td>
 				<td><?php echo $backup_enabled ? '<span style="color: green;">✓ ' . esc_html__( 'Enabled', 'wpshadow' ) . '</span>' : '<span style="color: red;">✗ ' . esc_html__( 'Disabled', 'wpshadow' ) . '</span>'; ?></td>
 			</tr>
 			<tr>
-				<td><strong><?php esc_html_e( 'Scheduled Backups', 'wpshadow' ); ?></strong></td>
+				<td><strong><?php esc_html_e( 'Scheduled Vault Light Snapshots', 'wpshadow' ); ?></strong></td>
 				<td><?php echo $backup_schedule_enabled ? '<span style="color: green;">✓ ' . esc_html__( 'Enabled', 'wpshadow' ) . '</span>' : '<span style="color: red;">✗ ' . esc_html__( 'Disabled', 'wpshadow' ) . '</span>'; ?></td>
 			</tr>
 			<tr>
-				<td><strong><?php esc_html_e( 'Total Backups', 'wpshadow' ); ?></strong></td>
+				<td><strong><?php esc_html_e( 'Total Snapshots', 'wpshadow' ); ?></strong></td>
 				<td><?php echo esc_html( number_format_i18n( $backup_count ) ); ?></td>
 			</tr>
 			<tr>
@@ -82,7 +82,7 @@ if ( is_dir( $backup_dir ) ) {
 				<td><?php echo esc_html( size_format( $backup_size, 2 ) ); ?></td>
 			</tr>
 			<tr>
-				<td><strong><?php esc_html_e( 'Backup Directory', 'wpshadow' ); ?></strong></td>
+				<td><strong><?php esc_html_e( 'Snapshot Directory', 'wpshadow' ); ?></strong></td>
 				<td>
 					<?php
 					if ( ! is_dir( $backup_dir ) ) {
@@ -96,7 +96,7 @@ if ( is_dir( $backup_dir ) ) {
 				</td>
 			</tr>
 			<tr>
-				<td><strong><?php esc_html_e( 'Retention Period', 'wpshadow' ); ?></strong></td>
+				<td><strong><?php esc_html_e( 'Snapshot Retention', 'wpshadow' ); ?></strong></td>
 				<td><?php echo esc_html( sprintf( _n( '%d day', '%d days', $backup_retention_days, 'wpshadow' ), $backup_retention_days ) ); ?></td>
 			</tr>
 			<tr>
@@ -126,7 +126,7 @@ if ( is_dir( $backup_dir ) ) {
 		</table>
 	</div>
 
-	<!-- Backup Settings Form -->
+	<!-- Snapshot Settings Form -->
 	<form method="post" action="options.php" class="wpshadow-tool-section">
 		<?php settings_fields( 'wpshadow_settings' ); ?>
 		
@@ -145,7 +145,7 @@ if ( is_dir( $backup_dir ) ) {
 		<div class="wps-form-group">
 			<label>
 				<input type="checkbox" id="wpshadow_backup_schedule_enabled" name="wpshadow_backup_schedule_enabled" value="1" <?php checked( $backup_schedule_enabled ); ?> />
-				<?php esc_html_e( 'Enable scheduled WPShadow Vault Light backups', 'wpshadow' ); ?>
+				<?php esc_html_e( 'Enable scheduled WPShadow Vault Light snapshots', 'wpshadow' ); ?>
 			</label>
 			<p class="description">
 				<?php esc_html_e( 'Run lightweight snapshots on a schedule so you always have a recent restore point.', 'wpshadow' ); ?>
@@ -153,7 +153,7 @@ if ( is_dir( $backup_dir ) ) {
 		</div>
 
 		<div class="wps-form-group">
-			<label for="wpshadow_backup_schedule_frequency"><?php esc_html_e( 'Backup frequency', 'wpshadow' ); ?></label>
+			<label for="wpshadow_backup_schedule_frequency"><?php esc_html_e( 'Snapshot frequency', 'wpshadow' ); ?></label>
 			<select id="wpshadow_backup_schedule_frequency" name="wpshadow_backup_schedule_frequency">
 				<option value="daily" <?php selected( $backup_schedule_freq, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
 				<option value="weekly" <?php selected( $backup_schedule_freq, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
@@ -163,7 +163,7 @@ if ( is_dir( $backup_dir ) ) {
 		</div>
 
 		<div class="wps-form-group">
-			<label for="wpshadow_backup_schedule_time"><?php esc_html_e( 'Backup time (24h)', 'wpshadow' ); ?></label>
+			<label for="wpshadow_backup_schedule_time"><?php esc_html_e( 'Snapshot time (24h)', 'wpshadow' ); ?></label>
 			<input type="text" id="wpshadow_backup_schedule_time" name="wpshadow_backup_schedule_time" value="<?php echo esc_attr( $backup_schedule_time ); ?>" placeholder="02:00" style="width: 120px;" />
 			<p class="description"><?php esc_html_e( 'We will run the snapshot at this time in your WordPress timezone.', 'wpshadow' ); ?></p>
 		</div>
