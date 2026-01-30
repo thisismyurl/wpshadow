@@ -164,19 +164,7 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 		);
 
 		return $checks;
-	}							if ( $code >= 400 ) {
-								$broken_links[] = array(
-									'url'         => $img_url,
-									'post_title'  => $post->post_title . ' (image)',
-									'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-									'status_code' => $code,
-								);
-							}
-						}
-					}
-				}
-			}
-		}
+	}
 
 		self::send_success(
 			array(
