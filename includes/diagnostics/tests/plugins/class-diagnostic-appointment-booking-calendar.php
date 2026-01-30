@@ -38,63 +38,52 @@ class Diagnostic_AppointmentBookingCalendar extends Diagnostic_Base {
 
 		$issues = array();
 
-		// Check 1: Calendar sync configured
+		// Check 1: Calendar sync configured.
 		$calendar_sync = get_option( 'appointment_calendar_sync', '' );
 		if ( empty( $calendar_sync ) ) {
 			$issues[] = 'calendar sync not configured (bookings may conflict)';
 		}
 
-		// Check 2: Timezone settings
+		// Check 2: Timezone settings.
 		$appointment_timezone = get_option( 'appointment_timezone', '' );
 		$wp_timezone = get_option( 'timezone_string', '' );
 		if ( ! empty( $appointment_timezone ) && $appointment_timezone !== $wp_timezone ) {
 			$issues[] = 'timezone mismatch between plugin and WordPress';
 		}
 
-		// Check 3: Double booking prevention
-		global $wpdb;
-		$double_bookings = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->prefix}appointments a1
-				 INNER JOIN {$wpdb->prefix}appointments a2
-				 ON a1.start_time = a2.start_time
-				 AND a1.id != a2.id
-				 WHERE a1.status = %s AND a2.status = %s",
-				'confirmed',
-				'confirmed'
-			)
-		);
-		if ( $double_bookings > 0 ) {
-			$issues[] = "{$double_bookings} double bookings detected (sync issue)";
+		// Check 3: Last sync time.
+		if ( ! empty( $calendar_sync ) ) {
+			$last_sync = get_option( 'appointment_last_sync', 0 );
+			if ( ! empty( $last_sync ) ) {
+				$hours_ago = round( ( time() - $last_sync ) / 3600 );
+				if ( $hours_ago > 24 ) {
+					$issues[] = "calendar not synced in {$hours_ago} hours (stale data)";
+				}
+			} else {
+				$issues[] = 'calendar sync never completed (sync may be failing)';
+			}
 		}
 
-		// Check 4: Failed sync attempts
+		// Check 4: Sync errors.
 		$sync_errors = get_transient( 'appointment_sync_errors' );
 		if ( ! empty( $sync_errors ) ) {
 			$error_count = is_array( $sync_errors ) ? count( $sync_errors ) : 1;
 			$issues[] = "{$error_count} recent sync failures";
 		}
 
-		// Check 5: External calendar connection
-		if ( ! empty( $calendar_sync ) ) {
-			$last_sync = get_option( 'appointment_last_sync', 0 );
-			if ( ! empty( $last_sync ) ) {
-				$hours_ago = round( ( time() - $last_sync ) / 3600 );
-				if ( $hours_ago > 24 ) {
-					$issues[] = "calendar not synced in {$hours_ago} hours";
-				}
-			}
-		}
-
-		// Check 6: Pending appointments count
-		$pending_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->prefix}appointments WHERE status = %s",
-				'pending'
-			)
-		);
+		// Check 5: Pending appointments count.
+		$pending_count = get_option( 'appointment_pending_count', 0 );
 		if ( $pending_count > 20 ) {
 			$issues[] = "{$pending_count} pending appointments (may indicate sync delays)";
+		}
+
+		// Check 6: External calendar connection test.
+		$calendar_enabled = get_option( 'appointment_external_calendar_enabled', '0' );
+		if ( '1' === $calendar_enabled ) {
+			$calendar_api_status = get_option( 'appointment_calendar_api_status', 'unknown' );
+			if ( 'connected' !== $calendar_api_status ) {
+				$issues[] = "external calendar API not connected (status: {$calendar_api_status})";
+			}
 		}
 
 		if ( ! empty( $issues ) ) {
