@@ -32,29 +32,66 @@ class Diagnostic_PleskWordpressToolkit extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! defined( 'PLESK_WORDPRESS_TOOLKIT' ) && ! get_option( 'plesk_wp_toolkit', false ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify smart updates are enabled
+		$smart_updates = get_option( 'plesk_wp_toolkit_smart_updates', 0 );
+		if ( ! $smart_updates ) {
+			$issues[] = 'Smart updates not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for security hardening
+		$hardening = get_option( 'plesk_wp_toolkit_security_hardening', 0 );
+		if ( ! $hardening ) {
+			$issues[] = 'Security hardening not enabled';
+		}
+		
+		// Check 3: Verify auto updates
+		$auto_updates = get_option( 'plesk_wp_toolkit_auto_updates', 0 );
+		if ( ! $auto_updates ) {
+			$issues[] = 'Auto updates not enabled';
+		}
+		
+		// Check 4: Check for staging environment
+		$staging = get_option( 'plesk_wp_toolkit_staging', 0 );
+		if ( ! $staging ) {
+			$issues[] = 'Staging environment not configured';
+		}
+		
+		// Check 5: Verify backup management
+		$backups = get_option( 'plesk_wp_toolkit_backups', 0 );
+		if ( ! $backups ) {
+			$issues[] = 'Backup management not enabled';
+		}
+		
+		// Check 6: Check for file permissions scan
+		$file_permissions = get_option( 'plesk_wp_toolkit_file_permissions_scan', 0 );
+		if ( ! $file_permissions ) {
+			$issues[] = 'File permissions scan not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d Plesk WordPress Toolkit issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/plesk-wordpress-toolkit',
 			);
 		}

@@ -32,29 +32,66 @@ class Diagnostic_RuncloudCacheRules extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! defined( 'RUNCLOUD_CACHE_VERSION' ) && ! get_option( 'runcloud_cache_enabled', false ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify cache is enabled
+		$cache_enabled = get_option( 'runcloud_cache_enabled', 0 );
+		if ( ! $cache_enabled ) {
+			$issues[] = 'RunCloud cache not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for cache rules configured
+		$cache_rules = get_option( 'runcloud_cache_rules', array() );
+		if ( empty( $cache_rules ) ) {
+			$issues[] = 'No cache rules configured';
+		}
+		
+		// Check 3: Verify cache exclusions
+		$cache_exclusions = get_option( 'runcloud_cache_exclusions', array() );
+		if ( empty( $cache_exclusions ) ) {
+			$issues[] = 'Cache exclusions not configured';
+		}
+		
+		// Check 4: Check for cache purge hooks
+		$purge_hooks = get_option( 'runcloud_cache_purge_hooks', 0 );
+		if ( ! $purge_hooks ) {
+			$issues[] = 'Cache purge hooks not enabled';
+		}
+		
+		// Check 5: Verify browser cache
+		$browser_cache = get_option( 'runcloud_browser_cache', 0 );
+		if ( ! $browser_cache ) {
+			$issues[] = 'Browser cache not enabled';
+		}
+		
+		// Check 6: Check for page cache TTL
+		$cache_ttl = get_option( 'runcloud_cache_ttl', 0 );
+		if ( $cache_ttl <= 0 ) {
+			$issues[] = 'Cache TTL not configured';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d RunCloud cache rule issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/runcloud-cache-rules',
 			);
 		}
