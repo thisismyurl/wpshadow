@@ -27,11 +27,11 @@ function wpshadow_register_kanban_handlers(): void {
 	\WPShadow\Admin\Ajax\Change_Finding_Status_Handler::register();
 
 	// Get finding family information (Philosophy #9: Show Value)
-	require_once plugin_dir_path( __FILE__ ) . '../admin/ajax/Get_Finding_Family_Handler.php';
+	require_once plugin_dir_path( __FILE__ ) . '../admin/ajax/get-finding-family-handler.php';
 	\WPShadow\Admin\Ajax\Get_Finding_Family_Handler::register();
 
 	// Apply family-grouped fixes (Philosophy #9: Show Value)
-	require_once plugin_dir_path( __FILE__ ) . '../admin/ajax/Apply_Family_Fix_Handler.php';
+	require_once plugin_dir_path( __FILE__ ) . '../admin/ajax/apply-family-fix-handler.php';
 	\WPShadow\Admin\Ajax\Apply_Family_Fix_Handler::register();
 }
 add_action( 'plugins_loaded', 'wpshadow_register_kanban_handlers' );

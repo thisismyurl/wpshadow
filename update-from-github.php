@@ -49,7 +49,7 @@ if ( function_exists( 'wp_cache_flush' ) ) {
 }
 
 // Verify the fix worked
-$file_to_check = $plugin_dir . '/includes/admin/ajax/First_Scan_Handler.php';
+$file_to_check = $plugin_dir . '/includes/admin/ajax/first-scan-handler.php';
 if ( file_exists( $file_to_check ) ) {
     $content = file_get_contents( $file_to_check );
     $open_braces = substr_count( $content, '{' );

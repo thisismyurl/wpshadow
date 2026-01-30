@@ -21,118 +21,118 @@ if ( ! defined( 'ABSPATH' ) ) {
 $ajax_path = __DIR__ . '/';
 
 // Core finding operations
-require_once $ajax_path . 'Dismiss_Finding_Handler.php';
-require_once $ajax_path . 'Autofix_Finding_Handler.php';
-require_once $ajax_path . 'Dry_Run_Treatment_Handler.php';
-require_once $ajax_path . 'Rollback_Treatment_Handler.php';
-require_once $ajax_path . 'Toggle_Autofix_Permission_Handler.php';
-require_once $ajax_path . 'Allow_All_Autofixes_Handler.php';
-require_once $ajax_path . 'Change_Finding_Status_Handler.php';
+require_once $ajax_path . 'dismiss-finding-handler.php';
+require_once $ajax_path . 'autofix-finding-handler.php';
+require_once $ajax_path . 'dry-run-treatment-handler.php';
+require_once $ajax_path . 'rollback-treatment-handler.php';
+require_once $ajax_path . 'toggle-autofix-permission-handler.php';
+require_once $ajax_path . 'allow-all-autofixes-handler.php';
+require_once $ajax_path . 'change-finding-status-handler.php';
 
 // Dashboard operations
-require_once $ajax_path . 'Get_Dashboard_Data_Handler.php';
-require_once $ajax_path . 'Save_Dashboard_Prefs_Handler.php';
+require_once $ajax_path . 'get-dashboard-data-handler.php';
+require_once $ajax_path . 'save-dashboard-prefs-handler.php';
 
 // Scanning operations
-require_once $ajax_path . 'First_Scan_Handler.php';
-require_once $ajax_path . 'Quick_Scan_Handler.php';
-require_once $ajax_path . 'Deep_Scan_Handler.php';
-require_once $ajax_path . 'Dismiss_Scan_Notice_Handler.php';
+require_once $ajax_path . 'first-scan-handler.php';
+require_once $ajax_path . 'quick-scan-handler.php';
+require_once $ajax_path . 'deep-scan-handler.php';
+require_once $ajax_path . 'dismiss-scan-notice-handler.php';
 
 // Notifications and alerts
-require_once $ajax_path . 'Save_Tagline_Handler.php';
-require_once $ajax_path . 'Mark_Notification_Read_Handler.php';
-require_once $ajax_path . 'Clear_Notifications_Handler.php';
+require_once $ajax_path . 'save-tagline-handler.php';
+require_once $ajax_path . 'mark-notification-read-handler.php';
+require_once $ajax_path . 'clear-notifications-handler.php';
 
 // Gamification
-require_once $ajax_path . 'Get_Gamification_Summary_Handler.php';
-require_once $ajax_path . 'Get_Leaderboard_Handler.php';
+require_once $ajax_path . 'get-gamification-summary-handler.php';
+require_once $ajax_path . 'get-leaderboard-handler.php';
 
 // Reporting
-require_once $ajax_path . 'Generate_Report_Handler.php';
-require_once $ajax_path . 'Download_Report_Handler.php';
-require_once $ajax_path . 'Send_Executive_Report_Handler.php';
-require_once $ajax_path . 'Export_CSV_Handler.php';
+require_once $ajax_path . 'generate-report-handler.php';
+require_once $ajax_path . 'download-report-handler.php';
+require_once $ajax_path . 'send-executive-report-handler.php';
+require_once $ajax_path . 'export-csv-handler.php';
 
 // Settings management
-require_once $ajax_path . 'Save_Email_Template_Handler.php';
-require_once $ajax_path . 'Reset_Email_Template_Handler.php';
-require_once $ajax_path . 'Update_Report_Schedule_Handler.php';
-require_once $ajax_path . 'Update_Privacy_Settings_Handler.php';
-require_once $ajax_path . 'Update_Data_Retention_Handler.php';
-require_once $ajax_path . 'Update_Scan_Frequency_Handler.php';
+require_once $ajax_path . 'save-email-template-handler.php';
+require_once $ajax_path . 'reset-email-template-handler.php';
+require_once $ajax_path . 'update-report-schedule-handler.php';
+require_once $ajax_path . 'update-privacy-settings-handler.php';
+require_once $ajax_path . 'update-data-retention-handler.php';
+require_once $ajax_path . 'update-scan-frequency-handler.php';
 
 // Workflow operations
-require_once $ajax_path . 'Save_Workflow_Handler.php';
-require_once $ajax_path . 'Load_Workflows_Handler.php';
-require_once $ajax_path . 'Get_Workflow_Handler.php';
-require_once $ajax_path . 'Delete_Workflow_Handler.php';
-require_once $ajax_path . 'Toggle_Workflow_Handler.php';
+require_once $ajax_path . 'save-workflow-handler.php';
+require_once $ajax_path . 'load-workflows-handler.php';
+require_once $ajax_path . 'get-workflow-handler.php';
+require_once $ajax_path . 'delete-workflow-handler.php';
+require_once $ajax_path . 'toggle-workflow-handler.php';
 
 // Activity tracking operations
 require_once $ajax_path . 'class-get-activities-handler.php';
-require_once $ajax_path . 'Generate_Workflow_Name_Handler.php';
-require_once $ajax_path . 'Get_Available_Actions_Handler.php';
-require_once $ajax_path . 'Get_Action_Config_Handler.php';
-require_once $ajax_path . 'Run_Workflow_Handler.php';
-require_once $ajax_path . 'Create_From_Example_Handler.php';
-require_once $ajax_path . 'Create_Suggested_Workflow_Handler.php';
-require_once $ajax_path . 'Get_Templates_Handler.php';
-require_once $ajax_path . 'Create_From_Template_Handler.php';
+require_once $ajax_path . 'generate-workflow-name-handler.php';
+require_once $ajax_path . 'get-available-actions-handler.php';
+require_once $ajax_path . 'get-action-config-handler.php';
+require_once $ajax_path . 'run-workflow-handler.php';
+require_once $ajax_path . 'create-from-example-handler.php';
+require_once $ajax_path . 'create-suggested-workflow-handler.php';
+require_once $ajax_path . 'get-templates-handler.php';
+require_once $ajax_path . 'create-from-template-handler.php';
 
 // Email recipient management
-require_once $ajax_path . 'Add_Email_Recipient_Handler.php';
-require_once $ajax_path . 'Approve_Email_Recipient_Handler.php';
-require_once $ajax_path . 'Remove_Email_Recipient_Handler.php';
+require_once $ajax_path . 'add-email-recipient-handler.php';
+require_once $ajax_path . 'approve-email-recipient-handler.php';
+require_once $ajax_path . 'remove-email-recipient-handler.php';
 
 // Guardian operations
-require_once $ajax_path . 'Toggle_Guardian_Handler.php';
+require_once $ajax_path . 'toggle-guardian-handler.php';
 
 // Off-peak scheduling
-require_once $ajax_path . 'Schedule_Overnight_Fix_Handler.php';
-require_once $ajax_path . 'Schedule_Offpeak_Handler.php';
+require_once $ajax_path . 'schedule-overnight-fix-handler.php';
+require_once $ajax_path . 'schedule-offpeak-handler.php';
 
 // Utilities
-require_once $ajax_path . 'Clear_Cache_Handler.php';
-require_once $ajax_path . 'Create_Magic_Link_Handler.php';
-require_once $ajax_path . 'Revoke_Magic_Link_Handler.php';
-require_once $ajax_path . 'Create_Permanent_User_Handler.php';
-require_once $ajax_path . 'Save_Cache_Options_Handler.php';
-require_once $ajax_path . 'Mobile_Check_Handler.php';
-require_once $ajax_path . 'A11y_Audit_Handler.php';
-require_once $ajax_path . 'Save_Tip_Prefs_Handler.php';
-require_once $ajax_path . 'Dismiss_Tip_Handler.php';
-require_once $ajax_path . 'Check_Broken_Links_Handler.php';
-require_once $ajax_path . 'Generate_Password_Handler.php';
-require_once $ajax_path . 'Consent_Preferences_Handler.php';
-require_once $ajax_path . 'Error_Report_Handler.php';
-require_once $ajax_path . 'Save_Notification_Rule_Handler.php';
-require_once $ajax_path . 'Delete_Notification_Rule_Handler.php';
+require_once $ajax_path . 'clear-cache-handler.php';
+require_once $ajax_path . 'create-magic-link-handler.php';
+require_once $ajax_path . 'revoke-magic-link-handler.php';
+require_once $ajax_path . 'create-permanent-user-handler.php';
+require_once $ajax_path . 'save-cache-options-handler.php';
+require_once $ajax_path . 'mobile-check-handler.php';
+require_once $ajax_path . 'a11y-audit-handler.php';
+require_once $ajax_path . 'save-tip-prefs-handler.php';
+require_once $ajax_path . 'dismiss-tip-handler.php';
+require_once $ajax_path . 'check-broken-links-handler.php';
+require_once $ajax_path . 'generate-password-handler.php';
+require_once $ajax_path . 'consent-preferences-handler.php';
+require_once $ajax_path . 'error-report-handler.php';
+require_once $ajax_path . 'save-notification-rule-handler.php';
+require_once $ajax_path . 'delete-notification-rule-handler.php';
 
 // Onboarding operations
-require_once $ajax_path . 'Save_Onboarding_Handler.php';
-require_once $ajax_path . 'Skip_Onboarding_Handler.php';
-require_once $ajax_path . 'Dismiss_Term_Handler.php';
-require_once $ajax_path . 'Show_All_Features_Handler.php';
-require_once $ajax_path . 'Dismiss_Graduation_Handler.php';
+require_once $ajax_path . 'save-onboarding-handler.php';
+require_once $ajax_path . 'skip-onboarding-handler.php';
+require_once $ajax_path . 'dismiss-term-handler.php';
+require_once $ajax_path . 'show-all-features-handler.php';
+require_once $ajax_path . 'dismiss-graduation-handler.php';
 
 // Timezone management
-require_once $ajax_path . 'Detect_Timezone_Handler.php';
-require_once $ajax_path . 'Set_Timezone_Handler.php';
+require_once $ajax_path . 'detect-timezone-handler.php';
+require_once $ajax_path . 'set-timezone-handler.php';
 
 // Visual comparison operations
-require_once $ajax_path . 'Get_Visual_Comparisons_Handler.php';
-require_once $ajax_path . 'Get_Visual_Comparison_Handler.php';
+require_once $ajax_path . 'get-visual-comparisons-handler.php';
+require_once $ajax_path . 'get-visual-comparison-handler.php';
 
 // Utilities operations
-require_once $ajax_path . 'Load_Tool_Handler.php';
+require_once $ajax_path . 'load-tool-handler.php';
 
 // Exit interview operations
-require_once $ajax_path . 'Submit_Exit_Interview_Handler.php';
+require_once $ajax_path . 'submit-exit-interview-handler.php';
 
 // Kanban operations (loaded separately in kanban-module.php)
-// - Get_Finding_Family_Handler.php
-// - Apply_Family_Fix_Handler.php
+// - get-finding-family-handler.php
+// - apply-family-fix-handler.php
 
 // Diagnostics & Treatments listing/toggles (Scan Settings UI)
 require_once $ajax_path . 'class-ajax-diagnostics-list.php';
@@ -143,4 +143,4 @@ require_once $ajax_path . 'class-ajax-toggle-treatment.php';
 // Exit interview and followup operations
 require_once $ajax_path . 'exit-followup-handlers.php';
 // Test handler (temporary)
-require_once $ajax_path . 'Test_AJAX_Handler.php';
+require_once $ajax_path . 'test-ajax-handler.php';
