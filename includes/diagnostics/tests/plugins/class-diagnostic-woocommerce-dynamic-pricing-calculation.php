@@ -36,29 +36,78 @@ class Diagnostic_WoocommerceDynamicPricingCalculation extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-dynamic-pricing-calculation',
-			);
+		// Check for Dynamic Pricing plugin
+		if ( ! class_exists( 'WC_Dynamic_Pricing' ) && ! defined( 'WC_DYNAMIC_PRICING_VERSION' ) ) {
+			return null;
 		}
 		
-		return null;
+		global $wpdb;
+		$issues = array();
+		
+		// Check 1: Count pricing rules
+		$pricing_rules = get_option( 'woocommerce_dynamic_pricing_rules', array() );
+		if ( ! empty( $pricing_rules ) && count( $pricing_rules ) > 20 ) {
+			$issues[] = sprintf( __( '%d pricing rules (cart calculation slowdown)', 'wpshadow' ), count( $pricing_rules ) );
+		}
+		
+		// Check 2: Complex conditions
+		$complex_rules = 0;
+		foreach ( $pricing_rules as $rule ) {
+			if ( isset( $rule['conditions'] ) && count( $rule['conditions'] ) > 3 ) {
+				$complex_rules++;
+			}
+		}
+		if ( $complex_rules > 5 ) {
+			$issues[] = sprintf( __( '%d complex rules (3+ conditions each)', 'wpshadow' ), $complex_rules );
+		}
+		
+		// Check 3: Cart calculation caching
+		$enable_cache = get_option( 'woocommerce_dynamic_pricing_enable_cache', 'no' );
+		if ( 'no' === $enable_cache ) {
+			$issues[] = __( 'Price calculation caching disabled (recalculates every page load)', 'wpshadow' );
+		}
+		
+		// Check 4: Role-based pricing
+		$role_rules = 0;
+		foreach ( $pricing_rules as $rule ) {
+			if ( isset( $rule['type'] ) && 'role' === $rule['type'] ) {
+				$role_rules++;
+			}
+		}
+		if ( $role_rules > 0 ) {
+			$issues[] = sprintf( __( '%d role-based rules (user query overhead)', 'wpshadow' ), $role_rules );
+		}
+		
+		// Check 5: Bulk pricing with large catalogs
+		$product_count = wp_count_posts( 'product' );
+		if ( $product_count->publish > 1000 && count( $pricing_rules ) > 10 ) {
+			$issues[] = sprintf( __( '%d products with %d rules (scale issue)', 'wpshadow' ), $product_count->publish, count( $pricing_rules ) );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of dynamic pricing issues */
+				__( 'WooCommerce dynamic pricing has %d calculation issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/woocommerce-dynamic-pricing-calculation',
+		);
 	}
 }

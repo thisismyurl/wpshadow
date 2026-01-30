@@ -32,33 +32,78 @@ class Diagnostic_FlatsomeThemeCatalogMode extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Flatsome theme
+		$theme = wp_get_theme();
+		if ( 'Flatsome' !== $theme->get( 'Name' ) && 'Flatsome' !== $theme->get_template() ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/flatsome-theme-catalog-mode',
-			);
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return null;
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: Catalog mode enabled
+		$catalog_mode = get_theme_mod( 'catalog_mode', 0 );
+		if ( ! $catalog_mode ) {
+			return null;
+		}
+		
+		// Check 2: Price visibility
+		$hide_prices = get_theme_mod( 'catalog_mode_hide_prices', 0 );
+		if ( $hide_prices ) {
+			$issues[] = __( 'Prices hidden (SEO impact, rich snippets lost)', 'wpshadow' );
+		}
+		
+		// Check 3: Inquiry form availability
+		$inquiry_form = get_theme_mod( 'catalog_mode_inquiry_form', '' );
+		if ( empty( $inquiry_form ) ) {
+			$issues[] = __( 'No inquiry form (lost leads)', 'wpshadow' );
+		}
+		
+		// Check 4: Cart functionality
+		$disable_cart = get_theme_mod( 'catalog_mode_disable_cart', 1 );
+		if ( $disable_cart ) {
+			$issues[] = __( 'Cart disabled (no shopping list)', 'wpshadow' );
+		}
+		
+		// Check 5: Button customization
+		$button_text = get_theme_mod( 'catalog_mode_button_text', '' );
+		if ( empty( $button_text ) ) {
+			$issues[] = __( 'Add to cart button not customized (confusing UX)', 'wpshadow' );
+		}
+		
+		// Check 6: Role-based catalog mode
+		$per_role = get_theme_mod( 'catalog_mode_per_role', 0 );
+		if ( ! $per_role ) {
+			$issues[] = __( 'Catalog mode applies to all users (B2B/B2C flexibility lost)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of catalog mode issues */
+				__( 'Flatsome catalog mode has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/flatsome-theme-catalog-mode',
+		);
 	}
 }

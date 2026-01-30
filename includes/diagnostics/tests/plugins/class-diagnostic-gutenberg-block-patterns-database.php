@@ -32,33 +32,78 @@ class Diagnostic_GutenbergBlockPatternsDatabase extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
+		// Block patterns are a core WordPress feature (5.5+)
+		if ( ! function_exists( 'register_block_pattern' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Count registered patterns
+		$pattern_registry = WP_Block_Patterns_Registry::get_instance();
+		$patterns = $pattern_registry->get_all_registered();
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gutenberg-block-patterns-database',
-			);
+		if ( count( $patterns ) > 100 ) {
+			$issues[] = sprintf( __( '%d registered patterns (memory overhead)', 'wpshadow' ), count( $patterns ) );
 		}
 		
-		return null;
+		// Check 2: Custom patterns in database
+		global $wpdb;
+		$custom_patterns = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s",
+				'wp_block'
+			)
+		);
+		
+		if ( $custom_patterns > 50 ) {
+			$issues[] = sprintf( __( '%d reusable blocks (database bloat)', 'wpshadow' ), $custom_patterns );
+		}
+		
+		// Check 3: Pattern categories
+		$category_registry = WP_Block_Pattern_Categories_Registry::get_instance();
+		$categories = $category_registry->get_all_registered();
+		
+		if ( count( $categories ) > 20 ) {
+			$issues[] = sprintf( __( '%d pattern categories (UI clutter)', 'wpshadow' ), count( $categories ) );
+		}
+		
+		// Check 4: Remote patterns enabled
+		$remote_patterns = get_option( 'should_load_remote_block_patterns', true );
+		if ( $remote_patterns ) {
+			$issues[] = __( 'Loading remote patterns (external API calls)', 'wpshadow' );
+		}
+		
+		// Check 5: Pattern caching
+		$pattern_cache = wp_cache_get( 'core_block_patterns', 'patterns' );
+		if ( false === $pattern_cache ) {
+			$issues[] = __( 'Pattern cache not set (regenerated each request)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of block pattern issues */
+				__( 'Gutenberg block patterns have %d database issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/gutenberg-block-patterns-database',
+		);
 	}
 }
