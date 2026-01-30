@@ -32,29 +32,67 @@ class Diagnostic_AllInOneSeoImageSeo extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! function_exists( 'aioseo' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Image alt text missing.
+		global $wpdb;
+		$missing_alt = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_mime_type LIKE %s AND ID NOT IN (
+					SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value != ''
+				)",
+				'attachment',
+				'image/%',
+				'_wp_attachment_image_alt'
+			)
+		);
+		if ( $missing_alt > 0 ) {
+			$issues[] = "{$missing_alt} images missing alt text (SEO and accessibility issue)";
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Image title attributes.
+		$auto_generate_titles = get_option( 'aioseo_image_title_attr', '0' );
+		if ( '0' === $auto_generate_titles ) {
+			$issues[] = 'image title attributes not auto-generated (missing SEO metadata)';
+		}
+		
+		// Check 3: Image sitemap enabled.
+		$image_sitemap = get_option( 'aioseo_image_sitemap_enabled', '0' );
+		if ( '0' === $image_sitemap ) {
+			$issues[] = 'image sitemap disabled (Google cannot discover images)';
+		}
+		
+		// Check 4: Open Graph image settings.
+		$og_image_default = get_option( 'aioseo_og_default_image', '' );
+		if ( empty( $og_image_default ) ) {
+			$issues[] = 'no default Open Graph image (social sharing may show no image)';
+		}
+		
+		// Check 5: Image file name optimization.
+		$optimize_filenames = get_option( 'aioseo_optimize_image_filenames', '0' );
+		if ( '0' === $optimize_filenames ) {
+			$issues[] = 'image filename optimization disabled (SEO opportunity missed)';
+		}
+		
+		// Check 6: Schema.org image markup.
+		$schema_images = get_option( 'aioseo_schema_images', '0' );
+		if ( '0' === $schema_images ) {
+			$issues[] = 'schema.org image markup disabled (rich results may not show images)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'All-in-One SEO image optimization issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-image-seo',
 			);
 		}

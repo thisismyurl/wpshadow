@@ -32,29 +32,73 @@ class Diagnostic_AllInOneSeoSitemap extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! function_exists( 'aioseo' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		// Check 1: Sitemap enabled.
+		$sitemap_enabled = get_option( 'aioseo_sitemap_enabled', '0' );
+		if ( '0' === $sitemap_enabled ) {
+			$issues[] = 'XML sitemap disabled (search engines cannot discover content)';
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'AIOSEO XML sitemap is disabled - search engines cannot efficiently discover your content',
+				'severity'    => self::calculate_severity( 60 ),
+				'threat_level' => 60,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-sitemap',
+			);
+		}
+		
+		// Check 2: Conflicting sitemaps.
+		$wp_sitemap = get_option( 'wp_sitemap_enabled', '1' );
+		if ( '1' === $wp_sitemap && '1' === $sitemap_enabled ) {
+			$issues[] = 'both WordPress and AIOSEO sitemaps enabled (causes conflicts)';
+		}
+		
+		// Check 3: Post types included.
+		$included_post_types = get_option( 'aioseo_sitemap_post_types', array() );
+		if ( empty( $included_post_types ) ) {
+			$issues[] = 'no post types included in sitemap (empty sitemap)';
+		}
+		
+		// Check 4: Priority and frequency settings.
+		$auto_priority = get_option( 'aioseo_sitemap_auto_priority', '0' );
+		if ( '0' === $auto_priority ) {
+			$issues[] = 'auto-priority disabled (consider enabling for dynamic priority)';
+		}
+		
+		// Check 5: Large sitemap without pagination.
+		global $wpdb;
+		$post_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = %s AND post_type IN ('post', 'page')",
+				'publish'
+			)
+		);
+		$per_page = get_option( 'aioseo_sitemap_per_page', 1000 );
+		if ( $post_count > 1000 && $per_page >= 1000 ) {
+			$issues[] = "{$post_count} posts in sitemap (consider reducing per-page limit for performance)";
+		}
+		
+		// Check 6: Image sitemap.
+		$image_sitemap = get_option( 'aioseo_sitemap_images', '0' );
+		if ( '0' === $image_sitemap ) {
+			$issues[] = 'image sitemap disabled (images not indexed efficiently)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => 'All-in-One SEO sitemap configuration issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-sitemap',
 			);
 		}
