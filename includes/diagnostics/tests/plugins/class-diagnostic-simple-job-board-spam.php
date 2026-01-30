@@ -36,29 +36,66 @@ class Diagnostic_SimpleJobBoardSpam extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 60 ),
-				'threat_level' => 60,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/simple-job-board-spam',
-			);
+		// Check 1: CAPTCHA enabled for job applications
+		$captcha_enabled = get_option( 'sjb_captcha_enabled', false );
+		if ( ! $captcha_enabled ) {
+			$issues[] = __( 'CAPTCHA not enabled for job applications', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Application rate limiting
+		$rate_limit = get_option( 'sjb_rate_limit_enabled', false );
+		if ( ! $rate_limit ) {
+			$issues[] = __( 'Application rate limiting not configured', 'wpshadow' );
+		}
+		
+		// Check 3: Moderation queue enabled
+		$moderation = get_option( 'sjb_moderation_enabled', false );
+		if ( ! $moderation ) {
+			$issues[] = __( 'Job application moderation not enabled', 'wpshadow' );
+		}
+		
+		// Check 4: Check for spam applications in database
+		$spam_apps = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}sjb_applications WHERE application_status = 'spam'"
+		);
+		
+		if ( $spam_apps > 10 ) {
+			$issues[] = sprintf( __( '%d spam applications detected (improve filtering)', 'wpshadow' ), $spam_apps );
+		}
+		
+		// Check 5: Email domain blacklist
+		$blacklist = get_option( 'sjb_email_blacklist', array() );
+		if ( empty( $blacklist ) ) {
+			$issues[] = __( 'Email domain blacklist not configured', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 60;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 72;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 66;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of security issues */
+				__( 'Simple Job Board has %d spam protection issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/simple-job-board-spam',
+		);
 	}
 }

@@ -32,33 +32,73 @@ class Diagnostic_WordpressHeartbeatApiFrequency extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
+		// WordPress core Heartbeat API always available
+		$issues = array();
+		
+		// Check 1: Heartbeat completely disabled
+		$disabled = apply_filters( 'heartbeat_settings', array() );
+		if ( isset( $disabled['disable'] ) && $disabled['disable'] === true ) {
+			return null; // Heartbeat disabled, no performance concern
+		}
+		
+		// Check 2: Frontend Heartbeat enabled
+		$frontend_disabled = get_option( 'heartbeat_disable_frontend', false );
+		if ( ! $frontend_disabled ) {
+			$issues[] = __( 'Heartbeat API running on frontend (unnecessary load)', 'wpshadow' );
+		}
+		
+		// Check 3: Post editor interval
+		$editor_interval = get_option( 'heartbeat_post_interval', 15 );
+		if ( $editor_interval < 30 ) {
+			$issues[] = sprintf( __( 'Post editor Heartbeat interval: %d seconds (recommend 30-60)', 'wpshadow' ), $editor_interval );
+		}
+		
+		// Check 4: Dashboard interval
+		$dashboard_interval = get_option( 'heartbeat_dashboard_interval', 15 );
+		if ( $dashboard_interval < 60 ) {
+			$issues[] = sprintf( __( 'Dashboard Heartbeat interval: %d seconds (recommend 60-120)', 'wpshadow' ), $dashboard_interval );
+		}
+		
+		// Check 5: Check server load
+		$load = sys_getloadavg();
+		if ( ! empty( $load ) && $load[0] > 2.0 && $editor_interval < 30 ) {
+			$issues[] = sprintf( __( 'High server load (%.2f) with frequent Heartbeat (reduce interval)', 'wpshadow' ), $load[0] );
+		}
+		
+		// Check 6: AJAX polling conflicts
+		global $wpdb;
+		$ajax_actions = $wpdb->get_var(
+			"SELECT COUNT(DISTINCT option_name) FROM {$wpdb->options} WHERE option_name LIKE 'wp_ajax_%'"
+		);
+		
+		if ( $ajax_actions > 20 && $editor_interval < 30 ) {
+			$issues[] = sprintf( __( '%d AJAX actions registered with frequent Heartbeat (potential conflicts)', 'wpshadow' ), $ajax_actions );
+		}
+		
+		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wordpress-heartbeat-api-frequency',
-			);
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
 		}
 		
-		return null;
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of performance issues */
+				__( 'WordPress Heartbeat API has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/wordpress-heartbeat-api-frequency',
+		);
 	}
 }

@@ -36,29 +36,78 @@ class Diagnostic_EventsManagerAttendeePrivacy extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/events-manager-attendee-privacy',
-			);
+		// Check 1: Attendee list publicly visible
+		$public_attendees = get_option( 'dbem_attendees_public', true );
+		if ( $public_attendees ) {
+			$issues[] = __( 'Attendee lists publicly visible (privacy concern)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Show attendee names
+		$show_names = get_option( 'dbem_bookings_show_names', true );
+		if ( $show_names && $public_attendees ) {
+			$issues[] = __( 'Attendee names publicly displayed', 'wpshadow' );
+		}
+		
+		// Check 3: Email addresses visible
+		$show_emails = get_option( 'dbem_bookings_show_emails', false );
+		if ( $show_emails ) {
+			$issues[] = __( 'Attendee email addresses visible (GDPR violation)', 'wpshadow' );
+		}
+		
+		// Check 4: Booking form privacy policy
+		$privacy_policy = get_option( 'dbem_bookings_privacy_policy', '' );
+		if ( empty( $privacy_policy ) ) {
+			$issues[] = __( 'No privacy policy link in booking form', 'wpshadow' );
+		}
+		
+		// Check 5: GDPR consent checkbox
+		$consent_required = get_option( 'dbem_bookings_consent_required', false );
+		if ( ! $consent_required ) {
+			$issues[] = __( 'GDPR consent not required for bookings', 'wpshadow' );
+		}
+		
+		// Check 6: Data retention policy
+		$retention = get_option( 'dbem_bookings_data_retention', 0 );
+		if ( $retention === 0 ) {
+			$issues[] = __( 'No data retention policy configured (keeps data indefinitely)', 'wpshadow' );
+		}
+		
+		// Check 7: Count of bookings with personal data
+		$booking_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}em_bookings WHERE booking_status = 1"
+		);
+		
+		if ( $booking_count > 100 && $public_attendees ) {
+			$issues[] = sprintf( __( '%d bookings with potentially exposed personal data', 'wpshadow' ), $booking_count );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 65;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 80;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 72;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of privacy issues */
+				__( 'Events Manager has %d attendee privacy issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/events-manager-attendee-privacy',
+		);
 	}
 }

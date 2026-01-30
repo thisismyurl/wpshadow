@@ -36,29 +36,86 @@ class Diagnostic_MultisiteCdnConfiguration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-cdn-configuration',
-			);
+		// Check 1: CDN enabled network-wide
+		$cdn_enabled = get_site_option( 'multisite_cdn_enabled', false );
+		if ( ! $cdn_enabled ) {
+			return null; // No CDN configured
 		}
 		
-		return null;
+		// Check 2: CDN URL configured
+		$cdn_url = get_site_option( 'multisite_cdn_url', '' );
+		if ( empty( $cdn_url ) ) {
+			$issues[] = __( 'CDN enabled but URL not configured', 'wpshadow' );
+		}
+		
+		// Check 3: SSL compatibility
+		if ( ! empty( $cdn_url ) && strpos( $cdn_url, 'https://' ) !== 0 && is_ssl() ) {
+			$issues[] = __( 'CDN URL not HTTPS (mixed content warnings)', 'wpshadow' );
+		}
+		
+		// Check 4: Per-site CDN configuration conflicts
+		$sites = get_sites( array( 'number' => 100 ) );
+		$conflicting_sites = 0;
+		
+		foreach ( $sites as $site ) {
+			switch_to_blog( $site->blog_id );
+			$site_cdn = get_option( 'site_cdn_url', '' );
+			restore_current_blog();
+			
+			if ( ! empty( $site_cdn ) && $site_cdn !== $cdn_url ) {
+				$conflicting_sites++;
+			}
+		}
+		
+		if ( $conflicting_sites > 0 ) {
+			$issues[] = sprintf( __( '%d sites with different CDN URLs (inconsistent config)', 'wpshadow' ), $conflicting_sites );
+		}
+		
+		// Check 5: Cache busting enabled
+		$cache_bust = get_site_option( 'multisite_cdn_cache_bust', false );
+		if ( ! $cache_bust ) {
+			$issues[] = __( 'CDN cache busting not enabled (stale assets possible)', 'wpshadow' );
+		}
+		
+		// Check 6: Subdomain mapping
+		global $wpdb;
+		$mapped_domains = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->blogs} WHERE domain NOT LIKE CONCAT('%', '{$wpdb->get_blog_prefix( 1 )}', '%')"
+		);
+		
+		if ( $mapped_domains > 0 && ! empty( $cdn_url ) ) {
+			$wildcard_cdn = get_site_option( 'multisite_cdn_wildcard_ssl', false );
+			if ( ! $wildcard_cdn ) {
+				$issues[] = sprintf( __( '%d mapped domains without wildcard SSL for CDN', 'wpshadow' ), $mapped_domains );
+			}
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of configuration issues */
+				__( 'Multisite CDN has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-cdn-configuration',
+		);
 	}
 }

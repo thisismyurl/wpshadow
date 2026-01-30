@@ -36,29 +36,72 @@ class Diagnostic_DirectoryEmailAlerts extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/directory-email-alerts',
-			);
+		// Check 1: Email alerts enabled
+		$alerts_enabled = get_option( 'wpbdp_email_alerts_enabled', false );
+		if ( ! $alerts_enabled ) {
+			return null; // No alerts, no performance concern
 		}
 		
-		return null;
+		// Check 2: Throttling configured
+		$throttle_limit = get_option( 'wpbdp_email_throttle_limit', 0 );
+		if ( $throttle_limit === 0 ) {
+			$issues[] = __( 'No email throttling configured (may trigger spam filters)', 'wpshadow' );
+		}
+		
+		// Check 3: Digest mode available
+		$digest_mode = get_option( 'wpbdp_email_digest_enabled', false );
+		if ( ! $digest_mode ) {
+			$issues[] = __( 'Digest mode not enabled (sends individual emails)', 'wpshadow' );
+		}
+		
+		// Check 4: Alert frequency
+		$frequency = get_option( 'wpbdp_email_alert_frequency', 'instant' );
+		if ( $frequency === 'instant' ) {
+			$issues[] = __( 'Instant email alerts (high server load for active directories)', 'wpshadow' );
+		}
+		
+		// Check 5: Email queue
+		global $wpdb;
+		$queue_size = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}wpbdp_email_queue WHERE status = 'pending'"
+		);
+		
+		if ( $queue_size > 100 ) {
+			$issues[] = sprintf( __( '%d emails in queue (processing delay or throttling issue)', 'wpshadow' ), $queue_size );
+		}
+		
+		// Check 6: Unsubscribe option
+		$unsubscribe = get_option( 'wpbdp_email_unsubscribe_enabled', false );
+		if ( ! $unsubscribe ) {
+			$issues[] = __( 'One-click unsubscribe not available (CAN-SPAM compliance)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 58;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 52;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of performance issues */
+				__( 'Directory email alerts have %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/directory-email-alerts',
+		);
 	}
 }

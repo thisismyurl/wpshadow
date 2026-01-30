@@ -32,33 +32,90 @@ class Diagnostic_PaypalCommercePlatformSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! class_exists( 'WC_Gateway_Paypal' ) ) {
+		if ( ! class_exists( 'WC_Gateway_Paypal' ) && ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: PayPal API credentials configured
+		$client_id = get_option( 'woocommerce_ppcp_client_id', '' );
+		$secret = get_option( 'woocommerce_ppcp_secret', '' );
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/paypal-commerce-platform-security',
-			);
+		if ( empty( $client_id ) || empty( $secret ) ) {
+			$issues[] = __( 'PayPal Commerce API credentials not configured', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Webhook signature verification
+		$webhook_id = get_option( 'woocommerce_ppcp_webhook_id', '' );
+		if ( empty( $webhook_id ) && ! empty( $client_id ) ) {
+			$issues[] = __( 'PayPal webhook not configured (missing payment notifications)', 'wpshadow' );
+		}
+		
+		// Check 3: IPN verification enabled
+		$ipn_enabled = get_option( 'woocommerce_paypal_ipn_enabled', false );
+		if ( ! $ipn_enabled ) {
+			$issues[] = __( 'PayPal IPN verification not enabled', 'wpshadow' );
+		}
+		
+		// Check 4: Sandbox mode in production
+		$sandbox_mode = get_option( 'woocommerce_ppcp_sandbox_enabled', false );
+		if ( $sandbox_mode && ! wp_get_environment_type() === 'development' ) {
+			$issues[] = __( 'PayPal sandbox mode enabled on production site', 'wpshadow' );
+		}
+		
+		// Check 5: SSL requirement
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'PayPal requires SSL for secure transactions', 'wpshadow' );
+		}
+		
+		// Check 6: Transaction logging
+		$logging = get_option( 'woocommerce_ppcp_logging_enabled', false );
+		if ( ! $logging ) {
+			$issues[] = __( 'PayPal transaction logging not enabled (troubleshooting difficult)', 'wpshadow' );
+		}
+		
+		// Check 7: Check for failed transactions
+		global $wpdb;
+		$failed_orders = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} 
+				 WHERE post_type = %s 
+				 AND post_status = %s
+				 AND post_modified > DATE_SUB(NOW(), INTERVAL 7 DAY)",
+				'shop_order',
+				'wc-failed'
+			)
+		);
+		
+		if ( $failed_orders > 10 ) {
+			$issues[] = sprintf( __( '%d failed orders in past week (investigate PayPal configuration)', 'wpshadow' ), $failed_orders );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 75;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 88;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 82;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of security issues */
+				__( 'PayPal Commerce Platform has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/paypal-commerce-platform-security',
+		);
 	}
 }
