@@ -32,33 +32,81 @@ class Diagnostic_UncodeThemeFrontendEditor extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Uncode theme
+		$theme = wp_get_theme();
+		if ( 'Uncode' !== $theme->get( 'Name' ) && 'Uncode' !== $theme->get_template() ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/uncode-theme-frontend-editor',
-			);
+		// Check 1: Frontend editor enabled
+		$frontend_editor = get_option( 'uncode_frontend_editor', 'on' );
+		if ( 'off' === $frontend_editor ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Editor access restrictions
+		$editor_roles = get_option( 'uncode_frontend_editor_roles', array( 'administrator' ) );
+		if ( in_array( 'editor', $editor_roles, true ) || in_array( 'author', $editor_roles, true ) ) {
+			$issues[] = __( 'Frontend editor available to non-admins (security risk)', 'wpshadow' );
+		}
+		
+		// Check 3: Auto-save frequency
+		$autosave_interval = get_option( 'uncode_autosave_interval', 60 );
+		if ( $autosave_interval < 30 ) {
+			$issues[] = sprintf( __( 'Auto-save every %ds (server load)', 'wpshadow' ), $autosave_interval );
+		}
+		
+		// Check 4: Revision storage
+		global $wpdb;
+		$revision_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s",
+				'revision'
+			)
+		);
+		
+		if ( $revision_count > 500 ) {
+			$issues[] = sprintf( __( '%d revisions (database bloat)', 'wpshadow' ), $revision_count );
+		}
+		
+		// Check 5: Frontend editor assets
+		$load_assets = get_option( 'uncode_frontend_editor_load_all_assets', 'on' );
+		if ( 'on' === $load_assets ) {
+			$issues[] = __( 'All editor assets loaded (unnecessary overhead)', 'wpshadow' );
+		}
+		
+		// Check 6: Cache compatibility
+		$cache_compat = get_option( 'uncode_frontend_editor_cache_compat', 'off' );
+		if ( 'off' === $cache_compat ) {
+			$issues[] = __( 'Cache compatibility disabled (stale editor content)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of frontend editor issues */
+				__( 'Uncode frontend editor has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/uncode-theme-frontend-editor',
+		);
 	}
 }

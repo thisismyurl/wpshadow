@@ -36,29 +36,62 @@ class Diagnostic_LocoTranslatePotGeneration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/loco-translate-pot-generation',
-			);
+		// Check 1: File save location
+		$file_location = get_option( 'loco_file_location', 'author' );
+		if ( 'author' === $file_location ) {
+			$issues[] = __( 'Saving to plugin directory (lost on updates)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Backup enabled
+		$backup_enabled = get_option( 'loco_backup', 0 );
+		if ( ! $backup_enabled ) {
+			$issues[] = __( 'Translation backups disabled (data loss risk)', 'wpshadow' );
+		}
+		
+		// Check 3: POT generation API
+		$api_provider = get_option( 'loco_api_provider', '' );
+		if ( empty( $api_provider ) ) {
+			$issues[] = __( 'No translation API configured (manual translations only)', 'wpshadow' );
+		}
+		
+		// Check 4: String extraction
+		$extract_method = get_option( 'loco_extract_method', 'php' );
+		if ( 'php' === $extract_method ) {
+			$issues[] = __( 'PHP extraction (may miss JavaScript strings)', 'wpshadow' );
+		}
+		
+		// Check 5: POT file permissions
+		$theme_pot = get_template_directory() . '/languages/' . get_template() . '.pot';
+		if ( file_exists( $theme_pot ) && ! is_writable( $theme_pot ) ) {
+			$issues[] = __( 'Theme POT file not writable', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of POT generation issues */
+				__( 'Loco Translate has %d POT generation issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/loco-translate-pot-generation',
+		);
 	}
 }

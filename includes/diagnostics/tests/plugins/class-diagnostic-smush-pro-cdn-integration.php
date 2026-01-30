@@ -36,29 +36,73 @@ class Diagnostic_SmushProCdnIntegration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/smush-pro-cdn-integration',
-			);
+		// Check for Pro version
+		if ( ! class_exists( 'WP_Smush_Pro' ) && ! defined( 'WP_SMUSH_PRO' ) ) {
+			return null;
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: CDN enabled
+		$cdn_status = get_option( 'wp-smush-cdn_status', 0 );
+		if ( ! $cdn_status ) {
+			return null; // CDN not enabled
+		}
+		
+		// Check 2: API key
+		$api_key = get_option( 'wp-smush-api_key', '' );
+		if ( empty( $api_key ) ) {
+			$issues[] = __( 'CDN API key missing', 'wpshadow' );
+		}
+		
+		// Check 3: WebP delivery
+		$webp_enabled = get_option( 'wp-smush-webp', 0 );
+		if ( ! $webp_enabled ) {
+			$issues[] = __( 'WebP delivery disabled (larger image sizes)', 'wpshadow' );
+		}
+		
+		// Check 4: Auto-resize
+		$auto_resize = get_option( 'wp-smush-resize', 0 );
+		if ( ! $auto_resize ) {
+			$issues[] = __( 'Auto-resize disabled (oversized images)', 'wpshadow' );
+		}
+		
+		// Check 5: CDN caching
+		$cdn_cache = get_option( 'wp-smush-cdn_cache_time', 31536000 );
+		if ( $cdn_cache < 2592000 ) {
+			$issues[] = sprintf( __( 'CDN cache TTL %d days (frequent refetches)', 'wpshadow' ), $cdn_cache / 86400 );
+		}
+		
+		// Check 6: Image serving
+		$serve_method = get_option( 'wp-smush-cdn_serve_method', 'rewrite' );
+		if ( 'javascript' === $serve_method ) {
+			$issues[] = __( 'JavaScript image serving (render-blocking)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of CDN integration issues */
+				__( 'Smush Pro CDN has %d integration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/smush-pro-cdn-integration',
+		);
 	}
 }

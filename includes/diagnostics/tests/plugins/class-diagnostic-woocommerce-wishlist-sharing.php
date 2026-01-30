@@ -32,33 +32,80 @@ class Diagnostic_WoocommerceWishlistSharing extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for wishlist plugins
+		$has_wishlist = defined( 'YITH_WCWL_VERSION' ) || 
+		                defined( 'TINVWL_FVERSION' ) ||
+		                class_exists( 'WC_Wishlists' );
+		
+		if ( ! $has_wishlist ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-wishlist-sharing',
+		// Check 1: Wishlist count (YITH)
+		if ( defined( 'YITH_WCWL_VERSION' ) ) {
+			$wishlist_count = $wpdb->get_var(
+				"SELECT COUNT(*) FROM {$wpdb->prefix}yith_wcwl_lists"
 			);
+			
+			if ( $wishlist_count > 1000 ) {
+				$issues[] = sprintf( __( '%d wishlists (database overhead)', 'wpshadow' ), $wishlist_count );
+			}
+			
+			// Check 2: Public sharing enabled
+			$public_sharing = get_option( 'yith_wcwl_share_fb', 'yes' );
+			if ( 'no' === $public_sharing ) {
+				$issues[] = __( 'Social sharing disabled (limits virality)', 'wpshadow' );
+			}
+			
+			// Check 3: Privacy settings
+			$default_privacy = get_option( 'yith_wcwl_default_privacy', 'public' );
+			if ( 'public' === $default_privacy ) {
+				$issues[] = __( 'Wishlists public by default (privacy concern)', 'wpshadow' );
+			}
 		}
 		
-		return null;
+		// Check 4: Guest wishlists
+		$guest_wishlist = get_option( 'yith_wcwl_enable_wishlist', 'yes' );
+		if ( 'yes' === $guest_wishlist ) {
+			$issues[] = __( 'Guest wishlists enabled (session storage overhead)', 'wpshadow' );
+		}
+		
+		// Check 5: Email sharing throttling
+		$email_sharing = get_option( 'yith_wcwl_share_email', 'yes' );
+		if ( 'yes' === $email_sharing ) {
+			$rate_limit = get_option( 'yith_wcwl_email_rate_limit', 0 );
+			if ( 0 === $rate_limit ) {
+				$issues[] = __( 'No email rate limiting (spam risk)', 'wpshadow' );
+			}
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of wishlist sharing issues */
+				__( 'WooCommerce wishlist has %d sharing issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/woocommerce-wishlist-sharing',
+		);
 	}
 }
