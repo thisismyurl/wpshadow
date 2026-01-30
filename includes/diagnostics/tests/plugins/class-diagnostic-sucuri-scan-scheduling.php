@@ -36,25 +36,62 @@ class Diagnostic_SucuriScanScheduling extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Scheduled scans enabled
+		$schedule = get_option( 'sucuri_scan_schedule_enabled', 0 );
+		if ( ! $schedule ) {
+			$issues[] = 'Scheduled scans not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Scan frequency
+		$frequency = get_option( 'sucuri_scan_frequency', '' );
+		if ( empty( $frequency ) ) {
+			$issues[] = 'Scan frequency not configured';
+		}
+		
+		// Check 3: Email alerts
+		$alerts = get_option( 'sucuri_scan_email_alerts_enabled', 0 );
+		if ( ! $alerts ) {
+			$issues[] = 'Email alerts not configured';
+		}
+		
+		// Check 4: Malware scanning
+		$malware = get_option( 'sucuri_malware_scan_enabled', 0 );
+		if ( ! $malware ) {
+			$issues[] = 'Malware scanning not enabled';
+		}
+		
+		// Check 5: File integrity monitoring
+		$integrity = get_option( 'sucuri_file_integrity_monitoring_enabled', 0 );
+		if ( ! $integrity ) {
+			$issues[] = 'File integrity monitoring not enabled';
+		}
+		
+		// Check 6: Backup scans
+		$backup = get_option( 'sucuri_scan_backups_enabled', 0 );
+		if ( ! $backup ) {
+			$issues[] = 'Scan backups not configured';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 50;
+			$threat_multiplier = 6;
+			$max_threat = 80;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d scan scheduling issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/sucuri-scan-scheduling',
 			);
 		}
