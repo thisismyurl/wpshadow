@@ -89,7 +89,7 @@ else
 fi
 
 # Exclude certain paths from deployment
-EXCLUDE_PATTERNS=("docs/" "node_modules/" "vendor/" "tests/" "test-results/" "dev-tools/" "build/" ".devcontainer/" ".github/" ".git/" ".tmp/" ".copilot/")
+EXCLUDE_PATTERNS=("docs/" "node_modules/" "vendor/" "tests/" "test-results/" "dev-tools/" "build/" ".devcontainer/" ".github/" ".git/" ".tmp/" ".copilot/" "includes/diagnostics/")
 FILTERED_FILES=()
 
 while IFS= read -r file; do
