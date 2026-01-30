@@ -71,7 +71,7 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 
 		// Check 1: Check Yoast admin scripts loading only on edit screens
 		$disable_admin_bar = get_option( 'wpseo_disable_adminbar', false );
-		
+
 		if ( ! $disable_admin_bar ) {
 			$issues[] = 'admin bar menu enabled (loads scripts on every admin page)';
 		}
@@ -81,7 +81,7 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 		$yoast_routes = array_filter( array_keys( $rest_api_routes ), function( $route ) {
 			return strpos( $route, 'yoast' ) !== false;
 		});
-		
+
 		if ( count( $yoast_routes ) > 10 ) {
 			$issues[] = sprintf( '%d Yoast REST API routes registered (potential overhead)', count( $yoast_routes ) );
 		}
@@ -89,14 +89,14 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 		// Check 3: Check database table optimization
 		$indexables_table = $wpdb->prefix . 'yoast_indexable';
 		$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $indexables_table ) );
-		
+
 		if ( $table_exists ) {
 			$indexables_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$indexables_table}" );
-			
+
 			if ( $indexables_count > 10000 ) {
 				$issues[] = sprintf( '%d indexable records (large table may slow queries)', $indexables_count );
 			}
-			
+
 			// Check for unindexed records
 			$unindexed = $wpdb->get_var( "SELECT COUNT(*) FROM {$indexables_table} WHERE object_last_modified > object_published_at" );
 			if ( $unindexed > 1000 ) {
@@ -106,12 +106,12 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 
 		// Check 4: Verify indexables feature performance
 		$indexables_enabled = get_option( 'wpseo_indexables_enabled', true );
-		
+
 		if ( $indexables_enabled ) {
 			// Check last indexation time
 			$indexation_started = get_option( 'wpseo_indexables_indexation_started', 0 );
 			$indexation_completed = get_option( 'wpseo_indexables_indexation_completed', 0 );
-			
+
 			if ( $indexation_started && ! $indexation_completed ) {
 				$issues[] = 'indexables rebuild in progress (may cause performance impact)';
 			}
@@ -119,11 +119,11 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 
 		// Check 5: Test for excessive database queries
 		$yoast_options_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->options} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->options}
 			WHERE option_name LIKE 'wpseo%'"
 		);
-		
+
 		if ( $yoast_options_count > 50 ) {
 			$issues[] = sprintf( '%d Yoast options in database (many autoloaded)', $yoast_options_count );
 		}
@@ -141,7 +141,7 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 		// Return finding if issues exist
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 85, 50 + ( count( $issues ) * 6 ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,

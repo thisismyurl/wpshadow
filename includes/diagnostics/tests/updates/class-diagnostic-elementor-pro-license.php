@@ -71,7 +71,7 @@ class Diagnostic_ElementorProLicense extends Diagnostic_Base {
 		// Check 1: Check Elementor Pro license activated
 		$license_key = get_option( 'elementor_pro_license_key', '' );
 		$license_data = get_option( '_elementor_pro_license_data', array() );
-		
+
 		if ( empty( $license_key ) ) {
 			$issues[] = 'Elementor Pro license not activated';
 		}
@@ -81,7 +81,7 @@ class Diagnostic_ElementorProLicense extends Diagnostic_Base {
 			if ( isset( $license_data['license'] ) && 'invalid' === $license_data['license'] ) {
 				$issues[] = 'license is invalid';
 			}
-			
+
 			if ( isset( $license_data['license'] ) && 'expired' === $license_data['license'] ) {
 				$issues[] = 'license has expired';
 			}
@@ -92,7 +92,7 @@ class Diagnostic_ElementorProLicense extends Diagnostic_Base {
 		if ( isset( $update_data->response['elementor-pro/elementor-pro.php'] ) ) {
 			$current_version = defined( 'ELEMENTOR_PRO_VERSION' ) ? ELEMENTOR_PRO_VERSION : '0';
 			$new_version = $update_data->response['elementor-pro/elementor-pro.php']->new_version;
-			
+
 			if ( version_compare( $current_version, $new_version, '<' ) ) {
 				$issues[] = sprintf( 'update available (current: %s, new: %s)', $current_version, $new_version );
 			}
@@ -110,7 +110,7 @@ class Diagnostic_ElementorProLicense extends Diagnostic_Base {
 		$plugin_file = WP_PLUGIN_DIR . '/elementor-pro/elementor-pro.php';
 		if ( file_exists( $plugin_file ) ) {
 			$plugin_content = file_get_contents( $plugin_file );
-			
+
 			// Check for common nulled plugin indicators
 			$nulled_indicators = array( 'nulled', 'cracked', 'leaked', 'pirated', 'warez' );
 			foreach ( $nulled_indicators as $indicator ) {
@@ -130,7 +130,7 @@ class Diagnostic_ElementorProLicense extends Diagnostic_Base {
 		// Return finding if issues exist
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 95, 65 + ( count( $issues ) * 5 ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,

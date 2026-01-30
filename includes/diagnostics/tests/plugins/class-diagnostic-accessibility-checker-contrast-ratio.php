@@ -35,15 +35,15 @@ class Diagnostic_AccessibilityCheckerContrastRatio extends Diagnostic_Base {
 		if ( ! class_exists( 'Accessibility_Checker' ) && ! defined( 'EDAC_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Contrast ratio checking enabled.
 		$contrast_check = get_option( 'edac_contrast_check_enabled', '1' );
 		if ( '0' === $contrast_check ) {
 			$issues[] = 'contrast ratio checking disabled';
 		}
-		
+
 		// Check 2: Failed contrast checks in database.
 		global $wpdb;
 		$failed_checks = $wpdb->get_var(
@@ -56,13 +56,13 @@ class Diagnostic_AccessibilityCheckerContrastRatio extends Diagnostic_Base {
 		if ( $failed_checks > 0 ) {
 			$issues[] = "{$failed_checks} contrast ratio violations detected";
 		}
-		
+
 		// Check 3: Minimum contrast level setting.
 		$min_contrast = get_option( 'edac_min_contrast_ratio', '4.5' );
 		if ( floatval( $min_contrast ) < 4.5 ) {
 			$issues[] = "minimum contrast ratio set to {$min_contrast} (WCAG AA requires 4.5:1)";
 		}
-		
+
 		// Check 4: Pages with contrast issues.
 		$pages_with_issues = $wpdb->get_var(
 			$wpdb->prepare(
@@ -74,19 +74,19 @@ class Diagnostic_AccessibilityCheckerContrastRatio extends Diagnostic_Base {
 		if ( $pages_with_issues > 0 ) {
 			$issues[] = "{$pages_with_issues} pages with contrast violations";
 		}
-		
+
 		// Check 5: Auto-scan on publish.
 		$auto_scan = get_option( 'edac_auto_scan_on_publish', '1' );
 		if ( '0' === $auto_scan ) {
 			$issues[] = 'automatic scanning on publish disabled (new content not checked)';
 		}
-		
+
 		// Check 6: Color scheme compatibility.
 		$color_schemes = get_option( 'edac_check_color_schemes', array() );
 		if ( empty( $color_schemes ) ) {
 			$issues[] = 'no color schemes configured for testing (may miss dark mode issues)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -99,7 +99,7 @@ class Diagnostic_AccessibilityCheckerContrastRatio extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/accessibility-checker-contrast-ratio',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -36,25 +36,62 @@ class Diagnostic_WpMailSmtpProviderApiLimits extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Provider rate limits
+		$settings = get_option( 'wp_mail_smtp', array() );
+		$provider = isset( $settings['mail']['mailer'] ) ? $settings['mail']['mailer'] : '';
+		$rate_limit_configured = get_option( 'wp_mail_smtp_rate_limit_' . $provider, '0' );
+		if ( ! empty( $provider ) && '0' === $rate_limit_configured ) {
+			$issues[] = "no rate limiting for {$provider} (may hit API limits)";
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Daily sending quota
+		$daily_sent = get_transient( 'wp_mail_smtp_daily_count' );
+		$daily_limit = get_option( 'wp_mail_smtp_daily_limit_' . $provider, 0 );
+		if ( ! empty( $daily_limit ) && ! empty( $daily_sent ) ) {
+			$percent_used = ( $daily_sent / $daily_limit ) * 100;
+			if ( $percent_used > 80 ) {
+				$issues[] = round( $percent_used ) . "% of daily sending quota used";
+			}
+		}
+		
+		// Check 3: API errors from provider
+		$api_errors = get_transient( 'wp_mail_smtp_api_errors_' . $provider );
+		if ( ! empty( $api_errors ) && is_array( $api_errors ) ) {
+			$error_count = count( $api_errors );
+			if ( $error_count > 5 ) {
+				$issues[] = "{$error_count} API errors from {$provider}";
+			}
+		}
+		
+		// Check 4: Throttle backoff strategy
+		$backoff_enabled = get_option( 'wp_mail_smtp_backoff_enabled', '0' );
+		if ( '0' === $backoff_enabled && ! empty( $provider ) ) {
+			$issues[] = 'no exponential backoff on API failures';
+		}
+		
+		// Check 5: Queue for rate-limited emails
+		$queue_enabled = get_option( 'wp_mail_smtp_queue_enabled', '0' );
+		if ( '0' === $queue_enabled && ! empty( $daily_limit ) ) {
+			$issues[] = 'no email queue (may lose emails at limit)';
+		}
+		
+		// Check 6: Monitoring alerts
+		$alert_threshold = get_option( 'wp_mail_smtp_alert_threshold', 0 );
+		if ( ! empty( $daily_limit ) && empty( $alert_threshold ) ) {
+			$issues[] = 'no alerts configured for quota limits';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => 'WP Mail SMTP API limit issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-mail-smtp-provider-api-limits',
 			);
 		}

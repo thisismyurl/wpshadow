@@ -35,9 +35,9 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Repeater fields without max rows.
 		global $wpdb;
 		$unlimited_repeaters = $wpdb->get_var(
@@ -52,7 +52,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( $unlimited_repeaters > 0 ) {
 			$issues[] = "{$unlimited_repeaters} repeater fields with no max row limit (can create huge datasets)";
 		}
-		
+
 		// Check 2: Posts with large repeater data.
 		$large_repeaters = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key LIKE '_repeater_%' AND CAST(meta_value AS UNSIGNED) > 50"
@@ -60,7 +60,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( $large_repeaters > 0 ) {
 			$issues[] = "{$large_repeaters} repeater instances with over 50 rows (slow to load and edit)";
 		}
-		
+
 		// Check 3: Nested repeaters.
 		$nested_repeaters = $wpdb->get_var(
 			$wpdb->prepare(
@@ -72,7 +72,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( $nested_repeaters > 0 ) {
 			$issues[] = "{$nested_repeaters} nested repeater fields (exponentially increases query complexity)";
 		}
-		
+
 		// Check 4: Repeaters with many subfields.
 		$complex_repeaters = $wpdb->get_var(
 			$wpdb->prepare(
@@ -84,7 +84,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( $complex_repeaters > 0 ) {
 			$issues[] = "{$complex_repeaters} repeater fields with over 15 subfields (consider splitting)";
 		}
-		
+
 		// Check 5: Repeaters with relationship/gallery fields.
 		$heavy_repeaters = $wpdb->get_var(
 			$wpdb->prepare(
@@ -95,7 +95,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( $heavy_repeaters > 0 ) {
 			$issues[] = "{$heavy_repeaters} repeaters with relationship/gallery fields (multiplies query load)";
 		}
-		
+
 		// Check 6: Repeater button labels not set.
 		$unlabeled_repeaters = $wpdb->get_var(
 			$wpdb->prepare(
@@ -108,7 +108,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 		if ( $unlabeled_repeaters > 5 ) {
 			$issues[] = "{$unlabeled_repeaters} repeaters without custom button labels (poor UX)";
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -121,7 +121,7 @@ class Diagnostic_AcfRepeaterFieldLimits extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/acf-repeater-field-limits',
 			);
 		}
-		
+
 		return null;
 	}
 }

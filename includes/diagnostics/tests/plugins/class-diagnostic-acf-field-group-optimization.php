@@ -35,9 +35,9 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Total field groups count.
 		global $wpdb;
 		$field_group_count = $wpdb->get_var(
@@ -50,7 +50,7 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 		if ( $field_group_count > 50 ) {
 			$issues[] = "{$field_group_count} field groups active (consider consolidation for better performance)";
 		}
-		
+
 		// Check 2: Field groups without location rules.
 		$groups_without_rules = $wpdb->get_var(
 			$wpdb->prepare(
@@ -63,7 +63,7 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 		if ( $groups_without_rules > 0 ) {
 			$issues[] = "{$groups_without_rules} field groups without location rules (loaded on all pages)";
 		}
-		
+
 		// Check 3: Overly broad location rules.
 		$broad_rules = $wpdb->get_var(
 			$wpdb->prepare(
@@ -75,7 +75,7 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 		if ( $broad_rules > 5 ) {
 			$issues[] = "{$broad_rules} field groups with 'all post types' rule (impacts performance)";
 		}
-		
+
 		// Check 4: Field groups with excessive fields.
 		$groups_with_many_fields = $wpdb->get_var(
 			$wpdb->prepare(
@@ -86,13 +86,13 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 		if ( $groups_with_many_fields > 0 ) {
 			$issues[] = "{$groups_with_many_fields} field groups with over 30 fields (split into smaller groups)";
 		}
-		
+
 		// Check 5: JSON sync not enabled.
 		$json_save_path = apply_filters( 'acf/settings/save_json', false );
 		if ( false === $json_save_path ) {
 			$issues[] = 'JSON sync not enabled (field groups stored in database, slower loading)';
 		}
-		
+
 		// Check 6: Local JSON files out of sync.
 		if ( false !== $json_save_path && is_dir( $json_save_path ) ) {
 			$json_files = glob( $json_save_path . '/group_*.json' );
@@ -100,7 +100,7 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 				$issues[] = "JSON files ({count($json_files)}) don't match field groups ({$field_group_count}) - sync needed";
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -113,7 +113,7 @@ class Diagnostic_AcfFieldGroupOptimization extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/acf-field-group-optimization',
 			);
 		}
-		
+
 		return null;
 	}
 }

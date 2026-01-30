@@ -35,9 +35,9 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Flexible content fields count.
 		global $wpdb;
 		$flexible_fields = $wpdb->get_var(
@@ -50,7 +50,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( $flexible_fields > 10 ) {
 			$issues[] = "{$flexible_fields} flexible content fields (consider reducing for better query performance)";
 		}
-		
+
 		// Check 2: Layouts per flexible field.
 		$max_layouts = $wpdb->get_var(
 			$wpdb->prepare(
@@ -61,7 +61,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( $max_layouts > 20 ) {
 			$issues[] = "flexible field with {$max_layouts} layouts (too many options slow editing)";
 		}
-		
+
 		// Check 3: Posts with large flexible content data.
 		$large_flex_data = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key LIKE '_flexible_%' AND LENGTH(meta_value) > 10000"
@@ -69,7 +69,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( $large_flex_data > 50 ) {
 			$issues[] = "{$large_flex_data} posts with large flexible content data (slows queries)";
 		}
-		
+
 		// Check 4: Nested flexible content.
 		$nested_flexible = $wpdb->get_var(
 			$wpdb->prepare(
@@ -81,7 +81,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( $nested_flexible > 0 ) {
 			$issues[] = "{$nested_flexible} nested flexible content fields (significantly impacts performance)";
 		}
-		
+
 		// Check 5: Flexible content with image fields.
 		$flex_with_images = $wpdb->get_var(
 			$wpdb->prepare(
@@ -93,7 +93,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( $flex_with_images > 5 ) {
 			$issues[] = "{$flex_with_images} flexible fields with image fields (use gallery or optimize loading)";
 		}
-		
+
 		// Check 6: Clone fields in flexible content.
 		$flex_with_clones = $wpdb->get_var(
 			$wpdb->prepare(
@@ -105,7 +105,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 		if ( $flex_with_clones > 3 ) {
 			$issues[] = "{$flex_with_clones} flexible fields using clone fields (adds query overhead)";
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -118,7 +118,7 @@ class Diagnostic_AcfFlexibleContentPerformance extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/acf-flexible-content-performance',
 			);
 		}
-		
+
 		return null;
 	}
 }

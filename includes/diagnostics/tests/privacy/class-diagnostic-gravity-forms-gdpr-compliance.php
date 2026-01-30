@@ -72,7 +72,7 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 		global $wpdb;
 		$forms_with_consent = 0;
 		$total_forms = 0;
-		
+
 		$forms = $wpdb->get_results( "SELECT id, meta_value FROM {$wpdb->prefix}gf_form_meta" );
 		if ( $forms ) {
 			$total_forms = count( $forms );
@@ -91,7 +91,7 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 					}
 				}
 			}
-			
+
 			if ( $forms_with_consent < $total_forms ) {
 				$missing_consent = $total_forms - $forms_with_consent;
 				$issues[] = sprintf( '%d forms missing consent checkboxes', $missing_consent );
@@ -101,7 +101,7 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 		// Check 2: Verify data retention policy configured
 		$retention_policy = get_option( 'gform_enable_logging', false );
 		$personal_data_retention = get_option( 'gform_personal_data_retention', 0 );
-		
+
 		if ( empty( $personal_data_retention ) || 0 === $personal_data_retention ) {
 			$issues[] = 'no data retention policy configured';
 		}
@@ -122,7 +122,7 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 					''
 				)
 			);
-			
+
 			if ( $entries_with_ip > 0 ) {
 				$issues[] = sprintf( 'storing IP addresses for %d entries (potential PII)', $entries_with_ip );
 			}
@@ -142,7 +142,7 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 				$export_capability_enabled = true;
 			}
 		}
-		
+
 		if ( ! $export_capability_enabled ) {
 			$issues[] = 'no data export capability for GDPR compliance';
 		}
@@ -150,7 +150,7 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 		// Return finding if issues exist
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,

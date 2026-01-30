@@ -35,20 +35,20 @@ class Diagnostic_AcfOptionsPageCaching extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Options pages registered.
 		$options_pages = apply_filters( 'acf/get_options_pages', array() );
 		if ( empty( $options_pages ) ) {
 			return null; // No options pages, no issues to check.
 		}
-		
+
 		// Check 2: Object cache available.
 		if ( ! wp_using_ext_object_cache() ) {
 			$issues[] = 'persistent object cache not enabled (options pages queried repeatedly)';
 		}
-		
+
 		// Check 3: Options page data size.
 		global $wpdb;
 		$large_options = $wpdb->get_var(
@@ -57,7 +57,7 @@ class Diagnostic_AcfOptionsPageCaching extends Diagnostic_Base {
 		if ( $large_options > 0 ) {
 			$issues[] = "{$large_options} large options page values (over 50KB, slow to load)";
 		}
-		
+
 		// Check 4: Autoload enabled for options.
 		$autoloaded_options = $wpdb->get_var(
 			$wpdb->prepare(
@@ -69,7 +69,7 @@ class Diagnostic_AcfOptionsPageCaching extends Diagnostic_Base {
 		if ( $autoloaded_options > 0 ) {
 			$issues[] = "{$autoloaded_options} options page values set to autoload (increases memory usage)";
 		}
-		
+
 		// Check 5: Options page query frequency.
 		if ( defined( 'SAVEQUERIES' ) && SAVEQUERIES ) {
 			if ( ! empty( $GLOBALS['wpdb']->queries ) ) {
@@ -84,13 +84,13 @@ class Diagnostic_AcfOptionsPageCaching extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 6: Cache groups configured for ACF.
 		$cache_groups = wp_cache_get_non_persistent_groups();
 		if ( in_array( 'acf', $cache_groups, true ) ) {
 			$issues[] = 'ACF cache group set to non-persistent (options pages not cached between requests)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -103,7 +103,7 @@ class Diagnostic_AcfOptionsPageCaching extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/acf-options-page-caching',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -70,7 +70,7 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 
 		// Check 1: Check SEO editor capability assignments
 		$role_manager_active = get_option( 'wpseo_role_manager_enabled', false );
-		
+
 		if ( ! $role_manager_active ) {
 			$issues[] = 'role manager not configured (default permissions may be too permissive)';
 		}
@@ -93,7 +93,7 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 		// Check 4: Check webmaster tools verification secured
 		$google_verify = get_option( 'wpseo-google-verify', '' );
 		$bing_verify = get_option( 'wpseo-msverify', '' );
-		
+
 		// Check if these are stored as plain options (should be in Yoast options)
 		if ( ! empty( $google_verify ) || ! empty( $bing_verify ) ) {
 			// Verify they're not exposed in REST API
@@ -108,7 +108,7 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 		if ( $anyone_can_register ) {
 			$default_role = get_option( 'default_role', 'subscriber' );
 			$default_role_obj = get_role( $default_role );
-			
+
 			if ( $default_role_obj && ( $default_role_obj->has_cap( 'edit_posts' ) || $default_role_obj->has_cap( 'wpseo_bulk_edit' ) ) ) {
 				$issues[] = sprintf( 'new users get %s role with SEO edit capabilities', $default_role );
 			}
@@ -121,14 +121,14 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 			global $wpdb;
 			$recent_sitemap_changes = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) 
-					FROM {$wpdb->options} 
-					WHERE option_name LIKE %s 
+					"SELECT COUNT(*)
+					FROM {$wpdb->options}
+					WHERE option_name LIKE %s
 					AND autoload = 'yes'",
 					'%wpseo_sitemap%'
 				)
 			);
-			
+
 			if ( $recent_sitemap_changes > 20 ) {
 				$issues[] = sprintf( '%d sitemap-related options (verify not modified)', $recent_sitemap_changes );
 			}
@@ -137,7 +137,7 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 		// Return finding if issues exist
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 90, 55 + ( count( $issues ) * 6 ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,

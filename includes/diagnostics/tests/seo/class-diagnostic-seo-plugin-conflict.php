@@ -73,14 +73,14 @@ class Diagnostic_SeoPluginConflict extends Diagnostic_Base {
 			'autodescription/autodescription.php'         => 'The SEO Framework',
 			'wp-seopress/seopress.php'                    => 'SEOPress',
 		);
-		
+
 		$active_seo_plugins = array();
 		foreach ( $seo_plugins as $plugin_file => $plugin_name ) {
 			if ( is_plugin_active( $plugin_file ) ) {
 				$active_seo_plugins[] = $plugin_name;
 			}
 		}
-		
+
 		if ( count( $active_seo_plugins ) > 1 ) {
 			$issues[] = sprintf( 'multiple SEO plugins active: %s', implode( ', ', $active_seo_plugins ) );
 		} elseif ( count( $active_seo_plugins ) === 0 ) {
@@ -90,78 +90,78 @@ class Diagnostic_SeoPluginConflict extends Diagnostic_Base {
 
 		// Check 2: Verify no conflicting XML sitemaps
 		$sitemap_endpoints = array();
-		
+
 		if ( defined( 'WPSEO_VERSION' ) ) {
 			$sitemap_endpoints[] = 'sitemap_index.xml (Yoast)';
 		}
-		
+
 		if ( class_exists( 'RankMath' ) || defined( 'RANK_MATH_VERSION' ) ) {
 			$sitemap_endpoints[] = 'sitemap_index.xml (Rank Math)';
 		}
-		
+
 		if ( class_exists( 'AIOSEO\Plugin\Common\Models\Sitemap' ) ) {
 			$sitemap_endpoints[] = 'sitemap.xml (AIOSEO)';
 		}
-		
+
 		if ( count( $sitemap_endpoints ) > 1 ) {
 			$issues[] = sprintf( 'conflicting sitemaps: %s', implode( ', ', $sitemap_endpoints ) );
 		}
 
 		// Check 3: Test for duplicate meta tags
 		$meta_tag_sources = 0;
-		
+
 		if ( defined( 'WPSEO_VERSION' ) ) {
 			$meta_tag_sources++;
 		}
-		
+
 		if ( class_exists( 'RankMath' ) ) {
 			$meta_tag_sources++;
 		}
-		
+
 		if ( function_exists( 'aioseo' ) ) {
 			$meta_tag_sources++;
 		}
-		
+
 		if ( $meta_tag_sources > 1 ) {
 			$issues[] = sprintf( '%d plugins outputting meta tags (causes duplicates)', $meta_tag_sources );
 		}
 
 		// Check 4: Check for conflicting schema markup
 		$schema_sources = 0;
-		
+
 		if ( defined( 'WPSEO_VERSION' ) ) {
 			$yoast_schema = get_option( 'wpseo_social', array() );
 			if ( isset( $yoast_schema['og_default_image'] ) ) {
 				$schema_sources++;
 			}
 		}
-		
+
 		if ( class_exists( 'RankMath' ) ) {
 			$schema_sources++;
 		}
-		
+
 		if ( $schema_sources > 1 ) {
 			$issues[] = sprintf( '%d plugins generating schema markup (causes conflicts)', $schema_sources );
 		}
 
 		// Check 5: Verify no double Open Graph tags
 		$og_sources = 0;
-		
+
 		if ( defined( 'WPSEO_VERSION' ) ) {
 			$og_enabled = get_option( 'wpseo_social', array() );
 			if ( ! isset( $og_enabled['opengraph'] ) || true === $og_enabled['opengraph'] ) {
 				$og_sources++;
 			}
 		}
-		
+
 		if ( class_exists( 'RankMath' ) ) {
 			$og_sources++;
 		}
-		
+
 		if ( function_exists( 'jetpack_og_tags' ) ) {
 			$og_sources++;
 		}
-		
+
 		if ( $og_sources > 1 ) {
 			$issues[] = sprintf( '%d sources outputting Open Graph tags', $og_sources );
 		}
@@ -170,13 +170,13 @@ class Diagnostic_SeoPluginConflict extends Diagnostic_Base {
 		if ( count( $active_seo_plugins ) > 1 ) {
 			global $wpdb;
 			$seo_options_count = $wpdb->get_var(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->options} 
-				WHERE option_name LIKE 'wpseo%' 
-				   OR option_name LIKE 'rank_math%' 
+				"SELECT COUNT(*)
+				FROM {$wpdb->options}
+				WHERE option_name LIKE 'wpseo%'
+				   OR option_name LIKE 'rank_math%'
 				   OR option_name LIKE 'aioseo%'"
 			);
-			
+
 			if ( $seo_options_count > 100 ) {
 				$issues[] = sprintf( '%d SEO-related options (performance overhead)', $seo_options_count );
 			}
@@ -185,7 +185,7 @@ class Diagnostic_SeoPluginConflict extends Diagnostic_Base {
 		// Return finding if issues exist
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 95, 65 + ( count( $issues ) * 5 ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,

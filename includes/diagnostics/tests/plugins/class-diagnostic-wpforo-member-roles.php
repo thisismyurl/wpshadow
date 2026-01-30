@@ -36,25 +36,64 @@ class Diagnostic_WpforoMemberRoles extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Custom usergroups configured
+		$usergroups = get_option( 'wpforo_usergroups', array() );
+		if ( empty( $usergroups ) ) {
+			$issues[] = 'no member roles configured';
+		} elseif ( count( $usergroups ) > 20 ) {
+			$issues[] = count( $usergroups ) . ' member roles (complex permission management)';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Guest permissions
+		if ( ! empty( $usergroups ) ) {
+			foreach ( $usergroups as $group ) {
+				if ( isset( $group['name'] ) && 'Guest' === $group['name'] ) {
+					if ( ! empty( $group['cans']['vpst'] ) ) {
+						$issues[] = 'guests can create posts (spam risk)';
+					}
+				}
+			}
+		}
+		
+		// Check 3: Role hierarchy conflicts
+		$role_conflicts = get_transient( 'wpforo_role_conflicts' );
+		if ( ! empty( $role_conflicts ) ) {
+			$issues[] = 'role hierarchy conflicts detected';
+		}
+		
+		// Check 4: WordPress role synchronization
+		$sync_enabled = get_option( 'wpforo_role_sync', '1' );
+		if ( '0' === $sync_enabled ) {
+			$issues[] = 'wpForo roles not synced with WordPress roles';
+		}
+		
+		// Check 5: Admin capabilities
+		if ( ! empty( $usergroups ) ) {
+			$admin_groups = array_filter( $usergroups, function( $group ) {
+				return isset( $group['cans']['modr'] ) && ! empty( $group['cans']['modr'] );
+			} );
+			if ( count( $admin_groups ) > 5 ) {
+				$issues[] = count( $admin_groups ) . ' groups with moderation powers (security concern)';
+			}
+		}
+		
+		// Check 6: Default usergroup
+		$default_group = get_option( 'wpforo_default_groupid', 0 );
+		if ( empty( $default_group ) ) {
+			$issues[] = 'no default usergroup set (registration may fail)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => 'wpForo member role security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wpforo-member-roles',
 			);
 		}

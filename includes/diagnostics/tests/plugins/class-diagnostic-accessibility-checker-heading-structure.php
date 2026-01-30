@@ -35,15 +35,15 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 		if ( ! class_exists( 'Accessibility_Checker' ) && ! defined( 'EDAC_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Heading structure checking enabled.
 		$heading_check = get_option( 'edac_heading_check_enabled', '1' );
 		if ( '0' === $heading_check ) {
 			$issues[] = 'heading structure checking disabled';
 		}
-		
+
 		// Check 2: Pages with skipped heading levels.
 		global $wpdb;
 		$skipped_headings = $wpdb->get_var(
@@ -56,7 +56,7 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 		if ( $skipped_headings > 0 ) {
 			$issues[] = "{$skipped_headings} instances of skipped heading levels (H1 to H3, etc.)";
 		}
-		
+
 		// Check 3: Pages missing H1 tags.
 		$missing_h1 = $wpdb->get_var(
 			$wpdb->prepare(
@@ -68,7 +68,7 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 		if ( $missing_h1 > 0 ) {
 			$issues[] = "{$missing_h1} pages missing H1 heading";
 		}
-		
+
 		// Check 4: Pages with multiple H1 tags.
 		$multiple_h1 = $wpdb->get_var(
 			$wpdb->prepare(
@@ -80,7 +80,7 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 		if ( $multiple_h1 > 0 ) {
 			$issues[] = "{$multiple_h1} pages with multiple H1 tags (confuses screen readers)";
 		}
-		
+
 		// Check 5: Empty headings detected.
 		$empty_headings = $wpdb->get_var(
 			$wpdb->prepare(
@@ -92,7 +92,7 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 		if ( $empty_headings > 0 ) {
 			$issues[] = "{$empty_headings} empty heading tags found";
 		}
-		
+
 		// Check 6: Pages not scanned recently.
 		$total_pages = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type IN ('post', 'page') AND post_status = 'publish'"
@@ -108,7 +108,7 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 			$percentage = round( ( $scanned_pages / $total_pages ) * 100 );
 			$issues[] = "only {$percentage}% of pages scanned in last 30 days";
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -121,7 +121,7 @@ class Diagnostic_AccessibilityCheckerHeadingStructure extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/accessibility-checker-heading-structure',
 			);
 		}
-		
+
 		return null;
 	}
 }

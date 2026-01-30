@@ -35,15 +35,15 @@ class Diagnostic_AcfJsonSync extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: JSON save path configured.
 		$json_save_path = apply_filters( 'acf/settings/save_json', false );
 		if ( false === $json_save_path ) {
 			$issues[] = 'JSON sync save path not configured';
 		}
-		
+
 		// Check 2: JSON directory exists and writable.
 		if ( false !== $json_save_path ) {
 			if ( ! is_dir( $json_save_path ) ) {
@@ -52,7 +52,7 @@ class Diagnostic_AcfJsonSync extends Diagnostic_Base {
 				$issues[] = 'JSON save directory not writable';
 			}
 		}
-		
+
 		// Check 3: Field groups in database vs JSON files.
 		global $wpdb;
 		$db_groups = $wpdb->get_var(
@@ -71,13 +71,13 @@ class Diagnostic_AcfJsonSync extends Diagnostic_Base {
 		} elseif ( $json_files > 0 && abs( $db_groups - $json_files ) > 2 ) {
 			$issues[] = "field group count mismatch (DB: {$db_groups}, JSON: {$json_files})";
 		}
-		
+
 		// Check 4: JSON load path configured.
 		$json_load_paths = apply_filters( 'acf/settings/load_json', array() );
 		if ( empty( $json_load_paths ) && false !== $json_save_path ) {
 			$issues[] = 'JSON load path not configured (JSON files will not be loaded)';
 		}
-		
+
 		// Check 5: Modified field groups not synced.
 		$modified_groups = $wpdb->get_var(
 			$wpdb->prepare(
@@ -98,7 +98,7 @@ class Diagnostic_AcfJsonSync extends Diagnostic_Base {
 				$issues[] = "{$modified_groups} recently modified groups but only {$recent_json_files} JSON files updated";
 			}
 		}
-		
+
 		// Check 6: JSON files in version control.
 		if ( false !== $json_save_path && is_dir( $json_save_path ) ) {
 			$git_dir = dirname( $json_save_path );
@@ -115,7 +115,7 @@ class Diagnostic_AcfJsonSync extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -128,7 +128,7 @@ class Diagnostic_AcfJsonSync extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/acf-json-sync',
 			);
 		}
-		
+
 		return null;
 	}
 }

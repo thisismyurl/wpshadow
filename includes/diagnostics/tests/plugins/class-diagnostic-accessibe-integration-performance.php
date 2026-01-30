@@ -35,15 +35,15 @@ class Diagnostic_AccessibeIntegrationPerformance extends Diagnostic_Base {
 		if ( ! defined( 'ACCESSIBE_VERSION' ) && ! class_exists( 'AccessiBe' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Script loading strategy.
 		$script_loading = get_option( 'accessibe_script_loading', 'sync' );
 		if ( 'sync' === $script_loading ) {
 			$issues[] = 'widget script loading synchronously (blocks page rendering)';
 		}
-		
+
 		// Check 2: Script position in page.
 		global $wp_scripts;
 		if ( isset( $wp_scripts->registered['accessibe-widget'] ) ) {
@@ -52,26 +52,26 @@ class Diagnostic_AccessibeIntegrationPerformance extends Diagnostic_Base {
 				$issues[] = 'widget script loaded in header (should load in footer)';
 			}
 		}
-		
+
 		// Check 3: Caching of widget configuration.
 		$cache_config = get_option( 'accessibe_cache_config', '0' );
 		if ( '0' === $cache_config ) {
 			$issues[] = 'widget configuration not cached (API called on every page load)';
 		}
-		
+
 		// Check 4: External API response time.
 		$api_response_time = get_transient( 'accessibe_api_response_time' );
 		if ( false !== $api_response_time && $api_response_time > 1000 ) {
 			$response_seconds = round( $api_response_time / 1000, 2 );
 			$issues[] = "slow API responses ({$response_seconds}s average, affects page speed)";
 		}
-		
+
 		// Check 5: DOM manipulation frequency.
 		$dom_scan_frequency = get_option( 'accessibe_dom_scan_frequency', 'high' );
 		if ( 'high' === $dom_scan_frequency ) {
 			$issues[] = 'DOM scanning frequency set to high (increases CPU usage)';
 		}
-		
+
 		// Check 6: Conflicts with page builders.
 		$active_plugins = get_option( 'active_plugins', array() );
 		$page_builders = array(
@@ -83,7 +83,7 @@ class Diagnostic_AccessibeIntegrationPerformance extends Diagnostic_Base {
 		if ( ! empty( $conflicts ) && '0' === get_option( 'accessibe_pagebuilder_compat', '0' ) ) {
 			$issues[] = 'page builder detected but compatibility mode disabled (may slow editor)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -96,7 +96,7 @@ class Diagnostic_AccessibeIntegrationPerformance extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/accessibe-integration-performance',
 			);
 		}
-		
+
 		return null;
 	}
 }
