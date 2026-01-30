@@ -35,12 +35,12 @@ class AJAX_Router {
 		// Debug logging
 		$debug_file = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH . 'debug-ajax.log' : '/tmp/debug-ajax.log';
 		file_put_contents( $debug_file, "AJAX_Router::init() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . " - about to register Test_AJAX_Handler\n", FILE_APPEND );
-		
+
 		// Test handler (temporary)
 		\WPShadow\Admin\Ajax\Test_AJAX_Handler::register();
-		
+
 		file_put_contents( $debug_file, "AJAX_Router::init() - Test_AJAX_Handler::register() completed\n", FILE_APPEND );
-		
+
 		// Core finding operations
 		\WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 		\WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
@@ -68,6 +68,8 @@ class AJAX_Router {
 		// Gamification
 		\WPShadow\Admin\Ajax\Get_Gamification_Summary_Handler::register();
 		\WPShadow\Admin\Ajax\Get_Leaderboard_Handler::register();
+		\WPShadow\Admin\Ajax\Claim_Earn_Action_Handler::register();
+		\WPShadow\Admin\Ajax\Redeem_Reward_Handler::register();
 
 		// Reporting
 		\WPShadow\Admin\Ajax\Generate_Report_Handler::register();

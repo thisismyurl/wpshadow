@@ -36,25 +36,71 @@ class Diagnostic_ReallySimpleSslHttpToHttps extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check if SSL is actually active
+		if ( ! is_ssl() ) {
+			$issues[] = 'Really Simple SSL active but SSL not detected';
+		}
 		
-		if ( $has_issue ) {
+		// Check for mixed content detection
+		$mixed_content = get_option( 'rlrsssl_mixed_content_admin', '1' );
+		if ( '0' === $mixed_content && is_ssl() ) {
+			$issues[] = 'mixed content detection disabled (insecure resources may load)';
+		}
+		
+		// Check for HSTS configuration
+		$hsts_enabled = get_option( 'rlrsssl_hsts', '0' );
+		if ( '0' === $hsts_enabled && is_ssl() ) {
+			$issues[] = 'HSTS not enabled (browsers may allow HTTP connections)';
+		}
+		
+		// Check for redirect method
+		$redirect_method = get_option( 'rlrsssl_redirect_method', 'htaccess' );
+		if ( 'php' === $redirect_method ) {
+			$issues[] = 'using PHP redirects (slower than server-level redirects)';
+		}
+		
+		// Check for .htaccess rules
+		if ( 'htaccess' === $redirect_method ) {
+			$htaccess_file = ABSPATH . '.htaccess';
+			if ( file_exists( $htaccess_file ) ) {
+				if ( ! is_writable( $htaccess_file ) ) {
+					$issues[] = '.htaccess not writable (cannot auto-update SSL rules)';
+				}
+			} else {
+				$issues[] = '.htaccess file missing (redirect rules not applied)';
+			}
+		}
+		
+		// Check for SSL certificate validity
+		$cert_valid = get_transient( 'rlrsssl_certificate_valid' );
+		if ( false === $cert_valid && is_ssl() ) {
+			$site_url = get_site_url();
+			$stream = @stream_context_create( array( 'ssl' => array( 'capture_peer_cert' => true ) ) );
+			$socket = @stream_socket_client(
+				'ssl://' . wp_parse_url( $site_url, PHP_URL_HOST ) . ':443',
+				$errno,
+				$errstr,
+				30,
+				STREAM_CLIENT_CONNECT,
+				$stream
+			);
+			
+			if ( false === $socket ) {
+				$issues[] = 'SSL certificate validation failed';
+			}
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 60 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => 'Really Simple SSL configuration issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/really-simple-ssl-http-to-https',
 			);
 		}
