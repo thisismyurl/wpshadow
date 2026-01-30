@@ -32,29 +32,63 @@ class Diagnostic_BitbucketUpdaterAuthentication extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'Bitbucket_Updater' ) && ! defined( 'BITBUCKET_UPDATER_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Bitbucket credentials stored securely
+		$bb_username = get_option( 'bitbucket_username', '' );
+		$bb_password = get_option( 'bitbucket_password', '' );
+		if ( ! empty( $bb_password ) ) {
+			$issues[] = 'Bitbucket credentials stored in database (use constants)';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: App password vs account password
+		if ( ! empty( $bb_password ) && strlen( $bb_password ) < 20 ) {
+			$issues[] = 'using account password instead of app password (security risk)';
+		}
+		
+		// Check 3: Authentication method
+		$auth_method = get_option( 'bitbucket_auth_method', 'password' );
+		if ( 'password' === $auth_method && ! defined( 'BITBUCKET_APP_PASSWORD' ) ) {
+			$issues[] = 'basic authentication detected (use OAuth or app passwords)';
+		}
+		
+		// Check 4: SSL verification enabled
+		$verify_ssl = get_option( 'bitbucket_verify_ssl', '1' );
+		if ( '0' === $verify_ssl ) {
+			$issues[] = 'SSL verification disabled (man-in-the-middle risk)';
+		}
+		
+		// Check 5: Repository access permissions
+		global $wpdb;
+		$repo_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE 'bitbucket_repo_%'"
+		);
+		if ( $repo_count > 10 ) {
+			$issues[] = "many repositories configured ({$repo_count} repos, review permissions)";
+		}
+		
+		// Check 6: Last authentication check
+		$last_check = get_option( 'bitbucket_last_auth_check', 0 );
+		if ( ! empty( $last_check ) ) {
+			$days_old = round( ( time() - $last_check ) / DAY_IN_SECONDS );
+			if ( $days_old > 30 ) {
+				$issues[] = "authentication not verified in {$days_old} days";
+			}
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
+				'description' => 'Bitbucket updater security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/bitbucket-updater-authentication',
 			);
 		}

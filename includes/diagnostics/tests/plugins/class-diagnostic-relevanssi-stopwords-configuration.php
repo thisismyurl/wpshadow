@@ -32,29 +32,69 @@ class Diagnostic_RelevanssiStopwordsConfiguration extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! defined( 'RELEVANSSI_PREMIUM_VERSION' ) || function_exists( 'relevanssi_search' ) ) {
+		if ( ! defined( 'RELEVANSSI_PREMIUM_VERSION' ) && ! function_exists( 'relevanssi_search' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Stopwords configured
+		$stopwords = get_option( 'relevanssi_stopwords', '' );
+		if ( empty( $stopwords ) ) {
+			$issues[] = 'no stopwords configured (may affect search quality)';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Stopwords count
+		if ( ! empty( $stopwords ) ) {
+			$stopword_array = explode( ',', $stopwords );
+			$count = count( $stopword_array );
+			if ( $count < 10 ) {
+				$issues[] = "few stopwords defined ({$count} words, consider adding more)";
+			}
+		}
+		
+		// Check 3: Language-specific stopwords
+		$locale = get_locale();
+		if ( ! empty( $stopwords ) && 'en_US' !== $locale ) {
+			$has_locale_stopwords = get_option( 'relevanssi_stopwords_' . $locale, '' );
+			if ( empty( $has_locale_stopwords ) ) {
+				$issues[] = "non-English site but no {$locale} stopwords configured";
+			}
+		}
+		
+		// Check 4: Index size with stopwords
+		global $wpdb;
+		$index_size = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}relevanssi"
+		);
+		if ( $index_size > 100000 && empty( $stopwords ) ) {
+			$issues[] = "large index ({$index_size} entries) without stopwords (performance impact)";
+		}
+		
+		// Check 5: Common words in index
+		$common_words = get_option( 'relevanssi_common_words', array() );
+		if ( ! empty( $common_words ) && is_array( $common_words ) ) {
+			$common_count = count( $common_words );
+			if ( $common_count > 50 && empty( $stopwords ) ) {
+				$issues[] = "{$common_count} common words found (add them as stopwords)";
+			}
+		}
+		
+		// Check 6: Minimum word length setting
+		$min_word_length = get_option( 'relevanssi_min_word_length', 3 );
+		if ( $min_word_length < 3 && empty( $stopwords ) ) {
+			$issues[] = 'short words indexed without stopwords (index bloat)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 35 ),
-				'threat_level' => 35,
-				'auto_fixable' => true,
+				'description' => 'Relevanssi stopwords configuration issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/relevanssi-stopwords-configuration',
 			);
 		}
