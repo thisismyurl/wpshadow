@@ -33,17 +33,17 @@ class Diagnostic_WordpressAutoUpdatesPlugins extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Auto-updates globally disabled
 		if ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED ) {
 			$issues[] = 'automatic updates globally disabled';
 		}
-		
+
 		// Check 2: Plugin auto-updates specifically disabled
 		if ( defined( 'WP_AUTO_UPDATE_CORE' ) && false === WP_AUTO_UPDATE_CORE ) {
 			$issues[] = 'core auto-updates disabled';
 		}
-		
+
 		// Check 3: Check enabled auto-update plugins
 		$auto_updates = get_option( 'auto_update_plugins', array() );
 		$all_plugins = get_plugins();
@@ -55,7 +55,7 @@ class Diagnostic_WordpressAutoUpdatesPlugins extends Diagnostic_Base {
 				$issues[] = 'only ' . round( $update_percent ) . '% of plugins auto-updating';
 			}
 		}
-		
+
 		// Check 4: Failed auto-update attempts
 		$failed_updates = get_option( 'auto_plugin_theme_update_emails', array() );
 		if ( ! empty( $failed_updates ) && is_array( $failed_updates ) ) {
@@ -66,20 +66,20 @@ class Diagnostic_WordpressAutoUpdatesPlugins extends Diagnostic_Base {
 				$issues[] = count( $recent_failures ) . ' auto-update failures in last 7 days';
 			}
 		}
-		
+
 		// Check 5: VCS detection (should disable auto-updates)
 		if ( is_dir( ABSPATH . '.git' ) || is_dir( ABSPATH . '.svn' ) ) {
 			if ( ! empty( $auto_updates ) ) {
 				$issues[] = 'auto-updates enabled on version-controlled site';
 			}
 		}
-		
+
 		// Check 6: Notification email configured
 		$admin_email = get_option( 'admin_email', '' );
 		if ( ! empty( $auto_updates ) && ( empty( $admin_email ) || ! is_email( $admin_email ) ) ) {
 			$issues[] = 'no valid admin email for update notifications';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -92,7 +92,7 @@ class Diagnostic_WordpressAutoUpdatesPlugins extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-auto-updates-plugins',
 			);
 		}
-		
+
 		return null;
 	}
 }

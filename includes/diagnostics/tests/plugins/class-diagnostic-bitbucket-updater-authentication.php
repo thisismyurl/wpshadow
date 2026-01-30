@@ -35,33 +35,33 @@ class Diagnostic_BitbucketUpdaterAuthentication extends Diagnostic_Base {
 		if ( ! class_exists( 'Bitbucket_Updater' ) && ! defined( 'BITBUCKET_UPDATER_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Bitbucket credentials stored securely
 		$bb_username = get_option( 'bitbucket_username', '' );
 		$bb_password = get_option( 'bitbucket_password', '' );
 		if ( ! empty( $bb_password ) ) {
 			$issues[] = 'Bitbucket credentials stored in database (use constants)';
 		}
-		
+
 		// Check 2: App password vs account password
 		if ( ! empty( $bb_password ) && strlen( $bb_password ) < 20 ) {
 			$issues[] = 'using account password instead of app password (security risk)';
 		}
-		
+
 		// Check 3: Authentication method
 		$auth_method = get_option( 'bitbucket_auth_method', 'password' );
 		if ( 'password' === $auth_method && ! defined( 'BITBUCKET_APP_PASSWORD' ) ) {
 			$issues[] = 'basic authentication detected (use OAuth or app passwords)';
 		}
-		
+
 		// Check 4: SSL verification enabled
 		$verify_ssl = get_option( 'bitbucket_verify_ssl', '1' );
 		if ( '0' === $verify_ssl ) {
 			$issues[] = 'SSL verification disabled (man-in-the-middle risk)';
 		}
-		
+
 		// Check 5: Repository access permissions
 		global $wpdb;
 		$repo_count = $wpdb->get_var(
@@ -70,7 +70,7 @@ class Diagnostic_BitbucketUpdaterAuthentication extends Diagnostic_Base {
 		if ( $repo_count > 10 ) {
 			$issues[] = "many repositories configured ({$repo_count} repos, review permissions)";
 		}
-		
+
 		// Check 6: Last authentication check
 		$last_check = get_option( 'bitbucket_last_auth_check', 0 );
 		if ( ! empty( $last_check ) ) {
@@ -79,7 +79,7 @@ class Diagnostic_BitbucketUpdaterAuthentication extends Diagnostic_Base {
 				$issues[] = "authentication not verified in {$days_old} days";
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
@@ -92,7 +92,7 @@ class Diagnostic_BitbucketUpdaterAuthentication extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/bitbucket-updater-authentication',
 			);
 		}
-		
+
 		return null;
 	}
 }

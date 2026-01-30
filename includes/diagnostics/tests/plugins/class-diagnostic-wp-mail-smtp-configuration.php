@@ -35,22 +35,22 @@ class Diagnostic_WpMailSmtpConfiguration extends Diagnostic_Base {
 		if ( ! defined( 'WPMS_PLUGIN_VER' ) && ! class_exists( 'WPMailSMTP\Core' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: SMTP configuration
 		$smtp_settings = get_option( 'wp_mail_smtp', array() );
 		if ( empty( $smtp_settings ) || ! isset( $smtp_settings['mail']['mailer'] ) ) {
 			$issues[] = 'SMTP mailer not configured';
 		}
-		
+
 		// Check 2: Authentication credentials
 		if ( ! empty( $smtp_settings ) && isset( $smtp_settings['mail']['mailer'] ) && 'smtp' === $smtp_settings['mail']['mailer'] ) {
 			if ( empty( $smtp_settings['smtp']['user'] ) || empty( $smtp_settings['smtp']['pass'] ) ) {
 				$issues[] = 'SMTP authentication credentials not set';
 			}
 		}
-		
+
 		// Check 3: Encryption method
 		if ( ! empty( $smtp_settings ) && isset( $smtp_settings['smtp']['encryption'] ) ) {
 			if ( 'none' === $smtp_settings['smtp']['encryption'] ) {
@@ -59,7 +59,7 @@ class Diagnostic_WpMailSmtpConfiguration extends Diagnostic_Base {
 		} else {
 			$issues[] = 'SMTP encryption not configured';
 		}
-		
+
 		// Check 4: From email address
 		$from_email = isset( $smtp_settings['mail']['from_email'] ) ? $smtp_settings['mail']['from_email'] : '';
 		if ( empty( $from_email ) ) {
@@ -67,7 +67,7 @@ class Diagnostic_WpMailSmtpConfiguration extends Diagnostic_Base {
 		} elseif ( ! is_email( $from_email ) ) {
 			$issues[] = 'invalid from email address format';
 		}
-		
+
 		// Check 5: Email logging
 		$logging_enabled = get_option( 'wp_mail_smtp_logging', '0' );
 		if ( '0' === $logging_enabled ) {
@@ -84,7 +84,7 @@ class Diagnostic_WpMailSmtpConfiguration extends Diagnostic_Base {
 				$issues[] = "{$failed_emails} failed email deliveries logged";
 			}
 		}
-		
+
 		// Check 6: Rate limiting or queuing
 		if ( ! empty( $smtp_settings ) ) {
 			$rate_limit = get_option( 'wp_mail_smtp_rate_limit', 0 );
@@ -92,7 +92,7 @@ class Diagnostic_WpMailSmtpConfiguration extends Diagnostic_Base {
 				$issues[] = 'no email rate limiting (may hit provider limits)';
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -105,7 +105,7 @@ class Diagnostic_WpMailSmtpConfiguration extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wp-mail-smtp-configuration',
 			);
 		}
-		
+
 		return null;
 	}
 }

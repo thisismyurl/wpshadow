@@ -35,9 +35,9 @@ class Diagnostic_CalderaFormsEmailDelivery extends Diagnostic_Base {
 		if ( ! class_exists( 'Caldera_Forms' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Email notification configured
 		$forms = get_option( 'caldera_forms', array() );
 		if ( ! empty( $forms ) && is_array( $forms ) ) {
@@ -48,13 +48,13 @@ class Diagnostic_CalderaFormsEmailDelivery extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 2: From email validation
 		$default_from = get_option( 'caldera_forms_default_from_email', '' );
 		if ( ! empty( $default_from ) && ! is_email( $default_from ) ) {
 			$issues[] = 'invalid default from email address';
 		}
-		
+
 		// Check 3: Email delivery errors
 		$error_log = get_transient( 'caldera_forms_email_errors' );
 		if ( ! empty( $error_log ) && is_array( $error_log ) ) {
@@ -63,13 +63,13 @@ class Diagnostic_CalderaFormsEmailDelivery extends Diagnostic_Base {
 				$issues[] = "{$error_count} recent email delivery failures";
 			}
 		}
-		
+
 		// Check 4: SMTP vs wp_mail
 		$mailer_type = get_option( 'caldera_forms_mailer_type', 'wp_mail' );
 		if ( 'wp_mail' === $mailer_type && ! function_exists( 'wp_mail' ) ) {
 			$issues[] = 'wp_mail function not available';
 		}
-		
+
 		// Check 5: Email queue processing
 		$queue_enabled = get_option( 'caldera_forms_email_queue', '0' );
 		if ( '1' === $queue_enabled ) {
@@ -78,13 +78,13 @@ class Diagnostic_CalderaFormsEmailDelivery extends Diagnostic_Base {
 				$issues[] = "{$queue_count} emails pending in queue (delivery delays)";
 			}
 		}
-		
+
 		// Check 6: Email logging
 		$logging = get_option( 'caldera_forms_email_logging', '0' );
 		if ( '0' === $logging ) {
 			$issues[] = 'email logging disabled (cannot troubleshoot delivery)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -97,7 +97,7 @@ class Diagnostic_CalderaFormsEmailDelivery extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/caldera-forms-email-delivery',
 			);
 		}
-		
+
 		return null;
 	}
 }

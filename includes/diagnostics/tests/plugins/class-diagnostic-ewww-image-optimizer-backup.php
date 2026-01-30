@@ -35,15 +35,15 @@ class Diagnostic_EwwwImageOptimizerBackup extends Diagnostic_Base {
 		if ( ! class_exists( 'EWWW_Image_Optimizer' ) && ! defined( 'EWWW_IMAGE_OPTIMIZER_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Backup originals setting
 		$backup_enabled = get_option( 'ewww_image_optimizer_backup_files', '' );
 		if ( empty( $backup_enabled ) ) {
 			$issues[] = 'original image backups disabled (cannot restore)';
 		}
-		
+
 		// Check 2: Backup directory exists and writable
 		$backup_dir = WP_CONTENT_DIR . '/ewww/original/';
 		if ( ! empty( $backup_enabled ) ) {
@@ -53,7 +53,7 @@ class Diagnostic_EwwwImageOptimizerBackup extends Diagnostic_Base {
 				$issues[] = 'backup directory not writable';
 			}
 		}
-		
+
 		// Check 3: Backup storage size
 		if ( is_dir( $backup_dir ) ) {
 			$backup_size = 0;
@@ -65,7 +65,7 @@ class Diagnostic_EwwwImageOptimizerBackup extends Diagnostic_Base {
 				$issues[] = "large backup directory ({$size_gb}GB, consider cleanup)";
 			}
 		}
-		
+
 		// Check 4: Optimized images count vs backup count
 		global $wpdb;
 		$optimized_count = $wpdb->get_var(
@@ -78,13 +78,13 @@ class Diagnostic_EwwwImageOptimizerBackup extends Diagnostic_Base {
 				$issues[] = "missing backups for many images ({$backup_count} backups vs {$optimized_count} optimized)";
 			}
 		}
-		
+
 		// Check 5: Automatic cleanup settings
 		$cleanup_days = get_option( 'ewww_image_optimizer_backup_cleanup_days', 0 );
 		if ( empty( $cleanup_days ) && ! empty( $backup_enabled ) ) {
 			$issues[] = 'no automatic backup cleanup configured (disk space may grow)';
 		}
-		
+
 		// Check 6: Backup permissions security
 		if ( is_dir( $backup_dir ) ) {
 			$perms = fileperms( $backup_dir );
@@ -92,7 +92,7 @@ class Diagnostic_EwwwImageOptimizerBackup extends Diagnostic_Base {
 				$issues[] = 'backup directory world-readable (security concern)';
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -105,7 +105,7 @@ class Diagnostic_EwwwImageOptimizerBackup extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/ewww-image-optimizer-backup',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -35,9 +35,9 @@ class Diagnostic_PleskStagingSites extends Diagnostic_Base {
 		if ( ! defined( 'PLESK_STAGING_VERSION' ) && ! is_dir( '/usr/local/psa' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Staging site identifier
 		$is_staging = get_option( 'plesk_staging_site', '0' );
 		if ( '1' === $is_staging ) {
@@ -46,13 +46,13 @@ class Diagnostic_PleskStagingSites extends Diagnostic_Base {
 				$issues[] = 'staging site without identifier prefix';
 			}
 		}
-		
+
 		// Check 2: Database sync configuration
 		$db_sync = get_option( 'plesk_staging_db_sync', 'manual' );
 		if ( '1' === $is_staging && 'auto' === $db_sync ) {
 			$issues[] = 'automatic database sync enabled (may overwrite production)';
 		}
-		
+
 		// Check 3: Search engine indexing
 		if ( '1' === $is_staging ) {
 			$blog_public = get_option( 'blog_public', '1' );
@@ -60,7 +60,7 @@ class Diagnostic_PleskStagingSites extends Diagnostic_Base {
 				$issues[] = 'staging site visible to search engines';
 			}
 		}
-		
+
 		// Check 4: Production URL references
 		if ( '1' === $is_staging ) {
 			$site_url = get_option( 'siteurl', '' );
@@ -69,13 +69,13 @@ class Diagnostic_PleskStagingSites extends Diagnostic_Base {
 				$issues[] = 'URLs do not indicate staging environment';
 			}
 		}
-		
+
 		// Check 5: File sync direction
 		$file_sync = get_option( 'plesk_staging_file_sync', 'none' );
 		if ( 'bidirectional' === $file_sync ) {
 			$issues[] = 'bidirectional file sync (staging changes may affect production)';
 		}
-		
+
 		// Check 6: Staging age
 		$staging_created = get_option( 'plesk_staging_created', 0 );
 		if ( ! empty( $staging_created ) ) {
@@ -84,7 +84,7 @@ class Diagnostic_PleskStagingSites extends Diagnostic_Base {
 				$issues[] = "staging site {$days_old} days old (consider refreshing)";
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -97,7 +97,7 @@ class Diagnostic_PleskStagingSites extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/plesk-staging-sites',
 			);
 		}
-		
+
 		return null;
 	}
 }

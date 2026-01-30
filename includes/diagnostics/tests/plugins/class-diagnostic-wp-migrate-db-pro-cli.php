@@ -35,9 +35,9 @@ class Diagnostic_WpMigrateDbProCli extends Diagnostic_Base {
 		if ( ! class_exists( 'WPMDB_Pro_CLI' ) && ! defined( 'WPMDB_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: WP-CLI available
 		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 			$issues[] = 'WP-CLI not available (CLI addon cannot function)';
@@ -51,25 +51,25 @@ class Diagnostic_WpMigrateDbProCli extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wp-migrate-db-pro-cli',
 			);
 		}
-		
+
 		// Check 2: CLI addon enabled
 		$cli_enabled = get_option( 'wpmdb_cli_enabled', '0' );
 		if ( '0' === $cli_enabled ) {
 			$issues[] = 'CLI addon installed but not enabled';
 		}
-		
+
 		// Check 3: Automated migration security
 		$require_confirm = get_option( 'wpmdb_cli_require_confirm', '1' );
 		if ( '0' === $require_confirm ) {
 			$issues[] = 'CLI migrations run without confirmation (dangerous)';
 		}
-		
+
 		// Check 4: CLI migration logging
 		$cli_logging = get_option( 'wpmdb_cli_logging', '1' );
 		if ( '0' === $cli_logging ) {
 			$issues[] = 'CLI operations not logged';
 		}
-		
+
 		// Check 5: Scheduled migrations
 		$scheduled = wp_get_scheduled_event( 'wpmdb_cli_migration' );
 		if ( $scheduled ) {
@@ -78,13 +78,13 @@ class Diagnostic_WpMigrateDbProCli extends Diagnostic_Base {
 				$issues[] = 'scheduled migrations without automatic backups';
 			}
 		}
-		
+
 		// Check 6: Error notifications
 		$error_email = get_option( 'wpmdb_cli_error_email', '' );
 		if ( ! empty( $cli_enabled ) && empty( $error_email ) ) {
 			$issues[] = 'no email configured for CLI errors';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -97,7 +97,7 @@ class Diagnostic_WpMigrateDbProCli extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wp-migrate-db-pro-cli',
 			);
 		}
-		
+
 		return null;
 	}
 }

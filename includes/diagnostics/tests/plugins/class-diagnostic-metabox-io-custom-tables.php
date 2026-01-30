@@ -35,9 +35,9 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 		if ( ! class_exists( 'MB_Custom_Table_API' ) && ! function_exists( 'mb_custom_table_load' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Custom tables defined
 		$custom_tables = get_option( 'mb_custom_tables', array() );
 		if ( ! empty( $custom_tables ) && is_array( $custom_tables ) ) {
@@ -56,7 +56,7 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 2: Table indexes
 		if ( ! empty( $custom_tables ) && is_array( $custom_tables ) ) {
 			global $wpdb;
@@ -71,7 +71,7 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 3: Table storage engine
 		if ( ! empty( $custom_tables ) && is_array( $custom_tables ) ) {
 			global $wpdb;
@@ -90,7 +90,7 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 4: Table row count vs postmeta
 		if ( ! empty( $custom_tables ) && is_array( $custom_tables ) ) {
 			global $wpdb;
@@ -108,14 +108,14 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 5: Orphaned records
 		if ( ! empty( $custom_tables ) && is_array( $custom_tables ) ) {
 			global $wpdb;
 			foreach ( $custom_tables as $table ) {
 				if ( isset( $table['name'] ) ) {
 					$orphaned = $wpdb->get_var(
-						"SELECT COUNT(*) FROM {$wpdb->prefix}{$table['name']} ct 
+						"SELECT COUNT(*) FROM {$wpdb->prefix}{$table['name']} ct
 						 WHERE NOT EXISTS (SELECT 1 FROM {$wpdb->posts} p WHERE p.ID = ct.ID)"
 					);
 					if ( $orphaned > 0 ) {
@@ -124,13 +124,13 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 6: Backup strategy
 		$backup_configured = get_option( 'mb_custom_tables_backup', '0' );
 		if ( ! empty( $custom_tables ) && '0' === $backup_configured ) {
 			$issues[] = 'custom tables not included in backup strategy';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -143,7 +143,7 @@ class Diagnostic_MetaboxIoCustomTables extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/metabox-io-custom-tables',
 			);
 		}
-		
+
 		return null;
 	}
 }
