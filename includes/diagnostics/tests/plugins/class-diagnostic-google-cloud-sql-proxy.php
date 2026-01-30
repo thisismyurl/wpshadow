@@ -32,33 +32,71 @@ class Diagnostic_GoogleCloudSqlProxy extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check if using Cloud SQL Proxy
+		$db_host = defined( 'DB_HOST' ) ? DB_HOST : '';
+		$using_proxy = strpos( $db_host, '127.0.0.1' ) !== false ||
+		               strpos( $db_host, 'cloudsql' ) !== false ||
+		               get_option( 'gcp_cloud_sql_proxy', false );
+		
+		if ( ! $using_proxy ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/google-cloud-sql-proxy',
-			);
+		// Check 1: Proxy socket location
+		if ( strpos( $db_host, '/cloudsql/' ) === false && strpos( $db_host, '127.0.0.1' ) !== false ) {
+			$issues[] = __( 'Using TCP instead of Unix socket (performance loss)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Connection pooling
+		$persistent_conn = defined( 'DB_PERSISTENT' ) && DB_PERSISTENT;
+		if ( ! $persistent_conn ) {
+			$issues[] = __( 'Persistent connections disabled (connection overhead)', 'wpshadow' );
+		}
+		
+		// Check 3: Proxy credentials in code
+		$creds_in_config = defined( 'GOOGLE_APPLICATION_CREDENTIALS' );
+		if ( $creds_in_config ) {
+			$issues[] = __( 'Service account credentials in wp-config.php (security risk)', 'wpshadow' );
+		}
+		
+		// Check 4: SSL enforcement
+		$require_ssl = get_option( 'gcp_require_ssl', false );
+		if ( ! $require_ssl ) {
+			$issues[] = __( 'SSL not enforced for database connections', 'wpshadow' );
+		}
+		
+		// Check 5: Connection timeout
+		$timeout = get_option( 'gcp_connection_timeout', 30 );
+		if ( $timeout > 10 ) {
+			$issues[] = sprintf( __( 'Connection timeout: %ds (slow failure detection)', 'wpshadow' ), $timeout );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of Cloud SQL Proxy issues */
+				__( 'Google Cloud SQL Proxy has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/google-cloud-sql-proxy',
+		);
 	}
 }

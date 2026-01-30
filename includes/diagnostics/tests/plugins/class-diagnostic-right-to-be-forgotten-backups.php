@@ -32,33 +32,71 @@ class Diagnostic_RightToBeForgottenBackups extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for backup plugins
+		$has_backup = class_exists( 'UpdraftPlus' ) ||
+		              defined( 'DUPLICATOR_VERSION' ) ||
+		              class_exists( 'BackWPup' );
+		
+		if ( ! $has_backup ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/right-to-be-forgotten-backups',
-			);
+		// Check 1: Backup retention policy
+		$retention_days = get_option( 'backup_retention_days', 0 );
+		if ( $retention_days === 0 || $retention_days > 365 ) {
+			$issues[] = __( 'Indefinite backup retention (GDPR violation)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: User data in backups tracked
+		$track_user_data = get_option( 'rtbf_track_user_data_in_backups', false );
+		if ( ! $track_user_data ) {
+			$issues[] = __( 'User data in backups not tracked (erasure incomplete)', 'wpshadow' );
+		}
+		
+		// Check 3: Automated backup deletion
+		$auto_delete = get_option( 'rtbf_auto_delete_backups', false );
+		if ( ! $auto_delete ) {
+			$issues[] = __( 'Manual backup deletion required (compliance burden)', 'wpshadow' );
+		}
+		
+		// Check 4: Backup notification for erasure
+		$notify_erasure = get_option( 'rtbf_notify_backup_erasure', false );
+		if ( ! $notify_erasure ) {
+			$issues[] = __( 'No notification when user data in old backups (tracking gap)', 'wpshadow' );
+		}
+		
+		// Check 5: Documentation of backup process
+		$document_policy = get_option( 'rtbf_backup_policy_documented', false );
+		if ( ! $document_policy ) {
+			$issues[] = __( 'Backup GDPR policy not documented (audit risk)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of RTBF backup issues */
+				__( 'Right to be Forgotten backups have %d compliance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/right-to-be-forgotten-backups',
+		);
 	}
 }

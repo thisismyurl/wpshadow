@@ -36,29 +36,84 @@ class Diagnostic_AcfConditionalLogicPerformance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Field groups with conditional logic
+		$field_groups = acf_get_field_groups();
+		$groups_with_logic = 0;
+		$total_conditional_fields = 0;
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 40 ),
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/acf-conditional-logic-performance',
-			);
+		foreach ( $field_groups as $group ) {
+			$fields = acf_get_fields( $group['key'] );
+			$has_logic = false;
+			
+			foreach ( $fields as $field ) {
+				if ( ! empty( $field['conditional_logic'] ) ) {
+					$has_logic = true;
+					$total_conditional_fields++;
+					
+					// Check for complex logic (multiple rule groups)
+					if ( is_array( $field['conditional_logic'] ) && count( $field['conditional_logic'] ) > 3 ) {
+						$issues[] = sprintf(
+							/* translators: %s: field name */
+							__( 'Field "%s" has complex conditional logic (performance)', 'wpshadow' ),
+							substr( $field['label'], 0, 30 )
+						);
+						break;
+					}
+				}
+			}
+			
+			if ( $has_logic ) {
+				$groups_with_logic++;
+			}
 		}
 		
-		return null;
+		if ( $groups_with_logic === 0 ) {
+			return null;
+		}
+		
+		// Check 2: Excessive conditional fields
+		if ( $total_conditional_fields > 50 ) {
+			$issues[] = sprintf( __( '%d fields with conditional logic (JavaScript overhead)', 'wpshadow' ), $total_conditional_fields );
+		}
+		
+		// Check 3: Local JSON enabled
+		$local_json_enabled = defined( 'ACF_LITE' ) || get_option( 'acf_local_json_enabled', false );
+		if ( ! $local_json_enabled && $groups_with_logic > 10 ) {
+			$issues[] = __( 'ACF Local JSON not enabled (database queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Field group count
+		if ( count( $field_groups ) > 30 ) {
+			$issues[] = sprintf( __( '%d field groups registered (admin slowdown)', 'wpshadow' ), count( $field_groups ) );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 40;
+		if ( count( $issues ) >= 3 ) {
+			$threat_level = 52;
+		} elseif ( count( $issues ) >= 2 ) {
+			$threat_level = 46;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of ACF performance issues */
+				__( 'ACF conditional logic has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/acf-conditional-logic-performance',
+		);
 	}
 }

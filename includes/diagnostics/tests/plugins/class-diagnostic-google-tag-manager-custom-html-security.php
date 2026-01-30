@@ -36,29 +36,68 @@ class Diagnostic_GoogleTagManagerCustomHtmlSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-custom-html-security',
-			);
+		// Check 1: GTM container ID
+		$container_id = get_option( 'gtm4wp-options' );
+		if ( empty( $container_id ) || ! isset( $container_id['gtm-code'] ) ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Custom HTML allowance
+		$allow_custom_html = isset( $container_id['gtm-custom-html-allowed'] ) && $container_id['gtm-custom-html-allowed'];
+		if ( $allow_custom_html ) {
+			$issues[] = __( 'Custom HTML tags allowed (XSS risk)', 'wpshadow' );
+		}
+		
+		// Check 3: User permissions
+		$gtm_capability = get_option( 'gtm4wp_manage_tags_capability', 'manage_options' );
+		if ( 'edit_posts' === $gtm_capability || 'edit_pages' === $gtm_capability ) {
+			$issues[] = __( 'Low user capability for GTM management (security risk)', 'wpshadow' );
+		}
+		
+		// Check 4: Content Security Policy
+		$csp_enabled = get_option( 'gtm4wp_csp_enabled', false );
+		if ( ! $csp_enabled && $allow_custom_html ) {
+			$issues[] = __( 'No Content Security Policy for GTM (injection risk)', 'wpshadow' );
+		}
+		
+		// Check 5: Tag validation
+		$validate_tags = get_option( 'gtm4wp_validate_tags', false );
+		if ( ! $validate_tags ) {
+			$issues[] = __( 'Tag validation disabled (malicious code risk)', 'wpshadow' );
+		}
+		
+		// Check 6: Environment (staging/production)
+		$environment = get_option( 'gtm4wp_environment', 'production' );
+		if ( 'production' !== $environment && defined( 'WP_ENV' ) && 'production' === WP_ENV ) {
+			$issues[] = __( 'GTM environment mismatch (wrong tracking)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of GTM security issues */
+				__( 'Google Tag Manager has %d security concerns: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-custom-html-security',
+		);
 	}
 }

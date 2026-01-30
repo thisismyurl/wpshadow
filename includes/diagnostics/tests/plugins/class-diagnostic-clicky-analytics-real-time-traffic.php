@@ -32,33 +32,80 @@ class Diagnostic_ClickyAnalyticsRealTimeTraffic extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Clicky Analytics
+		$has_clicky = defined( 'CLICKY_VERSION' ) ||
+		              get_option( 'clicky_site_id', '' ) ||
+		              function_exists( 'clicky_analytics' );
+		
+		if ( ! $has_clicky ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		// Check 1: Site ID configured
+		$site_id = get_option( 'clicky_site_id', '' );
+		if ( empty( $site_id ) ) {
+			$issues[] = __( 'Clicky Site ID not configured (not tracking)', 'wpshadow' );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => __( 'Clicky Analytics not connected', 'wpshadow' ),
+				'severity'    => self::calculate_severity( 60 ),
+				'threat_level' => 60,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/clicky-analytics-real-time-traffic',
 			);
 		}
 		
-		return null;
+		// Check 2: Admin tracking
+		$track_admin = get_option( 'clicky_track_admin', true );
+		if ( $track_admin ) {
+			$issues[] = __( 'Tracking admin users (skewed analytics)', 'wpshadow' );
+		}
+		
+		// Check 3: Outbound link tracking
+		$track_outbound = get_option( 'clicky_track_outbound', false );
+		if ( ! $track_outbound ) {
+			$issues[] = __( 'Outbound link tracking disabled (incomplete data)', 'wpshadow' );
+		}
+		
+		// Check 4: Async loading
+		$async_load = get_option( 'clicky_async', true );
+		if ( ! $async_load ) {
+			$issues[] = __( 'Synchronous tracking (page load delay)', 'wpshadow' );
+		}
+		
+		// Check 5: Cookie-less tracking
+		$cookieless = get_option( 'clicky_cookieless', false );
+		if ( ! $cookieless ) {
+			$issues[] = __( 'Using cookies (GDPR consideration)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of configuration issues */
+				__( 'Clicky Analytics has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/clicky-analytics-real-time-traffic',
+		);
 	}
 }

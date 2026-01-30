@@ -32,33 +32,70 @@ class Diagnostic_EventTicketPdfGeneration extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic plugin check ) {
+		// Check for event ticketing plugins
+		$has_ticketing = class_exists( 'Tribe__Tickets__Main' ) ||
+		                 class_exists( 'Event_Tickets_PDF' ) ||
+		                 function_exists( 'tribe_tickets_get_ticket_provider' );
+		
+		if ( ! $has_ticketing ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/event-ticket-pdf-generation',
-			);
+		// Check 1: PDF generation enabled
+		$pdf_enabled = get_option( 'tribe_tickets_pdf_enabled', false );
+		if ( ! $pdf_enabled ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: PDF library available
+		if ( ! class_exists( 'TCPDF' ) && ! class_exists( 'Dompdf\Dompdf' ) && ! class_exists( 'mPDF' ) ) {
+			$issues[] = __( 'No PDF library available (generation may fail)', 'wpshadow' );
+		}
+		
+		// Check 3: Memory limit
+		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
+		if ( $memory_limit < ( 256 * 1024 * 1024 ) ) { // 256MB
+			$issues[] = sprintf( __( 'Memory limit: %s (PDF generation may fail)', 'wpshadow' ), size_format( $memory_limit ) );
+		}
+		
+		// Check 4: PDF caching
+		$cache_pdfs = get_option( 'tribe_tickets_cache_pdfs', false );
+		if ( ! $cache_pdfs ) {
+			$issues[] = __( 'PDF caching disabled (regenerated every download)', 'wpshadow' );
+		}
+		
+		// Check 5: Font directory writable
+		$font_dir = WP_CONTENT_DIR . '/tcpdf/fonts/';
+		if ( ! wp_is_writable( WP_CONTENT_DIR ) ) {
+			$issues[] = __( 'Font directory not writable (custom fonts fail)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 58;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 52;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of PDF generation issues */
+				__( 'Event ticket PDF generation has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/event-ticket-pdf-generation',
+		);
 	}
 }
