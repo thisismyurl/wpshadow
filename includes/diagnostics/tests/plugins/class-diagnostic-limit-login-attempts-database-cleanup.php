@@ -32,29 +32,66 @@ class Diagnostic_LimitLoginAttemptsDatabaseCleanup extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'Limit_Login_Attempts' ) && ! get_option( 'limit_login_attempts_db_cleanup', '' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: DB cleanup enabled
+		$cleanup_enabled = get_option( 'limit_login_attempts_db_cleanup', 0 );
+		if ( ! $cleanup_enabled ) {
+			$issues[] = 'Database cleanup not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Retention days configured
+		$retention_days = absint( get_option( 'limit_login_attempts_retention_days', 0 ) );
+		if ( $retention_days <= 0 ) {
+			$issues[] = 'Retention period not configured';
+		}
+		
+		// Check 3: Cleanup schedule configured
+		$cleanup_schedule = get_option( 'limit_login_attempts_cleanup_schedule', '' );
+		if ( empty( $cleanup_schedule ) ) {
+			$issues[] = 'Cleanup schedule not configured';
+		}
+		
+		// Check 4: Max log entries configured
+		$max_entries = absint( get_option( 'limit_login_attempts_max_entries', 0 ) );
+		if ( $max_entries <= 0 ) {
+			$issues[] = 'Max log entries not configured';
+		}
+		
+		// Check 5: Auto cleanup after lockout
+		$auto_cleanup = get_option( 'limit_login_attempts_auto_cleanup', 0 );
+		if ( ! $auto_cleanup ) {
+			$issues[] = 'Automatic cleanup after lockouts not enabled';
+		}
+		
+		// Check 6: Cleanup of expired lockouts
+		$cleanup_expired = get_option( 'limit_login_attempts_cleanup_expired', 0 );
+		if ( ! $cleanup_expired ) {
+			$issues[] = 'Expired lockout cleanup not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d database cleanup issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/limit-login-attempts-database-cleanup',
 			);
 		}

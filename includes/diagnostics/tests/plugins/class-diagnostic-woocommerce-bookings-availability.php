@@ -32,29 +32,66 @@ class Diagnostic_WoocommerceBookingsAvailability extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! class_exists( 'WooCommerce' ) ) {
+		if ( ! class_exists( 'WooCommerce' ) && ! class_exists( 'WC_Bookings' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Default availability set
+		$default_availability = get_option( 'wc_bookings_default_availability', '' );
+		if ( empty( $default_availability ) ) {
+			$issues[] = 'Default availability not configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Availability range configured
+		$availability_range = get_option( 'wc_bookings_availability_range', '' );
+		if ( empty( $availability_range ) ) {
+			$issues[] = 'Availability range not configured';
+		}
+		
+		// Check 3: Buffer period configured
+		$buffer_period = absint( get_option( 'wc_bookings_buffer_period', 0 ) );
+		if ( $buffer_period <= 0 ) {
+			$issues[] = 'Buffer period not configured';
+		}
+		
+		// Check 4: Max bookings per slot
+		$max_bookings = absint( get_option( 'wc_bookings_max_bookings_per_slot', 0 ) );
+		if ( $max_bookings <= 0 ) {
+			$issues[] = 'Max bookings per slot not configured';
+		}
+		
+		// Check 5: Confirmation requirement
+		$requires_confirmation = get_option( 'wc_bookings_requires_confirmation', 0 );
+		if ( ! $requires_confirmation ) {
+			$issues[] = 'Bookings do not require confirmation';
+		}
+		
+		// Check 6: Timezone handling
+		$timezone_handling = get_option( 'wc_bookings_timezone_handling', '' );
+		if ( empty( $timezone_handling ) ) {
+			$issues[] = 'Timezone handling not configured';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d booking availability issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-bookings-availability',
 			);
 		}

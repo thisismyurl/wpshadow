@@ -36,25 +36,60 @@ class Diagnostic_MultisiteThemeNetworkEnable extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
+		$allowed_themes = get_site_option( 'allowedthemes', array() );
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Allowed themes array
+		if ( empty( $allowed_themes ) || ! is_array( $allowed_themes ) ) {
+			$issues[] = 'No network-enabled themes configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: At least one theme enabled
+		if ( is_array( $allowed_themes ) && 0 === count( $allowed_themes ) ) {
+			$issues[] = 'Network has zero enabled themes';
+		}
+		
+		// Check 3: Default theme enabled
+		$default_theme = get_option( 'stylesheet', '' );
+		if ( ! empty( $default_theme ) && ( empty( $allowed_themes[ $default_theme ] ) ) ) {
+			$issues[] = 'Default site theme not network-enabled';
+		}
+		
+		// Check 4: Too many enabled themes
+		if ( is_array( $allowed_themes ) && count( $allowed_themes ) > 25 ) {
+			$issues[] = 'Too many network-enabled themes (over 25)';
+		}
+		
+		// Check 5: Disallowed themes list
+		$disallowed = get_site_option( 'disallowedthemes', array() );
+		if ( empty( $disallowed ) ) {
+			$issues[] = 'Disallowed theme list not configured';
+		}
+		
+		// Check 6: Network theme updates
+		$updates_disabled = defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS;
+		if ( $updates_disabled ) {
+			$issues[] = 'Theme updates disabled for network';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d multisite theme configuration issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/multisite-theme-network-enable',
 			);
 		}
