@@ -1,0 +1,264 @@
+/**
+ * WPShadow Feature Tour Styles
+ *
+ * Accessible, responsive styling for interactive tours.
+ * WCAG AA compliant with 4.5:1 contrast ratios.
+ *
+ * @package WPShadow
+ * @since   1.2601.2200
+ */
+
+/* Tour Overlay */
+.wpshadow-tour-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 999998;
+	display: none;
+}
+
+/* Spotlight */
+.wpshadow-tour-spotlight {
+	position: absolute;
+	border: 3px solid #0073aa;
+	border-radius: 4px;
+	box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+	z-index: 999999;
+	pointer-events: none;
+	transition: all 0.3s ease;
+}
+
+/* Tooltip Container */
+.wpshadow-tour-tooltip {
+	position: absolute;
+	width: 400px;
+	max-width: 90vw;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+	z-index: 1000000;
+	display: none;
+}
+
+/* Tooltip Header */
+.wpshadow-tour-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 20px 15px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.wpshadow-tour-title {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: #1d2327;
+	flex: 1;
+	line-height: 1.4;
+}
+
+.wpshadow-tour-close {
+	background: transparent;
+	border: none;
+	padding: 5px;
+	cursor: pointer;
+	color: #646970;
+	font-size: 20px;
+	line-height: 1;
+	border-radius: 4px;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.wpshadow-tour-close:hover,
+.wpshadow-tour-close:focus {
+	background: #f0f0f1;
+	color: #1d2327;
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
+}
+
+/* Tooltip Body */
+.wpshadow-tour-body {
+	padding: 20px;
+}
+
+.wpshadow-tour-body p {
+	margin: 0 0 15px;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #50575e;
+}
+
+.wpshadow-tour-body p:last-child {
+	margin-bottom: 0;
+}
+
+.wpshadow-tour-action {
+	margin-top: 10px;
+	display: inline-block;
+}
+
+/* Tooltip Footer */
+.wpshadow-tour-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 20px 20px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.wpshadow-tour-progress {
+	font-size: 12px;
+	color: #646970;
+	font-weight: 500;
+}
+
+.wpshadow-tour-controls {
+	display: flex;
+	gap: 8px;
+}
+
+.wpshadow-tour-controls .button {
+	font-size: 13px;
+	padding: 6px 12px;
+	height: auto;
+}
+
+/* Tour Prompt Notice */
+.wpshadow-tour-prompt {
+	border-left-width: 4px;
+	border-left-color: #0073aa;
+}
+
+.wpshadow-tour-prompt h3 {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.wpshadow-tour-prompt .button {
+	margin-right: 8px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 782px) {
+	.wpshadow-tour-tooltip {
+		width: 90vw;
+		max-width: 400px;
+	}
+
+	.wpshadow-tour-header {
+		padding: 15px 15px 12px;
+	}
+
+	.wpshadow-tour-title {
+		font-size: 16px;
+	}
+
+	.wpshadow-tour-body {
+		padding: 15px;
+	}
+
+	.wpshadow-tour-footer {
+		flex-direction: column;
+		gap: 12px;
+		align-items: stretch;
+		padding: 12px 15px 15px;
+	}
+
+	.wpshadow-tour-controls {
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	.wpshadow-tour-controls .button {
+		flex: 1;
+		justify-content: center;
+	}
+}
+
+/* Animations */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.wpshadow-tour-tooltip {
+	animation: fadeIn 0.2s ease-out;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+	.wpshadow-tour-overlay {
+		background: rgba(0, 0, 0, 0.9);
+	}
+
+	.wpshadow-tour-spotlight {
+		border-width: 4px;
+		border-color: #fff;
+	}
+
+	.wpshadow-tour-tooltip {
+		border: 2px solid #000;
+	}
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	.wpshadow-tour-spotlight,
+	.wpshadow-tour-tooltip {
+		transition: none;
+	}
+
+	.wpshadow-tour-tooltip {
+		animation: none;
+	}
+}
+
+/* Focus Indicators (WCAG AA) */
+.wpshadow-tour-controls .button:focus {
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
+	box-shadow: none;
+}
+
+.wpshadow-tour-action:focus {
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
+}
+
+/* Screen Reader Only Text */
+.screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+/* RTL Support */
+[dir="rtl"] .wpshadow-tour-header {
+	flex-direction: row-reverse;
+}
+
+[dir="rtl"] .wpshadow-tour-footer {
+	flex-direction: row-reverse;
+}
+
+[dir="rtl"] .wpshadow-tour-controls {
+	flex-direction: row-reverse;
+}

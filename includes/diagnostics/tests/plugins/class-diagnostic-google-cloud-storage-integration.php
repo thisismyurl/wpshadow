@@ -32,33 +32,80 @@ class Diagnostic_GoogleCloudStorageIntegration extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for GCS plugins
+		$gcs_configured = get_option( 'gcs_bucket_name', '' ) ||
+		                  defined( 'GCS_BUCKET' ) ||
+		                  get_option( 'wpgcs_bucket', '' );
+		
+		if ( ! $gcs_configured ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/google-cloud-storage-integration',
-			);
+		// Check 1: Bucket name configured
+		$bucket_name = get_option( 'gcs_bucket_name', defined( 'GCS_BUCKET' ) ? GCS_BUCKET : '' );
+		if ( empty( $bucket_name ) ) {
+			$issues[] = __( 'GCS bucket name not configured', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Authentication method
+		$auth_method = get_option( 'gcs_auth_method', 'key_file' );
+		if ( 'key_file' === $auth_method ) {
+			$key_file = get_option( 'gcs_key_file_path', '' );
+			if ( empty( $key_file ) || ! file_exists( $key_file ) ) {
+				$issues[] = __( 'GCS key file not found or not configured', 'wpshadow' );
+			}
+		}
+		
+		// Check 3: CDN configuration
+		$cdn_url = get_option( 'gcs_cdn_url', '' );
+		if ( empty( $cdn_url ) ) {
+			$issues[] = __( 'CDN URL not configured (direct bucket access slower)', 'wpshadow' );
+		}
+		
+		// Check 4: Media library sync
+		$auto_sync = get_option( 'gcs_auto_sync_media', false );
+		if ( ! $auto_sync ) {
+			$issues[] = __( 'Automatic media sync disabled (manual uploads required)', 'wpshadow' );
+		}
+		
+		// Check 5: Local file deletion
+		$delete_local = get_option( 'gcs_delete_local_files', false );
+		if ( $delete_local ) {
+			$issues[] = __( 'Local files deleted after upload (no backup)', 'wpshadow' );
+		}
+		
+		// Check 6: Bucket permissions
+		$public_bucket = get_option( 'gcs_bucket_public', false );
+		if ( $public_bucket ) {
+			$issues[] = __( 'Bucket set to public access (security risk)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of GCS integration issues */
+				__( 'Google Cloud Storage integration has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/google-cloud-storage-integration',
+		);
 	}
 }

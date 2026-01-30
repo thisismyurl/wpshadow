@@ -62,22 +62,40 @@ class Plugin_Bootstrap {
 		// 10. Load reporting and intelligence features
 		self::load_reporting_intelligence();
 
-		// 10. Load exit followup system
+		// 11. Load exit followup system
 		self::load_exit_followup_system();
 
-		// 11. Load content post types (KB, FAQ, etc.)
+		// 12. Load content post types (KB, FAQ, etc.)
 		self::load_content_types();
 
-		// 12. Load pro addon integration
+		// 13. Load AJAX handlers for utilities
+		self::load_ajax_handlers();
+
+		// 14. Load guided onboarding system
+		self::load_guided_onboarding();
+
+		// 15. Load usage analytics
+		self::load_usage_analytics();
+
+		// 16. Load workflow recipes
+		self::load_workflow_recipes();
+
+		// 17. Load smart recommendations
+		self::load_smart_recommendations();
+
+		// 17. Load smart recommendations
+		self::load_smart_recommendations();
+
+		// 18. Load pro addon integration
 		self::load_pro_integration();
 
-		// 13. Load WP-CLI commands
+		// 19. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 14. Initialize visual comparator
+		// 20. Initialize visual comparator
 		self::init_visual_comparator();
 
-		// 15. Fire initialization complete hook
+		// 21. Fire initialization complete hook
 		do_action( 'wpshadow_core_initialized' );
 	}
 
@@ -413,6 +431,117 @@ class Plugin_Bootstrap {
 	private static function init_visual_comparator() {
 		if ( class_exists( '\\WPShadow\\Core\\Visual_Comparator' ) ) {
 			\WPShadow\Core\Visual_Comparator::init();
+		}
+	}
+
+	/**
+	 * Load AJAX handlers for utilities
+	 *
+	 * @since 1.2601.2200
+	 * @return void
+	 */
+	private static function load_ajax_handlers() {
+		if ( ! is_admin() && ! wp_doing_ajax() ) {
+			return;
+		}
+
+		$ajax_path = WPSHADOW_PATH . 'includes/admin/ajax/';
+
+		// Utilities AJAX handlers
+		$handlers = array(
+			'create-clone-handler.php',
+			'delete-clone-handler.php',
+			'sync-clone-handler.php',
+			'validate-snippet-handler.php',
+			'save-snippet-handler.php',
+			'toggle-snippet-handler.php',
+			'delete-snippet-handler.php',
+			'detect-plugin-conflict-handler.php',
+			'bulk-find-replace-handler.php',
+			'regenerate-thumbnails-handler.php',
+		);
+
+		foreach ( $handlers as $handler ) {
+			if ( file_exists( $ajax_path . $handler ) ) {
+				require_once $ajax_path . $handler;
+			}
+		}
+	}
+
+	/**
+	 * Load guided onboarding system
+	 *
+	 * @since 1.2601.2200
+	 * @return void
+	 */
+	private static function load_guided_onboarding() {
+		$onboarding_path = WPSHADOW_PATH . 'includes/onboarding/';
+
+		if ( file_exists( $onboarding_path . 'class-feature-tour.php' ) ) {
+			require_once $onboarding_path . 'class-feature-tour.php';
+
+			if ( class_exists( '\\WPShadow\\Onboarding\\Feature_Tour' ) ) {
+				\WPShadow\Onboarding\Feature_Tour::init();
+			}
+		}
+	}
+
+	/**
+	 * Load usage analytics system
+	 *
+	 * @since 1.2601.2200
+	 * @return void
+	 */
+	private static function load_usage_analytics() {
+		$analytics_path = WPSHADOW_PATH . 'includes/analytics/';
+
+		if ( file_exists( $analytics_path . 'class-usage-tracker.php' ) ) {
+			require_once $analytics_path . 'class-usage-tracker.php';
+
+			if ( class_exists( '\\WPShadow\\Analytics\\Usage_Tracker' ) ) {
+				\WPShadow\Analytics\Usage_Tracker::init();
+			}
+		}
+
+		// Load dashboard widget
+		if ( file_exists( $analytics_path . 'class-impact-dashboard-widget.php' ) ) {
+			require_once $analytics_path . 'class-impact-dashboard-widget.php';
+		}
+	}
+
+	/**
+	 * Load workflow recipes system
+	 *
+	 * @since 1.2601.2200
+	 * @return void
+	 */
+	private static function load_workflow_recipes() {
+		$recipes_path = WPSHADOW_PATH . 'includes/workflow/';
+
+		if ( file_exists( $recipes_path . 'class-recipe-manager.php' ) ) {
+			require_once $recipes_path . 'class-recipe-manager.php';
+
+			if ( class_exists( '\\WPShadow\\Workflow\\Recipe_Manager' ) ) {
+				\WPShadow\Workflow\Recipe_Manager::init();
+			}
+		}
+	}
+
+	/**
+	 * Load smart recommendations engine
+	 *
+	 * @since 1.2601.2200
+	 * @return void
+	 */
+	private static function load_smart_recommendations() {
+		$recommendations_path = WPSHADOW_PATH . 'includes/recommendations/';
+
+		if ( file_exists( $recommendations_path . 'class-recommendation-engine.php' ) ) {
+			require_once $recommendations_path . 'class-recommendation-engine.php';
+
+			if ( class_exists( '\\WPShadow\\Recommendations\\Recommendation_Engine' ) ) {
+				\WPShadow\Recommendations\Recommendation_Engine::init();
+			}
 		}
 	}
 
