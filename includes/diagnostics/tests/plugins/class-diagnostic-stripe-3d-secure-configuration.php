@@ -36,29 +36,68 @@ class Diagnostic_Stripe3dSecureConfiguration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
+		$settings = get_option( 'woocommerce_stripe_settings', array() );
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/stripe-3d-secure-configuration',
-			);
+		// Check 1: 3D Secure enabled
+		$sca_enabled = isset( $settings['inline_cc_form'] ) && 'yes' === $settings['inline_cc_form'];
+		if ( ! $sca_enabled ) {
+			$issues[] = __( '3D Secure (SCA) not enabled (compliance risk)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Test mode in production
+		$test_mode = isset( $settings['testmode'] ) && 'yes' === $settings['testmode'];
+		if ( $test_mode && ! defined( 'WP_DEBUG' ) ) {
+			$issues[] = __( 'Test mode in production (transactions failing)', 'wpshadow' );
+		}
+		
+		// Check 3: Webhook configured
+		$webhook_secret = isset( $settings['webhook_secret'] ) ? $settings['webhook_secret'] : '';
+		if ( empty( $webhook_secret ) ) {
+			$issues[] = __( 'No webhook secret (payment status issues)', 'wpshadow' );
+		}
+		
+		// Check 4: Saved cards
+		$saved_cards = isset( $settings['saved_cards'] ) && 'yes' === $settings['saved_cards'];
+		if ( $saved_cards && ! $sca_enabled ) {
+			$issues[] = __( 'Saved cards without SCA (PSD2 violation)', 'wpshadow' );
+		}
+		
+		// Check 5: Statement descriptor
+		$descriptor = isset( $settings['statement_descriptor'] ) ? $settings['statement_descriptor'] : '';
+		if ( empty( $descriptor ) ) {
+			$issues[] = __( 'No statement descriptor (customer confusion)', 'wpshadow' );
+		}
+		
+		// Check 6: Capture method
+		$capture = isset( $settings['capture'] ) && 'yes' === $settings['capture'];
+		if ( ! $capture ) {
+			$issues[] = __( 'Manual capture (delayed settlement)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 75;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 87;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 81;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Stripe has %d 3D Secure configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/stripe-3d-secure-configuration',
+		);
 	}
 }

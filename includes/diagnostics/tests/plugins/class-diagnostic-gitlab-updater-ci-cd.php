@@ -32,33 +32,76 @@ class Diagnostic_GitlabUpdaterCiCd extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for GitLab Updater plugin
+		$has_gitlab = class_exists( 'Fragen\\GitHub_Updater\\Init' ) ||
+		              function_exists( 'github_updater_init' ) ||
+		              get_option( 'github_updater', '' ) !== '';
+		
+		if ( ! $has_gitlab ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gitlab-updater-ci-cd',
-			);
+		// Check 1: GitLab token security
+		$token = get_option( 'github_updater_gitlab_access_token', '' );
+		if ( ! empty( $token ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$issues[] = __( 'GitLab token with debug mode (exposure risk)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Automatic updates
+		$auto_update = get_option( 'github_updater_auto_update', 'no' );
+		if ( 'yes' === $auto_update ) {
+			$issues[] = __( 'Automatic updates enabled (breaking change risk)', 'wpshadow' );
+		}
+		
+		// Check 3: Branch tracking
+		$branch = get_option( 'github_updater_branch', 'master' );
+		if ( 'master' === $branch || 'main' === $branch ) {
+			$issues[] = __( 'Tracking production branch (stability risk)', 'wpshadow' );
+		}
+		
+		// Check 4: CI/CD webhook
+		$webhook = get_option( 'github_updater_webhook', '' );
+		if ( empty( $webhook ) ) {
+			$issues[] = __( 'No webhook configured (delayed updates)', 'wpshadow' );
+		}
+		
+		// Check 5: SSL verification
+		$ssl_verify = get_option( 'github_updater_ssl_verify', 'yes' );
+		if ( 'no' === $ssl_verify ) {
+			$issues[] = __( 'SSL verification disabled (MITM risk)', 'wpshadow' );
+		}
+		
+		// Check 6: Update frequency
+		$check_frequency = get_option( 'github_updater_check_frequency', 12 );
+		if ( $check_frequency < 6 ) {
+			$issues[] = sprintf( __( 'Checking every %d hours (API rate limits)', 'wpshadow' ), $check_frequency );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'GitLab Updater has %d CI/CD issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/gitlab-updater-ci-cd',
+		);
 	}
 }

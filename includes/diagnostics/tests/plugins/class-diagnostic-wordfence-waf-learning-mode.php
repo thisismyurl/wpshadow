@@ -36,29 +36,71 @@ class Diagnostic_WordfenceWafLearningMode extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wordfence-waf-learning-mode',
-			);
+		// Check 1: WAF mode
+		$waf_mode = get_option( 'wordfenceWAFMode', 'disabled' );
+		if ( 'learning' === $waf_mode ) {
+			$issues[] = __( 'WAF in learning mode (not blocking attacks)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Learning mode duration
+		$learning_start = get_option( 'wordfenceWAFLearningStart', 0 );
+		if ( $learning_start > 0 ) {
+			$days_learning = ( time() - $learning_start ) / DAY_IN_SECONDS;
+			if ( $days_learning > 7 ) {
+				$issues[] = sprintf( __( 'Learning mode for %d days (should be enabled)', 'wpshadow' ), round( $days_learning ) );
+			}
+		}
+		
+		// Check 3: False positive count
+		$false_positives = get_option( 'wordfenceWAFFalsePositives', 0 );
+		if ( $false_positives > 100 ) {
+			$issues[] = sprintf( __( '%d false positives (rules too strict)', 'wpshadow' ), $false_positives );
+		}
+		
+		// Check 4: Whitelisted IPs
+		$whitelist = get_option( 'wordfenceWhitelist', array() );
+		if ( count( $whitelist ) > 50 ) {
+			$issues[] = sprintf( __( '%d whitelisted IPs (security bypass)', 'wpshadow' ), count( $whitelist ) );
+		}
+		
+		// Check 5: WAF rules update
+		$rules_updated = get_option( 'wordfenceWAFRulesLastUpdate', 0 );
+		$days_since_update = ( time() - $rules_updated ) / DAY_IN_SECONDS;
+		if ( $days_since_update > 7 ) {
+			$issues[] = sprintf( __( 'Rules not updated for %d days (vulnerable)', 'wpshadow' ), round( $days_since_update ) );
+		}
+		
+		// Check 6: Extended protection
+		$extended = get_option( 'wordfenceWAFExtended', 'no' );
+		if ( 'no' === $extended ) {
+			$issues[] = __( 'Extended protection disabled (basic security only)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 82;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 76;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Wordfence WAF has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wordfence-waf-learning-mode',
+		);
 	}
 }

@@ -36,29 +36,66 @@ class Diagnostic_AllInOneWpMigrationSecretKey extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-wp-migration-secret-key',
-			);
+		// Check 1: Secret key strength
+		$secret_key = get_option( 'ai1wm_secret_key', '' );
+		if ( ! empty( $secret_key ) && strlen( $secret_key ) < 32 ) {
+			$issues[] = sprintf( __( 'Secret key only %d characters (weak)', 'wpshadow' ), strlen( $secret_key ) );
 		}
 		
-		return null;
+		// Check 2: Default secret key
+		if ( 'CHANGE_THIS_SECRET_KEY' === $secret_key ) {
+			$issues[] = __( 'Using default secret key (critical vulnerability)', 'wpshadow' );
+		}
+		
+		// Check 3: Public downloads
+		$public_downloads = get_option( 'ai1wm_public_downloads', 'no' );
+		if ( 'yes' === $public_downloads ) {
+			$issues[] = __( 'Public downloads enabled (data exposure)', 'wpshadow' );
+		}
+		
+		// Check 4: Download expiration
+		$download_expiry = get_option( 'ai1wm_download_expiry', 0 );
+		if ( $download_expiry === 0 || $download_expiry > 86400 ) {
+			$issues[] = __( 'Download links never expire (security risk)', 'wpshadow' );
+		}
+		
+		// Check 5: IP restriction
+		$ip_restriction = get_option( 'ai1wm_ip_restriction', 'no' );
+		if ( 'no' === $ip_restriction ) {
+			$issues[] = __( 'No IP restriction (unauthorized access)', 'wpshadow' );
+		}
+		
+		// Check 6: Storage location
+		$storage_path = get_option( 'ai1wm_storage_path', '' );
+		if ( strpos( $storage_path, ABSPATH ) === 0 ) {
+			$issues[] = __( 'Backups in web root (direct access possible)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 75;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 87;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 81;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'All-in-One WP Migration has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/all-in-one-wp-migration-secret-key',
+		);
 	}
 }
