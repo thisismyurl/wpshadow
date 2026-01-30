@@ -32,33 +32,85 @@ class Diagnostic_BricksBuilderCustomElements extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Bricks Builder theme
+		$has_bricks = defined( 'BRICKS_VERSION' ) ||
+		              get_template() === 'bricks' ||
+		              class_exists( 'Bricks\Elements' );
+		
+		if ( ! $has_bricks ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/bricks-builder-custom-elements',
-			);
+		// Check 1: Custom elements registered
+		$custom_elements = get_option( 'bricks_custom_elements', array() );
+		if ( empty( $custom_elements ) ) {
+			return null; // No custom elements
 		}
 		
-		return null;
+		// Check 2: Asset loading
+		$load_assets = get_option( 'bricks_custom_element_assets', 'inline' );
+		if ( 'inline' === $load_assets ) {
+			$issues[] = __( 'Inline assets (page bloat)', 'wpshadow' );
+		}
+		
+		// Check 3: Version compatibility
+		foreach ( $custom_elements as $element ) {
+			if ( isset( $element['min_version'] ) && version_compare( BRICKS_VERSION, $element['min_version'], '<' ) ) {
+				$issues[] = sprintf( __( 'Incompatible element: %s', 'wpshadow' ), $element['name'] );
+				break;
+			}
+		}
+		
+		// Check 4: Security validation
+		$validate_input = get_option( 'bricks_validate_element_input', 'yes' );
+		if ( 'no' === $validate_input ) {
+			$issues[] = __( 'Input validation disabled (XSS risk)', 'wpshadow' );
+		}
+		
+		// Check 5: Documentation
+		$missing_docs = 0;
+		foreach ( $custom_elements as $element ) {
+			if ( ! isset( $element['documentation'] ) || empty( $element['documentation'] ) ) {
+				++$missing_docs;
+			}
+		}
+		
+		if ( $missing_docs > 0 ) {
+			$issues[] = sprintf( __( '%d elements without documentation', 'wpshadow' ), $missing_docs );
+		}
+		
+		// Check 6: Deprecated API usage
+		$deprecated_usage = get_option( 'bricks_deprecated_api_usage', array() );
+		if ( ! empty( $deprecated_usage ) ) {
+			$issues[] = sprintf( __( '%d deprecated API calls', 'wpshadow' ), count( $deprecated_usage ) );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of custom element issues */
+				__( 'Bricks Builder custom elements have %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/bricks-builder-custom-elements',
+		);
 	}
 }

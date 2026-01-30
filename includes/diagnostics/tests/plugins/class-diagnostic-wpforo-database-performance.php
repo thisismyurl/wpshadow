@@ -36,29 +36,81 @@ class Diagnostic_WpforoDatabasePerformance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Post count
+		$post_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}wpforo_posts"
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wpforo-database-performance',
-			);
+		if ( $post_count > 50000 ) {
+			$issues[] = sprintf( __( '%s posts (table optimization needed)', 'wpshadow' ), number_format( $post_count ) );
 		}
 		
-		return null;
+		// Check 2: Database indexing
+		$indexes = $wpdb->get_results(
+			"SHOW INDEX FROM {$wpdb->prefix}wpforo_posts WHERE Key_name != 'PRIMARY'"
+		);
+		
+		if ( count( $indexes ) < 3 ) {
+			$issues[] = __( 'Insufficient indexes (slow queries)', 'wpshadow' );
+		}
+		
+		// Check 3: Cache enabled
+		$cache_enabled = get_option( 'wpforo_cache_enabled', 'yes' );
+		if ( 'no' === $cache_enabled ) {
+			$issues[] = __( 'Cache disabled (repeated queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Subscriptions
+		$subscriptions = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}wpforo_subscribes"
+		);
+		
+		if ( $subscriptions > 10000 ) {
+			$issues[] = sprintf( __( '%s subscriptions (email overhead)', 'wpshadow' ), number_format( $subscriptions ) );
+		}
+		
+		// Check 5: Attachment storage
+		$attachments = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'wpforo_attachment'"
+		);
+		
+		if ( $attachments > 5000 ) {
+			$issues[] = sprintf( __( '%s attachments (disk space)', 'wpshadow' ), number_format( $attachments ) );
+		}
+		
+		// Check 6: Query logging
+		$query_log = get_option( 'wpforo_query_log', 'no' );
+		if ( 'yes' === $query_log ) {
+			$issues[] = __( 'Query logging enabled (production overhead)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 68;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 62;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of database performance issues */
+				__( 'wpForo has %d database performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wpforo-database-performance',
+		);
 	}
 }

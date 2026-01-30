@@ -162,142 +162,81 @@ class Phase4_Settings_Page {
 								<?php esc_html_e( 'Send notifications to Microsoft Teams.', 'wpshadow' ); ?>
 							</p>
 						</div>
-							<tr>
-								<th scope="row">
-									<label for="slack_enabled"><?php esc_html_e( 'Slack Integration', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<label>
-										<input type="checkbox" 
-											   name="slack_enabled" 
-											   id="slack_enabled" 
-											   value="1" 
-											   <?php checked( $settings['slack_enabled'] ); ?> />
-										<?php esc_html_e( 'Enable Slack notifications', 'wpshadow' ); ?>
-									</label>
-									<p class="description">
-										<?php esc_html_e( 'Send report summaries to Slack channels.', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-									<label for="slack_webhook"><?php esc_html_e( 'Slack Webhook URL', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<input type="url" 
-										   name="slack_webhook" 
-										   id="slack_webhook" 
-										   value="<?php echo esc_attr( $settings['slack_webhook'] ); ?>" 
-										   class="regular-text" 
-										   placeholder="https://hooks.slack.com/services/..." />
-									<p class="description">
-										<?php
-										printf(
-											/* translators: %s: Slack webhook documentation URL */
-											__( 'Get your webhook URL from <a href="%s" target="_blank">Slack</a>.', 'wpshadow' ),
-											'https://api.slack.com/messaging/webhooks'
-										);
-										?>
-									</p>
-								</td>
-							</tr>
-						</table>
 
-						<!-- Microsoft Teams -->
-						<table class="form-table">
-							<tr>
-								<th scope="row">
-									<label for="teams_enabled"><?php esc_html_e( 'Microsoft Teams', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<label>
-										<input type="checkbox" 
-											   name="teams_enabled" 
-											   id="teams_enabled" 
-											   value="1" 
-											   <?php checked( $settings['teams_enabled'] ); ?> />
-										<?php esc_html_e( 'Enable Teams notifications', 'wpshadow' ); ?>
-									</label>
-									<p class="description">
-										<?php esc_html_e( 'Send report summaries to Microsoft Teams channels.', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-									<label for="teams_webhook"><?php esc_html_e( 'Teams Webhook URL', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<input type="url" 
-										   name="teams_webhook" 
-										   id="teams_webhook" 
-										   value="<?php echo esc_attr( $settings['teams_webhook'] ); ?>" 
-										   class="regular-text" 
-										   placeholder="https://outlook.office.com/webhook/..." />
-									<p class="description">
-										<?php esc_html_e( 'Configure incoming webhooks in your Teams channel settings.', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-						</table>
+						<div class="wps-form-group wps-mt-4">
+							<label for="teams_webhook" class="wps-form-label">
+								<?php esc_html_e( 'Teams Webhook URL', 'wpshadow' ); ?>
+							</label>
+							<input type="url" 
+								   name="teams_webhook" 
+								   id="teams_webhook" 
+								   value="<?php echo esc_attr( $settings['teams_webhook'] ); ?>" 
+								   class="wps-input" 
+								   placeholder="https://outlook.office.com/webhook/..." />
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Configure incoming webhooks in your Teams channel settings.', 'wpshadow' ); ?>
+							</p>
+						</div>
 
 						<!-- Custom Webhook -->
-						<table class="form-table">
-							<tr>
-								<th scope="row">
-									<label for="webhook_enabled"><?php esc_html_e( 'Custom Webhook', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<label>
-										<input type="checkbox" 
-											   name="webhook_enabled" 
-											   id="webhook_enabled" 
-											   value="1" 
-											   <?php checked( $settings['webhook_enabled'] ); ?> />
-										<?php esc_html_e( 'Enable custom webhook', 'wpshadow' ); ?>
-									</label>
-									<p class="description">
-										<?php esc_html_e( 'Send report data to any custom endpoint.', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-									<label for="webhook_url"><?php esc_html_e( 'Webhook URL', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<input type="url" 
-										   name="webhook_url" 
-										   id="webhook_url" 
-										   value="<?php echo esc_attr( $settings['webhook_url'] ); ?>" 
-										   class="regular-text" 
-										   placeholder="https://your-service.com/webhook" />
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-									<label for="webhook_method"><?php esc_html_e( 'HTTP Method', 'wpshadow' ); ?></label>
-								</th>
-								<td>
-									<select name="webhook_method" id="webhook_method">
-										<option value="POST" <?php selected( $settings['webhook_method'], 'POST' ); ?>>POST</option>
-										<option value="GET" <?php selected( $settings['webhook_method'], 'GET' ); ?>>GET</option>
-										<option value="PUT" <?php selected( $settings['webhook_method'], 'PUT' ); ?>>PUT</option>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</div>
+						<div class="wps-form-group wps-mt-4">
+							<label for="webhook_enabled" class="wps-form-label">
+								<?php esc_html_e( 'Custom Webhook', 'wpshadow' ); ?>
+							</label>
+							<label class="wps-toggle">
+								<input type="checkbox" 
+									   name="webhook_enabled" 
+									   id="webhook_enabled" 
+									   value="1" 
+									   <?php checked( $settings['webhook_enabled'] ); ?> />
+								<span class="wps-toggle-slider"></span>
+							</label>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Send report data to any custom endpoint.', 'wpshadow' ); ?>
+							</p>
+						</div>
 
-					<!-- Alert Settings -->
-					<div class="wpshadow-settings-section">
-						<h2><?php esc_html_e( 'Alert Thresholds', 'wpshadow' ); ?></h2>
-						
+						<div class="wps-form-group wps-mt-4">
+							<label for="webhook_url" class="wps-form-label">
+								<?php esc_html_e( 'Webhook URL', 'wpshadow' ); ?>
+							</label>
+							<input type="url" 
+								   name="webhook_url" 
+								   id="webhook_url" 
+								   value="<?php echo esc_attr( $settings['webhook_url'] ); ?>" 
+								   class="wps-input" 
+								   placeholder="https://your-service.com/webhook" />
+						</div>
+
+						<div class="wps-form-group wps-mt-4">
+							<label for="webhook_method" class="wps-form-label">
+								<?php esc_html_e( 'HTTP Method', 'wpshadow' ); ?>
+							</label>
+							<select name="webhook_method" id="webhook_method" class="wps-input wps-w-32">
+								<option value="POST" <?php selected( $settings['webhook_method'], 'POST' ); ?>>POST</option>
+								<option value="GET" <?php selected( $settings['webhook_method'], 'GET' ); ?>>GET</option>
+								<option value="PUT" <?php selected( $settings['webhook_method'], 'PUT' ); ?>>PUT</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<!-- Alert Settings -->
+				<div class="wps-card">
+					<div class="wps-card-header">
+						<h3 class="wps-card-title">
+							<span class="dashicons dashicons-bell"></span>
+							<?php esc_html_e( 'Alert Thresholds', 'wpshadow' ); ?>
+						</h3>
+						<p class="wps-card-description">
+							<?php esc_html_e( 'Monitor configured alert thresholds and trigger conditions.', 'wpshadow' ); ?>
+						</p>
+					</div>
+					<div class="wps-card-body">
 						<?php if ( empty( $alerts ) ) : ?>
 							<p><?php esc_html_e( 'No alerts configured yet.', 'wpshadow' ); ?></p>
 						<?php else : ?>
-							<table class="wp-list-table widefat fixed striped">
+							<table class="wps-table widefat">
 								<thead>
 									<tr>
 										<th><?php esc_html_e( 'Metric', 'wpshadow' ); ?></th>
@@ -335,186 +274,159 @@ class Phase4_Settings_Page {
 							</table>
 						<?php endif; ?>
 
-						<p class="description">
+						<p class="wps-form-description wps-mt-4">
 							<?php esc_html_e( 'Alerts can be configured via the WP-CLI or programmatically. UI management coming soon.', 'wpshadow' ); ?>
 						</p>
 					</div>
+				</div>
 
-					<!-- Export Settings -->
-					<div class="wpshadow-settings-section">
-						<h2><?php esc_html_e( 'Export & Storage', 'wpshadow' ); ?></h2>
-						
-						<table class="form-table">
-							<tr>
-								<th scope="row"><?php esc_html_e( 'Export Retention', 'wpshadow' ); ?></th>
-								<td>
-									<p>
-										<?php esc_html_e( 'Exported files are automatically deleted after 7 days.', 'wpshadow' ); ?>
-									</p>
-									<p class="description">
-										<?php esc_html_e( 'Storage location: /wp-content/uploads/wpshadow-reports/', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row"><?php esc_html_e( 'Snapshot Retention', 'wpshadow' ); ?></th>
-								<td>
-									<p>
-										<?php esc_html_e( 'Historical snapshots are kept for 90 days.', 'wpshadow' ); ?>
-									</p>
-									<p class="description">
-										<?php esc_html_e( 'Older snapshots are automatically purged to save database space.', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-						</table>
+				<!-- Export & Storage -->
+				<div class="wps-card">
+					<div class="wps-card-header">
+						<h3 class="wps-card-title">
+							<span class="dashicons dashicons-download"></span>
+							<?php esc_html_e( 'Export & Storage', 'wpshadow' ); ?>
+						</h3>
+						<p class="wps-card-description">
+							<?php esc_html_e( 'Manage export retention policies and storage settings.', 'wpshadow' ); ?>
+						</p>
 					</div>
+					<div class="wps-card-body">
+						<div class="wps-form-group">
+							<label class="wps-form-label"><?php esc_html_e( 'Export Retention', 'wpshadow' ); ?></label>
+							<p><?php esc_html_e( 'Exported files are automatically deleted after 7 days.', 'wpshadow' ); ?></p>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Storage location: /wp-content/uploads/wpshadow-reports/', 'wpshadow' ); ?>
+							</p>
+						</div>
 
-					<!-- Analytics Settings -->
-					<div class="wpshadow-settings-section">
-						<h2><?php esc_html_e( 'Analytics & Benchmarking', 'wpshadow' ); ?></h2>
-						
-						<table class="form-table">
-							<tr>
-								<th scope="row"><?php esc_html_e( 'Site Type', 'wpshadow' ); ?></th>
-								<td>
-									<select name="site_type" id="site_type">
-										<option value="blog" <?php selected( get_option( 'wpshadow_site_type', 'business' ), 'blog' ); ?>>
-											<?php esc_html_e( 'Blog/Content Site', 'wpshadow' ); ?>
-										</option>
-										<option value="ecommerce" <?php selected( get_option( 'wpshadow_site_type', 'business' ), 'ecommerce' ); ?>>
-											<?php esc_html_e( 'E-Commerce', 'wpshadow' ); ?>
-										</option>
-										<option value="business" <?php selected( get_option( 'wpshadow_site_type', 'business' ), 'business' ); ?>>
-											<?php esc_html_e( 'Business/Corporate', 'wpshadow' ); ?>
-										</option>
-									</select>
-									<p class="description">
-										<?php esc_html_e( 'Used for benchmark comparisons against industry averages.', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row"><?php esc_html_e( 'Hourly Rate', 'wpshadow' ); ?></th>
-								<td>
-									<input type="number" 
-										   name="hourly_rate" 
-										   id="hourly_rate" 
-										   value="<?php echo esc_attr( get_option( 'wpshadow_hourly_rate', '100' ) ); ?>" 
-										   min="0" 
-										   step="1" 
-										   class="small-text" /> USD
-									<p class="description">
-										<?php esc_html_e( 'Used for ROI calculations (labor cost savings).', 'wpshadow' ); ?>
-									</p>
-								</td>
-							</tr>
-						</table>
+						<div class="wps-form-group wps-mt-4">
+							<label class="wps-form-label"><?php esc_html_e( 'Snapshot Retention', 'wpshadow' ); ?></label>
+							<p><?php esc_html_e( 'Historical snapshots are kept for 90 days.', 'wpshadow' ); ?></p>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Older snapshots are automatically purged to save database space.', 'wpshadow' ); ?>
+							</p>
+						</div>
 					</div>
 				</div>
 
-				<?php submit_button( __( 'Save Settings', 'wpshadow' ) ); ?>
+				<!-- Analytics & Benchmarking -->
+				<div class="wps-card">
+					<div class="wps-card-header">
+						<h3 class="wps-card-title">
+							<span class="dashicons dashicons-chart-line"></span>
+							<?php esc_html_e( 'Analytics & Benchmarking', 'wpshadow' ); ?>
+						</h3>
+						<p class="wps-card-description">
+							<?php esc_html_e( 'Configure site type and ROI calculation settings for better analytics.', 'wpshadow' ); ?>
+						</p>
+					</div>
+					<div class="wps-card-body">
+						<div class="wps-form-group">
+							<label for="site_type" class="wps-form-label">
+								<?php esc_html_e( 'Site Type', 'wpshadow' ); ?>
+							</label>
+							<select name="site_type" id="site_type" class="wps-input wps-w-64">
+								<option value="blog" <?php selected( get_option( 'wpshadow_site_type', 'business' ), 'blog' ); ?>>
+									<?php esc_html_e( 'Blog/Content Site', 'wpshadow' ); ?>
+								</option>
+								<option value="ecommerce" <?php selected( get_option( 'wpshadow_site_type', 'business' ), 'ecommerce' ); ?>>
+									<?php esc_html_e( 'E-Commerce', 'wpshadow' ); ?>
+								</option>
+								<option value="business" <?php selected( get_option( 'wpshadow_site_type', 'business' ), 'business' ); ?>>
+									<?php esc_html_e( 'Business/Corporate', 'wpshadow' ); ?>
+								</option>
+							</select>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Used for benchmark comparisons against industry averages.', 'wpshadow' ); ?>
+							</p>
+						</div>
+
+						<div class="wps-form-group wps-mt-4">
+							<label for="hourly_rate" class="wps-form-label">
+								<?php esc_html_e( 'Hourly Rate', 'wpshadow' ); ?>
+							</label>
+							<div class="wps-input-group">
+								<input type="number" 
+									   name="hourly_rate" 
+									   id="hourly_rate" 
+									   value="<?php echo esc_attr( get_option( 'wpshadow_hourly_rate', '100' ) ); ?>" 
+									   min="0" 
+									   step="1" 
+									   class="wps-input wps-w-32" />
+								<span class="wps-input-addon">USD</span>
+							</div>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Used for ROI calculations (labor cost savings).', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Action Buttons -->
+				<div class="wps-card wps-card--action">
+					<div class="wps-card-body">
+						<?php submit_button( __( 'Save Settings', 'wpshadow' ), 'primary', 'submit', false ); ?>
+					</div>
+				</div>
 			</form>
 
 			<!-- Feature Documentation -->
-			<div class="wpshadow-documentation-section">
-				<h2><?php esc_html_e( 'Available Features', 'wpshadow' ); ?></h2>
-				
-				<div class="wpshadow-feature-cards">
-					<div class="feature-card">
-						<h3><?php esc_html_e( 'Export & Scheduling', 'wpshadow' ); ?></h3>
-						<ul>
-							<li><?php esc_html_e( 'PDF, CSV, Excel exports', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Scheduled report generation', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Email delivery', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Historical snapshots', 'wpshadow' ); ?></li>
-						</ul>
-					</div>
+			<div class="wps-card">
+				<div class="wps-card-header">
+					<h3 class="wps-card-title">
+						<span class="dashicons dashicons-info"></span>
+						<?php esc_html_e( 'Available Features', 'wpshadow' ); ?>
+					</h3>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Overview of Phase 4 advanced features available in WPShadow.', 'wpshadow' ); ?>
+					</p>
+				</div>
+				<div class="wps-card-body">
+					<div class="wps-grid wps-grid-cols-2 wps-gap-4">
+						<div class="wps-info-box">
+							<h4><?php esc_html_e( 'Export & Scheduling', 'wpshadow' ); ?></h4>
+							<ul>
+								<li><?php esc_html_e( 'PDF, CSV, Excel exports', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Scheduled report generation', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Email delivery', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Historical snapshots', 'wpshadow' ); ?></li>
+							</ul>
+						</div>
 
-					<div class="feature-card">
-						<h3><?php esc_html_e( 'Intelligence', 'wpshadow' ); ?></h3>
-						<ul>
-							<li><?php esc_html_e( 'Trend analysis', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Alert thresholds', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Report annotations', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Executive summaries', 'wpshadow' ); ?></li>
-						</ul>
-					</div>
+						<div class="wps-info-box">
+							<h4><?php esc_html_e( 'Intelligence', 'wpshadow' ); ?></h4>
+							<ul>
+								<li><?php esc_html_e( 'Trend analysis', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Alert thresholds', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Report annotations', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Executive summaries', 'wpshadow' ); ?></li>
+							</ul>
+						</div>
 
-					<div class="feature-card">
-						<h3><?php esc_html_e( 'Integrations', 'wpshadow' ); ?></h3>
-						<ul>
-							<li><?php esc_html_e( 'Slack notifications', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Microsoft Teams', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Custom webhooks', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'REST API access', 'wpshadow' ); ?></li>
-						</ul>
-					</div>
+						<div class="wps-info-box">
+							<h4><?php esc_html_e( 'Integrations', 'wpshadow' ); ?></h4>
+							<ul>
+								<li><?php esc_html_e( 'Slack notifications', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Microsoft Teams', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Custom webhooks', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'REST API access', 'wpshadow' ); ?></li>
+							</ul>
+						</div>
 
-					<div class="feature-card">
-						<h3><?php esc_html_e( 'Advanced Analytics', 'wpshadow' ); ?></h3>
-						<ul>
-							<li><?php esc_html_e( 'ROI calculator', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Benchmark comparison', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'What-if scenarios', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Regression detection', 'wpshadow' ); ?></li>
-						</ul>
+						<div class="wps-info-box">
+							<h4><?php esc_html_e( 'Advanced Analytics', 'wpshadow' ); ?></h4>
+							<ul>
+								<li><?php esc_html_e( 'ROI calculator', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Benchmark comparison', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'What-if scenarios', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Regression detection', 'wpshadow' ); ?></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<style>
-		.wpshadow-settings-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-			gap: 20px;
-			margin: 20px 0;
-		}
-		.wpshadow-settings-section {
-			background: #fff;
-			padding: 20px;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-		}
-		.wpshadow-settings-section h2 {
-			margin-top: 0;
-			padding-bottom: 10px;
-			border-bottom: 1px solid #ddd;
-		}
-		.wpshadow-documentation-section {
-			margin-top: 40px;
-			background: #fff;
-			padding: 20px;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-		}
-		.wpshadow-feature-cards {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-			gap: 15px;
-			margin-top: 20px;
-		}
-		.feature-card {
-			padding: 15px;
-			background: #f9f9f9;
-			border-left: 4px solid #2271b1;
-			border-radius: 3px;
-		}
-		.feature-card h3 {
-			margin-top: 0;
-			color: #2271b1;
-		}
-		.feature-card ul {
-			margin: 10px 0 0 20px;
-			padding: 0;
-		}
-		.feature-card li {
-			margin-bottom: 5px;
-			color: #50575e;
-		}
-		</style>
-		<?php
 	}
 
 	/**

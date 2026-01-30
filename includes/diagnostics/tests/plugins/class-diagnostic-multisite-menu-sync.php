@@ -36,29 +36,85 @@ class Diagnostic_MultisiteMenuSync extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-menu-sync',
-			);
+		// Check 1: Menu sync enabled
+		$sync_enabled = get_site_option( 'multisite_menu_sync_enabled', 'no' );
+		if ( 'no' === $sync_enabled ) {
+			return null; // Not using menu sync
 		}
 		
-		return null;
+		// Check 2: Menu replication
+		$replicate_menus = get_site_option( 'multisite_replicate_menus', 'no' );
+		if ( 'no' === $replicate_menus ) {
+			$issues[] = __( 'Manual menu creation (inconsistent navigation)', 'wpshadow' );
+		}
+		
+		// Check 3: Menu location mapping
+		$location_mapping = get_site_option( 'multisite_menu_location_mapping', array() );
+		if ( empty( $location_mapping ) ) {
+			$issues[] = __( 'No location mapping (broken menus)', 'wpshadow' );
+		}
+		
+		// Check 4: Custom menu items
+		$sync_custom_items = get_site_option( 'multisite_sync_custom_menu_items', 'yes' );
+		if ( 'no' === $sync_custom_items ) {
+			$issues[] = __( 'Custom items not synced (incomplete menus)', 'wpshadow' );
+		}
+		
+		// Check 5: Menu cache
+		global $wpdb;
+		$sites = get_sites( array( 'number' => 100 ) );
+		$outdated_caches = 0;
+		
+		foreach ( $sites as $site ) {
+			switch_to_blog( $site->blog_id );
+			$last_sync = get_option( 'multisite_menu_last_sync', 0 );
+			if ( $last_sync > 0 && ( time() - $last_sync ) > 86400 ) {
+				++$outdated_caches;
+			}
+			restore_current_blog();
+		}
+		
+		if ( $outdated_caches > 0 ) {
+			$issues[] = sprintf( __( '%d sites with stale menu cache', 'wpshadow' ), $outdated_caches );
+		}
+		
+		// Check 6: Orphaned menu items
+		$orphaned_items = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON pm.meta_value = p.ID
+			WHERE pm.meta_key = '_menu_item_object_id' AND p.ID IS NULL"
+		);
+		
+		if ( $orphaned_items > 10 ) {
+			$issues[] = sprintf( __( '%d orphaned menu items', 'wpshadow' ), $orphaned_items );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of menu sync issues */
+				__( 'Multisite menu sync has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-menu-sync',
+		);
 	}
 }

@@ -36,29 +36,85 @@ class Diagnostic_GravityFormsWebhookSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		// Check for webhooks configured
+		$feeds = class_exists( 'GFAPI' ) ? GFAPI::get_feeds( null, null, 'webhooks' ) : array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 60 ),
-				'threat_level' => 60,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gravity-forms-webhook-security',
-			);
+		if ( empty( $feeds ) ) {
+			return null; // No webhooks configured
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: Signature validation
+		$validate_signature = get_option( 'gf_webhooks_validate_signature', 'yes' );
+		if ( 'no' === $validate_signature ) {
+			$issues[] = __( 'Signature validation disabled (spoofing risk)', 'wpshadow' );
+		}
+		
+		// Check 2: HTTPS enforcement
+		foreach ( $feeds as $feed ) {
+			if ( isset( $feed['meta']['requestURL'] ) ) {
+				if ( strpos( $feed['meta']['requestURL'], 'https://' ) !== 0 ) {
+					$issues[] = __( 'HTTP webhook URL (unencrypted data)', 'wpshadow' );
+					break;
+				}
+			}
+		}
+		
+		// Check 3: Request timeout
+		$timeout = get_option( 'gf_webhooks_timeout', 30 );
+		if ( $timeout > 60 ) {
+			$issues[] = sprintf( __( '%d second timeout (form delays)', 'wpshadow' ), $timeout );
+		}
+		
+		// Check 4: Retry configuration
+		$max_retries = get_option( 'gf_webhooks_max_retries', 3 );
+		if ( $max_retries === 0 ) {
+			$issues[] = __( 'No retry attempts (missed submissions)', 'wpshadow' );
+		}
+		
+		// Check 5: Payload size limit
+		$payload_limit = get_option( 'gf_webhooks_payload_limit', 0 );
+		if ( $payload_limit === 0 ) {
+			$issues[] = __( 'No payload size limit (DoS risk)', 'wpshadow' );
+		}
+		
+		// Check 6: IP whitelisting
+		$ip_whitelist = get_option( 'gf_webhooks_ip_whitelist', array() );
+		if ( empty( $ip_whitelist ) ) {
+			$issues[] = __( 'No IP whitelist (unauthorized requests)', 'wpshadow' );
+		}
+		
+		// Check 7: Logging enabled
+		$logging = get_option( 'gf_webhooks_logging', 'no' );
+		if ( 'no' === $logging ) {
+			$issues[] = __( 'Logging disabled (no audit trail)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 60;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 75;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 68;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of webhook security issues */
+				__( 'Gravity Forms webhooks have %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/gravity-forms-webhook-security',
+		);
 	}
 }

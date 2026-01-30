@@ -36,29 +36,70 @@ class Diagnostic_MultisiteNetworkAdminPerformance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Network admin dashboard widgets
+		global $wp_meta_boxes;
+		$widget_count = isset( $wp_meta_boxes['dashboard-network'] ) ? count( $wp_meta_boxes['dashboard-network']['normal']['core'] ) : 0;
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-network-admin-performance',
-			);
+		if ( $widget_count > 10 ) {
+			$issues[] = sprintf( __( '%d dashboard widgets (slow load)', 'wpshadow' ), $widget_count );
 		}
 		
-		return null;
+		// Check 2: Site count
+		$site_count = get_blog_count();
+		if ( $site_count > 100 ) {
+			$issues[] = sprintf( __( '%d sites (pagination needed)', 'wpshadow' ), $site_count );
+		}
+		
+		// Check 3: Site lookup optimization
+		$optimize_lookups = get_site_option( 'network_optimize_site_lookups', 'yes' );
+		if ( 'no' === $optimize_lookups ) {
+			$issues[] = __( 'Site lookups not optimized (slow queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Plugin checks
+		$check_all_sites = get_site_option( 'network_check_plugins_all_sites', 'yes' );
+		if ( 'yes' === $check_all_sites && $site_count > 50 ) {
+			$issues[] = __( 'Checking plugins on all sites (timeout risk)', 'wpshadow' );
+		}
+		
+		// Check 5: User queries
+		$cache_user_queries = get_site_option( 'network_cache_user_queries', 'yes' );
+		if ( 'no' === $cache_user_queries ) {
+			$issues[] = __( 'User queries not cached (repeated lookups)', 'wpshadow' );
+		}
+		
+		// Check 6: Batch operations
+		$batch_limit = get_site_option( 'network_batch_operation_limit', 10 );
+		if ( $batch_limit > 20 ) {
+			$issues[] = sprintf( __( '%d site batch limit (memory issues)', 'wpshadow' ), $batch_limit );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 68;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 62;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of network admin performance issues */
+				__( 'Multisite network admin has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-network-admin-performance',
+		);
 	}
 }

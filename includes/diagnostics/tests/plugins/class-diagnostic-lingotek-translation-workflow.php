@@ -32,33 +32,81 @@ class Diagnostic_LingotekTranslationWorkflow extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Lingotek Translation plugin
+		$has_lingotek = class_exists( 'Lingotek' ) ||
+		                defined( 'LINGOTEK_VERSION' ) ||
+		                get_option( 'lingotek_community_id', '' ) !== '';
+		
+		if ( ! $has_lingotek ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/lingotek-translation-workflow',
-			);
+		// Check 1: API token configured
+		$api_token = get_option( 'lingotek_access_token', '' );
+		if ( empty( $api_token ) ) {
+			$issues[] = __( 'No API token (workflow disabled)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Workflow templates
+		$workflows = get_option( 'lingotek_workflows', array() );
+		if ( empty( $workflows ) ) {
+			$issues[] = __( 'No workflow templates (manual translation)', 'wpshadow' );
+		}
+		
+		// Check 3: Translation memory
+		$use_tm = get_option( 'lingotek_use_translation_memory', 'yes' );
+		if ( 'no' === $use_tm ) {
+			$issues[] = __( 'Translation memory disabled (higher costs)', 'wpshadow' );
+		}
+		
+		// Check 4: Quality settings
+		$quality_level = get_option( 'lingotek_quality_level', 'standard' );
+		if ( 'none' === $quality_level ) {
+			$issues[] = __( 'No quality checks (poor translations)', 'wpshadow' );
+		}
+		
+		// Check 5: Job management
+		global $wpdb;
+		$pending_jobs = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = 'lingotek_status' AND meta_value = 'pending'"
+		);
+		
+		if ( $pending_jobs > 50 ) {
+			$issues[] = sprintf( __( '%d pending translation jobs', 'wpshadow' ), $pending_jobs );
+		}
+		
+		// Check 6: Auto-download
+		$auto_download = get_option( 'lingotek_auto_download', 'no' );
+		if ( 'no' === $auto_download ) {
+			$issues[] = __( 'Manual download (delayed publishing)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of translation workflow issues */
+				__( 'Lingotek workflow has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/lingotek-translation-workflow',
+		);
 	}
 }
