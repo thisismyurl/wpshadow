@@ -542,7 +542,7 @@ class Workflow_Wizard {
 				),
 			),
 			'backup_recovery'         => array(
-				'label'   => 'Backup & Recovery',
+				'label'   => 'WPShadow Vault Light',
 				'icon'    => 'backup',
 				'actions' => array(
 					'create_full_backup'   => array(

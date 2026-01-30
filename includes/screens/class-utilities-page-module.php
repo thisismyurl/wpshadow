@@ -70,6 +70,14 @@ function wpshadow_get_utilities_catalog() {
 			'enabled' => true,
 		),
 		array(
+			'title'   => __( 'WPShadow Vault Light', 'wpshadow' ),
+			'desc'    => __( 'Schedule Vault Light snapshots, manage retention, and upgrade seamlessly to Vault.', 'wpshadow' ),
+			'tool'    => 'vault-light',
+			'icon'    => 'dashicons-backup',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
 			'title'   => __( 'Dark Mode', 'wpshadow' ),
 			'desc'    => __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ),
 			'tool'    => 'dark-mode',
@@ -141,6 +149,9 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 
 		// Check if a specific utility is requested via tab parameter
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
+		if ( 'backup' === $tab ) {
+			$tab = 'vault-light';
+		}
 
 		// Get utilities catalog
 		$catalog = wpshadow_get_utilities_catalog();

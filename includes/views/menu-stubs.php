@@ -99,15 +99,18 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	function wpshadow_render_settings() {
 		// Check if a specific tab is requested (Issue #1685)
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
+		if ( 'backup' === $tab ) {
+			$tab = 'vault-light';
+		}
 		
 		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
 			$settings_pages = array(
-				'general'      => 'WPShadow\Settings\General_Settings_Page',
-				'privacy'      => 'WPShadow\Settings\Privacy_Settings_Page',
+				'general'       => 'WPShadow\Settings\General_Settings_Page',
+				'privacy'       => 'WPShadow\Settings\Privacy_Settings_Page',
 				'notifications' => 'WPShadow\Settings\Notifications_Settings_Page',
-				'backup'       => 'WPShadow\Settings\Backup_Settings_Page',
-				'advanced'     => 'WPShadow\Settings\Advanced_Settings_Page',
+				'vault-light'   => 'WPShadow\Settings\Vault_Light_Settings_Page',
+				'advanced'      => 'WPShadow\Settings\Advanced_Settings_Page',
 			);
 
 			// Check if the requested tab exists
@@ -273,25 +276,25 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					</div>
 				</div>
 
-				<!-- Backup & Recovery -->
+				<!-- WPShadow Vault Light -->
 				<div class="wps-card">
 					<div class="wps-card-header wps-pb-3 wps-border-bottom">
 						<div class="wps-flex wps-gap-3 wps-items-start">
 							<span class="dashicons dashicons-backup wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=backup' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Backup & Recovery', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=vault-light' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'WPShadow Vault Light', 'wpshadow' ); ?>
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Configure automatic backups before applying treatments.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Schedule Vault Light snapshots and prep for a seamless Vault upgrade.', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=backup' ) ); ?>" class="wps-btn wps-btn--secondary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=vault-light' ) ); ?>" class="wps-btn wps-btn--secondary">
 							<span class="dashicons dashicons-arrow-right-alt"></span>
 							<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
 						</a>

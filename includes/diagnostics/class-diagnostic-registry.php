@@ -203,10 +203,16 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Initialize and load all diagnostic classes
 	 *
 	 * Called during plugins_loaded. Loads all discovered diagnostic files.
+	 *
+	 * @since 1.2601.2148
+	 * @return void
 	 */
 	public static function init(): void {
 		// Don't load all diagnostics at once (causes memory exhaustion)
 		// They will be loaded on-demand when needed
+
+		// Initialize cache clearing hooks
+		self::init_hooks();
 	}
 
 	/**
@@ -400,8 +406,46 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Clear diagnostic cache
 	 *
 	 * Call this if diagnostics are added/removed dynamically.
+	 * Also clears the file map transient.
+	 *
+	 * @since 1.2601.2148
+	 * @return void
 	 */
 	public static function clear_cache(): void {
-		self::$diagnostics_cache = null;
+		self::$diagnostics_cache   = null;
+		self::$diagnostic_file_map = null;
+		delete_transient( 'wpshadow_diagnostic_file_map' );
+	}
+
+	/**
+	 * Initialize hooks for cache clearing
+	 *
+	 * Automatically clear cache when plugins/themes are updated.
+	 *
+	 * @since 1.26030.2046
+	 * @return void
+	 */
+	public static function init_hooks(): void {
+		// Clear cache when plugins are activated/deactivated/updated
+		add_action( 'activated_plugin', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'deactivated_plugin', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'upgrader_process_complete', array( __CLASS__, 'clear_cache' ) );
+
+		// Clear cache on WPShadow plugin update
+		add_action( 'upgrader_process_complete', array( __CLASS__, 'handle_plugin_update' ), 10, 2 );
+	}
+
+	/**
+	 * Handle plugin update to clear cache
+	 *
+	 * @since 1.26030.2046
+	 * @param \WP_Upgrader $upgrader WP_Upgrader instance.
+	 * @param array        $options  Update options.
+	 * @return void
+	 */
+	public static function handle_plugin_update( $upgrader, $options ): void {
+		if ( 'update' === $options['action'] && 'plugin' === $options['type'] ) {
+			self::clear_cache();
+		}
 	}
 }

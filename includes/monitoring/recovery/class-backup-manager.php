@@ -26,7 +26,7 @@ class Backup_Manager {
 	 *
 	 * @return string Backup ID
 	 */
-	public static function create_automated_backup( string $reason = 'auto_fix' ): string {
+	public static function create_automated_backup( string $reason = 'auto_fix', int $retention_days = 28 ): string {
 		$backup_id = 'backup_' . time() . '_' . wp_generate_password( 8, false );
 
 		// Capture critical options
@@ -38,14 +38,12 @@ class Backup_Manager {
 		);
 
 		// Store in transient (4 weeks expiration)
-		set_transient(
-			"wpshadow_{$backup_id}",
-			$backup,
-			WEEK_IN_SECONDS * 4
-		);
+		$retention_days = max( 1, absint( $retention_days ) );
+		$ttl            = DAY_IN_SECONDS * $retention_days;
+		set_transient( "wpshadow_{$backup_id}", $backup, $ttl );
 
 		// Add to manifest
-		self::add_to_manifest( $backup_id, $reason );
+		self::add_to_manifest( $backup_id, $reason, $retention_days );
 
 		do_action( 'wpshadow_backup_created', $backup_id, $reason );
 
@@ -176,14 +174,15 @@ class Backup_Manager {
 	 * @param string $backup_id Backup ID
 	 * @param string $reason Reason for backup
 	 */
-	private static function add_to_manifest( string $backup_id, string $reason ): void {
+	private static function add_to_manifest( string $backup_id, string $reason, int $retention_days = 28 ): void {
 		$manifest = get_option( 'wpshadow_backup_manifest', array() );
+		$retention_days = max( 1, absint( $retention_days ) );
 
 		$manifest[] = array(
 			'id'        => $backup_id,
 			'timestamp' => current_time( 'mysql' ),
 			'reason'    => $reason,
-			'expires'   => wp_date( 'Y-m-d H:i:s', strtotime( '+4 weeks' ) ),
+			'expires'   => wp_date( 'Y-m-d H:i:s', strtotime( '+' . $retention_days . ' days' ) ),
 		);
 
 		// Keep only last 50 in manifest (oldest auto-deleted from transients)

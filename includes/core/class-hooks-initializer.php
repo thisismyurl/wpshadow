@@ -47,6 +47,11 @@ class Hooks_Initializer {
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
 
+		// Scheduled backups (Vault Light)
+		if ( class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' ) ) {
+			\WPShadow\Guardian\Backup_Scheduler::init();
+		}
+
 		// Diagnostic filters (UTM tracking for KB links)
 		add_filter( 'wpshadow_diagnostic_result', array( __CLASS__, 'add_utm_to_kb_links' ), 10, 3 );
 
