@@ -254,6 +254,19 @@ class Timezone_Manager {
 	}
 
 	/**
+	 * Get WordPress full timezone list (same as WordPress uses)
+	 * Uses WordPress's wp_timezone_choice() output
+	 *
+	 * @param string $selected_zone Currently selected timezone
+	 * @return string HTML select options
+	 */
+	public static function get_wordpress_timezone_list( $selected_zone = '' ) {
+		// Use WordPress's built-in timezone list function
+		// This returns the exact same list WordPress uses in Settings > General
+		return wp_timezone_choice( $selected_zone );
+	}
+
+	/**
 	 * Get timezone recommendation based on current time
 	 * Helpful for detecting if timezone is way off
 	 *

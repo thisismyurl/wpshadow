@@ -107,27 +107,12 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 		<!-- Manual Selection Section -->
 		<div class="manual-section">
 			<h3><?php esc_html_e( 'Manual Timezone Selection', 'wpshadow' ); ?></h3>
-			<p><?php esc_html_e( 'Or manually select your timezone region:', 'wpshadow' ); ?></p>
+			<p><?php esc_html_e( 'Or manually select your timezone (uses the same list as WordPress):', 'wpshadow' ); ?></p>
 
 			<div class="timezone-selector">
-				<?php foreach ( $us_timezones as $region => $timezones ) : ?>
-					<fieldset class="timezone-region">
-						<legend><?php echo esc_html( $region ); ?></legend>
-						<div class="timezone-options">
-							<?php foreach ( $timezones as $tz => $label ) : ?>
-								<label class="timezone-label">
-									<input
-										type="radio"
-										name="wpshadow_timezone"
-										value="<?php echo esc_attr( $tz ); ?>"
-										<?php checked( $current_tz, $tz ); ?>
-										class="wpshadow-tz-radio" />
-									<span><?php echo esc_html( $label ); ?></span>
-								</label>
-							<?php endforeach; ?>
-						</div>
-					</fieldset>
-				<?php endforeach; ?>
+				<select id="wpshadow-timezone-select" name="wpshadow_timezone" class="wpshadow-timezone-select">
+					<?php echo Timezone_Manager::get_wordpress_timezone_list( $current_tz ); ?>
+				</select>
 			</div>
 
 			<button id="wpshadow-save-tz-btn" class="wps-btn wps-btn-primary" type="button" style="margin-top: 15px;">
@@ -189,56 +174,25 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 	}
 
 	.timezone-selector {
-		background: white;
-		border: 1px solid #ddd;
+		margin-bottom: 15px;
+	}
+
+	.wpshadow-timezone-select {
+		width: 100%;
+		max-width: 600px;
+		padding: 8px 12px;
+		font-size: 14px;
+		border: 1px solid #8c8f94;
 		border-radius: 4px;
-		padding: 15px;
+		background-color: #fff;
+		box-shadow: 0 0 0 transparent;
+		transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 	}
 
-	.timezone-region {
-		margin-bottom: 20px;
-		border: none;
-		padding: 0;
-	}
-
-	.timezone-region:last-child {
-		margin-bottom: 0;
-	}
-
-	.timezone-region legend {
-		font-weight: 600;
-		padding: 0 0 10px 0;
-		font-size: 0.95em;
-		color: #333;
-	}
-
-	.timezone-options {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 10px;
-		margin-left: 10px;
-	}
-
-	.timezone-label {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		padding: 8px;
-		border-radius: 3px;
-		transition: background-color 0.2s;
-	}
-
-	.timezone-label:hover {
-		background-color: #f0f0f0;
-	}
-
-	.timezone-label input[type="radio"] {
-		margin-right: 8px;
-		cursor: pointer;
-	}
-
-	.timezone-label span {
-		user-select: none;
+	.wpshadow-timezone-select:focus {
+		border-color: #2271b1;
+		box-shadow: 0 0 0 1px #2271b1;
+		outline: 2px solid transparent;
 	}
 
 	#wpshadow-detect-status,
@@ -339,7 +293,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			const $btn = $(this);
 			const $status = $('#wpshadow-save-status');
 			const $result = $('#wpshadow-save-result');
-			const selected = $('input[name="wpshadow_timezone"]:checked').val();
+			const selected = $('#wpshadow-timezone-select').val();
 
 			if (!selected) {
 				$result.text('<?php esc_attr_e( 'Error: Please select a timezone.', 'wpshadow' ); ?>');
