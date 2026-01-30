@@ -34,8 +34,8 @@ $active_links = array_filter(
 ?>
 
 <div class="wpshadow-tool-container">
-	<h2><?php esc_html_e( 'Temporary Support Login', 'wpshadow' ); ?></h2>
-	<p><?php esc_html_e( 'Create secure, temporary login links for developers to help fix your site without needing your password.', 'wpshadow' ); ?></p>
+	<h2><?php esc_html_e( 'Temporary User Access', 'wpshadow' ); ?></h2>
+	<p><?php esc_html_e( 'Create secure, temporary login links to invite contributors, editors, or administrators to your site without creating permanent accounts or sharing passwords.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>
@@ -43,22 +43,22 @@ $active_links = array_filter(
 			<?php wp_nonce_field( 'wpshadow_magic_link_nonce', 'wpshadow_magic_link_nonce' ); ?>
 			<div class="wps-settings-section">
 				<div class="wps-form-group">
-					<label class="wps-label" for="developer-name">
-						<?php esc_html_e( 'Developer Name', 'wpshadow' ); ?>
+					<label class="wps-label" for="user-name">
+						<?php esc_html_e( 'User Name', 'wpshadow' ); ?>
 					</label>
-					<input type="text" id="developer-name" name="developer_name" class="wps-input" required />
+					<input type="text" id="user-name" name="user_name" class="wps-input" required />
 					<span class="wps-help-text">
-						<?php esc_html_e( 'Full name of the person who will use this link', 'wpshadow' ); ?>
+						<?php esc_html_e( 'Full name of the person you are inviting', 'wpshadow' ); ?>
 					</span>
 				</div>
 
 				<div class="wps-form-group">
-					<label class="wps-label" for="developer-email">
-						<?php esc_html_e( 'Developer Email', 'wpshadow' ); ?>
+					<label class="wps-label" for="user-email">
+						<?php esc_html_e( 'User Email', 'wpshadow' ); ?>
 					</label>
-					<input type="email" id="developer-email" name="developer_email" class="wps-input" required />
+					<input type="email" id="user-email" name="user_email" class="wps-input" required />
 					<span class="wps-help-text">
-						<?php esc_html_e( 'Email for notifications about access', 'wpshadow' ); ?>
+						<?php esc_html_e( 'Email address of the person you are inviting', 'wpshadow' ); ?>
 					</span>
 				</div>
 
@@ -92,8 +92,9 @@ $active_links = array_filter(
 			<table class="widefat">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Developer', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'User', 'wpshadow' ); ?></th>
 						<th><?php esc_html_e( 'Email', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Role', 'wpshadow' ); ?></th>
 						<th><?php esc_html_e( 'Created', 'wpshadow' ); ?></th>
 						<th><?php esc_html_e( 'Expires', 'wpshadow' ); ?></th>
 						<th><?php esc_html_e( 'Action', 'wpshadow' ); ?></th>
@@ -102,8 +103,9 @@ $active_links = array_filter(
 				<tbody>
 					<?php foreach ( $active_links as $token => $link ) : ?>
 						<tr>
-							<td><?php echo esc_html( $link['developer_name'] ?? 'Unknown' ); ?></td>
-							<td><?php echo esc_html( $link['developer_email'] ?? '' ); ?></td>
+							<td><?php echo esc_html( $link['user_name'] ?? $link['developer_name'] ?? 'Unknown' ); ?></td>
+							<td><?php echo esc_html( $link['user_email'] ?? $link['developer_email'] ?? '' ); ?></td>
+							<td><?php echo esc_html( ucfirst( $link['user_role'] ?? 'editor' ) ); ?></td>
 							<td><?php echo esc_html( wp_date( get_option( 'date_format' ), $link['created_at'] ?? 0 ) ); ?></td>
 							<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $link['expires_at'] ?? 0 ) ); ?></td>
 							<td>
@@ -141,8 +143,9 @@ jQuery(document).ready(function($) {
 		var data = {
 			action: 'wpshadow_create_magic_link',
 			nonce: $form.find('[name="wpshadow_magic_link_nonce"]').val(),
-			developer_name: $form.find('[name="developer_name"]').val(),
-			developer_email: $form.find('[name="developer_email"]').val(),
+			user_name: $form.find('[name="user_name"]').val(),
+			user_email: $form.find('[name="user_email"]').val(),
+			user_role: $form.find('[name="user_role"]').val(),
 			duration: $form.find('[name="duration"]').val()
 		};
 

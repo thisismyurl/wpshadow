@@ -26,12 +26,28 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_magic_link_nonce', 'manage_options', 'nonce' );
 
-		$developer_name  = self::get_post_param( 'developer_name', 'text', '', true );
-		$developer_email = self::get_post_param( 'developer_email', 'email', '', true );
-		$duration_hours  = self::get_post_param( 'duration', 'int', 24 );
+		// Support both old (developer_*) and new (user_*) parameter names for backward compatibility
+		$user_name  = self::get_post_param( 'user_name', 'text', '' );
+		if ( empty( $user_name ) ) {
+			$user_name = self::get_post_param( 'developer_name', 'text', '', true );
+		}
+		
+		$user_email = self::get_post_param( 'user_email', 'email', '' );
+		if ( empty( $user_email ) ) {
+			$user_email = self::get_post_param( 'developer_email', 'email', '', true );
+		}
+		
+		$user_role      = self::get_post_param( 'user_role', 'text', 'editor' );
+		$duration_hours = self::get_post_param( 'duration', 'int', 24 );
 
-		if ( ! is_email( $developer_email ) ) {
+		if ( ! is_email( $user_email ) ) {
 			self::send_error( __( 'Invalid email address.', 'wpshadow' ) );
+		}
+
+		// Validate user role
+		$valid_roles = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' );
+		if ( ! in_array( $user_role, $valid_roles, true ) ) {
+			$user_role = 'editor'; // Default to editor if invalid role
 		}
 
 		$token      = wp_generate_password( 32, false );
@@ -40,8 +56,11 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 
 		$magic_links           = Options_Manager::get_array( 'wpshadow_magic_links', array() );
 		$magic_links[ $token ] = array(
-			'developer_name'  => $developer_name,
-			'developer_email' => $developer_email,
+			'user_name'       => $user_name,
+			'user_email'      => $user_email,
+			'user_role'       => $user_role,
+			'developer_name'  => $user_name, // Backward compatibility
+			'developer_email' => $user_email, // Backward compatibility
 			'created_at'      => $created_at,
 			'expires_at'      => $expires_at,
 		);
