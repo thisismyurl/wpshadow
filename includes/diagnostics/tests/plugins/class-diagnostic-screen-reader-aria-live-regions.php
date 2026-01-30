@@ -32,33 +32,80 @@ class Diagnostic_ScreenReaderAriaLiveRegions extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for accessibility plugins that add ARIA
+		$has_aria_plugin = defined( 'WP_ACCESSIBILITY_VERSION' ) ||
+		                   class_exists( 'One_User_Avatar' ) ||
+		                   function_exists( 'wp_accessibility_toolbar' );
+		
+		$issues = array();
+		
+		// Check 1: Theme support for ARIA
+		if ( ! current_theme_supports( 'html5', 'navigation-widgets' ) ) {
+			$issues[] = __( 'Theme lacks HTML5 semantic support', 'wpshadow' );
+		}
+		
+		// Check 2: Skip to content link
+		$has_skip_link = false;
+		$header_file = get_template_directory() . '/header.php';
+		if ( file_exists( $header_file ) ) {
+			$header_content = file_get_contents( $header_file );
+			$has_skip_link = strpos( $header_content, 'skip' ) !== false &&
+			                 strpos( $header_content, 'content' ) !== false;
+		}
+		if ( ! $has_skip_link ) {
+			$issues[] = __( 'No skip to content link (keyboard navigation)', 'wpshadow' );
+		}
+		
+		// Check 3: ARIA landmarks
+		if ( ! current_theme_supports( 'html5', 'search-form' ) ) {
+			$issues[] = __( 'Theme lacks HTML5 search form support', 'wpshadow' );
+		}
+		
+		// Check 4: Focus management
+		$focus_styles = get_option( 'wpshadow_focus_styles_enabled', 'no' );
+		if ( 'no' === $focus_styles ) {
+			$issues[] = __( 'Focus indicators may be missing (A11Y issue)', 'wpshadow' );
+		}
+		
+		// Check 5: Dynamic content announcements
+		global $wp_scripts;
+		$has_a11y_js = false;
+		if ( isset( $wp_scripts->registered['wp-a11y'] ) ) {
+			$has_a11y_js = true;
+		}
+		if ( ! $has_a11y_js ) {
+			$issues[] = __( 'WP A11Y script not enqueued (dynamic updates)', 'wpshadow' );
+		}
+		
+		// Check 6: ARIA live regions in forms
+		$forms_accessible = get_option( 'wpshadow_forms_accessible', 'no' );
+		if ( 'no' === $forms_accessible ) {
+			$issues[] = __( 'Forms lack ARIA live regions (error announcements)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/screen-reader-aria-live-regions',
-			);
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
 		}
 		
-		return null;
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Screen reader support has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/screen-reader-aria-live-regions',
+		);
 	}
 }

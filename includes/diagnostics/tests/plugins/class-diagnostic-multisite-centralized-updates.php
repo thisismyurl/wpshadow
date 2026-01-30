@@ -36,29 +36,72 @@ class Diagnostic_MultisiteCentralizedUpdates extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-centralized-updates',
-			);
+		// Check 1: Network update permissions
+		$allow_network_updates = get_site_option( 'allow_network_updates', 'no' );
+		if ( 'no' === $allow_network_updates ) {
+			$issues[] = __( 'Network updates disabled (fragmented versions)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Site-level plugin updates
+		$site_updates = get_site_option( 'allow_site_plugin_updates', 'yes' );
+		if ( 'yes' === $site_updates ) {
+			$issues[] = __( 'Sites can update plugins (version conflicts)', 'wpshadow' );
+		}
+		
+		// Check 3: Theme updates
+		$theme_updates = get_site_option( 'allow_site_theme_updates', 'yes' );
+		if ( 'yes' === $theme_updates ) {
+			$issues[] = __( 'Sites can update themes (inconsistent styling)', 'wpshadow' );
+		}
+		
+		// Check 4: Auto-updates
+		$auto_updates = get_site_option( 'auto_update_plugins', array() );
+		if ( empty( $auto_updates ) ) {
+			$issues[] = __( 'No auto-updates configured (security lag)', 'wpshadow' );
+		}
+		
+		// Check 5: Update notifications
+		$notify_admins = get_site_option( 'notify_site_admins_of_updates', 'no' );
+		if ( 'no' === $notify_admins ) {
+			$issues[] = __( 'Site admins not notified (outdated software)', 'wpshadow' );
+		}
+		
+		// Check 6: Version tracking
+		global $wpdb;
+		$version_variance = $wpdb->get_var(
+			"SELECT COUNT(DISTINCT meta_value) FROM {$wpdb->sitemeta} 
+			 WHERE meta_key = 'initial_db_version'"
+		);
+		
+		if ( $version_variance > 3 ) {
+			$issues[] = sprintf( __( '%d different WordPress versions (fragmentation)', 'wpshadow' ), $version_variance );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Multisite updates have %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-centralized-updates',
+		);
 	}
 }

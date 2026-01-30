@@ -36,29 +36,79 @@ class Diagnostic_MultisiteLanguageSwitcherPerformance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$has_msls = class_exists( 'Multisite_Language_Switcher' ) ||
+		            function_exists( 'get_the_msls' ) ||
+		            defined( 'MSLS_PLUGIN_VERSION' );
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-language-switcher-performance',
-			);
+		if ( ! $has_msls ) {
+			return null;
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: Site count
+		$site_count = get_blog_count();
+		if ( $site_count > 20 ) {
+			$issues[] = sprintf( __( '%d sites (slow language switching)', 'wpshadow' ), $site_count );
+		}
+		
+		// Check 2: Caching
+		$cache_enabled = get_option( 'msls_cache_enabled', 'no' );
+		if ( 'no' === $cache_enabled ) {
+			$issues[] = __( 'Language queries not cached (redundant lookups)', 'wpshadow' );
+		}
+		
+		// Check 3: Auto-detect language
+		$auto_detect = get_option( 'msls_auto_detect', 'yes' );
+		if ( 'yes' === $auto_detect ) {
+			$issues[] = __( 'Auto-detect enabled (extra queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Flag images
+		$flag_type = get_option( 'msls_flag_type', 'image' );
+		if ( 'image' === $flag_type ) {
+			$issues[] = __( 'Using flag images (extra HTTP requests)', 'wpshadow' );
+		}
+		
+		// Check 5: Link optimization
+		$optimize_links = get_option( 'msls_optimize_links', 'no' );
+		if ( 'no' === $optimize_links ) {
+			$issues[] = __( 'Links not optimized (slower page generation)', 'wpshadow' );
+		}
+		
+		// Check 6: Database queries
+		global $wpdb;
+		$query_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->sitemeta} WHERE meta_key LIKE 'msls_%'"
+		);
+		
+		if ( $query_count > 1000 ) {
+			$issues[] = sprintf( __( '%d MSLS meta entries (database bloat)', 'wpshadow' ), $query_count );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 67;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 61;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Multisite Language Switcher has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-language-switcher-performance',
+		);
 	}
 }

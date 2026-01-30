@@ -36,29 +36,87 @@ class Diagnostic_ElementorProThemeBuilderQueries extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$has_pro = defined( 'ELEMENTOR_PRO_VERSION' ) ||
+		           class_exists( 'ElementorPro\Plugin' );
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/elementor-pro-theme-builder-queries',
-			);
+		if ( ! $has_pro ) {
+			return null;
 		}
 		
-		return null;
+		global $wpdb;
+		$issues = array();
+		
+		// Check 1: Theme templates count
+		$template_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s",
+				'elementor_library'
+			)
+		);
+		
+		if ( $template_count > 50 ) {
+			$issues[] = sprintf( __( '%d templates (slow loading)', 'wpshadow' ), $template_count );
+		}
+		
+		// Check 2: Query caching
+		$cache_queries = get_option( 'elementor_cache_query_results', 'no' );
+		if ( 'no' === $cache_queries ) {
+			$issues[] = __( 'Theme Builder queries not cached (redundant DB hits)', 'wpshadow' );
+		}
+		
+		// Check 3: Display conditions
+		$condition_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_conditions'"
+		);
+		
+		if ( $condition_count > 100 ) {
+			$issues[] = sprintf( __( '%d display conditions (complex evaluation)', 'wpshadow' ), $condition_count );
+		}
+		
+		// Check 4: Loop grids
+		$loop_grids = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_value LIKE '%loop-grid%'"
+		);
+		
+		if ( $loop_grids > 20 ) {
+			$issues[] = sprintf( __( '%d loop grids (heavy queries)', 'wpshadow' ), $loop_grids );
+		}
+		
+		// Check 5: Dynamic tags
+		$dynamic_tags = get_option( 'elementor_disable_dynamic_tags', 'no' );
+		if ( 'no' === $dynamic_tags ) {
+			$issues[] = __( 'All dynamic tags enabled (performance overhead)', 'wpshadow' );
+		}
+		
+		// Check 6: CSS regeneration
+		$css_print_method = get_option( 'elementor_css_print_method', 'external' );
+		if ( 'internal' === $css_print_method ) {
+			$issues[] = __( 'Internal CSS method (larger page size)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Elementor Pro Theme Builder has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/elementor-pro-theme-builder-queries',
+		);
 	}
 }

@@ -358,6 +358,12 @@ class Plugin_Bootstrap {
 		// Load Phase 5: Academy & Training Integration
 		self::load_academy_training();
 
+		// Load Phase 6: Privacy & Consent Excellence
+		self::load_privacy_consent();
+
+		// Load Phase 7: WPShadow Guardian (Cloud AI Scanning)
+		self::load_guardian_integration();
+
 		// Load dashboard widgets
 		$widget_classes = array(
 			'class-executive-roi-widget.php',
@@ -698,6 +704,46 @@ class Plugin_Bootstrap {
 			if ( class_exists( '\\WPShadow\\Recommendations\\Recommendation_Engine' ) ) {
 				\WPShadow\Recommendations\Recommendation_Engine::init();
 			}
+		}
+	}
+
+	/**
+	 * Load Guardian integration (Phase 7).
+	 *
+	 * Loads WPShadow Guardian cloud AI scanning integration.
+	 * Provides:
+	 * - API client for Guardian cloud service
+	 * - Token balance display in admin bar and dashboard
+	 * - Scan interface for security, performance, SEO scans
+	 * - Account connection management
+	 * - Scan history and results viewing
+	 *
+	 * @since  1.2604.0300
+	 * @return void
+	 */
+	private static function load_guardian_integration() {
+		$guardian_path = WPSHADOW_PATH . 'includes/guardian/';
+
+		// Core Guardian components
+		$guardian_files = array(
+			'class-guardian-api-client.php',
+			'class-token-balance-widget.php',
+			'class-guardian-scan-interface.php',
+		);
+
+		foreach ( $guardian_files as $file ) {
+			if ( file_exists( $guardian_path . $file ) ) {
+				require_once $guardian_path . $file;
+			}
+		}
+
+		// Initialize Guardian components
+		if ( class_exists( '\\WPShadow\\Guardian\\Token_Balance_Widget' ) ) {
+			\WPShadow\Guardian\Token_Balance_Widget::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Guardian\\Guardian_Scan_Interface' ) ) {
+			\WPShadow\Guardian\Guardian_Scan_Interface::init();
 		}
 	}
 

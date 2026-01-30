@@ -32,33 +32,76 @@ class Diagnostic_GdprCookieComplianceConsent extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for GDPR cookie plugins
+		$has_gdpr = defined( 'GDPR_COOKIE_CONSENT_VERSION' ) ||
+		            class_exists( 'GDPR_Cookie_Compliance' ) ||
+		            function_exists( 'gdpr_cookie_compliance' );
+		
+		if ( ! $has_gdpr ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-compliance-consent',
-			);
+		// Check 1: Cookie consent enabled
+		$consent_enabled = get_option( 'gdpr_cookie_consent_enabled', 'no' );
+		if ( 'no' === $consent_enabled ) {
+			$issues[] = __( 'Cookie consent disabled (GDPR violation)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Explicit consent required
+		$consent_type = get_option( 'gdpr_cookie_consent_type', 'implied' );
+		if ( 'implied' === $consent_type ) {
+			$issues[] = __( 'Using implied consent (not GDPR compliant)', 'wpshadow' );
+		}
+		
+		// Check 3: Cookie policy page
+		$policy_page = get_option( 'gdpr_cookie_policy_page', 0 );
+		if ( ! $policy_page || get_post_status( $policy_page ) !== 'publish' ) {
+			$issues[] = __( 'No published cookie policy (GDPR requirement)', 'wpshadow' );
+		}
+		
+		// Check 4: Cookie categories
+		$categories = get_option( 'gdpr_cookie_categories', array() );
+		if ( empty( $categories ) ) {
+			$issues[] = __( 'No cookie categories defined (poor transparency)', 'wpshadow' );
+		}
+		
+		// Check 5: Consent logging
+		$log_consent = get_option( 'gdpr_cookie_log_consent', 'no' );
+		if ( 'no' === $log_consent ) {
+			$issues[] = __( 'Consent not logged (cannot prove compliance)', 'wpshadow' );
+		}
+		
+		// Check 6: Easy withdrawal
+		$allow_withdrawal = get_option( 'gdpr_cookie_allow_withdrawal', 'no' );
+		if ( 'no' === $allow_withdrawal ) {
+			$issues[] = __( 'Consent withdrawal not allowed (GDPR violation)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 82;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 76;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'GDPR cookie compliance has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-compliance-consent',
+		);
 	}
 }
