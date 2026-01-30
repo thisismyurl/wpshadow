@@ -32,33 +32,95 @@ class Diagnostic_Simple301RedirectsPerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Simple 301 Redirects or similar plugins
+		$has_redirects = function_exists( 'simple_301_redirects' ) ||
+		                 get_option( '301_redirects', false ) ||
+		                 class_exists( 'Simple301redirects' );
+		
+		if ( ! $has_redirects ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Redirect count
+		$redirects = get_option( '301_redirects', array() );
+		$redirect_count = is_array( $redirects ) ? count( $redirects ) : 0;
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/simple-301-redirects-performance',
-			);
+		if ( $redirect_count === 0 ) {
+			return null;
 		}
 		
-		return null;
+		if ( $redirect_count > 100 ) {
+			$issues[] = sprintf( __( '%d redirects configured (consider .htaccess)', 'wpshadow' ), $redirect_count );
+		}
+		
+		// Check 2: Wildcard redirects
+		$wildcard_count = 0;
+		foreach ( $redirects as $from => $to ) {
+			if ( strpos( $from, '*' ) !== false || strpos( $from, '.*' ) !== false ) {
+				$wildcard_count++;
+			}
+		}
+		
+		if ( $wildcard_count > 10 ) {
+			$issues[] = sprintf( __( '%d wildcard redirects (regex overhead)', 'wpshadow' ), $wildcard_count );
+		}
+		
+		// Check 3: Redirect caching
+		$cache_redirects = get_option( '301_redirects_cache', false );
+		if ( ! $cache_redirects && $redirect_count > 50 ) {
+			$issues[] = __( 'Redirect caching disabled (database queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Redirect loop detection
+		foreach ( $redirects as $from => $to ) {
+			if ( isset( $redirects[ $to ] ) && $redirects[ $to ] === $from ) {
+				$issues[] = sprintf(
+					/* translators: %s: redirect URL */
+					__( 'Redirect loop detected: %s', 'wpshadow' ),
+					substr( $from, 0, 50 )
+				);
+				break;
+			}
+		}
+		
+		// Check 5: External redirects
+		$external_count = 0;
+		foreach ( $redirects as $from => $to ) {
+			if ( strpos( $to, 'http://' ) === 0 || strpos( $to, 'https://' ) === 0 ) {
+				$external_count++;
+			}
+		}
+		
+		if ( $external_count > 20 ) {
+			$issues[] = sprintf( __( '%d external redirects (link juice loss)', 'wpshadow' ), $external_count );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 68;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 62;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of redirect performance issues */
+				__( 'Simple 301 Redirects has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/simple-301-redirects-performance',
+		);
 	}
 }

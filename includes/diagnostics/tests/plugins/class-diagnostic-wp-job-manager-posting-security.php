@@ -36,29 +36,78 @@ class Diagnostic_WpJobManagerPostingSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-posting-security',
-			);
+		// Check 1: Job moderation required
+		$require_moderation = get_option( 'job_manager_submission_requires_approval', 1 );
+		if ( ! $require_moderation ) {
+			$issues[] = __( 'Jobs auto-published without moderation (spam risk)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: CAPTCHA enabled
+		$captcha_enabled = get_option( 'job_manager_enable_captcha', 0 );
+		if ( ! $captcha_enabled ) {
+			$issues[] = __( 'No CAPTCHA on job forms (bot submissions)', 'wpshadow' );
+		}
+		
+		// Check 3: Guest job posting
+		$allow_guest = get_option( 'job_manager_enable_registration', 0 );
+		if ( ! $allow_guest ) {
+			// If registration is disabled, check if guests can post
+			$user_can_post = get_option( 'job_manager_user_can_post_without_account', 0 );
+			if ( $user_can_post ) {
+				$issues[] = __( 'Guest posting allowed (accountability issue)', 'wpshadow' );
+			}
+		}
+		
+		// Check 4: Email validation
+		$validate_email = get_option( 'job_manager_validate_user_email', 1 );
+		if ( ! $validate_email ) {
+			$issues[] = __( 'Email validation disabled (fake accounts)', 'wpshadow' );
+		}
+		
+		// Check 5: Application email required
+		$require_email = get_option( 'job_manager_application_method_email', 1 );
+		if ( ! $require_email ) {
+			$issues[] = __( 'Application emails not required (contact loss)', 'wpshadow' );
+		}
+		
+		// Check 6: Content sanitization
+		$allow_html = get_option( 'job_manager_job_description_allow_html', 1 );
+		if ( $allow_html ) {
+			$issues[] = __( 'HTML allowed in job descriptions (XSS risk)', 'wpshadow' );
+		}
+		
+		// Check 7: Submission rate limiting
+		$rate_limit = get_option( 'job_manager_submission_limit', 0 );
+		if ( $rate_limit === 0 ) {
+			$issues[] = __( 'No submission rate limit (spam floods)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 65;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 80;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 73;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of posting security issues */
+				__( 'WP Job Manager posting has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-posting-security',
+		);
 	}
 }

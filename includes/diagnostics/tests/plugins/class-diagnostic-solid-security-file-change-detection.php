@@ -36,29 +36,77 @@ class Diagnostic_SolidSecurityFileChangeDetection extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: File change detection enabled
+		$fcd_enabled = get_option( 'itsec_file_change_enabled', false );
+		if ( ! $fcd_enabled ) {
+			return null;
+		}
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/solid-security-file-change-detection',
+		// Check 2: Scan frequency
+		$scan_frequency = get_option( 'itsec_file_change_frequency', 'daily' );
+		if ( 'hourly' === $scan_frequency ) {
+			$issues[] = __( 'Hourly scans (server resource intensive)', 'wpshadow' );
+		}
+		
+		// Check 3: Excluded directories
+		$excluded_dirs = get_option( 'itsec_file_change_excluded', array() );
+		$required_exclusions = array( 'cache', 'uploads', 'logs', 'tmp' );
+		
+		$missing = array_diff( $required_exclusions, $excluded_dirs );
+		if ( count( $missing ) > 0 ) {
+			$issues[] = sprintf(
+				/* translators: %s: list of directories */
+				__( 'Missing exclusions: %s (false positives)', 'wpshadow' ),
+				implode( ', ', $missing )
 			);
 		}
 		
-		return null;
+		// Check 4: File baseline established
+		$baseline = get_option( 'itsec_file_change_baseline', false );
+		if ( ! $baseline ) {
+			$issues[] = __( 'No file baseline (all files flagged as changed)', 'wpshadow' );
+		}
+		
+		// Check 5: Email notifications
+		$email_notify = get_option( 'itsec_file_change_email', true );
+		$email_recipients = get_option( 'itsec_notification_email', array() );
+		
+		if ( $email_notify && empty( $email_recipients ) ) {
+			$issues[] = __( 'Notifications enabled but no recipients (alerts lost)', 'wpshadow' );
+		}
+		
+		// Check 6: Large site scan performance
+		$file_count = get_option( 'itsec_file_change_count', 0 );
+		if ( $file_count > 50000 ) {
+			$issues[] = sprintf( __( '%s files being scanned (performance impact)', 'wpshadow' ), number_format_i18n( $file_count ) );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 82;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 76;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of file change detection issues */
+				__( 'Solid Security file change detection has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/solid-security-file-change-detection',
+		);
 	}
 }

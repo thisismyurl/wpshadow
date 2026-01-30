@@ -36,29 +36,84 @@ class Diagnostic_RestrictContentProContentRestrictions extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/restrict-content-pro-content-restrictions',
-			);
+		// Check 1: REST API protection
+		$protect_rest = get_option( 'rcp_protect_rest_api', false );
+		if ( ! $protect_rest ) {
+			$issues[] = __( 'REST API not protected (content exposed via API)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Feed protection
+		$protect_feeds = get_option( 'rcp_protect_feeds', false );
+		if ( ! $protect_feeds ) {
+			$issues[] = __( 'RSS feeds not protected (full content in feeds)', 'wpshadow' );
+		}
+		
+		// Check 3: Search results protection
+		$hide_from_search = get_option( 'rcp_hide_restricted_from_search', false );
+		if ( ! $hide_from_search ) {
+			$issues[] = __( 'Restricted content appears in search results', 'wpshadow' );
+		}
+		
+		// Check 4: Excerpt protection
+		$protect_excerpts = get_option( 'rcp_protect_excerpts', true );
+		if ( ! $protect_excerpts ) {
+			$issues[] = __( 'Excerpts not protected (content preview leaked)', 'wpshadow' );
+		}
+		
+		// Check 5: Direct URL access
+		$check_restricted = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value != ''",
+				'rcp_subscription_level'
+			)
+		);
+		
+		if ( $check_restricted > 0 ) {
+			$redirect_enabled = get_option( 'rcp_redirect_from_premium', false );
+			if ( ! $redirect_enabled ) {
+				$issues[] = __( 'No redirect for restricted content (direct access possible)', 'wpshadow' );
+			}
+		}
+		
+		// Check 6: Attachment protection
+		$protect_attachments = get_option( 'rcp_protect_attachments', false );
+		if ( ! $protect_attachments ) {
+			$issues[] = __( 'Media files not protected (direct file access)', 'wpshadow' );
+		}
+		
+		// Check 7: Access logging
+		$log_access = get_option( 'rcp_log_restricted_access', false );
+		if ( ! $log_access ) {
+			$issues[] = __( 'Access attempts not logged (no audit trail)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 84;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 77;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of content restriction bypass risks */
+				__( 'Restrict Content Pro has %d bypass risks: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/restrict-content-pro-content-restrictions',
+		);
 	}
 }

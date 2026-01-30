@@ -32,33 +32,78 @@ class Diagnostic_OptimoleQualitySettings extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! defined( 'OPTIMOLE_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/optimole-quality-settings',
-			);
+		$api_key = get_option( 'optimole_api_key', '' );
+		if ( empty( $api_key ) ) {
+			return null;
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: Compression quality
+		$quality = get_option( 'optimole_quality', 'auto' );
+		if ( 'high' === $quality ) {
+			$issues[] = __( 'High quality setting (minimal compression)', 'wpshadow' );
+		} elseif ( is_numeric( $quality ) && $quality > 85 ) {
+			$issues[] = sprintf( __( 'Quality: %d%% (files still large)', 'wpshadow' ), $quality );
+		}
+		
+		// Check 2: Auto quality disabled
+		if ( 'auto' !== $quality ) {
+			$issues[] = __( 'Auto quality disabled (not optimizing per image)', 'wpshadow' );
+		}
+		
+		// Check 3: Resize settings
+		$auto_resize = get_option( 'optimole_auto_resize', true );
+		if ( ! $auto_resize ) {
+			$issues[] = __( 'Auto-resize disabled (serving full-size images)', 'wpshadow' );
+		}
+		
+		// Check 4: WebP conversion
+		$webp_enabled = get_option( 'optimole_webp', true );
+		if ( ! $webp_enabled ) {
+			$issues[] = __( 'WebP disabled (missing format optimization)', 'wpshadow' );
+		}
+		
+		// Check 5: Lazy load
+		$lazy_load = get_option( 'optimole_lazy_load', true );
+		if ( ! $lazy_load ) {
+			$issues[] = __( 'Lazy loading disabled (initial page weight high)', 'wpshadow' );
+		}
+		
+		// Check 6: Quality by device type
+		$quality_mobile = get_option( 'optimole_quality_mobile', 'auto' );
+		if ( 'auto' !== $quality_mobile && $quality_mobile === $quality ) {
+			$issues[] = __( 'Same quality for mobile (not optimized for slower connections)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of quality setting issues */
+				__( 'Optimole quality settings have %d optimization opportunities: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/optimole-quality-settings',
+		);
 	}
 }
