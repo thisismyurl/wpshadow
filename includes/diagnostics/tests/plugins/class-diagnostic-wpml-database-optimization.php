@@ -36,25 +36,62 @@ class Diagnostic_WpmlDatabaseOptimization extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Database indexing
+		$indexing = get_option( 'wpml_database_indexing_enabled', 0 );
+		if ( ! $indexing ) {
+			$issues[] = 'Database indexing not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Query optimization
+		$opt = get_option( 'wpml_query_optimization_enabled', 0 );
+		if ( ! $opt ) {
+			$issues[] = 'Query optimization not enabled';
+		}
+		
+		// Check 3: Table cleanup
+		$cleanup = get_option( 'wpml_table_cleanup_enabled', 0 );
+		if ( ! $cleanup ) {
+			$issues[] = 'Database table cleanup not enabled';
+		}
+		
+		// Check 4: Orphaned content cleanup
+		$orphaned = get_option( 'wpml_orphaned_content_cleanup_enabled', 0 );
+		if ( ! $orphaned ) {
+			$issues[] = 'Orphaned content cleanup not enabled';
+		}
+		
+		// Check 5: Cache clearing
+		$cache = get_option( 'wpml_translation_cache_clearing_enabled', 0 );
+		if ( ! $cache ) {
+			$issues[] = 'Translation cache clearing not configured';
+		}
+		
+		// Check 6: Scheduled optimization
+		$schedule = get_option( 'wpml_scheduled_optimization_enabled', 0 );
+		if ( ! $schedule ) {
+			$issues[] = 'Scheduled optimization not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 60 ),
-				'threat_level' => 60,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d database optimization issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wpml-database-optimization',
 			);
 		}
