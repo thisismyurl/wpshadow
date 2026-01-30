@@ -36,25 +36,52 @@ class Diagnostic_AmeliaPaymentProcessing extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Payment gateway configured.
+		$gateway = get_option( 'amelia_settings_payments_gateway', '' );
+		if ( empty( $gateway ) ) {
+			$issues[] = 'no payment gateway configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: SSL for payment pages.
+		if ( ! is_ssl() && ! empty( $gateway ) ) {
+			$issues[] = 'payment processing without SSL (insecure)';
+		}
+		
+		// Check 3: Test mode in production.
+		$test_mode = get_option( 'amelia_settings_payments_testMode', '0' );
+		if ( '1' === $test_mode && ! defined( 'WP_DEBUG' ) ) {
+			$issues[] = 'test mode enabled on production site';
+		}
+		
+		// Check 4: Payment logging.
+		$logging = get_option( 'amelia_settings_payments_logging', '0' );
+		if ( '0' === $logging ) {
+			$issues[] = 'payment logging disabled (cannot track transactions)';
+		}
+		
+		// Check 5: PCI compliance.
+		$store_cards = get_option( 'amelia_settings_payments_pci_storeCards', '0' );
+		if ( '1' === $store_cards ) {
+			$issues[] = 'storing credit card data (PCI compliance risk)';
+		}
+		
+		// Check 6: Refund policy.
+		$refund_policy = get_option( 'amelia_settings_payments_refundPolicy', '' );
+		if ( empty( $refund_policy ) ) {
+			$issues[] = 'no refund policy configured';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 80 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 80 ),
-				'threat_level' => 80,
-				'auto_fixable' => true,
+				'description' => 'Amelia payment processing issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/amelia-payment-processing',
 			);
 		}

@@ -35,30 +35,49 @@ class Diagnostic_AmeliaCalendarSync extends Diagnostic_Base {
 		if ( ! defined( 'AMELIA_VERSION' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+
+		// Check 1: Google Calendar integration enabled.
+		$google_enabled = get_option( 'amelia_settings_googleCalendar_enabled', false );
+		if ( ! $google_enabled ) {
+			$issues[] = 'Google Calendar integration not enabled';
+		}
+
+		// Check 2: Google API credentials configured.
+		if ( $google_enabled ) {
+			$client_id = get_option( 'amelia_settings_googleCalendar_clientId', '' );
+			$client_secret = get_option( 'amelia_settings_googleCalendar_clientSecret', '' );
+			if ( empty( $client_id ) || empty( $client_secret ) ) {
+				$issues[] = 'Google Calendar credentials not configured';
+			}
+		}
+
+		// Check 3: Sync frequency configured.
+		$sync_interval = get_option( 'amelia_settings_calendar_syncInterval', '' );
+		if ( empty( $sync_interval ) ) {
+			$issues[] = 'no calendar sync interval set';
+		}
+
+		// Check 4: Two-way sync enabled.
+		$two_way = get_option( 'amelia_settings_googleCalendar_twoWaySync', false );
+		if ( ! $two_way && $google_enabled ) {
+			$issues[] = 'two-way calendar sync not enabled';
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 40 + ( count( $issues ) * 6 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 40 ),
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/amelia-calendar-sync',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Calendar sync issues: ', 'wpshadow' ) . implode( ', ', $issues ),
+				'severity'     => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/amelia-calendar-sync',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -35,30 +35,53 @@ class Diagnostic_AmeliaBookingSecurity extends Diagnostic_Base {
 		if ( ! defined( 'AMELIA_VERSION' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+
+		// Check 1: Customer data encryption.
+		$encrypt_data = get_option( 'amelia_settings_booking_encryptCustomerData', false );
+		if ( ! $encrypt_data ) {
+			$issues[] = 'customer booking data not encrypted';
+		}
+
+		// Check 2: Payment gateway security.
+		$payment_gateway = get_option( 'amelia_settings_payments_gateway', '' );
+		if ( empty( $payment_gateway ) ) {
+			$issues[] = 'no payment gateway configured';
+		}
+
+		// Check 3: SSL requirement for booking.
+		if ( ! is_ssl() ) {
+			$issues[] = 'bookings not using HTTPS (data transmitted insecurely)';
+		}
+
+		// Check 4: GDPR compliance.
+		$gdpr_enabled = get_option( 'amelia_settings_gdpr_enabled', false );
+		if ( ! $gdpr_enabled ) {
+			$issues[] = 'GDPR compliance not enabled';
+		}
+
+		// Check 5: Access control permissions.
+		global $wpdb;
+		$booking_table = $wpdb->prefix . 'amelia_bookings';
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $booking_table ) );
+		if ( $table_exists && ! function_exists( 'amelia_verify_booking_access' ) ) {
+			$issues[] = 'no custom access control for booking data';
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 90, 65 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/amelia-booking-security',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Booking security issues: ', 'wpshadow' ) . implode( ', ', $issues ),
+				'severity'     => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/amelia-booking-security',
 			);
 		}
-		
+
 		return null;
 	}
 }
