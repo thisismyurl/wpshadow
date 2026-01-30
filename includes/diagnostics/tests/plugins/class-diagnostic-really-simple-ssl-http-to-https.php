@@ -35,32 +35,32 @@ class Diagnostic_ReallySimpleSslHttpToHttps extends Diagnostic_Base {
 		if ( ! defined( 'REALLY_SIMPLE_SSL_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check if SSL is actually active
 		if ( ! is_ssl() ) {
 			$issues[] = 'Really Simple SSL active but SSL not detected';
 		}
-		
+
 		// Check for mixed content detection
 		$mixed_content = get_option( 'rlrsssl_mixed_content_admin', '1' );
 		if ( '0' === $mixed_content && is_ssl() ) {
 			$issues[] = 'mixed content detection disabled (insecure resources may load)';
 		}
-		
+
 		// Check for HSTS configuration
 		$hsts_enabled = get_option( 'rlrsssl_hsts', '0' );
 		if ( '0' === $hsts_enabled && is_ssl() ) {
 			$issues[] = 'HSTS not enabled (browsers may allow HTTP connections)';
 		}
-		
+
 		// Check for redirect method
 		$redirect_method = get_option( 'rlrsssl_redirect_method', 'htaccess' );
 		if ( 'php' === $redirect_method ) {
 			$issues[] = 'using PHP redirects (slower than server-level redirects)';
 		}
-		
+
 		// Check for .htaccess rules
 		if ( 'htaccess' === $redirect_method ) {
 			$htaccess_file = ABSPATH . '.htaccess';
@@ -72,7 +72,7 @@ class Diagnostic_ReallySimpleSslHttpToHttps extends Diagnostic_Base {
 				$issues[] = '.htaccess file missing (redirect rules not applied)';
 			}
 		}
-		
+
 		// Check for SSL certificate validity
 		$cert_valid = get_transient( 'rlrsssl_certificate_valid' );
 		if ( false === $cert_valid && is_ssl() ) {
@@ -86,12 +86,12 @@ class Diagnostic_ReallySimpleSslHttpToHttps extends Diagnostic_Base {
 				STREAM_CLIENT_CONNECT,
 				$stream
 			);
-			
+
 			if ( false === $socket ) {
 				$issues[] = 'SSL certificate validation failed';
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 85, 60 + ( count( $issues ) * 5 ) );
 			return array(
@@ -104,7 +104,7 @@ class Diagnostic_ReallySimpleSslHttpToHttps extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/really-simple-ssl-http-to-https',
 			);
 		}
-		
+
 		return null;
 	}
 }

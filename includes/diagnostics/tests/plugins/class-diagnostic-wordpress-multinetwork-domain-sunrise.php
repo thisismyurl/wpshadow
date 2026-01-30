@@ -35,32 +35,32 @@ class Diagnostic_WordpressMultinetworkDomainSunrise extends Diagnostic_Base {
 		if ( ! is_multisite() ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check if SUNRISE is defined
 		if ( ! defined( 'SUNRISE' ) || ! SUNRISE ) {
 			$issues[] = 'SUNRISE constant not enabled in wp-config.php';
 		}
-		
+
 		// Check if sunrise.php exists
 		$sunrise_file = WP_CONTENT_DIR . '/sunrise.php';
 		if ( ! file_exists( $sunrise_file ) ) {
 			$issues[] = 'sunrise.php file missing from wp-content directory';
 		}
-		
+
 		// Check if DOMAIN_CURRENT_SITE is set for multinetwork
 		if ( defined( 'SUNRISE' ) && SUNRISE ) {
 			if ( ! defined( 'DOMAIN_CURRENT_SITE' ) || empty( DOMAIN_CURRENT_SITE ) ) {
 				$issues[] = 'DOMAIN_CURRENT_SITE constant not properly configured';
 			}
 		}
-		
+
 		// Check if multinetwork plugin is active
 		if ( ! class_exists( 'WP_MS_Networks_Plugin' ) && ! function_exists( 'switch_to_network' ) ) {
 			$issues[] = 'multinetwork plugin not active but sunrise configured';
 		}
-		
+
 		// Check sunrise.php permissions
 		if ( file_exists( $sunrise_file ) ) {
 			$perms = fileperms( $sunrise_file );
@@ -68,14 +68,14 @@ class Diagnostic_WordpressMultinetworkDomainSunrise extends Diagnostic_Base {
 				$issues[] = 'sunrise.php is writable (should be read-only)';
 			}
 		}
-		
+
 		// Check for network table issues
 		global $wpdb;
 		$network_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}site" );
 		if ( defined( 'SUNRISE' ) && SUNRISE && $network_count < 1 ) {
 			$issues[] = 'sunrise enabled but no networks found in database';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 85, 50 + ( count( $issues ) * 7 ) );
 			return array(
@@ -88,7 +88,7 @@ class Diagnostic_WordpressMultinetworkDomainSunrise extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-multinetwork-domain-sunrise',
 			);
 		}
-		
+
 		return null;
 	}
 }

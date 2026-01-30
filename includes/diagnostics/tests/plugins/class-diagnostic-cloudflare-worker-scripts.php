@@ -35,16 +35,16 @@ class Diagnostic_CloudflareWorkerScripts extends Diagnostic_Base {
 		if ( ! defined( 'CLOUDFLARE_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check if Cloudflare API credentials are set
 		$api_key = get_option( 'cloudflare_api_key', '' );
 		$api_email = get_option( 'cloudflare_api_email', '' );
 		if ( empty( $api_key ) || empty( $api_email ) ) {
 			$issues[] = 'Cloudflare API credentials not configured';
 		}
-		
+
 		// Check for worker script configuration
 		$worker_enabled = get_option( 'cloudflare_worker_enabled', '0' );
 		if ( '1' === $worker_enabled ) {
@@ -53,7 +53,7 @@ class Diagnostic_CloudflareWorkerScripts extends Diagnostic_Base {
 				$issues[] = 'worker scripts enabled but no script configured';
 			}
 		}
-		
+
 		// Check for worker route conflicts
 		$worker_routes = get_option( 'cloudflare_worker_routes', array() );
 		if ( ! empty( $worker_routes ) && is_array( $worker_routes ) ) {
@@ -64,25 +64,25 @@ class Diagnostic_CloudflareWorkerScripts extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check for cached API responses
 		$cache_ttl = get_option( 'cloudflare_worker_cache_ttl', 0 );
 		if ( $cache_ttl > 3600 && is_user_logged_in() ) {
 			$issues[] = 'worker cache TTL too high for authenticated users';
 		}
-		
+
 		// Check for worker KV namespace configuration
 		$kv_namespace = get_option( 'cloudflare_worker_kv_namespace', '' );
 		if ( '1' === $worker_enabled && empty( $kv_namespace ) ) {
 			$issues[] = 'worker KV namespace not configured for data storage';
 		}
-		
+
 		// Check for SSL/TLS compatibility with workers
 		$ssl_mode = get_option( 'cloudflare_ssl_mode', 'off' );
 		if ( '1' === $worker_enabled && 'off' === $ssl_mode ) {
 			$issues[] = 'SSL disabled but workers active (security risk)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 80, 50 + ( count( $issues ) * 6 ) );
 			return array(
@@ -95,7 +95,7 @@ class Diagnostic_CloudflareWorkerScripts extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/cloudflare-worker-scripts',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -35,23 +35,23 @@ class Diagnostic_BrokenLinkCheckerScanPerformance extends Diagnostic_Base {
 		if ( ! defined( 'BLC_ACTIVE' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check number of links being monitored
 		global $wpdb;
 		$link_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}blc_links" );
-		
+
 		if ( $link_count > 5000 ) {
 			$issues[] = "large link database ({$link_count} links monitored)";
 		}
-		
+
 		// Check scan frequency
 		$check_threshold = get_option( 'blc_check_threshold', 72 );
 		if ( $check_threshold < 24 && $link_count > 1000 ) {
 			$issues[] = "frequent scanning ({$check_threshold} hours) with large link database";
 		}
-		
+
 		// Check for broken links queue
 		$broken_links = $wpdb->get_var(
 			$wpdb->prepare(
@@ -59,30 +59,30 @@ class Diagnostic_BrokenLinkCheckerScanPerformance extends Diagnostic_Base {
 				1
 			)
 		);
-		
+
 		if ( $broken_links > 100 ) {
 			$issues[] = "many unresolved broken links ({$broken_links} found)";
 		}
-		
+
 		// Check timeout settings
 		$timeout = get_option( 'blc_timeout', 30 );
 		if ( $timeout > 60 ) {
 			$issues[] = "high timeout setting ({$timeout}s, slows scanning)";
 		}
-		
+
 		// Check execution mode
 		$execution_mode = get_option( 'blc_execution_mode', 'cron' );
 		if ( 'always' === $execution_mode ) {
 			$issues[] = 'scanning on every page load (impacts site performance)';
 		}
-		
+
 		// Check for old scan data
 		$last_check = get_option( 'blc_last_check_time', 0 );
 		if ( $last_check > 0 && ( time() - $last_check ) > ( 30 * DAY_IN_SECONDS ) ) {
 			$days = round( ( time() - $last_check ) / DAY_IN_SECONDS );
 			$issues[] = "scan data outdated (last check {$days} days ago)";
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -95,7 +95,7 @@ class Diagnostic_BrokenLinkCheckerScanPerformance extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/broken-link-checker-scan-performance',
 			);
 		}
-		
+
 		return null;
 	}
 }
