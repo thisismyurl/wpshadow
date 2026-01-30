@@ -32,33 +32,73 @@ class Diagnostic_DigitaloceanDropletPerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for DigitalOcean hosting indicators
+		$is_digitalocean = isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) &&
+		                   ( strpos( gethostname(), 'digitalocean' ) !== false ||
+		                     defined( 'DIGITALOCEAN_DROPLET' ) );
+		
+		if ( ! $is_digitalocean ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: PHP memory limit vs droplet size
+		$memory_limit = ini_get( 'memory_limit' );
+		$memory_bytes = wp_convert_hr_to_bytes( $memory_limit );
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/digitalocean-droplet-performance',
-			);
+		if ( $memory_bytes > 536870912 ) { // 512MB
+			$issues[] = sprintf( __( 'PHP memory limit (%s) high for basic droplet', 'wpshadow' ), $memory_limit );
 		}
 		
-		return null;
+		// Check 2: Object caching
+		$has_object_cache = wp_using_ext_object_cache();
+		if ( ! $has_object_cache ) {
+			$issues[] = __( 'No object caching (Redis/Memcached recommended on DigitalOcean)', 'wpshadow' );
+		}
+		
+		// Check 3: Monitoring enabled
+		$monitoring = get_option( 'digitalocean_monitoring_enabled', false );
+		if ( ! $monitoring ) {
+			$issues[] = __( 'DigitalOcean monitoring agent not detected', 'wpshadow' );
+		}
+		
+		// Check 4: Backup configuration
+		$backups_enabled = get_option( 'digitalocean_backups_enabled', false );
+		if ( ! $backups_enabled ) {
+			$issues[] = __( 'DigitalOcean automated backups not enabled', 'wpshadow' );
+		}
+		
+		// Check 5: Spaces CDN integration
+		$spaces_cdn = get_option( 'digitalocean_spaces_cdn', false );
+		if ( ! $spaces_cdn ) {
+			$issues[] = __( 'DigitalOcean Spaces CDN not configured (media delivery)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 68;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 62;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of performance issues */
+				__( 'DigitalOcean Droplet has %d optimization opportunities: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/digitalocean-droplet-performance',
+		);
 	}
 }

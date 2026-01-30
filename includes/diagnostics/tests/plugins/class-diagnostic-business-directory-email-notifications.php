@@ -36,29 +36,82 @@ class Diagnostic_BusinessDirectoryEmailNotifications extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/business-directory-email-notifications',
-			);
+		// Check 1: Email notifications enabled
+		$notifications_enabled = get_option( 'wpbdp_email_notifications', true );
+		if ( ! $notifications_enabled ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Notification frequency
+		$notification_types = array(
+			'wpbdp_notify_on_new_listing',
+			'wpbdp_notify_on_listing_edit',
+			'wpbdp_notify_on_listing_renewal',
+			'wpbdp_notify_on_listing_expiration',
+		);
+		
+		$enabled_count = 0;
+		foreach ( $notification_types as $type ) {
+			if ( get_option( $type, false ) ) {
+				$enabled_count++;
+			}
+		}
+		
+		if ( $enabled_count > 3 ) {
+			$issues[] = sprintf( __( '%d notification types enabled (excessive emails)', 'wpshadow' ), $enabled_count );
+		}
+		
+		// Check 3: Email queuing
+		$use_queue = get_option( 'wpbdp_email_use_queue', false );
+		if ( ! $use_queue ) {
+			$issues[] = __( 'Email queuing not enabled (server load spikes)', 'wpshadow' );
+		}
+		
+		// Check 4: Rate limiting
+		$rate_limit = get_option( 'wpbdp_email_rate_limit', 0 );
+		if ( $rate_limit === 0 ) {
+			$issues[] = __( 'No email rate limiting (spam complaints)', 'wpshadow' );
+		}
+		
+		// Check 5: Unsubscribe links
+		$unsubscribe_enabled = get_option( 'wpbdp_email_include_unsubscribe', false );
+		if ( ! $unsubscribe_enabled ) {
+			$issues[] = __( 'Unsubscribe links not included (CAN-SPAM violation)', 'wpshadow' );
+		}
+		
+		// Check 6: SMTP configuration
+		$smtp_configured = get_option( 'wpbdp_email_smtp_configured', false );
+		if ( ! $smtp_configured ) {
+			$issues[] = __( 'Using PHP mail() (low deliverability)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 58;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 52;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of email notification issues */
+				__( 'Business Directory email notifications have %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/business-directory-email-notifications',
+		);
 	}
 }

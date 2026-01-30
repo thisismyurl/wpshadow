@@ -36,29 +36,90 @@ class Diagnostic_WpJobManagerListingSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Jobs exist
+		$job_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s",
+				'job_listing'
+			)
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-listing-security',
-			);
+		if ( $job_count === 0 ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Job moderation enabled
+		$moderation = get_option( 'job_manager_moderate_new_listings', 0 );
+		if ( ! $moderation ) {
+			$issues[] = __( 'Job moderation not enabled (spam risk)', 'wpshadow' );
+		}
+		
+		// Check 3: Anonymous job posting
+		$allow_anonymous = get_option( 'job_manager_enable_registration', 0 );
+		if ( $allow_anonymous ) {
+			$issues[] = __( 'Anonymous job posting enabled (abuse potential)', 'wpshadow' );
+		}
+		
+		// Check 4: Expired jobs cleanup
+		$expired_jobs = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+				 INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+				 WHERE pm.meta_key = %s AND pm.meta_value < %s AND p.post_status = 'publish'",
+				'_job_expires',
+				current_time( 'Y-m-d' )
+			)
+		);
+		
+		if ( $expired_jobs > 20 ) {
+			$issues[] = sprintf( __( '%d expired jobs still published', 'wpshadow' ), $expired_jobs );
+		}
+		
+		// Check 5: Application email validation
+		$validate_email = get_option( 'job_manager_application_method_email_validate', 1 );
+		if ( ! $validate_email ) {
+			$issues[] = __( 'Application email validation disabled (spam applications)', 'wpshadow' );
+		}
+		
+		// Check 6: Captcha protection
+		$has_captcha = get_option( 'job_manager_enable_recaptcha', 0 );
+		if ( ! $has_captcha && $job_count > 50 ) {
+			$issues[] = __( 'No CAPTCHA protection on job submissions', 'wpshadow' );
+		}
+		
+		// Check 7: Application rate limiting
+		$rate_limit = get_option( 'job_manager_application_rate_limit', 0 );
+		if ( ! $rate_limit ) {
+			$issues[] = __( 'No rate limiting on job applications (automated abuse)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 65;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 78;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 72;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of security issues */
+				__( 'WP Job Manager listings have %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-listing-security',
+		);
 	}
 }
