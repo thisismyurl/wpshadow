@@ -36,25 +36,62 @@ class Diagnostic_MultisiteDomainMappingConfiguration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify SUNRISE is enabled
+		if ( ! defined( 'SUNRISE' ) || ! SUNRISE ) {
+			$issues[] = 'SUNRISE constant not enabled for domain mapping';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for sunrise.php file
+		if ( ! file_exists( WP_CONTENT_DIR . '/sunrise.php' ) ) {
+			$issues[] = 'sunrise.php file missing';
+		}
+		
+		// Check 3: Verify cookie domain configuration
+		$cookie_domain = get_site_option( 'dm_cookie_domain', '' );
+		if ( empty( $cookie_domain ) ) {
+			$issues[] = 'Cookie domain not configured';
+		}
+		
+		// Check 4: Check for admin redirect settings
+		$redirect_admin = get_site_option( 'dm_redirect_admin', '' );
+		if ( empty( $redirect_admin ) ) {
+			$issues[] = 'Admin redirect setting not configured';
+		}
+		
+		// Check 5: Verify mapped domain primary setting
+		$primary_mapping = get_site_option( 'dm_primary_domain', '' );
+		if ( empty( $primary_mapping ) ) {
+			$issues[] = 'Primary mapped domain setting missing';
+		}
+		
+		// Check 6: Check for domain mapping plugin activation
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		if ( ! is_plugin_active( 'wordpress-mu-domain-mapping/domain_mapping.php' ) ) {
+			$issues[] = 'Domain mapping plugin not active';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d multisite domain mapping issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/multisite-domain-mapping-configuration',
 			);
 		}
