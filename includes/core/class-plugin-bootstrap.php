@@ -355,6 +355,9 @@ class Plugin_Bootstrap {
 			require_once WPSHADOW_PATH . 'includes/screens/class-phase4-settings-page.php';
 		}
 
+		// Load Phase 5: Academy & Training Integration
+		self::load_academy_training();
+
 		// Load dashboard widgets
 		$widget_classes = array(
 			'class-executive-roi-widget.php',
@@ -545,6 +548,68 @@ class Plugin_Bootstrap {
 
 			if ( class_exists( '\\WPShadow\\Workflow\\Recipe_Manager' ) ) {
 				\WPShadow\Workflow\Recipe_Manager::init();
+			}
+		}
+	}
+
+	/**
+	 * Load Academy & Training Integration (Phase 5)
+	 *
+	 * Loads educational content systems including:
+	 * - KB Article Management
+	 * - Training Widget
+	 * - Weekly Tips Widget
+	 * - Post-Fix Education
+	 * - Contextual Learning Tips
+	 *
+	 * @since 1.2604.0100
+	 * @return void
+	 */
+	private static function load_academy_training() {
+		$content_path = WPSHADOW_PATH . 'includes/content/';
+
+		// Load KB Article Manager
+		if ( file_exists( $content_path . 'class-kb-article-manager.php' ) ) {
+			require_once $content_path . 'class-kb-article-manager.php';
+
+			if ( class_exists( '\\WPShadow\\Content\\KB_Article_Manager' ) ) {
+				\WPShadow\Content\KB_Article_Manager::init();
+			}
+		}
+
+		// Load Training Widget
+		if ( file_exists( $content_path . 'class-training-widget.php' ) ) {
+			require_once $content_path . 'class-training-widget.php';
+
+			if ( class_exists( '\\WPShadow\\Content\\Training_Widget' ) ) {
+				\WPShadow\Content\Training_Widget::init();
+			}
+		}
+
+		// Load Weekly Tips Widget
+		if ( file_exists( $content_path . 'class-weekly-tips-widget.php' ) ) {
+			require_once $content_path . 'class-weekly-tips-widget.php';
+
+			if ( class_exists( '\\WPShadow\\Content\\Weekly_Tips_Widget' ) ) {
+				\WPShadow\Content\Weekly_Tips_Widget::init();
+			}
+		}
+
+		// Load Post-Fix Education
+		if ( file_exists( $content_path . 'class-post-fix-education.php' ) ) {
+			require_once $content_path . 'class-post-fix-education.php';
+
+			if ( class_exists( '\\WPShadow\\Content\\Post_Fix_Education' ) ) {
+				\WPShadow\Content\Post_Fix_Education::init();
+			}
+		}
+
+		// Load existing KB Post Type if present
+		if ( file_exists( $content_path . 'class-kb-post-type.php' ) ) {
+			require_once $content_path . 'class-kb-post-type.php';
+
+			if ( class_exists( '\\WPShadow\\KB\\KB_Post_Type' ) ) {
+				\WPShadow\KB\KB_Post_Type::init();
 			}
 		}
 	}

@@ -759,6 +759,37 @@
 }
 
 /* ==========================================================================
+   Settings Page Components
+   ========================================================================== */
+
+.wps-info-box {
+	padding: 15px;
+	background: #f9f9f9;
+	border-left: 4px solid #2271b1;
+	border-radius: 3px;
+}
+
+.wps-info-box h4 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #2271b1;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.wps-info-box ul {
+	margin: 0;
+	padding-left: 20px;
+	list-style: disc;
+}
+
+.wps-info-box li {
+	margin-bottom: 5px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+/* ==========================================================================
    Responsive Design
    ========================================================================== */
 

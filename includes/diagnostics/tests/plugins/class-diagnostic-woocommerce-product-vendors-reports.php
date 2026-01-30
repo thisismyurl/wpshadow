@@ -32,33 +32,74 @@ class Diagnostic_WoocommerceProductVendorsReports extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! class_exists( 'WooCommerce' ) ) {
+		if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'WC_Product_Vendors' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-product-vendors-reports',
-			);
+		// Check 1: Vendor report access control
+		$report_capability = get_option( 'wcpv_report_capability', 'manage_woocommerce' );
+		if ( 'manage_product' === $report_capability ) {
+			$issues[] = __( 'Low report capability (vendors see all data)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Commission calculation
+		$commission_type = get_option( 'wcpv_commission_type', 'percentage' );
+		$commission_value = get_option( 'wcpv_commission_value', 0 );
+		
+		if ( $commission_value === 0 ) {
+			$issues[] = __( 'No default commission (unpaid vendors)', 'wpshadow' );
+		}
+		
+		// Check 3: Report caching
+		$cache_reports = get_option( 'wcpv_cache_reports', 'no' );
+		if ( 'no' === $cache_reports ) {
+			$issues[] = __( 'Reports not cached (slow dashboards)', 'wpshadow' );
+		}
+		
+		// Check 4: Data isolation
+		$isolate_data = get_option( 'wcpv_isolate_vendor_data', 'yes' );
+		if ( 'no' === $isolate_data ) {
+			$issues[] = __( 'Data not isolated (vendor data leaks)', 'wpshadow' );
+		}
+		
+		// Check 5: Export sanitization
+		$sanitize_exports = get_option( 'wcpv_sanitize_exports', 'no' );
+		if ( 'no' === $sanitize_exports ) {
+			$issues[] = __( 'Exports not sanitized (XSS in CSV)', 'wpshadow' );
+		}
+		
+		// Check 6: Payout tracking
+		$track_payouts = get_option( 'wcpv_track_payouts', 'no' );
+		if ( 'no' === $track_payouts ) {
+			$issues[] = __( 'No payout tracking (accounting issues)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of product vendors reporting issues */
+				__( 'WooCommerce Product Vendors reports have %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/woocommerce-product-vendors-reports',
+		);
 	}
 }

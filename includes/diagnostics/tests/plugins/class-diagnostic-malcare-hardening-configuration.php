@@ -32,33 +32,86 @@ class Diagnostic_MalcareHardeningConfiguration extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for MalCare Security plugin
+		$has_malcare = class_exists( 'MalCare_Loader' ) ||
+		               defined( 'MALCARE_VERSION' ) ||
+		               get_option( 'malcare_api_key', '' ) !== '';
+		
+		if ( ! $has_malcare ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/malcare-hardening-configuration',
-			);
+		// Check 1: Firewall enabled
+		$firewall = get_option( 'malcare_firewall_enabled', 'no' );
+		if ( 'no' === $firewall ) {
+			$issues[] = __( 'Firewall disabled (attack protection off)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Login protection
+		$login_protection = get_option( 'malcare_login_protection', 'no' );
+		if ( 'no' === $login_protection ) {
+			$issues[] = __( 'Login protection disabled (brute force risk)', 'wpshadow' );
+		}
+		
+		// Check 3: File change detection
+		$file_monitoring = get_option( 'malcare_file_monitoring', 'no' );
+		if ( 'no' === $file_monitoring ) {
+			$issues[] = __( 'File monitoring disabled (backdoor risk)', 'wpshadow' );
+		}
+		
+		// Check 4: Malware scan frequency
+		$scan_frequency = get_option( 'malcare_scan_frequency', 'daily' );
+		if ( 'manual' === $scan_frequency ) {
+			$issues[] = __( 'Manual scanning only (delayed detection)', 'wpshadow' );
+		}
+		
+		// Check 5: Hardening applied
+		$hardening_options = get_option( 'malcare_hardening', array() );
+		$required_hardening = array( 'disable_file_editor', 'hide_wp_version', 'disable_xmlrpc' );
+		
+		$missing_hardening = array_diff( $required_hardening, array_keys( array_filter( $hardening_options ) ) );
+		if ( ! empty( $missing_hardening ) ) {
+			$issues[] = sprintf( __( '%d hardening options not applied', 'wpshadow' ), count( $missing_hardening ) );
+		}
+		
+		// Check 6: Backup configuration
+		$auto_backup = get_option( 'malcare_auto_backup', 'no' );
+		if ( 'no' === $auto_backup ) {
+			$issues[] = __( 'Auto-backup disabled (no recovery option)', 'wpshadow' );
+		}
+		
+		// Check 7: Two-factor authentication
+		$twofa = get_option( 'malcare_2fa_enabled', 'no' );
+		if ( 'no' === $twofa ) {
+			$issues[] = __( '2FA not enabled (weak authentication)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 85;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 78;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of hardening configuration issues */
+				__( 'MalCare has %d hardening issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/malcare-hardening-configuration',
+		);
 	}
 }

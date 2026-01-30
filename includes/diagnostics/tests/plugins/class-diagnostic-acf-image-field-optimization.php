@@ -36,29 +36,86 @@ class Diagnostic_AcfImageFieldOptimization extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Image fields count
+		$image_fields = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} 
+				WHERE post_type = 'acf-field' AND post_excerpt = %s",
+				'image'
+			)
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/acf-image-field-optimization',
-			);
+		if ( $image_fields === 0 ) {
+			return null; // No image fields
 		}
 		
-		return null;
+		// Check 2: Return format
+		$array_format_fields = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} 
+				WHERE post_type = 'acf-field' 
+				AND post_excerpt = %s 
+				AND post_content LIKE %s",
+				'image',
+				'%return_format":"array%'
+			)
+		);
+		
+		if ( $array_format_fields < ( $image_fields * 0.5 ) ) {
+			$issues[] = __( 'Most fields return URL (no size control)', 'wpshadow' );
+		}
+		
+		// Check 3: Preview size
+		$preview_size = get_option( 'acf_image_preview_size', 'thumbnail' );
+		if ( 'full' === $preview_size ) {
+			$issues[] = __( 'Full-size previews (slow admin)', 'wpshadow' );
+		}
+		
+		// Check 4: Lazy loading
+		$lazy_load = get_option( 'acf_enable_lazy_loading', 'no' );
+		if ( 'no' === $lazy_load ) {
+			$issues[] = __( 'No lazy loading (all images load immediately)', 'wpshadow' );
+		}
+		
+		// Check 5: Image optimization
+		$auto_optimize = get_option( 'acf_auto_optimize_images', 'no' );
+		if ( 'no' === $auto_optimize ) {
+			$issues[] = __( 'No auto-optimization (large file sizes)', 'wpshadow' );
+		}
+		
+		// Check 6: CDN integration
+		$cdn_enabled = get_option( 'acf_cdn_enabled', 'no' );
+		if ( 'no' === $cdn_enabled && $image_fields > 20 ) {
+			$issues[] = __( 'No CDN (slow image delivery)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 58;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 52;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of ACF image optimization issues */
+				__( 'ACF image fields have %d optimization issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/acf-image-field-optimization',
+		);
 	}
 }
