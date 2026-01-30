@@ -32,33 +32,84 @@ class Diagnostic_PersonalDataExportPerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		global $wpdb;
+		$issues = array();
+		
+		// Check 1: Pending export requests
+		$pending_exports = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->comments} 
+				WHERE comment_type = %s AND comment_approved = %s",
+				'export_personal_data',
+				'request-pending'
+			)
+		);
+		
+		if ( $pending_exports > 10 ) {
+			$issues[] = sprintf( __( '%d pending export requests (processing backlog)', 'wpshadow' ), $pending_exports );
+		}
+		
+		// Check 2: Export timeout setting
+		$timeout = get_option( 'wp_privacy_export_timeout', 30 );
+		if ( $timeout < 60 ) {
+			$issues[] = sprintf( __( 'Export timeout: %d seconds (may fail for large sites)', 'wpshadow' ), $timeout );
+		}
+		
+		// Check 3: Batch size
+		$batch_size = get_option( 'wp_privacy_export_batch_size', 100 );
+		if ( $batch_size > 500 ) {
+			$issues[] = sprintf( __( 'Export batch size: %d (memory intensive)', 'wpshadow' ), $batch_size );
+		}
+		
+		// Check 4: Export file cleanup
+		$upload_dir = wp_upload_dir();
+		$export_dir = $upload_dir['basedir'] . '/wp-personal-data-exports/';
+		
+		if ( is_dir( $export_dir ) ) {
+			$old_files = 0;
+			$files = glob( $export_dir . '*.html' );
+			
+			foreach ( $files as $file ) {
+				if ( ( time() - filemtime( $file ) ) > ( 7 * DAY_IN_SECONDS ) ) {
+					$old_files++;
+				}
+			}
+			
+			if ( $old_files > 5 ) {
+				$issues[] = sprintf( __( '%d export files >7 days old (not auto-deleted)', 'wpshadow' ), $old_files );
+			}
+		}
+		
+		// Check 5: Export rate limiting
+		$rate_limit = get_option( 'wp_privacy_export_rate_limit', 1 );
+		if ( $rate_limit > 5 ) {
+			$issues[] = sprintf( __( 'Export rate limit: %d per hour (abuse risk)', 'wpshadow' ), $rate_limit );
+		}
+		
+		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/personal-data-export-performance',
-			);
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
 		}
 		
-		return null;
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of export performance issues */
+				__( 'Personal data export has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/personal-data-export-performance',
+		);
 	}
 }

@@ -32,33 +32,76 @@ class Diagnostic_AmplitudeAnalyticsCohortSync extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Amplitude Analytics
+		$has_amplitude = defined( 'AMPLITUDE_API_KEY' ) ||
+		                 get_option( 'amplitude_api_key', '' ) ||
+		                 function_exists( 'amplitude_track_event' );
+		
+		if ( ! $has_amplitude ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/amplitude-analytics-cohort-sync',
-			);
+		$api_key = get_option( 'amplitude_api_key', '' );
+		if ( empty( $api_key ) ) {
+			return null;
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: Cohort sync enabled
+		$cohort_sync = get_option( 'amplitude_cohort_sync', 'no' );
+		if ( 'no' === $cohort_sync ) {
+			$issues[] = __( 'Cohort sync disabled (segmentation unavailable)', 'wpshadow' );
+		}
+		
+		// Check 2: Cohort definitions
+		$cohorts = get_option( 'amplitude_cohorts', array() );
+		if ( empty( $cohorts ) && 'yes' === $cohort_sync ) {
+			$issues[] = __( 'Cohort sync enabled but no cohorts defined', 'wpshadow' );
+		}
+		
+		// Check 3: Sync frequency
+		$sync_frequency = get_option( 'amplitude_sync_frequency', 'daily' );
+		if ( 'hourly' === $sync_frequency && count( $cohorts ) > 10 ) {
+			$issues[] = sprintf( __( 'Hourly sync with %d cohorts (API rate limit risk)', 'wpshadow' ), count( $cohorts ) );
+		}
+		
+		// Check 4: User property mapping
+		$user_properties = get_option( 'amplitude_user_properties', array() );
+		if ( count( $user_properties ) > 50 ) {
+			$issues[] = sprintf( __( '%d user properties tracked (performance overhead)', 'wpshadow' ), count( $user_properties ) );
+		}
+		
+		// Check 5: Error logging
+		$error_logging = get_option( 'amplitude_error_logging', 'off' );
+		if ( 'off' === $error_logging ) {
+			$issues[] = __( 'Error logging disabled (sync failures undetected)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of cohort sync issues */
+				__( 'Amplitude cohort sync has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/amplitude-analytics-cohort-sync',
+		);
 	}
 }

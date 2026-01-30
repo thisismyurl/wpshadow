@@ -146,6 +146,7 @@ class AJAX_Router {
 
 		// Reports operations
 		\WPShadow\Admin\Ajax\Site_DNA_Handler::register();
+		\WPShadow\Admin\AJAX_Run_Family_Diagnostics::register();
 
 		// Exit interview operations
 		\WPShadow\Admin\Ajax\Submit_Exit_Interview_Handler::register();

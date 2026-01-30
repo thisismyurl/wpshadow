@@ -142,6 +142,7 @@ require_once $ajax_path . 'class-ajax-diagnostics-list.php';
 require_once $ajax_path . 'class-ajax-toggle-diagnostic.php';
 require_once $ajax_path . 'class-ajax-treatments-list.php';
 require_once $ajax_path . 'class-ajax-toggle-treatment.php';
+require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
 
 // Exit interview and followup operations
 require_once $ajax_path . 'exit-followup-handlers.php';

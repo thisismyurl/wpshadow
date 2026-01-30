@@ -50,6 +50,108 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 		),
 		
+		// Security Reports
+		array(
+			'title'   => __( 'Security Report', 'wpshadow' ),
+			'desc'    => __( 'Comprehensive security audit covering vulnerabilities, hardening, authentication, and threat analysis.', 'wpshadow' ),
+			'report'  => 'security-report',
+			'icon'    => 'dashicons-shield-alt',
+			'family'  => 'security',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		
+		// Performance Reports
+		array(
+			'title'   => __( 'Performance Report', 'wpshadow' ),
+			'desc'    => __( 'In-depth performance analysis covering load times, database queries, caching, and mobile optimization.', 'wpshadow' ),
+			'report'  => 'performance-report',
+			'icon'    => 'dashicons-performance',
+			'family'  => 'performance',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		
+		// SEO Reports
+		array(
+			'title'   => __( 'SEO Report', 'wpshadow' ),
+			'desc'    => __( 'Complete SEO audit analyzing search visibility, meta tags, mobile-first indexing, and Core Web Vitals.', 'wpshadow' ),
+			'report'  => 'seo-report',
+			'icon'    => 'dashicons-search',
+			'family'  => 'seo',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		
+		// Optimization Reports
+		array(
+			'title'   => __( 'Database Optimization Report', 'wpshadow' ),
+			'desc'    => __( 'Comprehensive database health analysis covering query performance, bloat detection, integrity checks, and optimization recommendations.', 'wpshadow' ),
+			'report'  => 'database-report',
+			'icon'    => 'dashicons-database',
+			'family'  => 'optimization',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		array(
+			'title'   => __( 'Plugin Audit Report', 'wpshadow' ),
+			'desc'    => __( 'Plugin health analysis covering security vulnerabilities, performance impact, conflicts, updates, and configuration issues.', 'wpshadow' ),
+			'report'  => 'plugins-report',
+			'icon'    => 'dashicons-admin-plugins',
+			'family'  => 'optimization',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		
+		// Commerce Reports
+		array(
+			'title'   => __( 'E-Commerce Health Report', 'wpshadow' ),
+			'desc'    => __( 'WooCommerce store analysis covering payment gateways, checkout optimization, cart abandonment, inventory, and revenue impact.', 'wpshadow' ),
+			'report'  => 'ecommerce-report',
+			'icon'    => 'dashicons-cart',
+			'family'  => 'commerce',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		
+		// Compliance & Operations Reports
+		array(
+			'title'   => __( 'Compliance & Privacy Report', 'wpshadow' ),
+			'desc'    => __( 'GDPR, CCPA, and PIPEDA compliance audit covering data protection, privacy policies, cookie consent, and regulatory requirements.', 'wpshadow' ),
+			'report'  => 'compliance-report',
+			'icon'    => 'dashicons-privacy',
+			'family'  => 'operations',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		array(
+			'title'   => __( 'Email Deliverability Report', 'wpshadow' ),
+			'desc'    => __( 'Email configuration analysis covering SMTP settings, domain authentication, blacklist status, and deliverability best practices.', 'wpshadow' ),
+			'report'  => 'email-report',
+			'icon'    => 'dashicons-email-alt',
+			'family'  => 'operations',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		array(
+			'title'   => __( 'Backup Readiness Report', 'wpshadow' ),
+			'desc'    => __( 'Backup configuration analysis covering backup frequency, storage locations, restore testing, and disaster recovery preparedness.', 'wpshadow' ),
+			'report'  => 'backup-report',
+			'icon'    => 'dashicons-backup',
+			'family'  => 'operations',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		array(
+			'title'   => __( 'Multisite Network Report', 'wpshadow' ),
+			'desc'    => __( 'Multisite network analysis covering site health, plugin conflicts, user synchronization, disk usage, and network-wide configuration.', 'wpshadow' ),
+			'report'  => 'multisite-report',
+			'icon'    => 'dashicons-admin-multisite',
+			'family'  => 'operations',
+			'enabled' => true,
+			'badge'   => 'new',
+		),
+		
 		// Page-Specific Reports
 		array(
 			'title'   => __( 'Mobile Friendliness Report', 'wpshadow' ),
@@ -158,6 +260,78 @@ function wpshadow_render_reports() {
 			</div>
 		<?php endif; ?>
 
+		<!-- Security Reports Section -->
+		<?php if ( ! empty( $grouped['security'] ) ) : ?>
+			<div class="wps-section wps-mb-6">
+				<h2 class="wps-section-title"><?php esc_html_e( 'Security Reports', 'wpshadow' ); ?></h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<?php foreach ( $grouped['security'] as $item ) : ?>
+						<?php wpshadow_render_report_card( $item ); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<!-- Performance Reports Section -->
+		<?php if ( ! empty( $grouped['performance'] ) ) : ?>
+			<div class="wps-section wps-mb-6">
+				<h2 class="wps-section-title"><?php esc_html_e( 'Performance Reports', 'wpshadow' ); ?></h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<?php foreach ( $grouped['performance'] as $item ) : ?>
+						<?php wpshadow_render_report_card( $item ); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<!-- SEO Reports Section -->
+		<?php if ( ! empty( $grouped['seo'] ) ) : ?>
+			<div class="wps-section wps-mb-6">
+				<h2 class="wps-section-title"><?php esc_html_e( 'SEO Reports', 'wpshadow' ); ?></h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<?php foreach ( $grouped['seo'] as $item ) : ?>
+						<?php wpshadow_render_report_card( $item ); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<!-- Optimization Reports Section -->
+		<?php if ( ! empty( $grouped['optimization'] ) ) : ?>
+			<div class="wps-section wps-mb-6">
+				<h2 class="wps-section-title"><?php esc_html_e( 'Optimization Reports', 'wpshadow' ); ?></h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<?php foreach ( $grouped['optimization'] as $item ) : ?>
+						<?php wpshadow_render_report_card( $item ); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<!-- Commerce Reports Section -->
+		<?php if ( ! empty( $grouped['commerce'] ) ) : ?>
+			<div class="wps-section wps-mb-6">
+				<h2 class="wps-section-title"><?php esc_html_e( 'E-Commerce Reports', 'wpshadow' ); ?></h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<?php foreach ( $grouped['commerce'] as $item ) : ?>
+						<?php wpshadow_render_report_card( $item ); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<!-- Operations Reports Section -->
+		<?php if ( ! empty( $grouped['operations'] ) ) : ?>
+			<div class="wps-section wps-mb-6">
+				<h2 class="wps-section-title"><?php esc_html_e( 'Compliance & Operations', 'wpshadow' ); ?></h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<?php foreach ( $grouped['operations'] as $item ) : ?>
+						<?php wpshadow_render_report_card( $item ); ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
 		<!-- Page-Specific Analysis Section -->
 		<?php if ( ! empty( $grouped['page-analysis'] ) ) : ?>
 			<div class="wps-section wps-mb-6">
@@ -254,6 +428,16 @@ function wpshadow_render_report_detail( $report ) {
 		'site-dna'             => 'site-dna.php',
 		'deep-scan'            => 'deep-scan.php',
 		'quick-scan'           => 'quick-scan.php',
+		'security-report'      => 'security-report.php',
+		'performance-report'   => 'performance-report.php',
+		'seo-report'           => 'seo-report.php',
+		'database-report'      => 'database-report.php',
+		'ecommerce-report'     => 'ecommerce-report.php',
+		'plugins-report'       => 'plugins-report.php',
+		'compliance-report'    => 'compliance-report.php',
+		'email-report'         => 'email-report.php',
+		'backup-report'        => 'backup-report.php',
+		'multisite-report'     => 'multisite-report.php',
 		'mobile-friendliness'  => 'mobile-friendliness.php',
 		'a11y-audit'           => 'a11y-audit.php',
 		'broken-links'         => 'broken-links.php',

@@ -2306,6 +2306,35 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     .wps-grid-cols-3 {
         grid-template-columns: 1fr;
     }
+
+    /* Fix mobile header visibility - ensure dark text on light background */
+    .wps-page-header {
+        background: var(--wps-gray-50);
+    }
+
+    .wps-page-header .wps-page-title,
+    .wps-page-header .wps-page-description {
+        color: var(--wps-gray-900);
+    }
+
+    /* Make buttons full-width on mobile and allow text wrapping */
+    .wps-btn,
+    .wps-btn-primary,
+    .wps-btn--primary,
+    .wps-btn-secondary,
+    .wps-btn--secondary {
+        width: 100%;
+        white-space: normal;
+        text-align: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: var(--wps-space-3) var(--wps-space-4);
+    }
+
+    /* Ensure button containers stack properly */
+    .wps-card-body.wps-flex {
+        flex-direction: column;
+    }
 }
 
 /* ============================================================================

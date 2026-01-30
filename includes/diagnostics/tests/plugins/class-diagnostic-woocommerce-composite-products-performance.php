@@ -36,29 +36,101 @@ class Diagnostic_WoocommerceCompositeProductsPerformance extends Diagnostic_Base
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-composite-products-performance',
-			);
+		// Check for Composite Products extension
+		if ( ! class_exists( 'WC_Composite_Products' ) ) {
+			return null;
 		}
 		
-		return null;
+		global $wpdb;
+		$issues = array();
+		
+		// Check 1: Count composite products
+		$composite_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} p 
+				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
+				WHERE p.post_type = %s AND pm.meta_key = %s",
+				'product',
+				'_bto_data'
+			)
+		);
+		
+		if ( $composite_count === 0 ) {
+			return null;
+		}
+		
+		// Check 2: Complex composites (many components)
+		$complex_composites = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT p.ID, pm.meta_value 
+				FROM {$wpdb->posts} p 
+				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
+				WHERE p.post_type = %s AND pm.meta_key = %s",
+				'product',
+				'_bto_data'
+			)
+		);
+		
+		$high_complexity = 0;
+		foreach ( $complex_composites as $composite ) {
+			$data = maybe_unserialize( $composite->meta_value );
+			if ( is_array( $data ) && count( $data ) > 6 ) {
+				$high_complexity++;
+			}
+		}
+		
+		if ( $high_complexity > 0 ) {
+			$issues[] = sprintf( __( '%d composites with >6 components (slow calculation)', 'wpshadow' ), $high_complexity );
+		}
+		
+		// Check 3: Configuration caching
+		$cache_enabled = get_option( 'woocommerce_composite_cache_enabled', 'no' );
+		if ( 'no' === $cache_enabled ) {
+			$issues[] = __( 'Configuration caching disabled (repeated queries)', 'wpshadow' );
+		}
+		
+		// Check 4: Ajax price calculation
+		$ajax_prices = get_option( 'woocommerce_composite_ajax_prices', 'yes' );
+		if ( 'no' === $ajax_prices && $high_complexity > 3 ) {
+			$issues[] = __( 'Ajax pricing disabled with complex products (page load slow)', 'wpshadow' );
+		}
+		
+		// Check 5: Stock management overhead
+		$manage_stock = get_option( 'woocommerce_composite_manage_stock', 'yes' );
+		if ( 'yes' === $manage_stock && $composite_count > 50 ) {
+			$issues[] = sprintf( __( '%d composites with stock management (inventory overhead)', 'wpshadow' ), $composite_count );
+		}
+		
+		// Check 6: Thumbnail regeneration
+		$regen_thumbs = get_option( 'woocommerce_composite_regen_images', 'no' );
+		if ( 'yes' === $regen_thumbs ) {
+			$issues[] = __( 'Image regeneration enabled (processing overhead)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 68;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 62;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of performance issues */
+				__( 'WooCommerce Composite Products has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/woocommerce-composite-products-performance',
+		);
 	}
 }

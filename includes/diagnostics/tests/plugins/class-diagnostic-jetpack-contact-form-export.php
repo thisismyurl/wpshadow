@@ -32,33 +32,98 @@ class Diagnostic_JetpackContactFormExport extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Jetpack
+		if ( ! class_exists( 'Jetpack' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/jetpack-contact-form-export',
-			);
+		// Check if contact forms module active
+		if ( ! Jetpack::is_module_active( 'contact-form' ) ) {
+			return null;
 		}
 		
-		return null;
+		global $wpdb;
+		$issues = array();
+		
+		// Check 1: Submission storage
+		$feedback_table = $wpdb->prefix . 'jetpack_contact_form_submissions';
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $feedback_table ) ) !== $feedback_table ) {
+			$issues[] = __( 'Submission storage not configured (data loss)', 'wpshadow' );
+		} else {
+			// Check submission count
+			$submission_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$feedback_table}" );
+			
+			if ( $submission_count > 10000 ) {
+				$issues[] = sprintf( __( '%s submissions stored (database bloat)', 'wpshadow' ), number_format_i18n( $submission_count ) );
+			}
+		}
+		
+		// Check 2: Export functionality
+		$export_enabled = get_option( 'jetpack_contact_form_export', 'yes' );
+		if ( 'no' === $export_enabled ) {
+			$issues[] = __( 'Export disabled (GDPR compliance issue)', 'wpshadow' );
+		}
+		
+		// Check 3: Retention policy
+		$retention_days = get_option( 'jetpack_contact_form_retention', 0 );
+		if ( $retention_days === 0 ) {
+			$issues[] = __( 'No retention policy (indefinite storage)', 'wpshadow' );
+		}
+		
+		// Check 4: Attachment storage
+		$store_attachments = get_option( 'jetpack_contact_form_store_attachments', 'yes' );
+		if ( 'yes' === $store_attachments ) {
+			$upload_dir = wp_upload_dir();
+			$attachment_dir = $upload_dir['basedir'] . '/jetpack-contact-form/';
+			
+			if ( is_dir( $attachment_dir ) ) {
+				$size = 0;
+				$files = new \RecursiveIteratorIterator(
+					new \RecursiveDirectoryIterator( $attachment_dir, \RecursiveDirectoryIterator::SKIP_DOTS )
+				);
+				
+				foreach ( $files as $file ) {
+					if ( $file->isFile() ) {
+						$size += $file->getSize();
+					}
+				}
+				
+				if ( $size > ( 500 * 1024 * 1024 ) ) { // 500MB
+					$issues[] = sprintf( __( 'Form attachments: %s (storage cost)', 'wpshadow' ), size_format( $size ) );
+				}
+			}
+		}
+		
+		// Check 5: Spam protection
+		$akismet_enabled = get_option( 'jetpack_contact_form_akismet', 'no' );
+		if ( 'no' === $akismet_enabled && class_exists( 'Akismet' ) ) {
+			$issues[] = __( 'Akismet available but not enabled for forms', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of contact form export issues */
+				__( 'Jetpack contact forms have %d export issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/jetpack-contact-form-export',
+		);
 	}
 }

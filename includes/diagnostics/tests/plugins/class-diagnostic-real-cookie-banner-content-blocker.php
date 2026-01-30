@@ -32,33 +32,88 @@ class Diagnostic_RealCookieBannerContentBlocker extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Real Cookie Banner
+		$has_rcb = defined( 'RCB_VERSION' ) ||
+		           class_exists( 'DevOwl\RealCookieBanner\Core' ) ||
+		           function_exists( 'real_cookie_banner_init' );
+		
+		if ( ! $has_rcb ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/real-cookie-banner-content-blocker',
-			);
+		// Check 1: Content blocker enabled
+		$blocker_enabled = get_option( 'rcb_content_blocker', 'yes' );
+		if ( 'no' === $blocker_enabled ) {
+			$issues[] = __( 'Content blocker disabled (scripts load without consent)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Service templates configured
+		$services = get_option( 'rcb_services', array() );
+		if ( empty( $services ) ) {
+			$issues[] = __( 'No service templates configured (manual blocking)', 'wpshadow' );
+		}
+		
+		// Check 3: Content blocker rules
+		$blocker_rules = get_option( 'rcb_blocker_rules', array() );
+		if ( count( $blocker_rules ) === 0 && 'yes' === $blocker_enabled ) {
+			$issues[] = __( 'Content blocker active but no rules defined', 'wpshadow' );
+		}
+		
+		// Check 4: Google Consent Mode
+		$consent_mode = get_option( 'rcb_google_consent_mode', 'no' );
+		if ( 'no' === $consent_mode ) {
+			// Check if Google services are used
+			$has_google = false;
+			foreach ( $services as $service ) {
+				if ( isset( $service['name'] ) && strpos( strtolower( $service['name'] ), 'google' ) !== false ) {
+					$has_google = true;
+					break;
+				}
+			}
+			
+			if ( $has_google ) {
+				$issues[] = __( 'Google services used but Consent Mode disabled', 'wpshadow' );
+			}
+		}
+		
+		// Check 5: Geo-targeting
+		$geo_enabled = get_option( 'rcb_geo_targeting', 'no' );
+		if ( 'no' === $geo_enabled ) {
+			$issues[] = __( 'Geo-targeting disabled (global banner for all regions)', 'wpshadow' );
+		}
+		
+		// Check 6: TCF 2.0 integration
+		$tcf_enabled = get_option( 'rcb_tcf', 'no' );
+		if ( 'no' === $tcf_enabled ) {
+			$issues[] = __( 'TCF 2.0 disabled (ad tech compliance issue)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of content blocker issues */
+				__( 'Real Cookie Banner content blocker has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/real-cookie-banner-content-blocker',
+		);
 	}
 }
