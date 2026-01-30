@@ -299,6 +299,8 @@ class Gamification_UI {
 		$rewards = Reward_System::get_all();
 		$history = Reward_System::get_history( $user_id, 10 );
 		$categories = Reward_System::get_categories();
+		$actions = Earn_Actions::get_actions();
+		$action_status = Earn_Actions::get_user_status( $user_id );
 		?>
 		<div class="wrap wpshadow-gamification-page">
 			<h1><?php esc_html_e( 'Rewards', 'wpshadow' ); ?></h1>
@@ -307,6 +309,53 @@ class Gamification_UI {
 			<div class="wpshadow-points-balance-card">
 				<span class="balance-label"><?php esc_html_e( 'Your Points:', 'wpshadow' ); ?></span>
 				<span class="balance-value"><?php echo esc_html( number_format_i18n( $balance ) ); ?></span>
+			</div>
+
+			<!-- Earn more points -->
+			<div class="wpshadow-earn-actions">
+				<h2><?php esc_html_e( 'Earn More Points', 'wpshadow' ); ?></h2>
+				<p class="description">
+					<?php esc_html_e( 'Optional, privacy-friendly ways to earn points. Some actions use the honor system and are only available once.', 'wpshadow' ); ?>
+				</p>
+				<div class="rewards-grid">
+					<?php foreach ( $actions as $action_id => $action ) : ?>
+						<?php
+							$status = $action_status[ $action_id ] ?? array();
+							$is_auto = ! empty( $action['auto'] );
+							$is_claimed = ! empty( $status['claimed'] );
+							$is_completed = ! empty( $status['completed'] );
+							$is_eligible = ! empty( $status['eligible'] );
+							$button_label = $is_claimed ? __( 'Claimed', 'wpshadow' ) : __( 'Claim Points', 'wpshadow' );
+							?>
+							<div class="reward-card">
+								<span class="reward-emoji">🎁</span>
+								<h3><?php echo esc_html( $action['name'] ); ?></h3>
+								<p><?php echo esc_html( $action['description'] ); ?></p>
+								<div class="reward-footer">
+									<span class="reward-cost"><?php echo esc_html( number_format_i18n( (int) $action['points'] ) ); ?> pts</span>
+									<?php if ( $is_auto ) : ?>
+										<span class="reward-status">
+											<?php echo $is_completed ? esc_html__( 'Completed', 'wpshadow' ) : esc_html__( 'Not set up yet', 'wpshadow' ); ?>
+										</span>
+									<?php else : ?>
+										<button
+											class="button wpshadow-earn-action"
+											data-action-id="<?php echo esc_attr( $action_id ); ?>"
+											data-action-url="<?php echo esc_url( $action['url'] ?? '' ); ?>"
+											<?php echo ( ! $is_eligible || $is_claimed ) ? 'disabled' : ''; ?>
+										>
+											<?php echo esc_html( $button_label ); ?>
+										</button>
+										<?php if ( ! empty( $status['message'] ) ) : ?>
+											<div class="reward-hint">
+												<?php echo esc_html( $status['message'] ); ?>
+											</div>
+										<?php endif; ?>
+									<?php endif; ?>
+								</div>
+							</div>
+					<?php endforeach; ?>
+				</div>
 			</div>
 
 			<!-- Reward catalog -->

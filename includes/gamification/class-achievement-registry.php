@@ -88,6 +88,39 @@ class Achievement_Registry {
 			'badge_id'    => 'automator',
 		) );
 
+		// Setup milestones
+		self::register( 'guardian_enabled', array(
+			'name'        => __( 'Guardian Ready', 'wpshadow' ),
+			'description' => __( 'Enable Guardian monitoring', 'wpshadow' ),
+			'category'    => 'guardian',
+			'emoji'       => '🛡️',
+			'points'      => 150,
+		) );
+
+		self::register( 'backup_enabled', array(
+			'name'        => __( 'Backup Ready', 'wpshadow' ),
+			'description' => __( 'Enable backups for safe changes', 'wpshadow' ),
+			'category'    => 'site_health',
+			'emoji'       => '💾',
+			'points'      => 100,
+		) );
+
+		self::register( 'backup_scheduled', array(
+			'name'        => __( 'Scheduled Safety', 'wpshadow' ),
+			'description' => __( 'Schedule automated backups', 'wpshadow' ),
+			'category'    => 'site_health',
+			'emoji'       => '🗓️',
+			'points'      => 75,
+		) );
+
+		self::register( 'cloud_connected', array(
+			'name'        => __( 'Cloud Connected', 'wpshadow' ),
+			'description' => __( 'Connect to WPShadow Cloud services', 'wpshadow' ),
+			'category'    => 'guardian',
+			'emoji'       => '☁️',
+			'points'      => 150,
+		) );
+
 		// Site Health achievements
 		self::register( 'clean_health', array(
 			'name'        => __( 'Spotless', 'wpshadow' ),
@@ -188,6 +221,22 @@ class Achievement_Registry {
 			'emoji'       => '🤝',
 			'points'      => 300,
 			'badge_id'    => 'helper',
+		) );
+
+		self::register( 'community_reviewer', array(
+			'name'        => __( 'Helpful Reviewer', 'wpshadow' ),
+			'description' => __( 'Leave a WordPress.org review', 'wpshadow' ),
+			'category'    => 'engagement',
+			'emoji'       => '⭐',
+			'points'      => 200,
+		) );
+
+		self::register( 'social_supporter', array(
+			'name'        => __( 'Social Supporter', 'wpshadow' ),
+			'description' => __( 'Share WPShadow with your community', 'wpshadow' ),
+			'category'    => 'engagement',
+			'emoji'       => '📣',
+			'points'      => 150,
 		) );
 
 		self::register( 'referral_champion', array(

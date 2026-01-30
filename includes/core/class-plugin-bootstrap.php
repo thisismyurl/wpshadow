@@ -367,6 +367,12 @@ class Plugin_Bootstrap {
 		// Load Phase 8: Gamification System
 		self::load_gamification_system();
 
+		// Load Phase 9: WPShadow Vault (Backup & Restore)
+		self::load_vault_system();
+
+		// Load Phase 10: WPShadow Academy (Adaptive Learning)
+		self::load_academy_system();
+
 		// Load dashboard widgets
 		$widget_classes = array(
 			'class-executive-roi-widget.php',
@@ -811,6 +817,103 @@ class Plugin_Bootstrap {
 
 		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_UI' ) ) {
 			\WPShadow\Gamification\Gamification_UI::init();
+		}
+	}
+
+	/**
+	 * Load WPShadow Vault (Backup & Restore) system
+	 *
+	 * Phase 9: Comprehensive backup and disaster recovery.
+	 *
+	 * Components:
+	 * - Vault Manager (backup creation, storage, restore)
+	 * - Vault Registration (free tier: 3 backups, 7-day retention)
+	 * - Vault Dashboard Badge (Core dashboard integration)
+	 * - Vault UI (admin pages for backup management)
+	 *
+	 * @since  1.6030.1850
+	 * @return void
+	 */
+	private static function load_vault_system() {
+		$vault_path = WPSHADOW_PATH . 'includes/vault/';
+
+		// Core Vault components
+		$vault_files = array(
+			'class-vault-manager.php',
+			'class-vault-registration.php',
+			'class-vault-dashboard-badge.php',
+			'class-vault-ui.php',
+		);
+
+		foreach ( $vault_files as $file ) {
+			if ( file_exists( $vault_path . $file ) ) {
+				require_once $vault_path . $file;
+			}
+		}
+
+		// Initialize Vault components
+		if ( class_exists( '\\WPShadow\\Vault\\Vault_Registration' ) ) {
+			\WPShadow\Vault\Vault_Registration::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Vault\\Vault_Dashboard_Badge' ) ) {
+			\WPShadow\Vault\Vault_Dashboard_Badge::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Vault\\Vault_UI' ) ) {
+			\WPShadow\Vault\Vault_UI::init();
+		}
+
+		// Initialize Vault Manager singleton
+		if ( class_exists( '\\WPShadow\\Vault\\Vault_Manager' ) ) {
+			\WPShadow\Vault\Vault_Manager::get_instance();
+		}
+	}
+
+	/**
+	 * Load Academy system (Phase 10)
+	 *
+	 * Adaptive learning with KB articles, training videos, and courses.
+	 *
+	 * @since 1.6030.1930
+	 */
+	private static function load_academy_system() {
+		// Load Academy classes.
+		$classes = array(
+			WPSHADOW_PATH . 'includes/academy/class-academy-manager.php',
+			WPSHADOW_PATH . 'includes/academy/class-kb-article-registry.php',
+			WPSHADOW_PATH . 'includes/academy/class-training-video-registry.php',
+			WPSHADOW_PATH . 'includes/academy/class-course-registry.php',
+			WPSHADOW_PATH . 'includes/academy/class-academy-ui.php',
+		);
+
+		foreach ( $classes as $class ) {
+			if ( file_exists( $class ) ) {
+				require_once $class;
+			}
+		}
+
+		// Initialize registries.
+		if ( class_exists( '\\WPShadow\\Academy\\KB_Article_Registry' ) ) {
+			\WPShadow\Academy\KB_Article_Registry::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Academy\\Training_Video_Registry' ) ) {
+			\WPShadow\Academy\Training_Video_Registry::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Academy\\Course_Registry' ) ) {
+			\WPShadow\Academy\Course_Registry::init();
+		}
+
+		// Initialize Academy Manager.
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Manager' ) ) {
+			\WPShadow\Academy\Academy_Manager::init();
+		}
+
+		// Initialize Academy UI.
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_UI' ) ) {
+			\WPShadow\Academy\Academy_UI::init();
 		}
 	}
 

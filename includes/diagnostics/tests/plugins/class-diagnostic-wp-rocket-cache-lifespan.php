@@ -35,40 +35,40 @@ class Diagnostic_WpRocketCacheLifespan extends Diagnostic_Base {
 		if ( ! defined( 'WP_ROCKET_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 		$options = get_option( 'wp_rocket_settings', array() );
-		
+
 		// Check 1: Cache lifespan
 		$lifespan = isset( $options['cache_lifespan'] ) ? $options['cache_lifespan'] : 0;
 		if ( $lifespan < 600 ) {
 			$issues[] = sprintf( __( 'Cache lifespan %d seconds (too short)', 'wpshadow' ), $lifespan );
 		}
-		
+
 		// Check 2: Automatic cache clearing
 		$auto_clear = isset( $options['automatic_cleanup'] ) ? $options['automatic_cleanup'] : 0;
 		if ( $auto_clear < 1 ) {
 			$issues[] = __( 'No automatic cache cleanup (stale content)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Preload enabled
 		$preload = isset( $options['manual_preload'] ) ? $options['manual_preload'] : 0;
 		if ( 0 === $preload ) {
 			$issues[] = __( 'Preload disabled (slow first visits)', 'wpshadow' );
 		}
-		
+
 		// Check 4: Separate mobile cache
 		$mobile_cache = isset( $options['do_caching_mobile_files'] ) ? $options['do_caching_mobile_files'] : 0;
 		if ( 0 === $mobile_cache ) {
 			$issues[] = __( 'No mobile cache (slow mobile experience)', 'wpshadow' );
 		}
-		
+
 		// Check 5: User cache
 		$user_cache = isset( $options['cache_logged_user'] ) ? $options['cache_logged_user'] : 0;
 		if ( 1 === $user_cache ) {
 			$issues[] = __( 'Logged-in users cached (dynamic content issues)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Cache size monitoring
 		$cache_dir = WP_CONTENT_DIR . '/cache/wp-rocket/';
 		if ( is_dir( $cache_dir ) ) {
@@ -87,18 +87,18 @@ class Diagnostic_WpRocketCacheLifespan extends Diagnostic_Base {
 				$issues[] = sprintf( __( '%d MB cache (excessive)', 'wpshadow' ), round( $size_mb ) );
 			}
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 45;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 57;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 51;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

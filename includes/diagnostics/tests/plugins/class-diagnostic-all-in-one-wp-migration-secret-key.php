@@ -35,55 +35,55 @@ class Diagnostic_AllInOneWpMigrationSecretKey extends Diagnostic_Base {
 		if ( ! defined( 'AI1WM_PLUGIN_NAME' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Secret key strength
 		$secret_key = get_option( 'ai1wm_secret_key', '' );
 		if ( ! empty( $secret_key ) && strlen( $secret_key ) < 32 ) {
 			$issues[] = sprintf( __( 'Secret key only %d characters (weak)', 'wpshadow' ), strlen( $secret_key ) );
 		}
-		
+
 		// Check 2: Default secret key
 		if ( 'CHANGE_THIS_SECRET_KEY' === $secret_key ) {
 			$issues[] = __( 'Using default secret key (critical vulnerability)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Public downloads
 		$public_downloads = get_option( 'ai1wm_public_downloads', 'no' );
 		if ( 'yes' === $public_downloads ) {
 			$issues[] = __( 'Public downloads enabled (data exposure)', 'wpshadow' );
 		}
-		
+
 		// Check 4: Download expiration
 		$download_expiry = get_option( 'ai1wm_download_expiry', 0 );
 		if ( $download_expiry === 0 || $download_expiry > 86400 ) {
 			$issues[] = __( 'Download links never expire (security risk)', 'wpshadow' );
 		}
-		
+
 		// Check 5: IP restriction
 		$ip_restriction = get_option( 'ai1wm_ip_restriction', 'no' );
 		if ( 'no' === $ip_restriction ) {
 			$issues[] = __( 'No IP restriction (unauthorized access)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Storage location
 		$storage_path = get_option( 'ai1wm_storage_path', '' );
 		if ( strpos( $storage_path, ABSPATH ) === 0 ) {
 			$issues[] = __( 'Backups in web root (direct access possible)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 75;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 87;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 81;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

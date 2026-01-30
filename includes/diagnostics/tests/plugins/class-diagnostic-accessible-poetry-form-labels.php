@@ -32,29 +32,67 @@ class Diagnostic_AccessiblePoetryFormLabels extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'Accessible_Poetry' ) && ! function_exists( 'accessible_poetry_init' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check for form submissions without labels
+		global $wpdb;
+		$forms_table = $wpdb->prefix . 'accessible_poetry_forms';
 		
-		if ( $has_issue ) {
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$forms_table}'" ) === $forms_table ) {
+			$missing_labels = $wpdb->get_var(
+				"SELECT COUNT(*) FROM {$forms_table} 
+				 WHERE form_data NOT LIKE '%<label%' 
+				 OR form_data LIKE '%<input%' AND form_data NOT LIKE '%aria-label%'"
+			);
+			
+			if ( $missing_labels > 0 ) {
+				$issues[] = "forms without proper labels ({$missing_labels} forms)";
+			}
+		}
+		
+		// Check for ARIA attributes configuration
+		$aria_enabled = get_option( 'accessible_poetry_aria_enabled', '1' );
+		if ( '0' === $aria_enabled ) {
+			$issues[] = 'ARIA attributes disabled (reduces accessibility)';
+		}
+		
+		// Check for keyboard navigation support
+		$keyboard_nav = get_option( 'accessible_poetry_keyboard_nav', '1' );
+		if ( '0' === $keyboard_nav ) {
+			$issues[] = 'keyboard navigation disabled (accessibility issue)';
+		}
+		
+		// Check for screen reader optimization
+		$screen_reader = get_option( 'accessible_poetry_screen_reader', '1' );
+		if ( '0' === $screen_reader ) {
+			$issues[] = 'screen reader optimization disabled';
+		}
+		
+		// Check for form validation messages
+		$validation_msgs = get_option( 'accessible_poetry_validation_messages', array() );
+		if ( empty( $validation_msgs ) || ! is_array( $validation_msgs ) ) {
+			$issues[] = 'no accessible validation messages configured';
+		}
+		
+		// Check for WCAG compliance level
+		$wcag_level = get_option( 'accessible_poetry_wcag_level', 'AA' );
+		if ( 'A' === $wcag_level || empty( $wcag_level ) ) {
+			$issues[] = 'WCAG compliance level below AA standard';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 75, 50 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'Accessible Poetry form accessibility issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/accessible-poetry-form-labels',
 			);
 		}

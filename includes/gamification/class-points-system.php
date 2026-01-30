@@ -34,9 +34,10 @@ class Points_System {
 	 * @param  int    $user_id User ID.
 	 * @param  int    $points  Points to award.
 	 * @param  string $reason  Reason for points.
+	 * @param  array  $meta    Optional metadata for the action.
 	 * @return bool True on success.
 	 */
-	public static function award_points( $user_id, $points, $reason = '' ) {
+	public static function award_points( $user_id, $points, $reason = '', $meta = array() ) {
 		if ( ! $user_id || $points <= 0 ) {
 			return false;
 		}
@@ -47,7 +48,7 @@ class Points_System {
 		update_user_meta( $user_id, 'wpshadow_points_balance', $new_balance );
 
 		// Record transaction
-		self::record_transaction( $user_id, $points, 'earned', $reason );
+		self::record_transaction( $user_id, $points, 'earned', $reason, $meta );
 
 		// Check tier badges
 		self::check_tier_badges( $user_id, $new_balance );
@@ -152,9 +153,10 @@ class Points_System {
 	 * @param  int    $points  Points (negative for spending).
 	 * @param  string $type    Transaction type (earned/spent).
 	 * @param  string $reason  Reason.
+	 * @param  array  $meta    Optional metadata for the action.
 	 * @return void
 	 */
-	private static function record_transaction( $user_id, $points, $type, $reason ) {
+	private static function record_transaction( $user_id, $points, $type, $reason, $meta = array() ) {
 		$history = get_user_meta( $user_id, 'wpshadow_points_history', true );
 
 		if ( ! is_array( $history ) ) {
@@ -166,6 +168,7 @@ class Points_System {
 			'points'    => $points,
 			'type'      => $type,
 			'reason'    => $reason,
+			'meta'      => is_array( $meta ) ? $meta : array(),
 		);
 
 		// Keep last 100 transactions
@@ -180,6 +183,47 @@ class Points_System {
 			$lifetime = self::get_lifetime_points( $user_id );
 			update_user_meta( $user_id, 'wpshadow_lifetime_points', $lifetime + $points );
 		}
+	}
+
+	/**
+	 * Get action count for a specific reason.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int         $user_id    User ID.
+	 * @param  string      $reason     Action reason to count.
+	 * @param  string|null $meta_key   Optional meta key filter.
+	 * @param  string|null $meta_value Optional meta value filter.
+	 * @return int Action count.
+	 */
+	public static function get_action_count( $user_id, $reason, $meta_key = null, $meta_value = null ) {
+		$history = get_user_meta( $user_id, 'wpshadow_points_history', true );
+
+		if ( ! is_array( $history ) ) {
+			return 0;
+		}
+
+		$count = 0;
+
+		foreach ( $history as $entry ) {
+			if ( empty( $entry['reason'] ) || $entry['reason'] !== $reason ) {
+				continue;
+			}
+
+			if ( $meta_key ) {
+				$meta = $entry['meta'] ?? array();
+				if ( ! is_array( $meta ) || ! array_key_exists( $meta_key, $meta ) ) {
+					continue;
+				}
+
+				if ( null !== $meta_value && (string) $meta[ $meta_key ] !== (string) $meta_value ) {
+					continue;
+				}
+			}
+
+			++$count;
+		}
+
+		return $count;
 	}
 
 	/**

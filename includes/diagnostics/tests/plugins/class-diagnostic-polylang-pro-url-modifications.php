@@ -35,15 +35,15 @@ class Diagnostic_PolylangProUrlModifications extends Diagnostic_Base {
 		if ( ! defined( 'POLYLANG_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: URL structure
 		$url_structure = get_option( 'polylang_url_structure', 'directory' );
 		if ( 'directory' === $url_structure ) {
 			$issues[] = __( 'Directory structure (subdomain recommended)', 'wpshadow' );
 		}
-		
+
 		// Check 2: Language slug conflict
 		$languages = pll_languages_list();
 		if ( $languages ) {
@@ -54,7 +54,7 @@ class Diagnostic_PolylangProUrlModifications extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 3: Rewrite rules
 		$rules = get_option( 'rewrite_rules' );
 		$pll_rules = 0;
@@ -66,36 +66,36 @@ class Diagnostic_PolylangProUrlModifications extends Diagnostic_Base {
 		if ( $pll_rules > 50 ) {
 			$issues[] = sprintf( __( '%d language rewrite rules (slow routing)', 'wpshadow' ), $pll_rules );
 		}
-		
+
 		// Check 4: Redirect handling
 		$redirect = get_option( 'polylang_redirect', 'browser' );
 		if ( 'browser' === $redirect ) {
 			$issues[] = __( 'Browser language detection (caching issues)', 'wpshadow' );
 		}
-		
+
 		// Check 5: Canonical URLs
 		$canonical = get_option( 'polylang_canonical', 'no' );
 		if ( 'no' === $canonical ) {
 			$issues[] = __( 'No canonical URLs (duplicate content SEO)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Hreflang tags
 		$hreflang = get_option( 'polylang_hreflang', 'no' );
 		if ( 'no' === $hreflang ) {
 			$issues[] = __( 'No hreflang tags (international SEO)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 50;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 62;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 56;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

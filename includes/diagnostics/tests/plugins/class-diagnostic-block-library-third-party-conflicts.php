@@ -34,19 +34,19 @@ class Diagnostic_BlockLibraryThirdPartyConflicts extends Diagnostic_Base {
 	public static function check() {
 		// Check if Gutenberg is active
 		$has_gutenberg = function_exists( 'register_block_type' );
-		
+
 		if ( ! $has_gutenberg ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Registered block count
 		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
 		if ( count( $registered_blocks ) > 200 ) {
 			$issues[] = sprintf( __( '%d registered blocks (slow editor)', 'wpshadow' ), count( $registered_blocks ) );
 		}
-		
+
 		// Check 2: Duplicate block names
 		$block_names = array();
 		foreach ( $registered_blocks as $name => $block ) {
@@ -55,7 +55,7 @@ class Diagnostic_BlockLibraryThirdPartyConflicts extends Diagnostic_Base {
 			}
 			$block_names[] = $name;
 		}
-		
+
 		// Check 3: Block editor assets
 		global $wp_scripts;
 		$editor_scripts = 0;
@@ -67,13 +67,13 @@ class Diagnostic_BlockLibraryThirdPartyConflicts extends Diagnostic_Base {
 		if ( $editor_scripts > 50 ) {
 			$issues[] = sprintf( __( '%d editor scripts (performance)', 'wpshadow' ), $editor_scripts );
 		}
-		
+
 		// Check 4: Block categories
 		$categories = get_block_categories( get_post() );
 		if ( count( $categories ) > 20 ) {
 			$issues[] = sprintf( __( '%d block categories (cluttered UI)', 'wpshadow' ), count( $categories ) );
 		}
-		
+
 		// Check 5: Block styles
 		global $wp_styles;
 		$block_styles = 0;
@@ -85,7 +85,7 @@ class Diagnostic_BlockLibraryThirdPartyConflicts extends Diagnostic_Base {
 		if ( $block_styles > 30 ) {
 			$issues[] = sprintf( __( '%d block stylesheets (CSS bloat)', 'wpshadow' ), $block_styles );
 		}
-		
+
 		// Check 6: Block patterns
 		if ( function_exists( 'WP_Block_Patterns_Registry' ) ) {
 			$patterns = \WP_Block_Patterns_Registry::get_instance()->get_all_registered();
@@ -93,18 +93,18 @@ class Diagnostic_BlockLibraryThirdPartyConflicts extends Diagnostic_Base {
 				$issues[] = sprintf( __( '%d block patterns (slow loading)', 'wpshadow' ), count( $patterns ) );
 			}
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 50;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 62;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 56;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

@@ -35,10 +35,10 @@ class Diagnostic_GravityFormsConditionalLogic extends Diagnostic_Base {
 		if ( ! class_exists( 'GFForms' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 		$forms = \GFAPI::get_forms();
-		
+
 		// Check 1: Complex conditional logic
 		foreach ( $forms as $form ) {
 			if ( ! empty( $form['conditionalLogic'] ) ) {
@@ -49,7 +49,7 @@ class Diagnostic_GravityFormsConditionalLogic extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 2: Nested conditions
 		foreach ( $forms as $form ) {
 			if ( isset( $form['fields'] ) ) {
@@ -65,7 +65,7 @@ class Diagnostic_GravityFormsConditionalLogic extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 3: Conditional notification count
 		$conditional_notifications = 0;
 		foreach ( $forms as $form ) {
@@ -80,7 +80,7 @@ class Diagnostic_GravityFormsConditionalLogic extends Diagnostic_Base {
 		if ( $conditional_notifications > 20 ) {
 			$issues[] = sprintf( __( '%d conditional notifications (processing delay)', 'wpshadow' ), $conditional_notifications );
 		}
-		
+
 		// Check 4: AJAX-enabled forms with conditionals
 		$ajax_conditionals = 0;
 		foreach ( $forms as $form ) {
@@ -91,30 +91,30 @@ class Diagnostic_GravityFormsConditionalLogic extends Diagnostic_Base {
 		if ( $ajax_conditionals > 5 ) {
 			$issues[] = sprintf( __( '%d AJAX forms with conditionals (load time)', 'wpshadow' ), $ajax_conditionals );
 		}
-		
+
 		// Check 5: JavaScript dependencies
 		$js_dependencies = get_option( 'gform_enable_jquery', 'yes' );
 		if ( 'yes' === $js_dependencies && count( $forms ) > 10 ) {
 			$issues[] = __( 'jQuery dependency with multiple forms (bloat)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Conditional logic caching
 		$caching = get_option( 'gform_conditional_logic_cache', 'no' );
 		if ( 'no' === $caching ) {
 			$issues[] = __( 'No conditional logic caching (repeated processing)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 35;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 47;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 41;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

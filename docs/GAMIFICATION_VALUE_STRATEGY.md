@@ -108,13 +108,13 @@ Users should always know what's next and why it matters.
 Current: "Fix 10 performance issues" (7/10 completed)
 Enhanced:
   7/10 ⚙️ Performance Hero
-  
+
   Why Performance Matters:
   - +0.5s load time = 7% conversion loss on e-commerce
   - Faster sites rank better in Google Search
   - Your current: 3.2s → Target: <2.5s
   - This fixes: Image optimization (saves 0.8s)
-  
+
   Next Steps:
   1. Minify CSS (saves 0.2s) [Learn: 5-min video]
   2. Enable caching (saves 0.4s) [Learn: 7-min video]
@@ -193,13 +193,13 @@ Points must convert to genuine value.
 ✅ first_scan (10 pts)
    Name: "You've Started"
    Why: Taking first action is hardest step
-   
+
 ✅ first_fix (25 pts)
    Name: "Confident Start"
    Why: You trust us enough to apply a fix
    Impact: You've reduced one risk vector
    Next: "Try different categories"
-   
+
 ✅ first_of_each_category (40 pts)
    Name: "Well-Rounded"
    Why: You understand all dimensions of health
@@ -238,7 +238,7 @@ Points must convert to genuine value.
 ✅ consistency_starter (40 pts after 7-day scan streak)
    Name: "Rise and Shine"
    Why: Daily monitoring = proactive management
-   
+
 ✅ consistency_champion (200 pts after 30-day scan streak)
    Name: "Always Vigilant"
    Why: You've made site monitoring a habit
@@ -254,13 +254,13 @@ Points must convert to genuine value.
    Why: Your site is in top 10% health
    Impact: Congratulations!
    Next: "Help others" [Invitation to community]
-   
+
 ✅ all_category_master (150 pts)
    Name: "Renaissance"
    Why: You've fixed issues across all domains
    Impact: You understand holistic site health
    Badge: "Master of All Trades"
-   
+
 ✅ zero_critical_30days (300 pts)
    Name: "Fortress"
    Why: No critical vulnerabilities in 30 days
@@ -350,7 +350,7 @@ class Achievement_Learning_Paths {
         // Return KB articles, videos, training modules
         // Tied to achievement progression
     }
-    
+
     public static function get_next_milestone_guide($user_id, $category) {
         // "Here's how to get Security Legend"
         // Step-by-step with learning resources
@@ -473,7 +473,7 @@ Difficulty: Advanced
 
 WHAT YOU'VE ACCOMPLISHED:
 ✓ Blocked SQL injection attacks
-✓ Prevented brute force access attempts  
+✓ Prevented brute force access attempts
 ✓ Closed cross-site scripting vulnerabilities
 ✓ Fixed authentication weaknesses
 ✓ Hardened against privilege escalation

@@ -92,6 +92,9 @@ class Gamification_Manager {
 
 		// Workflow events
 		add_action( 'wpshadow_workflow_completed', array( $this, 'handle_workflow_completed' ), 10, 2 );
+
+		// Settings updates (feature setup milestones)
+		add_action( 'wpshadow_setting_updated', array( $this, 'handle_setting_updated' ), 10, 3 );
 	}
 
 	/**
@@ -288,6 +291,77 @@ class Gamification_Manager {
 		} elseif ( 50 === $workflow_count ) {
 			Achievement_Registry::unlock( $user_id, 'automation_wizard' );
 		}
+	}
+
+	/**
+	 * Handle important feature setup changes.
+	 *
+	 * @since  1.2604.0400
+	 * @param  string $option    Setting name.
+	 * @param  mixed  $old_value Previous value.
+	 * @param  mixed  $value     New value.
+	 * @return void
+	 */
+	public function handle_setting_updated( $option, $old_value, $value ) {
+		$user_id = get_current_user_id();
+
+		if ( ! $user_id ) {
+			return;
+		}
+
+		$actions = Earn_Actions::get_actions();
+
+		foreach ( $actions as $action_id => $action ) {
+			if ( empty( $action['auto'] ) || empty( $action['setting'] ) ) {
+				continue;
+			}
+
+			if ( $action['setting'] !== $option ) {
+				continue;
+			}
+
+			if ( $this->is_setting_enabled( $value ) && ! $this->is_setting_enabled( $old_value ) ) {
+				if ( Earn_Actions::is_claimed( $user_id, $action_id ) ) {
+					return;
+				}
+
+				if ( ! empty( $action['achievement'] ) ) {
+					Achievement_Registry::unlock( $user_id, $action['achievement'] );
+				} else {
+					Points_System::award_points(
+						$user_id,
+						(int) $action['points'],
+						'feature_setup',
+						array( 'feature' => $action_id )
+					);
+				}
+
+				Earn_Actions::mark_claimed( $user_id, $action_id );
+			}
+		}
+	}
+
+	/**
+	 * Determine if a setting value is enabled.
+	 *
+	 * @since  1.2604.0400
+	 * @param  mixed $value Setting value.
+	 * @return bool True if enabled.
+	 */
+	private function is_setting_enabled( $value ): bool {
+		if ( is_bool( $value ) ) {
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			return ! empty( $value );
+		}
+
+		if ( is_numeric( $value ) ) {
+			return (int) $value > 0;
+		}
+
+		return ! empty( $value ) && '0' !== $value && 'false' !== $value;
 	}
 
 	/**

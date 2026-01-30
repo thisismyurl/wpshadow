@@ -35,9 +35,9 @@ class Diagnostic_LoginLogoutRegisterMenuSecurity extends Diagnostic_Base {
 		// Check for login menu plugins or custom login pages
 		$has_login_menu = function_exists( 'wp_nav_menu_item_custom_fields' ) ||
 		                  get_option( 'login_logout_register_menu', '' ) !== '';
-		
+
 		$issues = array();
-		
+
 		// Check 1: Login URLs in menu
 		$menus = wp_get_nav_menus();
 		foreach ( $menus as $menu ) {
@@ -51,13 +51,13 @@ class Diagnostic_LoginLogoutRegisterMenuSecurity extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 2: Logout nonce
 		$logout_nonce = get_option( 'logout_nonce_enabled', 'yes' );
 		if ( 'no' === $logout_nonce ) {
 			$issues[] = __( 'Logout without nonce (CSRF risk)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Registration in menu
 		$allow_registration = get_option( 'users_can_register', 0 );
 		if ( $allow_registration ) {
@@ -73,36 +73,36 @@ class Diagnostic_LoginLogoutRegisterMenuSecurity extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 4: Redirect after login
 		$redirect = get_option( 'login_redirect_url', '' );
 		if ( empty( $redirect ) ) {
 			$issues[] = __( 'No login redirect (default admin access)', 'wpshadow' );
 		}
-		
+
 		// Check 5: Logout redirect
 		$logout_redirect = get_option( 'logout_redirect_url', '' );
 		if ( empty( $logout_redirect ) ) {
 			$issues[] = __( 'No logout redirect (session info visible)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Login attempt logging
 		$log_attempts = get_option( 'log_login_attempts', 'no' );
 		if ( 'no' === $log_attempts ) {
 			$issues[] = __( 'Login attempts not logged (no audit trail)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 70;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 82;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 76;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,
