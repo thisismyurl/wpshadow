@@ -36,25 +36,62 @@ class Diagnostic_TranslatepressDeeplApiSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: API key configured
+		$api_key = get_option( 'trp_deepl_api_key', '' );
+		if ( empty( $api_key ) ) {
+			$issues[] = 'DeepL API key not configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: API endpoint secured
+		$https = get_option( 'trp_deepl_api_https_enabled', 0 );
+		if ( ! $https ) {
+			$issues[] = 'HTTPS not enforced for API calls';
+		}
+		
+		// Check 3: Authentication headers
+		$auth_header = get_option( 'trp_deepl_auth_header_enabled', 0 );
+		if ( ! $auth_header ) {
+			$issues[] = 'Authentication header not properly configured';
+		}
+		
+		// Check 4: Request validation
+		$req_val = get_option( 'trp_deepl_request_validation_enabled', 0 );
+		if ( ! $req_val ) {
+			$issues[] = 'API request validation not enabled';
+		}
+		
+		// Check 5: Rate limiting
+		$rate_limit = get_option( 'trp_deepl_rate_limiting_enabled', 0 );
+		if ( ! $rate_limit ) {
+			$issues[] = 'API rate limiting not enabled';
+		}
+		
+		// Check 6: Error logging
+		$logging = get_option( 'trp_deepl_error_logging_enabled', 0 );
+		if ( ! $logging ) {
+			$issues[] = 'API error logging not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 50;
+			$threat_multiplier = 6;
+			$max_threat = 80;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d API security issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/translatepress-deepl-api-security',
 			);
 		}

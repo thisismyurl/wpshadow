@@ -36,25 +36,62 @@ class Diagnostic_ReallySimpleSslMixedContent extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Mixed content detection
+		$detect = get_option( 'rssl_mixed_content_detection_enabled', 0 );
+		if ( ! $detect ) {
+			$issues[] = 'Mixed content detection not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Auto-fix mixed content
+		$autofix = get_option( 'rssl_auto_mixed_content_fix_enabled', 0 );
+		if ( ! $autofix ) {
+			$issues[] = 'Auto-fix for mixed content not enabled';
+		}
+		
+		// Check 3: HTTPS enforcement
+		$https = get_option( 'rssl_force_https_enabled', 0 );
+		if ( ! $https ) {
+			$issues[] = 'HTTPS enforcement not enabled';
+		}
+		
+		// Check 4: SSL certificate validation
+		$cert = get_option( 'rssl_ssl_certificate_validation_enabled', 0 );
+		if ( ! $cert ) {
+			$issues[] = 'SSL certificate validation not enabled';
+		}
+		
+		// Check 5: HSTS header
+		$hsts = get_option( 'rssl_hsts_header_enabled', 0 );
+		if ( ! $hsts ) {
+			$issues[] = 'HSTS header not enabled';
+		}
+		
+		// Check 6: Redirect chain
+		$redirect = get_option( 'rssl_redirect_chain_optimized', 0 );
+		if ( ! $redirect ) {
+			$issues[] = 'Redirect chain not optimized';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 55;
+			$threat_multiplier = 6;
+			$max_threat = 85;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d SSL/mixed content issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/really-simple-ssl-mixed-content',
 			);
 		}
