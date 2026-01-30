@@ -36,25 +36,62 @@ class Diagnostic_TablepressCacheConfiguration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify transient caching enabled
+		$cache_enabled = get_option( 'tablepress_use_cache', 0 );
+		if ( ! $cache_enabled ) {
+			$issues[] = 'Transient caching not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check cache expiration
+		$cache_expiration = get_option( 'tablepress_cache_expiration', 0 );
+		if ( $cache_expiration <= 0 ) {
+			$issues[] = 'Cache expiration not configured';
+		}
+		
+		// Check 3: Verify data table caching
+		$data_cache = get_option( 'tablepress_cache_data', 0 );
+		if ( ! $data_cache ) {
+			$issues[] = 'Data table caching not enabled';
+		}
+		
+		// Check 4: Check for automatic cache clearing
+		$auto_clear = get_option( 'tablepress_cache_auto_clear', 0 );
+		if ( ! $auto_clear ) {
+			$issues[] = 'Automatic cache clearing not enabled';
+		}
+		
+		// Check 5: Verify minified output
+		$minify_output = get_option( 'tablepress_minify_output', 0 );
+		if ( ! $minify_output ) {
+			$issues[] = 'Minified output not enabled';
+		}
+		
+		// Check 6: Check for lazy loading
+		$lazy_loading = get_option( 'tablepress_lazy_loading', 0 );
+		if ( ! $lazy_loading ) {
+			$issues[] = 'Lazy loading not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d TablePress cache issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/tablepress-cache-configuration',
 			);
 		}

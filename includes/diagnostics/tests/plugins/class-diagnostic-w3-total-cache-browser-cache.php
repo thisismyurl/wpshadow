@@ -32,29 +32,67 @@ class Diagnostic_W3TotalCacheBrowserCache extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! defined( 'W3TC' ) ) {
+		if ( ! defined( 'W3TC' ) && ! get_option( 'w3tc_config', array() ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
+		$config = get_option( 'w3tc_config', array() );
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Browser cache enabled
+		$browser_cache = isset( $config['browsercache.enabled'] ) ? (bool) $config['browsercache.enabled'] : false;
+		if ( ! $browser_cache ) {
+			$issues[] = 'Browser cache not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Expires headers
+		$expires = isset( $config['browsercache.expires'] ) ? (bool) $config['browsercache.expires'] : false;
+		if ( ! $expires ) {
+			$issues[] = 'Expires headers not enabled';
+		}
+		
+		// Check 3: Cache control headers
+		$cache_control = isset( $config['browsercache.cache.control'] ) ? (bool) $config['browsercache.cache.control'] : false;
+		if ( ! $cache_control ) {
+			$issues[] = 'Cache-Control headers not enabled';
+		}
+		
+		// Check 4: ETag support
+		$etag = isset( $config['browsercache.etag'] ) ? (bool) $config['browsercache.etag'] : false;
+		if ( ! $etag ) {
+			$issues[] = 'ETag headers not enabled';
+		}
+		
+		// Check 5: Compression for static files
+		$gzip = isset( $config['browsercache.compression'] ) ? (bool) $config['browsercache.compression'] : false;
+		if ( ! $gzip ) {
+			$issues[] = 'Gzip compression not enabled for browser cache';
+		}
+		
+		// Check 6: Cache policy for HTML
+		$html_cache = isset( $config['browsercache.html.cache.control'] ) ? (bool) $config['browsercache.html.cache.control'] : false;
+		if ( ! $html_cache ) {
+			$issues[] = 'HTML cache policy not configured';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d W3TC browser cache issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/w3-total-cache-browser-cache',
 			);
 		}
