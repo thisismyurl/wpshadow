@@ -23,102 +23,148 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_link_check', 'read', 'nonce' );
 
-		$check_internal = self::get_post_param( 'check_internal', 'int', 1 );
-		$check_external = self::get_post_param( 'check_external', 'int', 1 );
-		$check_images   = self::get_post_param( 'check_images', 'int', 0 );
+		$url = self::get_post_param( 'url', 'url', '' );
+		if ( empty( $url ) ) {
+			$url = home_url();
+		}
 
-		$broken_links  = array();
-		$posts_checked = 0;
-		$links_checked = 0;
+		if ( ! wp_http_validate_url( $url ) ) {
+			self::send_error( __( 'Please enter a valid URL (http/https).', 'wpshadow' ) );
+		}
 
-		$args = array(
-			'post_type'      => array( 'post', 'page' ),
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
+		// Validate same-site
+		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$check_host = wp_parse_url( $url, PHP_URL_HOST );
+		
+		if ( $site_host !== $check_host ) {
+			self::send_error( __( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ) );
+		}
+
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout' => 10,
+				'headers' => array( 'User-Agent' => 'WPShadow-Link-Checker' ),
+			)
 		);
 
-		$posts         = get_posts( $args );
-		$posts_checked = count( $posts );
+		if ( is_wp_error( $response ) ) {
+			self::send_error( $response->get_error_message() );
+		}
 
-		foreach ( $posts as $post ) {
-			$content = $post->post_content;
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( $code < 200 || $code >= 300 ) {
+			self::send_error( sprintf( __( 'Request returned status %d.', 'wpshadow' ), (int) $code ) );
+		}
 
-			preg_match_all( '/<a\s+(?:[^>]*?\s+)?href=["\']([^"\']+)["\']/', $content, $matches );
-			if ( ! empty( $matches[1] ) ) {
-				foreach ( $matches[1] as $url ) {
-					++$links_checked;
+		$body = wp_remote_retrieve_body( $response );
+		if ( empty( $body ) ) {
+			self::send_error( __( 'Empty response received.', 'wpshadow' ) );
+		}
 
-					if ( strpos( $url, '#' ) === 0 ) {
-						continue;
-					}
+		$checks = self::check_links_in_html( $body, $url );
+		$summary = array(
+			'pass' => 0,
+			'warn' => 0,
+			'fail' => 0,
+		);
+		
+		foreach ( $checks as $check ) {
+			$status = $check['status'] ?? '';
+			if ( isset( $summary[ $status ] ) ) {
+				++$summary[ $status ];
+			}
+		}
 
-					$is_internal = strpos( $url, home_url() ) === 0 || strpos( $url, '/' ) === 0;
+		self::send_success(
+			array(
+				'url'     => $url,
+				'summary' => $summary,
+				'checks'  => $checks,
+			)
+		);
+	}
 
-					if ( $is_internal && ! $check_internal ) {
-						continue;
-					}
+	/**
+	 * Check all links in HTML content.
+	 *
+	 * @param string $html HTML content to check.
+	 * @param string $base_url Base URL of the page.
+	 * @return array Array of link checks.
+	 */
+	private static function check_links_in_html( $html, $base_url ): array {
+		$checks = array();
+		$links_found = 0;
+		$broken_links = 0;
 
-					if ( ! $is_internal && ! $check_external ) {
-						continue;
-					}
+		// Extract all links
+		preg_match_all( '/<a\s+(?:[^>]*?\s+)?href=["\']([^"\']+)["\']/', $html, $matches );
+		
+		if ( ! empty( $matches[1] ) ) {
+			$links_found = count( $matches[1] );
+			$tested_links = array(); // Avoid testing same link multiple times
+			
+			foreach ( $matches[1] as $link ) {
+				// Skip anchors and already tested links
+				if ( strpos( $link, '#' ) === 0 || isset( $tested_links[ $link ] ) ) {
+					continue;
+				}
+				
+				$tested_links[ $link ] = true;
+				
+				// Make relative URLs absolute
+				if ( strpos( $link, '/' ) === 0 ) {
+					$link = home_url( $link );
+				} elseif ( ! preg_match( '/^https?:\/\//', $link ) ) {
+					continue; // Skip non-HTTP links (mailto:, tel:, etc.)
+				}
 
-					if ( strpos( $url, '/' ) === 0 ) {
-						$url = home_url( $url );
-					}
+				// Quick HEAD request to check link
+				$link_response = wp_remote_head(
+					$link,
+					array(
+						'timeout'     => 5,
+						'redirection' => 2,
+					)
+				);
 
-					$response = wp_remote_head(
-						$url,
-						array(
-							'timeout'     => 5,
-							'redirection' => 2,
-						)
+				if ( is_wp_error( $link_response ) ) {
+					++$broken_links;
+					$checks[] = array(
+						'label'   => $link,
+						'status'  => 'fail',
+						'details' => sprintf( __( 'Connection error: %s', 'wpshadow' ), $link_response->get_error_message() ),
 					);
-
-					if ( is_wp_error( $response ) ) {
-						$broken_links[] = array(
-							'url'         => $url,
-							'post_title'  => $post->post_title,
-							'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-							'status_code' => 'ERROR',
+				} else {
+					$link_code = wp_remote_retrieve_response_code( $link_response );
+					if ( $link_code >= 400 ) {
+						++$broken_links;
+						$checks[] = array(
+							'label'   => $link,
+							'status'  => 'fail',
+							'details' => sprintf( __( 'HTTP %d error', 'wpshadow' ), $link_code ),
 						);
-					} else {
-						$code = wp_remote_retrieve_response_code( $response );
-						if ( $code >= 400 ) {
-							$broken_links[] = array(
-								'url'         => $url,
-								'post_title'  => $post->post_title,
-								'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-								'status_code' => $code,
-							);
-						}
 					}
 				}
 			}
+		}
 
-			if ( $check_images ) {
-				preg_match_all( '/<img\s+(?:[^>]*?\s+)?src=["\']([^"\']+)["\']/', $content, $img_matches );
-				if ( ! empty( $img_matches[1] ) ) {
-					foreach ( $img_matches[1] as $img_url ) {
-						++$links_checked;
+		// Add summary check at the beginning
+		array_unshift(
+			$checks,
+			array(
+				'label'   => __( 'Link Check Summary', 'wpshadow' ),
+				'status'  => $broken_links > 0 ? 'fail' : 'pass',
+				'details' => sprintf(
+					__( 'Checked %d links, found %d broken.', 'wpshadow' ),
+					$links_found,
+					$broken_links
+				),
+			)
+		);
 
-						$response = wp_remote_head(
-							$img_url,
-							array(
-								'timeout'     => 5,
-								'redirection' => 2,
-							)
-						);
-
-						if ( is_wp_error( $response ) ) {
-							$broken_links[] = array(
-								'url'         => $img_url,
-								'post_title'  => $post->post_title . ' (image)',
-								'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-								'status_code' => 'ERROR',
-							);
-						} else {
-							$code = wp_remote_retrieve_response_code( $response );
-							if ( $code >= 400 ) {
+		return $checks;
+	}							if ( $code >= 400 ) {
 								$broken_links[] = array(
 									'url'         => $img_url,
 									'post_title'  => $post->post_title . ' (image)',

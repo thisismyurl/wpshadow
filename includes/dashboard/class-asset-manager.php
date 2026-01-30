@@ -220,6 +220,141 @@ function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
 }
 
 /**
+ * Enqueue accessibility audit assets.
+ *
+ * @param string $hook Current admin hook.
+ * @return void
+ */
+function wpshadow_enqueue_a11y_audit_assets( $hook ) {
+	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
+		return;
+	}
+
+	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
+	if ( $tool !== 'a11y-audit' ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'wpshadow-a11y-audit',
+		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	wp_enqueue_script(
+		'wpshadow-a11y-audit',
+		WPSHADOW_URL . 'assets/js/a11y-audit.js',
+		array(),
+		WPSHADOW_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'wpshadow-a11y-audit',
+		'wpshadowA11yAudit',
+		array(
+			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+			'nonce'       => wp_create_nonce( 'wpshadow_a11y_scan' ),
+			'defaultUrl'  => home_url(),
+			'i18nError'   => __( 'Unable to complete the accessibility scan. Please try again.', 'wpshadow' ),
+			'i18nRun'     => __( 'Run Accessibility Scan', 'wpshadow' ),
+			'i18nRunning' => __( 'Scanning...', 'wpshadow' ),
+		)
+	);
+}
+
+/**
+ * Enqueue broken links checker assets.
+ *
+ * @param string $hook Current admin hook.
+ * @return void
+ */
+function wpshadow_enqueue_broken_links_assets( $hook ) {
+	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
+		return;
+	}
+
+	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
+	if ( $tool !== 'broken-links' ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'wpshadow-broken-links',
+		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	wp_enqueue_script(
+		'wpshadow-broken-links',
+		WPSHADOW_URL . 'assets/js/broken-links.js',
+		array(),
+		WPSHADOW_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'wpshadow-broken-links',
+		'wpshadowBrokenLinks',
+		array(
+			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+			'nonce'       => wp_create_nonce( 'wpshadow_link_check' ),
+			'defaultUrl'  => home_url(),
+			'i18nError'   => __( 'Unable to complete the link check. Please try again.', 'wpshadow' ),
+			'i18nRun'     => __( 'Check Links', 'wpshadow' ),
+			'i18nRunning' => __( 'Checking...', 'wpshadow' ),
+		)
+	);
+}
+
+/**
+ * Enqueue color contrast checker assets.
+ *
+ * @param string $hook Current admin hook.
+ * @return void
+ */
+function wpshadow_enqueue_color_contrast_checker_assets( $hook ) {
+	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
+		return;
+	}
+
+	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
+	if ( $tool !== 'color-contrast-checker' ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'wpshadow-color-contrast-checker',
+		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	wp_enqueue_script(
+		'wpshadow-color-contrast-checker',
+		WPSHADOW_URL . 'assets/js/color-contrast-checker.js',
+		array(),
+		WPSHADOW_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'wpshadow-color-contrast-checker',
+		'wpshadowColorContrast',
+		array(
+			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+			'nonce'       => wp_create_nonce( 'wpshadow_contrast_check' ),
+			'defaultUrl'  => home_url(),
+			'i18nError'   => __( 'Unable to complete the contrast check. Please try again.', 'wpshadow' ),
+			'i18nRun'     => __( 'Check Contrast', 'wpshadow' ),
+			'i18nRunning' => __( 'Checking...', 'wpshadow' ),
+		)
+	);
+}
+
+/**
  * Enqueue site health explanations CSS.
  *
  * @param string $hook Current admin hook.
@@ -514,6 +649,9 @@ function wpshadow_register_asset_hooks() {
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_workflow_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_color_contrast_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_mobile_friendliness_assets' );
+	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_a11y_audit_assets' );
+	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_broken_links_assets' );
+	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_color_contrast_checker_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_dark_mode_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_tooltip_assets' );

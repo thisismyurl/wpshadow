@@ -114,9 +114,11 @@ class AJAX_Router {
 		\WPShadow\Admin\Ajax\Revoke_Magic_Link_Handler::register();
 		\WPShadow\Admin\Ajax\Save_Cache_Options_Handler::register();
 		\WPShadow\Admin\Ajax\Mobile_Check_Handler::register();
+		\WPShadow\Admin\Ajax\A11y_Audit_Handler::register();
 		\WPShadow\Admin\Ajax\Save_Tip_Prefs_Handler::register();
 		\WPShadow\Admin\Ajax\Dismiss_Tip_Handler::register();
 		\WPShadow\Admin\Ajax\Check_Broken_Links_Handler::register();
+		\WPShadow\Admin\Ajax\Color_Contrast_Handler::register();
 		\WPShadow\Admin\Ajax\Generate_Password_Handler::register();
 		\WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
 		\WPShadow\Admin\Ajax\Error_Report_Handler::register();

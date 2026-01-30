@@ -89,6 +89,11 @@ $kanban_cards = array(
 		<p><strong><?php esc_html_e( 'Enable caching to speed up your site.', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Use the switch below to turn on the page cache and choose what gets cached.', 'wpshadow' ); ?></p>
 	</div>
 
+	<div class="notice notice-success" style="margin-top:10px;">
+		<p><strong><?php esc_html_e( 'Free Offsite Storage for Registered Users', 'wpshadow' ); ?></strong></p>
+		<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three backups and free restores whenever you need them.', 'wpshadow' ); ?></p>
+	</div>
+
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Cache Status', 'wpshadow' ); ?></h3>
 		<table class="widefat">
@@ -308,4 +313,28 @@ jQuery(document).ready(function($) {
 	});
 });
 </script>
+
+<?php
+// Load and render sales widget
+require_once WPSHADOW_PATH . 'includes/views/components/sales-widget.php';
+
+wpshadow_render_sales_widget(
+	array(
+		'title'       => __( 'Supercharge Your Backups with WPShadow Pro', 'wpshadow' ),
+		'description' => __( 'WPShadow Pro and the WPShadow Vault module make backups a breeze with automated schedules, cloud storage, and one-click restores.', 'wpshadow' ),
+		'features'    => array(
+			__( 'Automated backup scheduling', 'wpshadow' ),
+			__( 'Unlimited cloud storage with Vault', 'wpshadow' ),
+			__( 'One-click restore from any backup', 'wpshadow' ),
+			__( 'Off-site storage for disaster recovery', 'wpshadow' ),
+			__( 'Priority support and updates', 'wpshadow' ),
+		),
+		'cta_text'    => __( 'Learn More About WPShadow Pro & Vault', 'wpshadow' ),
+		'cta_url'     => 'https://wpshadow.com/pro',
+		'icon'        => 'dashicons-database-export',
+		'style'       => 'default',
+	)
+);
+?>
+
 <?php Tool_View_Base::render_footer(); ?>

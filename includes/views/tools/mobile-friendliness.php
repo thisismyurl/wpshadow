@@ -113,5 +113,27 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 	}
 </style>
 
+<?php
+// Load and render sales widget
+require_once WPSHADOW_PATH . 'includes/views/components/sales-widget.php';
+
+wpshadow_render_sales_widget(
+	array(
+		'title'       => __( 'Want to scan multiple URLs at once?', 'wpshadow' ),
+		'description' => __( 'WPShadow Pro lets you batch-scan entire sections of your site in one go.', 'wpshadow' ),
+		'features'    => array(
+			__( 'Scan multiple URLs per session', 'wpshadow' ),
+			__( 'Batch processing for large sites', 'wpshadow' ),
+			__( 'Export results to CSV', 'wpshadow' ),
+			__( 'Priority support and updates', 'wpshadow' ),
+		),
+		'cta_text'    => __( 'Learn More About WPShadow Pro', 'wpshadow' ),
+		'cta_url'     => 'https://wpshadow.com/pro',
+		'icon'        => 'dashicons-performance',
+		'style'       => 'default',
+	)
+);
+?>
+
 <?php Tool_View_Base::render_footer(); ?>
 

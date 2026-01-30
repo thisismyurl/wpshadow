@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "checkJs": false,
+    "maxNodeModuleJsDepth": 0
+  },
+  "exclude": [
+    "node_modules",
+    "vendor",
+    "build",
+    "test-results",
+    ".git",
+    "mlcampbell",
+    ".venv",
+    "dev-tools/wp-content"
+  ]
+}

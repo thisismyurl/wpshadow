@@ -22,71 +22,78 @@ Tool_View_Base::verify_access( 'read' );
 Tool_View_Base::enqueue_assets( 'broken-links' );
 
 // Render header
-Tool_View_Base::render_header( __( 'Broken Link Checker', 'wpshadow' ), __( 'Find and fix broken links across your site.', 'wpshadow' ) );
+Tool_View_Base::render_header( __( 'Broken Link Checker', 'wpshadow' ) );
 ?>
+	<p><?php esc_html_e( 'Check a specific page for broken links in content, images, and navigation.', 'wpshadow' ); ?></p>
 
-	<div class="wpshadow-link-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
-		<div class="wpshadow-tool-section wps-card wps-form-card">
-			<h2><?php esc_html_e( 'Scan Site for Broken Links', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Check all posts and pages for broken internal and external links.', 'wpshadow' ); ?></p>
-
-			<form id="wpshadow-link-checker-form" method="post">
-				<?php wp_nonce_field( 'wpshadow_link_check', 'wpshadow_link_nonce' ); ?>
-
+	<div class="wpshadow-link-grid">
+		<div class="wpshadow-link-panel wps-card wps-form-card" role="region" aria-labelledby="wpshadow-link-scan-heading">
+			<h3 id="wpshadow-link-scan-heading"><?php esc_html_e( 'Scan a URL', 'wpshadow' ); ?></h3>
+			<form id="wpshadow-link-form">
 				<div class="wps-settings-section">
 					<div class="wps-form-group">
-						<label class="wps-label"><?php esc_html_e( 'Scan Options', 'wpshadow' ); ?></label>
-						<div style="display: flex; flex-direction: column; gap: 8px;">
-							<label>
-								<input type="checkbox" name="check_internal" value="1" checked>
-								<?php esc_html_e( 'Check internal links', 'wpshadow' ); ?>
-							</label>
-							<label>
-								<input type="checkbox" name="check_external" value="1" checked>
-								<?php esc_html_e( 'Check external links', 'wpshadow' ); ?>
-							</label>
-							<label>
-								<input type="checkbox" name="check_images" value="1">
-								<?php esc_html_e( 'Check image URLs', 'wpshadow' ); ?>
-							</label>
+						<label class="wps-label" for="wpshadow-link-path">
+							<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
+						</label>
+						<div class="wps-flex-gap-10-items-center">
+							<span class="wps-p-8-rounded-3" id="link-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+							<input type="text" id="wpshadow-link-path" name="path" class="wps-input" value="/" placeholder="/about" required />
 						</div>
+						<span class="wps-help-text">
+							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check all links.', 'wpshadow' ); ?>
+						</span>
 					</div>
 				</div>
-
+			
 				<p class="submit">
-					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-link-scan">
-						<span class="dashicons dashicons-update"></span>
-						<?php esc_html_e( 'Start Link Scan', 'wpshadow' ); ?>
-					</button>
-				</p>
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="wpshadow-link-submit-btn" aria-label="<?php esc_attr_e( 'Run a broken link check for the provided page path', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-update"></span>
+					<?php esc_html_e( 'Check Links', 'wpshadow' ); ?>
+				</button>
+			</p>
 
-				<div id="link-scan-error" class="wps-notice wps-notice-error wps-none" role="alert"></div>
-
-				<!-- Progress Bar Container -->
-				<div id="link-scan-progress" class="wps-none" style="margin-top: 20px;">
-					<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
-						<div id="link-scan-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
-							<span id="link-scan-progress-text">0%</span>
-						</div>
+			<!-- Progress Bar Container -->
+			<div id="wpshadow-link-progress" class="wps-none" style="margin-top: 20px;">
+				<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+					<div id="wpshadow-link-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
+						<span id="wpshadow-link-progress-text">0%</span>
 					</div>
-					<div id="link-scan-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
 				</div>
-			</form>
+				<div id="wpshadow-link-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
+			</div>
+
+			<div id="wpshadow-link-error" class="notice notice-error wps-none" role="alert" aria-live="assertive"></div>
 		</div>
 
-		<div class="wpshadow-tool-section wps-card">
-			<h2><?php esc_html_e( 'What We Check', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Broken links negatively impact:', 'wpshadow' ); ?></p>
-			<ul>
-				<li><?php esc_html_e( 'User experience - visitors see error pages', 'wpshadow' ); ?></li>
-				<li><?php esc_html_e( 'SEO - search engines may penalize sites with many broken links', 'wpshadow' ); ?></li>
-				<li><?php esc_html_e( 'Credibility - broken links make your site look unmaintained', 'wpshadow' ); ?></li>
+		<div class="wpshadow-link-panel wps-card" role="region" aria-labelledby="wpshadow-link-checklist-heading">
+			<h3 id="wpshadow-link-checklist-heading"><?php esc_html_e( 'What we look for', 'wpshadow' ); ?></h3>
+			<ul style="list-style: disc; margin-left: 18px;">
+				<li><?php esc_html_e( 'Broken internal links (404 errors)', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Broken external links (timeouts, errors)', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Missing images and media', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Redirects and moved content', 'wpshadow' ); ?></li>
 			</ul>
+			<p class="description"><?php esc_html_e( 'Broken links hurt both user experience and SEO rankings. Keep your content clean!', 'wpshadow' ); ?></p>
 		</div>
 	</div>
 
-	<!-- Full-width Results Section -->
-	<div id="link-scan-results" class="wpshadow-tool-section wps-card wps-none" style="width: 100%;"></div>
+	<!-- Results Section (Full Width) -->
+	<div class="wpshadow-link-results wps-none wps-card" id="wpshadow-link-results" role="region" aria-live="polite" aria-labelledby="wpshadow-link-results-heading" style="margin-top: 20px;">
+		<h3 id="wpshadow-link-results-heading"><?php esc_html_e( 'Scan Results', 'wpshadow' ); ?></h3>
+		<p><strong><?php esc_html_e( 'Checked URL:', 'wpshadow' ); ?></strong> <span id="wpshadow-link-last-url"></span></p>
+		<div class="wpshadow-link-summary" style="display: flex; gap: 15px; margin: 20px 0;">
+			<span class="wpshadow-link-pill is-pass" data-link-summary="pass" style="padding: 8px 16px; border-radius: 4px; background: #f0f6f2; color: #28a745; font-weight: 600;">
+				<?php esc_html_e( 'Working', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+			<span class="wpshadow-link-pill is-warn" data-link-summary="warn" style="padding: 8px 16px; border-radius: 4px; background: #fffbf0; color: #d98300; font-weight: 600;">
+				<?php esc_html_e( 'Warnings', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+			<span class="wpshadow-link-pill is-fail" data-link-summary="fail" style="padding: 8px 16px; border-radius: 4px; background: #fdf7f7; color: #dc3545; font-weight: 600;">
+				<?php esc_html_e( 'Broken', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+		</div>
+		<div id="wpshadow-link-checks"></div>
+	</div>
 </div>
 
 <style>
@@ -98,123 +105,32 @@ Tool_View_Base::render_header( __( 'Broken Link Checker', 'wpshadow' ), __( 'Fin
 		animation: wps-spin 1s linear infinite;
 		display: inline-block;
 	}
+	.wpshadow-link-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 20px;
+		margin-bottom: 20px;
+	}
 </style>
+<?php
+// Load and render sales widget
+require_once WPSHADOW_PATH . 'includes/views/components/sales-widget.php';
 
-<script>
-	jQuery(document).ready(function($) {
-		$('#wpshadow-link-checker-form').on('submit', function(e) {
-			e.preventDefault();
-			var $btn = $('#run-link-scan');
-			var $results = $('#link-scan-results');
-			var $progress = $('#link-scan-progress');
-			var $progressBar = $('#link-scan-progress-bar');
-			var $progressText = $('#link-scan-progress-text');
-			var $progressStatus = $('#link-scan-progress-status');
-
-			var formData = {
-				action: 'wpshadow_check_broken_links',
-				nonce: '<?php echo wp_create_nonce( 'wpshadow_link_check' ); ?>',
-				check_internal: $('input[name="check_internal"]').is(':checked') ? 1 : 0,
-				check_external: $('input[name="check_external"]').is(':checked') ? 1 : 0,
-				check_images: $('input[name="check_images"]').is(':checked') ? 1 : 0
-			};
-
-			$btn.prop('disabled', true).find('.dashicons').addClass('wps-spin');
-			$btn.find('span:not(.dashicons)').text('<?php esc_js( esc_html_e( 'Scanning...', 'wpshadow' ) ); ?>');
-			$results.addClass('wps-none');
-			$progress.removeClass('wps-none').show();
-
-			// Simulate progress stages
-			var scanStages = [
-				{ percent: 10, text: '<?php esc_js( esc_html_e( 'Gathering pages and posts...', 'wpshadow' ) ); ?>' },
-				{ percent: 30, text: '<?php esc_js( esc_html_e( 'Extracting links...', 'wpshadow' ) ); ?>' },
-				{ percent: 50, text: '<?php esc_js( esc_html_e( 'Checking internal links...', 'wpshadow' ) ); ?>' },
-				{ percent: 70, text: '<?php esc_js( esc_html_e( 'Checking external links...', 'wpshadow' ) ); ?>' },
-				{ percent: 85, text: '<?php esc_js( esc_html_e( 'Verifying image URLs...', 'wpshadow' ) ); ?>' },
-				{ percent: 95, text: '<?php esc_js( esc_html_e( 'Compiling report...', 'wpshadow' ) ); ?>' }
-			];
-
-			var currentStage = 0;
-			var progressInterval = setInterval(function() {
-				if (currentStage < scanStages.length) {
-					var stage = scanStages[currentStage];
-					$progressBar.css('width', stage.percent + '%');
-					$progressText.text(stage.percent + '%');
-					$progressStatus.text(stage.text);
-					currentStage++;
-				}
-			}, 800);
-
-			$.post(ajaxurl, formData, function(response) {
-				// Clear progress interval
-				clearInterval(progressInterval);
-
-				// Complete the progress bar
-				$progressBar.css('width', '100%');
-				$progressText.text('100%');
-				$progressStatus.text('<?php esc_js( esc_html_e( 'Scan complete!', 'wpshadow' ) ); ?>');
-
-				// Hide progress after brief delay and show results
-				setTimeout(function() {
-					$progress.fadeOut(300, function() {
-						$results.removeClass('wps-none').show();
-					});
-				}, 500);
-
-				if (response.success) {
-					var data = response.data;
-					var html = '<h3><?php esc_js( esc_html_e( 'Scan Complete', 'wpshadow' ) ); ?></h3>';
-
-					if (data.broken_links.length === 0) {
-						html += '<div style="padding: 20px; background: #f0f6f2; border-left: 4px solid #28a745; border-radius: 4px; margin: 20px 0;">' +
-							'<strong><?php esc_js( esc_html_e( 'Great! No broken links found.', 'wpshadow' ) ); ?></strong>' +
-							'</div>';
-					} else {
-						html += '<div style="padding: 20px; background: #fdf7f7; border-left: 4px solid #dc3545; border-radius: 4px; margin: 20px 0;">' +
-							'<strong><?php esc_js( esc_html_e( 'Found', 'wpshadow' ) ); ?> ' + data.broken_links.length + ' <?php esc_js( esc_html_e( 'broken link(s)', 'wpshadow' ) ); ?></strong>' +
-							'</div>';
-
-						html += '<table class="wp-list-table widefat striped" style="margin-top: 15px;">' +
-							'<thead><tr>' +
-							'<th><?php esc_js( esc_html_e( 'URL', 'wpshadow' ) ); ?></th>' +
-							'<th><?php esc_js( esc_html_e( 'Found In', 'wpshadow' ) ); ?></th>' +
-							'<th><?php esc_js( esc_html_e( 'Status Code', 'wpshadow' ) ); ?></th>' +
-							'</tr></thead><tbody>';
-
-						$.each(data.broken_links, function(i, link) {
-							html += '<tr>' +
-								'<td><code style="word-break: break-all; font-size: 12px;">' + link.url + '</code></td>' +
-								'<td><a href="' + link.edit_url + '" target="_blank">' + link.post_title + '</a></td>' +
-								'<td><span style="padding: 4px 8px; background: #fdf7f7; border-radius: 3px;">' + link.status_code + '</span></td>' +
-								'</tr>';
-						});
-
-						html += '</tbody></table>';
-					}
-
-					html += '<p style="margin-top: 15px;"><strong><?php esc_js( esc_html_e( 'Summary', 'wpshadow' ) ); ?>:</strong><br>' +
-						'<?php esc_js( esc_html_e( 'Posts checked:', 'wpshadow' ) ); ?> ' + data.posts_checked + '<br>' +
-						'<?php esc_js( esc_html_e( 'Links checked:', 'wpshadow' ) ); ?> ' + data.links_checked + '</p>';
-
-					$results.html(html);
-				} else {
-					$results.html('<div style="padding: 15px; background: #fdf7f7; border-left: 4px solid #dc3545; border-radius: 4px;">' +
-						'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + response.data + '</div>');
-				}
-
-				$btn.prop('disabled', false).find('.dashicons').removeClass('wps-spin');
-				$btn.find('span:not(.dashicons)').text('<?php esc_js( esc_html_e( 'Start Link Scan', 'wpshadow' ) ); ?>');
-			}).fail(function() {
-				clearInterval(progressInterval);
-				$progress.hide();
-				$results.html('<div style="padding: 15px; background: #fdf7f7; border-left: 4px solid #dc3545; border-radius: 4px;">' +
-					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> <?php esc_js( esc_html_e( 'Unable to connect to server. Please try again.', 'wpshadow' ) ); ?></div>').removeClass('wps-none').show();
-				$btn.prop('disabled', false).find('.dashicons').removeClass('wps-spin');
-				$btn.find('span:not(.dashicons)').text('<?php esc_js( esc_html_e( 'Start Link Scan', 'wpshadow' ) ); ?>');
-			});
-		});
-	});
-</script>
-
+wpshadow_render_sales_widget(
+	array(
+		'title'       => __( 'Want to scan multiple URLs at once?', 'wpshadow' ),
+		'description' => __( 'WPShadow Pro lets you batch-scan entire sections of your site in one go.', 'wpshadow' ),
+		'features'    => array(
+			__( 'Scan multiple URLs per session', 'wpshadow' ),
+			__( 'Batch processing for large sites', 'wpshadow' ),
+			__( 'Export results to CSV', 'wpshadow' ),
+			__( 'Priority support and updates', 'wpshadow' ),
+		),
+		'cta_text'    => __( 'Learn More About WPShadow Pro', 'wpshadow' ),
+		'cta_url'     => 'https://wpshadow.com/pro',
+		'icon'        => 'dashicons-admin-links',
+		'style'       => 'default',
+	)
+);
+?>
 <?php Tool_View_Base::render_footer(); ?>
-

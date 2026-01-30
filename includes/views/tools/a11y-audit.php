@@ -22,68 +22,79 @@ Tool_View_Base::verify_access( 'read' );
 Tool_View_Base::enqueue_assets( 'a11y-audit' );
 
 // Render header
-Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ) );
+Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ) );
 ?>
+	<p><?php esc_html_e( 'Scan a page for accessibility issues and WCAG compliance.', 'wpshadow' ); ?></p>
 
-	<div class="wpshadow-a11y-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
-		<div class="wpshadow-tool-section wps-card wps-form-card" role="region" aria-labelledby="wpshadow-a11y-quick-heading">
-			<h2 id="wpshadow-a11y-quick-heading"><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Enter a page URL to check for common accessibility issues:', 'wpshadow' ); ?></p>
-
-			<form id="wpshadow-a11y-scan-form" method="post">
-				<?php wp_nonce_field( 'wpshadow_a11y_scan', 'wpshadow_a11y_nonce' ); ?>
-
+	<div class="wpshadow-a11y-grid">
+		<div class="wpshadow-a11y-panel wps-card wps-form-card" role="region" aria-labelledby="wpshadow-a11y-scan-heading">
+			<h3 id="wpshadow-a11y-scan-heading"><?php esc_html_e( 'Scan a URL', 'wpshadow' ); ?></h3>
+			<form id="wpshadow-a11y-form">
 				<div class="wps-settings-section">
 					<div class="wps-form-group">
-						<label class="wps-label" for="page_path">
+						<label class="wps-label" for="wpshadow-a11y-path">
 							<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
 						</label>
 						<div class="wps-flex-gap-10-items-center">
 							<span class="wps-p-8-rounded-3" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-							<input type="text" name="page_path" id="page_path" class="wps-input"
-								value="/" placeholder="/about" required>
+							<input type="text" id="wpshadow-a11y-path" name="path" class="wps-input" value="/" placeholder="/about" required />
 						</div>
 						<span class="wps-help-text">
-							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean.', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check accessibility compliance.', 'wpshadow' ); ?>
 						</span>
 					</div>
 				</div>
-
+			
 				<p class="submit">
-					<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="run-scan" aria-label="<?php esc_attr_e( 'Run an accessibility scan for the provided page path', 'wpshadow' ); ?>">
-						<span class="dashicons dashicons-update"></span>
-						<?php esc_html_e( 'Run Accessibility Scan', 'wpshadow' ); ?>
-					</button>
-				</p>
+				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="wpshadow-a11y-submit-btn" aria-label="<?php esc_attr_e( 'Run an accessibility scan for the provided page path', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-update"></span>
+					<?php esc_html_e( 'Run Accessibility Scan', 'wpshadow' ); ?>
+				</button>
+			</p>
 
-				<div id="scan-error" class="wps-notice wps-notice-error wps-none" role="alert"></div>
-
-				<!-- Progress Bar Container -->
-				<div id="scan-progress" class="wps-none" style="margin-top: 20px;">
-					<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
-						<div id="scan-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
-							<span id="scan-progress-text">0%</span>
-						</div>
+			<!-- Progress Bar Container -->
+			<div id="wpshadow-a11y-progress" class="wps-none" style="margin-top: 20px;">
+				<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+					<div id="wpshadow-a11y-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
+						<span id="wpshadow-a11y-progress-text">0%</span>
 					</div>
-					<div id="scan-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
 				</div>
-			</form>
+				<div id="wpshadow-a11y-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
+			</div>
+
+			<div id="wpshadow-a11y-error" class="notice notice-error wps-none" role="alert" aria-live="assertive"></div>
 		</div>
 
-		<div class="wpshadow-tool-section wps-card" role="region" aria-labelledby="wpshadow-a11y-common-heading">
-			<h2 id="wpshadow-a11y-common-heading"><?php esc_html_e( 'What We Check', 'wpshadow' ); ?></h2>
-			<ul>
-				<li><strong><?php esc_html_e( 'Alt Text:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'All images must have descriptive alt attributes for screen readers.', 'wpshadow' ); ?></li>
-				<li><strong><?php esc_html_e( 'Heading Structure:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Headings should follow proper hierarchy (H1, H2, H3, etc).', 'wpshadow' ); ?></li>
-				<li><strong><?php esc_html_e( 'ARIA Labels:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Interactive elements need proper ARIA labels for screen readers.', 'wpshadow' ); ?></li>
-				<li><strong><?php esc_html_e( 'Color Contrast:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Text must have sufficient contrast against its background.', 'wpshadow' ); ?></li>
-				<li><strong><?php esc_html_e( 'Keyboard Navigation:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'All interactive elements must be usable with keyboard only.', 'wpshadow' ); ?></li>
+		<div class="wpshadow-a11y-panel wps-card" role="region" aria-labelledby="wpshadow-a11y-checklist-heading">
+			<h3 id="wpshadow-a11y-checklist-heading"><?php esc_html_e( 'What we look for', 'wpshadow' ); ?></h3>
+			<ul style="list-style: disc; margin-left: 18px;">
+				<li><?php esc_html_e( 'Alt text on all images for screen readers', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Proper heading hierarchy (H1, H2, H3)', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'ARIA labels on interactive elements', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Sufficient color contrast ratios', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Keyboard navigation support', 'wpshadow' ); ?></li>
 			</ul>
+			<p class="description"><?php esc_html_e( 'These checks help ensure your site is usable by everyone, including people using assistive technologies.', 'wpshadow' ); ?></p>
 		</div>
 	</div>
 
-	<!-- Full-width Results Section -->
-	<div id="scan-results" class="wpshadow-tool-section wps-card wps-none" role="status" aria-live="polite" aria-label="<?php esc_attr_e( 'Accessibility scan results', 'wpshadow' ); ?>" style="width: 100%;"></div>
+	<!-- Results Section (Full Width) -->
+	<div class="wpshadow-a11y-results wps-none wps-card" id="wpshadow-a11y-results" role="region" aria-live="polite" aria-labelledby="wpshadow-a11y-results-heading" style="margin-top: 20px;">
+		<h3 id="wpshadow-a11y-results-heading"><?php esc_html_e( 'Scan Results', 'wpshadow' ); ?></h3>
+		<p><strong><?php esc_html_e( 'Checked URL:', 'wpshadow' ); ?></strong> <span id="wpshadow-a11y-last-url"></span></p>
+		<div class="wpshadow-a11y-summary" style="display: flex; gap: 15px; margin: 20px 0;">
+			<span class="wpshadow-a11y-pill is-pass" data-a11y-summary="pass" style="padding: 8px 16px; border-radius: 4px; background: #f0f6f2; color: #28a745; font-weight: 600;">
+				<?php esc_html_e( 'Passes', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+			<span class="wpshadow-a11y-pill is-warn" data-a11y-summary="warn" style="padding: 8px 16px; border-radius: 4px; background: #fffbf0; color: #d98300; font-weight: 600;">
+				<?php esc_html_e( 'Warnings', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+			<span class="wpshadow-a11y-pill is-fail" data-a11y-summary="fail" style="padding: 8px 16px; border-radius: 4px; background: #fdf7f7; color: #dc3545; font-weight: 600;">
+				<?php esc_html_e( 'Fails', 'wpshadow' ); ?>: <strong>0</strong>
+			</span>
+		</div>
+		<div id="wpshadow-a11y-checks"></div>
+	</div>
 </div>
 
 <style>
@@ -95,159 +106,34 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ), __( 'Sca
 		animation: wps-spin 1s linear infinite;
 		display: inline-block;
 	}
+	.wpshadow-a11y-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 20px;
+		margin-bottom: 20px;
+	}
 </style>
 
-<script>
-	jQuery(document).ready(function($) {
-		var siteUrl = '<?php echo esc_js( untrailingslashit( home_url() ) ); ?>';
-		var siteUrlObj = new URL(siteUrl);
-		var siteHost = siteUrlObj.hostname;
+<?php
+// Load and render sales widget
+require_once WPSHADOW_PATH . 'includes/views/components/sales-widget.php';
 
-		// Auto-clean URLs pasted into path field
-		$('#page_path').on('blur', function() {
-			var value = $(this).val().trim();
-
-			// If it looks like a full URL, extract the path
-			if (value.match(/^https?:\/\//i)) {
-				try {
-					var urlObj = new URL(value);
-
-					// Validate same-site
-					if (urlObj.hostname !== siteHost) {
-						$(this).val('/');
-						WPShadowModal.alert({title: '<?php esc_attr_e( 'Invalid URL', 'wpshadow' ); ?>', message: '<?php esc_attr_e( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ); ?>', type: 'warning'});
-						return;
-					}
-
-					// Extract path + query
-					var path = urlObj.pathname + urlObj.search;
-					$(this).val(path || '/');
-				} catch (e) {
-					$(this).val('/');
-					WPShadowModal.alert({title: '<?php esc_attr_e( 'Invalid Format', 'wpshadow' ); ?>', message: '<?php esc_attr_e( 'Invalid URL format. Please enter a valid path or URL.', 'wpshadow' ); ?>', type: 'warning'});
-				}
-			} else if (!value.startsWith('/')) {
-				// Ensure path starts with /
-				$(this).val('/' + value);
-			}
-		});
-
-		$('#wpshadow-a11y-scan-form').on('submit', function(e) {
-			e.preventDefault();
-			var $btn = $('#run-scan');
-			var $results = $('#scan-results');
-			var $progress = $('#scan-progress');
-			var $progressBar = $('#scan-progress-bar');
-			var $progressText = $('#scan-progress-text');
-			var $progressStatus = $('#scan-progress-status');
-
-			var path = $('input[name="page_path"]').val().trim();
-			if (!path.startsWith('/')) {
-				path = '/' + path;
-			}
-
-			// Reconstruct full URL
-			var fullUrl = siteUrl + path;
-
-			var formData = {
-				action: 'wpshadow_a11y_scan',
-				nonce: '<?php echo wp_create_nonce( 'wpshadow_a11y_scan' ); ?>',
-				page_url: fullUrl
-			};
-
-			// Reset and show progress
-			$btn.prop('disabled', true).find('.dashicons').addClass('wps-spin');
-			$btn.find('span:not(.dashicons)').text('<?php esc_js( esc_html_e( 'Scanning...', 'wpshadow' ) ); ?>');
-			$results.addClass('wps-none');
-			$progress.removeClass('wps-none').show();
-			
-			// Simulate progress stages
-			var scanStages = [
-				{ percent: 10, text: '<?php esc_js( esc_html_e( 'Fetching page content...', 'wpshadow' ) ); ?>' },
-				{ percent: 30, text: '<?php esc_js( esc_html_e( 'Analyzing HTML structure...', 'wpshadow' ) ); ?>' },
-				{ percent: 50, text: '<?php esc_js( esc_html_e( 'Checking ARIA labels...', 'wpshadow' ) ); ?>' },
-				{ percent: 70, text: '<?php esc_js( esc_html_e( 'Validating alt attributes...', 'wpshadow' ) ); ?>' },
-				{ percent: 85, text: '<?php esc_js( esc_html_e( 'Testing keyboard navigation...', 'wpshadow' ) ); ?>' },
-				{ percent: 95, text: '<?php esc_js( esc_html_e( 'Finalizing report...', 'wpshadow' ) ); ?>' }
-			];
-			
-			var currentStage = 0;
-			var progressInterval = setInterval(function() {
-				if (currentStage < scanStages.length) {
-					var stage = scanStages[currentStage];
-					$progressBar.css('width', stage.percent + '%');
-					$progressText.text(stage.percent + '%');
-					$progressStatus.text(stage.text);
-					currentStage++;
-				}
-			}, 800); // Update every 800ms
-
-			$.post(ajaxurl, formData, function(response) {
-				// Clear progress interval
-				clearInterval(progressInterval);
-				
-				// Complete the progress bar
-				$progressBar.css('width', '100%');
-				$progressText.text('100%');
-				$progressStatus.text('<?php esc_js( esc_html_e( 'Scan complete!', 'wpshadow' ) ); ?>');
-				
-				// Hide progress after brief delay and show results
-				setTimeout(function() {
-					$progress.fadeOut(300, function() {
-						$results.removeClass('wps-none').show();
-					});
-				}, 500);
-				
-				if (response.success) {
-					var data = response.data;
-					var html = '<h3><?php esc_js( esc_html_e( 'Scan Results', 'wpshadow' ) ); ?></h3>';
-
-					// Summary with inline styles matching Mobile Friendliness
-					var summary = data.summary || {};
-					html += '<div style="display: flex; gap: 15px; margin: 20px 0;">' +
-						'<div style="flex: 1; padding: 15px; background: #f0f6f2; border-left: 4px solid #28a745; border-radius: 4px;">' +
-						'<strong><?php esc_js( esc_html_e( 'Pass', 'wpshadow' ) ); ?>:</strong> ' + (summary.pass || 0) +
-						'</div>' +
-						'<div style="flex: 1; padding: 15px; background: #fffbf0; border-left: 4px solid #ffc107; border-radius: 4px;">' +
-						'<strong><?php esc_js( esc_html_e( 'Warnings', 'wpshadow' ) ); ?>:</strong> ' + (summary.warn || 0) +
-						'</div>' +
-						'<div style="flex: 1; padding: 15px; background: #fdf7f7; border-left: 4px solid #dc3545; border-radius: 4px;">' +
-						'<strong><?php esc_js( esc_html_e( 'Issues', 'wpshadow' ) ); ?>:</strong> ' + (summary.fail || 0) +
-						'</div>' +
-						'</div>';
-
-					// Issues
-					if (data.issues && data.issues.length > 0) {
-						html += '<h4><?php esc_js( esc_html_e( 'Detailed Findings', 'wpshadow' ) ); ?></h4>';
-						$.each(data.issues, function(i, issue) {
-							var statusColor = issue.status === 'pass' ? '#28a745' : (issue.status === 'warn' ? '#ffc107' : '#dc3545');
-							var statusBg = issue.status === 'pass' ? '#f0f6f2' : (issue.status === 'warn' ? '#fffbf0' : '#fdf7f7');
-							html += '<div style="border-left: 4px solid ' + statusColor + '; padding: 15px; background: ' + statusBg + '; margin-bottom: 15px; border-radius: 3px;">' +
-								'<h5 style="margin-top: 0;">' + issue.label + '</h5>' +
-								'<p class="wps-m-0">' + issue.details + '</p>' +
-								'</div>';
-						});
-					}
-
-					$results.html(html);
-				} else {
-					$results.html('<div class="wps-p-15">' +
-						'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + (response.data && response.data.message ? response.data.message : '<?php esc_js( esc_html_e( 'Unable to scan page.', 'wpshadow' ) ); ?>') + '</div>');
-				}
-
-				$btn.prop('disabled', false).find('.dashicons').removeClass('wps-spin');
-				$btn.find('span:not(.dashicons)').text('<?php esc_js( esc_html_e( 'Run Accessibility Scan', 'wpshadow' ) ); ?>');
-			}).fail(function() {
-				clearInterval(progressInterval);
-				$progress.hide();
-				$results.html('<div class="wps-p-15">' +
-					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> <?php esc_js( esc_html_e( 'Unable to connect to server. Please try again.', 'wpshadow' ) ); ?></div>').removeClass('wps-none').show();
-				$btn.prop('disabled', false).find('.dashicons').removeClass('wps-spin');
-				$btn.find('span:not(.dashicons)').text('<?php esc_js( esc_html_e( 'Run Accessibility Scan', 'wpshadow' ) ); ?>');
-			});
-		});
-	});
-</script>
+wpshadow_render_sales_widget(
+	array(
+		'title'       => __( 'Want to scan multiple URLs at once?', 'wpshadow' ),
+		'description' => __( 'WPShadow Pro lets you batch-scan entire sections of your site in one go.', 'wpshadow' ),
+		'features'    => array(
+			__( 'Scan multiple URLs per session', 'wpshadow' ),
+			__( 'Batch processing for large sites', 'wpshadow' ),
+			__( 'Export results to CSV', 'wpshadow' ),
+			__( 'Priority support and updates', 'wpshadow' ),
+		),
+		'cta_text'    => __( 'Learn More About WPShadow Pro', 'wpshadow' ),
+		'cta_url'     => 'https://wpshadow.com/pro',
+		'icon'        => 'dashicons-universal-access',
+		'style'       => 'default',
+	)
+);
+?>
 
 <?php Tool_View_Base::render_footer(); ?>
-
