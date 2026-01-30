@@ -59,6 +59,9 @@ class Plugin_Bootstrap {
 		// 9. Load privacy system
 		self::load_privacy_system();
 
+		// 10. Load reporting and intelligence features
+		self::load_reporting_intelligence();
+
 		// 10. Load exit followup system
 		self::load_exit_followup_system();
 
@@ -277,6 +280,56 @@ class Plugin_Bootstrap {
 
 		if ( file_exists( $privacy_path . 'class-first-run-consent.php' ) ) {
 			require_once $privacy_path . 'class-first-run-consent.php';
+		}
+	}
+
+	/**
+	 * Load reporting and intelligence features
+	 *
+	 * Loads advanced reporting capabilities including:
+	 * - Predictive Analytics & Forecasting
+	 * - Competitive Benchmarking
+	 * - Real-Time Monitoring & Alerting
+	 * - Visual Health Journey
+	 * - Executive ROI Dashboard
+	 * - Team Collaboration
+	 *
+	 * @since  1.2601.2200
+	 * @return void
+	 */
+	private static function load_reporting_intelligence() {
+		$reporting_path = WPSHADOW_PATH . 'includes/reporting/';
+		$widgets_path   = WPSHADOW_PATH . 'includes/dashboard/widgets/';
+
+		// Load reporting intelligence classes
+		$reporting_classes = array(
+			'class-predictive-analytics.php',
+			'class-competitive-benchmarking.php',
+			'class-realtime-monitoring.php',
+			'class-visual-health-journey.php',
+		);
+
+		foreach ( $reporting_classes as $file ) {
+			if ( file_exists( $reporting_path . $file ) ) {
+				require_once $reporting_path . $file;
+			}
+		}
+
+		// Load dashboard widgets
+		$widget_classes = array(
+			'class-executive-roi-widget.php',
+			'class-team-collaboration-widget.php',
+		);
+
+		foreach ( $widget_classes as $file ) {
+			if ( file_exists( $widgets_path . $file ) ) {
+				require_once $widgets_path . $file;
+			}
+		}
+
+		// Initialize real-time monitoring if enabled
+		if ( class_exists( '\\WPShadow\\Reporting\\Realtime_Monitoring' ) ) {
+			\WPShadow\Reporting\Realtime_Monitoring::init();
 		}
 	}
 

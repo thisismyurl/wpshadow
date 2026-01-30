@@ -32,33 +32,74 @@ class Diagnostic_KinstaCdnIntegration extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Kinsta environment
+		if ( ! defined( 'KINSTA_CDN_USEAST1' ) && ! isset( $_SERVER['KINSTA_CACHE_ZONE'] ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/kinsta-cdn-integration',
-			);
+		// Check 1: CDN enabled
+		$cdn_enabled = get_option( 'kinsta_cdn_enabled', false );
+		if ( ! $cdn_enabled ) {
+			$issues[] = __( 'Kinsta CDN not enabled (missing performance benefit)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: CDN cache zone configured
+		$cache_zone = isset( $_SERVER['KINSTA_CACHE_ZONE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['KINSTA_CACHE_ZONE'] ) ) : '';
+		if ( empty( $cache_zone ) ) {
+			$issues[] = __( 'Kinsta cache zone not detected', 'wpshadow' );
+		}
+		
+		// Check 3: CDN URL rewriting
+		$cdn_url = get_option( 'kinsta_cdn_url', '' );
+		if ( empty( $cdn_url ) && $cdn_enabled ) {
+			$issues[] = __( 'CDN enabled but URL rewriting not configured', 'wpshadow' );
+		}
+		
+		// Check 4: SSL compatibility
+		if ( is_ssl() && ! empty( $cdn_url ) && strpos( $cdn_url, 'https://' ) !== 0 ) {
+			$issues[] = __( 'CDN URL not HTTPS (mixed content warnings)', 'wpshadow' );
+		}
+		
+		// Check 5: Cache purge on update
+		$auto_purge = get_option( 'kinsta_cdn_auto_purge', false );
+		if ( ! $auto_purge ) {
+			$issues[] = __( 'Automatic CDN cache purge not enabled', 'wpshadow' );
+		}
+		
+		// Check 6: Subdomain CDN mapping
+		if ( is_multisite() ) {
+			$wildcard_cdn = get_site_option( 'kinsta_cdn_wildcard', false );
+			if ( ! $wildcard_cdn ) {
+				$issues[] = __( 'Multisite without wildcard CDN configuration', 'wpshadow' );
+			}
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of configuration issues */
+				__( 'Kinsta CDN integration has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/kinsta-cdn-integration',
+		);
 	}
 }

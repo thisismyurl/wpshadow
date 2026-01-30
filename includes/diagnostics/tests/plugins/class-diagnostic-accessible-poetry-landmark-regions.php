@@ -32,33 +32,73 @@ class Diagnostic_AccessiblePoetryLandmarkRegions extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Accessible Poetry plugin
+		if ( ! function_exists( 'accessible_poetry_init' ) && ! defined( 'ACCESSIBLE_POETRY_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/accessible-poetry-landmark-regions',
-			);
+		// Check 1: ARIA landmark configuration
+		$landmarks_enabled = get_option( 'accessible_poetry_landmarks', true );
+		if ( ! $landmarks_enabled ) {
+			$issues[] = __( 'ARIA landmarks not enabled', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Main content landmark
+		$main_landmark = get_option( 'accessible_poetry_main_landmark', '' );
+		if ( empty( $main_landmark ) ) {
+			$issues[] = __( 'Main content landmark not configured', 'wpshadow' );
+		}
+		
+		// Check 3: Navigation landmark
+		$nav_landmark = get_option( 'accessible_poetry_nav_landmark', true );
+		if ( ! $nav_landmark ) {
+			$issues[] = __( 'Navigation landmarks disabled', 'wpshadow' );
+		}
+		
+		// Check 4: Heading hierarchy validation
+		$validate_headings = get_option( 'accessible_poetry_validate_headings', false );
+		if ( ! $validate_headings ) {
+			$issues[] = __( 'Heading hierarchy validation not enabled', 'wpshadow' );
+		}
+		
+		// Check 5: Skip to content links
+		$skip_links = get_option( 'accessible_poetry_skip_links', true );
+		if ( ! $skip_links ) {
+			$issues[] = __( 'Skip to content links disabled', 'wpshadow' );
+		}
+		
+		// Check 6: Complementary regions
+		$complementary = get_option( 'accessible_poetry_complementary_regions', false );
+		if ( ! $complementary ) {
+			$issues[] = __( 'Complementary landmark regions not configured', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of accessibility issues */
+				__( 'Accessible Poetry has %d landmark region issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/accessible-poetry-landmark-regions',
+		);
 	}
 }

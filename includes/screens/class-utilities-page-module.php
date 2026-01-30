@@ -22,36 +22,13 @@ require_once WPSHADOW_PATH . 'includes/dashboard/widgets/class-tooltip-manager.p
 /**
  * Get utilities catalog.
  *
+ * Note: Report-generation tools (Deep Scan, Quick Scan, etc.) moved to Reports section.
+ * Utilities are true utility tools for site management and maintenance.
+ *
  * @return array Utilities.
  */
 function wpshadow_get_utilities_catalog() {
 	return array(
-		// Page Analysis Tools
-		array(
-			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
-			'desc'    => __( 'Scan a page for accessibility issues, WCAG compliance, and color contrast.', 'wpshadow' ),
-			'tool'    => 'a11y-audit',
-			'icon'    => 'dashicons-universal-access',
-			'family'  => 'page-analysis',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Broken Link Checker', 'wpshadow' ),
-			'desc'    => __( 'Check a page for broken internal and external links.', 'wpshadow' ),
-			'tool'    => 'broken-links',
-			'icon'    => 'dashicons-admin-links',
-			'family'  => 'page-analysis',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Mobile Friendliness', 'wpshadow' ),
-			'desc'    => __( 'Test a page for mobile compatibility and responsive design.', 'wpshadow' ),
-			'tool'    => 'mobile-friendliness',
-			'icon'    => 'dashicons-smartphone',
-			'family'  => 'page-analysis',
-			'enabled' => true,
-		),
-		
 		// Site Management Tools
 		array(
 			'title'   => __( 'WPShadow Cache', 'wpshadow' ),
@@ -110,20 +87,78 @@ function wpshadow_get_utilities_catalog() {
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Customization Audit', 'wpshadow' ),
-			'desc'    => __( 'Analyze custom themes, plugins, and code modifications for potential issues.', 'wpshadow' ),
-			'tool'    => 'customization-audit',
-			'icon'    => 'dashicons-admin-generic',
+			'title'   => __( 'Safe Mode', 'wpshadow' ),
+			'desc'    => __( 'Temporarily disable plugins and themes for your session only to isolate conflicts without affecting the live site.', 'wpshadow' ),
+			'tool'    => 'safe-mode',
+			'icon'    => 'dashicons-shield',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Visual Comparisons', 'wpshadow' ),
-			'desc'    => __( 'Visual regression testing and screenshot comparison tool.', 'wpshadow' ),
-			'tool'    => 'visual-comparisons',
-			'icon'    => 'dashicons-format-image',
+			'title'   => __( 'Asset Impact Explorer', 'wpshadow' ),
+			'desc'    => __( 'Analyze scripts and stylesheets loading on your site to identify performance optimization opportunities.', 'wpshadow' ),
+			'tool'    => 'asset-impact',
+			'icon'    => 'dashicons-performance',
 			'family'  => 'site-management',
-			'enabled' => false, // Coming soon
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( '404 Monitor', 'wpshadow' ),
+			'desc'    => __( 'Track 404 errors and identify broken links. Set up redirects to fix broken URLs and improve SEO.', 'wpshadow' ),
+			'tool'    => '404-monitor',
+			'icon'    => 'dashicons-warning',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Update Safety Check', 'wpshadow' ),
+			'desc'    => __( 'Pre-update safety verification and Vault Light snapshot creation before WordPress updates.', 'wpshadow' ),
+			'tool'    => 'update-safety',
+			'icon'    => 'dashicons-update',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+
+		// Killer Utilities (Added 1.2601.2200)
+		array(
+			'title'   => __( 'Site Cloner', 'wpshadow' ),
+			'desc'    => __( 'One-click site cloning to subdomain or subdirectory. Perfect for staging, testing, and development. Free: 2 clones.', 'wpshadow' ),
+			'tool'    => 'site-cloner',
+			'icon'    => 'dashicons-admin-site-alt3',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Smart Code Snippets', 'wpshadow' ),
+			'desc'    => __( 'Add PHP, JavaScript, and CSS snippets safely without editing theme files. Syntax validation and sandboxed testing. Free: 10 snippets.', 'wpshadow' ),
+			'tool'    => 'code-snippets',
+			'icon'    => 'dashicons-editor-code',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Plugin Conflict Detector', 'wpshadow' ),
+			'desc'    => __( 'Automatically identify which plugin is causing an issue using binary search. Finds conflicts in minutes, not hours.', 'wpshadow' ),
+			'tool'    => 'plugin-conflict',
+			'icon'    => 'dashicons-admin-plugins',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Bulk Find & Replace', 'wpshadow' ),
+			'desc'    => __( 'Search and replace across posts, pages, custom fields, and options. Perfect for domain changes and bulk updates.', 'wpshadow' ),
+			'tool'    => 'bulk-find-replace',
+			'icon'    => 'dashicons-search',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Regenerate Thumbnails', 'wpshadow' ),
+			'desc'    => __( 'Batch regenerate image thumbnails for all registered sizes. Perfect after theme changes or adding custom image sizes.', 'wpshadow' ),
+			'tool'    => 'regenerate-thumbnails',
+			'icon'    => 'dashicons-image-rotate',
+			'family'  => 'site-management',
+			'enabled' => true,
 		),
 	);
 }

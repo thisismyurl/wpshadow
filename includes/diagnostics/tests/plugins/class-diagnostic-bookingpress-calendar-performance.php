@@ -36,29 +36,83 @@ class Diagnostic_BookingpressCalendarPerformance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/bookingpress-calendar-performance',
-			);
+		// Check 1: Calendar AJAX loading
+		$ajax_calendar = get_option( 'bookingpress_ajax_calendar', false );
+		if ( ! $ajax_calendar ) {
+			$issues[] = __( 'Calendar not loading via AJAX (slow initial page load)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Date range optimization
+		$date_range = get_option( 'bookingpress_calendar_date_range', 365 );
+		if ( $date_range > 180 ) {
+			$issues[] = sprintf( __( 'Calendar date range: %d days (recommend 90-180)', 'wpshadow' ), $date_range );
+		}
+		
+		// Check 3: Availability cache
+		$cache_availability = get_option( 'bookingpress_cache_availability', false );
+		if ( ! $cache_availability ) {
+			$issues[] = __( 'Availability caching not enabled', 'wpshadow' );
+		}
+		
+		// Check 4: Calendar rendering mode
+		$render_mode = get_option( 'bookingpress_calendar_render_mode', 'full' );
+		if ( $render_mode === 'full' ) {
+			$issues[] = __( 'Full calendar rendering (consider on-demand mode)', 'wpshadow' );
+		}
+		
+		// Check 5: Appointment query optimization
+		$appointment_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}bookingpress_appointments WHERE bookingpress_appointment_status = '1'"
+		);
+		
+		if ( $appointment_count > 1000 && ! $cache_availability ) {
+			$issues[] = sprintf( __( '%d appointments without availability caching (slow calendar loads)', 'wpshadow' ), $appointment_count );
+		}
+		
+		// Check 6: Database indexes
+		$has_indexes = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM information_schema.statistics 
+				 WHERE table_schema = %s 
+				 AND table_name = %s 
+				 AND index_name LIKE %s",
+				DB_NAME,
+				$wpdb->prefix . 'bookingpress_appointments',
+				'%date%'
+			)
+		);
+		
+		if ( $has_indexes === 0 && $appointment_count > 500 ) {
+			$issues[] = __( 'Missing date indexes on appointments table', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 65;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 58;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of performance issues */
+				__( 'BookingPress calendar has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/bookingpress-calendar-performance',
+		);
 	}
 }

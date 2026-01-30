@@ -36,29 +36,74 @@ class Diagnostic_MultisiteSiteCloningSecurity extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-site-cloning-security',
-			);
+		// Check if site cloning functionality exists
+		$clone_enabled = get_site_option( 'enable_site_cloning', false );
+		if ( ! $clone_enabled && ! function_exists( 'wpmudev_clone_site' ) && ! class_exists( 'NS_Cloner' ) ) {
+			return null;
 		}
 		
-		return null;
+		$issues = array();
+		
+		// Check 1: Cloning capability restriction
+		$clone_capability = get_site_option( 'site_clone_capability', 'manage_network' );
+		if ( $clone_capability !== 'manage_network' && $clone_capability !== 'manage_network_options' ) {
+			$issues[] = sprintf( __( 'Site cloning allowed with "%s" capability (should be network admin only)', 'wpshadow' ), $clone_capability );
+		}
+		
+		// Check 2: Source site validation
+		$validate_source = get_site_option( 'clone_validate_source_site', false );
+		if ( ! $validate_source ) {
+			$issues[] = __( 'No source site validation before cloning', 'wpshadow' );
+		}
+		
+		// Check 3: Sensitive data handling
+		$sanitize_data = get_site_option( 'clone_sanitize_sensitive_data', false );
+		if ( ! $sanitize_data ) {
+			$issues[] = __( 'Sensitive data not sanitized during cloning (passwords, API keys)', 'wpshadow' );
+		}
+		
+		// Check 4: Plugin/theme whitelist
+		$whitelist_plugins = get_site_option( 'clone_plugin_whitelist', array() );
+		if ( empty( $whitelist_plugins ) ) {
+			$issues[] = __( 'No plugin whitelist for cloning (security plugins may be cloned)', 'wpshadow' );
+		}
+		
+		// Check 5: Clone audit logging
+		$audit_clones = get_site_option( 'clone_audit_logging', false );
+		if ( ! $audit_clones ) {
+			$issues[] = __( 'Site cloning not logged for audit trail', 'wpshadow' );
+		}
+		
+		// Check 6: Database prefix randomization
+		$randomize_prefix = get_site_option( 'clone_randomize_prefix', false );
+		if ( ! $randomize_prefix ) {
+			$issues[] = __( 'Cloned sites use predictable database prefix', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 85;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 78;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of security issues */
+				__( 'Multisite site cloning has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-site-cloning-security',
+		);
 	}
 }

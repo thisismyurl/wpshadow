@@ -36,29 +36,86 @@ class Diagnostic_MultisiteSpamSiteDetection extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Spam sites in network
+		$spam_sites = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->blogs} WHERE spam = %d",
+				1
+			)
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-spam-site-detection',
-			);
+		if ( $spam_sites > 10 ) {
+			$issues[] = sprintf( __( '%d spam sites flagged (cleanup needed)', 'wpshadow' ), $spam_sites );
 		}
 		
-		return null;
+		// Check 2: Spam detection enabled
+		$auto_detect = get_site_option( 'spam_detection_enabled', false );
+		if ( ! $auto_detect ) {
+			$issues[] = __( 'Automatic spam detection not enabled', 'wpshadow' );
+		}
+		
+		// Check 3: Recent spam registrations
+		$recent_spam = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->blogs} WHERE spam = %d AND registered > DATE_SUB(NOW(), INTERVAL 7 DAY)",
+				1
+			)
+		);
+		
+		if ( $recent_spam > 5 ) {
+			$issues[] = sprintf( __( '%d new spam sites in past week (detection may be delayed)', 'wpshadow' ), $recent_spam );
+		}
+		
+		// Check 4: Akismet integration
+		$akismet_check = get_site_option( 'akismet_site_check_enabled', false );
+		if ( ! $akismet_check && function_exists( 'akismet_http_post' ) ) {
+			$issues[] = __( 'Akismet available but not checking new sites', 'wpshadow' );
+		}
+		
+		// Check 5: Spam site pattern detection
+		$pattern_domains = $wpdb->get_results(
+			"SELECT domain FROM {$wpdb->blogs} WHERE spam = 1 GROUP BY domain HAVING COUNT(*) > 1"
+		);
+		
+		if ( ! empty( $pattern_domains ) ) {
+			$issues[] = sprintf( __( '%d domain patterns associated with spam', 'wpshadow' ), count( $pattern_domains ) );
+		}
+		
+		// Check 6: Automated cleanup
+		$auto_cleanup = get_site_option( 'spam_site_auto_delete', false );
+		$cleanup_days = get_site_option( 'spam_site_cleanup_days', 0 );
+		
+		if ( ! $auto_cleanup && $spam_sites > 20 ) {
+			$issues[] = __( 'No automated spam site cleanup configured', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 85;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 78;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of spam detection issues */
+				__( 'Multisite spam detection has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-spam-site-detection',
+		);
 	}
 }

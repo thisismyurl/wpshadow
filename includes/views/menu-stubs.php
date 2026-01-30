@@ -381,6 +381,11 @@ if ( ! function_exists( 'wpshadow_render_help' ) ) {
 	require_once WPSHADOW_PATH . 'includes/screens/class-help-page-module.php';
 }
 
+// Load Reports module (defines wpshadow_render_reports if not already defined)
+if ( ! function_exists( 'wpshadow_render_reports' ) ) {
+	require_once WPSHADOW_PATH . 'includes/screens/class-reports-page-module.php';
+}
+
 // Load Workflows module (defines wpshadow_render_workflow_builder if not already defined)
 if ( ! function_exists( 'wpshadow_render_workflow_builder' ) ) {
 	require_once WPSHADOW_PATH . 'includes/workflow/workflow-module.php';

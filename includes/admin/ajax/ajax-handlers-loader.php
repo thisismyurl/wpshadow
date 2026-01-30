@@ -98,6 +98,9 @@ require_once $ajax_path . 'create-magic-link-handler.php';
 require_once $ajax_path . 'revoke-magic-link-handler.php';
 require_once $ajax_path . 'create-permanent-user-handler.php';
 require_once $ajax_path . 'save-cache-options-handler.php';
+
+// Reports
+require_once $ajax_path . 'class-site-dna-handler.php';
 require_once $ajax_path . 'mobile-check-handler.php';
 require_once $ajax_path . 'a11y-audit-handler.php';
 require_once $ajax_path . 'save-tip-prefs-handler.php';
