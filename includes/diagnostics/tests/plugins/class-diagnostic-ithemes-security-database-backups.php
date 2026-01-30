@@ -36,25 +36,74 @@ class Diagnostic_IthemesSecurityDatabaseBackups extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		$backup_enabled = false;
+		$backup_interval = 0;
+		$backup_destination = '';
 		
-		if ( $has_issue ) {
+		if ( class_exists( 'ITSEC_Modules' ) && method_exists( 'ITSEC_Modules', 'get_setting' ) ) {
+			$backup_enabled = (bool) ITSEC_Modules::get_setting( 'backup', 'enabled' );
+			$backup_interval = (int) ITSEC_Modules::get_setting( 'backup', 'interval' );
+			$backup_destination = (string) ITSEC_Modules::get_setting( 'backup', 'location' );
+		} else {
+			$backup_settings = get_option( 'itsec_backup', array() );
+			$backup_enabled = ! empty( $backup_settings['enabled'] );
+			$backup_interval = isset( $backup_settings['interval'] ) ? (int) $backup_settings['interval'] : 0;
+			$backup_destination = isset( $backup_settings['location'] ) ? (string) $backup_settings['location'] : '';
+		}
+		
+		// Check 1: Verify backups are enabled
+		if ( ! $backup_enabled ) {
+			$issues[] = 'Database backups not enabled';
+		}
+		
+		// Check 2: Check backup interval
+		if ( $backup_enabled && $backup_interval <= 0 ) {
+			$issues[] = 'Backup interval not configured';
+		}
+		
+		// Check 3: Verify backup destination
+		if ( $backup_enabled && empty( $backup_destination ) ) {
+			$issues[] = 'Backup destination not configured';
+		}
+		
+		// Check 4: Check email notification for backups
+		$notify_email = get_option( 'itsec_backup_email', '' );
+		if ( $backup_enabled && empty( $notify_email ) ) {
+			$issues[] = 'Backup notification email not configured';
+		}
+		
+		// Check 5: Verify backup retention
+		$retention = get_option( 'itsec_backup_retention', 0 );
+		if ( $backup_enabled && $retention <= 0 ) {
+			$issues[] = 'Backup retention not configured';
+		}
+		
+		// Check 6: Check for recent backups
+		$last_backup = (int) get_option( 'itsec_backup_last_backup', 0 );
+		if ( $backup_enabled && $last_backup > 0 && ( time() - $last_backup ) > 1209600 ) {
+			$issues[] = 'No database backup in the last 14 days';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 70;
+			$threat_multiplier = 5;
+			$max_threat = 95;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d iThemes Security database backup issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/ithemes-security-database-backups',
 			);
 		}
