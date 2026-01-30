@@ -36,25 +36,85 @@ class Diagnostic_PeepsoActivityStream extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		// Check if PeepSo is active
+		if ( ! class_exists( 'PeepSo' ) && ! defined( 'PEEPSO_VERSION' ) ) {
+			return null;
+		}
+
+		$issues = array();
+		$threat_level = 0;
+
+		global $wpdb;
+
+		// Check activity posts volume
+		$activity_posts = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'peepso-post'"
+		);
+
+		if ( $activity_posts > 10000 ) {
+			// Check query caching
+			$query_cache = get_option( 'peepso_activity_cache_enabled', 1 );
+			if ( ! $query_cache ) {
+				$issues[] = 'activity_cache_disabled';
+				$threat_level += 30;
+			}
+
+			// Check pagination
+			$posts_per_page = get_option( 'peepso_activity_posts_per_page', 10 );
+			if ( $posts_per_page > 25 ) {
+				$issues[] = 'excessive_posts_per_page';
+				$threat_level += 25;
+			}
+		}
+
+		// Check database indexes
+		$table_name = $wpdb->prefix . 'peepso_activities';
+		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" );
+		if ( $table_exists ) {
+			$indexes = $wpdb->get_results( "SHOW INDEX FROM {$table_name}" );
+			$has_act_index = false;
+			foreach ( $indexes as $index ) {
+				if ( $index->Key_name === 'act_external_id' ) {
+					$has_act_index = true;
+					break;
+				}
+			}
+			if ( ! $has_act_index ) {
+				$issues[] = 'missing_activity_indexes';
+				$threat_level += 30;
+			}
+		}
+
+		// Check old activity cleanup
+		$cleanup_enabled = get_option( 'peepso_activity_cleanup_enabled', 0 );
+		if ( ! $cleanup_enabled && $activity_posts > 50000 ) {
+			$issues[] = 'activity_cleanup_disabled';
+			$threat_level += 20;
+		}
+
+		// Check lazy loading
+		$lazy_load = get_option( 'peepso_activity_lazy_load', 1 );
+		if ( ! $lazy_load ) {
+			$issues[] = 'lazy_loading_disabled';
+			$threat_level += 15;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of performance issues */
+				__( 'PeepSo activity stream has performance problems: %s. This causes slow page loads and poor user experience.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/peepso-activity-stream',
 			);
 		}
