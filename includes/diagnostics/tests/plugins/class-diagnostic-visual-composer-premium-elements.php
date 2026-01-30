@@ -32,29 +32,82 @@ class Diagnostic_VisualComposerPremiumElements extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check if Visual Composer is installed
+		if ( ! defined( 'WPB_VC_VERSION' ) && ! class_exists( 'Vc_Manager' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+		$threat_level = 0;
+
+		// Check license activation
+		$vc_license = get_option( 'wpb_js_composer_purchase_code', '' );
+		if ( empty( $vc_license ) ) {
+			$issues[] = 'license_not_activated';
+			$threat_level += 25;
+		}
+
+		// Check for updates
+		$update_data = get_site_transient( 'update_plugins' );
+		$vc_needs_update = false;
+		if ( $update_data && isset( $update_data->response ) ) {
+			foreach ( $update_data->response as $plugin => $data ) {
+				if ( strpos( $plugin, 'js_composer' ) !== false ) {
+					$vc_needs_update = true;
+					break;
+				}
+			}
+		}
+		if ( $vc_needs_update ) {
+			$issues[] = 'premium_elements_update_available';
+			$threat_level += 20;
+		}
+
+		// Check custom element count
+		global $wpdb;
+		$custom_elements = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->options} 
+			 WHERE option_name LIKE '_wpb_custom_element_%'"
+		);
+		if ( $custom_elements > 50 ) {
+			$issues[] = 'excessive_custom_elements';
+			$threat_level += 15;
+		}
+
+		// Check element performance
+		$disable_frontend_editor = get_option( 'wpb_js_use_custom', 'on' );
+		if ( $disable_frontend_editor === 'off' ) {
+			$issues[] = 'frontend_editor_always_loaded';
+			$threat_level += 15;
+		}
+
+		// Check for deprecated elements
+		$deprecated_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} 
+			 WHERE meta_key = '_wpb_vc_js_status' 
+			 AND meta_value LIKE '%deprecated%'"
+		);
+		if ( $deprecated_count > 0 ) {
+			$issues[] = 'using_deprecated_elements';
+			$threat_level += 15;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of premium element issues */
+				__( 'Visual Composer premium elements have issues: %s. This affects functionality and security of premium features.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/visual-composer-premium-elements',
 			);
 		}

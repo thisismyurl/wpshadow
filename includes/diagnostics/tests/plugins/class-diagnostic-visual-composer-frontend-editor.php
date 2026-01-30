@@ -32,29 +32,74 @@ class Diagnostic_VisualComposerFrontendEditor extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check if Visual Composer is installed
+		if ( ! defined( 'WPB_VC_VERSION' ) && ! class_exists( 'Vc_Frontend_Editor' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+		$threat_level = 0;
+
+		// Check frontend editor access
+		$editor_role = get_option( 'wpb_js_role', 'administrator' );
+		if ( $editor_role === 'contributor' || $editor_role === 'author' ) {
+			$issues[] = 'frontend_editor_too_permissive';
+			$threat_level += 25;
+		}
+
+		// Check auto-save configuration
+		$auto_save = get_option( 'wpb_js_frontend_editor_auto_save', 'on' );
+		if ( $auto_save === 'off' ) {
+			$issues[] = 'auto_save_disabled';
+			$threat_level += 15;
+		}
+
+		// Check editor preview mode
+		$preview_mode = get_option( 'wpb_js_frontend_editor_preview_mode', 'desktop' );
+		if ( $preview_mode === 'desktop' ) {
+			$issues[] = 'mobile_preview_not_default';
+			$threat_level += 10;
+		}
+
+		// Check draft management
+		global $wpdb;
+		$draft_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} 
+				 WHERE post_status = %s 
+				 AND post_content LIKE %s",
+				'auto-draft',
+				'%vc_row%'
+			)
+		);
+		if ( $draft_count > 50 ) {
+			$issues[] = 'excessive_auto_drafts';
+			$threat_level += 20;
+		}
+
+		// Check frontend editor assets loading
+		$load_assets = get_option( 'wpb_js_less_version', '' );
+		if ( empty( $load_assets ) ) {
+			$issues[] = 'frontend_assets_not_optimized';
+			$threat_level += 15;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of frontend editor issues */
+				__( 'Visual Composer frontend editor has issues: %s. This affects security and performance of the page builder interface.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/visual-composer-frontend-editor',
 			);
 		}

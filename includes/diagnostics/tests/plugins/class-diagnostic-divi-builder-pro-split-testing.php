@@ -36,25 +36,77 @@ class Diagnostic_DiviBuilderProSplitTesting extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		$issues = array();
+		$threat_level = 0;
+
+		global $wpdb;
+
+		// Check for split test post type
+		$split_tests = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s",
+				'et_pb_ab_test'
+			)
+		);
+
+		if ( $split_tests === 0 ) {
+			$issues[] = 'no_split_tests_configured';
+			$threat_level += 20;
+		} else {
+			// Check for active tests
+			$active_tests = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->posts} 
+					 WHERE post_type = %s AND post_status = %s",
+					'et_pb_ab_test',
+					'publish'
+				)
+			);
+			if ( $active_tests === 0 ) {
+				$issues[] = 'no_active_split_tests';
+				$threat_level += 15;
+			}
+		}
+
+		// Check split test settings
+		$divi_options = get_option( 'et_divi', array() );
+		$ab_testing_enabled = isset( $divi_options['divi_ab_testing'] ) ? $divi_options['divi_ab_testing'] : false;
+		if ( ! $ab_testing_enabled ) {
+			$issues[] = 'ab_testing_disabled';
+			$threat_level += 25;
+		}
+
+		// Check for test data collection
+		$ab_stats_table = $wpdb->prefix . 'et_ab_stats';
+		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$ab_stats_table}'" ) === $ab_stats_table;
+		if ( ! $table_exists && $split_tests > 0 ) {
+			$issues[] = 'stats_table_missing';
+			$threat_level += 20;
+		}
+
+		// Check conversion tracking
+		$track_conversions = isset( $divi_options['divi_ab_track_conversions'] ) ? $divi_options['divi_ab_track_conversions'] : false;
+		if ( ! $track_conversions && $split_tests > 0 ) {
+			$issues[] = 'conversion_tracking_disabled';
+			$threat_level += 20;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of split testing issues */
+				__( 'Divi Builder split testing has issues: %s. This prevents A/B testing optimization and conversion tracking.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-pro-split-testing',
 			);
 		}
