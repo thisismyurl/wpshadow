@@ -36,25 +36,79 @@ class Diagnostic_WoocommerceDepositsSchedule extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+		// Check if Deposits plugin is active
+		if ( ! class_exists( 'WC_Deposits' ) && ! defined( 'WC_DEPOSITS_VERSION' ) ) {
+			return null;
+		}
+
+		$issues = array();
+		$threat_level = 0;
+
+		global $wpdb;
+
+		// Check deposit plans
+		$deposit_plans = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'wc_deposits_plan'"
+		);
+		if ( $deposit_plans === 0 ) {
+			$issues[] = 'no_deposit_plans_configured';
+			$threat_level += 25;
+		}
+
+		// Check deposit settings
+		$deposits_enabled = get_option( 'wc_deposits_enabled', 'no' );
+		if ( $deposits_enabled === 'no' ) {
+			$issues[] = 'deposits_disabled';
+			$threat_level += 20;
+		}
+
+		// Check payment schedule validation
+		$schedule_validation = get_option( 'wc_deposits_validate_schedule', 'yes' );
+		if ( $schedule_validation === 'no' ) {
+			$issues[] = 'schedule_validation_disabled';
+			$threat_level += 20;
+		}
+
+		// Check reminder notifications
+		$reminders_enabled = get_option( 'wc_deposits_payment_reminders', 'yes' );
+		if ( $reminders_enabled === 'no' ) {
+			$issues[] = 'payment_reminders_disabled';
+			$threat_level += 15;
+		}
+
+		// Check for overdue payments
+		$overdue_orders = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} p
+				 INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+				 WHERE p.post_type = %s
+				 AND pm.meta_key = '_wc_deposits_payment_schedule'
+				 AND pm.meta_value LIKE %s",
+				'shop_order',
+				'%overdue%'
+			)
+		);
+		if ( $overdue_orders > 10 ) {
+			$issues[] = 'excessive_overdue_payments';
+			$threat_level += 20;
+		}
+
+		if ( ! empty( $issues ) ) {
+			$description = sprintf(
+				/* translators: %s: list of deposit schedule issues */
+				__( 'WooCommerce Deposits has scheduling issues: %s. This causes payment collection problems and revenue loss.', 'wpshadow' ),
+				implode( ', ', array_map( function( $issue ) {
+					return ucwords( str_replace( '_', ' ', $issue ) );
+				}, $issues ) )
+			);
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => $description,
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-deposits-schedule',
 			);
 		}
