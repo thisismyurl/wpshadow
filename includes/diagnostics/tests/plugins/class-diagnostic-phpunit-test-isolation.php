@@ -32,33 +32,92 @@ class Diagnostic_PhpunitTestIsolation extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// PHPUnit only relevant in development/testing environments
+		if ( wp_get_environment_type() === 'production' ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		// Check for PHPUnit configuration
+		$phpunit_xml = ABSPATH . 'phpunit.xml';
+		if ( ! file_exists( $phpunit_xml ) && ! file_exists( ABSPATH . 'phpunit.xml.dist' ) ) {
+			return null;
+		}
 		
-		$has_issue = false; // Replace with actual check logic
+		$issues = array();
 		
-		if ( $has_issue ) {
+		// Check 1: Bootstrap file exists
+		$bootstrap = ABSPATH . 'tests/bootstrap.php';
+		if ( ! file_exists( $bootstrap ) ) {
+			$issues[] = __( 'PHPUnit bootstrap file not found', 'wpshadow' );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => __( 'PHPUnit test configuration incomplete', 'wpshadow' ),
+				'severity'    => self::calculate_severity( 60 ),
+				'threat_level' => 60,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/phpunit-test-isolation',
 			);
 		}
 		
-		return null;
+		// Check 2: Database reset configuration
+		$bootstrap_content = file_get_contents( $bootstrap );
+		if ( strpos( $bootstrap_content, 'WP_UnitTestCase' ) === false ) {
+			$issues[] = __( 'Not using WP_UnitTestCase (no automatic database reset)', 'wpshadow' );
+		}
+		
+		// Check 3: Global state backup
+		if ( strpos( $bootstrap_content, '@backupGlobals' ) === false ) {
+			$issues[] = __( 'Global state backup not configured (@backupGlobals)', 'wpshadow' );
+		}
+		
+		// Check 4: Static attribute backup
+		if ( strpos( $bootstrap_content, '@backupStaticAttributes' ) === false ) {
+			$issues[] = __( 'Static attribute backup not configured', 'wpshadow' );
+		}
+		
+		// Check 5: Test dependencies warning
+		$test_dir = ABSPATH . 'tests';
+		if ( is_dir( $test_dir ) ) {
+			$test_files = glob( $test_dir . '/**/*Test.php' );
+			$depends_usage = 0;
+			
+			foreach ( $test_files as $file ) {
+				$content = file_get_contents( $file );
+				if ( strpos( $content, '@depends' ) !== false ) {
+					$depends_usage++;
+				}
+			}
+			
+			if ( $depends_usage > 5 ) {
+				$issues[] = sprintf( __( '%d tests use @depends (isolation concerns)', 'wpshadow' ), $depends_usage );
+			}
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of isolation issues */
+				__( 'PHPUnit test isolation has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/phpunit-test-isolation',
+		);
 	}
 }

@@ -32,33 +32,85 @@ class Diagnostic_WoocommerceWishlistGuestUsers extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for popular wishlist plugins
+		$wishlist_active = class_exists( 'YITH_WCWL' ) || function_exists( 'tinvwl' ) || class_exists( 'WC_Wishlists_Plugin' );
+		
+		if ( ! $wishlist_active ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-wishlist-guest-users',
-			);
+		// Check 1: Guest wishlist enabled
+		$guest_enabled = get_option( 'yith_wcwl_enable_guest_wishlists', 'no' );
+		if ( 'no' === $guest_enabled ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Guest wishlist storage method
+		$storage_method = get_option( 'wishlist_guest_storage', 'session' );
+		if ( 'session' === $storage_method ) {
+			$issues[] = __( 'Guest wishlists use session storage (lost on logout)', 'wpshadow' );
+		}
+		
+		// Check 3: Guest wishlist persistence
+		$cookie_expiry = get_option( 'yith_wcwl_guest_cookie_expiry', 30 );
+		if ( $cookie_expiry < 90 ) {
+			$issues[] = sprintf( __( 'Guest wishlist cookie expires in %d days (short retention)', 'wpshadow' ), $cookie_expiry );
+		}
+		
+		// Check 4: Guest-to-user migration
+		$auto_migrate = get_option( 'wishlist_migrate_on_login', false );
+		if ( ! $auto_migrate ) {
+			$issues[] = __( 'Guest wishlists not migrated on user registration/login', 'wpshadow' );
+		}
+		
+		// Check 5: Old guest wishlist cleanup
+		if ( class_exists( 'YITH_WCWL' ) ) {
+			$old_wishlists = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->prefix}yith_wcwl
+					 WHERE user_id = %d AND dateadded < DATE_SUB(NOW(), INTERVAL 90 DAY)",
+					0
+				)
+			);
+			
+			if ( $old_wishlists > 100 ) {
+				$issues[] = sprintf( __( '%d guest wishlists older than 90 days (cleanup needed)', 'wpshadow' ), $old_wishlists );
+			}
+		}
+		
+		// Check 6: Guest email collection
+		$collect_email = get_option( 'yith_wcwl_ask_guest_email', 'no' );
+		if ( 'no' === $collect_email ) {
+			$issues[] = __( 'Guest email not collected (no recovery/marketing opportunity)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of guest wishlist issues */
+				__( 'WooCommerce guest wishlists have %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/woocommerce-wishlist-guest-users',
+		);
 	}
 }

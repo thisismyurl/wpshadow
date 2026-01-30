@@ -36,29 +36,87 @@ class Diagnostic_DirectoryListingCategories extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Category taxonomy exists
+		$category_count = wp_count_terms( array(
+			'taxonomy' => WPBDP_CATEGORY_TAX,
+			'hide_empty' => false,
+		) );
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/directory-listing-categories',
-			);
+		if ( is_wp_error( $category_count ) || $category_count === 0 ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Deep category hierarchy
+		$max_depth = 0;
+		$terms = get_terms( array(
+			'taxonomy' => WPBDP_CATEGORY_TAX,
+			'hide_empty' => false,
+		) );
+		
+		foreach ( $terms as $term ) {
+			$depth = 0;
+			$parent = $term->parent;
+			while ( $parent > 0 ) {
+				$depth++;
+				$parent_term = get_term( $parent, WPBDP_CATEGORY_TAX );
+				$parent = $parent_term ? $parent_term->parent : 0;
+			}
+			$max_depth = max( $max_depth, $depth );
+		}
+		
+		if ( $max_depth > 5 ) {
+			$issues[] = sprintf( __( 'Category hierarchy depth: %d levels (recommend 3-4)', 'wpshadow' ), $max_depth );
+		}
+		
+		// Check 3: Large category count
+		if ( $category_count > 500 ) {
+			$issues[] = sprintf( __( '%d categories (query performance impact)', 'wpshadow' ), $category_count );
+		}
+		
+		// Check 4: Empty categories
+		$empty_cats = wp_count_terms( array(
+			'taxonomy' => WPBDP_CATEGORY_TAX,
+			'hide_empty' => true,
+		) );
+		
+		$empty_count = $category_count - $empty_cats;
+		if ( $empty_count > 50 ) {
+			$issues[] = sprintf( __( '%d empty categories (cleanup recommended)', 'wpshadow' ), $empty_count );
+		}
+		
+		// Check 5: Category query caching
+		$cache_enabled = get_option( 'wpbdp_cache_directory_categories', false );
+		if ( ! $cache_enabled && $category_count > 100 ) {
+			$issues[] = __( 'Category query caching not enabled', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 58;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 52;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of category issues */
+				__( 'Directory listing categories have %d optimization issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/directory-listing-categories',
+		);
 	}
 }
