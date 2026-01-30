@@ -1,0 +1,275 @@
+<?php
+/**
+ * Points System
+ *
+ * Manages points earning, spending, and tracking.
+ * Phase 8: Gamification System - Points Management
+ *
+ * @package    WPShadow
+ * @subpackage Gamification
+ * @since      1.2604.0400
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Gamification;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Points System Class
+ *
+ * Handles all point-based operations.
+ *
+ * @since 1.2604.0400
+ */
+class Points_System {
+
+	/**
+	 * Award points to a user.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int    $user_id User ID.
+	 * @param  int    $points  Points to award.
+	 * @param  string $reason  Reason for points.
+	 * @return bool True on success.
+	 */
+	public static function award_points( $user_id, $points, $reason = '' ) {
+		if ( ! $user_id || $points <= 0 ) {
+			return false;
+		}
+
+		$current = self::get_balance( $user_id );
+		$new_balance = $current + $points;
+
+		update_user_meta( $user_id, 'wpshadow_points_balance', $new_balance );
+
+		// Record transaction
+		self::record_transaction( $user_id, $points, 'earned', $reason );
+
+		// Check tier badges
+		self::check_tier_badges( $user_id, $new_balance );
+
+		// Trigger action
+		do_action( 'wpshadow_points_awarded', $user_id, $points, $reason );
+
+		// Log activity
+		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+			\WPShadow\Core\Activity_Logger::log(
+				'points_earned',
+				sprintf(
+					/* translators: 1: points, 2: reason */
+					__( 'Earned %1$d points: %2$s', 'wpshadow' ),
+					$points,
+					$reason
+				),
+				'',
+				array( 'points' => $points )
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Spend points.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int    $user_id User ID.
+	 * @param  int    $points  Points to spend.
+	 * @param  string $reason  Reason for spending.
+	 * @return bool True on success.
+	 */
+	public static function spend_points( $user_id, $points, $reason = '' ) {
+		if ( ! $user_id || $points <= 0 ) {
+			return false;
+		}
+
+		$current = self::get_balance( $user_id );
+
+		// Check sufficient balance
+		if ( $current < $points ) {
+			return false;
+		}
+
+		$new_balance = $current - $points;
+
+		update_user_meta( $user_id, 'wpshadow_points_balance', $new_balance );
+
+		// Record transaction
+		self::record_transaction( $user_id, -$points, 'spent', $reason );
+
+		// Trigger action
+		do_action( 'wpshadow_points_spent', $user_id, $points, $reason );
+
+		// Log activity
+		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+			\WPShadow\Core\Activity_Logger::log(
+				'points_spent',
+				sprintf(
+					/* translators: 1: points, 2: reason */
+					__( 'Spent %1$d points: %2$s', 'wpshadow' ),
+					$points,
+					$reason
+				),
+				'',
+				array( 'points' => $points )
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get user's point balance.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int $user_id User ID.
+	 * @return int Point balance.
+	 */
+	public static function get_balance( $user_id ) {
+		return (int) get_user_meta( $user_id, 'wpshadow_points_balance', true );
+	}
+
+	/**
+	 * Get user's lifetime points (all earned).
+	 *
+	 * @since  1.2604.0400
+	 * @param  int $user_id User ID.
+	 * @return int Lifetime points.
+	 */
+	public static function get_lifetime_points( $user_id ) {
+		return (int) get_user_meta( $user_id, 'wpshadow_lifetime_points', true );
+	}
+
+	/**
+	 * Record a point transaction.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int    $user_id User ID.
+	 * @param  int    $points  Points (negative for spending).
+	 * @param  string $type    Transaction type (earned/spent).
+	 * @param  string $reason  Reason.
+	 * @return void
+	 */
+	private static function record_transaction( $user_id, $points, $type, $reason ) {
+		$history = get_user_meta( $user_id, 'wpshadow_points_history', true );
+
+		if ( ! is_array( $history ) ) {
+			$history = array();
+		}
+
+		$history[] = array(
+			'timestamp' => current_time( 'mysql' ),
+			'points'    => $points,
+			'type'      => $type,
+			'reason'    => $reason,
+		);
+
+		// Keep last 100 transactions
+		if ( count( $history ) > 100 ) {
+			$history = array_slice( $history, -100 );
+		}
+
+		update_user_meta( $user_id, 'wpshadow_points_history', $history );
+
+		// Update lifetime points if earned
+		if ( $points > 0 ) {
+			$lifetime = self::get_lifetime_points( $user_id );
+			update_user_meta( $user_id, 'wpshadow_lifetime_points', $lifetime + $points );
+		}
+	}
+
+	/**
+	 * Get point transaction history.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int $user_id User ID.
+	 * @param  int $limit   Number of transactions to return.
+	 * @return array Transaction history.
+	 */
+	public static function get_history( $user_id, $limit = 20 ) {
+		$history = get_user_meta( $user_id, 'wpshadow_points_history', true );
+
+		if ( ! is_array( $history ) ) {
+			return array();
+		}
+
+		// Return most recent first
+		$history = array_reverse( $history );
+
+		return array_slice( $history, 0, $limit );
+	}
+
+	/**
+	 * Check and award tier badges based on points.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int $user_id User ID.
+	 * @param  int $points  Current points.
+	 * @return void
+	 */
+	private static function check_tier_badges( $user_id, $points ) {
+		$tiers = array(
+			'bronze'   => 500,
+			'silver'   => 2000,
+			'gold'     => 5000,
+			'platinum' => 10000,
+		);
+
+		foreach ( $tiers as $badge_id => $required_points ) {
+			if ( $points >= $required_points ) {
+				Badge_System::award_badge( $user_id, $badge_id );
+			}
+		}
+	}
+
+	/**
+	 * Get points summary for user.
+	 *
+	 * @since  1.2604.0400
+	 * @param  int $user_id User ID.
+	 * @return array {
+	 *     Points summary.
+	 *
+	 *     @type int    $balance  Current balance.
+	 *     @type int    $lifetime Lifetime earned.
+	 *     @type int    $spent    Total spent.
+	 *     @type string $tier     Current tier.
+	 *     @type int    $next_tier_points Points to next tier.
+	 * }
+	 */
+	public static function get_summary( $user_id ) {
+		$balance = self::get_balance( $user_id );
+		$lifetime = self::get_lifetime_points( $user_id );
+		$spent = $lifetime - $balance;
+
+		$tiers = array(
+			10000 => 'platinum',
+			5000  => 'gold',
+			2000  => 'silver',
+			500   => 'bronze',
+		);
+
+		$tier = 'none';
+		$next_tier_points = 500;
+
+		foreach ( $tiers as $points => $tier_name ) {
+			if ( $lifetime >= $points ) {
+				$tier = $tier_name;
+				break;
+			}
+			$next_tier_points = $points;
+		}
+
+		return array(
+			'balance'           => $balance,
+			'lifetime'          => $lifetime,
+			'spent'             => $spent,
+			'tier'              => $tier,
+			'next_tier_points'  => $next_tier_points,
+		);
+	}
+}

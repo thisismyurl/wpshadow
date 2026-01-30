@@ -35,56 +35,56 @@ class Diagnostic_WpSuperCachePluginCaching extends Diagnostic_Base {
 		if ( ! function_exists( 'wp_cache_postload' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Caching enabled
 		$cache_enabled = get_option( 'wp_super_cache_enabled', 0 );
 		if ( ! $cache_enabled ) {
 			$issues[] = __( 'Caching disabled (no performance benefit)', 'wpshadow' );
 		}
-		
+
 		// Check 2: Cache mode
 		$cache_mode = get_option( 'wp_cache_mod_rewrite', 0 );
 		if ( ! $cache_mode ) {
 			$issues[] = __( 'Not using mod_rewrite (slower caching)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Compression
 		$compression = get_option( 'wp_cache_compression', 0 );
 		if ( ! $compression ) {
 			$issues[] = __( 'Compression disabled (larger cache files)', 'wpshadow' );
 		}
-		
+
 		// Check 4: Cache expiry
 		$cache_timeout = get_option( 'wp_cache_timeout', 3600 );
 		if ( $cache_timeout > 86400 ) {
 			$issues[] = __( 'Long cache timeout (stale content)', 'wpshadow' );
 		}
-		
+
 		// Check 5: Mobile caching
 		$mobile_cache = get_option( 'wp_cache_mobile_enabled', 0 );
 		if ( ! $mobile_cache ) {
 			$issues[] = __( 'Mobile caching disabled (slower mobile)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Preload
 		$preload = get_option( 'wp_cache_preload', 0 );
 		if ( ! $preload ) {
 			$issues[] = __( 'Cache preload disabled (first hit penalty)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 50;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 62;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 56;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

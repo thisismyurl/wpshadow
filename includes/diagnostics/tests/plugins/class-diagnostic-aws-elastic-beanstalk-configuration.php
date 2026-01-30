@@ -36,62 +36,62 @@ class Diagnostic_AwsElasticBeanstalkConfiguration extends Diagnostic_Base {
 		$is_eb = isset( $_SERVER['RDS_HOSTNAME'] ) ||
 		         defined( 'AWS_EB_ENV' ) ||
 		         file_exists( '/var/app/current/.ebextensions' );
-		
+
 		if ( ! $is_eb ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Environment variables
 		if ( ! defined( 'DB_HOST' ) || strpos( DB_HOST, 'rds.amazonaws.com' ) === false ) {
 			$issues[] = __( 'Not using RDS (single point of failure)', 'wpshadow' );
 		}
-		
+
 		// Check 2: Session handler
 		$session_handler = ini_get( 'session.save_handler' );
 		if ( 'files' === $session_handler ) {
 			$issues[] = __( 'File-based sessions (not scalable)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Object cache
 		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
 			$issues[] = __( 'No object cache (poor multi-instance performance)', 'wpshadow' );
 		}
-		
+
 		// Check 4: Upload directory
 		$upload_dir = wp_upload_dir();
 		if ( strpos( $upload_dir['basedir'], '/var/app/current' ) !== false ) {
 			$issues[] = __( 'Uploads in app directory (lost on deployment)', 'wpshadow' );
 		}
-		
+
 		// Check 5: Debug mode
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$issues[] = __( 'Debug mode enabled (exposes errors)', 'wpshadow' );
 		}
-		
+
 		// Check 6: HTTPS enforcement
 		if ( ! defined( 'FORCE_SSL_ADMIN' ) || ! FORCE_SSL_ADMIN ) {
 			$issues[] = __( 'HTTPS not enforced (security risk)', 'wpshadow' );
 		}
-		
+
 		// Check 7: Health check endpoint
 		$health_check = get_option( 'eb_health_check_path', '' );
 		if ( empty( $health_check ) ) {
 			$issues[] = __( 'No health check endpoint (poor monitoring)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 50;
 		if ( count( $issues ) >= 5 ) {
 			$threat_level = 64;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 57;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

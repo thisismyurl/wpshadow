@@ -32,33 +32,75 @@ class Diagnostic_ProfileBuilderEmailCustomization extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		$has_pb = class_exists( 'Profile_Builder' ) ||
+		          defined( 'PROFILE_BUILDER_VERSION' ) ||
+		          function_exists( 'wppb_create_upload_form' );
+
+		if ( ! $has_pb ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/profile-builder-email-customization',
-			);
+
+		$issues = array();
+
+		// Check 1: Custom email templates
+		$custom_emails = get_option( 'wppb_custom_email_templates', 'no' );
+		if ( 'no' === $custom_emails ) {
+			$issues[] = __( 'Using default templates (generic branding)', 'wpshadow' );
 		}
-		
-		return null;
+
+		// Check 2: From name
+		$from_name = get_option( 'wppb_email_from_name', '' );
+		if ( empty( $from_name ) ) {
+			$issues[] = __( 'No from name (spam filters)', 'wpshadow' );
+		}
+
+		// Check 3: From email
+		$from_email = get_option( 'wppb_email_from_email', '' );
+		if ( empty( $from_email ) || ! is_email( $from_email ) ) {
+			$issues[] = __( 'Invalid from email (delivery issues)', 'wpshadow' );
+		}
+
+		// Check 4: Email content type
+		$content_type = get_option( 'wppb_email_content_type', 'text/plain' );
+		if ( 'text/plain' === $content_type ) {
+			$issues[] = __( 'Plain text emails (poor formatting)', 'wpshadow' );
+		}
+
+		// Check 5: Variable sanitization
+		$sanitize_vars = get_option( 'wppb_sanitize_email_vars', 'no' );
+		if ( 'no' === $sanitize_vars ) {
+			$issues[] = __( 'Variables not sanitized (XSS risk)', 'wpshadow' );
+		}
+
+		// Check 6: Email logging
+		$log_emails = get_option( 'wppb_log_emails', 'no' );
+		if ( 'no' === $log_emails ) {
+			$issues[] = __( 'Emails not logged (no audit trail)', 'wpshadow' );
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Profile Builder email has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/profile-builder-email-customization',
+		);
 	}
 }

@@ -36,14 +36,14 @@ class Diagnostic_ScreenReaderAriaLiveRegions extends Diagnostic_Base {
 		$has_aria_plugin = defined( 'WP_ACCESSIBILITY_VERSION' ) ||
 		                   class_exists( 'One_User_Avatar' ) ||
 		                   function_exists( 'wp_accessibility_toolbar' );
-		
+
 		$issues = array();
-		
+
 		// Check 1: Theme support for ARIA
 		if ( ! current_theme_supports( 'html5', 'navigation-widgets' ) ) {
 			$issues[] = __( 'Theme lacks HTML5 semantic support', 'wpshadow' );
 		}
-		
+
 		// Check 2: Skip to content link
 		$has_skip_link = false;
 		$header_file = get_template_directory() . '/header.php';
@@ -55,18 +55,18 @@ class Diagnostic_ScreenReaderAriaLiveRegions extends Diagnostic_Base {
 		if ( ! $has_skip_link ) {
 			$issues[] = __( 'No skip to content link (keyboard navigation)', 'wpshadow' );
 		}
-		
+
 		// Check 3: ARIA landmarks
 		if ( ! current_theme_supports( 'html5', 'search-form' ) ) {
 			$issues[] = __( 'Theme lacks HTML5 search form support', 'wpshadow' );
 		}
-		
+
 		// Check 4: Focus management
 		$focus_styles = get_option( 'wpshadow_focus_styles_enabled', 'no' );
 		if ( 'no' === $focus_styles ) {
 			$issues[] = __( 'Focus indicators may be missing (A11Y issue)', 'wpshadow' );
 		}
-		
+
 		// Check 5: Dynamic content announcements
 		global $wp_scripts;
 		$has_a11y_js = false;
@@ -76,24 +76,24 @@ class Diagnostic_ScreenReaderAriaLiveRegions extends Diagnostic_Base {
 		if ( ! $has_a11y_js ) {
 			$issues[] = __( 'WP A11Y script not enqueued (dynamic updates)', 'wpshadow' );
 		}
-		
+
 		// Check 6: ARIA live regions in forms
 		$forms_accessible = get_option( 'wpshadow_forms_accessible', 'no' );
 		if ( 'no' === $forms_accessible ) {
 			$issues[] = __( 'Forms lack ARIA live regions (error announcements)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 50;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 62;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 56;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

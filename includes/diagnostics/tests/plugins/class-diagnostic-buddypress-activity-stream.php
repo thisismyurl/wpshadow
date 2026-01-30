@@ -36,29 +36,71 @@ class Diagnostic_BuddypressActivityStream extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Activity count
+		$activity_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}bp_activity"
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/buddypress-activity-stream',
-			);
+		if ( $activity_count > 50000 ) {
+			$issues[] = sprintf( __( '%s activities (slow queries)', 'wpshadow' ), number_format( $activity_count ) );
 		}
 		
-		return null;
+		// Check 2: Activity caching
+		$cache_enabled = get_option( 'bp_activity_cache', 0 );
+		if ( ! $cache_enabled ) {
+			$issues[] = __( 'Activity not cached (redundant queries)', 'wpshadow' );
+		}
+		
+		// Check 3: Per page limit
+		$per_page = get_option( 'bp_activity_per_page', 20 );
+		if ( $per_page > 50 ) {
+			$issues[] = sprintf( __( '%d items per page (slow loading)', 'wpshadow' ), $per_page );
+		}
+		
+		// Check 4: Auto-load more
+		$auto_load = get_option( 'bp_activity_auto_load', 'yes' );
+		if ( 'yes' === $auto_load ) {
+			$issues[] = __( 'Auto-load enabled (continuous DB queries)', 'wpshadow' );
+		}
+		
+		// Check 5: Activity cleanup
+		$cleanup = get_option( 'bp_activity_cleanup', 'no' );
+		if ( 'no' === $cleanup ) {
+			$issues[] = __( 'Old activities never deleted (database bloat)', 'wpshadow' );
+		}
+		
+		// Check 6: Akismet integration
+		$akismet = get_option( 'bp_activity_akismet', 'no' );
+		if ( 'no' === $akismet && function_exists( 'akismet_http_post' ) ) {
+			$issues[] = __( 'Akismet available but not used (spam)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 67;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 61;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'BuddyPress activity stream has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/buddypress-activity-stream',
+		);
 	}
 }

@@ -36,30 +36,30 @@ class Diagnostic_FlywheelLocalCompatibility extends Diagnostic_Base {
 		$is_local = defined( 'LOCAL_SITE_ID' ) ||
 		            isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( $_SERVER['SERVER_SOFTWARE'], 'Local' ) !== false ||
 		            strpos( ABSPATH, 'Local Sites' ) !== false;
-		
+
 		if ( ! $is_local ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Database prefix
 		global $wpdb;
 		if ( $wpdb->prefix === 'wp_' ) {
 			$issues[] = __( 'Using default wp_ prefix (security risk)', 'wpshadow' );
 		}
-		
+
 		// Check 2: Production URLs in DB
 		$site_url = get_option( 'siteurl' );
 		if ( strpos( $site_url, '.local' ) === false && strpos( $site_url, 'localhost' ) === false ) {
 			$issues[] = __( 'Production URL in local DB (migration issues)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Debug mode
 		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 			$issues[] = __( 'Debug mode disabled (missed local errors)', 'wpshadow' );
 		}
-		
+
 		// Check 4: Local SSL
 		if ( is_ssl() && strpos( $site_url, 'https' ) !== false ) {
 			$cert_path = $_SERVER['DOCUMENT_ROOT'] . '/../conf/ssl.crt';
@@ -70,30 +70,30 @@ class Diagnostic_FlywheelLocalCompatibility extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 5: Mail catcher
 		$smtp_host = ini_get( 'SMTP' );
 		if ( empty( $smtp_host ) || $smtp_host === 'localhost' ) {
 			$issues[] = __( 'No mail catcher configured (emails lost)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Version control
 		$has_git = file_exists( ABSPATH . '.git' );
 		if ( ! $has_git ) {
 			$issues[] = __( 'No Git repository (no version control)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 50;
 		if ( count( $issues ) >= 4 ) {
 			$threat_level = 62;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 56;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

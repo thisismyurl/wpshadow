@@ -364,6 +364,9 @@ class Plugin_Bootstrap {
 		// Load Phase 7: WPShadow Guardian (Cloud AI Scanning)
 		self::load_guardian_integration();
 
+		// Load Phase 8: Gamification System
+		self::load_gamification_system();
+
 		// Load dashboard widgets
 		$widget_classes = array(
 			'class-executive-roi-widget.php',
@@ -744,6 +747,70 @@ class Plugin_Bootstrap {
 
 		if ( class_exists( '\\WPShadow\\Guardian\\Guardian_Scan_Interface' ) ) {
 			\WPShadow\Guardian\Guardian_Scan_Interface::init();
+		}
+	}
+
+	/**
+	 * Load Gamification System (Phase 8).
+	 *
+	 * Loads achievement, badge, points, leaderboard, and reward systems.
+	 * Privacy-first design with opt-in leaderboards.
+	 *
+	 * Components:
+	 * - Achievement Registry (23 achievements across 6 categories)
+	 * - Badge System (tier + special badges)
+	 * - Points System (earning, spending, history)
+	 * - Leaderboard (opt-in only, privacy-first)
+	 * - Reward System (Guardian credits, Vault storage, Pro subscriptions, digital swag)
+	 * - Gamification Manager (central orchestrator)
+	 * - Gamification UI (admin pages)
+	 *
+	 * @since  1.2604.0400
+	 * @return void
+	 */
+	private static function load_gamification_system() {
+		$gamification_path = WPSHADOW_PATH . 'includes/gamification/';
+
+		// Core gamification components
+		$gamification_files = array(
+			'class-achievement-registry.php',
+			'class-badge-system.php',
+			'class-points-system.php',
+			'class-leaderboard.php',
+			'class-reward-system.php',
+			'class-gamification-manager.php',
+			'class-gamification-ui.php',
+		);
+
+		foreach ( $gamification_files as $file ) {
+			if ( file_exists( $gamification_path . $file ) ) {
+				require_once $gamification_path . $file;
+			}
+		}
+
+		// Initialize gamification components
+		if ( class_exists( '\\WPShadow\\Gamification\\Achievement_Registry' ) ) {
+			\WPShadow\Gamification\Achievement_Registry::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Gamification\\Badge_System' ) ) {
+			\WPShadow\Gamification\Badge_System::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard' ) ) {
+			\WPShadow\Gamification\Leaderboard::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Gamification\\Reward_System' ) ) {
+			\WPShadow\Gamification\Reward_System::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_Manager' ) ) {
+			\WPShadow\Gamification\Gamification_Manager::init();
+		}
+
+		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_UI' ) ) {
+			\WPShadow\Gamification\Gamification_UI::init();
 		}
 	}
 

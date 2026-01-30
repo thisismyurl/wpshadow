@@ -35,30 +35,70 @@ class Diagnostic_PaypalSandboxModeDetection extends Diagnostic_Base {
 		if ( ! class_exists( 'WC_Gateway_Paypal' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/paypal-sandbox-mode-detection',
-			);
+
+		$issues = array();
+
+		// Check 1: Sandbox mode enabled
+		$sandbox = get_option( 'woocommerce_paypal_settings', array() );
+		$testmode = isset( $sandbox['testmode'] ) ? $sandbox['testmode'] : 'no';
+
+		if ( 'yes' === $testmode ) {
+			$issues[] = __( 'PayPal sandbox mode enabled (test payments)', 'wpshadow' );
 		}
-		
-		return null;
+
+		// Check 2: Sandbox credentials in production
+		$api_username = isset( $sandbox['api_username'] ) ? $sandbox['api_username'] : '';
+		if ( strpos( $api_username, 'sandbox' ) !== false ) {
+			$issues[] = __( 'Sandbox credentials detected (payments fail)', 'wpshadow' );
+		}
+
+		// Check 3: Email address
+		$email = isset( $sandbox['email'] ) ? $sandbox['email'] : '';
+		if ( strpos( $email, 'sandbox' ) !== false || strpos( $email, 'test' ) !== false ) {
+			$issues[] = __( 'Test email address (revenue loss)', 'wpshadow' );
+		}
+
+		// Check 4: Debug logging
+		$debug = isset( $sandbox['debug'] ) ? $sandbox['debug'] : 'no';
+		if ( 'yes' === $debug && 'yes' !== $testmode ) {
+			$issues[] = __( 'Debug logging in production (performance hit)', 'wpshadow' );
+		}
+
+		// Check 5: IPN validation
+		$ipn_url = isset( $sandbox['ipn_notification_url'] ) ? $sandbox['ipn_notification_url'] : '';
+		if ( strpos( $ipn_url, 'sandbox' ) !== false ) {
+			$issues[] = __( 'Sandbox IPN URL (payment notifications fail)', 'wpshadow' );
+		}
+
+		// Check 6: Currency restrictions
+		$currency = get_woocommerce_currency();
+		if ( 'yes' === $testmode && $currency !== 'USD' ) {
+			$issues[] = sprintf( __( 'Sandbox with %s currency (limited testing)', 'wpshadow' ), $currency );
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		$threat_level = 75;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 87;
+		} elseif ( count( $issues ) >= 2 ) {
+			$threat_level = 81;
+		}
+
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'PayPal has %d sandbox/production issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/paypal-sandbox-mode-detection',
+		);
 	}
 }

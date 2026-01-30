@@ -32,33 +32,89 @@ class Diagnostic_LoginLogoutRegisterMenuSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for login menu plugins or custom login pages
+		$has_login_menu = function_exists( 'wp_nav_menu_item_custom_fields' ) ||
+		                  get_option( 'login_logout_register_menu', '' ) !== '';
+		
+		$issues = array();
+		
+		// Check 1: Login URLs in menu
+		$menus = wp_get_nav_menus();
+		foreach ( $menus as $menu ) {
+			$items = wp_get_nav_menu_items( $menu->term_id );
+			if ( $items ) {
+				foreach ( $items as $item ) {
+					if ( strpos( $item->url, 'wp-login.php' ) !== false ) {
+						$issues[] = __( 'wp-login.php exposed in menu (brute force target)', 'wpshadow' );
+						break 2;
+					}
+				}
+			}
+		}
+		
+		// Check 2: Logout nonce
+		$logout_nonce = get_option( 'logout_nonce_enabled', 'yes' );
+		if ( 'no' === $logout_nonce ) {
+			$issues[] = __( 'Logout without nonce (CSRF risk)', 'wpshadow' );
+		}
+		
+		// Check 3: Registration in menu
+		$allow_registration = get_option( 'users_can_register', 0 );
+		if ( $allow_registration ) {
+			foreach ( $menus as $menu ) {
+				$items = wp_get_nav_menu_items( $menu->term_id );
+				if ( $items ) {
+					foreach ( $items as $item ) {
+						if ( strpos( $item->url, 'wp-login.php?action=register' ) !== false ) {
+							$issues[] = __( 'Public registration link (spam accounts)', 'wpshadow' );
+							break 2;
+						}
+					}
+				}
+			}
+		}
+		
+		// Check 4: Redirect after login
+		$redirect = get_option( 'login_redirect_url', '' );
+		if ( empty( $redirect ) ) {
+			$issues[] = __( 'No login redirect (default admin access)', 'wpshadow' );
+		}
+		
+		// Check 5: Logout redirect
+		$logout_redirect = get_option( 'logout_redirect_url', '' );
+		if ( empty( $logout_redirect ) ) {
+			$issues[] = __( 'No logout redirect (session info visible)', 'wpshadow' );
+		}
+		
+		// Check 6: Login attempt logging
+		$log_attempts = get_option( 'log_login_attempts', 'no' );
+		if ( 'no' === $log_attempts ) {
+			$issues[] = __( 'Login attempts not logged (no audit trail)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/login-logout-register-menu-security',
-			);
+		$threat_level = 70;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 82;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 76;
 		}
 		
-		return null;
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Login/logout menu has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/login-logout-register-menu-security',
+		);
 	}
 }

@@ -112,23 +112,23 @@ class Guardian_Scan_Interface extends AJAX_Handler_Base {
 			</h1>
 
 			<nav class="nav-tab-wrapper">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=dashboard' ) ); ?>" 
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=dashboard' ) ); ?>"
 				   class="nav-tab <?php echo 'dashboard' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'Dashboard', 'wpshadow' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=scan' ) ); ?>" 
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=scan' ) ); ?>"
 				   class="nav-tab <?php echo 'scan' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'Run Scan', 'wpshadow' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=history' ) ); ?>" 
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=history' ) ); ?>"
 				   class="nav-tab <?php echo 'history' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'History', 'wpshadow' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=pricing' ) ); ?>" 
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=pricing' ) ); ?>"
 				   class="nav-tab <?php echo 'pricing' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'Pricing', 'wpshadow' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=account' ) ); ?>" 
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=account' ) ); ?>"
 				   class="nav-tab <?php echo 'account' === $tab ? 'nav-tab-active' : ''; ?>">
 					<?php esc_html_e( 'Account', 'wpshadow' ); ?>
 				</a>
@@ -471,8 +471,8 @@ class Guardian_Scan_Interface extends AJAX_Handler_Base {
 								<?php echo number_format_i18n( $tier['tokens'] ) . ' ' . esc_html__( 'tokens', 'wpshadow' ); ?>
 							<?php endif; ?>
 						</div>
-						<a href="https://guardian.wpshadow.com/purchase/<?php echo esc_attr( $tier_id ); ?>" 
-						   class="button <?php echo 'unlimited' === $tier_id ? 'button-primary' : ''; ?>" 
+						<a href="https://guardian.wpshadow.com/purchase/<?php echo esc_attr( $tier_id ); ?>"
+						   class="button <?php echo 'unlimited' === $tier_id ? 'button-primary' : ''; ?>"
 						   target="_blank">
 							<?php echo 0 === $tier['price'] ? esc_html__( 'Get Started', 'wpshadow' ) : esc_html__( 'Purchase', 'wpshadow' ); ?>
 						</a>
@@ -615,9 +615,9 @@ class Guardian_Scan_Interface extends AJAX_Handler_Base {
 				<h2><?php esc_html_e( 'Connect Guardian Account', 'wpshadow' ); ?></h2>
 				<p><?php esc_html_e( 'Enter your Guardian API key to connect your account.', 'wpshadow' ); ?></p>
 				<form id="connect-form">
-					<input type="text" 
-					       id="guardian-api-key" 
-					       placeholder="<?php esc_attr_e( 'Enter API Key', 'wpshadow' ); ?>" 
+					<input type="text"
+					       id="guardian-api-key"
+					       placeholder="<?php esc_attr_e( 'Enter API Key', 'wpshadow' ); ?>"
 					       style="width: 100%; padding: 10px; margin: 20px 0;" />
 					<p class="description">
 						<?php
