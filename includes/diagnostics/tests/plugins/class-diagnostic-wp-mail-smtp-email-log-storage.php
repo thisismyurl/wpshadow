@@ -35,30 +35,72 @@ class Diagnostic_WpMailSmtpEmailLogStorage extends Diagnostic_Base {
 		if ( ! defined( 'WPMS_PLUGIN_VER' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-mail-smtp-email-log-storage',
-			);
+
+		global $wpdb;
+		$issues = array();
+
+		// Check 1: Email logging enabled
+		$log_enabled = get_option( 'wp_mail_smtp_email_log', 'no' );
+		if ( 'no' === $log_enabled ) {
+			return null;
 		}
-		
-		return null;
+
+		// Check 2: Log table size
+		$log_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}wpms_email_log"
+		);
+
+		if ( $log_count > 10000 ) {
+			$issues[] = sprintf( __( '%d emails logged (database bloat)', 'wpshadow' ), number_format( $log_count ) );
+		}
+
+		// Check 3: Auto-delete
+		$auto_delete = get_option( 'wp_mail_smtp_log_auto_delete', 'no' );
+		if ( 'no' === $auto_delete ) {
+			$issues[] = __( 'Logs never deleted (grows forever)', 'wpshadow' );
+		}
+
+		// Check 4: Retention period
+		$retention_days = get_option( 'wp_mail_smtp_log_retention_days', 0 );
+		if ( $retention_days === 0 || $retention_days > 90 ) {
+			$issues[] = __( 'Long retention (privacy concern)', 'wpshadow' );
+		}
+
+		// Check 5: Log content
+		$log_content = get_option( 'wp_mail_smtp_log_content', 'yes' );
+		if ( 'yes' === $log_content ) {
+			$issues[] = __( 'Email content logged (sensitive data)', 'wpshadow' );
+		}
+
+		// Check 6: Log attachments
+		$log_attachments = get_option( 'wp_mail_smtp_log_attachments', 'yes' );
+		if ( 'yes' === $log_attachments ) {
+			$issues[] = __( 'Attachments logged (disk space)', 'wpshadow' );
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'WP Mail SMTP log storage has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-mail-smtp-email-log-storage',
+		);
 	}
 }

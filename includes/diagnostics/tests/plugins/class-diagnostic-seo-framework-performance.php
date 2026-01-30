@@ -32,33 +32,80 @@ class Diagnostic_SeoFrameworkPerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for The SEO Framework plugin
+		$has_tsf = defined( 'THE_SEO_FRAMEWORK_VERSION' ) ||
+		           function_exists( 'the_seo_framework' ) ||
+		           class_exists( 'The_SEO_Framework\Load' );
+		
+		if ( ! $has_tsf ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/seo-framework-performance',
-			);
+		// Check 1: Cache support
+		$cache_enabled = get_option( 'the_seo_framework_cache', 0 );
+		if ( ! $cache_enabled ) {
+			$issues[] = __( 'Object cache disabled (slower page loads)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Sitemap generation
+		$sitemap_enabled = get_option( 'autodescription-site-settings', array() );
+		if ( isset( $sitemap_enabled['sitemaps_output'] ) && ! $sitemap_enabled['sitemaps_output'] ) {
+			$issues[] = __( 'Sitemap disabled (SEO impact)', 'wpshadow' );
+		}
+		
+		// Check 3: Sitemap transient cache
+		$sitemap_cache = get_option( 'the_seo_framework_sitemap_cache', 0 );
+		if ( ! $sitemap_cache ) {
+			$issues[] = __( 'Sitemap cache disabled (regenerated each request)', 'wpshadow' );
+		}
+		
+		// Check 4: Low memory mode
+		$low_memory = get_option( 'the_seo_framework_low_memory_mode', 0 );
+		if ( $low_memory ) {
+			$issues[] = __( 'Low memory mode active (limited features)', 'wpshadow' );
+		}
+		
+		// Check 5: Transient cleanup
+		global $wpdb;
+		$transient_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_tsf_%'"
+		);
+		
+		if ( $transient_count > 100 ) {
+			$issues[] = sprintf( __( '%d TSF transients (database bloat)', 'wpshadow' ), $transient_count );
+		}
+		
+		// Check 6: Schema output
+		$schema_output = get_option( 'the_seo_framework_schema_output', 1 );
+		if ( ! $schema_output ) {
+			$issues[] = __( 'Schema.org disabled (lost rich snippets)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'SEO Framework has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/seo-framework-performance',
+		);
 	}
 }

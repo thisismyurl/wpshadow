@@ -615,6 +615,75 @@ class Plugin_Bootstrap {
 	}
 
 	/**
+	 * Load Privacy & Consent Excellence (Phase 6)
+	 *
+	 * Loads privacy management systems including:
+	 * - First Activation Welcome Modal
+	 * - Privacy Dashboard Page
+	 * - Phone Home Indicator
+	 * - Privacy Policy Version Tracking
+	 * - Consent Management
+	 * - Data Export/Deletion Tools
+	 *
+	 * @since 1.2604.0200
+	 * @return void
+	 */
+	private static function load_privacy_consent() {
+		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
+		$admin_path   = WPSHADOW_PATH . 'includes/admin/';
+
+		// Load existing privacy infrastructure
+		if ( file_exists( $privacy_path . 'class-consent-preferences.php' ) ) {
+			require_once $privacy_path . 'class-consent-preferences.php';
+		}
+
+		if ( file_exists( $privacy_path . 'class-first-run-consent.php' ) ) {
+			require_once $privacy_path . 'class-first-run-consent.php';
+		}
+
+		if ( file_exists( $privacy_path . 'class-privacy-policy-manager.php' ) ) {
+			require_once $privacy_path . 'class-privacy-policy-manager.php';
+		}
+
+		// Load Phase 6 components
+		// First Activation Welcome Modal
+		if ( file_exists( $admin_path . 'class-first-activation-welcome.php' ) ) {
+			require_once $admin_path . 'class-first-activation-welcome.php';
+
+			if ( class_exists( '\\WPShadow\\Admin\\First_Activation_Welcome' ) ) {
+				\WPShadow\Admin\First_Activation_Welcome::init();
+			}
+		}
+
+		// Privacy Dashboard Page
+		if ( file_exists( $admin_path . 'class-privacy-dashboard-page.php' ) ) {
+			require_once $admin_path . 'class-privacy-dashboard-page.php';
+
+			if ( class_exists( '\\WPShadow\\Admin\\Privacy_Dashboard_Page' ) ) {
+				\WPShadow\Admin\Privacy_Dashboard_Page::init();
+			}
+		}
+
+		// Phone Home Indicator
+		if ( file_exists( $admin_path . 'class-phone-home-indicator.php' ) ) {
+			require_once $admin_path . 'class-phone-home-indicator.php';
+
+			if ( class_exists( '\\WPShadow\\Admin\\Phone_Home_Indicator' ) ) {
+				\WPShadow\Admin\Phone_Home_Indicator::init();
+			}
+		}
+
+		// Privacy Policy Version Tracker
+		if ( file_exists( $privacy_path . 'class-privacy-policy-version-tracker.php' ) ) {
+			require_once $privacy_path . 'class-privacy-policy-version-tracker.php';
+
+			if ( class_exists( '\\WPShadow\\Privacy\\Privacy_Policy_Version_Tracker' ) ) {
+				\WPShadow\Privacy\Privacy_Policy_Version_Tracker::init();
+			}
+		}
+	}
+
+	/**
 	 * Load smart recommendations engine
 	 *
 	 * @since 1.2601.2200

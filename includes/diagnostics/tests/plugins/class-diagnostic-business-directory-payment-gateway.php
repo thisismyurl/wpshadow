@@ -35,61 +35,61 @@ class Diagnostic_BusinessDirectoryPaymentGateway extends Diagnostic_Base {
 		if ( ! function_exists( 'wpbdp' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Payment gateway enabled
 		$payments_enabled = get_option( 'wpbdp_payments_enabled', 'no' );
 		if ( 'no' === $payments_enabled ) {
 			return null; // Payments not in use
 		}
-		
+
 		// Check 2: SSL enforcement
 		if ( ! is_ssl() ) {
 			$issues[] = __( 'Not using HTTPS (payment data unencrypted)', 'wpshadow' );
 		}
-		
+
 		// Check 3: Payment gateway configured
 		$gateway = get_option( 'wpbdp_payment_gateway', '' );
 		if ( empty( $gateway ) ) {
 			$issues[] = __( 'No payment gateway configured', 'wpshadow' );
 		}
-		
+
 		// Check 4: Transaction logging
 		$log_transactions = get_option( 'wpbdp_log_payments', 'no' );
 		if ( 'no' === $log_transactions ) {
 			$issues[] = __( 'Payments not logged (no audit trail)', 'wpshadow' );
 		}
-		
+
 		// Check 5: Test mode in production
 		$test_mode = get_option( 'wpbdp_payment_test_mode', 'no' );
 		if ( 'yes' === $test_mode && ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 			$issues[] = __( 'Test mode in production (no real charges)', 'wpshadow' );
 		}
-		
+
 		// Check 6: Webhook verification
 		$verify_webhooks = get_option( 'wpbdp_verify_payment_webhooks', 'no' );
 		if ( 'no' === $verify_webhooks ) {
 			$issues[] = __( 'Webhooks not verified (fake payments)', 'wpshadow' );
 		}
-		
+
 		// Check 7: PCI compliance
 		$store_cards = get_option( 'wpbdp_store_payment_details', 'yes' );
 		if ( 'yes' === $store_cards ) {
 			$issues[] = __( 'Storing payment details (PCI violation)', 'wpshadow' );
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$threat_level = 75;
 		if ( count( $issues ) >= 5 ) {
 			$threat_level = 90;
 		} elseif ( count( $issues ) >= 3 ) {
 			$threat_level = 83;
 		}
-		
+
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,

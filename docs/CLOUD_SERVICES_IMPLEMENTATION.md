@@ -268,9 +268,9 @@ cd /workspaces/wpshadow
 
 ### Registration
 ```php
-$response = Cloud_Service_Connector::register( 
-    'user@example.com', 
-    'https://example.com' 
+$response = Cloud_Service_Connector::register(
+    'user@example.com',
+    'https://example.com'
 );
 // Returns: ['api_key' => '...', 'free_tier' => [...]]
 ```
