@@ -32,29 +32,62 @@ class Diagnostic_OxygenBuilderSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
-			return null;
+		$issues = array();
+		
+		// Check 1: Frontend editing security
+		$frontend = get_option( 'oxygen_frontend_editing_secured', 0 );
+		if ( ! $frontend ) {
+			$issues[] = 'Frontend editing not properly secured';
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		// Check 2: User role restrictions
+		$roles = get_option( 'oxygen_user_role_restrictions_enabled', 0 );
+		if ( ! $roles ) {
+			$issues[] = 'User role restrictions not enabled';
+		}
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 3: Code execution restrictions
+		$code_exec = get_option( 'oxygen_code_execution_restricted', 0 );
+		if ( ! $code_exec ) {
+			$issues[] = 'Code execution not properly restricted';
+		}
 		
-		if ( $has_issue ) {
+		// Check 4: File upload security
+		$uploads = get_option( 'oxygen_file_upload_security_enabled', 0 );
+		if ( ! $uploads ) {
+			$issues[] = 'File upload security not configured';
+		}
+		
+		// Check 5: Nonce verification
+		$nonce = get_option( 'oxygen_nonce_verification_enabled', 0 );
+		if ( ! $nonce ) {
+			$issues[] = 'Nonce verification not enabled';
+		}
+		
+		// Check 6: Element access control
+		$element_access = get_option( 'oxygen_element_access_control_enabled', 0 );
+		if ( ! $element_access ) {
+			$issues[] = 'Element access control not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 50;
+			$threat_multiplier = 6;
+			$max_threat = 80;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d security issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/oxygen-builder-security',
 			);
 		}

@@ -36,25 +36,62 @@ class Diagnostic_WordfenceTwoFactorBackup extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Two-factor authentication enabled
+		$tfa = get_option( 'wordfence_two_factor_enabled', 0 );
+		if ( ! $tfa ) {
+			$issues[] = 'Two-factor authentication not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Backup codes generated
+		$backup_codes = get_option( 'wordfence_backup_codes_generated', 0 );
+		if ( ! $backup_codes ) {
+			$issues[] = 'Backup codes not generated';
+		}
+		
+		// Check 3: Backup codes secured
+		$backup_secured = get_option( 'wordfence_backup_codes_stored_securely', 0 );
+		if ( ! $backup_secured ) {
+			$issues[] = 'Backup codes not stored securely';
+		}
+		
+		// Check 4: Totp/authenticator app
+		$totp = get_option( 'wordfence_totp_app_configured', 0 );
+		if ( ! $totp ) {
+			$issues[] = 'TOTP/Authenticator app not configured';
+		}
+		
+		// Check 5: SMS backup enabled
+		$sms = get_option( 'wordfence_sms_backup_enabled', 0 );
+		if ( ! $sms ) {
+			$issues[] = 'SMS backup method not enabled';
+		}
+		
+		// Check 6: Recovery methods tested
+		$recovery = get_option( 'wordfence_recovery_methods_tested', 0 );
+		if ( ! $recovery ) {
+			$issues[] = 'Recovery methods not recently tested';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 50;
+			$threat_multiplier = 6;
+			$max_threat = 80;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d 2FA backup issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wordfence-two-factor-backup',
 			);
 		}

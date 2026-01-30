@@ -36,25 +36,62 @@ class Diagnostic_CookieNoticeScriptBlocking extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Script blocking enabled
+		$blocking = get_option( 'cookie_notice_script_blocking_enabled', 0 );
+		if ( ! $blocking ) {
+			$issues[] = 'Script blocking not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Blocked scripts configured
+		$blocked_count = absint( get_option( 'cookie_notice_blocked_scripts_count', 0 ) );
+		if ( $blocked_count <= 0 ) {
+			$issues[] = 'No blocked scripts configured';
+		}
+		
+		// Check 3: Consent categories
+		$categories = get_option( 'cookie_notice_consent_categories_configured', 0 );
+		if ( ! $categories ) {
+			$issues[] = 'Consent categories not configured';
+		}
+		
+		// Check 4: Cookiebot integration
+		$cookiebot = get_option( 'cookie_notice_cookiebot_integration_enabled', 0 );
+		if ( ! $cookiebot ) {
+			$issues[] = 'Cookiebot integration not enabled';
+		}
+		
+		// Check 5: Consent tracking
+		$tracking = get_option( 'cookie_notice_consent_tracking_enabled', 0 );
+		if ( ! $tracking ) {
+			$issues[] = 'Consent tracking not enabled';
+		}
+		
+		// Check 6: Banner customization
+		$banner = get_option( 'cookie_notice_banner_customized', 0 );
+		if ( ! $banner ) {
+			$issues[] = 'Banner not customized';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d cookie consent issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/cookie-notice-script-blocking',
 			);
 		}
