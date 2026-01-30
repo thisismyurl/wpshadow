@@ -29,36 +29,57 @@ class Diagnostic_AstraThemeDynamicCssGeneration extends Diagnostic_Base {
 	protected static $slug = 'astra-theme-dynamic-css-generation';
 	protected static $title = 'Astra Theme Dynamic Css Generation';
 	protected static $description = 'Astra Theme Dynamic Css Generation needs optimization';
-	protected static $family = 'functionality';
 
-	public static function check() {
-		if ( ! true // Generic check ) {
-			return null;
-		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/astra-theme-dynamic-css-generation',
-			);
-		}
-		
-		return null;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
+}
+
+public static function check() {
+! function_exists( 'astra_get_option' ) ) { return null; }
+array();
+amic_css = get_option( 'astra_dynamic_css_generation', '1' );
+'0' === $dynamic_css ) { $issues[] = 'dynamic CSS generation disabled'; }
+get_option( 'astra_dynamic_css_cache', '1' );
+'0' === $css_cache ) { $issues[] = 'CSS caching disabled'; }
+get_option( 'astra_css_cache_size', 0 );
+$cache_size > 1000000 ) { $issues[] = "cache size {$cache_size} bytes (very large)"; }
+ify = get_option( 'astra_minify_dynamic_css', '1' );
+'0' === $minify ) { $issues[] = 'CSS minification disabled'; }
+get_option( 'astra_compress_css', '1' );
+'0' === $compress ) { $issues[] = 'CSS compression disabled'; }
+erate = get_option( 'astra_regenerate_css_on_update', '0' );
+'0' === $regenerate ) { $issues[] = 'CSS not regenerated on updates'; }
+! empty( $issues ) ) {
+ array( 'id' => self::$slug, 'title' => self::$title, 'description' => implode( ', ', $issues ), 'severity' => self::calculate_severity( min( 65, 50 + ( count( $issues ) * 3 ) ) ), 'threat_level' => min( 65, 50 + ( count( $issues ) * 3 ) ), 'auto_fixable' => false, 'kb_link' => 'https://wpshadow.com/kb/astra-theme-dynamic-css-generation' );
+ null;
+}
 }

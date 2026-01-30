@@ -36,25 +36,62 @@ class Diagnostic_LitespeedCacheDatabaseOptimization extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Database optimization enabled
+		$db_opt = get_option( 'litespeed_db_optimization', 0 );
+		if ( ! $db_opt ) {
+			$issues[] = 'Database optimization not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Table optimization schedule
+		$table_opt_schedule = get_option( 'litespeed_table_optimize_schedule', '' );
+		if ( empty( $table_opt_schedule ) ) {
+			$issues[] = 'Table optimization schedule not configured';
+		}
+		
+		// Check 3: Cleanup revisions
+		$cleanup_revs = get_option( 'litespeed_cleanup_revisions', 0 );
+		if ( ! $cleanup_revs ) {
+			$issues[] = 'Post revision cleanup not enabled';
+		}
+		
+		// Check 4: Cleanup draft posts
+		$cleanup_drafts = get_option( 'litespeed_cleanup_drafts', 0 );
+		if ( ! $cleanup_drafts ) {
+			$issues[] = 'Draft post cleanup not enabled';
+		}
+		
+		// Check 5: Cleanup spam comments
+		$cleanup_spam = get_option( 'litespeed_cleanup_spam_comments', 0 );
+		if ( ! $cleanup_spam ) {
+			$issues[] = 'Spam comment cleanup not enabled';
+		}
+		
+		// Check 6: Transient cleanup
+		$cleanup_transients = get_option( 'litespeed_cleanup_transients', 0 );
+		if ( ! $cleanup_transients ) {
+			$issues[] = 'Expired transient cleanup not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d LiteSpeed DB optimization issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/litespeed-cache-database-optimization',
 			);
 		}
