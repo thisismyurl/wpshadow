@@ -36,25 +36,62 @@ class Diagnostic_WpAllImportCustomFieldMapping extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Field mapping validation
+		$validation = get_option( 'pmxi_field_mapping_validation_enabled', 0 );
+		if ( ! $validation ) {
+			$issues[] = 'Field mapping validation not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Input sanitization
+		$sanitize = get_option( 'pmxi_field_mapping_sanitization_enabled', 0 );
+		if ( ! $sanitize ) {
+			$issues[] = 'Field mapping sanitization not enabled';
+		}
+		
+		// Check 3: Injection prevention
+		$injection = get_option( 'pmxi_injection_prevention_enabled', 0 );
+		if ( ! $injection ) {
+			$issues[] = 'Injection prevention not enabled';
+		}
+		
+		// Check 4: Field type checking
+		$type_check = get_option( 'pmxi_field_type_validation_enabled', 0 );
+		if ( ! $type_check ) {
+			$issues[] = 'Field type validation not enabled';
+		}
+		
+		// Check 5: Custom callback security
+		$callback = get_option( 'pmxi_custom_callback_security_enabled', 0 );
+		if ( ! $callback ) {
+			$issues[] = 'Custom callback security not configured';
+		}
+		
+		// Check 6: Regular expression validation
+		$regex = get_option( 'pmxi_regex_validation_enabled', 0 );
+		if ( ! $regex ) {
+			$issues[] = 'Regular expression validation not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d field mapping security issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-all-import-custom-field-mapping',
 			);
 		}

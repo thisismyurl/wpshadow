@@ -36,25 +36,62 @@ class Diagnostic_LifterlmsDatabaseQueries extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Query optimization enabled
+		$opt = get_option( 'llms_query_optimization_enabled', 0 );
+		if ( ! $opt ) {
+			$issues[] = 'Query optimization not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Database indexing
+		$indexing = get_option( 'llms_database_indexing_enabled', 0 );
+		if ( ! $indexing ) {
+			$issues[] = 'Database indexing not enabled';
+		}
+		
+		// Check 3: Post meta optimization
+		$meta = get_option( 'llms_post_meta_optimization_enabled', 0 );
+		if ( ! $meta ) {
+			$issues[] = 'Post meta optimization not enabled';
+		}
+		
+		// Check 4: Query caching
+		$cache = get_option( 'llms_query_caching_enabled', 0 );
+		if ( ! $cache ) {
+			$issues[] = 'Query caching not enabled';
+		}
+		
+		// Check 5: User meta optimization
+		$user_meta = get_option( 'llms_user_meta_optimization_enabled', 0 );
+		if ( ! $user_meta ) {
+			$issues[] = 'User meta optimization not enabled';
+		}
+		
+		// Check 6: Archive old data
+		$archive = get_option( 'llms_data_archiving_enabled', 0 );
+		if ( ! $archive ) {
+			$issues[] = 'Data archiving not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 35;
+			$threat_multiplier = 6;
+			$max_threat = 65;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d database query issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/lifterlms-database-queries',
 			);
 		}

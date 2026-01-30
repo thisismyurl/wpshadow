@@ -32,29 +32,62 @@ class Diagnostic_CrazyEggHeatmapDataStorage extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
-			return null;
+		$issues = array();
+		
+		// Check 1: Data storage enabled
+		$storage = get_option( 'crazy_egg_heatmap_data_storage_enabled', 0 );
+		if ( ! $storage ) {
+			$issues[] = 'Heatmap data storage not enabled';
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		// Check 2: Data retention policy
+		$retention = get_option( 'crazy_egg_data_retention_policy_set', 0 );
+		if ( ! $retention ) {
+			$issues[] = 'Data retention policy not configured';
+		}
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 3: Storage location
+		$location = get_option( 'crazy_egg_storage_location_configured', 0 );
+		if ( ! $location ) {
+			$issues[] = 'Storage location not configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 4: Backup configuration
+		$backup = get_option( 'crazy_egg_backup_enabled', 0 );
+		if ( ! $backup ) {
+			$issues[] = 'Backup not configured';
+		}
+		
+		// Check 5: Compression
+		$compression = get_option( 'crazy_egg_data_compression_enabled', 0 );
+		if ( ! $compression ) {
+			$issues[] = 'Data compression not enabled';
+		}
+		
+		// Check 6: Storage quota
+		$quota = absint( get_option( 'crazy_egg_storage_quota_mb', 0 ) );
+		if ( $quota <= 0 ) {
+			$issues[] = 'Storage quota not configured';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 30;
+			$threat_multiplier = 6;
+			$max_threat = 60;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d heatmap data storage issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/crazy-egg-heatmap-data-storage',
 			);
 		}
