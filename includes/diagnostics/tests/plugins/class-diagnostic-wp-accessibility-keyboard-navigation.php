@@ -32,29 +32,66 @@ class Diagnostic_WpAccessibilityKeyboardNavigation extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'WP_Accessibility' ) && ! function_exists( 'wpa_init' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify skip link is enabled
+		$skip_link = get_option( 'wpa_skiplink', '' );
+		if ( empty( $skip_link ) ) {
+			$issues[] = 'Skip navigation link not configured';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for focus outline visibility
+		$focus_outline = get_option( 'wpa_focus_outline', '' );
+		if ( empty( $focus_outline ) ) {
+			$issues[] = 'Focus outline not enabled for keyboard navigation';
+		}
+		
+		// Check 3: Verify keyboard navigation for dropdowns
+		$keyboard_nav = get_option( 'wpa_keyboard_nav', '' );
+		if ( empty( $keyboard_nav ) ) {
+			$issues[] = 'Dropdown keyboard navigation not enabled';
+		}
+		
+		// Check 4: Check ARIA landmark support
+		$landmarks = get_option( 'wpa_insert_roles', '' );
+		if ( empty( $landmarks ) ) {
+			$issues[] = 'ARIA landmark roles not added';
+		}
+		
+		// Check 5: Verify tabindex removal for accessibility
+		$tabindex = get_option( 'wpa_tabindex', '' );
+		if ( empty( $tabindex ) ) {
+			$issues[] = 'Tabindex correction not enabled';
+		}
+		
+		// Check 6: Check for longdesc support
+		$longdesc = get_option( 'wpa_longdesc', '' );
+		if ( empty( $longdesc ) ) {
+			$issues[] = 'Image longdesc support not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d accessibility keyboard navigation issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-accessibility-keyboard-navigation',
 			);
 		}

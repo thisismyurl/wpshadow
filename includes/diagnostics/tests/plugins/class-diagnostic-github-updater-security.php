@@ -32,29 +32,71 @@ class Diagnostic_GithubUpdaterSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'Fragen\\GitHub_Updater\\Base' ) && ! class_exists( 'GitHub_Updater' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify GitHub access tokens are not stored in plain text
+		$github_tokens = get_site_option( 'github_updater', array() );
+		if ( ! empty( $github_tokens ) && is_array( $github_tokens ) ) {
+			foreach ( $github_tokens as $key => $value ) {
+				if ( strpos( $key, 'token' ) !== false && ! empty( $value ) ) {
+					$issues[] = 'GitHub tokens stored in options (should use authentication)';
+					break;
+				}
+			}
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Verify SSL verification is enabled
+		$ssl_verify = get_site_option( 'github_updater_ssl_verify', true );
+		if ( ! $ssl_verify ) {
+			$issues[] = 'SSL verification disabled for GitHub Updater';
+		}
+		
+		// Check 3: Check for rate limiting configuration
+		$rate_limit = get_site_option( 'github_updater_rate_limit', false );
+		if ( ! $rate_limit ) {
+			$issues[] = 'GitHub API rate limiting not configured';
+		}
+		
+		// Check 4: Verify update checks are authenticated
+		$use_auth = get_site_option( 'github_updater_use_auth', false );
+		if ( ! $use_auth ) {
+			$issues[] = 'Unauthenticated API requests may hit rate limits';
+		}
+		
+		// Check 5: Check for webhook security tokens
+		$webhook_secret = get_site_option( 'github_updater_webhook_secret', '' );
+		if ( empty( $webhook_secret ) ) {
+			$issues[] = 'Webhook secret not configured';
+		}
+		
+		// Check 6: Verify private repository access is properly secured
+		$private_repos = get_site_option( 'github_updater_private_repos', array() );
+		if ( ! empty( $private_repos ) && empty( $use_auth ) ) {
+			$issues[] = 'Private repositories configured without authentication';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 70;
+			$threat_multiplier = 5;
+			$max_threat = 95;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d GitHub Updater security issue(s): %s',
+					$issue_count,
+					impode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/github-updater-security',
 			);
 		}

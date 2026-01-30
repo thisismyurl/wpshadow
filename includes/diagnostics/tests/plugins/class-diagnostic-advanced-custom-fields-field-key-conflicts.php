@@ -32,29 +32,118 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Duplicate field keys.
+		global $wpdb;
+		$duplicate_keys = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT post_excerpt, COUNT(*) as cnt FROM {$wpdb->posts} 
+				WHERE post_type = %s AND post_status = %s AND post_excerpt != '' 
+				GROUP BY post_excerpt HAVING cnt > 1",
+				'acf-field',
+				'publish'
+			)
+		);
+		if ( ! empty( $duplicate_keys ) ) {
+			$count = count( $duplicate_keys );
+			$issues[] = "{$count} duplicate field keys detected (data corruption risk)";
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Missing field keys.
+		$missing_keys = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_status = %s AND (post_excerpt = '' OR post_excerpt IS NULL)",
+				'acf-field',
+				'publish'
+			)
+		);
+		if ( $missing_keys > 0 ) {
+			$issues[] = "{$missing_keys} fields without unique keys (import/export issues)";
+		}
+		
+		// Check 3: Field name collisions.
+		$duplicate_names = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT post_title, COUNT(*) as cnt FROM {$wpdb->posts} 
+				WHERE post_type = %s AND post_status = %s 
+				GROUP BY post_title HAVING cnt > 1",
+				'acf-field',
+				'publish'
+			)
+		);
+		if ( ! empty( $duplicate_names ) ) {
+			$count = count( $duplicate_names );
+			$issues[] = "{$count} field name collisions (data retrieval conflicts)";
+		}
+		
+		// Check 4: Orphaned field data.
+		$orphaned_meta = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
+			LEFT JOIN {$wpdb->posts} p ON pm.meta_key = CONCAT('_', p.post_name) 
+			WHERE pm.meta_key LIKE 'field_%' AND p.ID IS NULL"
+		);
+		if ( $orphaned_meta > 0 ) {
+			$issues[] = "{$orphaned_meta} orphaned field references (cleanup needed)";
+		}
+		
+		// Check 5: JSON sync conflicts.
+		$json_path = get_option( 'acf_json_save_path', '' );
+		if ( ! empty( $json_path ) && is_dir( $json_path ) ) {
+			$json_files = glob( $json_path . '/*.json' );
+			if ( is_array( $json_files ) && count( $json_files ) > 0 ) {
+				// Check for sync conflicts.
+				$needs_sync = array();
+				foreach ( $json_files as $file ) {
+					$json_data = json_decode( file_get_contents( $file ), true );
+					if ( isset( $json_data['key'] ) ) {
+						$db_version = $wpdb->get_var(
+							$wpdb->prepare(
+								"SELECT post_modified FROM {$wpdb->posts} WHERE post_excerpt = %s AND post_type = %s",
+								$json_data['key'],
+								'acf-field-group'
+							)
+						);
+						if ( $db_version && filemtime( $file ) > strtotime( $db_version ) ) {
+							$needs_sync[] = basename( $file );
+						}
+					}
+				}
+				if ( ! empty( $needs_sync ) ) {
+					$count = count( $needs_sync );
+					$issues[] = "{$count} field groups out of sync with JSON files";
+				}
+			}
+		}
+		
+		// Check 6: Field group key conflicts.
+		$duplicate_group_keys = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT post_excerpt, COUNT(*) as cnt FROM {$wpdb->posts} 
+				WHERE post_type = %s AND post_status = %s AND post_excerpt != '' 
+				GROUP BY post_excerpt HAVING cnt > 1",
+				'acf-field-group',
+				'publish'
+			)
+		);
+		if ( ! empty( $duplicate_group_keys ) ) {
+			$count = count( $duplicate_group_keys );
+			$issues[] = "{$count} duplicate field group keys (import conflicts)";
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'ACF field key conflict issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-custom-fields-field-key-conflicts',
 			);
 		}

@@ -32,29 +32,73 @@ class Diagnostic_AstraThemeHeaderBuilder extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		$theme = wp_get_theme();
+		if ( 'Astra' !== $theme->get( 'Name' ) && 'Astra' !== $theme->parent_theme ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify header builder is enabled
+		$header_builder = get_option( 'astra-settings[header-builder]', 'disabled' );
+		if ( $header_builder === 'disabled' ) {
+			$issues[] = 'Header builder not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for mobile header configuration
+		$mobile_header = get_option( 'astra-settings[mobile-header-type]', 'default' );
+		if ( $mobile_header === 'default' ) {
+			$issues[] = 'Mobile header not optimized';
+		}
+		
+		// Check 3: Verify sticky header performance
+		$sticky_header = get_option( 'astra-settings[header-main-stick]', 0 );
+		$stick_origin = get_option( 'astra-settings[header-main-stick-meta]', '' );
+		if ( $sticky_header && empty( $stick_origin ) ) {
+			$issues[] = 'Sticky header enabled without performance optimization';
+		}
+		
+		// Check 4: Check for excessive header widgets
+		$header_widgets = get_option( 'astra-settings[header-builder-widgets]', array() );
+		if ( count( $header_widgets ) > 5 ) {
+			$issues[] = 'Excessive header widgets may impact performance';
+		}
+		
+		// Check 5: Verify transparent header settings
+		$transparent = get_option( 'astra-settings[transparent-header-enable]', 0 );
+		if ( $transparent ) {
+			$transparent_color = get_option( 'astra-settings[transparent-header-bg-color]', '' );
+			if ( empty( $transparent_color ) ) {
+				$issues[] = 'Transparent header enabled without proper styling';
+			}
+		}
+		
+		// Check 6: Check for header caching compatibility
+		if ( defined( 'WP_CACHE' ) && WP_CACHE ) {
+			$cache_compat = get_option( 'astra-settings[header-cache-compatibility]', false );
+			if ( ! $cache_compat && $sticky_header ) {
+				$issues[] = 'Cache compatibility not configured for sticky header';
+			}
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d Astra header builder issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/astra-theme-header-builder',
 			);
 		}

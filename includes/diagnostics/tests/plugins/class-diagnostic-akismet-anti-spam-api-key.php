@@ -35,30 +35,50 @@ class Diagnostic_AkismetAntiSpamApiKey extends Diagnostic_Base {
 		if ( ! defined( 'AKISMET_VERSION' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
+
+		$issues = array();
+
+		// Check 1: API key configured.
+		$api_key = \Akismet::get_api_key();
+		if ( empty( $api_key ) ) {
+			$issues[] = 'Akismet API key not configured';
+		}
+
+		// Check 2: API key is valid.
+		if ( ! empty( $api_key ) ) {
+			$key_status = \Akismet::verify_key( $api_key );
+			if ( 'invalid' === $key_status ) {
+				$issues[] = 'Akismet API key is invalid';
+			} elseif ( 'failed' === $key_status ) {
+				$issues[] = 'Unable to verify Akismet API key (connectivity issue)';
+			}
+		}
+
+		// Check 3: Akismet is enabled for comments.
+		$comment_moderation = get_option( 'akismet_strictness', 0 );
+		if ( empty( $comment_moderation ) ) {
+			$issues[] = 'Akismet comment filtering not configured';
+		}
+
+		// Check 4: Auto-discard spam enabled.
+		$auto_discard = get_option( 'akismet_discard_month', 'false' );
+		if ( 'false' === $auto_discard ) {
+			$issues[] = 'Akismet not set to auto-discard spam (spam accumulates)';
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 60 + ( count( $issues ) * 6 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/akismet-anti-spam-api-key',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Akismet configuration issues: ', 'wpshadow' ) . implode( ', ', $issues ),
+				'severity'     => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/akismet-anti-spam-api-key',
 			);
 		}
-		
+
 		return null;
 	}
 }
