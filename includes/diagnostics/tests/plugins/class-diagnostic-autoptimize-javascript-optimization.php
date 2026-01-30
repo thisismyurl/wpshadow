@@ -35,30 +35,22 @@ class Diagnostic_AutoptimizeJavascriptOptimization extends Diagnostic_Base {
 		if ( ! defined( 'AUTOPTIMIZE_PLUGIN_VERSION' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/autoptimize-javascript-optimization',
-			);
+		$issues = array();
+		$optimize_js = get_option( 'autoptimize_optimize_js', 0 );
+		if ( '0' === $optimize_js ) { $issues[] = 'JavaScript optimization disabled'; }
+		$minify_js = get_option( 'autoptimize_minify_js', 0 );
+		if ( '0' === $minify_js ) { $issues[] = 'JS minification disabled'; }
+		$remove_unused = get_option( 'autoptimize_remove_unused_js', 0 );
+		if ( '0' === $remove_unused ) { $issues[] = 'unused JavaScript not removed'; }
+		$defer_js = get_option( 'autoptimize_defer_js', 0 );
+		if ( '0' === $defer_js ) { $issues[] = 'defer attribute not used'; }
+		$exclude_js = get_option( 'autoptimize_js_exclude', '' );
+		if ( empty( $exclude_js ) ) { $issues[] = 'no JS exclusion rules'; }
+		$aggregate_js = get_option( 'autoptimize_aggregate_js', 0 );
+		if ( '0' === $aggregate_js ) { $issues[] = 'JS file aggregation disabled'; }
+		if ( ! empty( $issues ) ) {
+			return array( 'id' => self::$slug, 'title' => self::$title, 'description' => implode( ', ', $issues ), 'severity' => self::calculate_severity( min( 75, 50 + ( count( $issues ) * 4 ) ) ), 'threat_level' => min( 75, 50 + ( count( $issues ) * 4 ) ), 'auto_fixable' => false, 'kb_link' => 'https://wpshadow.com/kb/autoptimize-javascript-optimization' );
 		}
-		
 		return null;
 	}
 }

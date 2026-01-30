@@ -32,33 +32,24 @@ class Diagnostic_AuthorizeNetTransactionKeySecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'AuthorizeNetPaymentGateway' ) && ! function_exists( 'wc_anet' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 80 ),
-				'threat_level' => 80,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/authorize-net-transaction-key-security',
-			);
+		$issues = array();
+		$api_login = get_option( 'anet_api_login', '' );
+		if ( empty( $api_login ) ) { $issues[] = 'API login not configured'; }
+		$transaction_key = get_option( 'anet_transaction_key', '' );
+		if ( empty( $transaction_key ) ) { $issues[] = 'transaction key not configured'; }
+		$signature_key = get_option( 'anet_signature_key', '' );
+		if ( empty( $signature_key ) ) { $issues[] = 'signature key not set'; }
+		if ( is_ssl() ) {} else { $issues[] = 'SSL not enabled for API calls'; }
+		$test_mode = get_option( 'anet_test_mode', 0 );
+		if ( '1' === $test_mode ) { $issues[] = 'test mode still active in production'; }
+		$key_rotation = get_option( 'anet_last_key_rotation', 0 );
+		if ( $key_rotation && ( time() - (int) $key_rotation > 15778800 ) ) { $issues[] = 'keys not rotated in 6+ months'; }
+		if ( ! empty( $issues ) ) {
+			return array( 'id' => self::$slug, 'title' => self::$title, 'description' => implode( ', ', $issues ), 'severity' => self::calculate_severity( min( 95, 80 + ( count( $issues ) * 3 ) ) ), 'threat_level' => min( 95, 80 + ( count( $issues ) * 3 ) ), 'auto_fixable' => false, 'kb_link' => 'https://wpshadow.com/kb/authorize-net-transaction-key-security' );
 		}
-		
 		return null;
 	}
 }

@@ -35,30 +35,22 @@ class Diagnostic_AutoptimizeImageOptimization extends Diagnostic_Base {
 		if ( ! defined( 'AUTOPTIMIZE_PLUGIN_VERSION' ) ) {
 			return null;
 		}
-		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/autoptimize-image-optimization',
-			);
+		$issues = array();
+		$optimize_images = get_option( 'autoptimize_optimize_images', 0 );
+		if ( '0' === $optimize_images ) { $issues[] = 'image optimization disabled'; }
+		$webp_enabled = get_option( 'autoptimize_enable_webp', 0 );
+		if ( '0' === $webp_enabled ) { $issues[] = 'WebP conversion not enabled'; }
+		$lazy_load = get_option( 'autoptimize_lazy_load_images', 0 );
+		if ( '0' === $lazy_load ) { $issues[] = 'lazy loading disabled'; }
+		$quality_level = get_option( 'autoptimize_image_quality', 82 );
+		if ( $quality_level < 75 ) { $issues[] = "image quality too low ({$quality_level}%)"; }
+		$optimize_thumbnails = get_option( 'autoptimize_optimize_thumbnails', 0 );
+		if ( '0' === $optimize_thumbnails ) { $issues[] = 'thumbnail optimization disabled'; }
+		$image_cache = get_option( 'autoptimize_image_cache_interval', 0 );
+		if ( 0 === $image_cache ) { $issues[] = 'image cache not configured'; }
+		if ( ! empty( $issues ) ) {
+			return array( 'id' => self::$slug, 'title' => self::$title, 'description' => implode( ', ', $issues ), 'severity' => self::calculate_severity( min( 75, 50 + ( count( $issues ) * 4 ) ) ), 'threat_level' => min( 75, 50 + ( count( $issues ) * 4 ) ), 'auto_fixable' => false, 'kb_link' => 'https://wpshadow.com/kb/autoptimize-image-optimization' );
 		}
-		
 		return null;
 	}
 }
