@@ -245,8 +245,14 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			// Disable button
 			$btn.prop('disabled', true).text('<?php esc_attr_e( 'Detecting...', 'wpshadow' ); ?>');
 
-			// Detect timezone from browser
-			const detected = WPShadowTZ ? WPShadowTZ.detectBrowserTimezone() : null;
+			// Detect timezone from browser using Intl API
+			let detected = null;
+			try {
+				const format = new Intl.DateTimeFormat().resolvedOptions();
+				detected = format.timeZone;
+			} catch (e) {
+				console.error('Timezone detection failed:', e);
+			}
 
 			if (!detected) {
 				$result.text('<?php esc_attr_e( 'Error: Could not detect timezone from browser.', 'wpshadow' ); ?>');
