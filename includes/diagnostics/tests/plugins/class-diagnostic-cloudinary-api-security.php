@@ -32,33 +32,84 @@ class Diagnostic_CloudinaryApiSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Cloudinary plugin
+		if ( ! class_exists( 'Cloudinary\Plugin' ) && ! defined( 'CLOUDINARY_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: API credentials in wp-config.php vs database
+		$cloud_name = get_option( 'cloudinary_cloud_name', '' );
+		$api_key = get_option( 'cloudinary_api_key', '' );
+		$api_secret = get_option( 'cloudinary_api_secret', '' );
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/cloudinary-api-security',
-			);
+		if ( ! empty( $cloud_name ) || ! empty( $api_key ) || ! empty( $api_secret ) ) {
+			$issues[] = __( 'Cloudinary API credentials stored in database (should use wp-config.php)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Verify constants are defined
+		if ( ! defined( 'CLOUDINARY_URL' ) && ( empty( $cloud_name ) && empty( $api_key ) ) ) {
+			$issues[] = __( 'Cloudinary credentials not configured', 'wpshadow' );
+		}
+		
+		// Check 3: API secret exposure in frontend
+		global $wpdb;
+		$frontend_exposure = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_value LIKE %s",
+				'%cloudinary%',
+				'%api_secret%'
+			)
+		);
+		
+		if ( $frontend_exposure > 0 ) {
+			$issues[] = sprintf( __( 'API secret found in %d post metadata entries', 'wpshadow' ), $frontend_exposure );
+		}
+		
+		// Check 4: Signed URLs enabled for secure content
+		$use_signed_urls = get_option( 'cloudinary_use_signed_urls', false );
+		if ( ! $use_signed_urls ) {
+			$issues[] = __( 'Signed URLs not enabled (recommended for security)', 'wpshadow' );
+		}
+		
+		// Check 5: API rate limiting
+		$rate_limit = get_option( 'cloudinary_rate_limit_enabled', false );
+		if ( ! $rate_limit ) {
+			$issues[] = __( 'API rate limiting not configured', 'wpshadow' );
+		}
+		
+		// Check 6: Webhook signature verification
+		$webhook_secret = get_option( 'cloudinary_webhook_secret', '' );
+		$webhook_enabled = get_option( 'cloudinary_webhooks_enabled', false );
+		if ( $webhook_enabled && empty( $webhook_secret ) ) {
+			$issues[] = __( 'Webhooks enabled without signature verification', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 70;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 85;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 78;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of security issues */
+				__( 'Cloudinary API has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/cloudinary-api-security',
+		);
 	}
 }

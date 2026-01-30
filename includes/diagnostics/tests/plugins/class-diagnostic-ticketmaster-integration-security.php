@@ -32,33 +32,93 @@ class Diagnostic_TicketmasterIntegrationSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic plugin check ) {
+		global $wpdb;
+		
+		// Check if Ticketmaster integration is present (common option patterns)
+		$tm_options = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				'%ticketmaster%',
+				'%tm_api%'
+			)
+		);
+		
+		if ( empty( $tm_options ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/ticketmaster-integration-security',
-			);
+		// Check 1: API key exposed in options
+		foreach ( $tm_options as $option ) {
+			if ( stripos( $option->option_name, 'api_key' ) !== false || stripos( $option->option_name, 'secret' ) !== false ) {
+				if ( ! empty( $option->option_value ) && strlen( $option->option_value ) > 10 ) {
+					$issues[] = sprintf( __( 'API credentials stored in option: %s', 'wpshadow' ), $option->option_name );
+				}
+			}
 		}
 		
-		return null;
+		// Check 2: API keys in postmeta
+		$tm_postmeta = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_value LIKE %s",
+				'%ticketmaster%',
+				'%key%'
+			)
+		);
+		
+		if ( $tm_postmeta > 0 ) {
+			$issues[] = sprintf( __( '%d posts with Ticketmaster API data in postmeta', 'wpshadow' ), $tm_postmeta );
+		}
+		
+		// Check 3: Check if credentials are encrypted
+		$has_encryption = false;
+		foreach ( $tm_options as $option ) {
+			if ( stripos( $option->option_value, 'encrypted:' ) === 0 || function_exists( 'openssl_encrypt' ) ) {
+				$has_encryption = true;
+				break;
+			}
+		}
+		
+		if ( ! $has_encryption && count( $tm_options ) > 0 ) {
+			$issues[] = __( 'Ticketmaster credentials not encrypted', 'wpshadow' );
+		}
+		
+		// Check 4: SSL requirement for API calls
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'Site not using SSL for API communications', 'wpshadow' );
+		}
+		
+		// Check 5: Check for webhook endpoint security
+		$tm_webhook = get_option( 'ticketmaster_webhook_url', '' );
+		if ( ! empty( $tm_webhook ) && strpos( $tm_webhook, 'https://' ) !== 0 ) {
+			$issues[] = __( 'Ticketmaster webhook URL not using HTTPS', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 75;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 85;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 80;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of security issues */
+				__( 'Ticketmaster integration has %d security issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/ticketmaster-integration-security',
+		);
 	}
 }

@@ -36,29 +36,88 @@ class Diagnostic_MultisiteSsoIntegration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-sso-integration',
-			);
+		// Check 1: SSO configuration exists
+		$sso_enabled = get_site_option( 'multisite_sso_enabled', false );
+		if ( ! $sso_enabled ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Shared authentication secret
+		$auth_secret = get_site_option( 'multisite_sso_secret', '' );
+		if ( empty( $auth_secret ) ) {
+			$issues[] = __( 'SSO authentication secret not configured', 'wpshadow' );
+		} elseif ( strlen( $auth_secret ) < 32 ) {
+			$issues[] = sprintf( __( 'SSO secret too short: %d characters (minimum 32)', 'wpshadow' ), strlen( $auth_secret ) );
+		}
+		
+		// Check 3: Cookie domain configuration
+		$cookie_domain = get_site_option( 'multisite_sso_cookie_domain', '' );
+		if ( empty( $cookie_domain ) ) {
+			$issues[] = __( 'SSO cookie domain not configured', 'wpshadow' );
+		} else {
+			// Verify cookie domain matches network domain
+			$network = get_network();
+			if ( ! empty( $network->domain ) && strpos( $cookie_domain, $network->domain ) === false ) {
+				$issues[] = __( 'SSO cookie domain mismatch with network domain', 'wpshadow' );
+			}
+		}
+		
+		// Check 4: HTTPS requirement for SSO
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSO without HTTPS is insecure', 'wpshadow' );
+		}
+		
+		// Check 5: Token expiration
+		$token_expiry = get_site_option( 'multisite_sso_token_expiry', 0 );
+		if ( $token_expiry === 0 || $token_expiry > 3600 ) {
+			$issues[] = sprintf( __( 'SSO token expiry too long: %d seconds (recommended: 300-900)', 'wpshadow' ), $token_expiry );
+		}
+		
+		// Check 6: Per-site SSO configuration conflicts
+		global $wpdb;
+		$sites = get_sites( array( 'number' => 100 ) );
+		$conflicting_sites = 0;
+		
+		foreach ( $sites as $site ) {
+			switch_to_blog( $site->blog_id );
+			$site_sso = get_option( 'enable_sso', true );
+			restore_current_blog();
+			
+			if ( ! $site_sso ) {
+				$conflicting_sites++;
+			}
+		}
+		
+		if ( $conflicting_sites > 0 ) {
+			$issues[] = sprintf( __( '%d sites have SSO disabled (inconsistent network)', 'wpshadow' ), $conflicting_sites );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 65;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 58;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of configuration issues */
+				__( 'Multisite SSO integration has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-sso-integration',
+		);
 	}
 }
