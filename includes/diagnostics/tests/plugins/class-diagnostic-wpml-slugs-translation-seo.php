@@ -36,25 +36,63 @@ class Diagnostic_WpmlSlugsTranslationSeo extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
+		$wpml_settings = get_option( 'icl_sitepress_settings', array() );
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Slug translation enabled
+		$slug_trans = isset( $wpml_settings['enable_slug_translation'] ) ? (bool) $wpml_settings['enable_slug_translation'] : false;
+		if ( ! $slug_trans ) {
+			$issues[] = 'Slug translation not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: SEO optimization enabled
+		$seo_opt = isset( $wpml_settings['seo_friendly_urls'] ) ? (bool) $wpml_settings['seo_friendly_urls'] : false;
+		if ( ! $seo_opt ) {
+			$issues[] = 'SEO-friendly URLs not enabled';
+		}
+		
+		// Check 3: Canonical tags
+		$canonical = get_option( 'wpml_canonical_tags_enabled', 0 );
+		if ( ! $canonical ) {
+			$issues[] = 'Canonical tags not enabled';
+		}
+		
+		// Check 4: Duplicate content handling
+		$duplicate_handling = get_option( 'wpml_duplicate_content_handling', '' );
+		if ( empty( $duplicate_handling ) ) {
+			$issues[] = 'Duplicate content handling not configured';
+		}
+		
+		// Check 5: Hreflang tags
+		$hreflang = get_option( 'wpml_hreflang_tags_enabled', 0 );
+		if ( ! $hreflang ) {
+			$issues[] = 'Hreflang tags not enabled';
+		}
+		
+		// Check 6: Sitemap generation
+		$sitemap = get_option( 'wpml_sitemap_generation', 0 );
+		if ( ! $sitemap ) {
+			$issues[] = 'Sitemap generation for translations not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 40;
+			$threat_multiplier = 6;
+			$max_threat = 70;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d WPML SEO issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wpml-slugs-translation-seo',
 			);
 		}

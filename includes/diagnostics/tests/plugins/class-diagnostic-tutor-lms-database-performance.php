@@ -36,25 +36,62 @@ class Diagnostic_TutorLmsDatabasePerformance extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Database query optimization
+		$query_opt = get_option( 'tutor_query_optimization_enabled', 0 );
+		if ( ! $query_opt ) {
+			$issues[] = 'Database query optimization not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Caching enabled
+		$cache = get_option( 'tutor_lms_caching_enabled', 0 );
+		if ( ! $cache ) {
+			$issues[] = 'LMS caching not enabled';
+		}
+		
+		// Check 3: Index optimization
+		$index = get_option( 'tutor_db_index_optimization', 0 );
+		if ( ! $index ) {
+			$issues[] = 'Database index optimization not configured';
+		}
+		
+		// Check 4: Course query optimization
+		$course_opt = get_option( 'tutor_course_query_optimization', 0 );
+		if ( ! $course_opt ) {
+			$issues[] = 'Course query optimization not enabled';
+		}
+		
+		// Check 5: Lesson query optimization
+		$lesson_opt = get_option( 'tutor_lesson_query_optimization', 0 );
+		if ( ! $lesson_opt ) {
+			$issues[] = 'Lesson query optimization not enabled';
+		}
+		
+		// Check 6: Analytics optimization
+		$analytics = get_option( 'tutor_analytics_db_optimization', 0 );
+		if ( ! $analytics ) {
+			$issues[] = 'Analytics database optimization not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 45;
+			$threat_multiplier = 6;
+			$max_threat = 75;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d Tutor LMS DB performance issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/tutor-lms-database-performance',
 			);
 		}
