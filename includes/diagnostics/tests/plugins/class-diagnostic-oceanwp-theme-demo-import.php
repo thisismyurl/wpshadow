@@ -32,33 +32,75 @@ class Diagnostic_OceanwpThemeDemoImport extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		$theme = wp_get_theme();
+		if ( 'OceanWP' !== $theme->get( 'Name' ) && 'OceanWP' !== $theme->get_template() ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/oceanwp-theme-demo-import',
-			);
+		// Check 1: Demo data installed
+		$demo_installed = get_option( 'oceanwp_demo_import', 'no' );
+		if ( 'yes' === $demo_installed ) {
+			$issues[] = __( 'Demo data still installed (bloated database)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Demo images
+		$demo_images = get_option( 'oceanwp_demo_images', 'yes' );
+		if ( 'yes' === $demo_images ) {
+			$issues[] = __( 'Demo images in media library (wasted storage)', 'wpshadow' );
+		}
+		
+		// Check 3: Demo posts count
+		global $wpdb;
+		$demo_posts = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_title LIKE '%demo%'"
+		);
+		if ( $demo_posts > 0 ) {
+			$issues[] = sprintf( __( '%d demo posts found (cleanup needed)', 'wpshadow' ), $demo_posts );
+		}
+		
+		// Check 4: Import in progress
+		$import_status = get_transient( 'oceanwp_demo_import_status' );
+		if ( false !== $import_status ) {
+			$issues[] = __( 'Import in progress (resource intensive)', 'wpshadow' );
+		}
+		
+		// Check 5: Failed imports
+		$failed_imports = get_option( 'oceanwp_failed_imports', array() );
+		if ( ! empty( $failed_imports ) ) {
+			$issues[] = sprintf( __( '%d failed import attempts', 'wpshadow' ), count( $failed_imports ) );
+		}
+		
+		// Check 6: Import timeout
+		$timeout = get_option( 'oceanwp_import_timeout', 300 );
+		if ( $timeout < 600 ) {
+			$issues[] = __( 'Import timeout too short (failures likely)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'OceanWP demo import has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/oceanwp-theme-demo-import',
+		);
 	}
 }

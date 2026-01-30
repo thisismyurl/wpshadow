@@ -36,29 +36,67 @@ class Diagnostic_GoogleTagManagerContainerLoading extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-container-loading',
-			);
+		// Check 1: Container ID
+		$container_id = get_option( 'gtm4wp_container_id', '' );
+		if ( empty( $container_id ) ) {
+			$issues[] = __( 'No container ID set (GTM not active)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Loading method
+		$load_method = get_option( 'gtm4wp_load_method', 'header' );
+		if ( 'header' === $load_method ) {
+			$issues[] = __( 'Loaded in header (render blocking)', 'wpshadow' );
+		}
+		
+		// Check 3: Async loading
+		$async = get_option( 'gtm4wp_async', 'no' );
+		if ( 'no' === $async ) {
+			$issues[] = __( 'Not loaded async (page speed impact)', 'wpshadow' );
+		}
+		
+		// Check 4: Environment snippet
+		$environment = get_option( 'gtm4wp_environment', '' );
+		if ( ! empty( $environment ) && ! defined( 'WP_DEBUG' ) ) {
+			$issues[] = __( 'Testing environment in production (data issues)', 'wpshadow' );
+		}
+		
+		// Check 5: datalayer events
+		$datalayer_events = get_option( 'gtm4wp_datalayer_events', array() );
+		if ( count( $datalayer_events ) > 50 ) {
+			$issues[] = sprintf( __( '%d dataLayer events (performance impact)', 'wpshadow' ), count( $datalayer_events ) );
+		}
+		
+		// Check 6: Tag timeout
+		$timeout = get_option( 'gtm4wp_tag_timeout', 2000 );
+		if ( $timeout > 5000 ) {
+			$issues[] = __( 'Tag timeout too long (slow page loads)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 67;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 61;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Google Tag Manager has %d performance issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-container-loading',
+		);
 	}
 }

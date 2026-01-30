@@ -36,29 +36,67 @@ class Diagnostic_BookingpressEmailNotifications extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/bookingpress-email-notifications',
-			);
+		// Check 1: Customer notifications
+		$customer_notify = get_option( 'bookingpress_customer_notifications', 'yes' );
+		if ( 'no' === $customer_notify ) {
+			$issues[] = __( 'Customer notifications disabled (poor experience)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Admin notifications
+		$admin_notify = get_option( 'bookingpress_admin_notifications', 'yes' );
+		if ( 'no' === $admin_notify ) {
+			$issues[] = __( 'Admin notifications disabled (missed bookings)', 'wpshadow' );
+		}
+		
+		// Check 3: Email templates
+		$templates = get_option( 'bookingpress_email_templates', array() );
+		if ( empty( $templates ) ) {
+			$issues[] = __( 'No custom email templates (generic emails)', 'wpshadow' );
+		}
+		
+		// Check 4: Email queue
+		$queue_enabled = get_option( 'bookingpress_email_queue', 'no' );
+		if ( 'no' === $queue_enabled ) {
+			$issues[] = __( 'Email queue disabled (blocking requests)', 'wpshadow' );
+		}
+		
+		// Check 5: Reminder emails
+		$reminders = get_option( 'bookingpress_reminder_emails', 'no' );
+		if ( 'no' === $reminders ) {
+			$issues[] = __( 'Reminder emails disabled (no-shows likely)', 'wpshadow' );
+		}
+		
+		// Check 6: Email logging
+		$logging = get_option( 'bookingpress_email_logging', 'no' );
+		if ( 'no' === $logging ) {
+			$issues[] = __( 'Email not logged (no audit trail)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 57;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 51;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'BookingPress email has %d notification issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/bookingpress-email-notifications',
+		);
 	}
 }

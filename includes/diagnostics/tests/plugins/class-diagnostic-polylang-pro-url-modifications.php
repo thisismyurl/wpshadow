@@ -36,29 +36,78 @@ class Diagnostic_PolylangProUrlModifications extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/polylang-pro-url-modifications',
-			);
+		// Check 1: URL structure
+		$url_structure = get_option( 'polylang_url_structure', 'directory' );
+		if ( 'directory' === $url_structure ) {
+			$issues[] = __( 'Directory structure (subdomain recommended)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Language slug conflict
+		$languages = pll_languages_list();
+		if ( $languages ) {
+			foreach ( $languages as $lang ) {
+				$page = get_page_by_path( $lang );
+				if ( $page ) {
+					$issues[] = sprintf( __( 'Language slug /%s/ conflicts with page', 'wpshadow' ), $lang );
+				}
+			}
+		}
+		
+		// Check 3: Rewrite rules
+		$rules = get_option( 'rewrite_rules' );
+		$pll_rules = 0;
+		foreach ( $rules as $pattern => $rewrite ) {
+			if ( strpos( $pattern, 'language' ) !== false ) {
+				$pll_rules++;
+			}
+		}
+		if ( $pll_rules > 50 ) {
+			$issues[] = sprintf( __( '%d language rewrite rules (slow routing)', 'wpshadow' ), $pll_rules );
+		}
+		
+		// Check 4: Redirect handling
+		$redirect = get_option( 'polylang_redirect', 'browser' );
+		if ( 'browser' === $redirect ) {
+			$issues[] = __( 'Browser language detection (caching issues)', 'wpshadow' );
+		}
+		
+		// Check 5: Canonical URLs
+		$canonical = get_option( 'polylang_canonical', 'no' );
+		if ( 'no' === $canonical ) {
+			$issues[] = __( 'No canonical URLs (duplicate content SEO)', 'wpshadow' );
+		}
+		
+		// Check 6: Hreflang tags
+		$hreflang = get_option( 'polylang_hreflang', 'no' );
+		if ( 'no' === $hreflang ) {
+			$issues[] = __( 'No hreflang tags (international SEO)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Polylang Pro has %d URL modification issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/polylang-pro-url-modifications',
+		);
 	}
 }

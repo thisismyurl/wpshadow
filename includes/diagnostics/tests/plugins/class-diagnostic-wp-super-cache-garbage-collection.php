@@ -36,29 +36,81 @@ class Diagnostic_WpSuperCacheGarbageCollection extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wp_cache_config_file;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-super-cache-garbage-collection',
-			);
+		// Check 1: Garbage collection enabled
+		$gc_enabled = get_option( 'wp_super_cache_gc_enabled', 'no' );
+		if ( 'no' === $gc_enabled ) {
+			$issues[] = __( 'Garbage collection disabled (cache bloat)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: GC schedule
+		$gc_schedule = wp_get_schedule( 'wp_cache_gc' );
+		if ( false === $gc_schedule ) {
+			$issues[] = __( 'No GC schedule (old cache never deleted)', 'wpshadow' );
+		}
+		
+		// Check 3: Cache size
+		$cache_dir = WP_CONTENT_DIR . '/cache/';
+		if ( is_dir( $cache_dir ) ) {
+			$size = 0;
+			$files = new \RecursiveIteratorIterator(
+				new \RecursiveDirectoryIterator( $cache_dir ),
+				\RecursiveIteratorIterator::LEAVES_ONLY
+			);
+			foreach ( $files as $file ) {
+				if ( $file->isFile() ) {
+					$size += $file->getSize();
+				}
+			}
+			$size_mb = $size / 1024 / 1024;
+			if ( $size_mb > 500 ) {
+				$issues[] = sprintf( __( '%d MB cache (excessive)', 'wpshadow' ), round( $size_mb ) );
+			}
+		}
+		
+		// Check 4: Max age
+		$max_age = get_option( 'wp_super_cache_max_age', 0 );
+		if ( $max_age === 0 ) {
+			$issues[] = __( 'No cache expiration (stale content)', 'wpshadow' );
+		}
+		
+		// Check 5: Delete expired files
+		$delete_expired = get_option( 'wp_super_cache_delete_expired', 'no' );
+		if ( 'no' === $delete_expired ) {
+			$issues[] = __( 'Expired files not deleted (disk space)', 'wpshadow' );
+		}
+		
+		// Check 6: GC timeout
+		$gc_timeout = get_option( 'wp_super_cache_gc_timeout', 600 );
+		if ( $gc_timeout > 1800 ) {
+			$issues[] = __( 'GC timeout too long (resource intensive)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'WP Super Cache garbage collection has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-super-cache-garbage-collection',
+		);
 	}
 }

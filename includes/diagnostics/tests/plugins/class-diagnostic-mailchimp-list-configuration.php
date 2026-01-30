@@ -36,29 +36,67 @@ class Diagnostic_MailchimpListConfiguration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/mailchimp-list-configuration',
-			);
+		// Check 1: API key
+		$api_key = get_option( 'mc4wp_api_key', '' );
+		if ( empty( $api_key ) ) {
+			$issues[] = __( 'No API key (not connected)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Default list
+		$default_list = get_option( 'mc4wp_default_list', '' );
+		if ( empty( $default_list ) ) {
+			$issues[] = __( 'No default list (forms may fail)', 'wpshadow' );
+		}
+		
+		// Check 3: Double opt-in
+		$double_optin = get_option( 'mc4wp_double_optin', 'yes' );
+		if ( 'no' === $double_optin ) {
+			$issues[] = __( 'Single opt-in (spam/GDPR concern)', 'wpshadow' );
+		}
+		
+		// Check 4: List segmentation
+		$segments = get_option( 'mc4wp_list_segments', array() );
+		if ( empty( $segments ) ) {
+			$issues[] = __( 'No list segmentation (poor targeting)', 'wpshadow' );
+		}
+		
+		// Check 5: Welcome automation
+		$welcome = get_option( 'mc4wp_welcome_email', 'no' );
+		if ( 'no' === $welcome ) {
+			$issues[] = __( 'No welcome automation (missed engagement)', 'wpshadow' );
+		}
+		
+		// Check 6: Sync frequency
+		$sync = get_option( 'mc4wp_sync_frequency', 'manual' );
+		if ( 'manual' === $sync ) {
+			$issues[] = __( 'Manual sync only (outdated lists)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 45;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 57;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 51;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Mailchimp has %d list configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/mailchimp-list-configuration',
+		);
 	}
 }
