@@ -138,7 +138,11 @@ Tool_View_Base::render_header( __( 'Email Test & Configuration', 'wpshadow' ), _
 		</div>
 	<?php endif; ?>
 
-	<div class="card" class="wps-email-test-card">
+	<!-- Two Column Layout -->
+	<div class="wps-email-test-grid">
+		<!-- Left Column: Test Form -->
+		<div class="wps-email-test-column-left">
+			<div class="card" class="wps-email-test-card">
 		<h2><?php esc_html_e( 'Current Email Configuration', 'wpshadow' ); ?></h2>
 		<table class="widefat striped" class="wps-email-test-table">
 			<tbody>
@@ -169,9 +173,7 @@ Tool_View_Base::render_header( __( 'Email Test & Configuration', 'wpshadow' ), _
 					<td><code><?php echo esc_html( get_option( 'admin_email' ) ); ?></code></td>
 				</tr>
 			</tbody>
-		</table>
-
-		<h2><?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?></h2>
+				<h2><?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?></h2>
 		<form method="post" action="">
 			<?php wp_nonce_field( 'wpshadow_email_test', 'wpshadow_email_test_nonce' ); ?>
 
@@ -257,11 +259,11 @@ Tool_View_Base::render_header( __( 'Email Test & Configuration', 'wpshadow' ), _
 				<button type="submit" name="wpshadow_send_test_email" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Send Test Email', 'wpshadow' ); ?>
 				</button>
-			</p>
-		</form>
-	</div>
+				</p>
+			</form>
+		</div>
 
-	<div class="card" class="wps-email-test-card-alt">
+		<div class="card" class="wps-email-test-card-alt">
 		<h2><?php esc_html_e( 'Troubleshooting Email Delivery', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'If emails are not being delivered, consider these common issues:', 'wpshadow' ); ?></p>
 		<ul class="wps-email-test-list">
@@ -342,8 +344,81 @@ Tool_View_Base::render_header( __( 'Email Test & Configuration', 'wpshadow' ), _
 				<button type="submit" name="wpshadow_update_compliance" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Update Compliance Settings', 'wpshadow' ); ?>
 				</button>
-			</p>
-		</form>
+				</p>
+			</form>
+		</div>
 	</div>
+
+	<!-- Right Column: Configuration & Troubleshooting -->
+	<div class="wps-email-test-column-right">
+		<div class="card">
+			<h2><?php esc_html_e( 'Current Email Configuration', 'wpshadow' ); ?></h2>
+			<table class="widefat striped" class="wps-email-test-table">
+				<tbody>
+					<tr>
+						<th class="wps-email-test-table-header"><?php esc_html_e( 'From Name', 'wpshadow' ); ?></th>
+						<td>
+							<code><?php echo esc_html( $current_from_name ); ?></code>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'From Email', 'wpshadow' ); ?></th>
+						<td>
+							<code><?php echo esc_html( $current_from_email ); ?></code>
+							<?php if ( $current_from_email === $wp_from_email ) : ?>
+								<span class="dashicons dashicons-warning wps-email-test-warning-icon"></span>
+								<span class="wps-email-test-warning-text">
+									<?php esc_html_e( 'Using WordPress default (may be rejected by mail servers)', 'wpshadow' ); ?>
+								</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'WordPress Default', 'wpshadow' ); ?></th>
+						<td><code><?php echo esc_html( $wp_from_email ); ?></code></td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Admin Email', 'wpshadow' ); ?></th>
+						<td><code><?php echo esc_html( get_option( 'admin_email' ) ); ?></code></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="card" class="wps-email-test-card-alt">
+			<h2><?php esc_html_e( 'Troubleshooting Email Delivery', 'wpshadow' ); ?></h2>
+			<p><?php esc_html_e( 'If emails are not being delivered, consider these common issues:', 'wpshadow' ); ?></p>
+			<ul class="wps-email-test-list">
+				<li>
+					<strong><?php esc_html_e( 'Server mail configuration:', 'wpshadow' ); ?></strong>
+					<?php esc_html_e( 'Your hosting server may not be configured to send mail properly.', 'wpshadow' ); ?>
+				</li>
+				<li>
+					<strong><?php esc_html_e( 'SPF/DKIM records:', 'wpshadow' ); ?></strong>
+					<?php esc_html_e( 'Your domain may not have proper DNS records for email authentication.', 'wpshadow' ); ?>
+				</li>
+				<li>
+					<strong><?php esc_html_e( 'From Email address:', 'wpshadow' ); ?></strong>
+					<?php esc_html_e( 'Using an address that doesn\'t match your domain can cause delivery failures.', 'wpshadow' ); ?>
+				</li>
+				<li>
+					<strong><?php esc_html_e( 'SMTP plugin:', 'wpshadow' ); ?></strong>
+					<?php
+					printf(
+						/* translators: 1: opening anchor tag for WP Mail SMTP, 2: closing anchor tag */
+						esc_html__( 'Consider using an SMTP plugin like %1$sWP Mail SMTP%2$s for more reliable delivery.', 'wpshadow' ),
+						'<a href="https://wordpress.org/plugins/wp-mail-smtp/" target="_blank">',
+						'</a>'
+					);
+					?>
+				</li>
+				<li>
+					<strong><?php esc_html_e( 'Email service provider:', 'wpshadow' ); ?></strong>
+					<?php esc_html_e( 'Use a transactional email service like SendGrid, Mailgun, or Amazon SES for production sites.', 'wpshadow' ); ?>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
 </div>
 <?php Tool_View_Base::render_footer(); ?>
