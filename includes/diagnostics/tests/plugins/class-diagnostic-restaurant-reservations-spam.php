@@ -36,29 +36,77 @@ class Diagnostic_RestaurantReservationsSpam extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 60 ),
-				'threat_level' => 60,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/restaurant-reservations-spam',
-			);
+		// Check 1: CAPTCHA enabled
+		$captcha = get_option( 'rtb_captcha_enabled', 'no' );
+		if ( 'no' === $captcha ) {
+			$issues[] = __( 'No CAPTCHA (bot spam)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: Honeypot field
+		$honeypot = get_option( 'rtb_honeypot_enabled', 'no' );
+		if ( 'no' === $honeypot ) {
+			$issues[] = __( 'No honeypot field (simple bot spam)', 'wpshadow' );
+		}
+		
+		// Check 3: Rate limiting
+		$rate_limit = get_option( 'rtb_rate_limit', 0 );
+		if ( $rate_limit === 0 ) {
+			$issues[] = __( 'No rate limiting (spam floods)', 'wpshadow' );
+		}
+		
+		// Check 4: Spam reservation count
+		$spam_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} 
+				WHERE post_type = %s AND post_status = %s",
+				'rtb_booking',
+				'spam'
+			)
+		);
+		
+		if ( $spam_count > 50 ) {
+			$issues[] = sprintf( __( '%d spam reservations (database bloat)', 'wpshadow' ), $spam_count );
+		}
+		
+		// Check 5: Auto-delete spam
+		$auto_delete = get_option( 'rtb_auto_delete_spam', 'no' );
+		if ( 'no' === $auto_delete ) {
+			$issues[] = __( 'Spam not auto-deleted (manual cleanup)', 'wpshadow' );
+		}
+		
+		// Check 6: Moderation required
+		$require_approval = get_option( 'rtb_require_approval', 'no' );
+		if ( 'no' === $require_approval ) {
+			$issues[] = __( 'No moderation (instant booking)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 60;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 72;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 66;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of restaurant reservations spam issues */
+				__( 'Restaurant reservations have %d spam issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/restaurant-reservations-spam',
+		);
 	}
 }

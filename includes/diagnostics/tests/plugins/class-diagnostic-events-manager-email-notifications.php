@@ -36,29 +36,68 @@ class Diagnostic_EventsManagerEmailNotifications extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/events-manager-email-notifications',
-			);
+		// Check 1: Email notification enabled
+		$notify_enabled = get_option( 'dbem_email_notifications', '0' );
+		if ( '0' === $notify_enabled ) {
+			return null; // Feature not in use
 		}
 		
-		return null;
+		// Check 2: From email configured
+		$from_email = get_option( 'dbem_mail_sender_address', '' );
+		if ( empty( $from_email ) || $from_email === get_option( 'admin_email' ) ) {
+			$issues[] = __( 'Using admin email as sender (spam risk)', 'wpshadow' );
+		}
+		
+		// Check 3: Email template formatting
+		$email_html = get_option( 'dbem_email_html', '0' );
+		if ( '0' === $email_html ) {
+			$issues[] = __( 'Plain text emails only (poor formatting)', 'wpshadow' );
+		}
+		
+		// Check 4: BCC on all emails
+		$bcc_enabled = get_option( 'dbem_email_bcc', '0' );
+		if ( '1' === $bcc_enabled ) {
+			$issues[] = __( 'BCC on all emails (privacy risk)', 'wpshadow' );
+		}
+		
+		// Check 5: SMTP configuration
+		$use_smtp = get_option( 'dbem_rsvp_mail_send_method', 'mail' );
+		if ( 'mail' === $use_smtp ) {
+			$issues[] = __( 'Using PHP mail() (unreliable delivery)', 'wpshadow' );
+		}
+		
+		// Check 6: Email rate limiting
+		$rate_limit = get_option( 'dbem_email_rate_limit', 0 );
+		if ( $rate_limit === 0 ) {
+			$issues[] = __( 'No rate limiting (mail server bans)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of Events Manager email issues */
+				__( 'Events Manager emails have %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/events-manager-email-notifications',
+		);
 	}
 }
