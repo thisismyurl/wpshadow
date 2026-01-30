@@ -333,6 +333,28 @@ class Plugin_Bootstrap {
 			}
 		}
 
+		// Load Phase 4 Infrastructure (Export, Snapshots, Integrations, Analytics)
+		$phase4_classes = array(
+			'class-report-export-manager.php',
+			'class-report-snapshot-manager.php',
+			'class-report-alert-manager.php',
+			'class-report-integration-manager.php',
+			'class-report-annotation-manager.php',
+			'class-report-analytics-engine.php',
+			'class-phase4-initializer.php',
+		);
+
+		foreach ( $phase4_classes as $file ) {
+			if ( file_exists( $reporting_path . $file ) ) {
+				require_once $reporting_path . $file;
+			}
+		}
+
+		// Load Phase 4 Settings Page
+		if ( file_exists( WPSHADOW_PATH . 'includes/screens/class-phase4-settings-page.php' ) ) {
+			require_once WPSHADOW_PATH . 'includes/screens/class-phase4-settings-page.php';
+		}
+
 		// Load dashboard widgets
 		$widget_classes = array(
 			'class-executive-roi-widget.php',

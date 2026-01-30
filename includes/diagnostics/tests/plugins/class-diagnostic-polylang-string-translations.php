@@ -36,29 +36,81 @@ class Diagnostic_PolylangStringTranslations extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: String translations registered
+		$strings = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}polylang_strings"
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/polylang-string-translations',
-			);
+		if ( $strings === null ) {
+			return null; // Table doesn't exist
 		}
 		
-		return null;
+		// Check 2: Untranslated strings
+		$languages = get_option( 'polylang', array() );
+		if ( isset( $languages['languages'] ) && count( $languages['languages'] ) > 0 ) {
+			$untranslated = $wpdb->get_var(
+				"SELECT COUNT(DISTINCT string_id) 
+				FROM {$wpdb->prefix}polylang_strings ps
+				LEFT JOIN {$wpdb->prefix}polylang_translations pt ON ps.string_id = pt.object_id
+				WHERE pt.translation IS NULL OR pt.translation = ''"
+			);
+			
+			if ( $untranslated > 10 ) {
+				$issues[] = sprintf( __( '%d untranslated strings', 'wpshadow' ), $untranslated );
+			}
+		}
+		
+		// Check 3: Language switcher
+		$switcher = get_option( 'polylang_switcher', array() );
+		if ( empty( $switcher ) || ! isset( $switcher['show_names'] ) ) {
+			$issues[] = __( 'Language switcher not configured', 'wpshadow' );
+		}
+		
+		// Check 4: Media translation
+		$media_support = get_option( 'polylang_media_support', 1 );
+		if ( ! $media_support ) {
+			$issues[] = __( 'Media translation disabled (untranslated images)', 'wpshadow' );
+		}
+		
+		// Check 5: Default language fallback
+		$force_lang = get_option( 'polylang_force_lang', 0 );
+		if ( ! $force_lang ) {
+			$issues[] = __( 'Language detection disabled (may show wrong language)', 'wpshadow' );
+		}
+		
+		// Check 6: Translation synchronization
+		$sync = get_option( 'polylang_sync', array() );
+		if ( empty( $sync ) ) {
+			$issues[] = __( 'Post synchronization disabled (manual updates needed)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of string translation issues */
+				__( 'Polylang has %d string translation issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/polylang-string-translations',
+		);
 	}
 }

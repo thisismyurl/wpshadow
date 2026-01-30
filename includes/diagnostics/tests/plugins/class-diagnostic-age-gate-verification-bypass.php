@@ -32,33 +32,79 @@ class Diagnostic_AgeGateVerificationBypass extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for age gate plugins
+		$has_age_gate = defined( 'AGE_GATE_VERSION' ) ||
+		                class_exists( 'Age_Gate' ) ||
+		                get_option( 'age_gate_enabled', '' ) !== '';
+		
+		if ( ! $has_age_gate ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/age-gate-verification-bypass',
-			);
+		// Check 1: Cookie-only verification
+		$verification_method = get_option( 'age_gate_verification_method', 'cookie' );
+		if ( 'cookie' === $verification_method ) {
+			$issues[] = __( 'Cookie-only verification (easily bypassed)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: JavaScript dependency
+		$require_js = get_option( 'age_gate_require_js', 'yes' );
+		if ( 'yes' === $require_js ) {
+			$issues[] = __( 'JavaScript required (bypass if disabled)', 'wpshadow' );
+		}
+		
+		// Check 3: Remember me duration
+		$remember_duration = get_option( 'age_gate_remember_duration', 365 );
+		if ( $remember_duration > 30 ) {
+			$issues[] = sprintf( __( '%d day cookie (long bypass window)', 'wpshadow' ), $remember_duration );
+		}
+		
+		// Check 4: Minimum age validation
+		$min_age = get_option( 'age_gate_minimum_age', 18 );
+		$validate_date = get_option( 'age_gate_validate_date', 'no' );
+		
+		if ( 'no' === $validate_date ) {
+			$issues[] = __( 'No date validation (fake birthdays accepted)', 'wpshadow' );
+		}
+		
+		// Check 5: Legal compliance
+		$show_policy = get_option( 'age_gate_show_privacy_policy', 'no' );
+		if ( 'no' === $show_policy ) {
+			$issues[] = __( 'No privacy policy link (compliance issue)', 'wpshadow' );
+		}
+		
+		// Check 6: Bot detection
+		$bot_protection = get_option( 'age_gate_bot_protection', 'off' );
+		if ( 'off' === $bot_protection ) {
+			$issues[] = __( 'No bot detection (automated bypass)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of age gate bypass vulnerabilities */
+				__( 'Age gate has %d verification bypass risks: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/age-gate-verification-bypass',
+		);
 	}
 }
