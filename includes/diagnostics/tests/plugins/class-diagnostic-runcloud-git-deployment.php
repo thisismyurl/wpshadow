@@ -32,33 +32,75 @@ class Diagnostic_RuncloudGitDeployment extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for RunCloud hosting environment
+		if ( ! defined( 'RUNCLOUD_HUB_VERSION' ) && ! isset( $_SERVER['RUNCLOUD_SERVER_NAME'] ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/runcloud-git-deployment',
-			);
+		// Check 1: Git initialized
+		$git_dir = ABSPATH . '.git';
+		if ( ! is_dir( $git_dir ) ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Deployment webhook configured
+		$webhook_url = get_option( 'runcloud_git_webhook', '' );
+		if ( empty( $webhook_url ) ) {
+			$issues[] = __( 'Git deployment webhook not configured', 'wpshadow' );
+		}
+		
+		// Check 3: Deployment history logging
+		$log_deployments = get_option( 'runcloud_log_deployments', false );
+		if ( ! $log_deployments ) {
+			$issues[] = __( 'Deployment history not logged (audit trail missing)', 'wpshadow' );
+		}
+		
+		// Check 4: Automatic deployment safety
+		$auto_deploy = get_option( 'runcloud_auto_deploy', false );
+		$require_approval = get_option( 'runcloud_require_approval', true );
+		
+		if ( $auto_deploy && ! $require_approval ) {
+			$issues[] = __( 'Automatic deployment without approval (dangerous for production)', 'wpshadow' );
+		}
+		
+		// Check 5: Rollback configuration
+		$max_backups = get_option( 'runcloud_max_deployment_backups', 0 );
+		if ( $max_backups === 0 ) {
+			$issues[] = __( 'No deployment backups configured (cannot rollback)', 'wpshadow' );
+		}
+		
+		// Check 6: File permissions after deployment
+		$fix_permissions = get_option( 'runcloud_fix_permissions_after_deploy', true );
+		if ( ! $fix_permissions ) {
+			$issues[] = __( 'File permissions not corrected after deployment', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of deployment issues */
+				__( 'RunCloud Git deployment has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/runcloud-git-deployment',
+		);
 	}
 }

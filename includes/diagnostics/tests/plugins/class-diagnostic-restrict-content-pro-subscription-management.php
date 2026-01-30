@@ -36,29 +36,93 @@ class Diagnostic_RestrictContentProSubscriptionManagement extends Diagnostic_Bas
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Memberships exist
+		$membership_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}rcp_memberships" );
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/restrict-content-pro-subscription-management',
-			);
+		if ( $membership_count === 0 ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Expired subscriptions not cleaned
+		$expired = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->prefix}rcp_memberships
+				 WHERE status = %s AND expiration_date < %s",
+				'active',
+				date( 'Y-m-d H:i:s' )
+			)
+		);
+		
+		if ( $expired > 10 ) {
+			$issues[] = sprintf( __( '%d expired subscriptions still marked active', 'wpshadow' ), $expired );
+		}
+		
+		// Check 3: Renewal notifications enabled
+		$renewal_notices = get_option( 'rcp_send_renewal_reminders', false );
+		if ( ! $renewal_notices ) {
+			$issues[] = __( 'Renewal reminder emails not enabled (churn risk)', 'wpshadow' );
+		}
+		
+		// Check 4: Payment failure handling
+		$failed_payments = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->prefix}rcp_payments WHERE status = %s",
+				'failed'
+			)
+		);
+		
+		if ( $failed_payments > 20 ) {
+			$issues[] = sprintf( __( '%d failed payments (review gateway configuration)', 'wpshadow' ), $failed_payments );
+		}
+		
+		// Check 5: Subscription status cron
+		$cron_scheduled = wp_next_scheduled( 'rcp_check_for_expired_memberships' );
+		if ( ! $cron_scheduled ) {
+			$issues[] = __( 'Expiration check cron not scheduled (status sync issues)', 'wpshadow' );
+		}
+		
+		// Check 6: Member query optimization
+		$has_index = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM information_schema.statistics
+				 WHERE table_schema = %s AND table_name = %s AND index_name LIKE %s",
+				DB_NAME,
+				$wpdb->prefix . 'rcp_memberships',
+				'%status%'
+			)
+		);
+		
+		if ( $has_index === 0 && $membership_count > 500 ) {
+			$issues[] = __( 'Missing database index on status (slow member queries)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 55;
+		if ( count( $issues ) >= 5 ) {
+			$threat_level = 68;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 62;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of subscription management issues */
+				__( 'Restrict Content Pro subscriptions have %d management issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/restrict-content-pro-subscription-management',
+		);
 	}
 }
