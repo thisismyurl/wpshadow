@@ -36,25 +36,70 @@ class Diagnostic_AcfOptionsPageCaching extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Options pages registered.
+		$options_pages = apply_filters( 'acf/get_options_pages', array() );
+		if ( empty( $options_pages ) ) {
+			return null; // No options pages, no issues to check.
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Object cache available.
+		if ( ! wp_using_ext_object_cache() ) {
+			$issues[] = 'persistent object cache not enabled (options pages queried repeatedly)';
+		}
+		
+		// Check 3: Options page data size.
+		global $wpdb;
+		$large_options = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE 'options_%' AND LENGTH(option_value) > 50000"
+		);
+		if ( $large_options > 0 ) {
+			$issues[] = "{$large_options} large options page values (over 50KB, slow to load)";
+		}
+		
+		// Check 4: Autoload enabled for options.
+		$autoloaded_options = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s AND autoload = %s",
+				'options_%',
+				'yes'
+			)
+		);
+		if ( $autoloaded_options > 0 ) {
+			$issues[] = "{$autoloaded_options} options page values set to autoload (increases memory usage)";
+		}
+		
+		// Check 5: Options page query frequency.
+		if ( defined( 'SAVEQUERIES' ) && SAVEQUERIES ) {
+			if ( ! empty( $GLOBALS['wpdb']->queries ) ) {
+				$options_queries = 0;
+				foreach ( $GLOBALS['wpdb']->queries as $query ) {
+					if ( false !== strpos( $query[0], "option_name = 'options_" ) ) {
+						++$options_queries;
+					}
+				}
+				if ( $options_queries > 10 ) {
+					$issues[] = "{$options_queries} options page queries in single request (cache not working)";
+				}
+			}
+		}
+		
+		// Check 6: Cache groups configured for ACF.
+		$cache_groups = wp_cache_get_non_persistent_groups();
+		if ( in_array( 'acf', $cache_groups, true ) ) {
+			$issues[] = 'ACF cache group set to non-persistent (options pages not cached between requests)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'ACF options page caching issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/acf-options-page-caching',
 			);
 		}

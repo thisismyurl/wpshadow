@@ -32,29 +32,78 @@ class Diagnostic_AccessiblePoetrySemantics extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! class_exists( 'Accessible_Poetry' ) && ! defined( 'ACCESSIBLE_POETRY_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Semantic HTML enabled for poems.
+		$semantic_html = get_option( 'accessible_poetry_semantic_html', '1' );
+		if ( '0' === $semantic_html ) {
+			$issues[] = 'semantic HTML disabled (screen readers cannot identify poem structure)';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: ARIA labels configured.
+		$aria_labels = get_option( 'accessible_poetry_aria_labels', '1' );
+		if ( '0' === $aria_labels ) {
+			$issues[] = 'ARIA labels disabled (reduces accessibility)';
+		}
+		
+		// Check 3: Line break handling.
+		$line_breaks = get_option( 'accessible_poetry_line_breaks', 'semantic' );
+		if ( 'br' === $line_breaks ) {
+			$issues[] = 'using <br> tags for line breaks (use semantic line elements instead)';
+		}
+		
+		// Check 4: Stanza grouping.
+		global $wpdb;
+		$poems_without_stanzas = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_content NOT LIKE %s",
+				'poem',
+				'%<div class="stanza"%'
+			)
+		);
+		if ( $poems_without_stanzas > 0 ) {
+			$issues[] = "{$poems_without_stanzas} poems without stanza grouping (improves navigation)";
+		}
+		
+		// Check 5: Alt text for visual poetry.
+		$visual_poems = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s",
+				'poem_type',
+				'visual'
+			)
+		);
+		$visual_with_alt = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value != %s",
+				'poem_alt_text',
+				''
+			)
+		);
+		if ( $visual_poems > 0 && $visual_with_alt < $visual_poems ) {
+			$missing = $visual_poems - $visual_with_alt;
+			$issues[] = "{$missing} visual poems missing alt text descriptions";
+		}
+		
+		// Check 6: Screen reader optimization.
+		$sr_optimized = get_option( 'accessible_poetry_screen_reader_mode', '0' );
+		if ( '0' === $sr_optimized ) {
+			$issues[] = 'screen reader optimization mode disabled (enables better poem narration)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'Accessible Poetry semantics issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/accessible-poetry-semantics',
 			);
 		}
