@@ -32,33 +32,73 @@ class Diagnostic_WpMigrateDbProMediaFiles extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for WP Migrate DB Pro
+		if ( ! defined( 'WPMDB_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-migrate-db-pro-media-files',
-			);
+		// Check 1: Media Files addon
+		$media_addon = class_exists( 'WPMDB_Media_Files' ) || defined( 'WPMDB_MEDIA_FILES_VERSION' );
+		if ( ! $media_addon ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: File size limit
+		$file_limit = get_option( 'wpmdb_media_file_limit', 10 ); // MB
+		if ( $file_limit < 5 ) {
+			$issues[] = sprintf( __( 'Media file limit: %dMB (may skip large files)', 'wpshadow' ), $file_limit );
+		}
+		
+		// Check 3: Chunking enabled
+		$chunk_size = get_option( 'wpmdb_media_chunk_size', 1 ); // MB
+		if ( $chunk_size > 5 ) {
+			$issues[] = sprintf( __( 'Large chunk size: %dMB (timeout risk)', 'wpshadow' ), $chunk_size );
+		}
+		
+		// Check 4: Attachment metadata sync
+		$sync_metadata = get_option( 'wpmdb_sync_attachment_meta', true );
+		if ( ! $sync_metadata ) {
+			$issues[] = __( 'Attachment metadata not synced (broken images)', 'wpshadow' );
+		}
+		
+		// Check 5: File verification
+		$verify_files = get_option( 'wpmdb_verify_media_files', false );
+		if ( ! $verify_files ) {
+			$issues[] = __( 'File verification disabled (corruption undetected)', 'wpshadow' );
+		}
+		
+		// Check 6: Bandwidth throttling
+		$throttle = get_option( 'wpmdb_media_throttle', 0 );
+		if ( $throttle === 0 ) {
+			$issues[] = __( 'No bandwidth throttling (server overload risk)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of media migration issues */
+				__( 'WP Migrate DB Pro media files has %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-migrate-db-pro-media-files',
+		);
 	}
 }

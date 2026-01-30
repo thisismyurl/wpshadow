@@ -36,29 +36,91 @@ class Diagnostic_WpJobManagerExpiredListings extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		global $wpdb;
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Expired jobs count
+		$expired_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+				 INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+				 WHERE pm.meta_key = %s 
+				 AND pm.meta_value < %s
+				 AND p.post_type = %s
+				 AND p.post_status = 'publish'",
+				'_job_expires',
+				current_time( 'Y-m-d' ),
+				'job_listing'
+			)
+		);
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 30 ),
-				'threat_level' => 30,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-expired-listings',
-			);
+		if ( $expired_count === 0 ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Excessive expired listings
+		if ( $expired_count > 50 ) {
+			$issues[] = sprintf( __( '%d expired job listings still published', 'wpshadow' ), $expired_count );
+		}
+		
+		// Check 3: Auto-delete expired listings
+		$auto_delete = get_option( 'job_manager_delete_expired_jobs', 0 );
+		$delete_days = get_option( 'job_manager_delete_expired_jobs_days', 30 );
+		
+		if ( ! $auto_delete && $expired_count > 20 ) {
+			$issues[] = __( 'Auto-deletion of expired jobs not enabled', 'wpshadow' );
+		} elseif ( $auto_delete && $delete_days > 90 ) {
+			$issues[] = sprintf( __( 'Expired jobs kept for %d days (database bloat)', 'wpshadow' ), $delete_days );
+		}
+		
+		// Check 4: Cleanup cron job
+		$next_cleanup = wp_next_scheduled( 'job_manager_delete_old_previews' );
+		if ( ! $next_cleanup ) {
+			$issues[] = __( 'Cleanup cron job not scheduled', 'wpshadow' );
+		}
+		
+		// Check 5: Old expired jobs (30+ days)
+		$very_old = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+				 INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+				 WHERE pm.meta_key = %s 
+				 AND pm.meta_value < DATE_SUB(%s, INTERVAL 30 DAY)
+				 AND p.post_type = %s",
+				'_job_expires',
+				current_time( 'Y-m-d' ),
+				'job_listing'
+			)
+		);
+		
+		if ( $very_old > 10 ) {
+			$issues[] = sprintf( __( '%d jobs expired 30+ days ago (cleanup overdue)', 'wpshadow' ), $very_old );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 30;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 42;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 36;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of expired listing issues */
+				__( 'WP Job Manager expired listings have %d cleanup issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-expired-listings',
+		);
 	}
 }

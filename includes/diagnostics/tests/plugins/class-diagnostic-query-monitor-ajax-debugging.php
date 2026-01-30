@@ -32,33 +32,67 @@ class Diagnostic_QueryMonitorAjaxDebugging extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for Query Monitor
+		if ( ! class_exists( 'QueryMonitor' ) && ! defined( 'QM_VERSION' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/query-monitor-ajax-debugging',
-			);
+		// Check 1: AJAX debugging enabled
+		$ajax_debug = get_option( 'qm_enable_ajax_debugging', false );
+		if ( ! $ajax_debug ) {
+			$issues[] = __( 'AJAX debugging not enabled (limited troubleshooting)', 'wpshadow' );
 		}
 		
-		return null;
+		// Check 2: AJAX error logging
+		$log_errors = get_option( 'qm_log_ajax_errors', true );
+		if ( ! $log_errors ) {
+			$issues[] = __( 'AJAX error logging disabled (errors go unnoticed)', 'wpshadow' );
+		}
+		
+		// Check 3: Query Monitor visible for AJAX
+		$show_ajax = get_option( 'qm_show_ajax_requests', false );
+		if ( ! $show_ajax && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			$issues[] = __( 'Query Monitor hidden during AJAX (no output)', 'wpshadow' );
+		}
+		
+		// Check 4: Response header debugging
+		$header_debug = get_option( 'qm_enable_response_headers', true );
+		if ( ! $header_debug ) {
+			$issues[] = __( 'Response header debugging disabled (limited insights)', 'wpshadow' );
+		}
+		
+		// Check 5: Slow AJAX threshold
+		$slow_threshold = get_option( 'qm_slow_ajax_threshold', 1.0 );
+		if ( $slow_threshold > 3.0 ) {
+			$issues[] = sprintf( __( 'Slow AJAX threshold: %.1fs (missing performance issues)', 'wpshadow' ), $slow_threshold );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of AJAX debugging issues */
+				__( 'Query Monitor AJAX debugging has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'     => 'https://wpshadow.com/kb/query-monitor-ajax-debugging',
+		);
 	}
 }

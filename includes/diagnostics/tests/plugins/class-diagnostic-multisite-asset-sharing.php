@@ -36,29 +36,70 @@ class Diagnostic_MultisiteAssetSharing extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-asset-sharing',
-			);
+		// Check 1: Site count
+		$site_count = get_blog_count();
+		if ( $site_count < 2 ) {
+			return null;
 		}
 		
-		return null;
+		// Check 2: Media library sharing
+		$shared_media = get_site_option( 'ms_files_rewriting', 0 );
+		if ( ! $shared_media && $site_count > 5 ) {
+			$issues[] = __( 'Media libraries not shared (duplicate storage)', 'wpshadow' );
+		}
+		
+		// Check 3: Upload directory structure
+		$upload_dir = wp_upload_dir();
+		$base_upload = $upload_dir['basedir'];
+		
+		if ( strpos( $base_upload, '/sites/' ) === false ) {
+			$issues[] = __( 'Upload directory not site-specific (file conflicts)', 'wpshadow' );
+		}
+		
+		// Check 4: Plugin sharing
+		$shared_plugins = get_site_option( 'active_sitewide_plugins', array() );
+		if ( count( $shared_plugins ) === 0 && $site_count > 3 ) {
+			$issues[] = __( 'No network-activated plugins (management overhead)', 'wpshadow' );
+		}
+		
+		// Check 5: Theme sharing
+		$allowed_themes = get_site_option( 'allowedthemes' );
+		if ( empty( $allowed_themes ) ) {
+			$issues[] = __( 'All themes enabled network-wide (security/consistency risk)', 'wpshadow' );
+		}
+		
+		// Check 6: Asset CDN
+		$cdn_url = get_site_option( 'ms_cdn_url', '' );
+		if ( empty( $cdn_url ) && $site_count > 10 ) {
+			$issues[] = __( 'No CDN configured for shared assets (performance)', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of asset sharing issues */
+				__( 'Multisite asset sharing has %d configuration issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/multisite-asset-sharing',
+		);
 	}
 }

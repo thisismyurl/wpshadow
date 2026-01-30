@@ -32,33 +32,90 @@ class Diagnostic_WpSyncDbCompatibility extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		// Check for WP Sync DB
+		$has_sync_db = class_exists( 'WPSDB_Plugin' ) || defined( 'WPSDB_VERSION' );
+		if ( ! $has_sync_db ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: WordPress version compatibility
+		$wp_version = get_bloginfo( 'version' );
+		$min_version = get_option( 'wpsdb_min_wp_version', '5.0' );
 		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-sync-db-compatibility',
+		if ( version_compare( $wp_version, $min_version, '<' ) ) {
+			$issues[] = sprintf(
+				/* translators: 1: current version, 2: minimum version */
+				__( 'WordPress %1$s may not be compatible (requires %2$s+)', 'wpshadow' ),
+				$wp_version,
+				$min_version
 			);
 		}
 		
-		return null;
+		// Check 2: Table prefix conflicts
+		global $wpdb;
+		$prefix = $wpdb->prefix;
+		
+		if ( 'wp_' === $prefix ) {
+			$issues[] = __( 'Using default table prefix (sync confusion risk)', 'wpshadow' );
+		}
+		
+		// Check 3: Multisite compatibility
+		if ( is_multisite() ) {
+			$multisite_support = get_option( 'wpsdb_multisite_tools', false );
+			if ( ! $multisite_support ) {
+				$issues[] = __( 'Multisite detected but multisite tools not enabled', 'wpshadow' );
+			}
+		}
+		
+		// Check 4: SSL verification
+		$verify_ssl = get_option( 'wpsdb_verify_ssl', true );
+		if ( ! $verify_ssl ) {
+			$issues[] = __( 'SSL verification disabled (man-in-the-middle risk)', 'wpshadow' );
+		}
+		
+		// Check 5: Plugin conflict detection
+		$conflicting_plugins = array(
+			'w3-total-cache/w3-total-cache.php' => 'W3 Total Cache',
+			'wp-super-cache/wp-cache.php' => 'WP Super Cache',
+		);
+		
+		foreach ( $conflicting_plugins as $plugin => $name ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$issues[] = sprintf(
+					/* translators: %s: plugin name */
+					__( '%s active (sync conflicts possible)', 'wpshadow' ),
+					$name
+				);
+				break;
+			}
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 50;
+		if ( count( $issues ) >= 4 ) {
+			$threat_level = 62;
+		} elseif ( count( $issues ) >= 3 ) {
+			$threat_level = 56;
+		}
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				/* translators: %s: list of compatibility issues */
+				__( 'WP Sync DB has %d compatibility issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/wp-sync-db-compatibility',
+		);
 	}
 }
