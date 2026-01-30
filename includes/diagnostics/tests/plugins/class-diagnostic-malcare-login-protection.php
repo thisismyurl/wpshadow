@@ -32,29 +32,66 @@ class Diagnostic_MalcareLoginProtection extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
+		if ( ! defined( 'MALCARE_VERSION' ) && ! class_exists( 'MalCare' ) ) {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Verify login protection enabled
+		$login_protection = get_option( 'malcare_login_protection', 0 );
+		if ( ! $login_protection ) {
+			$issues[] = 'Login protection not enabled';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Check for CAPTCHA on login
+		$captcha = get_option( 'malcare_login_captcha', 0 );
+		if ( ! $captcha ) {
+			$issues[] = 'Login CAPTCHA not enabled';
+		}
+		
+		// Check 3: Verify brute force protection
+		$brute_force = get_option( 'malcare_bruteforce_protection', 0 );
+		if ( ! $brute_force ) {
+			$issues[] = 'Brute force protection not enabled';
+		}
+		
+		// Check 4: Check for IP lockouts
+		$ip_lockout = get_option( 'malcare_ip_lockout', 0 );
+		if ( ! $ip_lockout ) {
+			$issues[] = 'IP lockout not enabled';
+		}
+		
+		// Check 5: Verify login alert emails
+		$alert_email = get_option( 'malcare_login_alerts', 0 );
+		if ( ! $alert_email ) {
+			$issues[] = 'Login alert emails not enabled';
+		}
+		
+		// Check 6: Check for 2FA support
+		$two_factor = get_option( 'malcare_2fa', 0 );
+		if ( ! $two_factor ) {
+			$issues[] = 'Two-factor authentication not enabled';
+		}
+		
+		$issue_count = count( $issues );
+		if ( $issue_count > 0 ) {
+			$base_threat = 70;
+			$threat_multiplier = 5;
+			$max_threat = 95;
+			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
+			
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => sprintf(
+					'Found %d MalCare login protection issue(s): %s',
+					$issue_count,
+					implode( ', ', $issues )
+				),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/malcare-login-protection',
 			);
 		}
