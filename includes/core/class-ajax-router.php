@@ -113,6 +113,7 @@ class AJAX_Router {
 		\WPShadow\Admin\Ajax\Create_Magic_Link_Handler::register();
 		\WPShadow\Admin\Ajax\Revoke_Magic_Link_Handler::register();
 		\WPShadow\Admin\Ajax\Save_Cache_Options_Handler::register();
+		\WPShadow\Admin\Ajax\Fix_Cache_Permissions_Handler::register();
 		\WPShadow\Admin\Ajax\Mobile_Check_Handler::register();
 		\WPShadow\Admin\Ajax\A11y_Audit_Handler::register();
 		\WPShadow\Admin\Ajax\Save_Tip_Prefs_Handler::register();

@@ -165,14 +165,4 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 
 		return $checks;
 	}
-
-		self::send_success(
-			array(
-				'posts_checked' => $posts_checked,
-				'links_checked' => $links_checked,
-				'broken_links'  => $broken_links,
-				'broken_count'  => count( $broken_links ),
-			)
-		);
-	}
 }

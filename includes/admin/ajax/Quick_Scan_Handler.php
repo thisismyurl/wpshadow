@@ -283,32 +283,10 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 	 * @return string|null File path if found, null otherwise
 	 */
 	private static function find_diagnostic_file( string $class_name ): ?string {
-		$base_dir = __DIR__;
-		// Go up to includes/diagnostics/
-		$base_dir = dirname( dirname( $base_dir ) ) . '/diagnostics';
-
-		$subdirs = array( 'tests', 'help', 'todo', 'verified' );
-
-		// Convert class name to file name (e.g., "Diagnostic_Ssl" -> "class-diagnostic-ssl.php")
-		$class_file = 'class-' . str_replace( '_', '-', strtolower( $class_name ) ) . '.php';
-
-		foreach ( $subdirs as $subdir ) {
-			$dir = $base_dir . '/' . $subdir;
-
-			if ( ! is_dir( $dir ) ) {
-				continue;
-			}
-
-			// Search recursively for the file
-			$files = glob( $dir . '/**/' . $class_file, GLOB_BRACE );
-			if ( ! empty( $files ) && file_exists( $files[0] ) ) {
-				return $files[0];
-			}
-
-			// Also check in root of directory
-			$root_file = $dir . '/' . $class_file;
-			if ( file_exists( $root_file ) ) {
-				return $root_file;
+		if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+			$map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+			if ( isset( $map[ $class_name ]['file'] ) ) {
+				return $map[ $class_name ]['file'];
 			}
 		}
 

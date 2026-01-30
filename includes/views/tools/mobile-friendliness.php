@@ -21,6 +21,36 @@ Tool_View_Base::verify_access( 'read' );
 // Enqueue assets
 Tool_View_Base::enqueue_assets( 'mobile-friendliness' );
 
+// Enqueue the mobile friendliness script
+wp_enqueue_script(
+	'wpshadow-mobile-friendliness',
+	WPSHADOW_URL . 'assets/js/mobile-friendliness.js',
+	array( 'jquery' ),
+	WPSHADOW_VERSION,
+	true
+);
+
+// Localize script settings
+wp_localize_script(
+	'wpshadow-mobile-friendliness',
+	'wpshadowMobileCheck',
+	array(
+		'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+		'nonce'      => wp_create_nonce( 'wpshadow_mobile_check' ),
+		'defaultUrl' => home_url(),
+		'i18nRun'    => __( 'Run Mobile Check', 'wpshadow' ),
+		'i18nRunning' => __( 'Checking...', 'wpshadow' ),
+		'i18nError'  => __( 'Something went wrong. Please try again.', 'wpshadow' ),
+		'i18nComplete' => __( 'Scan complete!', 'wpshadow' ),
+		'i18nStage1' => __( 'Fetching page content...', 'wpshadow' ),
+		'i18nStage2' => __( 'Analyzing viewport settings...', 'wpshadow' ),
+		'i18nStage3' => __( 'Checking responsive design...', 'wpshadow' ),
+		'i18nStage4' => __( 'Testing mobile usability...', 'wpshadow' ),
+		'i18nStage5' => __( 'Running final checks...', 'wpshadow' ),
+		'i18nStage6' => __( 'Compiling results...', 'wpshadow' ),
+	)
+);
+
 // Render header
 Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) );
 ?>
@@ -35,9 +65,9 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 						<label class="wps-label" for="wpshadow-mobile-path">
 							<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
 						</label>
-						<div class="wps-flex-gap-10-items-center">
-							<span class="wps-p-8-rounded-3" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-							<input type="text" id="wpshadow-mobile-path" name="path" class="wps-input" value="/" placeholder="/about" required />
+						<div class="wps-input-group">
+							<span class="wps-input-prefix" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+							<input type="text" id="wpshadow-mobile-path" name="path" class="wps-input" value="/" placeholder="/about" required aria-describedby="mobile-site-domain" />
 						</div>
 						<span class="wps-help-text">
 							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check viewport and layout signals.', 'wpshadow' ); ?>

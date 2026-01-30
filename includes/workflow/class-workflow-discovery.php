@@ -47,20 +47,10 @@ class Workflow_Discovery {
 
 		self::$diagnostics_cache = array();
 
-		$diagnostics_dir = WP_PLUGIN_DIR . '/wpshadow/includes/diagnostics/';
-
-		if ( ! is_dir( $diagnostics_dir ) ) {
-			return self::$diagnostics_cache;
-		}
-
-		// Get files from root and subdirectories
-		$files = glob( $diagnostics_dir . 'class-diagnostic-*.php' );
-		if ( ! $files ) {
-			$files = array();
-		}
-		// Also scan subdirectories
-		foreach ( glob( $diagnostics_dir . '*/class-diagnostic-*.php' ) as $subfile ) {
-			$files[] = $subfile;
+		$files = array();
+		if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+			$map   = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+			$files = array_column( $map, 'file' );
 		}
 
 		foreach ( $files as $file ) {

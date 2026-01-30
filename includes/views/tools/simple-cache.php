@@ -55,6 +55,7 @@ $kanban_cards = array(
 		'title'  => __( 'Cache directory writable', 'wpshadow' ),
 		'body'   => $cache_dir_writable ? __( 'We can write to the cache directory.', 'wpshadow' ) : __( 'Cache directory is not writable. Please check permissions for wp-content/cache/', 'wpshadow' ),
 		'status' => $cache_dir_writable ? 'ok' : 'issue',
+		'action' => ! $cache_dir_writable && 'direct' === $fs_method ? 'fix_permissions' : '',
 	),
 	array(
 		'title'  => __( 'Filesystem access', 'wpshadow' ),
@@ -91,7 +92,7 @@ $kanban_cards = array(
 
 	<div class="notice notice-success" style="margin-top:10px;">
 		<p><strong><?php esc_html_e( 'Free Offsite Storage for Registered Users', 'wpshadow' ); ?></strong></p>
-		<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three backups and free restores whenever you need them.', 'wpshadow' ); ?></p>
+		<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three backups and free restores whenever you need them.', 'wpshadow' ); ?> <a href="https://wpshadow.com/features/offsite-backup/" target="_blank"><?php esc_html_e( 'Learn more', 'wpshadow' ); ?></a></p>
 	</div>
 
 	<div class="wpshadow-tool-section">
@@ -143,6 +144,20 @@ $kanban_cards = array(
 					<div class="wps-kanban-label"><?php echo esc_html( $label_text ); ?></div>
 					<h4><?php echo esc_html( $card['title'] ); ?></h4>
 					<p><?php echo esc_html( $card['body'] ); ?></p>
+					<?php if ( ! empty( $card['action'] ) && 'fix_permissions' === $card['action'] ) : ?>
+						<button type="button" class="button button-small wpshadow-fix-permissions" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_fix_permissions' ) ); ?>" style="margin-top: 8px;">
+							<?php esc_html_e( 'Fix Permissions', 'wpshadow' ); ?>
+						</button>
+						<p class="description" style="margin-top: 4px; font-size: 11px;">
+							<?php
+							printf(
+								/* translators: %s: KB article URL */
+								__( 'Or <a href="%s" target="_blank">learn how to fix manually</a>', 'wpshadow' ),
+								'https://wpshadow.com/kb/cache-directory-permissions'
+							);
+							?>
+						</p>
+					<?php endif; ?>
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -223,6 +238,39 @@ $kanban_cards = array(
 
 <script>
 jQuery(document).ready(function($) {
+	// Fix permissions
+	$('.wpshadow-fix-permissions').on('click', function() {
+		var $btn = $(this);
+		var nonce = $btn.data('nonce');
+		var originalText = $btn.text();
+
+		$btn.prop('disabled', true).text('<?php esc_attr_e( 'Fixing...', 'wpshadow' ); ?>');
+
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wpshadow_fix_cache_permissions',
+				nonce: nonce
+			},
+			success: function(response) {
+				if (response.success) {
+					$btn.text('<?php esc_attr_e( '✓ Fixed', 'wpshadow' ); ?>').css('background-color', '#46b450');
+					setTimeout(function() {
+						location.reload();
+					}, 1500);
+				} else {
+					alert(response.data && response.data.message ? response.data.message : '<?php esc_attr_e( 'Could not fix permissions automatically. Please check the KB article for manual instructions.', 'wpshadow' ); ?>');
+					$btn.prop('disabled', false).text(originalText);
+				}
+			},
+			error: function() {
+				alert('<?php esc_attr_e( 'Error attempting to fix permissions.', 'wpshadow' ); ?>');
+				$btn.prop('disabled', false).text(originalText);
+			}
+		});
+	});
+
 	// Clear cache
 	$('#wpshadow-clear-cache').on('click', function() {
 		var $btn = $(this);

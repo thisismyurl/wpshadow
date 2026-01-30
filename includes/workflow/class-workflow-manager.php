@@ -1001,18 +1001,12 @@ class Workflow_Manager {
 
 		// Load diagnostic registry if available
 		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			// Get all registered diagnostics
-			$diagnostic_dir = plugin_dir_path( __FILE__ ) . '../diagnostics';
-			$files          = glob( $diagnostic_dir . '/class-diagnostic-*.php' );
-
-			if ( $files ) {
-				foreach ( $files as $file ) {
-					preg_match( '/class-diagnostic-(.+?)\.php/', basename( $file ), $matches );
-					if ( isset( $matches[1] ) ) {
-						$slug                 = str_replace( '-', '_', $matches[1] );
-						$diagnostics[ $slug ] = ucwords( str_replace( '-', ' ', $matches[1] ) );
-					}
-				}
+			$registered = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
+			foreach ( $registered as $class_name ) {
+				$class_name = str_replace( '\\WPShadow\\Diagnostics\\', '', $class_name );
+				$slug       = strtolower( str_replace( 'Diagnostic_', '', $class_name ) );
+				$label      = ucwords( str_replace( '_', ' ', $slug ) );
+				$diagnostics[ $slug ] = $label;
 			}
 		}
 

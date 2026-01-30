@@ -29,6 +29,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 	private static $diagnostics_cache = null;
 
 	/**
+	 * Cached diagnostic file map
+	 *
+	 * @var array|null
+	 */
+	private static $diagnostic_file_map = null;
+
+	/**
 	 * Get the list of registered items.
 	 *
 	 * Discovers diagnostic classes from tests/, help/, and todo/ subdirectories.
@@ -63,39 +70,110 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @return array Array of diagnostic class names
 	 */
 	private static function discover_diagnostics(): array {
-		$diagnostics = array();
-		$base_dir    = __DIR__;
-		$subdirs     = array( 'tests', 'help', 'todo', 'verified' );
+		$file_map = self::get_diagnostic_file_map();
+		return array_keys( $file_map );
+	}
+
+	/**
+	 * Get diagnostic file map (class name => file path + family)
+	 *
+	 * @since  1.26030.0135
+	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
+	 */
+	public static function get_diagnostic_file_map(): array {
+		if ( null !== self::$diagnostic_file_map ) {
+			return self::$diagnostic_file_map;
+		}
+
+		$cached = get_transient( 'wpshadow_diagnostic_file_map' );
+		if ( is_array( $cached ) && ! empty( $cached ) ) {
+			self::$diagnostic_file_map = $cached;
+			return self::$diagnostic_file_map;
+		}
+
+		$map = self::build_diagnostic_file_map();
+		set_transient( 'wpshadow_diagnostic_file_map', $map, DAY_IN_SECONDS );
+
+		self::$diagnostic_file_map = $map;
+		return self::$diagnostic_file_map;
+	}
+
+	/**
+	 * Build diagnostic file map by scanning diagnostics directory
+	 *
+	 * @since  1.26030.0135
+	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
+	 */
+	private static function build_diagnostic_file_map(): array {
+		$map     = array();
+		$base    = __DIR__;
+		$subdirs = array( 'tests', 'help', 'todo', 'verified' );
 
 		foreach ( $subdirs as $subdir ) {
-			$dir = $base_dir . '/' . $subdir;
-
+			$dir = $base . '/' . $subdir;
 			if ( ! is_dir( $dir ) ) {
 				continue;
 			}
 
-			// Get all class-diagnostic-*.php and class-test-*.php files recursively
-			$diagnostic_files = glob( $dir . '/**/class-diagnostic-*.php', GLOB_BRACE );
-			$test_files       = glob( $dir . '/**/class-test-*.php', GLOB_BRACE );
-			// Also get files in the root of the directory
-			$diagnostic_root  = glob( $dir . '/class-diagnostic-*.php' );
-			$test_root        = glob( $dir . '/class-test-*.php' );
-			$files            = array_merge( (array) $diagnostic_files, (array) $test_files, (array) $diagnostic_root, (array) $test_root );
+			$iterator = new \RecursiveIteratorIterator(
+				new \RecursiveDirectoryIterator( $dir, \FilesystemIterator::SKIP_DOTS )
+			);
 
-			if ( empty( $files ) ) {
-				continue;
-			}
-
-			foreach ( $files as $file ) {
-				$class_name = self::get_class_name_from_file( $file );
-
-				if ( $class_name ) {
-					$diagnostics[] = $class_name;
+			foreach ( $iterator as $file_info ) {
+				/** @var \SplFileInfo $file_info */
+				if ( ! $file_info->isFile() ) {
+					continue;
 				}
+
+				$filename = $file_info->getFilename();
+				if ( 0 !== strpos( $filename, 'class-diagnostic-' ) && 0 !== strpos( $filename, 'class-test-' ) ) {
+					continue;
+				}
+
+				if ( 'php' !== $file_info->getExtension() ) {
+					continue;
+				}
+
+				$class_name = self::get_class_name_from_file( $file_info->getPathname() );
+				if ( ! $class_name ) {
+					continue;
+				}
+
+				if ( isset( $map[ $class_name ] ) ) {
+					continue;
+				}
+
+				$family = self::get_family_from_path( $file_info->getPathname() );
+				$map[ $class_name ] = array(
+					'file'   => $file_info->getPathname(),
+					'family' => $family,
+				);
 			}
 		}
 
-		return $diagnostics;
+		/**
+		 * Filters the diagnostic file map.
+		 *
+		 * @since 1.26030.0135
+		 *
+		 * @param array<string, array{file: string, family: string}> $map Diagnostic file map.
+		 */
+		return apply_filters( 'wpshadow_diagnostic_file_map', $map );
+	}
+
+	/**
+	 * Derive diagnostic family from file path.
+	 *
+	 * @since  1.26030.0135
+	 * @param  string $path Diagnostic file path.
+	 * @return string Family slug.
+	 */
+	private static function get_family_from_path( string $path ): string {
+		if ( preg_match( '#/tests/([^/]+)/#', $path, $matches ) ) {
+			return sanitize_key( $matches[1] );
+		}
+
+		return 'uncategorized';
 	}
 
 	/**
@@ -164,30 +242,9 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @return string|null File path if found, null otherwise
 	 */
 	private static function find_diagnostic_file( string $class_name ): ?string {
-		$base_dir = __DIR__;
-		$subdirs  = array( 'tests', 'help', 'todo', 'verified' );
-
-		// Convert class name to file name (e.g., "Diagnostic_Ssl" -> "class-diagnostic-ssl.php")
-		$class_file = 'class-' . str_replace( '_', '-', strtolower( $class_name ) ) . '.php';
-
-		foreach ( $subdirs as $subdir ) {
-			$dir = $base_dir . '/' . $subdir;
-
-			if ( ! is_dir( $dir ) ) {
-				continue;
-			}
-
-			// Search recursively for the file
-			$files = glob( $dir . '/**/' . $class_file, GLOB_BRACE );
-			if ( ! empty( $files ) && file_exists( $files[0] ) ) {
-				return $files[0];
-			}
-
-			// Also check in root of directory
-			$root_file = $dir . '/' . $class_file;
-			if ( file_exists( $root_file ) ) {
-				return $root_file;
-			}
+		$map = self::get_diagnostic_file_map();
+		if ( isset( $map[ $class_name ]['file'] ) ) {
+			return $map[ $class_name ]['file'];
 		}
 
 		return null;
@@ -299,7 +356,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 		foreach ( $diagnostic_classes as $class_name ) {
 			if ( ! class_exists( $class_name ) ) {
-				continue;
+				$loaded = self::load_diagnostic_class( str_replace( __NAMESPACE__ . '\\', '', $class_name ) );
+				if ( ! $loaded ) {
+					continue;
+				}
 			}
 
 			// Check if diagnostic is enabled (apply filter for external control)
