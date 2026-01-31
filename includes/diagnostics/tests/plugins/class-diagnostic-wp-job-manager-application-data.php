@@ -37,36 +37,59 @@ class Diagnostic_WpJobManagerApplicationData extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify SSL for application submissions
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for job applications', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check application data encryption
+		$data_encryption = get_option( 'job_manager_application_encryption', false );
+		if ( ! $data_encryption ) {
+			$issues[] = __( 'Application data encryption not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify access controls
+		$access_controls = get_option( 'job_manager_application_access_controls', false );
+		if ( ! $access_controls ) {
+			$issues[] = __( 'Application data access controls not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check data retention policy
+		$retention_policy = get_option( 'job_manager_application_retention_days', 0 );
+		if ( $retention_policy === 0 || $retention_policy > 365 ) {
+			$issues[] = __( 'Application data retention policy not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify backup configuration
+		$backup_enabled = get_option( 'job_manager_application_backup', false );
+		if ( ! $backup_enabled ) {
+			$issues[] = __( 'Application data backup not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check PII handling compliance
+		$pii_compliance = get_option( 'job_manager_pii_compliance', false );
+		if ( ! $pii_compliance ) {
+			$issues[] = __( 'PII handling compliance not configured', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 100, 70 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 70,
-				'threat_level' => 70,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WP Job Manager application data security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-job-manager-application-data',
+				'kb_link'      => 'https://wpshadow.com/kb/wp-job-manager-application-data',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

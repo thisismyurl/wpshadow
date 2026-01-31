@@ -34,36 +34,60 @@ class Diagnostic_PodsFrameworkTemplatePerformance extends Diagnostic_Base {
 	public static function check() {
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify template caching is enabled
+		$template_cache = get_option( 'pods_template_cache_enabled', false );
+		if ( ! $template_cache ) {
+			$issues[] = __( 'Pods template caching not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check query optimization
+		$query_optimization = get_option( 'pods_query_optimization', false );
+		if ( ! $query_optimization ) {
+			$issues[] = __( 'Pods query optimization not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify field loading strategy
+		$field_loading = get_option( 'pods_field_loading_strategy', '' );
+		if ( 'lazy' !== $field_loading ) {
+			$issues[] = __( 'Field loading strategy not optimized', 'wpshadow' );
+		}
+
+		// Check 4: Check template complexity limits
+		$complexity_limit = get_option( 'pods_template_complexity_limit', false );
+		if ( ! $complexity_limit ) {
+			$issues[] = __( 'Template complexity limits not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify render caching
+		$render_cache = get_transient( 'pods_template_render_cache' );
+		if ( false === $render_cache ) {
+			$issues[] = __( 'Template render caching not active', 'wpshadow' );
+		}
+
+		// Check 6: Check AJAX pagination configuration
+		$ajax_pagination = get_option( 'pods_ajax_pagination', false );
+		if ( ! $ajax_pagination ) {
+			$issues[] = __( 'AJAX pagination not enabled for templates', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 55 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 55,
-				'threat_level' => 55,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Pods Framework template performance issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/pods-framework-template-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/pods-framework-template-performance',
 			);
 		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
-		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

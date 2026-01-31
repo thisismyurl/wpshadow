@@ -37,36 +37,60 @@ class Diagnostic_LitespeedCacheImageOptimization extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify image optimization is enabled
+		$img_optimization = get_option( 'litespeed_img_optm_auto', false );
+		if ( ! $img_optimization ) {
+			$issues[] = __( 'LiteSpeed image optimization not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check WebP conversion
+		$webp_enabled = get_option( 'litespeed_img_optm_webp', false );
+		if ( ! $webp_enabled ) {
+			$issues[] = __( 'WebP image conversion not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify lazy loading configuration
+		$lazy_load = get_option( 'litespeed_media_lazy', false );
+		if ( ! $lazy_load ) {
+			$issues[] = __( 'Image lazy loading not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check optimization level
+		$optimization_level = get_option( 'litespeed_img_optm_level', 0 );
+		if ( $optimization_level < 2 ) {
+			$issues[] = __( 'Image optimization level too low', 'wpshadow' );
+		}
+
+		// Check 5: Verify CDN integration for images
+		$cdn_integration = get_option( 'litespeed_cdn_img', false );
+		if ( ! $cdn_integration ) {
+			$issues[] = __( 'CDN integration for images not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check optimization queue management
+		$queue_management = get_option( 'litespeed_img_optm_queue_limit', 0 );
+		if ( $queue_management === 0 || $queue_management > 500 ) {
+			$issues[] = __( 'Image optimization queue not optimally configured', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'LiteSpeed Cache image optimization issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/litespeed-cache-image-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/litespeed-cache-image-optimization',
 			);
 		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
-		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

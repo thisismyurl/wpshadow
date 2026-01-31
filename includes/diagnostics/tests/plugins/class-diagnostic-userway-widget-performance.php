@@ -34,36 +34,60 @@ class Diagnostic_UserwayWidgetPerformance extends Diagnostic_Base {
 	public static function check() {
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify widget loading strategy
+		$loading_strategy = get_option( 'userway_loading_strategy', '' );
+		if ( 'defer' !== $loading_strategy && 'async' !== $loading_strategy ) {
+			$issues[] = __( 'Widget loading strategy not optimized', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check async loading configuration
+		$async_loading = get_option( 'userway_async_loading', false );
+		if ( ! $async_loading ) {
+			$issues[] = __( 'Async loading not enabled for widget', 'wpshadow' );
+		}
+
+		// Check 3: Verify widget caching
+		$widget_cache = get_transient( 'userway_widget_cache' );
+		if ( false === $widget_cache ) {
+			$issues[] = __( 'Widget caching not active', 'wpshadow' );
+		}
+
+		// Check 4: Check script size optimization
+		$script_minified = get_option( 'userway_script_minified', false );
+		if ( ! $script_minified ) {
+			$issues[] = __( 'Widget script not minified', 'wpshadow' );
+		}
+
+		// Check 5: Verify CDN usage for widget assets
+		$cdn_enabled = get_option( 'userway_cdn_enabled', false );
+		if ( ! $cdn_enabled ) {
+			$issues[] = __( 'CDN not enabled for widget assets', 'wpshadow' );
+		}
+
+		// Check 6: Check lazy loading configuration
+		$lazy_load = get_option( 'userway_lazy_load', false );
+		if ( ! $lazy_load ) {
+			$issues[] = __( 'Lazy loading not enabled for widget', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Userway widget performance issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/userway-widget-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/userway-widget-performance',
 			);
 		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
-		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

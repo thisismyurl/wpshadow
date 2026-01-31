@@ -37,36 +37,59 @@ class Diagnostic_DiviBuilderModuleSecurity extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify SSL for module data transmission
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for Divi module data', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check input sanitization configuration
+		$sanitization_enabled = get_option( 'et_divi_module_sanitization', false );
+		if ( ! $sanitization_enabled ) {
+			$issues[] = __( 'Module input sanitization not enforced', 'wpshadow' );
+		}
+
+		// Check 3: Verify nonce verification for module saves
+		$nonce_verification = get_option( 'et_divi_module_nonce_verification', false );
+		if ( ! $nonce_verification ) {
+			$issues[] = __( 'Nonce verification not enabled for module operations', 'wpshadow' );
+		}
+
+		// Check 4: Check capability restrictions
+		$capability_checks = get_option( 'et_divi_module_capability_checks', false );
+		if ( ! $capability_checks ) {
+			$issues[] = __( 'Capability checks not configured for custom modules', 'wpshadow' );
+		}
+
+		// Check 5: Verify XSS protection
+		$xss_protection = get_option( 'et_divi_module_xss_protection', false );
+		if ( ! $xss_protection ) {
+			$issues[] = __( 'XSS protection not enabled for module content', 'wpshadow' );
+		}
+
+		// Check 6: Check file upload validation in modules
+		$upload_validation = get_option( 'et_divi_module_upload_validation', false );
+		if ( ! $upload_validation ) {
+			$issues[] = __( 'File upload validation not configured', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 65 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 65,
-				'threat_level' => 65,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Divi Builder module security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-module-security',
+				'kb_link'      => 'https://wpshadow.com/kb/divi-builder-module-security',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

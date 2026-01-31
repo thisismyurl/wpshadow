@@ -37,36 +37,60 @@ class Diagnostic_WoocommerceTableRateShippingCalculation extends Diagnostic_Base
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify shipping calculation caching
+		$calculation_cache = get_option( 'wc_table_rate_calculation_cache', false );
+		if ( ! $calculation_cache ) {
+			$issues[] = __( 'Shipping calculation caching not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check table size limits
+		$table_size = get_option( 'wc_table_rate_table_size', 0 );
+		if ( $table_size > 1000 ) {
+			$issues[] = __( 'Shipping rate table too large', 'wpshadow' );
+		}
+
+		// Check 3: Verify rate complexity limits
+		$rate_complexity = get_option( 'wc_table_rate_complexity_limit', false );
+		if ( ! $rate_complexity ) {
+			$issues[] = __( 'Rate complexity limits not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check calculation timeout configuration
+		$calculation_timeout = get_option( 'wc_table_rate_timeout', 0 );
+		if ( $calculation_timeout === 0 || $calculation_timeout > 30 ) {
+			$issues[] = __( 'Calculation timeout not optimally configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify cache invalidation strategy
+		$cache_invalidation = get_option( 'wc_table_rate_cache_invalidation', '' );
+		if ( empty( $cache_invalidation ) ) {
+			$issues[] = __( 'Cache invalidation strategy not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check calculation logging for debugging
+		$calculation_logging = get_option( 'wc_table_rate_calculation_logging', false );
+		if ( $calculation_logging ) {
+			$issues[] = __( 'Calculation logging enabled (performance impact)', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WooCommerce table rate shipping calculation issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-table-rate-shipping-calculation',
+				'kb_link'      => 'https://wpshadow.com/kb/woocommerce-table-rate-shipping-calculation',
 			);
 		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
-		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
-		}
 		return null;
 	}
 }
