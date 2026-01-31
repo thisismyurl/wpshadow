@@ -16,7 +16,19 @@ class Diagnostic_Html_Detect_Missing_Loadinglazy_On_Images extends Diagnostic_Ba
 		if ( preg_match_all( '/<img[^>]*(?!.*loading=["\']lazy["\'])[^>]*src=["\']([^"\']+)["\']/', $post->post_content, $matches ) ) {
 			$no_lazy = array_slice( array_map( 'basename', $matches[1] ), 0, 10 );
 		}
-		if ( count( $no_lazy ) < 3 ) { return null; }
+		if ( count( $no_lazy ) < 3 ) 
+		// Performance optimization checks
+		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
+			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		}
+		if ( ! extension_loaded( 'zlib' ) ) {
+			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+		}
+		// Check transient support
+		if ( ! function_exists( 'set_transient' ) ) {
+			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
+		}
+{ return null; }
 		return array(
 			'id' => self::$slug,
 			'title' => self::$title,

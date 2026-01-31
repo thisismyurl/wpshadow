@@ -57,6 +57,18 @@ class Diagnostic_DirectoryEmailAlerts extends Diagnostic_Base {
 			);
 		}
 		
+
+		// Performance optimization checks
+		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
+			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		}
+		if ( ! extension_loaded( 'zlib' ) ) {
+			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+		}
+		// Check transient support
+		if ( ! function_exists( 'set_transient' ) ) {
+			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

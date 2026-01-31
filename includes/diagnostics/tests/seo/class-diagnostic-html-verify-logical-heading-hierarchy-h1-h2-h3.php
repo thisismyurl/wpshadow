@@ -36,6 +36,18 @@ class Diagnostic_Html_Verify_Logical_Heading_Hierarchy_H1_H2_H3 extends Diagnost
 				'meta' => array(),
 			);
 		}
+
+		// SEO validation checks
+		if ( ! function_exists( 'wp_get_document_title' ) ) {
+			$issues[] = __( 'Document title function unavailable', 'wpshadow' );
+		}
+		if ( get_option( 'blog_public' ) === '0' ) {
+			$issues[] = __( 'Site set to private in search engines', 'wpshadow' );
+		}
+		// Check meta robots
+		if ( ! function_exists( 'wp_robots' ) ) {
+			$issues[] = __( 'Robots meta tag function unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

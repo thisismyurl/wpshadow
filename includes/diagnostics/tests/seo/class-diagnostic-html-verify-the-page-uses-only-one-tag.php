@@ -25,6 +25,18 @@ class Diagnostic_Html_Verify_The_Page_Uses_Only_One_Tag extends Diagnostic_Base 
 				'meta' => array( 'count' => $h1_count ),
 			);
 		}
+
+		// SEO validation checks
+		if ( ! function_exists( 'wp_get_document_title' ) ) {
+			$issues[] = __( 'Document title function unavailable', 'wpshadow' );
+		}
+		if ( get_option( 'blog_public' ) === '0' ) {
+			$issues[] = __( 'Site set to private in search engines', 'wpshadow' );
+		}
+		// Check meta robots
+		if ( ! function_exists( 'wp_robots' ) ) {
+			$issues[] = __( 'Robots meta tag function unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

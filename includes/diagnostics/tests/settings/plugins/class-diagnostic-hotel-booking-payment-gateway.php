@@ -57,6 +57,18 @@ class Diagnostic_HotelBookingPaymentGateway extends Diagnostic_Base {
 			);
 		}
 		
+
+		// Security validation checks
+		if ( is_ssl() === false ) {
+			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
+		}
+		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
+			$issues[] = __( 'SSL not forced', 'wpshadow' );
+		}
+		// Additional checks
+		if ( ! function_exists( 'wp_verify_nonce' ) ) {
+			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

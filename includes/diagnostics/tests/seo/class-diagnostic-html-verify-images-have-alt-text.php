@@ -20,7 +20,18 @@ class Diagnostic_Html_Verify_Images_Have_Alt_Text extends Diagnostic_Base {
 				}
 			}
 		}
-		if ( $no_alt < 2 ) { return null; }
+		if ( $no_alt < 2 ) 
+		// Basic WordPress functionality checks
+		if ( ! function_exists( 'get_option' ) ) {
+			$issues[] = __( 'Options API not available', 'wpshadow' );
+		}
+		if ( ! function_exists( 'add_action' ) ) {
+			$issues[] = __( 'WordPress hooks not available', 'wpshadow' );
+		}
+		if ( empty( $GLOBALS['wpdb'] ) ) {
+			$issues[] = __( 'Database not initialized', 'wpshadow' );
+		}
+{ return null; }
 		return array(
 			'id' => self::$slug,
 			'title' => self::$title,

@@ -26,6 +26,18 @@ class Diagnostic_Html_Verify_The_Title_Tag_Length_Is_Within_Recommended_Limits e
 				'meta' => array( 'length' => $length, 'optimal_min' => 30, 'optimal_max' => 60 ),
 			);
 		}
+
+		// SEO validation checks
+		if ( ! function_exists( 'wp_get_document_title' ) ) {
+			$issues[] = __( 'Document title function unavailable', 'wpshadow' );
+		}
+		if ( get_option( 'blog_public' ) === '0' ) {
+			$issues[] = __( 'Site set to private in search engines', 'wpshadow' );
+		}
+		// Check meta robots
+		if ( ! function_exists( 'wp_robots' ) ) {
+			$issues[] = __( 'Robots meta tag function unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

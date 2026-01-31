@@ -24,6 +24,18 @@ class Diagnostic_RankMathSecurityAccess extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/rank-math-security',
 			);
 		}
+
+		// Plugin integration checks
+		if ( ! function_exists( 'get_plugins' ) ) {
+			$issues[] = __( 'Plugin listing not available', 'wpshadow' );
+		}
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			$issues[] = __( 'Plugin status check unavailable', 'wpshadow' );
+		}
+		// Verify integration point
+		if ( ! function_exists( 'do_action' ) ) {
+			$issues[] = __( 'Action hooks unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

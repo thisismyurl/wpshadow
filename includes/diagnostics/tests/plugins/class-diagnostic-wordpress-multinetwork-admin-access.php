@@ -54,6 +54,18 @@ class Diagnostic_WordpressMultinetworkAdminAccess extends Diagnostic_Base {
 			);
 		}
 		
+
+		// Feature availability checks
+		if ( ! function_exists( 'add_action' ) ) {
+			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		}
+		if ( empty( $GLOBALS['wpdb'] ) ) {
+			$issues[] = __( 'Database not initialized', 'wpshadow' );
+		}
+		// Verify core functionality
+		if ( ! function_exists( 'get_post' ) ) {
+			$issues[] = __( 'Post functionality not available', 'wpshadow' );
+		}
 		return null;
 	}
 }

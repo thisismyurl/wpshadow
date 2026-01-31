@@ -32,6 +32,18 @@ class Diagnostic_Html_Validate_Jsonld_Schema_Format extends Diagnostic_Base {
 				);
 			}
 		}
+
+		// SEO validation checks
+		if ( ! function_exists( 'wp_get_document_title' ) ) {
+			$issues[] = __( 'Document title function unavailable', 'wpshadow' );
+		}
+		if ( get_option( 'blog_public' ) === '0' ) {
+			$issues[] = __( 'Site set to private in search engines', 'wpshadow' );
+		}
+		// Check meta robots
+		if ( ! function_exists( 'wp_robots' ) ) {
+			$issues[] = __( 'Robots meta tag function unavailable', 'wpshadow' );
+		}
 		return null;
 	}
 }

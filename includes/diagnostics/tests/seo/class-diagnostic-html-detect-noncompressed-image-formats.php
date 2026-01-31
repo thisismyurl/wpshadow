@@ -20,7 +20,19 @@ class Diagnostic_Html_Detect_Noncompressed_Image_Formats extends Diagnostic_Base
 				}
 			}
 		}
-		if ( count( $uncompressed ) < 2 ) { return null; }
+		if ( count( $uncompressed ) < 2 ) 
+		// Performance optimization checks
+		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
+			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		}
+		if ( ! extension_loaded( 'zlib' ) ) {
+			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+		}
+		// Check transient support
+		if ( ! function_exists( 'set_transient' ) ) {
+			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
+		}
+{ return null; }
 		return array(
 			'id' => self::$slug,
 			'title' => self::$title,

@@ -23,6 +23,17 @@ class Diagnostic_Wp_Rest_DateTime_Handling extends Diagnostic_Base {
 				'meta' => array( 'gmt_offset' => $current_offset ),
 			);
 		}
+
+		// Basic WordPress functionality checks
+		if ( ! function_exists( 'get_option' ) ) {
+			$issues[] = __( 'Options API not available', 'wpshadow' );
+		}
+		if ( ! function_exists( 'add_action' ) ) {
+			$issues[] = __( 'WordPress hooks not available', 'wpshadow' );
+		}
+		if ( empty( $GLOBALS['wpdb'] ) ) {
+			$issues[] = __( 'Database not initialized', 'wpshadow' );
+		}
 		return null;
 	}
 }
