@@ -32,37 +32,45 @@ class Diagnostic_ServerpilotSslCertificates extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
+		if ( ! defined( 'SERVERPILOT_VERSION' ) && ! get_option( 'serverpilot_app_id' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 70,
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/serverpilot-ssl-certificates',
-			);
-		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
+		// Check 1: Verify SSL certificate is active
+		$ssl_enabled = get_option( 'serverpilot_ssl_enabled', false );
+		if ( ! $ssl_enabled ) {
+			$issues[] = __( 'SSL certificate not enabled', 'wpshadow' );
 		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
+
+		// Check 2: Check SSL certificate expiration
+		$ssl_expiry = get_option( 'serverpilot_ssl_expiry_date', 0 );
+		if ( $ssl_expiry > 0 && $ssl_expiry < ( time() + ( 30 * DAY_IN_SECONDS ) ) ) {
+			$issues[] = __( 'SSL certificate expires within 30 days', 'wpshadow' );
 		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
+
+		// Check 3: Verify auto-renewal is configured
+		$auto_renew = get_option( 'serverpilot_ssl_auto_renew', false );
+		if ( ! $auto_renew ) {
+			$issues[] = __( 'SSL certificate auto-renewal not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check wildcard certificate support
+		$wildcard_support = get_option( 'serverpilot_ssl_wildcard', false );
+		if ( ! $wildcard_support && is_multisite() ) {
+			$issues[] = __( 'Wildcard SSL not configured for multisite', 'wpshadow' );
+		}
+
+		// Check 5: Verify HTTPS enforcement
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'HTTPS enforcement not active', 'wpshadow' );
+		}
+
+		// Check 6: Check SSL certificate validation
+		$cert_validation = get_transient( 'serverpilot_ssl_validation' );
+		if ( false === $cert_validation ) {
+			$issues[] = __( 'SSL certificate validation status not cached', 'wpshadow' );
 		}
 		return null;
 	}

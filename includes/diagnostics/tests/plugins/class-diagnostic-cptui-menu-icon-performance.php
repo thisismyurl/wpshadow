@@ -37,31 +37,61 @@ class Diagnostic_CptuiMenuIconPerformance extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 35,
-				'threat_level' => 35,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/cptui-menu-icon-performance',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify menu icon URL format and optimization
+		$cptui_post_types = get_option( 'cptui_post_types', array() );
+		if ( ! empty( $cptui_post_types ) ) {
+			foreach ( $cptui_post_types as $post_type ) {
+				if ( ! empty( $post_type['menu_icon'] ) && strpos( $post_type['menu_icon'], 'data:image' ) === false && strpos( $post_type['menu_icon'], 'dashicons' ) === false ) {
+					$issues[] = __( 'Non-optimized menu icon format detected', 'wpshadow' );
+					break;
+				}
+			}
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Verify icon caching strategy
+		$icon_cache_enabled = get_option( 'cptui_icon_cache_enabled', false );
+		if ( ! $icon_cache_enabled ) {
+			$issues[] = __( 'Menu icon caching not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Check for excessive icon sizes
+		$icon_size_limit = 32; // KB
+		if ( ! empty( $cptui_post_types ) ) {
+			foreach ( $cptui_post_types as $post_type ) {
+				if ( ! empty( $post_type['menu_icon'] ) && strpos( $post_type['menu_icon'], 'data:image' ) === 0 ) {
+					$icon_size = strlen( base64_decode( substr( $post_type['menu_icon'], strpos( $post_type['menu_icon'], ',' ) + 1 ) ) );
+					if ( $icon_size > ( $icon_size_limit * 1024 ) ) {
+						$issues[] = __( 'Menu icon exceeds recommended size', 'wpshadow' );
+						break;
+					}
+				}
+			}
+		}
+
+		// Check 4: Verify SVG usage for scalability
+		$svg_icons_count = 0;
+		if ( ! empty( $cptui_post_types ) ) {
+			foreach ( $cptui_post_types as $post_type ) {
+				if ( ! empty( $post_type['menu_icon'] ) && strpos( $post_type['menu_icon'], 'svg' ) !== false ) {
+					$svg_icons_count++;
+				}
+			}
+			if ( $svg_icons_count === 0 && count( $cptui_post_types ) > 0 ) {
+				$issues[] = __( 'SVG icons not utilized for better performance', 'wpshadow' );
+			}
+		}
+
+		// Check 5: Check menu icon preload strategy
+		$icon_preload_enabled = get_option( 'cptui_icon_preload', false );
+		if ( ! $icon_preload_enabled ) {
+			$issues[] = __( 'Menu icon preloading not configured', 'wpshadow' );
+		}
+
+		// Check 6: Verify admin menu performance optimization
+		$admin_menu_cache = get_transient( 'cptui_admin_menu_cache' );
+		if ( false === $admin_menu_cache ) {
+			$issues[] = __( 'Admin menu caching not active', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {

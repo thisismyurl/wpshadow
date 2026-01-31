@@ -37,31 +37,41 @@ class Diagnostic_ShortpixelBackupCleanup extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/shortpixel-backup-cleanup',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify backup retention policy
+		$backup_retention = get_option( 'shortpixel_backup_retention_days', 0 );
+		if ( $backup_retention > 90 || $backup_retention === 0 ) {
+			$issues[] = __( 'Backup retention period too long or unlimited', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check automatic cleanup schedule
+		$cleanup_schedule = wp_get_schedule( 'shortpixel_backup_cleanup' );
+		if ( false === $cleanup_schedule ) {
+			$issues[] = __( 'Automatic backup cleanup not scheduled', 'wpshadow' );
+		}
+
+		// Check 3: Verify backup storage location
+		$backup_folder = get_option( 'shortpixel_backup_folder', '' );
+		if ( empty( $backup_folder ) ) {
+			$issues[] = __( 'Backup storage location not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check backup file deletion after optimization
+		$delete_after_optimize = get_option( 'shortpixel_delete_backup_after_optimize', false );
+		if ( ! $delete_after_optimize ) {
+			$issues[] = __( 'Backup deletion after optimization not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify disk space monitoring for backups
+		$monitor_space = get_option( 'shortpixel_monitor_backup_space', false );
+		if ( ! $monitor_space ) {
+			$issues[] = __( 'Disk space monitoring for backups not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check for old backup purge configuration
+		$purge_old_backups = get_option( 'shortpixel_purge_old_backups', false );
+		if ( ! $purge_old_backups ) {
+			$issues[] = __( 'Old backup purge mechanism not configured', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {

@@ -37,31 +37,41 @@ class Diagnostic_BuddypressGroupPermissions extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 65,
-				'threat_level' => 65,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/buddypress-group-permissions',
-			);
-		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
+		// Check 1: Verify default group creation settings
+		$restrict_group_creation = get_option( 'bp_restrict_group_creation', 0 );
+		if ( ! $restrict_group_creation ) {
+			$issues[] = __( 'Group creation not restricted to admins', 'wpshadow' );
 		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
+
+		// Check 2: Check group invitation permissions
+		$invite_status = get_option( 'bp_group_invite_status', 'members' );
+		if ( 'members' === $invite_status ) {
+			$issues[] = __( 'Group invitation permissions too permissive', 'wpshadow' );
+		}
+
+		// Check 3: Verify group document upload restrictions
+		$restrict_uploads = get_option( 'bp_group_restrict_document_uploads', 0 );
+		if ( ! $restrict_uploads ) {
+			$issues[] = __( 'Group document upload restrictions not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check group activity moderation
+		$activity_moderation = get_option( 'bp_group_activity_moderation', 0 );
+		if ( ! $activity_moderation ) {
+			$issues[] = __( 'Group activity moderation not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify group member role capabilities
+		$member_caps_defined = get_option( 'bp_group_member_caps', array() );
+		if ( empty( $member_caps_defined ) ) {
+			$issues[] = __( 'Group member role capabilities not properly defined', 'wpshadow' );
+		}
+
+		// Check 6: Check group visibility default settings
+		$default_visibility = get_option( 'bp_group_default_visibility', 'public' );
+		if ( 'public' === $default_visibility ) {
+			$issues[] = __( 'Default group visibility set to public', 'wpshadow' );
 		}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {

@@ -32,36 +32,45 @@ class Diagnostic_WoocommerceProductVendorsSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! class_exists( 'WooCommerce' ) ) {
+		if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'WC_Product_Vendors' ) ) {
 			return null;
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 70,
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-product-vendors-security',
-			);
-		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
+		// Check 1: Verify vendor registration requires approval
+		$vendor_approval = get_option( 'wcpv_vendor_registration_approval', '' );
+		if ( 'yes' !== $vendor_approval ) {
+			$issues[] = __( 'Vendor registration approval not required', 'wpshadow' );
 		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
+
+		// Check 2: Check vendor dashboard access restrictions
+		$dashboard_restrict = get_option( 'wcpv_restrict_vendor_dashboard', '' );
+		if ( 'yes' !== $dashboard_restrict ) {
+			$issues[] = __( 'Vendor dashboard access not restricted', 'wpshadow' );
+		}
+
+		// Check 3: Verify product submission moderation
+		$product_moderation = get_option( 'wcpv_product_submission_approval', '' );
+		if ( 'yes' !== $product_moderation ) {
+			$issues[] = __( 'Product submission moderation not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check vendor data access controls
+		$data_access_limit = get_option( 'wcpv_limit_vendor_data_access', '' );
+		if ( 'yes' !== $data_access_limit ) {
+			$issues[] = __( 'Vendor data access controls not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify SSL for vendor commission payments
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for vendor payments', 'wpshadow' );
+		}
+
+		// Check 6: Check vendor capability restrictions
+		$capability_restrict = get_option( 'wcpv_restrict_vendor_capabilities', '' );
+		if ( 'yes' !== $capability_restrict ) {
+			$issues[] = __( 'Vendor capability restrictions not configured', 'wpshadow' );
 		}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {

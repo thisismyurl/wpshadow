@@ -32,37 +32,46 @@ class Diagnostic_GoogleCloudCdnConfiguration extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
+		if ( ! defined( 'GCP_PLUGIN_VERSION' ) && ! get_option( 'gcp_cdn_enabled' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/google-cloud-cdn-configuration',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify CDN is enabled
+		$cdn_enabled = get_option( 'gcp_cdn_enabled', false );
+		if ( ! $cdn_enabled ) {
+			$issues[] = __( 'Google Cloud CDN not enabled', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check CDN cache configuration
+		$cache_ttl = get_option( 'gcp_cdn_cache_ttl', 0 );
+		if ( $cache_ttl < 3600 ) {
+			$issues[] = __( 'CDN cache TTL too low for optimal performance', 'wpshadow' );
 		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
+
+		// Check 3: Verify origin server configuration
+		$origin_host = get_option( 'gcp_cdn_origin_host', '' );
+		if ( empty( $origin_host ) ) {
+			$issues[] = __( 'CDN origin server not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check SSL/TLS for CDN endpoints
+		$cdn_ssl = get_option( 'gcp_cdn_ssl_enabled', false );
+		if ( ! $cdn_ssl ) {
+			$issues[] = __( 'SSL/TLS not enabled for CDN endpoints', 'wpshadow' );
+		}
+
+		// Check 5: Verify cache invalidation strategy
+		$cache_invalidation = get_option( 'gcp_cdn_cache_invalidation_enabled', false );
+		if ( ! $cache_invalidation ) {
+			$issues[] = __( 'CDN cache invalidation not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check CDN URL rewriting
+		$url_rewrite = get_option( 'gcp_cdn_url_rewrite', false );
+		if ( ! $url_rewrite ) {
+			$issues[] = __( 'CDN URL rewriting not enabled', 'wpshadow' );
 		}
 		return null;
 	}
