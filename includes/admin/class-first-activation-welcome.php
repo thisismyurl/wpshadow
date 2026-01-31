@@ -590,10 +590,10 @@ JS;
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_complete_welcome() {
-		check_ajax_referer( 'wpshadow_complete_welcome', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_complete_welcome', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$user_id = get_current_user_id();

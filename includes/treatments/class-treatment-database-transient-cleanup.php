@@ -64,7 +64,7 @@ class Treatment_Database_Transient_Cleanup extends Treatment_Base {
 				if ( $timeout < time() ) {
 					// Get the transient name (remove the _transient_timeout_ prefix)
 					$transient_name = substr( $option_name, 18 ); // strlen('_transient_timeout_') = 18
-					
+
 					// Delete both the timeout and the actual transient value
 					delete_transient( $transient_name );
 					$deleted_count++;
@@ -75,13 +75,13 @@ class Treatment_Database_Transient_Cleanup extends Treatment_Base {
 		// Handle multisite
 		if ( is_multisite() ) {
 			$site_metas = get_site_option( 'site_meta', array() );
-			
+
 			// Get all site option names
 			global $wpdb;
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Need to scan all site meta for expired transients
 			$sitemeta_rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT meta_id, meta_key, meta_value FROM {$wpdb->sitemeta} 
+					"SELECT meta_id, meta_key, meta_value FROM {$wpdb->sitemeta}
 					WHERE meta_key LIKE %s",
 					'_site_transient_timeout_%'
 				)

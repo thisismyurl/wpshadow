@@ -85,7 +85,7 @@ Add at top of file:
 ```css
 /**
  * Kanban Board Styles
- * 
+ *
  * Depends on: design-system.css for base .wps-card components
  * This file contains only kanban-specific extensions and modifications
  */

@@ -54,8 +54,8 @@ $like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
 
 $replaced = $wpdb->query(
     $wpdb->prepare(
-        "UPDATE {$wpdb->options} 
-         SET option_value = REPLACE(option_value, %s, %s) 
+        "UPDATE {$wpdb->options}
+         SET option_value = REPLACE(option_value, %s, %s)
          WHERE option_value LIKE %s",
         $find,
         $replace,
@@ -72,7 +72,7 @@ $replaced = 0;
 foreach ( $all_options as $option_name => $option_value ) {
     if ( false !== strpos( $option_value, $find ) ) {
         $new_value = str_replace( $find, $replace, $option_value );
-        
+
         if ( update_option( $option_name, $new_value ) ) {
             $replaced++;
         }
@@ -129,8 +129,8 @@ $like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
 
 $replaced = $wpdb->query(
     $wpdb->prepare(
-        "UPDATE {$wpdb->comments} 
-         SET comment_content = REPLACE(comment_content, %s, %s) 
+        "UPDATE {$wpdb->comments}
+         SET comment_content = REPLACE(comment_content, %s, %s)
          WHERE comment_content LIKE %s",
         $find,
         $replace,
@@ -151,12 +151,12 @@ $replaced = 0;
 foreach ( $comments as $comment ) {
     if ( false !== strpos( $comment->comment_content, $find ) ) {
         $new_content = str_replace( $find, $replace, $comment->comment_content );
-        
+
         $result = wp_update_comment( array(
             'comment_ID'      => $comment->comment_ID,
             'comment_content' => $new_content,
         ) );
-        
+
         if ( $result && ! is_wp_error( $result ) ) {
             $replaced++;
         }
@@ -189,10 +189,10 @@ $like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
 
 $replaced = $wpdb->query(
     $wpdb->prepare(
-        "UPDATE {$wpdb->posts} 
-         SET post_content = REPLACE(post_content, %s, %s) 
-         WHERE post_content LIKE %s 
-         AND post_type = %s 
+        "UPDATE {$wpdb->posts}
+         SET post_content = REPLACE(post_content, %s, %s)
+         WHERE post_content LIKE %s
+         AND post_type = %s
          AND post_status = %s",
         $find,
         $replace,
@@ -217,12 +217,12 @@ $replaced = 0;
 foreach ( $posts as $post ) {
     if ( false !== strpos( $post->post_content, $find ) ) {
         $new_content = str_replace( $find, $replace, $post->post_content );
-        
+
         $result = wp_update_post( array(
             'ID'           => $post->ID,
             'post_content' => $new_content,
         ), false );  // false = don't fire wp_insert_post
-        
+
         if ( $result && ! is_wp_error( $result ) ) {
             $replaced++;
         }
@@ -267,9 +267,9 @@ $like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
 
 $replaced = $wpdb->query(
     $wpdb->prepare(
-        "UPDATE {$wpdb->postmeta} 
-         SET meta_value = REPLACE(meta_value, %s, %s) 
-         WHERE meta_value LIKE %s 
+        "UPDATE {$wpdb->postmeta}
+         SET meta_value = REPLACE(meta_value, %s, %s)
+         WHERE meta_value LIKE %s
          AND meta_key = %s",
         $find,
         $replace,
@@ -296,10 +296,10 @@ $replaced = 0;
 
 foreach ( $posts as $post ) {
     $old_value = get_post_meta( $post->ID, 'my_meta_key', true );
-    
+
     if ( false !== strpos( $old_value, $find ) ) {
         $new_value = str_replace( $find, $replace, $old_value );
-        
+
         if ( update_post_meta( $post->ID, 'my_meta_key', $new_value ) ) {
             $replaced++;
         }
@@ -352,8 +352,8 @@ global $wpdb;
 
 $deleted = $wpdb->query(
     $wpdb->prepare(
-        "DELETE FROM {$wpdb->options} 
-         WHERE option_name LIKE %s 
+        "DELETE FROM {$wpdb->options}
+         WHERE option_name LIKE %s
          AND option_value < %d",
         $wpdb->esc_like( '_transient_timeout_' ) . '%',
         time()
@@ -374,7 +374,7 @@ foreach ( $all_options as $option_name => $option_value ) {
         if ( (int) $option_value < $now ) {
             // Extract transient name
             $transient_name = substr( $option_name, 19 );
-            
+
             // Delete both timeout and value using WordPress API
             if ( delete_transient( $transient_name ) ) {
                 $deleted++;
@@ -486,10 +486,10 @@ foreach ( $all_options as $option_name => $option_value ) {
 public function test_bulk_replace_options_wordpress_friendly() {
     // Add test option with target value
     add_option( 'test_option', 'old value to replace' );
-    
+
     // Call refactored function
     $result = $this->bulk_replace_options( 'old value', 'new value' );
-    
+
     // Assert
     $this->assertEquals( 1, $result );
     $this->assertEquals( 'new value to replace', get_option( 'test_option' ) );
@@ -526,6 +526,6 @@ public static function bulk_update_posts( $find, $replace ) {
 
 ---
 
-**Status:** Ready for Phase 1 implementation  
+**Status:** Ready for Phase 1 implementation
 **Last Updated:** January 31, 2026
 

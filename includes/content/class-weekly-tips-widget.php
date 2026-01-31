@@ -74,7 +74,7 @@ class Weekly_Tips_Widget {
 			<div class="wpshadow-weekly-tip__content">
 				<h4 class="wpshadow-weekly-tip__title"><?php echo esc_html( $tip['title'] ); ?></h4>
 				<p class="wpshadow-weekly-tip__description"><?php echo esc_html( $tip['description'] ); ?></p>
-				
+
 				<?php if ( ! empty( $tip['key_points'] ) ) : ?>
 					<ul class="wpshadow-weekly-tip__points">
 						<?php foreach ( $tip['key_points'] as $point ) : ?>
@@ -85,8 +85,8 @@ class Weekly_Tips_Widget {
 
 				<div class="wpshadow-weekly-tip__actions">
 					<?php if ( ! empty( $tip['video_url'] ) ) : ?>
-						<a href="<?php echo esc_url( $tip['video_url'] ); ?>" 
-						   target="_blank" 
+						<a href="<?php echo esc_url( $tip['video_url'] ); ?>"
+						   target="_blank"
 						   class="button button-primary">
 							<span class="dashicons dashicons-video-alt3"></span>
 							<?php esc_html_e( 'Watch 5-Min Video', 'wpshadow' ); ?>
@@ -94,8 +94,8 @@ class Weekly_Tips_Widget {
 					<?php endif; ?>
 
 					<?php if ( ! empty( $tip['kb_url'] ) ) : ?>
-						<a href="<?php echo esc_url( $tip['kb_url'] ); ?>" 
-						   target="_blank" 
+						<a href="<?php echo esc_url( $tip['kb_url'] ); ?>"
+						   target="_blank"
 						   class="button button-secondary">
 							<span class="dashicons dashicons-book-alt"></span>
 							<?php esc_html_e( 'Read Guide', 'wpshadow' ); ?>
@@ -104,8 +104,8 @@ class Weekly_Tips_Widget {
 				</div>
 
 				<div class="wpshadow-weekly-tip__feedback">
-					<button type="button" 
-					        class="wpshadow-tip-helpful" 
+					<button type="button"
+					        class="wpshadow-tip-helpful"
 					        data-tip-id="<?php echo esc_attr( $tip['id'] ); ?>">
 						<span class="dashicons dashicons-thumbs-up"></span>
 						<?php esc_html_e( 'This was helpful', 'wpshadow' ); ?>
@@ -126,7 +126,7 @@ class Weekly_Tips_Widget {
 					);
 					?>
 					&bull;
-					<a href="<?php echo esc_url( UTM_Link_Manager::academy_link( 'all-tips', 'weekly-widget' ) ); ?>" 
+					<a href="<?php echo esc_url( UTM_Link_Manager::academy_link( 'all-tips', 'weekly-widget' ) ); ?>"
 					   target="_blank">
 						<?php esc_html_e( 'View All Tips', 'wpshadow' ); ?>
 					</a>
@@ -204,7 +204,7 @@ class Weekly_Tips_Widget {
 			$('.wpshadow-tip-helpful').on('click', function() {
 				var $btn = $(this);
 				var tipId = $btn.data('tip-id');
-				
+
 				$.post(ajaxurl, {
 					action: 'wpshadow_mark_tip_helpful',
 					tip_id: tipId,
@@ -229,10 +229,10 @@ class Weekly_Tips_Widget {
 	private static function get_current_week_tip(): ?array {
 		$tips = self::get_all_tips();
 		$week_number = self::get_current_week_number();
-		
+
 		// Rotate through tips based on week number
 		$tip_index = ( $week_number - 1 ) % count( $tips );
-		
+
 		return $tips[ $tip_index ] ?? null;
 	}
 
@@ -345,7 +345,8 @@ class Weekly_Tips_Widget {
 	 * @return void
 	 */
 	public static function ajax_mark_helpful() {
-		check_ajax_referer( 'wpshadow_tip_feedback', 'nonce' );
+		// Use Security_Validator for consistent security checks
+		\WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_tip_feedback', 'nonce', true );
 
 		$tip_id = isset( $_POST['tip_id'] ) ? sanitize_key( $_POST['tip_id'] ) : '';
 		if ( empty( $tip_id ) ) {

@@ -1,6 +1,6 @@
 /**
  * WPShadow AJAX Helper
- * 
+ *
  * Centralized AJAX utility to reduce code duplication across JavaScript files.
  * Provides consistent error handling, loading states, and nonce management.
  *
@@ -77,10 +77,10 @@
 							options.success(response.data || {}, response, textStatus, jqXHR);
 						}
 					} else {
-						var errorMsg = response && response.data && response.data.message 
-							? response.data.message 
+						var errorMsg = response && response.data && response.data.message
+							? response.data.message
 							: options.errorMessage;
-						
+
 						if (options.error) {
 							options.error(errorMsg, response);
 						} else if (options.showErrors) {
@@ -90,7 +90,7 @@
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					var errorMsg = options.errorMessage;
-					
+
 					if (textStatus === 'timeout') {
 						errorMsg = 'Request timed out. Please try again.';
 					} else if (jqXHR.status === 403) {
@@ -128,14 +128,14 @@
 			options = options || {};
 			var originalType = options.type;
 			options.type = 'GET';
-			
+
 			var result = this.post(action, data, options);
-			
+
 			// Restore original type if it was set
 			if (originalType) {
 				options.type = originalType;
 			}
-			
+
 			return result;
 		},
 
@@ -166,7 +166,7 @@
 		 */
 		showLoading: function(element) {
 			var $element = $(element);
-			
+
 			// Save original state
 			if (!$element.data('wpshadow-original-html')) {
 				$element.data('wpshadow-original-html', $element.html());
@@ -174,13 +174,13 @@
 			if (!$element.data('wpshadow-original-disabled')) {
 				$element.data('wpshadow-original-disabled', $element.prop('disabled'));
 			}
-			
+
 			// Add loading class and disable
 			$element.addClass('wpshadow-loading');
 			if ($element.is('button, input, select, textarea')) {
 				$element.prop('disabled', true);
 			}
-			
+
 			// Add spinner if button
 			if ($element.is('button') || $element.hasClass('button')) {
 				var spinnerHtml = '<span class="spinner is-active" style="float: none; margin: 0 5px 0 0;"></span>';
@@ -195,18 +195,18 @@
 		 */
 		hideLoading: function(element) {
 			var $element = $(element);
-			
+
 			// Restore original state
 			var originalHtml = $element.data('wpshadow-original-html');
 			var originalDisabled = $element.data('wpshadow-original-disabled');
-			
+
 			$element.removeClass('wpshadow-loading');
-			
+
 			if (originalHtml) {
 				$element.html(originalHtml);
 				$element.removeData('wpshadow-original-html');
 			}
-			
+
 			if ($element.is('button, input, select, textarea')) {
 				$element.prop('disabled', originalDisabled || false);
 				$element.removeData('wpshadow-original-disabled');
@@ -264,7 +264,7 @@
 			}
 
 			var $notice = $('<div class="' + noticeClass + '"><p>' + message + '</p></div>');
-			
+
 			// Insert after h1 or at top of .wrap
 			if ($('h1').first().length) {
 				$('h1').first().after($notice);

@@ -359,10 +359,10 @@ JS;
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_get_connections() {
-		check_ajax_referer( 'wpshadow_phone_home', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_phone_home', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$connections = get_transient( 'wpshadow_recent_connections' ) ?: array();

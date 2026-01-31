@@ -388,11 +388,8 @@ class Recipe_Manager {
 	 * @return void
 	 */
 	public static function ajax_get_recipes() {
-		check_ajax_referer( 'wpshadow_recipes', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-		}
+		// Use Security_Validator for consistent security checks
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_recipes', 'manage_options', 'nonce' );
 
 		$recipes = self::get_recipes();
 
@@ -410,11 +407,8 @@ class Recipe_Manager {
 	 * @return void
 	 */
 	public static function ajax_execute_recipe() {
-		check_ajax_referer( 'wpshadow_recipes', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-		}
+		// Use Security_Validator for consistent security checks
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_recipes', 'manage_options', 'nonce' );
 
 		$recipe_id = isset( $_POST['recipe_id'] ) ? sanitize_key( $_POST['recipe_id'] ) : '';
 

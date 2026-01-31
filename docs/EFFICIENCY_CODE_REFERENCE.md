@@ -1,7 +1,7 @@
 # WPShadow Efficiency Audit - Code Locations Reference
 
-**Purpose:** Detailed file locations and specific code patterns identified during efficiency audit  
-**Updated:** January 31, 2026  
+**Purpose:** Detailed file locations and specific code patterns identified during efficiency audit
+**Updated:** January 31, 2026
 **Use:** Quick reference for implementing Phase 1 and Phase 2 optimizations
 
 ---
@@ -23,7 +23,7 @@
 ### Primary Problem File
 **File:** `/includes/core/class-hooks-initializer.php`
 
-**Method:** `on_wp_enqueue_scripts()`  
+**Method:** `on_wp_enqueue_scripts()`
 **Lines:** 295-360
 
 **Current Behavior:**
@@ -79,8 +79,8 @@ wp_enqueue_script( 'wpshadow-dashboard-realtime' ); // 65KB
 ### 🔴 Critical N+1 Issues
 
 #### Issue 1: Exit Followup Handler
-**File:** `/includes/admin/ajax/exit-followup-handlers.php`  
-**Lines:** 80-115  
+**File:** `/includes/admin/ajax/exit-followup-handlers.php`
+**Lines:** 80-115
 **Severity:** HIGH
 
 ```php
@@ -102,9 +102,9 @@ foreach ( $followups as $followup ) {
 ```php
 // SOLUTION: Single query with JOIN
 $results = $wpdb->get_results(
-    "SELECT f.*, d.* 
+    "SELECT f.*, d.*
      FROM {$wpdb->prefix}wpshadow_followups f
-     LEFT JOIN {$wpdb->prefix}wpshadow_followup_data d 
+     LEFT JOIN {$wpdb->prefix}wpshadow_followup_data d
        ON f.id = d.followup_id"
 );
 ```
@@ -112,8 +112,8 @@ $results = $wpdb->get_results(
 ---
 
 #### Issue 2: Bulk Find-Replace Handler
-**File:** `/includes/admin/ajax/bulk-find-replace-handler.php`  
-**Lines:** 180-335  
+**File:** `/includes/admin/ajax/bulk-find-replace-handler.php`
+**Lines:** 180-335
 **Severity:** MEDIUM
 
 **Problem:** Multiple separate COUNT queries before execution
@@ -143,7 +143,7 @@ $affected_rows = $wpdb->get_var( 'SELECT FOUND_ROWS()' );
 ---
 
 #### Issue 3: Clone/Sync Operations
-**Files:** 
+**Files:**
 - `/includes/admin/ajax/sync-clone-handler.php:186-199`
 - `/includes/admin/ajax/create-clone-handler.php:258-283`
 
@@ -269,7 +269,7 @@ if ( false === $menu_items ) {
 
 **Table:** `{prefix}wpshadow_activities`
 
-Current indexes: Likely none  
+Current indexes: Likely none
 Recommended indexes:
 ```sql
 ALTER TABLE {prefix}wpshadow_activities ADD INDEX idx_user_id (user_id);
@@ -336,7 +336,7 @@ Add index creation to activation/migration routine
 ```php
 class API_Batch_Manager {
     private static $batch_queue = array();
-    
+
     public static function queue( $action, $url, $args = array() ) {
         self::$batch_queue[] = array(
             'action' => $action,
@@ -344,7 +344,7 @@ class API_Batch_Manager {
             'args' => $args,
         );
     }
-    
+
     public static function flush() {
         // Execute all queued requests together
         // Use curl_multi for parallel execution
@@ -358,7 +358,7 @@ class API_Batch_Manager {
 
 ### Over-Eager Init Pattern
 
-**File:** `/includes/core/class-plugin-bootstrap.php`  
+**File:** `/includes/core/class-plugin-bootstrap.php`
 **Lines:** 30-80
 
 **Current:** All 21 systems initialized immediately
@@ -384,7 +384,7 @@ public static function init() {
     // Always load
     self::load_core_classes();
     Hooks_Initializer::init();
-    
+
     // Only in admin
     if ( is_admin() ) {
         Menu_Manager::init();
@@ -392,12 +392,12 @@ public static function init() {
         self::load_workflow_module();
         // ... other admin systems ...
     }
-    
+
     // Only if enabled
     if ( get_option( 'wpshadow_guardian_active' ) ) {
         self::load_guardian_system();
     }
-    
+
     // Only on-demand
     if ( wp_doing_ajax() && 'wpshadow_action' === $_POST['action'] ) {
         self::load_ajax_handlers();
@@ -504,6 +504,6 @@ grep -rn "foreach" includes/ -A 5 | grep "wpdb" | head -20
 
 ---
 
-**Last Updated:** January 31, 2026  
+**Last Updated:** January 31, 2026
 **Next Review:** After Phase 1 deployment
 

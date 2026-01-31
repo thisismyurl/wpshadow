@@ -1,7 +1,7 @@
 # WPShadow $wpdb Audit & WordPress-Friendly Alternatives
 
-**Status:** Comprehensive audit of $wpdb usage across the plugin  
-**Purpose:** Identify opportunities to replace direct database queries with WordPress APIs  
+**Status:** Comprehensive audit of $wpdb usage across the plugin
+**Purpose:** Identify opportunities to replace direct database queries with WordPress APIs
 **Date:** January 31, 2026
 
 ---
@@ -44,7 +44,7 @@ $wpdb->query(
 
 **WordPress Alternatives:**
 - ✅ `get_option()` - Get single option
-- ✅ `update_option()` - Update single option  
+- ✅ `update_option()` - Update single option
 - ✅ `delete_option()` - Delete single option
 - ✅ `wp_load_alloptions()` - Get all options (cached)
 
@@ -104,9 +104,9 @@ $posts = get_posts( array(
 foreach ( $posts as $post ) {
     $old_value = get_post_meta( $post->ID, $meta_key, true );
     if ( false !== strpos( $old_value, $find ) ) {
-        update_post_meta( 
-            $post->ID, 
-            $meta_key, 
+        update_post_meta(
+            $post->ID,
+            $meta_key,
             str_replace( $find, $replace, $old_value )
         );
     }
@@ -218,8 +218,8 @@ These require more careful refactoring but provide significant benefits.
 // Direct deletion of expired transients
 $deleted = $wpdb->query(
     $wpdb->prepare(
-        "DELETE FROM {$wpdb->options} 
-         WHERE option_name LIKE %s 
+        "DELETE FROM {$wpdb->options}
+         WHERE option_name LIKE %s
          AND option_value < %d",
         $wpdb->esc_like( '_transient_timeout_' ) . '%',
         time()
@@ -240,7 +240,7 @@ $deleted = $wpdb->query(
 public static function cleanup_expired_transients() {
     $all_options = wp_load_alloptions();
     $deleted = 0;
-    
+
     foreach ( $all_options as $name => $value ) {
         if ( strpos( $name, '_transient_timeout_' ) === 0 ) {
             if ( (int) $value < time() ) {
@@ -250,7 +250,7 @@ public static function cleanup_expired_transients() {
             }
         }
     }
-    
+
     return $deleted;
 }
 ```
@@ -291,9 +291,9 @@ These are complex or foundational and may not be worth changing.
 ```php
 // Get all WordPress tables
 $tables = $wpdb->get_col(
-    $wpdb->prepare( 
-        'SHOW TABLES LIKE %s', 
-        $wpdb->esc_like( $wpdb->prefix ) . '%' 
+    $wpdb->prepare(
+        'SHOW TABLES LIKE %s',
+        $wpdb->esc_like( $wpdb->prefix ) . '%'
     )
 );
 
@@ -345,7 +345,7 @@ $wpdb->query( "CREATE TABLE `{$new_table}` LIKE `{$table}`" );
 | WordPress APIs | ⚡ Slower | ✅ Yes | ✅ Yes | ✅ High |
 | Hybrid (both) | ⚡⚡ Medium | ✅ Partial | ✅ Yes | ✅ High |
 
-**Recommendation:** 
+**Recommendation:**
 - Use WordPress APIs for general operations (posts, meta, comments, options)
 - Keep `$wpdb` for: custom tables, advanced queries, bulk transient cleanup, DDL
 - Profile bulk operations after refactoring
@@ -435,7 +435,7 @@ global $wpdb;
 
 $replaced = $wpdb->query(
     $wpdb->prepare(
-        "UPDATE {$wpdb->posts} 
+        "UPDATE {$wpdb->posts}
          SET post_content = REPLACE(post_content, %s, %s),
              post_title = REPLACE(post_title, %s, %s)
          WHERE (post_content LIKE %s OR post_title LIKE %s)
@@ -460,19 +460,19 @@ $posts = get_posts( array(
 $replaced = 0;
 foreach ( $posts as $post ) {
     $updated = false;
-    
+
     $content = $post->post_content;
     if ( false !== strpos( $content, $find ) ) {
         $content = str_replace( $find, $replace, $content );
         $updated = true;
     }
-    
+
     $title = $post->post_title;
     if ( false !== strpos( $title, $find ) ) {
         $title = str_replace( $find, $replace, $title );
         $updated = true;
     }
-    
+
     if ( $updated ) {
         wp_update_post( array(
             'ID'           => $post->ID,
@@ -544,12 +544,12 @@ $wpdb->get_results( "SELECT * FROM {$wpdb->posts} WHERE ID = $post_id" );
 ```php
 /**
  * Get all posts with custom meta using direct query.
- * 
+ *
  * Using $wpdb directly instead of get_posts() because:
  * - Needs to filter by 3+ custom meta fields
  * - Performance critical (1000+ posts)
  * - get_posts() would require 3 separate meta_query arrays
- * 
+ *
  * @since 1.2601.2200
  */
 global $wpdb;
@@ -596,7 +596,7 @@ Phase in WordPress API replacements starting with **Phase 1** items:
 
 ---
 
-**Document Status:** Ready for implementation  
-**Last Updated:** January 31, 2026  
+**Document Status:** Ready for implementation
+**Last Updated:** January 31, 2026
 **Prepared by:** GitHub Copilot
 
