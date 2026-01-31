@@ -46,8 +46,8 @@ class Recommendation_Engine {
 		add_action( 'wp_ajax_wpshadow_dismiss_recommendation', array( __CLASS__, 'ajax_dismiss' ) );
 		add_action( 'wp_ajax_wpshadow_get_recommendations', array( __CLASS__, 'ajax_get_recommendations' ) );
 
-		// Error detection
-		add_action( 'shutdown', array( __CLASS__, 'detect_errors' ) );
+		// Error detection (disabled - #3881 alert removed)
+		// add_action( 'shutdown', array( __CLASS__, 'detect_errors' ) );
 	}
 
 	/**
