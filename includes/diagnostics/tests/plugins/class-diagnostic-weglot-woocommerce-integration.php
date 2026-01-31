@@ -32,36 +32,46 @@ class Diagnostic_WeglotWoocommerceIntegration extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! defined( 'WEGLOT_VERSION' ) ) {
+		if ( ! defined( 'WEGLOT_VERSION' ) || ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/weglot-woocommerce-integration',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify WooCommerce integration is enabled
+		$wc_integration = get_option( 'weglot_woocommerce_enabled', false );
+		if ( ! $wc_integration ) {
+			$issues[] = __( 'WooCommerce integration not enabled in Weglot', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check product content translation
+		$translate_products = get_option( 'weglot_translate_wc_products', false );
+		if ( ! $translate_products ) {
+			$issues[] = __( 'Product content translation not configured', 'wpshadow' );
+		}
+
+		// Check 3: Verify checkout page translation
+		$translate_checkout = get_option( 'weglot_translate_wc_checkout', false );
+		if ( ! $translate_checkout ) {
+			$issues[] = __( 'Checkout page translation not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check currency switching for translations
+		$currency_switching = get_option( 'weglot_wc_currency_switching', false );
+		if ( ! $currency_switching ) {
+			$issues[] = __( 'Currency switching not configured for translations', 'wpshadow' );
+		}
+
+		// Check 5: Verify translated URL structure
+		$url_structure = get_option( 'weglot_wc_url_structure', '' );
+		if ( empty( $url_structure ) ) {
+			$issues[] = __( 'Translated URL structure not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check cache compatibility with WooCommerce
+		$cache_compatibility = get_option( 'weglot_wc_cache_compatibility', false );
+		if ( ! $cache_compatibility ) {
+			$issues[] = __( 'Cache compatibility for WooCommerce not enabled', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {

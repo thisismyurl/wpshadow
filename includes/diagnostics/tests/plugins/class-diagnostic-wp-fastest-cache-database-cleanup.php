@@ -32,37 +32,46 @@ class Diagnostic_WpFastestCacheDatabaseCleanup extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
+		if ( ! class_exists( 'WpFastestCache' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-fastest-cache-database-cleanup',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify database cleanup is enabled
+		$cleanup_enabled = get_option( 'WpFastestCacheDBClean', false );
+		if ( ! $cleanup_enabled ) {
+			$issues[] = __( 'Database cleanup not enabled', 'wpshadow' );
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Check post revisions cleanup
+		$revisions_limit = get_option( 'WpFastestCacheRevisions', -1 );
+		if ( $revisions_limit < 0 ) {
+			$issues[] = __( 'Post revisions cleanup not configured', 'wpshadow' );
 		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
+
+		// Check 3: Verify auto-drafts deletion
+		$autodrafts_cleanup = get_option( 'WpFastestCacheAutodrafts', false );
+		if ( ! $autodrafts_cleanup ) {
+			$issues[] = __( 'Auto-drafts cleanup not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check transient cleanup
+		$transients_cleanup = get_option( 'WpFastestCacheTransients', false );
+		if ( ! $transients_cleanup ) {
+			$issues[] = __( 'Transient cleanup not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify orphaned post metadata cleanup
+		$orphaned_meta = get_option( 'WpFastestCacheOrphanedMeta', false );
+		if ( ! $orphaned_meta ) {
+			$issues[] = __( 'Orphaned metadata cleanup not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check database optimization schedule
+		$optimization_schedule = wp_get_schedule( 'wpfc_database_optimization' );
+		if ( false === $optimization_schedule ) {
+			$issues[] = __( 'Database optimization not scheduled', 'wpshadow' );
 		}
 		return null;
 	}

@@ -32,37 +32,46 @@ class Diagnostic_CustomFieldSuitePerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
+		if ( ! class_exists( 'CFS' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 55,
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/custom-field-suite-performance',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify field value caching
+		$field_cache = get_option( 'cfs_enable_field_cache', false );
+		if ( ! $field_cache ) {
+			$issues[] = __( 'Custom field caching not enabled', 'wpshadow' );
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Check query optimization for field groups
+		$query_optimization = get_option( 'cfs_optimize_field_queries', false );
+		if ( ! $query_optimization ) {
+			$issues[] = __( 'Field query optimization not enabled', 'wpshadow' );
 		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
+
+		// Check 3: Verify field group limits
+		$field_groups = get_option( 'cfs_field_groups', array() );
+		if ( count( $field_groups ) > 50 ) {
+			$issues[] = __( 'Excessive field groups may impact performance', 'wpshadow' );
+		}
+
+		// Check 4: Check conditional logic performance
+		$conditional_cache = get_option( 'cfs_conditional_logic_cache', false );
+		if ( ! $conditional_cache ) {
+			$issues[] = __( 'Conditional logic caching not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify repeater field limits
+		$repeater_limit = get_option( 'cfs_repeater_field_limit', 0 );
+		if ( $repeater_limit > 100 || $repeater_limit === 0 ) {
+			$issues[] = __( 'Repeater field limit too high or unlimited', 'wpshadow' );
+		}
+
+		// Check 6: Check AJAX loading for large field sets
+		$ajax_loading = get_option( 'cfs_ajax_field_loading', false );
+		if ( ! $ajax_loading ) {
+			$issues[] = __( 'AJAX loading not enabled for large field sets', 'wpshadow' );
 		}
 		return null;
 	}

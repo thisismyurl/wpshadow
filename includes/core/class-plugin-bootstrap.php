@@ -784,6 +784,7 @@ class Plugin_Bootstrap {
 			'class-points-system.php',
 			'class-leaderboard.php',
 			'class-reward-system.php',
+			'class-earn-actions.php',
 			'class-gamification-manager.php',
 			'class-gamification-ui.php',
 		);

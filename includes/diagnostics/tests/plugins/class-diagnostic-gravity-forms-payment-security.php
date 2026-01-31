@@ -37,31 +37,40 @@ class Diagnostic_GravityFormsPaymentSecurity extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 75,
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/gravity-forms-payment-security',
-			);
-		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
+		// Check 1: Verify SSL for payment processing
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for payment forms', 'wpshadow' );
 		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
+
+		// Check 2: Check payment gateway encryption
+		$gateway_encryption = get_option( 'gform_payment_gateway_encryption', false );
+		if ( ! $gateway_encryption ) {
+			$issues[] = __( 'Payment gateway data encryption not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify PCI compliance mode
+		$pci_compliance = get_option( 'gform_pci_compliance_mode', false );
+		if ( ! $pci_compliance ) {
+			$issues[] = __( 'PCI compliance mode not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check payment transaction logging
+		$transaction_logging = get_option( 'gform_log_payment_transactions', false );
+		if ( ! $transaction_logging ) {
+			$issues[] = __( 'Payment transaction logging not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify failed payment handling
+		$failed_payment_handling = get_option( 'gform_failed_payment_notifications', false );
+		if ( ! $failed_payment_handling ) {
+			$issues[] = __( 'Failed payment notifications not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check payment data retention policy
+		$data_retention = get_option( 'gform_payment_data_retention_days', 0 );
+		if ( $data_retention > 90 || $data_retention === 0 ) {
+			$issues[] = __( 'Payment data retention period too long', 'wpshadow' );
 		}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {

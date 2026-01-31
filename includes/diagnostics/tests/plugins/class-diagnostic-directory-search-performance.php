@@ -37,31 +37,41 @@ class Diagnostic_DirectorySearchPerformance extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 55,
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/directory-search-performance',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify search indexing is enabled
+		$search_indexing = get_option( 'wpbdp_search_indexing_enabled', false );
+		if ( ! $search_indexing ) {
+			$issues[] = __( 'Directory search indexing not enabled', 'wpshadow' );
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Check search query caching
+		$query_cache = get_option( 'wpbdp_search_query_cache', false );
+		if ( ! $query_cache ) {
+			$issues[] = __( 'Search query caching not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify search result pagination
+		$per_page = get_option( 'wpbdp_search_results_per_page', 0 );
+		if ( $per_page > 50 || $per_page === 0 ) {
+			$issues[] = __( 'Search results per page not optimally configured', 'wpshadow' );
+		}
+
+		// Check 4: Check relevance sorting configuration
+		$relevance_sorting = get_option( 'wpbdp_search_relevance_sorting', false );
+		if ( ! $relevance_sorting ) {
+			$issues[] = __( 'Search relevance sorting not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify search filter caching
+		$filter_cache = get_option( 'wpbdp_search_filter_cache', false );
+		if ( ! $filter_cache ) {
+			$issues[] = __( 'Search filter caching not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check maximum search results limit
+		$max_results = get_option( 'wpbdp_search_max_results', 0 );
+		if ( $max_results > 1000 || $max_results === 0 ) {
+			$issues[] = __( 'Maximum search results limit too high or unlimited', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {

@@ -37,31 +37,41 @@ class Diagnostic_WoocommerceOnePageCheckoutValidation extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-one-page-checkout-validation',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify checkout field validation
+		$field_validation = get_option( 'wc_opc_field_validation', false );
+		if ( ! $field_validation ) {
+			$issues[] = __( 'Checkout field validation not enabled', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check AJAX validation for real-time feedback
+		$ajax_validation = get_option( 'wc_opc_ajax_validation', false );
+		if ( ! $ajax_validation ) {
+			$issues[] = __( 'AJAX field validation not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify nonce verification for checkout
+		$nonce_check = get_option( 'wc_opc_nonce_verification', false );
+		if ( ! $nonce_check ) {
+			$issues[] = __( 'Checkout nonce verification not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check cart validation before checkout
+		$cart_validation = get_option( 'wc_opc_cart_validation', false );
+		if ( ! $cart_validation ) {
+			$issues[] = __( 'Cart validation before checkout not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify payment method validation
+		$payment_validation = get_option( 'wc_opc_payment_validation', false );
+		if ( ! $payment_validation ) {
+			$issues[] = __( 'Payment method validation not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check error handling and user feedback
+		$error_handling = get_option( 'wc_opc_error_handling', false );
+		if ( ! $error_handling ) {
+			$issues[] = __( 'Checkout error handling not properly configured', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {

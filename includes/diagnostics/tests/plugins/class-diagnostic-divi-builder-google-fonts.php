@@ -37,31 +37,41 @@ class Diagnostic_DiviBuilderGoogleFonts extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 40,
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-google-fonts',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify font loading strategy
+		$font_loading = get_option( 'et_divi_font_loading_strategy', '' );
+		if ( 'swap' !== $font_loading && 'async' !== $font_loading ) {
+			$issues[] = __( 'Font loading strategy not optimized', 'wpshadow' );
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Check font weight limits
+		$font_weights = get_option( 'et_divi_google_font_weights', array() );
+		if ( count( $font_weights ) > 4 ) {
+			$issues[] = __( 'Too many font weights loaded', 'wpshadow' );
+		}
+
+		// Check 3: Verify font-display property
+		$font_display = get_option( 'et_divi_font_display', '' );
+		if ( 'swap' !== $font_display ) {
+			$issues[] = __( 'Font-display not set to swap', 'wpshadow' );
+		}
+
+		// Check 4: Check local font hosting option
+		$local_fonts = get_option( 'et_divi_local_google_fonts', '' );
+		if ( 'on' !== $local_fonts ) {
+			$issues[] = __( 'Local Google Fonts hosting not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify font subsetting
+		$font_subset = get_option( 'et_divi_font_character_set', 'latin' );
+		if ( empty( $font_subset ) ) {
+			$issues[] = __( 'Font subsetting not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check font preload configuration
+		$preload_fonts = get_option( 'et_divi_preload_fonts', '' );
+		if ( 'on' !== $preload_fonts ) {
+			$issues[] = __( 'Font preloading not enabled', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {

@@ -32,36 +32,51 @@ class Diagnostic_WordpressMenuQueryCaching extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
+		if ( ! function_exists( 'wp_get_nav_menus' ) ) {
 			return null;
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 55,
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wordpress-menu-query-caching',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify menu caching is enabled
+		$menu_cache_enabled = get_option( 'wp_nav_menu_cache_enabled', false );
+		if ( ! $menu_cache_enabled ) {
+			$issues[] = __( 'Menu query caching not enabled', 'wpshadow' );
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Check transient usage for menu caching
+		$menus = wp_get_nav_menus();
+		$cached_menus = 0;
+		foreach ( $menus as $menu ) {
+			if ( false !== get_transient( 'nav_menu_' . $menu->term_id ) ) {
+				$cached_menus++;
+			}
+		}
+		if ( $cached_menus === 0 && count( $menus ) > 0 ) {
+			$issues[] = __( 'No menu transient caching detected', 'wpshadow' );
+		}
+
+		// Check 3: Verify menu query optimization
+		$query_optimization = get_option( 'wp_nav_menu_query_optimization', false );
+		if ( ! $query_optimization ) {
+			$issues[] = __( 'Menu query optimization not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check cache invalidation strategy
+		$cache_invalidation = get_option( 'wp_nav_menu_cache_invalidation', '' );
+		if ( empty( $cache_invalidation ) ) {
+			$issues[] = __( 'Menu cache invalidation strategy not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify menu count limits for performance
+		if ( count( $menus ) > 10 ) {
+			$issues[] = __( 'Excessive menu count may impact performance', 'wpshadow' );
+		}
+
+		// Check 6: Check menu walker class caching
+		$walker_cache = get_option( 'wp_nav_menu_walker_cache', false );
+		if ( ! $walker_cache ) {
+			$issues[] = __( 'Menu walker class caching not enabled', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {

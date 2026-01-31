@@ -37,31 +37,42 @@ class Diagnostic_BeaverBuilderResponsiveSettings extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 45,
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/beaver-builder-responsive-settings',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify responsive editing is enabled
+		$responsive_enabled = get_option( 'fl_builder_responsive_enabled', '' );
+		if ( 'enabled' !== $responsive_enabled ) {
+			$issues[] = __( 'Responsive editing not enabled', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check responsive breakpoints configuration
+		$medium_breakpoint = get_option( '_fl_builder_medium_breakpoint', 0 );
+		$mobile_breakpoint = get_option( '_fl_builder_mobile_breakpoint', 0 );
+		if ( $medium_breakpoint === 0 || $mobile_breakpoint === 0 ) {
+			$issues[] = __( 'Responsive breakpoints not configured', 'wpshadow' );
+		}
+
+		// Check 3: Verify mobile preview enabled
+		$mobile_preview = get_option( 'fl_builder_mobile_preview', false );
+		if ( ! $mobile_preview ) {
+			$issues[] = __( 'Mobile preview not enabled in editor', 'wpshadow' );
+		}
+
+		// Check 4: Check device-specific settings enabled
+		$device_settings = get_option( 'fl_builder_device_specific_settings', false );
+		if ( ! $device_settings ) {
+			$issues[] = __( 'Device-specific settings not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify responsive images enabled
+		$responsive_images = get_option( 'fl_builder_responsive_images', '' );
+		if ( 'enabled' !== $responsive_images ) {
+			$issues[] = __( 'Responsive images not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check mobile optimization mode
+		$mobile_optimization = get_option( 'fl_builder_mobile_optimization', false );
+		if ( ! $mobile_optimization ) {
+			$issues[] = __( 'Mobile optimization mode not enabled', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {
