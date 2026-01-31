@@ -35,9 +35,9 @@ class Diagnostic_CptuiArchiveTemplate extends Diagnostic_Base {
 		if ( ! defined( 'CPT_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Archive support.
 		$post_types = get_option( 'cptui_post_types', array() );
 		if ( ! empty( $post_types ) ) {
@@ -48,7 +48,7 @@ class Diagnostic_CptuiArchiveTemplate extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 2: Template file existence.
 		$theme_dir = get_template_directory();
 		if ( ! empty( $post_types ) ) {
@@ -59,19 +59,19 @@ class Diagnostic_CptuiArchiveTemplate extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 3: Rewrite rules.
 		$rewrite = get_option( 'cptui_rewrite_rules_flushed', '0' );
 		if ( '0' === $rewrite ) {
 			$issues[] = 'rewrite rules not flushed';
 		}
-		
+
 		// Check 4: Query vars.
 		$query_vars = get_option( 'cptui_register_query_vars', '1' );
 		if ( '0' === $query_vars ) {
 			$issues[] = 'query vars not registered';
 		}
-		
+
 		// Check 5: Archive label.
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $pt ) {
@@ -81,7 +81,7 @@ class Diagnostic_CptuiArchiveTemplate extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 55, 40 + ( count( $issues ) * 3 ) );
 			return array(
@@ -94,7 +94,7 @@ class Diagnostic_CptuiArchiveTemplate extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/cptui-archive-template',
 			);
 		}
-		
+
 		return null;
 	}
 }
