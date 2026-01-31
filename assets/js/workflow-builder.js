@@ -59,20 +59,10 @@
 		},
 
 			/**
-		 * Add canvas controls (removed zoom buttons per #1677)
+		 * Add canvas controls (pan only, zoom removed)
 		 */
 		addCanvasControls: function() {
-			// Zoom controls removed - users can use browser zoom
-			// Keeping pan controls functional
-
-			// Mouse wheel zoom
-			$('.wps-workflow-canvas').on('wheel', (e) => {
-				if (e.ctrlKey || e.metaKey) {
-					e.preventDefault();
-					const delta = e.originalEvent.deltaY > 0 ? -0.05 : 0.05;
-					this.zoomCanvas(delta);
-				}
-			});
+			// Zoom removed - use browser zoom if needed
 
 			// Pan controls
 			$('.wps-canvas-viewport').on('mousedown', (e) => {
@@ -133,31 +123,19 @@
 		},
 
 		/**
-		 * Zoom canvas
-		 */
-		zoomCanvas: function(delta) {
-			this.canvasZoom = Math.max(0.5, Math.min(2, this.canvasZoom + delta));
-			this.updateCanvasTransform();
-			$('.wps-zoom-level').text(Math.round(this.canvasZoom * 100) + '%');
-			this.announceToScreenReader('Zoom level: ' + Math.round(this.canvasZoom * 100) + '%');
-		},
-
-		/**
-		 * Reset canvas zoom and position
+		 * Reset canvas position
 		 */
 		resetCanvas: function() {
-			this.canvasZoom = 1;
 			this.canvasPosition = { x: 0, y: 0 };
 			this.updateCanvasTransform();
-			$('.wps-zoom-level').text('100%');
-			this.announceToScreenReader('Canvas reset to 100%');
+			this.announceToScreenReader('Canvas reset');
 		},
 
 		/**
 		 * Update canvas transform
 		 */
 		updateCanvasTransform: function() {
-			const transform = `translate(${this.canvasPosition.x}px, ${this.canvasPosition.y}px) scale(${this.canvasZoom})`;
+			const transform = `translate(${this.canvasPosition.x}px, ${this.canvasPosition.y}px)`;
 			$('.wps-canvas-content').css('transform', transform);
 
 			// Update connections

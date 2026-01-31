@@ -31,6 +31,15 @@ function wpshadow_render_workflow_builder() {
 		wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
 	}
 
+	// Enqueue modal system first.
+	wp_enqueue_script(
+		'wpshadow-modal',
+		WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
+		array( 'jquery' ),
+		WPSHADOW_VERSION,
+		true
+	);
+
 	// Enqueue workflow builder assets.
 	wp_enqueue_style(
 		'wpshadow-workflow-builder',
@@ -42,7 +51,7 @@ function wpshadow_render_workflow_builder() {
 	wp_enqueue_script(
 		'wpshadow-workflow-builder',
 		WPSHADOW_URL . 'assets/js/workflow-builder.js',
-		array( 'jquery' ),
+		array( 'jquery', 'wpshadow-modal' ),
 		WPSHADOW_VERSION,
 		true
 	);
@@ -74,6 +83,8 @@ function wpshadow_render_workflow_builder() {
 				'step2'         => __( 'Add ACTION blocks (THEN what to do)', 'wpshadow' ),
 				'step3'         => __( 'Configure each block', 'wpshadow' ),
 				'step4'         => __( 'Save and test your workflow', 'wpshadow' ),
+				'singleTrigger' => __( 'Only one trigger is allowed per workflow in the free version. Need multiple triggers? Upgrade to WPShadow Pro for unlimited workflow complexity.', 'wpshadow' ),
+				'singleAction'  => __( 'Only one action is allowed per workflow in the free version. Need multiple actions? Upgrade to WPShadow Pro for unlimited workflow complexity.', 'wpshadow' ),
 			),
 		)
 	);
