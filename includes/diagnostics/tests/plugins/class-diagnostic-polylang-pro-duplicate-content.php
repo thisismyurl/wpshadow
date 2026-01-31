@@ -37,20 +37,52 @@ class Diagnostic_PolylangProDuplicateContent extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Duplicate detection enabled.
+		$duplicate_detect = get_option( 'polylang_detect_duplicates', '1' );
+		if ( '0' === $duplicate_detect ) {
+			$issues[] = 'duplicate detection disabled';
+		}
+		
+		// Check 2: Auto-sync enabled.
+		$auto_sync = get_option( 'polylang_auto_sync', '1' );
+		if ( '0' === $auto_sync ) {
+			$issues[] = 'auto-sync disabled';
+		}
+		
+		// Check 3: Media translation.
+		$media_trans = get_option( 'polylang_media_translation', '1' );
+		if ( '0' === $media_trans ) {
+			$issues[] = 'media translation disabled';
+		}
+		
+		// Check 4: Canonical redirects.
+		$canonical = get_option( 'polylang_redirect_canonical', '1' );
+		if ( '0' === $canonical ) {
+			$issues[] = 'canonical redirects disabled';
+		}
+		
+		// Check 5: Hreflang tags.
+		$hreflang = get_option( 'polylang_hreflang', '1' );
+		if ( '0' === $hreflang ) {
+			$issues[] = 'hreflang tags disabled';
+		}
+		
+		// Check 6: URL modification.
+		$url_mod = get_option( 'polylang_url_modification', 'directories' );
+		if ( 'none' === $url_mod ) {
+			$issues[] = 'URL modification disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 50 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'Polylang Pro issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/polylang-pro-duplicate-content',
 			);
 		}

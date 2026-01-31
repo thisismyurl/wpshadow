@@ -32,22 +32,56 @@ class Diagnostic_Braintree3dSecureImplementation extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
+		if ( ! class_exists( 'WC_Braintree' ) && ! defined( 'WC_BRAINTREE_VERSION' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: 3D Secure enabled.
+		$three_d_secure = get_option( 'wc_braintree_3d_secure_enabled', '0' );
+		if ( '0' === $three_d_secure ) {
+			$issues[] = '3D Secure not enabled';
+		}
+		
+		// Check 2: SSL enforcement.
+		if ( ! is_ssl() ) {
+			$issues[] = 'payments without HTTPS';
+		}
+		
+		// Check 3: Sandbox mode.
+		$sandbox = get_option( 'wc_braintree_sandbox', '0' );
+		if ( '1' === $sandbox ) {
+			$issues[] = 'sandbox mode on live site';
+		}
+		
+		// Check 4: Fraud tools.
+		$fraud_tools = get_option( 'wc_braintree_fraud_tools', '1' );
+		if ( '0' === $fraud_tools ) {
+			$issues[] = 'fraud tools disabled';
+		}
+		
+		// Check 5: Transaction logging.
+		$logging = get_option( 'wc_braintree_logging', '1' );
+		if ( '0' === $logging ) {
+			$issues[] = 'transaction logging disabled';
+		}
+		
+		// Check 6: Tokenization.
+		$tokenization = get_option( 'wc_braintree_tokenization', '1' );
+		if ( '0' === $tokenization ) {
+			$issues[] = 'card tokenization disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 90, 75 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
-				'auto_fixable' => true,
+				'description' => 'Braintree security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/braintree-3d-secure-implementation',
 			);
 		}
