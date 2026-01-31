@@ -1,8 +1,8 @@
 <?php
 /**
- * OpenAPI Documentation Not Generated Diagnostic
+ * Query String Tracking Not Configured Diagnostic
  *
- * Checks if OpenAPI documentation is generated.
+ * Checks if query string tracking is configured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OpenAPI Documentation Not Generated Diagnostic Class
+ * Query String Tracking Not Configured Diagnostic Class
  *
- * Detects missing OpenAPI documentation.
+ * Detects missing query string tracking.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_OpenAPI_Documentation_Not_Generated extends Diagnostic_Base {
+class Diagnostic_Query_String_Tracking_Not_Configured extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'openapi-documentation-not-generated';
+	protected static $slug = 'query-string-tracking-not-configured';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'OpenAPI Documentation Not Generated';
+	protected static $title = 'Query String Tracking Not Configured';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if OpenAPI documentation is generated';
+	protected static $description = 'Checks if query string tracking is configured';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_OpenAPI_Documentation_Not_Generated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for OpenAPI/Swagger documentation
-		if ( ! file_exists( ABSPATH . 'openapi.yaml' ) && ! file_exists( ABSPATH . 'openapi.json' ) ) {
+		// Check for UTM parameter tracking
+		if ( ! has_filter( 'init', 'track_utm_parameters' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'OpenAPI documentation is not generated. Create OpenAPI/Swagger specification for REST APIs to enable interactive documentation and third-party integrations.', 'wpshadow' ),
+				'description'   => __( 'Query string tracking is not configured. Implement UTM parameter tracking to identify traffic sources and attribute conversions to specific campaigns.', 'wpshadow' ),
 				'severity'      => 'low',
 				'threat_level'  => 10,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/openapi-documentation-not-generated',
+				'kb_link'       => 'https://wpshadow.com/kb/query-string-tracking-not-configured',
 			);
 		}
 
