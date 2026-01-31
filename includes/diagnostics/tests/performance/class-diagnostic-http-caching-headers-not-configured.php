@@ -1,8 +1,8 @@
 <?php
 /**
- * CSS Minification Not Implemented Diagnostic
+ * HTTP Caching Headers Not Configured Diagnostic
  *
- * Checks if CSS is minified.
+ * Checks if HTTP caching is configured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * CSS Minification Not Implemented Diagnostic Class
+ * HTTP Caching Headers Not Configured Diagnostic Class
  *
- * Detects unmini CSS.
+ * Detects missing HTTP caching headers.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
+class Diagnostic_HTTP_Caching_Headers_Not_Configured extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'css-minification-not-implemented';
+	protected static $slug = 'http-caching-headers-not-configured';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'CSS Minification Not Implemented';
+	protected static $title = 'HTTP Caching Headers Not Configured';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if CSS is minified';
+	protected static $description = 'Checks if HTTP caching is configured';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for CSS minification
-		if ( ! has_filter( 'style_loader_tag', 'minify_css' ) ) {
+		// Check if cache headers are set
+		if ( ! has_action( 'wp_headers', 'set_cache_headers' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'CSS minification is not implemented. Minify CSS files to reduce file size and improve page load speed.', 'wpshadow' ),
+				'description'   => __( 'HTTP caching headers are not configured. Set Cache-Control and ETag headers to enable browser and CDN caching.', 'wpshadow' ),
 				'severity'      => 'medium',
-				'threat_level'  => 30,
+				'threat_level'  => 35,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/css-minification-not-implemented',
+				'kb_link'       => 'https://wpshadow.com/kb/http-caching-headers-not-configured',
 			);
 		}
 

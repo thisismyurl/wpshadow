@@ -1,8 +1,8 @@
 <?php
 /**
- * User Roles Customization Not Applied Diagnostic
+ * Expired Sessions Cleanup Not Implemented Diagnostic
  *
- * Checks if custom user roles are configured.
+ * Checks if expired sessions are cleaned up.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * User Roles Customization Not Applied Diagnostic Class
+ * Expired Sessions Cleanup Not Implemented Diagnostic Class
  *
- * Detects missing custom user roles.
+ * Detects unmanaged session cleanup.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_User_Roles_Customization_Not_Applied extends Diagnostic_Base {
+class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'user-roles-customization-not-applied';
+	protected static $slug = 'expired-sessions-cleanup-not-implemented';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'User Roles Customization Not Applied';
+	protected static $title = 'Expired Sessions Cleanup Not Implemented';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if custom user roles are configured';
+	protected static $description = 'Checks if expired sessions are cleaned up';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,20 +63,16 @@ class Diagnostic_User_Roles_Customization_Not_Applied extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wp_roles;
-
-		// Count custom roles
-		$custom_roles = count( (array) $wp_roles->roles ) - 5; // 5 default roles
-
-		if ( $custom_roles <= 0 ) {
+		// Check if session cleanup is scheduled
+		if ( ! wp_next_scheduled( 'wp_session_cleanup' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'User roles customization is not applied. Create custom roles and capabilities for fine-grained access control.', 'wpshadow' ),
+				'description'   => __( 'Expired sessions cleanup is not implemented. Schedule session cleanup to remove old session data and improve security.', 'wpshadow' ),
 				'severity'      => 'low',
-				'threat_level'  => 15,
+				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/user-roles-customization-not-applied',
+				'kb_link'       => 'https://wpshadow.com/kb/expired-sessions-cleanup-not-implemented',
 			);
 		}
 

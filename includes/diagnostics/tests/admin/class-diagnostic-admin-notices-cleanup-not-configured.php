@@ -1,8 +1,8 @@
 <?php
 /**
- * Gutenberg Block Patterns Not Imported Diagnostic
+ * Admin Notices Cleanup Not Configured Diagnostic
  *
- * Checks if block patterns are imported.
+ * Checks if admin notices are managed.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gutenberg Block Patterns Not Imported Diagnostic Class
+ * Admin Notices Cleanup Not Configured Diagnostic Class
  *
- * Detects missing block patterns.
+ * Detects unmanaged admin notices.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_Gutenberg_Block_Patterns_Not_Imported extends Diagnostic_Base {
+class Diagnostic_Admin_Notices_Cleanup_Not_Configured extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'gutenberg-block-patterns-not-imported';
+	protected static $slug = 'admin-notices-cleanup-not-configured';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Gutenberg Block Patterns Not Imported';
+	protected static $title = 'Admin Notices Cleanup Not Configured';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if block patterns are imported';
+	protected static $description = 'Checks if admin notices are managed';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_Gutenberg_Block_Patterns_Not_Imported extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for block patterns
-		if ( ! has_action( 'init', 'register_block_patterns' ) ) {
+		// Check if notice dismissal is enabled
+		if ( ! has_action( 'admin_notices', 'clean_admin_notices' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Gutenberg block patterns are not imported. Register custom block patterns to speed up content creation with pre-designed layouts.', 'wpshadow' ),
+				'description'   => __( 'Admin notices cleanup is not configured. Hide outdated admin notices and consolidate important messages for better UX.', 'wpshadow' ),
 				'severity'      => 'low',
 				'threat_level'  => 10,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-block-patterns-not-imported',
+				'kb_link'       => 'https://wpshadow.com/kb/admin-notices-cleanup-not-configured',
 			);
 		}
 

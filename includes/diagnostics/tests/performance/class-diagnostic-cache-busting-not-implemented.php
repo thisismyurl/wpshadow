@@ -1,8 +1,8 @@
 <?php
 /**
- * Homepage Hero Image Not Optimized Diagnostic
+ * Cache Busting Not Implemented Diagnostic
  *
- * Checks if hero image is optimized.
+ * Checks if cache busting is implemented.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Homepage Hero Image Not Optimized Diagnostic Class
+ * Cache Busting Not Implemented Diagnostic Class
  *
- * Detects unoptimized hero image.
+ * Detects missing cache busting.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_Homepage_Hero_Image_Not_Optimized extends Diagnostic_Base {
+class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'homepage-hero-image-not-optimized';
+	protected static $slug = 'cache-busting-not-implemented';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Homepage Hero Image Not Optimized';
+	protected static $title = 'Cache Busting Not Implemented';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if hero image is optimized';
+	protected static $description = 'Checks if cache busting is implemented';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_Homepage_Hero_Image_Not_Optimized extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for homepage
-		if ( is_home() ) {
+		// Check for cache busting in asset versioning
+		if ( ! has_filter( 'script_loader_tag', 'add_cache_buster' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Homepage hero image is not optimized. Compress hero images, use responsive sizing, and implement lazy loading for faster load times.', 'wpshadow' ),
+				'description'   => __( 'Cache busting is not implemented. Use version parameters on static assets to force browser cache refresh when files are updated.', 'wpshadow' ),
 				'severity'      => 'low',
 				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/homepage-hero-image-not-optimized',
+				'auto_fixable'  => true,
+				'kb_link'       => 'https://wpshadow.com/kb/cache-busting-not-implemented',
 			);
 		}
 

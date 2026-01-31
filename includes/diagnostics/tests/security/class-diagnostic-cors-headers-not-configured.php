@@ -1,8 +1,8 @@
 <?php
 /**
- * CSS Minification Not Implemented Diagnostic
+ * CORS Headers Not Configured Diagnostic
  *
- * Checks if CSS is minified.
+ * Checks if CORS headers are configured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,41 +20,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * CSS Minification Not Implemented Diagnostic Class
+ * CORS Headers Not Configured Diagnostic Class
  *
- * Detects unmini CSS.
+ * Detects missing CORS headers.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
+class Diagnostic_CORS_Headers_Not_Configured extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'css-minification-not-implemented';
+	protected static $slug = 'cors-headers-not-configured';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'CSS Minification Not Implemented';
+	protected static $title = 'CORS Headers Not Configured';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if CSS is minified';
+	protected static $description = 'Checks if CORS headers are configured';
 
 	/**
 	 * The family this diagnostic belongs to
 	 *
 	 * @var string
 	 */
-	protected static $family = 'performance';
+	protected static $family = 'security';
 
 	/**
 	 * Run the diagnostic check.
@@ -63,16 +63,16 @@ class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for CSS minification
-		if ( ! has_filter( 'style_loader_tag', 'minify_css' ) ) {
+		// Check for CORS header handling
+		if ( ! has_action( 'rest_api_init', 'set_cors_headers' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'CSS minification is not implemented. Minify CSS files to reduce file size and improve page load speed.', 'wpshadow' ),
+				'description'   => __( 'CORS headers are not configured. Configure CORS headers to control which cross-origin requests are allowed to your API.', 'wpshadow' ),
 				'severity'      => 'medium',
-				'threat_level'  => 30,
+				'threat_level'  => 35,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/css-minification-not-implemented',
+				'kb_link'       => 'https://wpshadow.com/kb/cors-headers-not-configured',
 			);
 		}
 
