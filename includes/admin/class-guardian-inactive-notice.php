@@ -179,7 +179,12 @@ class Guardian_Inactive_Notice {
 		}
 
 		// Enable Guardian with default settings
-		set_transient( 'wpshadow_guardian_first_activation', true, 3600 );
+		\WPShadow\Core\Cache_Manager::set(
+			'guardian_first_activation',
+			true,
+			'wpshadow_notices',
+			3600
+		);
 		$success = \WPShadow\Guardian\Guardian_Manager::update_settings(
 			array(
 				'enabled' => true,

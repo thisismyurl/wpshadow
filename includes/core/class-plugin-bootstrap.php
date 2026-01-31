@@ -116,6 +116,15 @@ class Plugin_Bootstrap {
 		// - class-activity-logger.php
 		// - class-error-handler.php
 
+		// PHASE 1 OPTIMIZATION: Load database and cache management classes
+		if ( file_exists( $core_path . 'class-database-indexes.php' ) ) {
+			require_once $core_path . 'class-database-indexes.php';
+		}
+
+		if ( file_exists( $core_path . 'class-cache-manager.php' ) ) {
+			require_once $core_path . 'class-cache-manager.php';
+		}
+
 		// Load additional core classes
 		if ( file_exists( $core_path . 'class-kpi-tracker.php' ) ) {
 			require_once $core_path . 'class-kpi-tracker.php';

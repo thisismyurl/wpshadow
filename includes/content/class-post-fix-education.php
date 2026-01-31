@@ -60,9 +60,10 @@ class Post_Fix_Education {
 		}
 
 		// Store in session for display on next page load
-		set_transient(
-			'wpshadow_education_' . get_current_user_id(),
+		\WPShadow\Core\Cache_Manager::set(
+			'education_' . get_current_user_id(),
 			$education,
+			'wpshadow_education',
 			300 // 5 minutes
 		);
 	}
@@ -77,14 +78,19 @@ class Post_Fix_Education {
 	 */
 	public static function render_education_notice() {
 		$user_id = get_current_user_id();
-		$education = get_transient( 'wpshadow_education_' . $user_id );
-
+	$education = \WPShadow\Core\Cache_Manager::get(
+		'education_' . $user_id,
+		'wpshadow_education'
+	);
 		if ( ! $education ) {
 			return;
 		}
 
 		// Clear transient
-		delete_transient( 'wpshadow_education_' . $user_id );
+		\WPShadow\Core\Cache_Manager::delete(
+			'education_' . $user_id,
+			'wpshadow_education'
+		);
 
 		?>
 		<div class="wpshadow-education-notice">

@@ -355,11 +355,7 @@ class Recommendation_Engine {
 	 * @return void
 	 */
 	public static function ajax_dismiss() {
-		check_ajax_referer( 'wpshadow_recommendation', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-		}
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_recommendation', 'manage_options', 'nonce' );
 
 		$rec_id = isset( $_POST['recommendation_id'] ) ? sanitize_key( $_POST['recommendation_id'] ) : '';
 
@@ -383,11 +379,7 @@ class Recommendation_Engine {
 	 * @return void
 	 */
 	public static function ajax_get_recommendations() {
-		check_ajax_referer( 'wpshadow_recommendation', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-		}
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_recommendation', 'manage_options', 'nonce' );
 
 		$recommendations = self::get_recommendations();
 

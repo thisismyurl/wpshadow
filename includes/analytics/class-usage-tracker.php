@@ -298,11 +298,7 @@ class Usage_Tracker {
 	 * @return void
 	 */
 	public static function ajax_get_stats() {
-		check_ajax_referer( 'wpshadow_usage_stats', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-		}
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_usage_stats', 'manage_options', 'nonce' );
 
 		$period = isset( $_POST['period'] ) ? absint( $_POST['period'] ) : 0;
 

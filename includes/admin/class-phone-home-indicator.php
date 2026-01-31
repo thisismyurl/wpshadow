@@ -95,7 +95,12 @@ class Phone_Home_Indicator {
 		self::$connections = array_slice( self::$connections, -10 );
 
 		// Store in transient for persistence across page loads
-		set_transient( 'wpshadow_recent_connections', self::$connections, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'recent_connections',
+			self::$connections,
+			'wpshadow_phone_home',
+			HOUR_IN_SECONDS
+		);
 
 		// Log activity
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
@@ -365,7 +370,11 @@ JS;
 			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
-		$connections = get_transient( 'wpshadow_recent_connections' ) ?: array();
+		$connections = \WPShadow\Core\Cache_Manager::get(
+			'recent_connections',
+			'wpshadow_phone_home',
+			array()
+		);
 
 		// Sort by timestamp descending (most recent first)
 		usort( $connections, function( $a, $b ) {
@@ -387,7 +396,11 @@ JS;
 	 * @return bool True if connections were made.
 	 */
 	public static function has_recent_activity( $minutes = 5 ) {
-		$connections = get_transient( 'wpshadow_recent_connections' ) ?: array();
+		$connections = \WPShadow\Core\Cache_Manager::get(
+			'recent_connections',
+			'wpshadow_phone_home',
+			array()
+		);
 		$cutoff_time = time() - ( $minutes * MINUTE_IN_SECONDS );
 
 		foreach ( $connections as $conn ) {
@@ -407,7 +420,11 @@ JS;
 	 * @return array Recent connections.
 	 */
 	public static function get_recent_connections( $limit = 10 ) {
-		$connections = get_transient( 'wpshadow_recent_connections' ) ?: array();
+		$connections = \WPShadow\Core\Cache_Manager::get(
+			'recent_connections',
+			'wpshadow_phone_home',
+			array()
+		);
 
 		// Sort by timestamp descending
 		usort( $connections, function( $a, $b ) {

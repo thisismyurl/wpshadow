@@ -467,14 +467,6 @@
 	}
 }
 
-/* Card Header - Category and Threat */
-.wps-card-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 12px;
-}
-
 /* Category Badge (Small Pills) */
 .wps-category-badge {
 	display: inline-block;
@@ -619,9 +611,8 @@
 	color: var(--wps-danger, #ef4444);
 }
 
-/* Card Title */
-.finding-title,
-.wps-card-title {
+/* Card Title - kanban specific override */
+.finding-title {
 	font-weight: 700;
 	font-size: 0.9375rem;
 	margin: 0 0 10px 0;
@@ -677,20 +668,8 @@
 	color: var(--wps-success-dark);
 }
 
-/* Card Body */
-.finding-card-description,
+/* Card Description - kanban specific override */
 .finding-description {
-	font-size: var(--wps-text-xs);
-	color: var(--wps-gray-600);
-	line-height: 1.5;
-	margin-bottom: var(--wps-space-3);
-	margin-top: 8px;
-	background: var(--wps-success, #10b981);
-}
-
-/* Card Description */
-.finding-description,
-.wps-card-description {
 	font-size: 0.8125rem;
 	color: var(--wps-gray-600, #6b7280);
 	margin: 8px 0;
@@ -703,7 +682,7 @@
 	-webkit-box-orient: vertical;
 }
 
-/* Card Footer */
+/* Card Footer - kanban specific */
 .finding-card-footer {
 	display: flex;
 	align-items: center;
@@ -724,14 +703,6 @@
 .finding-actions {
 	display: flex;
 	gap: var(--wps-space-1);
-/* Card Footer - Actions */
-.finding-actions,
-.wps-card-footer {
-	display: flex;
-	gap: 8px;
-	margin-top: 12px;
-	flex-wrap: wrap;
-	margin-top: 8px;
 }
 
 .finding-card-action {

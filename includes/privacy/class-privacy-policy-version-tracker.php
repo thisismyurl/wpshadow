@@ -100,11 +100,7 @@ class Privacy_Policy_Version_Tracker {
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_acknowledgment() {
-		check_ajax_referer( 'wpshadow_acknowledge_policy', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-		}
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_acknowledge_policy', 'manage_options', 'nonce' );
 
 		$user_id = get_current_user_id();
 

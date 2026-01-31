@@ -63,7 +63,10 @@ class First_Activation_Welcome {
 		}
 
 		// Check if plugin was just activated
-		$plugin_activated = get_transient( 'wpshadow_first_activation_' . $user_id );
+		$plugin_activated = \WPShadow\Core\Cache_Manager::get(
+		'first_activation_' . $user_id,
+		'wpshadow_activation'
+	);
 		if ( ! $plugin_activated ) {
 			return false;
 		}
@@ -82,7 +85,12 @@ class First_Activation_Welcome {
 	public static function mark_first_activation() {
 		$user_id = get_current_user_id();
 		if ( $user_id ) {
-			set_transient( 'wpshadow_first_activation_' . $user_id, true, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'first_activation_' . $user_id,
+				true,
+				'wpshadow_activation',
+				HOUR_IN_SECONDS
+			);
 		}
 	}
 
@@ -611,7 +619,10 @@ JS;
 		update_user_meta( $user_id, 'wpshadow_welcome_skipped', $skipped );
 
 		// Clear the activation flag
-		delete_transient( 'wpshadow_first_activation_' . $user_id );
+		\WPShadow\Core\Cache_Manager::delete(
+			'first_activation_' . $user_id,
+			'wpshadow_activation'
+		);
 
 		// Log activity
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {

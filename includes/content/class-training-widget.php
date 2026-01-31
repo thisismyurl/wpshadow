@@ -508,7 +508,7 @@ class Training_Widget {
 	 * @return void
 	 */
 	public static function ajax_dismiss_widget() {
-		check_ajax_referer( 'wpshadow_training_widget', 'nonce' );
+		\WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_training_widget', 'nonce', true );
 
 		$context = isset( $_POST['context'] ) ? sanitize_key( $_POST['context'] ) : 'general';
 		$user_id = get_current_user_id();
@@ -525,7 +525,7 @@ class Training_Widget {
 	 * @return void
 	 */
 	public static function ajax_track_click() {
-		check_ajax_referer( 'wpshadow_training_widget', 'nonce' );
+		\WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_training_widget', 'nonce', true );
 
 		$course = isset( $_POST['course'] ) ? sanitize_key( $_POST['course'] ) : '';
 		if ( empty( $course ) ) {
