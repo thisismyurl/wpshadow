@@ -213,7 +213,7 @@ function wpshadow_get_reports_catalog() {
  *
  * @return void
  */
-function wpshadow_render_reports() {
+function wpshadow_render_reports_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
 	}

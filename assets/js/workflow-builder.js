@@ -1547,7 +1547,7 @@
 
 	// Initialize on document ready
 	$(document).ready(function() {
-		if ($('.wps-workflow-builder').length > 0) {
+		if ($('.wps-workflow-builder-container').length > 0 || $('#wps-canvas').length > 0) {
 			WorkflowBuilder.init();
 		}
 	});

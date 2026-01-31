@@ -79,16 +79,18 @@ if ( ! function_exists( 'wpshadow_render_reports' ) ) {
 	 * Render Reports page
 	 */
 	function wpshadow_render_reports() {
-		// Load Report Form class if not already loaded
-		if ( ! class_exists( '\WPShadow\Admin\Report_Form' ) ) {
-			require_once WPSHADOW_PATH . 'includes/screens/class-report-form.php';
+		// Load card-based reports module if available
+		$reports_module = WPSHADOW_PATH . 'includes/screens/class-reports-page-module.php';
+		if ( file_exists( $reports_module ) ) {
+			require_once $reports_module;
 		}
-		
-		if ( class_exists( '\WPShadow\Admin\Report_Form' ) ) {
-			echo \WPShadow\Admin\Report_Form::render();
-		} else {
-			echo '<div class="wrap"><h1>Reports</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Site health reports and analytics.</p></div>';
+
+		if ( function_exists( 'wpshadow_render_reports_page' ) ) {
+			wpshadow_render_reports_page();
+			return;
 		}
+
+		echo '<div class="wrap"><h1>Reports</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Site health reports and analytics.</p></div>';
 	}
 }
 
