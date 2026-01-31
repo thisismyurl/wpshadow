@@ -39,8 +39,7 @@ class Academy_UI extends AJAX_Handler_Base {
 		// Dashboard widget.
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
 
-		// Admin menu.
-		add_action( 'admin_menu', array( __CLASS__, 'register_admin_menu' ) );
+		// Admin menu is now registered by Menu_Manager to control menu order (Academy before Help).
 
 		// Enqueue assets.
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
@@ -168,23 +167,6 @@ class Academy_UI extends AJAX_Handler_Base {
 			</p>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Register admin menu
-	 *
-	 * @since  1.6030.1920
-	 * @return void
-	 */
-	public static function register_admin_menu() {
-		add_submenu_page(
-			'wpshadow',
-			__( 'WPShadow Academy', 'wpshadow' ),
-			__( 'Academy', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-academy',
-			array( __CLASS__, 'render_academy_page' )
-		);
 	}
 
 	/**

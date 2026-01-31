@@ -125,8 +125,18 @@ class Menu_Manager {
 			'wpshadow_render_utilities'
 		);
 
-		// Note: Academy is registered by Academy_UI::register_admin_menu() - positioned here in menu order (after Utilities, before Rewards)
-		// Note: Rewards is registered by Gamification_UI::register_menu_pages() - positioned after Academy, before Help
+		// Note: Academy is registered by Academy_UI::register_admin_menu() - positioned before Help
+		// Note: Leaderboard & Rewards are registered by Gamification_UI::register_menu_pages()
+
+		// Academy (moved above Help priority)
+		add_submenu_page(
+			'wpshadow',
+			__( 'WPShadow Academy', 'wpshadow' ),
+			__( 'Academy', 'wpshadow' ),
+			'manage_options',
+			'wpshadow-academy',
+			array( 'WPShadow\Academy\Academy_UI', 'render_academy_page' )
+		);
 
 		// Help & Documentation
 		add_submenu_page(
