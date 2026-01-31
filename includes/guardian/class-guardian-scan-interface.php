@@ -36,7 +36,6 @@ class Guardian_Scan_Interface extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'add_menu_page' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 		add_action( 'wp_ajax_wpshadow_guardian_scan', array( __CLASS__, 'handle_scan_request' ) );
 		add_action( 'wp_ajax_wpshadow_guardian_check_scan', array( __CLASS__, 'handle_check_scan' ) );

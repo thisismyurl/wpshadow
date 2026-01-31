@@ -41,11 +41,14 @@ class Gamification_UI {
 	/**
 	 * Register admin menu pages.
 	 *
+	 * Achievements is registered as a submenu under wpshadow (parent),
+	 * with Leaderboard and Rewards as submenus under Achievements.
+	 *
 	 * @since  1.2604.0400
 	 * @return void
 	 */
 	public static function register_menu_pages() {
-		// Achievements page
+		// Achievements page (under WPShadow parent menu)
 		add_submenu_page(
 			'wpshadow',
 			__( 'Achievements', 'wpshadow' ),
@@ -55,9 +58,9 @@ class Gamification_UI {
 			array( __CLASS__, 'render_achievements_page' )
 		);
 
-		// Leaderboard page
+		// Leaderboard page (under Achievements parent)
 		add_submenu_page(
-			'wpshadow',
+			'wpshadow-achievements',
 			__( 'Leaderboard', 'wpshadow' ),
 			__( 'Leaderboard', 'wpshadow' ),
 			'read',
@@ -65,9 +68,9 @@ class Gamification_UI {
 			array( __CLASS__, 'render_leaderboard_page' )
 		);
 
-		// Rewards page
+		// Rewards page (under Achievements parent)
 		add_submenu_page(
-			'wpshadow',
+			'wpshadow-achievements',
 			__( 'Rewards', 'wpshadow' ),
 			__( 'Rewards', 'wpshadow' ),
 			'read',
