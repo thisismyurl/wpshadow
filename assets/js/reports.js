@@ -214,8 +214,8 @@
          */
         submitReportForm: function(form) {
             const self = this;
-            const submitBtn = form.find('button[type="submit"]');
-            const originalText = submitBtn.text();
+            const submitBtn = $('#generate-report-btn');
+            const originalText = submitBtn.length ? submitBtn.text() : '';
 
             // Validate required fields
             if (!this.validateForm(form)) {
@@ -223,12 +223,14 @@
             }
 
             // Show loading state
-            submitBtn.prop('disabled', true).text(wpshadowReportBuilder.i18n.generating || 'Generating...');
+            if (submitBtn.length) {
+                submitBtn.prop('disabled', true).text(wpshadowReportBuilder.i18n.generating || 'Generating...');
+            }
             $('#loading-spinner').show();
             $('#report-preview').hide();
 
             const formData = new FormData(form[0]);
-            formData.append('action', 'wps_generate_report');
+            formData.append('action', 'wpshadow_generate_report');
             formData.append('nonce', wpshadowReportBuilder.nonce);
 
             $.ajax({
@@ -258,7 +260,9 @@
                     $('#loading-spinner').hide();
                 },
                 complete: function() {
-                    submitBtn.prop('disabled', false).text(originalText);
+                    if (submitBtn.length) {
+                        submitBtn.prop('disabled', false).text(originalText);
+                    }
                     $('#loading-spinner').hide();
                 }
             });

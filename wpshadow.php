@@ -113,10 +113,11 @@ require_once WPSHADOW_PATH . 'includes/admin/class-guardian-inactive-notice.php'
 \WPShadow\Admin\Guardian_Inactive_Notice::init();
 
 add_action(
-	'plugins_loaded',
+	'init',
 	function () {
 		\WPShadow\Core\Plugin_Bootstrap::init();
-	}
+	},
+	20
 );
 
 /**

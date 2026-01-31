@@ -157,6 +157,7 @@ class Menu_Manager {
 			'wpshadow-guardian-reports'       => 'wpshadow-reports',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
+			'wpshadow-tools'                  => 'wpshadow-utilities',
 			'wpshadow-exit-followups'         => 'wpshadow', // Redirect exit-followups to dashboard
 		);
 

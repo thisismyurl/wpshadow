@@ -38,7 +38,7 @@ class Generate_Report_Handler extends AJAX_Handler_Base {
 		$format    = self::get_post_param( 'format', 'text', 'html', false );
 
 		// Validate date format
-		if ( ! $this->is_valid_date( $date_from ) || ! $this->is_valid_date( $date_to ) ) {
+		if ( ! self::is_valid_date( $date_from ) || ! self::is_valid_date( $date_to ) ) {
 			self::send_error( __( 'Invalid date format. Please use YYYY-MM-DD.', 'wpshadow' ) );
 		}
 
@@ -118,7 +118,7 @@ class Generate_Report_Handler extends AJAX_Handler_Base {
 	 * @param string $date Date string to validate
 	 * @return bool True if valid YYYY-MM-DD format
 	 */
-	private function is_valid_date( string $date ): bool {
+	private static function is_valid_date( string $date ): bool {
 		$date_obj = \DateTime::createFromFormat( 'Y-m-d', $date );
 		return $date_obj && $date_obj->format( 'Y-m-d' ) === $date;
 	}

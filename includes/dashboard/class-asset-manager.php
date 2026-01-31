@@ -478,7 +478,7 @@ function wpshadow_enqueue_report_assets( $hook ) {
 		'wpshadowReportBuilder',
 		array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'wpshadow_report' ),
+			'nonce'   => wp_create_nonce( 'wpshadow_report_builder' ),
 			'i18n'    => array(
 				'generating'       => __( 'Generating report...', 'wpshadow' ),
 				'generated'        => __( 'Report generated successfully!', 'wpshadow' ),
