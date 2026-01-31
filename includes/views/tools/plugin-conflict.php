@@ -50,7 +50,7 @@ $all_plugins = get_plugins();
 <!-- Plugin Overview -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Your Active Plugins', 'wpshadow' ); ?></h3>
-	
+
 	<div style="padding: 15px; background: #f8f9fa; border-radius: 4px; margin-bottom: 20px;">
 		<p style="margin: 0;">
 			<strong><?php esc_html_e( 'Active Plugins:', 'wpshadow' ); ?></strong>
@@ -74,7 +74,7 @@ $all_plugins = get_plugins();
 			?>
 		</p>
 	</div>
-	
+
 	<table class="wp-list-table widefat fixed striped">
 		<thead>
 			<tr>
@@ -106,19 +106,19 @@ $all_plugins = get_plugins();
 <!-- Start Conflict Detection -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Start Conflict Detection', 'wpshadow' ); ?></h3>
-	
+
 	<form id="wpshadow-conflict-detector-form" method="post">
 		<?php wp_nonce_field( 'wpshadow_plugin_conflict', 'nonce' ); ?>
-		
+
 		<table class="form-table">
 			<tr>
 				<th scope="row">
 					<label for="issue_description"><?php esc_html_e( 'Issue Description', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<textarea id="issue_description" 
-							  name="issue_description" 
-							  rows="4" 
+					<textarea id="issue_description"
+							  name="issue_description"
+							  rows="4"
 							  class="large-text"
 							  placeholder="<?php esc_attr_e( 'Describe the problem you are experiencing...
 Example: Checkout page shows white screen
@@ -130,7 +130,7 @@ Example: Admin menu is broken', 'wpshadow' ); ?>"
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="issue_location"><?php esc_html_e( 'Where does it occur?', 'wpshadow' ); ?></label>
@@ -145,23 +145,23 @@ Example: Admin menu is broken', 'wpshadow' ); ?>"
 					</select>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="test_url"><?php esc_html_e( 'Test URL (Optional)', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<input type="url" 
-						   id="test_url" 
-						   name="test_url" 
-						   class="regular-text" 
+					<input type="url"
+						   id="test_url"
+						   name="test_url"
+						   class="regular-text"
 						   placeholder="<?php echo esc_attr( home_url( '/checkout' ) ); ?>" />
 					<p class="description">
 						<?php esc_html_e( 'Specific page where the issue occurs (helps validate the fix)', 'wpshadow' ); ?>
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Detection Method', 'wpshadow' ); ?></th>
 				<td>
@@ -192,7 +192,7 @@ Example: Admin menu is broken', 'wpshadow' ); ?>"
 				</td>
 			</tr>
 		</table>
-		
+
 		<p class="submit">
 			<button type="submit" class="button button-primary button-large" id="start-detection">
 				<span class="dashicons dashicons-search" style="margin-top: 4px;"></span>
@@ -203,7 +203,7 @@ Example: Admin menu is broken', 'wpshadow' ); ?>"
 			</span>
 		</p>
 	</form>
-	
+
 	<!-- Detection Progress -->
 	<div id="detection-progress" style="display: none; margin-top: 20px;">
 		<div style="padding: 20px; background: #f0f6fc; border: 1px solid #0073aa; border-radius: 4px;">
@@ -218,7 +218,7 @@ Example: Admin menu is broken', 'wpshadow' ); ?>"
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Detection Results -->
 	<div id="detection-results" style="display: none; margin-top: 20px;">
 		<!-- Results will be populated via JavaScript -->
@@ -229,7 +229,7 @@ Example: Admin menu is broken', 'wpshadow' ); ?>"
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Known Plugin Conflicts', 'wpshadow' ); ?></h3>
 	<p><?php esc_html_e( 'Common plugin conflicts we have detected:', 'wpshadow' ); ?></p>
-	
+
 	<table class="wp-list-table widefat">
 		<thead>
 			<tr>
@@ -267,11 +267,11 @@ jQuery(document).ready(function($) {
 	// Handle form submission
 	$('#wpshadow-conflict-detector-form').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		if (!confirm('<?php echo esc_js( __( 'Start plugin conflict detection? This will test plugins using Safe Mode (your live site is not affected).', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		const $form = $(this);
 		const $button = $('#start-detection');
 		const $progress = $('#detection-progress');
@@ -279,30 +279,30 @@ jQuery(document).ready(function($) {
 		const $progressText = $('#detection-progress-text');
 		const $log = $('#detection-log');
 		const $results = $('#detection-results');
-		
+
 		$button.prop('disabled', true);
 		$progress.show();
 		$results.hide();
 		$log.empty();
-		
+
 		function logMessage(message) {
 			$log.append('<div>' + message + '</div>');
 			$log.scrollTop($log[0].scrollHeight);
 		}
-		
+
 		function updateProgress(percent, text) {
 			$progressBar.css('width', percent + '%');
 			$progressText.text(text);
 		}
-		
+
 		logMessage('<?php echo esc_js( __( '→ Starting detection process...', 'wpshadow' ) ); ?>');
 		updateProgress(10, '<?php echo esc_js( __( 'Preparing tests...', 'wpshadow' ) ); ?>');
-		
+
 		// Prepare form data
 		const formData = new FormData(this);
 		formData.append('action', 'wpshadow_detect_plugin_conflict');
 		formData.append('method', $('input[name="detection_method"]:checked').val());
-		
+
 		// Make AJAX request
 		$.ajax({
 			url: ajaxurl,
@@ -321,22 +321,22 @@ jQuery(document).ready(function($) {
 						logMessage('<?php echo esc_js( __( '→ Analyzing plugin combinations...', 'wpshadow' ) ); ?>');
 					}
 				}, 2000);
-				
+
 				xhr.addEventListener('loadend', function() {
 					clearInterval(progressInterval);
 				});
-				
+
 				return xhr;
 			},
 			success: function(response) {
 				updateProgress(100, '<?php echo esc_js( __( 'Detection complete!', 'wpshadow' ) ); ?>');
-				
+
 				if (response.success) {
 					logMessage('<?php echo esc_js( __( '✓ Analysis complete', 'wpshadow' ) ); ?>');
-					
+
 					setTimeout(function() {
 						$progress.slideUp();
-						
+
 						if (response.data.conflicting_plugin) {
 							// Conflict found
 							$results.html(`
@@ -369,14 +369,14 @@ jQuery(document).ready(function($) {
 								</div>
 							`).slideDown();
 						}
-						
+
 						$button.prop('disabled', false);
 					}, 500);
 				} else {
 					logMessage('<?php echo esc_js( __( '✗ Error: ', 'wpshadow' ) ); ?>' + response.data.message);
 					updateProgress(0, '<?php echo esc_js( __( 'Error occurred', 'wpshadow' ) ); ?>');
 					$button.prop('disabled', false);
-					
+
 					setTimeout(function() {
 						$progress.slideUp();
 						$results.html(`
@@ -392,7 +392,7 @@ jQuery(document).ready(function($) {
 				logMessage('<?php echo esc_js( __( '✗ Request failed: ', 'wpshadow' ) ); ?>' + error);
 				updateProgress(0, '<?php echo esc_js( __( 'Request failed', 'wpshadow' ) ); ?>');
 				$button.prop('disabled', false);
-				
+
 				setTimeout(function() {
 					$progress.slideUp();
 					$results.html(`
@@ -405,7 +405,7 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
+
 	<?php if ( $auto_start ) : ?>
 	// Auto-start detection if requested from error dialog
 	$(document).ready(function() {

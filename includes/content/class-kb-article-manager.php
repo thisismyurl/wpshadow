@@ -68,7 +68,7 @@ class KB_Article_Manager {
 			'admin-unused-themes'               => 'unused-themes',
 			'admin-excessive-menu-items'        => 'menu-optimization',
 			'admin-deactivated-plugins'         => 'plugin-management',
-			
+
 			// Security diagnostics
 			'security-file-permissions'         => 'file-permissions',
 			'security-wp-config-location'       => 'wp-config-security',
@@ -80,7 +80,7 @@ class KB_Article_Manager {
 			'security-https-required'           => 'https-security',
 			'security-ssl-verification'         => 'ssl-certificate',
 			'security-outdated-php'             => 'php-version',
-			
+
 			// Performance diagnostics
 			'performance-memory-limit'          => 'memory-limit',
 			'performance-max-execution-time'    => 'execution-time',
@@ -92,7 +92,7 @@ class KB_Article_Manager {
 			'performance-cdn'                   => 'cdn-setup',
 			'performance-lazy-loading'          => 'lazy-loading',
 			'performance-database-optimization' => 'database-optimization',
-			
+
 			// SEO diagnostics
 			'seo-meta-description'              => 'meta-descriptions',
 			'seo-alt-text'                      => 'image-alt-text',
@@ -201,7 +201,7 @@ class KB_Article_Manager {
 	 */
 	public static function show_learning_tips() {
 		$screen = get_current_screen();
-		
+
 		// Only show on WPShadow pages
 		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
