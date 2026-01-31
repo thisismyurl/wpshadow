@@ -32,38 +32,70 @@ class Diagnostic_SalientThemePageHeaderStyles extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
+		if ( ! function_exists( 'wp_get_theme' ) ) {
+			return null;
+		}
+		
+		$current_theme = wp_get_theme();
+		if ( 'Salient' !== $current_theme->get( 'Name' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify header styles enabled
+		$header_styles = get_option( 'salient_header_styles_enabled', false );
+		if ( ! $header_styles ) {
+			$issues[] = __( 'Salient header styles not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check page header configuration
+		$page_header = get_option( 'salient_page_header_config', '' );
+		if ( empty( $page_header ) ) {
+			$issues[] = __( 'Page header configuration not set', 'wpshadow' );
+		}
+
+		// Check 3: Verify header caching
+		$header_cache = get_transient( 'salient_header_cache' );
+		if ( false === $header_cache ) {
+			$issues[] = __( 'Header styles caching not active', 'wpshadow' );
+		}
+
+		// Check 4: Check CSS optimization
+		$css_optimization = get_option( 'salient_header_css_optimization', false );
+		if ( ! $css_optimization ) {
+			$issues[] = __( 'Header CSS optimization not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify responsive header
+		$responsive_header = get_option( 'salient_responsive_header', false );
+		if ( ! $responsive_header ) {
+			$issues[] = __( 'Responsive header styles not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check header mobile optimization
+		$mobile_opt = get_option( 'salient_header_mobile_optimization', false );
+		if ( ! $mobile_opt ) {
+			$issues[] = __( 'Mobile header optimization not configured', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 75, 45 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Salient page header styles issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/salient-theme-page-header-styles',
+				'kb_link'      => 'https://wpshadow.com/kb/salient-theme-page-header-styles',
 			);
 		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
-		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
-		}
 		return null;
 	}
 }

@@ -37,36 +37,63 @@ class Diagnostic_SliderRevolutionFilePermissions extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify file permissions
+		$file_perms = get_option( 'rs_file_permissions_set', false );
+		if ( ! $file_perms ) {
+			$issues[] = __( 'Slider Revolution file permissions not secured', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check directory permissions
+		$dir_perms = get_option( 'rs_directory_permissions_set', false );
+		if ( ! $dir_perms ) {
+			$issues[] = __( 'Slider Revolution directory permissions not secured', 'wpshadow' );
+		}
+
+		// Check 3: Verify uploads folder security
+		$uploads_secure = get_option( 'rs_uploads_security', false );
+		if ( ! $uploads_secure ) {
+			$issues[] = __( 'Slider Revolution uploads directory not protected', 'wpshadow' );
+		}
+
+		// Check 4: Check .htaccess protection
+		$htaccess_set = get_option( 'rs_htaccess_protection', false );
+		if ( ! $htaccess_set ) {
+			$issues[] = __( 'Slider Revolution .htaccess protection not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify cache folder security
+		$cache_secure = get_option( 'rs_cache_security', false );
+		if ( ! $cache_secure ) {
+			$issues[] = __( 'Slider Revolution cache folder not secured', 'wpshadow' );
+		}
+
+		// Check 6: Check configuration file access
+		$config_secure = get_option( 'rs_config_file_security', false );
+		if ( ! $config_secure ) {
+			$issues[] = __( 'Slider Revolution configuration files not protected', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 60 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 60,
-				'threat_level' => 60,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Slider Revolution file permission security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/slider-revolution-file-permissions',
+				'kb_link'      => 'https://wpshadow.com/kb/slider-revolution-file-permissions',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
+	}
+}
+
 	}
 }

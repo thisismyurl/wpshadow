@@ -37,36 +37,63 @@ class Diagnostic_GoogleTagManagerConsentMode extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify consent mode enabled
+		$consent_mode = get_option( 'gtm_consent_mode_enabled', false );
+		if ( ! $consent_mode ) {
+			$issues[] = __( 'Google Tag Manager consent mode not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check analytics consent
+		$analytics_consent = get_option( 'gtm_analytics_consent_required', false );
+		if ( ! $analytics_consent ) {
+			$issues[] = __( 'Analytics consent tracking not configured', 'wpshadow' );
+		}
+
+		// Check 3: Verify advertising consent
+		$ad_consent = get_option( 'gtm_advertising_consent_required', false );
+		if ( ! $ad_consent ) {
+			$issues[] = __( 'Advertising consent tracking not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check personalization consent
+		$personalization = get_option( 'gtm_personalization_consent', false );
+		if ( ! $personalization ) {
+			$issues[] = __( 'Personalization consent not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify denial default state
+		$deny_default = get_option( 'gtm_consent_deny_by_default', false );
+		if ( ! $deny_default ) {
+			$issues[] = __( 'Consent deny-by-default mode not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check user consent banner
+		$banner_enabled = get_option( 'gtm_consent_banner_enabled', false );
+		if ( ! $banner_enabled ) {
+			$issues[] = __( 'Consent banner not enabled for GTM', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Google Tag Manager consent mode issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-consent-mode',
+				'kb_link'      => 'https://wpshadow.com/kb/google-tag-manager-consent-mode',
 			);
 		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
-		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
-		}
 		return null;
+	}
+}
+
 	}
 }
