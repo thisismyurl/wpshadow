@@ -183,6 +183,7 @@ class Privacy_Policy_Version_Tracker {
 			});
 		});
 		</script>
+		*/
 		<?php
 	}
 
