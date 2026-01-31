@@ -73,10 +73,24 @@ class Diagnostic_WoocommerceOnePageCheckoutValidation extends Diagnostic_Base {
 		if ( ! $error_handling ) {
 			$issues[] = __( 'Checkout error handling not properly configured', 'wpshadow' );
 		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WooCommerce One Page Checkout validation issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/woocommerce-one-page-checkout-validation',
+			);
 		}
+
 		return null;
 	}
 }

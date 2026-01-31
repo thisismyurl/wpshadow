@@ -73,10 +73,24 @@ class Diagnostic_WeglotWoocommerceIntegration extends Diagnostic_Base {
 		if ( ! $cache_compatibility ) {
 			$issues[] = __( 'Cache compatibility for WooCommerce not enabled', 'wpshadow' );
 		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Weglot WooCommerce integration issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/weglot-woocommerce-integration',
+			);
 		}
+
 		return null;
 	}
 }

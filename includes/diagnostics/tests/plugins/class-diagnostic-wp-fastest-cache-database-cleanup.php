@@ -73,6 +73,24 @@ class Diagnostic_WpFastestCacheDatabaseCleanup extends Diagnostic_Base {
 		if ( false === $optimization_schedule ) {
 			$issues[] = __( 'Database optimization not scheduled', 'wpshadow' );
 		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WP Fastest Cache database cleanup issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/wp-fastest-cache-database-cleanup',
+			);
+		}
+
 		return null;
 	}
 }

@@ -72,10 +72,24 @@ class Diagnostic_GravityFormsPaymentSecurity extends Diagnostic_Base {
 		if ( $data_retention > 90 || $data_retention === 0 ) {
 			$issues[] = __( 'Payment data retention period too long', 'wpshadow' );
 		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 105, 75 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Gravity Forms payment security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/gravity-forms-payment-security',
+			);
 		}
+
 		return null;
 	}
 }

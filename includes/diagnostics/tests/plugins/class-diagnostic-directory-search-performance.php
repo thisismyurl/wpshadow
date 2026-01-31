@@ -73,10 +73,24 @@ class Diagnostic_DirectorySearchPerformance extends Diagnostic_Base {
 		if ( $max_results > 1000 || $max_results === 0 ) {
 			$issues[] = __( 'Maximum search results limit too high or unlimited', 'wpshadow' );
 		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 55 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Directory search performance issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/directory-search-performance',
+			);
 		}
+
 		return null;
 	}
 }

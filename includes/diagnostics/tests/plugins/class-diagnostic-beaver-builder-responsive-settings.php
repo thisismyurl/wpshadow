@@ -74,10 +74,24 @@ class Diagnostic_BeaverBuilderResponsiveSettings extends Diagnostic_Base {
 		if ( ! $mobile_optimization ) {
 			$issues[] = __( 'Mobile optimization mode not enabled', 'wpshadow' );
 		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 75, 45 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Beaver Builder responsive settings issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/beaver-builder-responsive-settings',
+			);
 		}
+
 		return null;
 	}
 }

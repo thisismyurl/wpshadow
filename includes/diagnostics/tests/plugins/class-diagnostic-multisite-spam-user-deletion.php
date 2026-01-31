@@ -73,10 +73,24 @@ class Diagnostic_MultisiteSpamUserDeletion extends Diagnostic_Base {
 		if ( empty( $spam_criteria ) ) {
 			$issues[] = __( 'Spam user detection criteria not configured', 'wpshadow' );
 		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 100, 70 + ( count( $issues ) * 5 ) );
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Multisite spam user deletion issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/multisite-spam-user-deletion',
+			);
 		}
+
 		return null;
 	}
 }
