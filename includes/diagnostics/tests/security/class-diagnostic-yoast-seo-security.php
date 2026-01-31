@@ -117,6 +117,15 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 		// Check 6: Test for unauthorized XML sitemap modifications
 		$sitemap_disabled = get_option( 'wpseo_xml_sitemap_disabled', false );
 		if ( ! $sitemap_disabled ) {
+			/**
+			 * NOTE: Using $wpdb for filtered COUNT() query is intentional.
+			 * 
+			 * WordPress API limitation:
+			 * - Need to count options matching pattern with autoload filter
+			 * - wp_load_alloptions() only loads autoloaded options (can't count by pattern)
+			 * - get_option() would require knowing exact option names
+			 * - Pattern matching + column filtering not supported by WordPress API
+			 */
 			// Check if custom sitemap has been modified recently by non-admin
 			global $wpdb;
 			$recent_sitemap_changes = $wpdb->get_var(

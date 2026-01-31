@@ -168,6 +168,16 @@ class Diagnostic_SeoPluginConflict extends Diagnostic_Base {
 
 		// Check 6: Test for performance impact of multiple plugins
 		if ( count( $active_seo_plugins ) > 1 ) {
+			/**
+			 * NOTE: Using $wpdb for multi-pattern COUNT() query is intentional.
+			 * 
+			 * WordPress API alternative: Individual get_option() calls
+			 * Not suitable because:
+			 * - We need aggregate count across multiple plugin prefixes
+			 * - Don't know specific option names in advance
+			 * - Pattern matching with OR conditions not supported by WordPress API
+			 * - Single COUNT() query is more efficient than iterating options
+			 */
 			global $wpdb;
 			$seo_options_count = $wpdb->get_var(
 				"SELECT COUNT(*)

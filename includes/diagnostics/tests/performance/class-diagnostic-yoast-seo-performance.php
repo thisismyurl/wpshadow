@@ -118,6 +118,16 @@ class Diagnostic_YoastSeoPerformance extends Diagnostic_Base {
 		}
 
 		// Check 5: Test for excessive database queries
+		/**
+		 * NOTE: Using $wpdb for direct COUNT() query is intentional.
+		 * 
+		 * WordPress alternative considered: wp_load_alloptions()
+		 * Not suitable because:
+		 * - We only need the count, not the actual option values
+		 * - wp_load_alloptions() loads all options into memory (~800KB+)
+		 * - Direct COUNT() returns single integer (4 bytes)
+		 * - Pattern matching ('wpseo%') not supported by WordPress API
+		 */
 		$yoast_options_count = $wpdb->get_var(
 			"SELECT COUNT(*)
 			FROM {$wpdb->options}

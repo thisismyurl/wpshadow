@@ -223,6 +223,17 @@ class Diagnostic_Sensitive_Data_Cleanup extends Diagnostic_Base {
 			}
 		}
 
+		/**
+		 * NOTE: Using $wpdb for pattern-based security scan is intentional.
+		 * 
+		 * Why direct database access is necessary:
+		 * - Security audit requires scanning ALL option names for sensitive keywords
+		 * - Need to check patterns: %_key%, %_token%, %secret%
+		 * - WordPress API (get_option) requires knowing exact option name
+		 * - wp_load_alloptions() doesn't support pattern filtering
+		 * - This is a security diagnostic checking for exposed credentials
+		 * - LIMIT 20 prevents excessive memory usage on large option tables
+		 */
 		// Check wp_options for suspicious options
 		global $wpdb;
 		$suspicious_options = $wpdb->get_results(

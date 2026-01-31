@@ -68,6 +68,16 @@ class Diagnostic_GravityFormsGdprCompliance extends Diagnostic_Base {
 
 		$issues = array();
 
+		/**
+		 * NOTE: Using $wpdb to access Gravity Forms custom table is intentional.
+		 * 
+		 * Why WordPress API cannot be used:
+		 * - Gravity Forms stores form configuration in custom table 'gf_form_meta'
+		 * - This is NOT a WordPress core table (no get_post/get_option equivalent)
+		 * - Gravity Forms does not provide a public API for querying form metadata
+		 * - Direct database access is the ONLY way to audit GDPR compliance settings
+		 * - Third-party plugin tables have no WordPress Core API alternative
+		 */
 		// Check 1: Verify consent checkboxes are present in forms
 		global $wpdb;
 		$forms_with_consent = 0;
