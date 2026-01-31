@@ -51,12 +51,19 @@ class Token_Balance_Widget {
 			return;
 		}
 
+		// Check if Guardian is enabled
+		$is_enabled = Guardian_Manager::is_enabled();
+		$status_dot = $is_enabled 
+			? '<span class="wpshadow-status-dot wpshadow-status-active" title="' . esc_attr__( 'Guardian Active', 'wpshadow' ) . '"></span>'
+			: '<span class="wpshadow-status-dot wpshadow-status-inactive" title="' . esc_attr__( 'Guardian Inactive', 'wpshadow' ) . '"></span>';
+
 		if ( ! Guardian_API_Client::is_connected() ) {
-			// Show connect button
+			// Show connect button with red dot (inactive)
 			$wp_admin_bar->add_node(
 				array(
 					'id'    => 'wpshadow-guardian',
 					'title' => '<span class="wpshadow-guardian-connect">' .
+								$status_dot .
 								'<span class="dashicons dashicons-cloud" style="font-size: 20px; vertical-align: middle;"></span> ' .
 								__( 'Connect Guardian', 'wpshadow' ) .
 								'</span>',
@@ -84,11 +91,11 @@ class Token_Balance_Widget {
 			);
 		}
 
-		// Show token balance
+		// Show token balance with status indicator
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'wpshadow-guardian',
-				'title' => self::get_admin_bar_html( $balance ),
+				'title' => self::get_admin_bar_html( $balance, $status_dot ),
 				'href'  => admin_url( 'admin.php?page=wpshadow-guardian' ),
 				'meta'  => array(
 					'class' => 'wpshadow-guardian-adminbar',
@@ -132,19 +139,22 @@ class Token_Balance_Widget {
 	 * Get HTML for admin bar item.
 	 *
 	 * @since  1.2604.0300
-	 * @param  int|string $balance Token balance.
+	 * @param  int|string $balance    Token balance.
+	 * @param  string     $status_dot Status indicator HTML.
 	 * @return string HTML.
 	 */
-	private static function get_admin_bar_html( $balance ) {
+	private static function get_admin_bar_html( $balance, $status_dot = '' ) {
 		$low_balance = is_numeric( $balance ) && $balance < 10;
 		$class       = $low_balance ? 'wpshadow-tokens-low' : 'wpshadow-tokens-ok';
 
 		return sprintf(
 			'<span class="wpshadow-guardian-balance %s">' .
+			'%s' .
 			'<span class="dashicons dashicons-cloud" style="font-size: 20px; vertical-align: middle;"></span> ' .
 			'<span class="wpshadow-token-count">%s</span>' .
 			'</span>',
 			esc_attr( $class ),
+			$status_dot,
 			esc_html( is_numeric( $balance ) ? number_format_i18n( $balance ) : $balance )
 		);
 	}
@@ -175,7 +185,24 @@ class Token_Balance_Widget {
 				color: #dc3232;
 			}
 			.wpshadow-guardian-connect {
-				color: #2271b1;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.wpshadow-status-dot {
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				margin-right: 2px;
+			}
+			.wpshadow-status-active {
+				background-color: #00a32a;
+				box-shadow: 0 0 3px rgba(0, 163, 42, 0.6);
+			}
+			.wpshadow-status-inactive {
+				background-color: #dc3232;
+				box-shadow: 0 0 3px rgba(220, 50, 50, 0.6);
 			}
 			#wpshadow-guardian-buy-tokens {
 				border-top: 1px solid rgba(255,255,255,0.1);

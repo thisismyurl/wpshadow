@@ -39,7 +39,8 @@ class Privacy_Dashboard_Page {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'add_menu_page' ) );
+		// Note: Menu registration moved to Gamification_UI::register_menu_pages()
+		// to place Privacy under Achievements submenu
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 		add_action( 'wp_ajax_wpshadow_export_data', array( __CLASS__, 'handle_export_data' ) );
 		add_action( 'wp_ajax_wpshadow_delete_data', array( __CLASS__, 'handle_delete_data' ) );
@@ -47,20 +48,15 @@ class Privacy_Dashboard_Page {
 	}
 
 	/**
-	 * Add privacy dashboard menu page.
+	 * Add privacy dashboard menu page (now called by Gamification_UI).
 	 *
 	 * @since  1.2604.0200
+	 * @deprecated Menu registration moved to Gamification_UI::register_menu_pages()
 	 * @return void
 	 */
 	public static function add_menu_page() {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Privacy Dashboard', 'wpshadow' ),
-			__( 'Privacy', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-privacy',
-			array( __CLASS__, 'render_page' )
-		);
+		// Menu registration moved to Gamification_UI for proper hierarchy
+		// Kept for backward compatibility if called directly
 	}
 
 	/**

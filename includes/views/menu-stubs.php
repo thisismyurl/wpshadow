@@ -228,19 +228,44 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					</div>
 				</div>
 
-				<!-- Privacy Settings -->
+							<!-- Privacy Dashboard -->
 				<div class="wps-card">
 					<div class="wps-card-header wps-pb-3 wps-border-bottom">
 						<div class="wps-flex wps-gap-3 wps-items-start">
 							<span class="dashicons dashicons-lock wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Privacy & Data', 'wpshadow' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Privacy Dashboard', 'wpshadow' ); ?>
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Manage data collection, anonymous reporting, and privacy preferences.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Manage data export, deletion, and privacy preferences.', 'wpshadow' ); ?>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="wps-card-body">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>" class="wps-btn wps-btn--secondary">
+							<span class="dashicons dashicons-arrow-right-alt"></span>
+							<?php esc_html_e( 'Open', 'wpshadow' ); ?>
+						</a>
+					</div>
+				</div>
+
+				<!-- Privacy & Data Settings -->
+				<div class="wps-card">
+					<div class="wps-card-header wps-pb-3 wps-border-bottom">
+						<div class="wps-flex wps-gap-3 wps-items-start">
+							<span class="dashicons dashicons-admin-network wps-text-3xl wps-text-primary"></span>
+							<div>
+								<h3 class="wps-card-title wps-m-0">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
+										<?php esc_html_e( 'Privacy & Data Settings', 'wpshadow' ); ?>
+									</a>
+								</h3>
+								<p class="wps-card-description wps-m-0">
+									<?php esc_html_e( 'Configure data collection and anonymous reporting preferences.', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>

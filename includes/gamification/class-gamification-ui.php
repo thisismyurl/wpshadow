@@ -77,6 +77,16 @@ class Gamification_UI {
 			'wpshadow-rewards',
 			array( __CLASS__, 'render_rewards_page' )
 		);
+
+		// Privacy page (under Achievements parent)
+		add_submenu_page(
+			'wpshadow-achievements',
+			__( 'Privacy Dashboard', 'wpshadow' ),
+			__( 'Privacy', 'wpshadow' ),
+			'manage_options',
+			'wpshadow-privacy',
+			array( 'WPShadow\Admin\Privacy_Dashboard_Page', 'render_page' )
+		);
 	}
 
 	/**
