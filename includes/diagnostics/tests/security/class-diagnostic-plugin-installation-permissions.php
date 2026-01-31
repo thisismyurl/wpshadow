@@ -102,9 +102,9 @@ class Diagnostic_Plugin_Installation_Permissions extends Diagnostic_Base {
 			$plugin_path = WP_PLUGIN_DIR . '/' . $plugin;
 			if ( file_exists( $plugin_path ) ) {
 				$content = file_get_contents( $plugin_path );
-				
+
 				// Check for unsafe admin_init without capability check
-				if ( strpos( $content, "add_action( 'admin_init'" ) !== false 
+				if ( strpos( $content, "add_action( 'admin_init'" ) !== false
 					&& strpos( $content, 'current_user_can' ) === false ) {
 					++$unsafe_count;
 				}
