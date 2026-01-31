@@ -422,17 +422,19 @@ class Gamification_Manager {
 					<div class="next-milestone">
 						<h4><?php esc_html_e( 'Next Milestone', 'wpshadow' ); ?></h4>
 						<div class="milestone-info">
-							<span class="milestone-name"><?php echo esc_html( $next_milestone['name'] ); ?></span>
+							<span class="milestone-name"><?php echo esc_html( $next_milestone['name'] ?? 'Milestone' ); ?></span>
 							<div class="progress-bar">
-								<div class="progress-fill" style="width: <?php echo esc_attr( $next_milestone['progress'] ); ?>%;"></div>
+								<div class="progress-fill" style="width: <?php echo esc_attr( $next_milestone['progress'] ?? 0 ); ?>%;"></div>
 							</div>
 							<span class="progress-text">
 								<?php
+								$current_pts  = $next_milestone['current'] ?? 0;
+								$required_pts = $next_milestone['required'] ?? 0;
 								printf(
 									/* translators: 1: current points, 2: required points */
 									esc_html__( '%1$s / %2$s points', 'wpshadow' ),
-									number_format_i18n( $next_milestone['current'] ),
-									number_format_i18n( $next_milestone['required'] )
+									number_format_i18n( $current_pts ),
+									number_format_i18n( $required_pts )
 								);
 								?>
 							</span>
