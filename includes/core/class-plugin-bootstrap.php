@@ -735,6 +735,7 @@ class Plugin_Bootstrap {
 
 		// Core Guardian components
 		$guardian_files = array(
+			'class-guardian-manager.php',
 			'class-guardian-api-client.php',
 			'class-token-balance-widget.php',
 			'class-guardian-scan-interface.php',

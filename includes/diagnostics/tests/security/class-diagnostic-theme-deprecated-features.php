@@ -139,7 +139,7 @@ class Diagnostic_Theme_Deprecated_Features extends Diagnostic_Base {
 			if ( ! empty( $header['tags'] ) ) {
 				$tags = array_map( 'trim', explode( ',', strtolower( $header['tags'] ) ) );
 				$deprecated_tags = array( 'blue', 'brown', 'orange', 'pink', 'purple', 'silver', 'tan', 'white', 'yellow', 'dark', 'light' );
-				
+
 				$found_deprecated = array_intersect( $tags, $deprecated_tags );
 				if ( ! empty( $found_deprecated ) ) {
 					$deprecated_items[] = array(

@@ -158,7 +158,7 @@ class Diagnostic_Plugin_Admin_Page_Security extends Diagnostic_Base {
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
 			$plugin_folder = dirname( $plugin_file );
 			$config_files = glob( $plugin_dir . '/' . $plugin_folder . '/{config,settings,credentials}*.{php,json,xml,yml,yaml}', GLOB_BRACE );
-			
+
 			foreach ( $config_files as $file ) {
 				$content = file_get_contents( $file, false, null, 0, 200 );
 				// Check if file lacks ABSPATH check.

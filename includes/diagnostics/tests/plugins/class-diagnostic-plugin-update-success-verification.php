@@ -68,7 +68,7 @@ class Diagnostic_Plugin_Update_Success_Verification extends Diagnostic_Base {
 
 		// Check for update_plugins transient.
 		$update_plugins = get_site_transient( 'update_plugins' );
-		
+
 		// Get all plugins.
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -122,10 +122,10 @@ class Diagnostic_Plugin_Update_Success_Verification extends Diagnostic_Base {
 		// Check for partial plugin directories (incomplete updates).
 		$plugin_dir = WP_PLUGIN_DIR;
 		$plugin_folders = glob( $plugin_dir . '/*', GLOB_ONLYDIR );
-		
+
 		foreach ( $plugin_folders as $folder ) {
 			$folder_name = basename( $folder );
-			
+
 			// Skip if it's a known plugin.
 			$has_main_file = false;
 			foreach ( $all_plugins as $plugin_file => $plugin_data ) {

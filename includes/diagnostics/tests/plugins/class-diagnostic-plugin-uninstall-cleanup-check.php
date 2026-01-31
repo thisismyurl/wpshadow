@@ -113,7 +113,7 @@ class Diagnostic_Plugin_Uninstall_Cleanup_Check extends Diagnostic_Base {
 
 		// Get all options.
 		$all_options = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name NOT LIKE '\_%'" );
-		
+
 		$orphaned_options = array();
 		foreach ( $all_options as $option_name ) {
 			// Skip WordPress core options.
@@ -154,7 +154,7 @@ class Diagnostic_Plugin_Uninstall_Cleanup_Check extends Diagnostic_Base {
 		foreach ( $tables as $table ) {
 			// Skip core WordPress tables.
 			$core_tables = array( 'posts', 'postmeta', 'users', 'usermeta', 'options', 'links', 'comments', 'commentmeta', 'terms', 'term_relationships', 'term_taxonomy', 'termmeta' );
-			
+
 			$table_name = str_replace( $wpdb->prefix, '', $table );
 			if ( in_array( $table_name, $core_tables, true ) ) {
 				continue;

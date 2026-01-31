@@ -117,8 +117,8 @@ class Diagnostic_Plugin_Activation_Hook_Issues extends Diagnostic_Base {
 		// Check for orphaned activation hooks (plugin deleted but hook remains).
 		global $wpdb;
 		$options_with_activation = $wpdb->get_results(
-			"SELECT option_name, option_value FROM {$wpdb->options} 
-			WHERE option_name LIKE '%_activation_%' 
+			"SELECT option_name, option_value FROM {$wpdb->options}
+			WHERE option_name LIKE '%_activation_%'
 			OR option_name LIKE 'plugin_%_version'
 			LIMIT 50",
 			ARRAY_A
@@ -130,7 +130,7 @@ class Diagnostic_Plugin_Activation_Hook_Issues extends Diagnostic_Base {
 			preg_match( '/([a-zA-Z0-9_-]+)/', $option['option_name'], $matches );
 			if ( ! empty( $matches[1] ) ) {
 				$slug = $matches[1];
-				
+
 				// Check if any plugin contains this slug.
 				$found = false;
 				foreach ( array_keys( $all_plugins ) as $plugin_file ) {
