@@ -11,7 +11,21 @@ class Diagnostic_NinjaFormsSpamProtection extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! class_exists( 'Ninja_Forms' ) ) { return null; }
+		if ( ! class_exists( 'Ninja_Forms' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/ninja-forms-spam-protection',
+		);
+	}
+	return null; }
 		$settings = get_option( 'ninja_forms_settings' );
 		if ( empty( $settings['recaptcha_site_key'] ) ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_NinjaFormsSpamProtection extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/ninja-forms-spam',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "ninja_forms_spam_protection_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/ninja-forms-spam-protection',
+		);
+	}
+	return null;
 	}
 }

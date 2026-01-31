@@ -11,7 +11,21 @@ class Diagnostic_WpRocketConflicts extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! function_exists( 'rocket_direct_filesystem' ) ) { return null; }
+		if ( ! function_exists( 'rocket_direct_filesystem' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/wp-rocket-conflicts',
+		);
+	}
+	return null; }
 		if ( defined( 'WPE_PLUGIN_VERSION' ) || defined( 'KINSTA_CACHE_VERSION' ) ) {
 			return array(
 				'id' => self::$slug,
@@ -23,6 +37,34 @@ class Diagnostic_WpRocketConflicts extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/wp-rocket-hosting-conflicts',
 			);
 		}
-		return null;
+		
+	if ( ! (! empty( $settings["lazyload"] )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Image lazy loading', 'wpshadow' );
+	}
+
+	if ( ! (! empty( $settings["preload_fonts"] )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Cache preloading', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/wp-rocket-conflicts',
+		);
+	}
+	return null;
 	}
 }

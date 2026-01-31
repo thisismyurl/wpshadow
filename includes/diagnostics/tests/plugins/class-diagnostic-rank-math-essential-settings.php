@@ -11,7 +11,21 @@ class Diagnostic_RankMathEssentialSettings extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! class_exists( 'RankMath' ) ) { return null; }
+		if ( ! class_exists( 'RankMath' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/rank-math-essential-settings',
+		);
+	}
+	return null; }
 		$general = get_option( 'rank-math-options-general', array() );
 		if ( empty( $general['sitemap'] ) || empty( $general['breadcrumbs'] ) ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_RankMathEssentialSettings extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/rank-math-settings',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "rank_math_essential_settings_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/rank-math-essential-settings',
+		);
+	}
+	return null;
 	}
 }

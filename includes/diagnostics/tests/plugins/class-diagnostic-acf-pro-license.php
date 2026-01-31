@@ -11,7 +11,21 @@ class Diagnostic_AcfProLicense extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! class_exists( 'ACF' ) ) { return null; }
+		if ( ! class_exists( 'ACF' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/acf-pro-license',
+		);
+	}
+	return null; }
 		if ( defined( 'ACF_PRO' ) && ACF_PRO ) {
 			$license = get_option( 'acf_pro_license' );
 			if ( empty( $license['key'] ) || 'active' !== $license['status'] ) {
@@ -26,6 +40,34 @@ class Diagnostic_AcfProLicense extends Diagnostic_Base {
 				);
 			}
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "acf_pro_license_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/acf-pro-license',
+		);
+	}
+	return null;
 	}
 }

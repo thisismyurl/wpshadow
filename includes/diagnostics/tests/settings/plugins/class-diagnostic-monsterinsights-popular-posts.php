@@ -11,7 +11,21 @@ class Diagnostic_MonsterinsightsPopularPosts extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! function_exists( 'MonsterInsights' ) ) { return null; }
+		if ( ! function_exists( 'MonsterInsights' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/monsterinsights-popular-posts',
+		);
+	}
+	return null; }
 		$popular = get_option( 'monsterinsights_popular_posts_enabled', false );
 		if ( ! $popular ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_MonsterinsightsPopularPosts extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/popular-posts',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "monsterinsights_popular_posts_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/monsterinsights-popular-posts',
+		);
+	}
+	return null;
 	}
 }

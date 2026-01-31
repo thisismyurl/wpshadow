@@ -11,7 +11,21 @@ class Diagnostic_YoastInternalLinking extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! defined( 'WPSEO_PREMIUM_FILE' ) ) { return null; }
+		if ( ! defined( 'WPSEO_PREMIUM_FILE' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/yoast-internal-linking',
+		);
+	}
+	return null; }
 		$enabled = get_option( 'wpseo_internal_link_suggestions_enabled', true );
 		if ( ! $enabled ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_YoastInternalLinking extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/yoast-internal-linking',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "yoast_internal_linking_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/yoast-internal-linking',
+		);
+	}
+	return null;
 	}
 }

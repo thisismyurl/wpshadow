@@ -11,7 +11,21 @@ class Diagnostic_LitespeedQuicCloud extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! defined( 'LSCWP_V' ) ) { return null; }
+		if ( ! defined( 'LSCWP_V' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/litespeed-quic-cloud',
+		);
+	}
+	return null; }
 		$apikey = get_option( 'litespeed.conf.apikey', '' );
 		if ( empty( $apikey ) ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_LitespeedQuicCloud extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/litespeed-quic',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "litespeed_quic_cloud_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/litespeed-quic-cloud',
+		);
+	}
+	return null;
 	}
 }

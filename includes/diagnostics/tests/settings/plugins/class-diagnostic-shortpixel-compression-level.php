@@ -11,7 +11,21 @@ class Diagnostic_ShortpixelCompressionLevel extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! class_exists( 'ShortPixelAPI' ) ) { return null; }
+		if ( ! class_exists( 'ShortPixelAPI' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/shortpixel-compression-level',
+		);
+	}
+	return null; }
 		$compression = get_option( 'wp-short-pixel-compression' );
 		if ( empty( $compression ) ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_ShortpixelCompressionLevel extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/shortpixel-compression',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "shortpixel_compression_level_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/shortpixel-compression-level',
+		);
+	}
+	return null;
 	}
 }

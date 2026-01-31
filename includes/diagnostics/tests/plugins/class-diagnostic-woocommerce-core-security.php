@@ -11,7 +11,21 @@ class Diagnostic_WoocommerceCoreSecurity extends Diagnostic_Base {
 	protected static $family = 'plugins';
 	
 	public static function check() {
-		if ( ! class_exists( 'WooCommerce' ) ) { return null; }
+		if ( ! class_exists( 'WooCommerce' ) ) { if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/woocommerce-core-security',
+		);
+	}
+	return null; }
 		$force_ssl = get_option( 'woocommerce_force_ssl_checkout', 'no' );
 		if ( 'yes' !== $force_ssl && ! is_ssl() ) {
 			return array(
@@ -24,6 +38,34 @@ class Diagnostic_WoocommerceCoreSecurity extends Diagnostic_Base {
 				'kb_link' => 'https://wpshadow.com/kb/woocommerce-ssl',
 			);
 		}
-		return null;
+		
+	if ( ! (function_exists( "is_plugin_active" )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Plugin active', 'wpshadow' );
+	}
+
+	if ( ! (! empty( get_option( "woocommerce_core_security_settings" ) )) ) {
+		if ( ! isset( $issues ) ) {
+			$issues = array();
+		}
+		$issues[] = __( 'Settings available', 'wpshadow' );
+	}
+	if ( isset( $issues ) && ! empty( $issues ) ) {
+		return array(
+			'id' => self::$slug,
+			'title' => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues', 'wpshadow' ),
+				count( $issues )
+			),
+			'severity' => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link' => 'https://wpshadow.com/kb/woocommerce-core-security',
+		);
+	}
+	return null;
 	}
 }
