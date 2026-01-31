@@ -124,7 +124,6 @@ class Privacy_Policy_Version_Tracker {
 						<p style="margin: 0 0 12px;">
 							<?php
 							printf(
-								/* translators: 1: version number, 2: effective date */
 								esc_html__( 'Our privacy policy has been updated to version %1$s, effective %2$s. Please review the changes.', 'wpshadow' ),
 								'<strong>' . esc_html( self::CURRENT_VERSION ) . '</strong>',
 								'<strong>' . esc_html( wp_date( get_option( 'date_format' ), strtotime( self::EFFECTIVE_DATE ) ) ) . '</strong>'
