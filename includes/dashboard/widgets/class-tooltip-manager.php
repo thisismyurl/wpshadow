@@ -26,7 +26,10 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 	// If no category specified, load all categories
 	if ( null === $category ) {
 		$cache_key = 'wpshadow_tooltips_all';
-		$cached    = get_transient( $cache_key );
+		$cached    = \WPShadow\Core\Cache_Manager::get(
+			$cache_key,
+			'wpshadow_tooltips'
+		);
 
 		if ( false !== $cached ) {
 			return $cached;
@@ -42,13 +45,21 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 		}
 
 		// Cache all tooltips for 24 hours
-		set_transient( $cache_key, $all_tooltips, 24 * HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			$cache_key,
+			$all_tooltips,
+			'wpshadow_tooltips',
+			24 * HOUR_IN_SECONDS
+		);
 		return $all_tooltips;
 	}
 
 	// Check transient cache for category
 	$cache_key = 'wpshadow_tooltips_' . sanitize_key( $category );
-	$cached    = get_transient( $cache_key );
+	$cached    = \WPShadow\Core\Cache_Manager::get(
+		$cache_key,
+		'wpshadow_tooltips'
+	);
 
 	if ( false !== $cached ) {
 		return $cached;
@@ -79,7 +90,12 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 	}
 
 	// Cache the result for 24 hours
-	set_transient( $cache_key, $data, 24 * HOUR_IN_SECONDS );
+	\WPShadow\Core\Cache_Manager::set(
+		$cache_key,
+		$data,
+		'wpshadow_tooltips',
+		24 * HOUR_IN_SECONDS
+	);
 
 	return $data;
 }

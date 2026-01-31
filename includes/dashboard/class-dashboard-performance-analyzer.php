@@ -68,7 +68,10 @@ class Dashboard_Performance_Analyzer {
 		}
 
 		// Get current metrics
-		$metrics = get_transient( 'wpshadow_dashboard_metrics' );
+		$metrics = \WPShadow\Core\Cache_Manager::get(
+			'dashboard_metrics',
+			'wpshadow_dashboard'
+		);
 		if ( ! is_array( $metrics ) ) {
 			$metrics = array(
 				'loads'       => array(),
@@ -88,9 +91,19 @@ class Dashboard_Performance_Analyzer {
 		// Calculate average
 		$avg_load_ms = (int) ( array_sum( $metrics['loads'] ) / count( $metrics['loads'] ) );
 
-		// Set transients for diagnostics
-		set_transient( 'wpshadow_dashboard_load_ms', $avg_load_ms, WEEK_IN_SECONDS );
-		set_transient( 'wpshadow_dashboard_metrics', $metrics, WEEK_IN_SECONDS );
+		// Set cache for diagnostics
+		\WPShadow\Core\Cache_Manager::set(
+			'dashboard_load_ms',
+			$avg_load_ms,
+			'wpshadow_dashboard',
+			WEEK_IN_SECONDS
+		);
+		\WPShadow\Core\Cache_Manager::set(
+			'dashboard_metrics',
+			$metrics,
+			'wpshadow_dashboard',
+			WEEK_IN_SECONDS
+		);
 	}
 
 	/**
@@ -110,7 +123,12 @@ class Dashboard_Performance_Analyzer {
 			}
 		}
 
-		set_transient( 'wpshadow_dashboard_widget_count', $widget_count, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'dashboard_widget_count',
+			$widget_count,
+			'wpshadow_dashboard',
+			DAY_IN_SECONDS
+		);
 	}
 
 	/**
@@ -119,9 +137,20 @@ class Dashboard_Performance_Analyzer {
 	 * @return array Analysis data
 	 */
 	public static function get_summary(): array {
-		$avg_load_ms  = (int) get_transient( 'wpshadow_dashboard_load_ms' );
-		$widget_count = (int) get_transient( 'wpshadow_dashboard_widget_count' );
-		$metrics      = get_transient( 'wpshadow_dashboard_metrics' );
+		$avg_load_ms  = (int) \WPShadow\Core\Cache_Manager::get(
+			'dashboard_load_ms',
+			'wpshadow_dashboard',
+			0
+		);
+		$widget_count = (int) \WPShadow\Core\Cache_Manager::get(
+			'dashboard_widget_count',
+			'wpshadow_dashboard',
+			0
+		);
+		$metrics      = \WPShadow\Core\Cache_Manager::get(
+			'dashboard_metrics',
+			'wpshadow_dashboard'
+		);
 
 		return array(
 			'avg_load_ms'  => $avg_load_ms,
@@ -137,8 +166,8 @@ class Dashboard_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_dashboard_load_ms' );
-		delete_transient( 'wpshadow_dashboard_widget_count' );
-		delete_transient( 'wpshadow_dashboard_metrics' );
+		\WPShadow\Core\Cache_Manager::delete( 'dashboard_load_ms', 'wpshadow_dashboard' );
+		\WPShadow\Core\Cache_Manager::delete( 'dashboard_widget_count', 'wpshadow_dashboard' );
+		\WPShadow\Core\Cache_Manager::delete( 'dashboard_metrics', 'wpshadow_dashboard' );
 	}
 }
