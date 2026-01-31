@@ -37,31 +37,41 @@ class Diagnostic_DiviBuilderLazyLoading extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 45,
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-lazy-loading',
-			);
-		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
+		// Check 1: Verify Divi lazy loading is enabled
+		$lazy_load_enabled = get_option( 'et_pb_static_lazy_loading', '' );
+		if ( 'on' !== $lazy_load_enabled ) {
+			$issues[] = __( 'Divi lazy loading not enabled', 'wpshadow' );
 		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
+
+		// Check 2: Check native browser lazy loading
+		$native_lazy_load = get_option( 'et_pb_native_lazy_loading', '' );
+		if ( 'on' !== $native_lazy_load ) {
+			$issues[] = __( 'Native browser lazy loading not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify lazy load threshold
+		$threshold = get_option( 'et_pb_lazy_load_threshold', 200 );
+		if ( $threshold < 100 ) {
+			$issues[] = __( 'Lazy load threshold too aggressive', 'wpshadow' );
+		}
+
+		// Check 4: Check video lazy loading
+		$video_lazy_load = get_option( 'et_pb_video_lazy_loading', '' );
+		if ( 'on' !== $video_lazy_load ) {
+			$issues[] = __( 'Video lazy loading not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify background image lazy loading
+		$bg_lazy_load = get_option( 'et_pb_background_lazy_loading', '' );
+		if ( 'on' !== $bg_lazy_load ) {
+			$issues[] = __( 'Background image lazy loading not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check LCP image optimization
+		$lcp_optimization = get_option( 'et_pb_lcp_lazy_load_skip', '' );
+		if ( 'on' !== $lcp_optimization ) {
+			$issues[] = __( 'LCP image lazy load skip not configured', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {

@@ -32,37 +32,45 @@ class Diagnostic_MolliePaymentLinkExpiry extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
+		if ( ! class_exists( 'Mollie_WC_Plugin' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 75,
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/mollie-payment-link-expiry',
-			);
-		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
+		// Check 1: Verify payment link expiration time
+		$link_expiry = get_option( 'mollie_payment_link_expiry_hours', 0 );
+		if ( $link_expiry > 24 || $link_expiry === 0 ) {
+			$issues[] = __( 'Payment link expiration time too long or not configured', 'wpshadow' );
 		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
+
+		// Check 2: Check expired link cleanup
+		$cleanup_schedule = wp_get_schedule( 'mollie_expired_links_cleanup' );
+		if ( false === $cleanup_schedule ) {
+			$issues[] = __( 'Expired payment link cleanup not scheduled', 'wpshadow' );
 		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
+
+		// Check 3: Verify SSL for payment links
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for payment link generation', 'wpshadow' );
+		}
+
+		// Check 4: Check expiry warning notifications
+		$expiry_warnings = get_option( 'mollie_payment_link_expiry_warnings', false );
+		if ( ! $expiry_warnings ) {
+			$issues[] = __( 'Payment link expiry warnings not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify automatic link renewal
+		$auto_renewal = get_option( 'mollie_payment_link_auto_renewal', false );
+		if ( ! $auto_renewal ) {
+			$issues[] = __( 'Automatic payment link renewal not configured', 'wpshadow' );
+		}
+
+		// Check 6: Check payment link validation on access
+		$validate_on_access = get_option( 'mollie_validate_link_on_access', false );
+		if ( ! $validate_on_access ) {
+			$issues[] = __( 'Payment link validation on access not enabled', 'wpshadow' );
 		}
 		return null;
 	}

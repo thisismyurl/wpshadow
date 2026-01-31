@@ -32,37 +32,46 @@ class Diagnostic_GeneratepressPremiumMobileHeader extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
+		if ( ! defined( 'GP_PREMIUM_VERSION' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/generatepress-premium-mobile-header',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify mobile menu is enabled
+		$mobile_menu_enabled = get_option( 'generate_mobile_menu_enabled', '' );
+		if ( 'enabled' !== $mobile_menu_enabled ) {
+			$issues[] = __( 'Mobile menu not enabled', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check mobile breakpoint configuration
+		$mobile_breakpoint = get_option( 'generate_mobile_header_breakpoint', 0 );
+		if ( $mobile_breakpoint > 768 || $mobile_breakpoint === 0 ) {
+			$issues[] = __( 'Mobile header breakpoint not optimally configured', 'wpshadow' );
 		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
+
+		// Check 3: Verify sticky mobile header
+		$sticky_mobile = get_option( 'generate_sticky_mobile_header', '' );
+		if ( 'enabled' !== $sticky_mobile ) {
+			$issues[] = __( 'Sticky mobile header not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check mobile menu animation performance
+		$menu_animation = get_option( 'generate_mobile_menu_animation', 'slide' );
+		if ( 'slide' !== $menu_animation && 'fade' !== $menu_animation ) {
+			$issues[] = __( 'Mobile menu animation not performance-optimized', 'wpshadow' );
+		}
+
+		// Check 5: Verify hamburger icon optimization
+		$icon_type = get_option( 'generate_mobile_menu_icon_type', '' );
+		if ( 'svg' !== $icon_type ) {
+			$issues[] = __( 'Hamburger icon not using SVG for performance', 'wpshadow' );
+		}
+
+		// Check 6: Check mobile header caching
+		$mobile_cache = get_transient( 'generate_mobile_header_cache' );
+		if ( false === $mobile_cache ) {
+			$issues[] = __( 'Mobile header caching not active', 'wpshadow' );
 		}
 		return null;
 	}
