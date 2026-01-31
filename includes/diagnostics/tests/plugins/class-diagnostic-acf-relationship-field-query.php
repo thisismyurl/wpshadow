@@ -111,7 +111,7 @@ class Diagnostic_AcfRelationshipFieldQuery extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'ACF relationship field query issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/acf-relationship-field-query',

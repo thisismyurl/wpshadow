@@ -80,7 +80,7 @@ class Diagnostic_BbpressDatabaseOptimization extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'bbPress database issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/bbpress-database-optimization',

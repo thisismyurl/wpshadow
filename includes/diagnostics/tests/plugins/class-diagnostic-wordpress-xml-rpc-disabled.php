@@ -90,7 +90,7 @@ class Diagnostic_WordpressXmlRpcDisabled extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 65 ),
+				'severity'     => 65,
 				'threat_level' => 65,
 				'auto_fixable' => false, // Requires plugin or .htaccess modification
 				'kb_link'      => 'https://wpshadow.com/kb/wordpress-xml-rpc-disabled',

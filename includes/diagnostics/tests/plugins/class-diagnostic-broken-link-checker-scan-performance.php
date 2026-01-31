@@ -89,7 +89,7 @@ class Diagnostic_BrokenLinkCheckerScanPerformance extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'Broken Link Checker performance issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/broken-link-checker-scan-performance',

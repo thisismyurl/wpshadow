@@ -121,7 +121,7 @@ class Diagnostic_WordpressDebugLogExposure extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( $threat_level ),
+				'severity'     => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false, // Requires wp-config.php modification
 				'kb_link'      => 'https://wpshadow.com/kb/wordpress-debug-log-exposure',

@@ -50,7 +50,7 @@ class Diagnostic_RestrictContentProSubscriptionManagement extends Diagnostic_Bas
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
+				'severity'    => 55,
 				'threat_level' => 55,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/restrict-content-pro-subscription-management',

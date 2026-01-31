@@ -50,7 +50,7 @@ class Diagnostic_BeaverBuilderProTemplates extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
+				'severity'    => 50,
 				'threat_level' => 50,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/beaver-builder-pro-templates',

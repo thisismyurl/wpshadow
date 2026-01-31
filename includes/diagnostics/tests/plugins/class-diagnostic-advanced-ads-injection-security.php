@@ -102,7 +102,7 @@ class Diagnostic_AdvancedAdsInjectionSecurity extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'Advanced Ads injection security issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-ads-injection-security',

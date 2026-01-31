@@ -115,7 +115,7 @@ class Diagnostic_Search_Console_Indexing_Errors extends Diagnostic_Base {
 			return null;
 		}
 
-		$severity     = self::calculate_severity( $error_pct );
+		$severity     = $error_pct;
 		$threat_level = self::calculate_threat_level( $error_pct );
 
 		return array(

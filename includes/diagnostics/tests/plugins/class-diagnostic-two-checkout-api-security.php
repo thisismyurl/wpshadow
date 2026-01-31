@@ -51,7 +51,7 @@ class Diagnostic_TwoCheckoutApiSecurity extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => __( '2Checkout not connected', 'wpshadow' ),
-				'severity'    => self::calculate_severity( 85 ),
+				'severity'    => 85,
 				'threat_level' => 85,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/two-checkout-api-security',
@@ -112,7 +112,7 @@ class Diagnostic_TwoCheckoutApiSecurity extends Diagnostic_Base {
 				count( $issues ),
 				implode( ', ', $issues )
 			),
-			'severity'    => self::calculate_severity( $threat_level ),
+			'severity'    => $threat_level,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/two-checkout-api-security',

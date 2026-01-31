@@ -50,7 +50,7 @@ class Diagnostic_TutorLmsQuizSecurity extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
+				'severity'    => 65,
 				'threat_level' => 65,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/tutor-lms-quiz-security',

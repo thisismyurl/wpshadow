@@ -80,7 +80,7 @@ class Diagnostic_DiviBuilderProWoocommerceIntegration extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'Divi Builder WooCommerce integration issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-pro-woocommerce-integration',

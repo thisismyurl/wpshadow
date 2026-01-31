@@ -135,7 +135,7 @@ class Diagnostic_ElementorProCssGeneration extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 50 ),
+				'severity'     => 50,
 				'threat_level' => 50,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/elementor-pro-css-generation',

@@ -95,7 +95,7 @@ class Diagnostic_PaypalExpressApiCredentials extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 80 ),
+				'severity'     => 80,
 				'threat_level' => 80,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/paypal-express-api-credentials',

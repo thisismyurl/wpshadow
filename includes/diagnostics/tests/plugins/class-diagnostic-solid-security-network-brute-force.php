@@ -80,7 +80,7 @@ class Diagnostic_SolidSecurityNetworkBruteForce extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'Solid Security network brute force issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/solid-security-network-brute-force',

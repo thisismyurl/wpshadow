@@ -89,7 +89,7 @@ class Diagnostic_WpMailSmtpProviderApiLimits extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'WP Mail SMTP API limit issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-mail-smtp-provider-api-limits',

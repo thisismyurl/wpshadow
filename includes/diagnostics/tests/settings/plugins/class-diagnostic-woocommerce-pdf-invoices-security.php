@@ -119,7 +119,7 @@ class Diagnostic_WoocommercePdfInvoicesSecurity extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 70 ),
+				'severity'     => 70,
 				'threat_level' => 70,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/woocommerce-pdf-invoices-security',

@@ -46,7 +46,7 @@ class Diagnostic_GoogleTagManagerDatalayerErrors extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => __( 'Google Tag Manager container ID missing', 'wpshadow' ),
-				'severity'    => self::calculate_severity( 50 ),
+				'severity'    => 50,
 				'threat_level' => 50,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-dataLayer-errors',
@@ -106,7 +106,7 @@ class Diagnostic_GoogleTagManagerDatalayerErrors extends Diagnostic_Base {
 				count( $issues ),
 				implode( ', ', $issues )
 			),
-			'severity'    => self::calculate_severity( $threat_level ),
+			'severity'    => $threat_level,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-dataLayer-errors',

@@ -50,7 +50,7 @@ class Diagnostic_MemberpressContentDripping extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 40 ),
+				'severity'    => 40,
 				'threat_level' => 40,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/memberpress-content-dripping',

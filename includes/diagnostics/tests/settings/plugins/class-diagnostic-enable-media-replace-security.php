@@ -104,7 +104,7 @@ class Diagnostic_EnableMediaReplaceSecurity extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 60 ),
+				'severity'     => 60,
 				'threat_level' => 60,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/enable-media-replace-security',

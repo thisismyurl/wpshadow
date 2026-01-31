@@ -112,7 +112,7 @@ class Diagnostic_Mobile_Bounce_Rate_High extends Diagnostic_Base {
 			return null; // Good - mobile bounce within acceptable range.
 		}
 
-		$severity     = self::calculate_severity( $difference_pct );
+		$severity     = $difference_pct;
 		$threat_level = self::calculate_threat_level( $difference_pct );
 
 		return array(

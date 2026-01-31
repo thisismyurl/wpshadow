@@ -46,7 +46,7 @@ class Diagnostic_EventbriteTicketSync extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => __( 'Eventbrite API token not configured', 'wpshadow' ),
-				'severity'    => self::calculate_severity( 65 ),
+				'severity'    => 65,
 				'threat_level' => 65,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/eventbrite-ticket-sync',
@@ -108,7 +108,7 @@ class Diagnostic_EventbriteTicketSync extends Diagnostic_Base {
 				count( $issues ),
 				implode( ', ', $issues )
 			),
-			'severity'    => self::calculate_severity( $threat_level ),
+			'severity'    => $threat_level,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/eventbrite-ticket-sync',

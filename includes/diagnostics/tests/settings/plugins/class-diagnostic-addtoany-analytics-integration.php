@@ -50,7 +50,7 @@ class Diagnostic_AddtoanyAnalyticsIntegration extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 35 ),
+				'severity'    => 35,
 				'threat_level' => 35,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/addtoany-analytics-integration',

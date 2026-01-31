@@ -94,7 +94,7 @@ class Diagnostic_StripeWebhookSignatureValidation extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 75 ),
+				'severity'     => 75,
 				'threat_level' => 75,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/stripe-webhook-signature-validation',

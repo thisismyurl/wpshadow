@@ -79,7 +79,7 @@ class Diagnostic_BookingAnalyticsPrivacy extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'Booking analytics privacy issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/booking-analytics-privacy',

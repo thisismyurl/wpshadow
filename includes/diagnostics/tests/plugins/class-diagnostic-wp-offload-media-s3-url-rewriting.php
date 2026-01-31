@@ -95,7 +95,7 @@ class Diagnostic_WpOffloadMediaS3UrlRewriting extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'WP Offload Media S3 URL rewriting issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-offload-media-s3-url-rewriting',

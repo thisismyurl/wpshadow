@@ -76,7 +76,7 @@ class Diagnostic_MouseflowFunnelAnalysis extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => 'Mouseflow funnel analysis issues: ' . implode( ', ', $issues ),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/mouseflow-funnel-analysis',

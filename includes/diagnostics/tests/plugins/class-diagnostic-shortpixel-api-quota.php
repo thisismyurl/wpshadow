@@ -46,7 +46,7 @@ class Diagnostic_ShortpixelApiQuota extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => __( 'ShortPixel not connected', 'wpshadow' ),
-				'severity'    => self::calculate_severity( 80 ),
+				'severity'    => 80,
 				'threat_level' => 80,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/shortpixel-api-quota',
@@ -113,7 +113,7 @@ class Diagnostic_ShortpixelApiQuota extends Diagnostic_Base {
 				count( $issues ),
 				implode( ', ', $issues )
 			),
-			'severity'    => self::calculate_severity( $threat_level ),
+			'severity'    => $threat_level,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/shortpixel-api-quota',

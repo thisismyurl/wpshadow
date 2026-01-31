@@ -66,10 +66,10 @@ public static function check() {
 
 (int) get_option( 'wp_page_for_privacy_policy' );
 $privacy_page_id ) {
- self::create_finding( 'no_privacy_page' );
+ array( 'no_privacy_page' );
 get_post( $privacy_page_id );
 $privacy_page || 'publish' !== $privacy_page->post_status ) {
- self::create_finding( 'privacy_page_not_published' );
+ array( 'privacy_page_not_published' );
 policy is linked in footer.
 u_locations = get_nav_menu_locations();
 ked = false;
@@ -82,7 +82,7 @@ ked = true;
 Check content length (should be comprehensive).
 tent_length = str_word_count( wp_strip_all_tags( $privacy_page->post_content ) );
 tent_length < 500 ) {
- self::create_finding( 'privacy_policy_too_short', array( 'word_count' => $content_length ) );
+ array( 'privacy_policy_too_short', array( 'word_count' => $content_length ) );
 $privacy_linked ) {
 
  array(

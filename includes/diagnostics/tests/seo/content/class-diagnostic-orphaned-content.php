@@ -85,7 +85,7 @@ class Diagnostic_Orphaned_Content extends Diagnostic_Base {
 		}
 
 		$orphan_count = count( $orphaned_content );
-		$severity     = self::calculate_severity( $orphan_count );
+		$severity     = $orphan_count;
 
 		$finding = array(
 			'id'           => self::$slug,

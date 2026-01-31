@@ -105,7 +105,7 @@ class Diagnostic_WordfenceFirewallRules extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 75 ),
+				'severity'     => 75,
 				'threat_level' => 75,
 				'auto_fixable' => false, // Requires admin to configure Wordfence settings
 				'kb_link'      => 'https://wpshadow.com/kb/wordfence-firewall-rules',

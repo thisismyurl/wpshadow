@@ -113,7 +113,7 @@ class Diagnostic_Core_Web_Vitals_Failures extends Diagnostic_Base {
 			return null; // 75%+ passing is acceptable.
 		}
 
-		$severity     = self::calculate_severity( $passing_pct );
+		$severity     = $passing_pct;
 		$threat_level = self::calculate_threat_level( $passing_pct );
 
 		return array(

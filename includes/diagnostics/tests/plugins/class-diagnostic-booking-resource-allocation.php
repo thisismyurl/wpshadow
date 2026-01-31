@@ -113,7 +113,7 @@ class Diagnostic_BookingResourceAllocation extends Diagnostic_Base {
 				count( $issues ),
 				implode( ', ', $issues )
 			),
-			'severity'    => self::calculate_severity( $threat_level ),
+			'severity'    => $threat_level,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/booking-resource-allocation',

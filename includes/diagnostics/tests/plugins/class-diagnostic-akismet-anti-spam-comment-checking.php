@@ -47,7 +47,7 @@ class Diagnostic_AkismetAntiSpamCommentChecking extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => __( 'Akismet API key not configured', 'wpshadow' ),
-				'severity'    => self::calculate_severity( 80 ),
+				'severity'    => 80,
 				'threat_level' => 80,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/akismet-anti-spam-comment-checking',
@@ -104,7 +104,7 @@ class Diagnostic_AkismetAntiSpamCommentChecking extends Diagnostic_Base {
 				count( $issues ),
 				implode( ', ', $issues )
 			),
-			'severity'    => self::calculate_severity( $threat_level ),
+			'severity'    => $threat_level,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/akismet-anti-spam-comment-checking',

@@ -110,7 +110,7 @@ class Diagnostic_WordpressOrphanedMetadata extends Diagnostic_Base {
 					$issue_count,
 					implode( ', ', $issues )
 				),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-orphaned-metadata',

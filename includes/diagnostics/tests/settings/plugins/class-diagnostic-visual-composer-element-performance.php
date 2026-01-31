@@ -47,7 +47,7 @@ class Diagnostic_VisualComposerElementPerformance extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
+				'severity'    => 55,
 				'threat_level' => 55,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/visual-composer-element-performance',

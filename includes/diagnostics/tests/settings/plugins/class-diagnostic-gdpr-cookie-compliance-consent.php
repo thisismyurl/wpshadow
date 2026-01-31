@@ -47,7 +47,7 @@ class Diagnostic_GdprCookieComplianceConsent extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
+				'severity'    => 70,
 				'threat_level' => 70,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-compliance-consent',

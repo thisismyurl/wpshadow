@@ -130,7 +130,7 @@ class Diagnostic_RestrictContentProRestApiSecurity extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 70 ),
+				'severity'     => 70,
 				'threat_level' => 70,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/restrict-content-pro-rest-api-security',

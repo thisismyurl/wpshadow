@@ -92,7 +92,7 @@ class Diagnostic_WpAllImportDuplicateDetection extends Diagnostic_Base {
 					$issue_count,
 					implode( ', ', $issues )
 				),
-				'severity'    => self::calculate_severity( $threat_level ),
+				'severity'    => $threat_level,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-all-import-duplicate-detection',

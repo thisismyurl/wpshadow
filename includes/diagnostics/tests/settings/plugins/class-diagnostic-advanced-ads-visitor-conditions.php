@@ -50,7 +50,7 @@ class Diagnostic_AdvancedAdsVisitorConditions extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 45 ),
+				'severity'    => 45,
 				'threat_level' => 45,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-ads-visitor-conditions',

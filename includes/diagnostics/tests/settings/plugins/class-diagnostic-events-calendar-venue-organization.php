@@ -50,7 +50,7 @@ class Diagnostic_EventsCalendarVenueOrganization extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 30 ),
+				'severity'    => 30,
 				'threat_level' => 30,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/events-calendar-venue-organization',

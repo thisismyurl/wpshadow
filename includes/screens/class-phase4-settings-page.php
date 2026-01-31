@@ -427,6 +427,7 @@ class Phase4_Settings_Page {
 				</div>
 			</div>
 		</div>
+		<?php
 	}
 
 	/**

@@ -278,7 +278,7 @@ class Diagnostic_SSL_Expiration extends Diagnostic_Base {
 	 */
 	private static function build_finding( array $cert_data, int $days_remaining ): array {
 		// Determine severity and threat level.
-		$severity     = self::calculate_severity( $days_remaining );
+		$severity     = $days_remaining;
 		$threat_level = self::calculate_threat_level( $days_remaining );
 
 		// Build description.

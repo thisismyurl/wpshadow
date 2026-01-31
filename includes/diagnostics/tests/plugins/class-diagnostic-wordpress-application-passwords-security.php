@@ -48,7 +48,7 @@ class Diagnostic_WordpressApplicationPasswordsSecurity extends Diagnostic_Base {
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
+				'severity'    => 70,
 				'threat_level' => 70,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-application-passwords-security',

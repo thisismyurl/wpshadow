@@ -113,7 +113,7 @@ class Diagnostic_WoocommerceSubscriptionsPayment extends Diagnostic_Base {
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
-				'severity'     => self::calculate_severity( 70 ),
+				'severity'     => 70,
 				'threat_level' => 70,
 				'auto_fixable' => false, // Requires admin configuration of WooCommerce settings
 				'kb_link'      => 'https://wpshadow.com/kb/woocommerce-subscriptions-payment',
