@@ -473,15 +473,15 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 				</div>
 			<?php endif; ?>
 		<?php endforeach; ?>
-	</div>
 
-	<!-- Activity History Section -->
-	<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
-		<?php
-		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-			wpshadow_render_page_activities( 'utilities', 10 );
-		}
-		?>
+		<!-- Activity History Section -->
+		<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'utilities', 10 );
+			}
+			?>
+		</div>
 	</div>
 
 		<?php

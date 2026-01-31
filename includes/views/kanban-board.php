@@ -482,16 +482,16 @@ $severity_legend = array(
 							<div class="finding-card-footer">
 								<div class="finding-card-actions finding-actions">
 									<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
-										<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" 
-											target="_blank" 
+										<a href="<?php echo esc_url( $finding['kb_link'] ); ?>"
+											target="_blank"
 											class="button button-small"
 											aria-label="<?php esc_attr_e( 'Learn more in knowledge base', 'wpshadow' ); ?>">
 											<?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
 										</a>
 									<?php endif; ?>
 									<?php if ( ! empty( $finding['training_link'] ) ) : ?>
-										<a href="<?php echo esc_url( $finding['training_link'] ); ?>" 
-											target="_blank" 
+										<a href="<?php echo esc_url( $finding['training_link'] ); ?>"
+											target="_blank"
 											class="button button-small"
 											aria-label="<?php esc_attr_e( 'Watch training video', 'wpshadow' ); ?>">
 											<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
@@ -537,10 +537,10 @@ $severity_legend = array(
 	</div>
 
 	<!-- Color Legend -->
-	<div class="wpshadow-kanban-legend wps-flex wps-gap-6 wps-items-center wps-mt-4 wps-p-4 wps-rounded-lg wps-bg-white wps-border wps-border-gray-200">
-		<p class="wps-kanban-legend-label wps-m-0 wps-font-semibold">Color legend</p>
+	<div class="wpshadow-kanban-legend wps-flex wps-gap-4 wps-items-center wps-mt-4 wps-p-4 wps-rounded-lg wps-bg-white wps-border wps-border-gray-200 wps-flex-wrap">
+		<p class="wps-kanban-legend-label wps-m-0 wps-font-semibold wps-mr-2">Color legend</p>
 			<?php foreach ( $severity_legend as $legend ) : ?>
-				<p class="wps-inline-flex wps-gap-2 wps-items-center wps-m-0">
+				<p class="wps-inline-flex wps-gap-2 wps-items-center wps-m-0 wps-px-2">
 					<span class="wps-legend-color-box" style="width: 12px; height: 12px; border-radius: 3px; background: <?php echo esc_attr( $legend['bg'] ); ?>; border: 1px solid <?php echo esc_attr( $legend['color'] ); ?>; display: inline-block;"></span>
 					<span><?php echo esc_html( $legend['label'] ); ?></span>
 				</p>

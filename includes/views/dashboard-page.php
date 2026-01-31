@@ -223,11 +223,27 @@ function wpshadow_render_dashboard() {
 							location.reload();
 						}, 1500);
 					} else {
-						var errorMsg = '<?php esc_html_e( 'Unknown error', 'wpshadow' ); ?>';
+						var errorMsg = '<?php esc_html_e( 'Unknown error occurred during scan', 'wpshadow' ); ?>';
 						if (response.data) {
-							errorMsg = typeof response.data === 'string' ? response.data : (response.data.message || errorMsg);
+							// Properly handle error message from response
+							if (typeof response.data === 'string') {
+								errorMsg = response.data;
+							} else if (response.data.message) {
+								errorMsg = response.data.message;
+							} else if (typeof response.data === 'object') {
+								// Convert object to readable string
+								try {
+									errorMsg = JSON.stringify(response.data);
+								} catch(e) {
+									errorMsg = '<?php esc_html_e( 'An error occurred. Please check your error logs.', 'wpshadow' ); ?>';
+								}
+							}
 						}
-						$progressText.text('<?php esc_html_e( 'Error:', 'wpshadow' ); ?> ' + errorMsg);
+						$progressText.html('<span style="color: #dc3232;"><?php esc_html_e( 'Error:', 'wpshadow' ); ?> ' + errorMsg + '</span>');
+						// Hide overlay after delay so user can see error
+						setTimeout(function() {
+							$overlay.fadeOut();
+						}, 5000);
 					}
 				},
 				error: function() {

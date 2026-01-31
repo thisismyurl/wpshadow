@@ -37,24 +37,38 @@ class Phase4_Settings_Page {
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu_page' ), 20 );
+		add_action( 'admin_init', array( __CLASS__, 'handle_legacy_redirect' ) );
 		add_action( 'admin_post_wpshadow_save_phase4_settings', array( __CLASS__, 'save_settings' ) );
+	}
+
+	/**
+	 * Handle legacy redirect from old Advanced Features page
+	 *
+	 * @since 1.2601.2148
+	 * @return void
+	 */
+	public static function handle_legacy_redirect() {
+		if ( isset( $_GET['page'] ) && 'wpshadow-advanced-features' === $_GET['page'] ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ) );
+				exit;
+			}
+		}
 	}
 
 	/**
 	 * Add menu page
 	 *
+	 * NOTE: Advanced Features moved to Settings > Advanced tab per bug #3874
+	 * This function now only adds a redirect for backwards compatibility
+	 *
 	 * @since  1.2603.0200
 	 * @return void
 	 */
 	public static function add_menu_page() {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Advanced Features', 'wpshadow' ),
-			__( 'Advanced Features', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-advanced-features',
-			array( __CLASS__, 'render_page' )
-		);
+		// Advanced Features is now part of Settings > Advanced tab
+		// No longer registering as separate submenu item
+		// Redirect handled in handle_legacy_redirect()
 	}
 
 	/**
