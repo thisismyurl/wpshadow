@@ -26,7 +26,7 @@ class Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 	public static function check() {
 		// Check if URLs are being validated/sanitized.
 		$has_url_filter = has_filter( 'pre_comment_author_url', 'esc_url_raw' );
-		
+
 		if ( ! $has_url_filter ) {
 			return array(
 				'id'           => self::$slug,
@@ -42,7 +42,7 @@ class Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 		// Check for suspicious URLs in recent comments.
 		global $wpdb;
 		$suspicious_urls = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
 			WHERE comment_author_url LIKE '%bit.ly%'
 			OR comment_author_url LIKE '%tinyurl%'
 			OR comment_author_url LIKE '%.tk%'

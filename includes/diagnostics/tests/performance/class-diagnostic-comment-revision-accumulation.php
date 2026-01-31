@@ -38,7 +38,7 @@ class Diagnostic_Comment_Revision_Accumulation extends Diagnostic_Base {
 		// Check for revision-like meta keys.
 		$revision_meta = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->commentmeta}
-			WHERE meta_key LIKE '%revision%' 
+			WHERE meta_key LIKE '%revision%'
 			OR meta_key LIKE '%history%'
 			OR meta_key LIKE '%backup%'"
 		);

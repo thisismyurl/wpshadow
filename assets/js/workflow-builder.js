@@ -696,31 +696,40 @@
 			if ('trigger' === blockType && triggerCount >= 1) {
 				const message = wpshadowWorkflow.strings.singleTrigger || 'Only one trigger is allowed per workflow';
 
-				// Issue #1677: Use accessible modal instead of alert
-				if (typeof WPSModal !== 'undefined') {
-					WPSModal.show({
-						title: 'Trigger Limit Reached',
-						message: message + '<br><br>Need multiple triggers? Upgrade to WPShadow Pro for unlimited workflow complexity.',
-						confirmText: 'Got It',
-						type: 'warning'
-					});
-				} else {
-					this.showNotification('error', message);
-				}
-
-				this.announceToScreenReader(message);
-				return;
-			}
-
-			if ('action' === blockType && actionCount >= 1) {
-				const message = wpshadowWorkflow.strings.singleAction || 'Only one action is allowed per workflow';
+			// Use accessible modal instead of alert
+			if (typeof WPShadowModal !== 'undefined') {
+				WPShadowModal.alert({
+					title: 'Trigger Limit Reached',
+					message: message,
+					okText: 'Got It',
+					type: 'warning'
+				});
+			} else {
 				this.showNotification('error', message);
-				this.announceToScreenReader(message);
-				return;
 			}
 
-			const uniqueId = 'block_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+			this.announceToScreenReader(message);
+			return;
+		}
 
+		if ('action' === blockType && actionCount >= 1) {
+			const message = wpshadowWorkflow.strings.singleAction || 'Only one action is allowed per workflow';
+
+			// Use accessible modal instead of notification
+			if (typeof WPShadowModal !== 'undefined') {
+				WPShadowModal.alert({
+					title: 'Action Limit Reached',
+					message: message,
+					okText: 'Got It',
+					type: 'warning'
+				});
+			} else {
+				this.showNotification('error', message);
+			}
+
+			this.announceToScreenReader(message);
+			return;
+		}
 			const blockData = {
 				id: uniqueId,
 				type: blockType,

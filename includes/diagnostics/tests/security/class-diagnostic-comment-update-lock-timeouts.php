@@ -29,9 +29,9 @@ class Diagnostic_Comment_Update_Lock_Timeouts extends Diagnostic_Base {
 		// Check for locked comments (post locks from editing).
 		$locked_comments = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->postmeta} 
-				WHERE meta_key = '_edit_lock' 
-				AND meta_value < %d 
+				"SELECT COUNT(*) FROM {$wpdb->postmeta}
+				WHERE meta_key = '_edit_lock'
+				AND meta_value < %d
 				AND post_id IN (SELECT comment_post_ID FROM {$wpdb->comments})",
 				time() - 3600
 			)

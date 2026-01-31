@@ -83,6 +83,8 @@ function wpshadow_render_workflow_builder() {
 				'step2'         => __( 'Add ACTION blocks (THEN what to do)', 'wpshadow' ),
 				'step3'         => __( 'Configure each block', 'wpshadow' ),
 				'step4'         => __( 'Save and test your workflow', 'wpshadow' ),
+gleTrigger' => __( 'Only one trigger is allowed per workflow in the free version. Need multiple triggers? Upgrade to WPShadow Pro for unlimited workflow complexity.', 'wpshadow' ),
+gleAction'  => __( 'Only one action is allowed per workflow in the free version. Need multiple actions? Upgrade to WPShadow Pro for unlimited workflow complexity.', 'wpshadow' ),
 				'singleTrigger' => __( 'Only one trigger is allowed per workflow in the free version. Need multiple triggers? Upgrade to WPShadow Pro for unlimited workflow complexity.', 'wpshadow' ),
 				'singleAction'  => __( 'Only one action is allowed per workflow in the free version. Need multiple actions? Upgrade to WPShadow Pro for unlimited workflow complexity.', 'wpshadow' ),
 			),

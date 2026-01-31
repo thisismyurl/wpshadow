@@ -35,10 +35,10 @@ class Diagnostic_Sales_Pricing_Transparency extends Diagnostic_Base {
 		if ( class_exists( 'WooCommerce' ) ) {
 			$tax_display_shop = get_option( 'woocommerce_tax_display_shop', 'excl' );
 			$tax_display_cart = get_option( 'woocommerce_tax_display_cart', 'excl' );
-			
+
 			// Check if prices display suffixes.
 			$price_display_suffix = get_option( 'woocommerce_price_display_suffix', '' );
-			
+
 			if ( empty( $price_display_suffix ) && 'excl' === $tax_display_shop ) {
 				$issues[] = array(
 					'issue'       => 'no_tax_suffix',
@@ -50,9 +50,9 @@ class Diagnostic_Sales_Pricing_Transparency extends Diagnostic_Base {
 			// Check for sale products without regular price shown.
 			global $wpdb;
 			$sales_without_regular = $wpdb->get_var(
-				"SELECT COUNT(DISTINCT post_id) FROM {$wpdb->postmeta} 
-				WHERE meta_key = '_sale_price' 
-				AND meta_value != '' 
+				"SELECT COUNT(DISTINCT post_id) FROM {$wpdb->postmeta}
+				WHERE meta_key = '_sale_price'
+				AND meta_value != ''
 				AND post_id NOT IN (
 					SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_regular_price' AND meta_value != ''
 				)"

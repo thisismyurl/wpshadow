@@ -25,7 +25,7 @@ class Diagnostic_Portfolio_Accessibility_Visual_Content extends Diagnostic_Base 
 
 	public static function check() {
 		// Check for portfolio/gallery plugins or custom post types.
-		$has_portfolio = post_type_exists( 'portfolio' ) || 
+		$has_portfolio = post_type_exists( 'portfolio' ) ||
 		                 post_type_exists( 'jetpack-portfolio' ) ||
 		                 class_exists( 'Essential_Grid' ) ||
 		                 class_exists( 'Envira_Gallery' );
@@ -41,7 +41,7 @@ class Diagnostic_Portfolio_Accessibility_Visual_Content extends Diagnostic_Base 
 		$images_without_alt = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->posts} p
 			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_image_alt'
-			WHERE p.post_type = 'attachment' 
+			WHERE p.post_type = 'attachment'
 			AND p.post_mime_type LIKE 'image/%'
 			AND (pm.meta_value IS NULL OR pm.meta_value = '')
 			LIMIT 100"
@@ -65,8 +65,8 @@ class Diagnostic_Portfolio_Accessibility_Visual_Content extends Diagnostic_Base 
 			if ( post_type_exists( $type ) ) {
 				$items_without_content = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT COUNT(*) FROM {$wpdb->posts} 
-						WHERE post_type = %s 
+						"SELECT COUNT(*) FROM {$wpdb->posts}
+						WHERE post_type = %s
 						AND post_status = 'publish'
 						AND (post_content = '' OR post_content IS NULL)
 						LIMIT 50",
@@ -93,7 +93,7 @@ class Diagnostic_Portfolio_Accessibility_Visual_Content extends Diagnostic_Base 
 		$theme_file = get_template_directory() . '/index.php';
 		if ( file_exists( $theme_file ) ) {
 			$theme_content = file_get_contents( $theme_file );
-			$has_aria = strpos( $theme_content, 'role=' ) !== false || 
+			$has_aria = strpos( $theme_content, 'role=' ) !== false ||
 			            strpos( $theme_content, 'aria-' ) !== false;
 
 			if ( ! $has_aria ) {

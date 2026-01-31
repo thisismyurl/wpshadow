@@ -93,7 +93,7 @@ class Diagnostic_Comment_Whitelist_Bypass extends Diagnostic_Base {
 			// This means users with previously approved comments bypass moderation.
 			// Check if there's also a minimum number of approved comments required.
 			$approved_threshold = apply_filters( 'wpshadow_comment_whitelist_threshold', 1 );
-			
+
 			$issues[] = array(
 				'issue'       => 'auto_approve_previous_commenters',
 				'description' => sprintf(
@@ -108,12 +108,12 @@ class Diagnostic_Comment_Whitelist_Bypass extends Diagnostic_Base {
 		// Check if there are any users with excessive approved comments.
 		global $wpdb;
 		$suspicious_users = $wpdb->get_results(
-			"SELECT comment_author_email, COUNT(*) as count 
-			FROM {$wpdb->comments} 
-			WHERE comment_approved = '1' 
-			GROUP BY comment_author_email 
-			HAVING count > 100 
-			ORDER BY count DESC 
+			"SELECT comment_author_email, COUNT(*) as count
+			FROM {$wpdb->comments}
+			WHERE comment_approved = '1'
+			GROUP BY comment_author_email
+			HAVING count > 100
+			ORDER BY count DESC
 			LIMIT 5"
 		);
 

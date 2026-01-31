@@ -25,7 +25,7 @@ class Diagnostic_Comment_Threading_Depth_Limit extends Diagnostic_Base {
 
 	public static function check() {
 		$thread_depth = (int) get_option( 'thread_comments_depth', 5 );
-		
+
 		if ( $thread_depth > 10 ) {
 			return array(
 				'id'           => self::$slug,

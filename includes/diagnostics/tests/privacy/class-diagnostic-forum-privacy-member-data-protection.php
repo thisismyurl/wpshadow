@@ -72,7 +72,7 @@ class Diagnostic_Forum_Privacy_Member_Data_Protection extends Diagnostic_Base {
 		// Check if IP addresses are being logged.
 		global $wpdb;
 		$ip_logging = false;
-		
+
 		if ( class_exists( 'bbPress' ) ) {
 			$ip_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = '_bbp_author_ip' LIMIT 1" );
 			$ip_logging = $ip_count > 0;

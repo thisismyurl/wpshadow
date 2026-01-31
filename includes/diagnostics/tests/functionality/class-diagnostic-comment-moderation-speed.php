@@ -34,10 +34,10 @@ class Diagnostic_Comment_Moderation_Speed extends Diagnostic_Base {
 		if ( $pending_count > 100 ) {
 			// Check average time to approve.
 			$avg_time = $wpdb->get_var(
-				"SELECT AVG(TIMESTAMPDIFF(HOUR, c1.comment_date, c2.comment_date)) 
+				"SELECT AVG(TIMESTAMPDIFF(HOUR, c1.comment_date, c2.comment_date))
 				FROM {$wpdb->comments} c1
 				JOIN {$wpdb->comments} c2 ON c1.comment_post_ID = c2.comment_post_ID
-				WHERE c1.comment_approved = '1' 
+				WHERE c1.comment_approved = '1'
 				AND c2.comment_approved = '1'
 				AND c1.comment_date < c2.comment_date
 				LIMIT 100"

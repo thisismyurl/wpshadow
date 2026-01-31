@@ -25,7 +25,7 @@ class Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
 
 	public static function check() {
 		$require_email = (int) get_option( 'require_name_email', 1 );
-		
+
 		if ( 0 === $require_email ) {
 			return array(
 				'id'           => self::$slug,
@@ -41,8 +41,8 @@ class Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
 		// Check for obviously fake emails in recent comments.
 		global $wpdb;
 		$fake_emails = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
-			WHERE comment_author_email LIKE '%noemail%' 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
+			WHERE comment_author_email LIKE '%noemail%'
 			OR comment_author_email LIKE '%fake%'
 			OR comment_author_email LIKE '%test@test%'
 			OR comment_author_email NOT LIKE '%@%.%'

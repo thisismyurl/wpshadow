@@ -26,18 +26,18 @@ class Diagnostic_Comment_Flood_Protection extends Diagnostic_Base {
 	public static function check() {
 		// WordPress has built-in flood protection, but check if it's been disabled.
 		$has_flood_filter = has_filter( 'comment_flood_filter' );
-		
+
 		// Check for rapid commenting in database.
 		global $wpdb;
 		$flood_threshold = apply_filters( 'comment_flood_filter_time', 15 );
-		
+
 		// Look for users/IPs submitting comments too rapidly.
 		$recent_floods = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT comment_author_IP, COUNT(*) as count 
-				FROM {$wpdb->comments} 
+				"SELECT comment_author_IP, COUNT(*) as count
+				FROM {$wpdb->comments}
 				WHERE comment_date > DATE_SUB(NOW(), INTERVAL %d SECOND)
-				GROUP BY comment_author_IP 
+				GROUP BY comment_author_IP
 				HAVING count > 3
 				LIMIT 5",
 				$flood_threshold

@@ -55,10 +55,10 @@ class Diagnostic_Comment_Backtrace_Generation extends Diagnostic_Base {
 		global $wpdb;
 		$debug_comments = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments} 
-				WHERE comment_content LIKE %s 
-				OR comment_content LIKE %s 
-				OR comment_content LIKE %s 
+				"SELECT COUNT(*) FROM {$wpdb->comments}
+				WHERE comment_content LIKE %s
+				OR comment_content LIKE %s
+				OR comment_content LIKE %s
 				LIMIT 10",
 				'%' . $wpdb->esc_like( '/home/' ) . '%',
 				'%' . $wpdb->esc_like( '/var/www/' ) . '%',

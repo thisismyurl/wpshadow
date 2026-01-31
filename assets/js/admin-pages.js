@@ -2,7 +2,7 @@
  * WPShadow Admin Scripts
  * Common JavaScript functionality for all admin pages
  * Consolidates inline scripts from various PHP modules
- * 
+ *
  * @package WPShadow
  */
 
@@ -13,7 +13,7 @@
      * WPShadow Admin Module
      */
     const WPShadowAdmin = {
-        
+
         /**
          * Initialize admin functionality
          */
@@ -148,7 +148,7 @@
             const fieldName = trigger.data('edit-field');
             const currentValue = trigger.data('value') || trigger.text();
             const input = $('<input type="text" value="' + currentValue + '" class="wps-inline-edit" />');
-            
+
             trigger.replaceWith(input);
             input.focus().select();
 
@@ -176,7 +176,7 @@
          */
         sendFieldUpdate: function(fieldName, newValue) {
             const self = this;
-            
+
             $.ajax({
                 url: wpshadowAdmin.ajaxUrl,
                 type: 'POST',

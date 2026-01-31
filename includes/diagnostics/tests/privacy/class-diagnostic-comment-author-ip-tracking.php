@@ -28,7 +28,7 @@ class Diagnostic_Comment_Author_IP_Tracking extends Diagnostic_Base {
 
 		// Check if IPs are being stored.
 		$ip_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
 			WHERE comment_author_IP != '' AND comment_author_IP IS NOT NULL
 			LIMIT 100"
 		);

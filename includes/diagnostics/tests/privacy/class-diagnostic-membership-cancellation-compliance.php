@@ -49,11 +49,11 @@ class Diagnostic_Membership_Cancellation_Compliance extends Diagnostic_Base {
 		foreach ( $pages as $page ) {
 			$title = strtolower( $page->post_title );
 			$content = strtolower( $page->post_content );
-			
+
 			if ( strpos( $title, 'terms' ) !== false || strpos( $title, 'service' ) !== false ) {
 				$has_tos = true;
 			}
-			
+
 			if ( strpos( $content, 'cancel' ) !== false && strpos( $content, 'refund' ) !== false ) {
 				$has_cancellation_policy = true;
 			}
@@ -76,7 +76,7 @@ class Diagnostic_Membership_Cancellation_Compliance extends Diagnostic_Base {
 		}
 
 		// Check if there's a way to cancel online (look for account/subscription management).
-		$has_account_page = get_option( 'woocommerce_myaccount_page_id' ) || 
+		$has_account_page = get_option( 'woocommerce_myaccount_page_id' ) ||
 		                    get_option( 'pmpro_account_page_id' ) ||
 		                    get_option( 'mepr-account-page-id' );
 

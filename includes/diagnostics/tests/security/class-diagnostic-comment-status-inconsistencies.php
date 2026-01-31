@@ -31,7 +31,7 @@ class Diagnostic_Comment_Status_Inconsistencies extends Diagnostic_Base {
 
 		$invalid_comments = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments} 
+				"SELECT COUNT(*) FROM {$wpdb->comments}
 				WHERE comment_approved NOT IN ($placeholders)",
 				...$valid_statuses
 			)

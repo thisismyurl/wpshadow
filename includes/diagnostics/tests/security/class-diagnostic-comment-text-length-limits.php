@@ -39,7 +39,7 @@ class Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
 	 */
 	public static function check() {
 		// Check for custom comment length validation.
-		$has_length_filter = has_filter( 'preprocess_comment', 'wp_filter_kses' ) || 
+		$has_length_filter = has_filter( 'preprocess_comment', 'wp_filter_kses' ) ||
 		                     has_filter( 'comment_text', 'wp_kses_post' ) ||
 		                     has_filter( 'preprocess_comment' );
 
