@@ -84,15 +84,20 @@ class Diagnostic_AutomaticUpdatesConfigured extends Diagnostic_Base {
         }
         
         // If everything is enabled, no issue
-        if ( empty( $issues ) ) {
+        
+		// Check 4: Feature enabled
+		if ( ! (get_option( "automatic-updates-configured_enabled" ) === "1") ) {
+			$issues[] = __( 'Feature enabled', 'wpshadow' );
+		}
+		if ( empty( $issues ) ) {
             return null;
         }
         
-        $threat_level = 50; // Default medium
+        $threat_level = (40 + min(35, count($issues) * 8)); // Default medium
         
         // Higher threat if core updates are completely disabled
         if ( $core_updates_disabled || $core_updates_disabled_completely ) {
-            $threat_level = 60;
+            $threat_level = (40 + min(35, count($issues) * 8));
         }
         
         return array(

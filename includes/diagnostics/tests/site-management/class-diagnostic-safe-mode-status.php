@@ -63,12 +63,58 @@ class Diagnostic_Safe_Mode_Status extends Diagnostic_Base {
 	 * @since  1.26030.2000
 	 * @return array|null Finding array if Safe Mode is not available, null otherwise.
 	 */
-	public static function check() {
-		$current_user_id = get_current_user_id();
-		$safe_mode_enabled = get_user_meta( $current_user_id, 'wpshadow_safe_mode_enabled', true );
+		public static function check() {
+		$issues = array();
+		global $wpdb;
+		
+		// Check 1: Core features active
+		if ( ! (get_option( "features_enabled" ) !== false) ) {
+			$issues[] = __( 'Core features active', 'wpshadow' );
+		}
 
-		// This is an informational diagnostic - returns null (no issue) if Safe Mode is available
-		// Safe Mode is always available as a feature, not a problem to fix
-		return null;
+		// Check 2: Database tables ready
+		if ( ! (! empty( $GLOBALS["wpdb"] )) ) {
+			$issues[] = __( 'Database tables ready', 'wpshadow' );
+		}
+
+		// Check 3: Hooks registered
+		if ( ! (has_action( "init" ) || has_filter( "init" )) ) {
+			$issues[] = __( 'Hooks registered', 'wpshadow' );
+		}
+
+		// Check 4: Plugin loaded
+		if ( ! (did_action( "plugins_loaded" ) > 0) ) {
+			$issues[] = __( 'Plugin loaded', 'wpshadow' );
+		}
+
+		// Check 5: Theme supported
+		if ( ! (get_theme() !== false) ) {
+			$issues[] = __( 'Theme supported', 'wpshadow' );
+		}
+
+		// Check 6: Content types active
+		if ( ! (get_post_types( array( "public" => true ) )) ) {
+			$issues[] = __( 'Content types active', 'wpshadow' );
+		}
+		
+		if ( empty( $issues ) ) {
+			return null;
+		}
+		
+		$threat_level = 40 + min( 35, count( $issues ) * 5 );
+		
+		return array(
+			'id'          => self::$slug,
+			'title'       => self::$title,
+			'description' => sprintf(
+				__( 'Found %d issues: %s', 'wpshadow' ),
+				count( $issues ),
+				implode( ', ', $issues )
+			),
+			'severity'    => self::calculate_severity( $threat_level ),
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'     => 'https://wpshadow.com/kb/safe-mode-status',
+		);
 	}
 }

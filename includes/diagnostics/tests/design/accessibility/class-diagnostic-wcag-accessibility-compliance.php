@@ -135,6 +135,7 @@ class Diagnostic_WCAG_Accessibility_Compliance extends Diagnostic_Base {
 			$issues[] = __( 'Theme is not tagged as accessibility-ready and no accessibility plugin is active.', 'wpshadow' );
 		}
 
+		
 		if ( empty( $issues ) ) {
 			// No obvious accessibility issues
 			return null;

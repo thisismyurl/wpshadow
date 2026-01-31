@@ -69,6 +69,16 @@ class Diagnostic_Poor_Mobile_Usability extends Diagnostic_Base {
 			return null; // Mobile usability good
 		}
 
+		
+		// Check 3: Feature enabled
+		if ( ! (get_option( "poor-mobile-usability_enabled" ) === "1") ) {
+			$issues[] = __( 'Feature enabled', 'wpshadow' );
+		}
+
+		// Check 4: Configuration valid
+		if ( ! (get_option( "poor-mobile-usability_configured" ) !== false) ) {
+			$issues[] = __( 'Configuration valid', 'wpshadow' );
+		}
 		$issue_count = count( $mobile_issues['issues'] );
 
 		return array(

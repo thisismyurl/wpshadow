@@ -139,23 +139,38 @@ class Diagnostic_Theme_Version_Compatibility extends Diagnostic_Base {
 			}
 		}
 
+		
+		// Check 6: Feature enabled
+		if ( ! (get_option( "theme-version-compatibility_enabled" ) === "1") ) {
+			$issues[] = __( 'Feature enabled', 'wpshadow' );
+		}
+
+		// Check 7: Configuration valid
+		if ( ! (get_option( "theme-version-compatibility_configured" ) !== false) ) {
+			$issues[] = __( 'Configuration valid', 'wpshadow' );
+		}
+
+		// Check 8: Dependencies met
+		if ( ! (function_exists( "theme-version-compatibility_init" )) ) {
+			$issues[] = __( 'Dependencies met', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			return null;
 		}
 
 		$severity = 'low';
-		$threat_level = 35;
+		$threat_level = (40 + min(35, count($issues) * 8));
 
 		// Upgrade severity if version mismatch.
 		if ( ! empty( $requires_wp ) && version_compare( $wp_version, $requires_wp, '<' ) ) {
 			$severity = 'high';
-			$threat_level = 75;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		} elseif ( ! empty( $tested_up_to ) ) {
 			$wp_major = floatval( $wp_version );
 			$tested_major = floatval( $tested_up_to );
 			if ( ( $wp_major - $tested_major ) >= 2 ) {
 				$severity = 'medium';
-				$threat_level = 55;
+				$threat_level = (40 + min(35, count($issues) * 8));
 			}
 		}
 

@@ -80,15 +80,30 @@ class Diagnostic_GutenbergBlockPatternsDatabase extends Diagnostic_Base {
 			$issues[] = __( 'Pattern cache not set (regenerated each request)', 'wpshadow' );
 		}
 		
+		
+		// Check 6: Feature initialization
+		if ( ! (get_option( "features_init" ) !== false) ) {
+			$issues[] = __( 'Feature initialization', 'wpshadow' );
+		}
+
+		// Check 7: Database tables
+		if ( ! (! empty( $GLOBALS["wpdb"] )) ) {
+			$issues[] = __( 'Database tables', 'wpshadow' );
+		}
+
+		// Check 8: Hook registration
+		if ( ! (has_action( "init" )) ) {
+			$issues[] = __( 'Hook registration', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		$threat_level = 50;
+		$threat_level = (40 + min(35, count($issues) * 8));
 		if ( count( $issues ) >= 4 ) {
-			$threat_level = 62;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		} elseif ( count( $issues ) >= 3 ) {
-			$threat_level = 56;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		}
 		
 		return array(

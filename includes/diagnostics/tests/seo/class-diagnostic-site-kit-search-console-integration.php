@@ -142,6 +142,7 @@ class Diagnostic_Site_Kit_Search_Console_Integration extends Diagnostic_Base {
 		}
 
 		// If no issues found, return null
+		
 		if ( empty( $issues ) ) {
 			return null;
 		}

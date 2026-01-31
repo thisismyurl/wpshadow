@@ -215,6 +215,7 @@ class Diagnostic_Touch_Target_Size_Below_44px extends Diagnostic_Base {
 		);
 
 		// If no CSS issues found but theme exists, add general warnings.
+		
 		if ( empty( $issues ) ) {
 			// Only report if we detect potential problem selectors in template files.
 			$template_dir = $theme->get_template_directory();

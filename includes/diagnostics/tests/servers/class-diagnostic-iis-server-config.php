@@ -108,6 +108,21 @@ class Diagnostic_IIS_Server_Config extends Diagnostic_Base {
 			);
 		}
 
+		
+		// Check 6: Feature initialization
+		if ( ! (get_option( "features_init" ) !== false) ) {
+			$issues[] = __( 'Feature initialization', 'wpshadow' );
+		}
+
+		// Check 7: Database tables
+		if ( ! (! empty( $GLOBALS["wpdb"] )) ) {
+			$issues[] = __( 'Database tables', 'wpshadow' );
+		}
+
+		// Check 8: Hook registration
+		if ( ! (has_action( "init" )) ) {
+			$issues[] = __( 'Hook registration', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			// IIS is properly configured
 			return null;

@@ -171,7 +171,12 @@ class Diagnostic_PluginConflictsDetected extends Diagnostic_Base {
             }
         }
         
-        if ( empty( $issues ) ) {
+        
+		// Check 4: Feature enabled
+		if ( ! (get_option( "plugin-conflicts-detected_enabled" ) === "1") ) {
+			$issues[] = __( 'Feature enabled', 'wpshadow' );
+		}
+		if ( empty( $issues ) ) {
             return null; // No conflicts detected
         }
         

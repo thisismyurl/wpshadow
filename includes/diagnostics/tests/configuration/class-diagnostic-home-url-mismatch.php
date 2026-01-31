@@ -107,7 +107,12 @@ class Diagnostic_HomeUrlMismatch extends Diagnostic_Base {
             );
         }
         
-        if ( empty( $issues ) ) {
+        
+		// Check 4: Feature enabled
+		if ( ! (get_option( "home-url-mismatch_enabled" ) === "1") ) {
+			$issues[] = __( 'Feature enabled', 'wpshadow' );
+		}
+		if ( empty( $issues ) ) {
             return null; // No mismatch
         }
         

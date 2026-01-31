@@ -32,21 +32,52 @@ class Diagnostic_FlywheelCacheManagement extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Flywheel cache enabled
+		$cache_enabled = get_option( 'flywheel_cache_enabled', false );
+		if ( ! $cache_enabled ) {
+			$issues[] = 'Flywheel cache disabled';
+		}
+		
+		// Check 2: Cache purge strategy configured
+		$purge_strategy = get_option( 'flywheel_cache_purge_strategy', '' );
+		if ( empty( $purge_strategy ) ) {
+			$issues[] = 'Cache purge strategy not configured';
+		}
+		
+		// Check 3: Cache exclusions defined
+		$exclusions = get_option( 'flywheel_cache_exclusions', array() );
+		if ( empty( $exclusions ) ) {
+			$issues[] = 'No cache exclusions defined';
+		}
+		
+		// Check 4: CDN sync enabled
+		$cdn_sync = get_option( 'flywheel_cdn_sync_enabled', false );
+		if ( ! $cdn_sync ) {
+			$issues[] = 'CDN sync disabled';
+		}
+		
+		// Check 5: Auto-purge on content update
+		$auto_purge = get_option( 'flywheel_auto_purge_enabled', false );
+		if ( ! $auto_purge ) {
+			$issues[] = 'Auto-purge disabled';
+		}
+		
+		// Check 6: Cache warmup configured
+		$cache_warmup = get_option( 'flywheel_cache_warmup_enabled', false );
+		if ( ! $cache_warmup ) {
+			$issues[] = 'Cache warmup not configured';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
+				'description' => 'Flywheel cache management issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/flywheel-cache-management',
 			);

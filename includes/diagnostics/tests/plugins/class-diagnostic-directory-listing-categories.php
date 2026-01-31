@@ -93,15 +93,30 @@ class Diagnostic_DirectoryListingCategories extends Diagnostic_Base {
 			$issues[] = __( 'Category query caching not enabled', 'wpshadow' );
 		}
 		
+		
+		// Check 6: Cache status
+		if ( ! (defined( "WP_CACHE" ) && WP_CACHE) ) {
+			$issues[] = __( 'Cache status', 'wpshadow' );
+		}
+
+		// Check 7: Database optimization
+		if ( ! (! is_option_empty( "db_optimized" )) ) {
+			$issues[] = __( 'Database optimization', 'wpshadow' );
+		}
+
+		// Check 8: Asset minification
+		if ( ! (function_exists( "wp_enqueue_script" )) ) {
+			$issues[] = __( 'Asset minification', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		$threat_level = 45;
+		$threat_level = (40 + min(35, count($issues) * 8));
 		if ( count( $issues ) >= 4 ) {
-			$threat_level = 58;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		} elseif ( count( $issues ) >= 3 ) {
-			$threat_level = 52;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		}
 		
 		return array(

@@ -137,6 +137,21 @@ class Diagnostic_Site_Kit_Data_Sharing_Privacy extends Diagnostic_Base {
 		}
 
 		// If no issues found, return null
+		
+		// Check 6: GDPR enabled
+		if ( ! (get_option( "gdpr_mode" ) === "1") ) {
+			$issues[] = __( 'GDPR enabled', 'wpshadow' );
+		}
+
+		// Check 7: Data retention
+		if ( ! ((int) get_option( "retention_days" ) > 0) ) {
+			$issues[] = __( 'Data retention', 'wpshadow' );
+		}
+
+		// Check 8: Consent tracking
+		if ( ! (get_option( "track_consent" ) !== false) ) {
+			$issues[] = __( 'Consent tracking', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			return null;
 		}

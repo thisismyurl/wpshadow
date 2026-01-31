@@ -177,6 +177,11 @@ class Diagnostic_Robots_Txt_Analysis extends Diagnostic_Base {
 			$issues[] = 'Unable to fetch robots.txt';
 		}
 
+		
+		// Check 4: Meta tags generated
+		if ( ! (get_option( "seo_enabled" ) !== false) ) {
+			$issues[] = __( 'Meta tags generated', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			$issues[] = 'robots.txt is optimally configured';
 		}

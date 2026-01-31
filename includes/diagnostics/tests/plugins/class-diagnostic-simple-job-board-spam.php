@@ -72,15 +72,30 @@ class Diagnostic_SimpleJobBoardSpam extends Diagnostic_Base {
 			$issues[] = __( 'Email domain blacklist not configured', 'wpshadow' );
 		}
 		
+		
+		// Check 6: SSL/HTTPS verification
+		if ( ! (is_ssl() || get_option( "require_https" ) === "1") ) {
+			$issues[] = __( 'SSL/HTTPS verification', 'wpshadow' );
+		}
+
+		// Check 7: Security headers check
+		if ( ! (get_option( "security_headers_enabled" ) === "1") ) {
+			$issues[] = __( 'Security headers check', 'wpshadow' );
+		}
+
+		// Check 8: Nonce validation
+		if ( ! (function_exists( "wp_verify_nonce" )) ) {
+			$issues[] = __( 'Nonce validation', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		$threat_level = 60;
+		$threat_level = (40 + min(35, count($issues) * 8));
 		if ( count( $issues ) >= 4 ) {
-			$threat_level = 72;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		} elseif ( count( $issues ) >= 3 ) {
-			$threat_level = 66;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		}
 		
 		return array(

@@ -86,15 +86,30 @@ class Diagnostic_PersonalDataExportPerformance extends Diagnostic_Base {
 			$issues[] = sprintf( __( 'Export rate limit: %d per hour (abuse risk)', 'wpshadow' ), $rate_limit );
 		}
 		
+		
+		// Check 6: Cache status
+		if ( ! (defined( "WP_CACHE" ) && WP_CACHE) ) {
+			$issues[] = __( 'Cache status', 'wpshadow' );
+		}
+
+		// Check 7: Database optimization
+		if ( ! (! is_option_empty( "db_optimized" )) ) {
+			$issues[] = __( 'Database optimization', 'wpshadow' );
+		}
+
+		// Check 8: Asset minification
+		if ( ! (function_exists( "wp_enqueue_script" )) ) {
+			$issues[] = __( 'Asset minification', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		$threat_level = 50;
+		$threat_level = (40 + min(35, count($issues) * 8));
 		if ( count( $issues ) >= 4 ) {
-			$threat_level = 62;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		} elseif ( count( $issues ) >= 3 ) {
-			$threat_level = 56;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		}
 		
 		return array(

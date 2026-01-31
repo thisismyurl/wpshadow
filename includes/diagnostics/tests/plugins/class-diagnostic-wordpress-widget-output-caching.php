@@ -100,15 +100,16 @@ class Diagnostic_WordpressWidgetOutputCaching extends Diagnostic_Base {
 			$issues[] = sprintf( __( '%d sidebars with >8 widgets (performance bottleneck)', 'wpshadow' ), $large_sidebars );
 		}
 		
+		
 		if ( empty( $issues ) ) {
 			return null;
 		}
 		
-		$threat_level = 55;
+		$threat_level = (40 + min(35, count($issues) * 8));
 		if ( count( $issues ) >= 3 ) {
-			$threat_level = 68;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		} elseif ( count( $issues ) >= 2 ) {
-			$threat_level = 62;
+			$threat_level = (40 + min(35, count($issues) * 8));
 		}
 		
 		return array(

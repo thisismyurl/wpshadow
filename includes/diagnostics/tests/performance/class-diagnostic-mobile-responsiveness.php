@@ -125,6 +125,7 @@ class Diagnostic_Mobile_Responsiveness extends Diagnostic_Base {
 			$issues[] = __( 'Theme does not appear to use responsive design (no media queries detected).', 'wpshadow' );
 		}
 
+		
 		if ( empty( $issues ) ) {
 			// Site appears mobile-friendly
 			return null;

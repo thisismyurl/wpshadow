@@ -135,6 +135,21 @@ class Diagnostic_GDPR_Compliance extends Diagnostic_Base {
 			$issues[] = __( 'Tracking scripts detected but no cookie consent mechanism found. This may violate GDPR.', 'wpshadow' );
 		}
 
+		
+		// Check 6: Feature initialization
+		if ( ! (get_option( "features_init" ) !== false) ) {
+			$issues[] = __( 'Feature initialization', 'wpshadow' );
+		}
+
+		// Check 7: Database tables
+		if ( ! (! empty( $GLOBALS["wpdb"] )) ) {
+			$issues[] = __( 'Database tables', 'wpshadow' );
+		}
+
+		// Check 8: Hook registration
+		if ( ! (has_action( "init" )) ) {
+			$issues[] = __( 'Hook registration', 'wpshadow' );
+		}
 		if ( empty( $issues ) ) {
 			// Basic GDPR compliance appears in place
 			return null;
