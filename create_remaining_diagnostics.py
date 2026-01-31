@@ -24,7 +24,7 @@ diagnostics = {
         "threat_level": 50,
        "message": "Paywall concerns: %s. News sites should clearly communicate subscription policies."
     },
-    
+
     # Portfolio (3 more needed)
     "portfolio/class-diagnostic-image-copyright-protection.php": {
         "slug": "image-copyright-protection",
@@ -39,7 +39,7 @@ diagnostics = {
         "threat_level": 55,
         "message": "Copyright protection concerns: %s. Portfolio sites should protect creative work."
     },
-    
+
     "portfolio/class-diagnostic-portfolio-accessibility.php": {
         "slug": "portfolio-accessibility",
         "title": "Portfolio Accessibility Standards",
@@ -53,7 +53,7 @@ diagnostics = {
         "threat_level": 70,
         "message": "Accessibility concerns: %s. Portfolio sites must be accessible to all users."
     },
-    
+
     "portfolio/class-diagnostic-client-gallery-privacy.php": {
         "slug": "client-gallery-privacy",
         "title": "Portfolio Client Gallery Privacy",
@@ -67,7 +67,7 @@ diagnostics = {
         "threat_level": 75,
         "message": "Client gallery security concerns: %s. Private galleries must be secured."
     },
-    
+
     # Forum (4 more needed)
     "forum/class-diagnostic-forum-member-privacy.php": {
         "slug": "forum-member-privacy",
@@ -82,7 +82,7 @@ diagnostics = {
         "threat_level": 70,
         "message": "Forum privacy concerns: %s. Forum sites must protect member privacy."
     },
-    
+
     "forum/class-diagnostic-ugc-copyright-dmca.php": {
         "slug": "ugc-copyright-dmca",
         "title": "Forum User-Generated Content Copyright (DMCA)",
@@ -96,7 +96,7 @@ diagnostics = {
         "threat_level": 75,
         "message": "Copyright compliance concerns: %s. Forums need DMCA takedown procedures."
     },
-    
+
     "forum/class-diagnostic-forum-moderation-policy.php": {
         "slug": "forum-moderation-policy",
         "title": "Forum Community Moderation Policy",
@@ -110,7 +110,7 @@ diagnostics = {
         "threat_level": 70,
         "message": "Moderation concerns: %s. Forums need clear community guidelines."
     },
-    
+
     "forum/class-diagnostic-forum-performance-scale.php": {
         "slug": "forum-performance-scale",
         "title": "Forum Performance at Scale",
@@ -124,7 +124,7 @@ diagnostics = {
         "threat_level": 60,
         "message": "Performance concerns: %s. Forums with high traffic need optimization."
     },
-    
+
     # Multisite (4 more needed)
     "multisite/class-diagnostic-multisite-data-isolation.php": {
         "slug": "multisite-data-isolation",
@@ -139,7 +139,7 @@ diagnostics = {
         "threat_level": 90,
         "message": "Data isolation concerns: %s. Multisite networks must isolate sub-site data."
     },
-    
+
     "multisite/class-diagnostic-multisite-plugin-theme-security.php": {
         "slug": "multisite-plugin-theme-security",
         "title": "Multisite Plugin and Theme Security",
@@ -153,7 +153,7 @@ diagnostics = {
         "threat_level": 85,
         "message": "Plugin security concerns: %s. Multisite networks need strict plugin controls."
     },
-    
+
     "multisite/class-diagnostic-multisite-registration-antispam.php": {
         "slug": "multisite-registration-antispam",
         "title": "Multisite Registration Anti-Spam Protection",
@@ -167,7 +167,7 @@ diagnostics = {
         "threat_level": 75,
         "message": "Registration spam concerns: %s. Multisite networks need anti-spam protection."
     },
-    
+
     "multisite/class-diagnostic-multisite-privacy-consistency.php": {
         "slug": "multisite-privacy-consistency",
         "title": "Multisite Network Privacy Policy Consistency",
@@ -181,7 +181,7 @@ diagnostics = {
         "threat_level": 75,
         "message": "Privacy consistency concerns: %s. Multisite networks need unified privacy policies."
     },
-    
+
     # E-commerce (4 more needed - already have 3)
     "ecommerce/class-diagnostic-digital-product-privacy.php": {
         "slug": "digital-product-privacy",
@@ -196,7 +196,7 @@ diagnostics = {
         "threat_level": 70,
         "message": "Digital product privacy concerns: %s. Download systems must protect customer data."
     },
-    
+
     "ecommerce/class-diagnostic-customer-account-security.php": {
         "slug": "customer-account-security",
         "title": "Customer Account Security Standards",
@@ -210,7 +210,7 @@ diagnostics = {
         "threat_level": 85,
         "message": "Account security concerns: %s. E-commerce sites need strong account protection."
     },
-    
+
     "ecommerce/class-diagnostic-ecommerce-checkout-accessibility.php": {
         "slug": "ecommerce-checkout-accessibility",
         "title": "E-commerce Checkout Accessibility",
@@ -224,7 +224,7 @@ diagnostics = {
         "threat_level": 75,
         "message": "Checkout accessibility concerns: %s. All customers must be able to complete purchases."
     },
-    
+
     "ecommerce/class-diagnostic-member-content-moderation.php": {
         "slug": "member-content-moderation",
         "title": "Member-Generated Content Moderation",
@@ -253,13 +253,13 @@ def generate_diagnostic_code(data):
     severity = data["severity"]
     threat_level = data["threat_level"]
     message = data["message"]
-    
+
     # Generate class name from slug
     class_name = "Diagnostic_" + "".join([word.capitalize() for word in slug.split("-")])
-    
+
     # Generate namespace
     namespace = family.capitalize()
-    
+
     # Start building the PHP code
     php_code = f'''<?php
 /**
@@ -329,7 +329,7 @@ class {class_name} extends Diagnostic_Base {{
 		$issues = array();
 
 '''
-    
+
     # Add page check if specified
     if page_check:
         php_code += f'''		// Check for {page_check} page.
@@ -339,7 +339,7 @@ class {class_name} extends Diagnostic_Base {{
 		}}
 
 '''
-    
+
     # Add plugin checks if specified
     if plugin_keywords:
         keywords_str = "', '".join(plugin_keywords)
@@ -361,14 +361,14 @@ class {class_name} extends Diagnostic_Base {{
 		}}
 
 '''
-    
+
     # Add remaining issue checks
     remaining_issues = issues_list[1:] if page_check else issues_list[1:] if plugin_keywords else issues_list
     for issue in remaining_issues:
         php_code += f'''		// Additional checks would go here for: {issue}
 
 '''
-    
+
     # Close the check method
     php_code += f'''		if ( empty( $issues ) ) {{
 			return null;
@@ -390,22 +390,22 @@ class {class_name} extends Diagnostic_Base {{
 	}}
 }}
 '''
-    
+
     return php_code
 
 # Create each diagnostic file
 created_count = 0
 for file_path, data in diagnostics.items():
     full_path = os.path.join(BASE_DIR, file_path)
-    
+
     # Skip if file already exists
     if os.path.exists(full_path):
         print(f"⏭️  Skipping (exists): {file_path}")
         continue
-    
+
     # Generate the PHP code
     php_code = generate_diagnostic_code(data)
-    
+
     # Write the file
     try:
         with open(full_path, 'w') as f:

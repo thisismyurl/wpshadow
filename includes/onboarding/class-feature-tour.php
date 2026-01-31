@@ -113,50 +113,6 @@ class Feature_Tour {
 		// Disabled - see show_tour_prompt()
 		return;
 
-		/* Original code commented out per bug #3867
-		// Only show on WPShadow pages
-		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
-			return;
-		}
-
-		// Check if user has seen the new features tour
-		$completed_tours = self::get_completed_tours();
-		if ( in_array( 'killer-utilities', $completed_tours, true ) ) {
-			return;
-		}
-
-		// Check if dismissed
-		$dismissed = get_user_meta( get_current_user_id(), 'wpshadow_tour_dismissed_killer_utilities', true );
-		if ( $dismissed ) {
-			return;
-		}
-
-		?>
-		<div class="notice notice-info is-dismissible wpshadow-tour-prompt" data-tour="killer-utilities">
-			<div style="display: flex; align-items: center; padding: 10px 0;">
-				<div style="font-size: 48px; margin-right: 20px;">🚀</div>
-				<div style="flex: 1;">
-					<h3 style="margin: 0 0 10px 0;"><?php esc_html_e( 'New in WPShadow: 5 Killer Utilities!', 'wpshadow' ); ?></h3>
-					<p style="margin: 0 0 10px 0;">
-						<?php esc_html_e( 'Save hours with Site Cloner, Code Snippets, Plugin Conflict Detector, Bulk Find/Replace, and Regenerate Thumbnails.', 'wpshadow' ); ?>
-					</p>
-					<p style="margin: 0;">
-						<button type="button" class="button button-primary wpshadow-start-tour" data-tour="killer-utilities">
-							<span class="dashicons dashicons-welcome-learn-more" style="margin-top: 3px;"></span>
-							<?php esc_html_e( 'Take the 3-Minute Tour', 'wpshadow' ); ?>
-						</button>
-						<button type="button" class="button wpshadow-dismiss-tour" data-tour="killer-utilities">
-							<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
-						</button>
-						<a href="https://wpshadow.com/kb/killer-utilities" target="_blank" style="margin-left: 10px;">
-							<?php esc_html_e( 'Read Documentation', 'wpshadow' ); ?>
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**

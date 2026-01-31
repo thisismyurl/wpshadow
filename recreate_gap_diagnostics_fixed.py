@@ -396,10 +396,10 @@ class Diagnostic_Paywall_Transparency extends Diagnostic_Base {
 created_count = 0
 for file_path, content in diagnostics.items():
     full_path = os.path.join(BASE_DIR, file_path)
-    
+
     # Ensure directory exists
     os.makedirs(os.path.dirname(full_path), exist_ok=True)
-    
+
     # Write the file
     try:
         with open(full_path, 'w') as f:
