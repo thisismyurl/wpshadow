@@ -178,7 +178,7 @@ class Recommendation_Engine {
 				'title'       => __( '⚠️ Error Detected! Let\'s Find the Cause', 'wpshadow' ),
 				'message'     => __( 'A fatal error was detected. Use our Plugin Conflict Detector to identify which plugin is causing the issue. Takes 5 minutes.', 'wpshadow' ),
 				'action_text' => __( 'Find the Problem', 'wpshadow' ),
-				'action_url'  => admin_url( 'admin.php?page=wpshadow-utilities&tab=plugin-conflict' ),
+				'action_url'  => admin_url( 'admin.php?page=wpshadow-utilities&tab=plugin-conflict&auto_start=1' ),
 				'dismiss'     => true,
 				'priority'    => 'critical',
 			)

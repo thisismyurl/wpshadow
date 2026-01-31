@@ -53,7 +53,7 @@ class Token_Balance_Widget {
 
 		// Check if Guardian is enabled
 		$is_enabled = Guardian_Manager::is_enabled();
-		$status_dot = $is_enabled 
+		$status_dot = $is_enabled
 			? '<span class="wpshadow-status-dot wpshadow-status-active" title="' . esc_attr__( 'Guardian Active', 'wpshadow' ) . '"></span>'
 			: '<span class="wpshadow-status-dot wpshadow-status-inactive" title="' . esc_attr__( 'Guardian Inactive', 'wpshadow' ) . '"></span>';
 

@@ -26,6 +26,9 @@ Tool_View_Base::render_header( __( 'Plugin Conflict Detector', 'wpshadow' ) );
 $active_plugins = get_option( 'active_plugins', array() );
 $plugin_count = count( $active_plugins );
 
+// Check if auto-start is requested (from error dialog)
+$auto_start = isset( $_GET['auto_start'] ) && '1' === $_GET['auto_start'];
+
 // Get plugin data
 $all_plugins = get_plugins();
 ?>
@@ -105,7 +108,7 @@ $all_plugins = get_plugins();
 	<h3><?php esc_html_e( 'Start Conflict Detection', 'wpshadow' ); ?></h3>
 	
 	<form id="wpshadow-conflict-detector-form" method="post">
-		<?php wp_nonce_field( 'wpshadow_detect_conflict', 'nonce' ); ?>
+		<?php wp_nonce_field( 'wpshadow_plugin_conflict', 'nonce' ); ?>
 		
 		<table class="form-table">
 			<tr>
@@ -280,13 +283,7 @@ jQuery(document).ready(function($) {
 		$button.prop('disabled', true);
 		$progress.show();
 		$results.hide();
-		
-		const formData = new FormData(this);
-		formData.append('action', 'wpshadow_detect_plugin_conflict');
-		
-		// Simulate testing process
-		let currentTest = 0;
-		const totalTests = <?php echo esc_js( ceil( log( max( $plugin_count, 1 ), 2 ) ) ); ?>;
+		$log.empty();
 		
 		function logMessage(message) {
 			$log.append('<div>' + message + '</div>');
@@ -298,50 +295,125 @@ jQuery(document).ready(function($) {
 			$progressText.text(text);
 		}
 		
-		logMessage('<?php echo esc_js( __( '→ Starting binary search algorithm...', 'wpshadow' ) ); ?>');
-		logMessage('<?php echo esc_js( __( '→ Total plugins to test: ', 'wpshadow' ) . $plugin_count ); ?>');
+		logMessage('<?php echo esc_js( __( '→ Starting detection process...', 'wpshadow' ) ); ?>');
+		updateProgress(10, '<?php echo esc_js( __( 'Preparing tests...', 'wpshadow' ) ); ?>');
 		
-		// Simulate progress
-		const testInterval = setInterval(function() {
-			currentTest++;
-			const progress = (currentTest / totalTests) * 100;
-			
-			if (currentTest <= totalTests) {
-				updateProgress(progress, '<?php echo esc_js( __( 'Test ', 'wpshadow' ) ); ?>' + currentTest + '/' + totalTests);
-				logMessage('<?php echo esc_js( __( '→ Testing subset of plugins...', 'wpshadow' ) ); ?>');
-			} else {
-				clearInterval(testInterval);
-				finishDetection();
-			}
-		}, 2000);
+		// Prepare form data
+		const formData = new FormData(this);
+		formData.append('action', 'wpshadow_detect_plugin_conflict');
+		formData.append('method', $('input[name="detection_method"]:checked').val());
 		
-		function finishDetection() {
-			updateProgress(100, '<?php echo esc_js( __( 'Detection complete!', 'wpshadow' ) ); ?>');
-			logMessage('<?php echo esc_js( __( '✓ Conflict detected!', 'wpshadow' ) ); ?>');
-			
-			setTimeout(function() {
-				$progress.slideUp();
-				$results.html(`
-					<div style="padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px;">
-						<h3 style="margin-top: 0;">⚠️ <?php echo esc_js( __( 'Conflict Detected', 'wpshadow' ) ); ?></h3>
-						<p><strong><?php echo esc_js( __( 'Conflicting Plugin:', 'wpshadow' ) ); ?></strong> Example Plugin (Demo)</p>
-						<p><?php echo esc_js( __( 'This is a demonstration. Real implementation would show the actual conflicting plugin.', 'wpshadow' ) ); ?></p>
-						<h4><?php echo esc_js( __( 'Recommended Actions:', 'wpshadow' ) ); ?></h4>
-						<ul>
-							<li><?php echo esc_js( __( 'Contact plugin author about compatibility', 'wpshadow' ) ); ?></li>
-							<li><?php echo esc_js( __( 'Search for alternative plugin', 'wpshadow' ) ); ?></li>
-							<li><?php echo esc_js( __( 'Check plugin support forum for known issues', 'wpshadow' ) ); ?></li>
-						</ul>
-						<p>
-							<button class="button button-primary"><?php echo esc_js( __( 'Disable Conflicting Plugin', 'wpshadow' ) ); ?></button>
-							<button class="button button-secondary"><?php echo esc_js( __( 'Search Alternatives', 'wpshadow' ) ); ?></button>
-						</p>
-					</div>
-				`).slideDown();
+		// Make AJAX request
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			xhr: function() {
+				const xhr = new window.XMLHttpRequest();
+				// Update progress during request
+				let progress = 20;
+				const progressInterval = setInterval(function() {
+					if (progress < 90) {
+						progress += 10;
+						updateProgress(progress, '<?php echo esc_js( __( 'Testing plugins...', 'wpshadow' ) ); ?>');
+						logMessage('<?php echo esc_js( __( '→ Analyzing plugin combinations...', 'wpshadow' ) ); ?>');
+					}
+				}, 2000);
+				
+				xhr.addEventListener('loadend', function() {
+					clearInterval(progressInterval);
+				});
+				
+				return xhr;
+			},
+			success: function(response) {
+				updateProgress(100, '<?php echo esc_js( __( 'Detection complete!', 'wpshadow' ) ); ?>');
+				
+				if (response.success) {
+					logMessage('<?php echo esc_js( __( '✓ Analysis complete', 'wpshadow' ) ); ?>');
+					
+					setTimeout(function() {
+						$progress.slideUp();
+						
+						if (response.data.conflicting_plugin) {
+							// Conflict found
+							$results.html(`
+								<div style="padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 4px;">
+									<h3 style="margin-top: 0;">⚠️ <?php echo esc_js( __( 'Conflict Detected', 'wpshadow' ) ); ?></h3>
+									<p><strong><?php echo esc_js( __( 'Conflicting Plugin:', 'wpshadow' ) ); ?></strong> ${response.data.plugin_name}</p>
+									<p><?php echo esc_js( __( 'Tests performed:', 'wpshadow' ) ); ?> ${response.data.tests_performed}</p>
+									${response.data.recommendation ? `<div style="margin-top: 15px;">${response.data.recommendation}</div>` : ''}
+									<h4><?php echo esc_js( __( 'Recommended Actions:', 'wpshadow' ) ); ?></h4>
+									<ul>
+										<li><?php echo esc_js( __( 'Contact plugin author about compatibility', 'wpshadow' ) ); ?></li>
+										<li><?php echo esc_js( __( 'Search for alternative plugin', 'wpshadow' ) ); ?></li>
+										<li><?php echo esc_js( __( 'Check plugin support forum for known issues', 'wpshadow' ) ); ?></li>
+									</ul>
+								</div>
+							`).slideDown();
+						} else {
+							// No conflict found
+							$results.html(`
+								<div style="padding: 20px; background: #d4edda; border: 2px solid #28a745; border-radius: 4px;">
+									<h3 style="margin-top: 0;">✓ <?php echo esc_js( __( 'No Plugin Conflicts Detected', 'wpshadow' ) ); ?></h3>
+									<p>${response.data.message}</p>
+									<p><?php echo esc_js( __( 'Your issue may be caused by:', 'wpshadow' ) ); ?></p>
+									<ul>
+										<li><?php echo esc_js( __( 'Theme compatibility issue', 'wpshadow' ) ); ?></li>
+										<li><?php echo esc_js( __( 'Server configuration', 'wpshadow' ) ); ?></li>
+										<li><?php echo esc_js( __( 'WordPress core issue', 'wpshadow' ) ); ?></li>
+										<li><?php echo esc_js( __( 'Custom code in theme', 'wpshadow' ) ); ?></li>
+									</ul>
+								</div>
+							`).slideDown();
+						}
+						
+						$button.prop('disabled', false);
+					}, 500);
+				} else {
+					logMessage('<?php echo esc_js( __( '✗ Error: ', 'wpshadow' ) ); ?>' + response.data.message);
+					updateProgress(0, '<?php echo esc_js( __( 'Error occurred', 'wpshadow' ) ); ?>');
+					$button.prop('disabled', false);
+					
+					setTimeout(function() {
+						$progress.slideUp();
+						$results.html(`
+							<div style="padding: 20px; background: #f8d7da; border: 2px solid #dc3545; border-radius: 4px;">
+								<h3 style="margin-top: 0;">✗ <?php echo esc_js( __( 'Detection Failed', 'wpshadow' ) ); ?></h3>
+								<p>${response.data.message || '<?php echo esc_js( __( 'An error occurred during conflict detection.', 'wpshadow' ) ); ?>'}</p>
+							</div>
+						`).slideDown();
+					}, 500);
+				}
+			},
+			error: function(xhr, status, error) {
+				logMessage('<?php echo esc_js( __( '✗ Request failed: ', 'wpshadow' ) ); ?>' + error);
+				updateProgress(0, '<?php echo esc_js( __( 'Request failed', 'wpshadow' ) ); ?>');
 				$button.prop('disabled', false);
-			}, 1000);
-		}
+				
+				setTimeout(function() {
+					$progress.slideUp();
+					$results.html(`
+						<div style="padding: 20px; background: #f8d7da; border: 2px solid #dc3545; border-radius: 4px;">
+							<h3 style="margin-top: 0;">✗ <?php echo esc_js( __( 'Connection Error', 'wpshadow' ) ); ?></h3>
+							<p><?php echo esc_js( __( 'Could not connect to server. Please try again.', 'wpshadow' ) ); ?></p>
+						</div>
+					`).slideDown();
+				}, 500);
+			}
+		});
 	});
+	
+	<?php if ( $auto_start ) : ?>
+	// Auto-start detection if requested from error dialog
+	$(document).ready(function() {
+		setTimeout(function() {
+			$('#wpshadow-conflict-detector-form').submit();
+		}, 500);
+	});
+	<?php endif; ?>
 });
 </script>
 

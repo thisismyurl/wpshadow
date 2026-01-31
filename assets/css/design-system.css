@@ -292,6 +292,18 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     transition: box-shadow var(--wps-transition-base), transform var(--wps-transition-base);
 }
 
+a.wps-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+a.wps-card:hover,
+a.wps-card:focus {
+    text-decoration: none;
+    color: inherit;
+}
+
 .wps-card:hover {
     box-shadow: var(--wps-shadow-md);
 }
