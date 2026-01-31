@@ -69,7 +69,7 @@ function wpshadow_get_utilities_catalog() {
 		),
 		array(
 			'title'   => __( 'AI Content Optimizer', 'wpshadow' ),
-			'desc'    => __( 'AI-powered content analysis for readability, SEO, and accessibility. Auto-generate meta descriptions. Free: 50 analyses/month.', 'wpshadow' ),
+			'desc'    => __( 'AI-powered content analysis for readability, SEO, and accessibility. Auto-generate meta descriptions. Free: 1,000 credits per month.', 'wpshadow' ),
 			'tool'    => 'ai-content-optimizer',
 			'icon'    => 'dashicons-welcome-write-blog',
 			'family'  => 'cloud-ai',
@@ -78,7 +78,7 @@ function wpshadow_get_utilities_catalog() {
 		),
 		array(
 			'title'   => __( 'AI Image Alt Text Generator', 'wpshadow' ),
-			'desc'    => __( 'Automatically generate WCAG-compliant alt text for images using computer vision AI. Free: 100 images/month.', 'wpshadow' ),
+			'desc'    => __( 'Automatically generate WCAG-compliant alt text for images using computer vision AI. Free: 1,000 credits per month.', 'wpshadow' ),
 			'tool'    => 'ai-image-alt',
 			'icon'    => 'dashicons-format-image',
 			'family'  => 'cloud-ai',
@@ -87,7 +87,7 @@ function wpshadow_get_utilities_catalog() {
 		),
 		array(
 			'title'   => __( 'AI Spam Detection', 'wpshadow' ),
-			'desc'    => __( 'Advanced ML-powered spam and malicious comment detection beyond basic filters. Free: 1000 checks/month.', 'wpshadow' ),
+			'desc'    => __( 'Advanced ML-powered spam and malicious comment detection beyond basic filters. Free: 1,000 credits per month.', 'wpshadow' ),
 			'tool'    => 'ai-spam-detection',
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'cloud-ai',
@@ -404,6 +404,8 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 		}
 		
 		$family_titles = array(
+			'cloud-monitoring' => __( 'Cloud Monitoring (Free with Registration)', 'wpshadow' ),
+			'cloud-ai'         => __( 'Cloud AI Tools (Free: 1,000 credits/month)', 'wpshadow' ),
 			'page-analysis'    => __( 'Page Analysis Tools', 'wpshadow' ),
 			'site-management'  => __( 'Site Management', 'wpshadow' ),
 			'other'            => __( 'Other Utilities', 'wpshadow' ),
