@@ -1,7 +1,7 @@
 <?php
 /**
  * Test script to validate Usage_Tracker fix
- * 
+ *
  * This validates that the track_activity method signature matches the hook it's registered to.
  */
 

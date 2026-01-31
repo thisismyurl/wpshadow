@@ -225,7 +225,7 @@ class Diagnostic_Sensitive_Data_Cleanup extends Diagnostic_Base {
 
 		/**
 		 * NOTE: Using $wpdb for pattern-based security scan is intentional.
-		 * 
+		 *
 		 * Why direct database access is necessary:
 		 * - Security audit requires scanning ALL option names for sensitive keywords
 		 * - Need to check patterns: %_key%, %_token%, %secret%
