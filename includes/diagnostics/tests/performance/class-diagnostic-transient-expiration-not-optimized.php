@@ -67,8 +67,8 @@ class Diagnostic_Transient_Expiration_Not_Optimized extends Diagnostic_Base {
 
 		// Check for expired transients still in database
 		$expired_transients = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
-			 WHERE option_name LIKE '%_transient_timeout_%' 
+			"SELECT COUNT(*) FROM {$wpdb->options}
+			 WHERE option_name LIKE '%_transient_timeout_%'
 			 AND option_value < UNIX_TIMESTAMP()"
 		);
 

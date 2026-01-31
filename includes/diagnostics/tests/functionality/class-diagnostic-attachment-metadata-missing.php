@@ -67,7 +67,7 @@ class Diagnostic_Attachment_Metadata_Missing extends Diagnostic_Base {
 
 		// Check if image attachments have metadata
 		$images_without_metadata = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta}
 			 WHERE meta_key = '_wp_attachment_metadata' AND meta_value = ''"
 		);
 
