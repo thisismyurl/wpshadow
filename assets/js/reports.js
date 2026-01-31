@@ -2,7 +2,7 @@
  * WPShadow Report Scripts
  * Consolidated JavaScript for report builder and renderer functionality
  * Extracted from inline scripts in class-report-builder.php and class-report-renderer.php
- * 
+ *
  * @package WPShadow
  */
 
@@ -13,7 +13,7 @@
      * WPShadow Report Builder Module
      */
     const WPShadowReportBuilder = {
-        
+
         /**
          * Initialize report builder
          */
@@ -21,7 +21,7 @@
             // Hide loading spinner on page load (Issue #1684)
             $('#loading-spinner').hide();
             $('#report-preview').hide();
-            
+
             this.initPresetButtons();
             this.initDatePicker();
             this.initReportTypeSelection();
@@ -39,7 +39,7 @@
                 e.preventDefault();
                 const preset = $(this).data('preset');
                 self.applyDatePreset(preset);
-                
+
                 // Update button states
                 $('.wps-preset-btn').removeClass('selected');
                 $(this).addClass('selected');
@@ -199,7 +199,7 @@
          */
         initGenerateButton: function() {
             const self = this;
-            
+
             $(document).on('click', '#generate-report-btn', function(e) {
                 e.preventDefault();
                 const form = $('#wpshadow-report-form');
@@ -298,7 +298,7 @@
      * WPShadow Report Display/Export Module
      */
     const WPShadowReportDisplay = {
-        
+
         /**
          * Initialize report display functionality
          */
@@ -445,7 +445,7 @@
                 const platform = $(this).data('share-platform');
                 const url = $(this).data('share-url') || window.location.href;
                 const title = $(this).data('share-title') || document.title;
-                
+
                 self.shareReport(platform, url, title);
             });
         },
@@ -502,7 +502,7 @@
             WPShadowReportBuilder.init();
             window.WPShadowReportBuilder = WPShadowReportBuilder;
         }
-        
+
         if ($('#wps-report-output').length) {
             WPShadowReportDisplay.init();
             window.WPShadowReportDisplay = WPShadowReportDisplay;

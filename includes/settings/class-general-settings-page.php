@@ -68,10 +68,10 @@ class General_Settings_Page {
 						<div class="wps-form-group">
 							<div class="wps-flex wps-gap-6 wps-items-start wps-justify-between">
 								<label class="wps-toggle" for="wpshadow_cache_enabled">
-									<input 
-										type="checkbox" 
-										id="wpshadow_cache_enabled" 
-										name="wpshadow_cache_enabled" 
+									<input
+										type="checkbox"
+										id="wpshadow_cache_enabled"
+										name="wpshadow_cache_enabled"
 										value="1"
 										<?php checked( get_option( 'wpshadow_cache_enabled', true ) ); ?>
 									/>
@@ -95,10 +95,10 @@ class General_Settings_Page {
 									</span>
 								</div>
 								<div class="wps-range-wrapper">
-									<input 
-										type="range" 
-										id="wpshadow_cache_duration" 
-										name="wpshadow_cache_duration" 
+									<input
+										type="range"
+										id="wpshadow_cache_duration"
+										name="wpshadow_cache_duration"
 										value="<?php echo esc_attr( get_option( 'wpshadow_cache_duration', 3600 ) ); ?>"
 										min="60"
 										max="86400"
@@ -142,10 +142,10 @@ class General_Settings_Page {
 									</span>
 								</div>
 								<div class="wps-range-wrapper">
-									<input 
-										type="range" 
-										id="wpshadow_visual_comparison_width" 
-										name="wpshadow_visual_comparison_width" 
+									<input
+										type="range"
+										id="wpshadow_visual_comparison_width"
+										name="wpshadow_visual_comparison_width"
 										value="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_width', 1200 ) ); ?>"
 										min="640"
 										max="2560"
@@ -175,10 +175,10 @@ class General_Settings_Page {
 									</span>
 								</div>
 								<div class="wps-range-wrapper">
-									<input 
-										type="range" 
-										id="wpshadow_visual_comparison_height" 
-										name="wpshadow_visual_comparison_height" 
+									<input
+										type="range"
+										id="wpshadow_visual_comparison_height"
+										name="wpshadow_visual_comparison_height"
 										value="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_height', 800 ) ); ?>"
 										min="480"
 										max="2160"
