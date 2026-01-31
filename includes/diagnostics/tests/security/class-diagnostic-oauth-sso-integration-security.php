@@ -1,0 +1,187 @@
+<?php
+/**
+ * OAuth/SSO Integration Security Diagnostic
+ *
+ * Detects OAuth/SSO plugins and validates security configuration.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.2601.2240
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * OAuth/SSO Integration Security Diagnostic
+ *
+ * Analyzes OAuth and single sign-on implementations for security.
+ *
+ * @since 1.2601.2240
+ */
+class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
+
+	/**
+	 * The diagnostic slug
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'oauth-sso-integration-security';
+
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'OAuth/SSO Integration Security';
+
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Detects OAuth/SSO plugins and validates security configuration';
+
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @since  1.2601.2240
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		$issues = array();
+
+		// OAuth/SSO plugins
+		$oauth_plugins = array(
+			'google-authenticator-for-wordpress/google-authenticator-for-wordpress.php' => 'Google Authenticator',
+			'wpcloud/plugin.php'         => 'WordPress.com Connect',
+			'jetpack/jetpack.php'        => 'Jetpack (has SSO)',
+			'auth0/auth0.php'            => 'Auth0',
+			'oauth-single-sign-on/oauth-sso.php' => 'OAuth SSO',
+			'miniorange-oauth-openid-connect/mo_openid_connect.php' => 'miniOrange OAuth',
+		);
+
+		$active_plugins = get_option( 'active_plugins', array() );
+		$has_oauth = false;
+		$oauth_plugins_active = array();
+
+		foreach ( $oauth_plugins as $plugin => $name ) {
+			if ( in_array( $plugin, $active_plugins, true ) ) {
+				$has_oauth = true;
+				$oauth_plugins_active[] = $name;
+			}
+		}
+
+		if ( ! $has_oauth ) {
+			return null; // No OAuth/SSO implementation
+		}
+
+		// Check OAuth configuration
+		$oauth_config = array(
+			'oauth_client_id'     => get_option( 'oauth_client_id' ),
+			'oauth_client_secret' => get_option( 'oauth_client_secret' ),
+			'oauth_redirect_uri'  => get_option( 'oauth_redirect_uri' ),
+		);
+
+		foreach ( $oauth_config as $key => $value ) {
+			if ( empty( $value ) ) {
+				$issues[] = sprintf(
+					/* translators: %s: configuration key */
+					__( 'OAuth configuration incomplete: %s not set', 'wpshadow' ),
+					str_replace( '_', ' ', ucfirst( $key ) )
+				);
+			}
+		}
+
+		// Check for HTTPS/SSL on OAuth callback
+		$site_url = get_site_url();
+		if ( strpos( $site_url, 'https://' ) === false ) {
+			$issues[] = __( 'OAuth callback URL not using HTTPS - security risk', 'wpshadow' );
+		}
+
+		// Check for state parameter validation
+		global $wp_filter;
+
+		if ( ! isset( $wp_filter['oauth_callback'] ) || empty( $wp_filter['oauth_callback']->callbacks ) ) {
+			$issues[] = __( 'OAuth state parameter validation may not be implemented', 'wpshadow' );
+		}
+
+		// Check for token storage security
+		global $wpdb;
+		$token_check = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE meta_key LIKE '%oauth%' OR meta_key LIKE '%sso%'"
+		);
+
+		if ( $token_check > 0 ) {
+			// Check if tokens are encrypted
+			$sample_token = $wpdb->get_var(
+				"SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key LIKE '%oauth%' LIMIT 1"
+			);
+
+			if ( $sample_token && strlen( $sample_token ) < 100 ) {
+				$issues[] = __( 'OAuth tokens appear to be stored unencrypted', 'wpshadow' );
+			}
+		}
+
+		// Check for multiple SSO providers
+		if ( count( $oauth_plugins_active ) > 1 ) {
+			$issues[] = sprintf(
+				/* translators: %d: number of SSO plugins */
+				__( 'Multiple SSO plugins active (%d) - may cause conflicts', 'wpshadow' ),
+				count( $oauth_plugins_active )
+			);
+		}
+
+		// Check for user registration via OAuth
+		$oauth_user_registration = get_option( 'oauth_auto_register_users' );
+		if ( $oauth_user_registration ) {
+			// This is actually a feature, but verify it has proper role assignment
+			$oauth_default_role = get_option( 'oauth_default_role' );
+			if ( empty( $oauth_default_role ) || 'administrator' === $oauth_default_role ) {
+				$issues[] = __( 'OAuth auto-registration not configured for security - users may get admin role', 'wpshadow' );
+			}
+		}
+
+		// Report findings
+		if ( ! empty( $issues ) ) {
+			$severity     = 'high';
+			$threat_level = 75;
+
+			$description = __( 'OAuth/SSO integration security concerns detected', 'wpshadow' );
+
+			$details = array(
+				'oauth_plugins_active' => $oauth_plugins_active,
+				'issues'               => $issues,
+				'site_url_https'       => strpos( $site_url, 'https://' ) !== false,
+				'token_count'          => $token_check,
+			);
+
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => $description,
+				'severity'     => $severity,
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/oauth-sso-integration-security',
+				'details'      => $details,
+			);
+		}
+
+		return null;
+	}
+}

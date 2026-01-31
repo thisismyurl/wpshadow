@@ -85,7 +85,10 @@ class Compromised_Accounts_Analyzer {
 	 * @return void
 	 */
 	public static function track_profile_update( int $user_id, $old_user_data ): void {
-		$suspicious_events = get_transient( 'wpshadow_suspicious_account_events' );
+		$suspicious_events = \WPShadow\Core\Cache_Manager::get(
+			'suspicious_account_events',
+			'wpshadow_monitoring'
+		);
 		if ( ! is_array( $suspicious_events ) ) {
 			$suspicious_events = array();
 		}
@@ -107,19 +110,17 @@ class Compromised_Accounts_Analyzer {
 			);
 		}
 
-		set_transient( 'wpshadow_suspicious_account_events', $suspicious_events, WEEK_IN_SECONDS );
-	}
-
-	/**
-	 * Track role changes
-	 *
-	 * @param int $user_id User ID
-	 * @param string $role New role
-	 * @param array $old_roles Old roles
-	 * @return void
-	 */
+	\WPShadow\Core\Cache_Manager::set(
+		'suspicious_account_events',
+		$suspicious_events,
+		'wpshadow_monitoring',
+		WEEK_IN_SECONDS
+	);
 	public static function track_role_change( int $user_id, string $role, array $old_roles ): void {
-		$suspicious_events = get_transient( 'wpshadow_suspicious_account_events' );
+		$suspicious_events = \WPShadow\Core\Cache_Manager::get(
+			'suspicious_account_events',
+			'wpshadow_monitoring'
+		);
 		if ( ! is_array( $suspicious_events ) ) {
 			$suspicious_events = array();
 		}
@@ -140,7 +141,12 @@ class Compromised_Accounts_Analyzer {
 			);
 		}
 
-		set_transient( 'wpshadow_suspicious_account_events', $suspicious_events, WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'suspicious_account_events',
+			$suspicious_events,
+			'wpshadow_monitoring',
+			WEEK_IN_SECONDS
+		);
 	}
 
 	/**
@@ -157,7 +163,10 @@ class Compromised_Accounts_Analyzer {
 
 		if ( $stored_pass && $stored_pass !== $current_pass ) {
 			// Password changed
-			$suspicious_events = get_transient( 'wpshadow_suspicious_account_events' );
+			$suspicious_events = \WPShadow\Core\Cache_Manager::get(
+				'suspicious_account_events',
+				'wpshadow_monitoring'
+			);
 			if ( ! is_array( $suspicious_events ) ) {
 				$suspicious_events = array();
 			}
@@ -169,7 +178,12 @@ class Compromised_Accounts_Analyzer {
 				'ip'        => self::get_client_ip(),
 			);
 
-			set_transient( 'wpshadow_suspicious_account_events', $suspicious_events, WEEK_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'suspicious_account_events',
+				$suspicious_events,
+				'wpshadow_monitoring',
+				WEEK_IN_SECONDS
+			);
 			update_user_meta( $user_id, 'wpshadow_last_password_change', time() );
 		}
 
@@ -188,8 +202,14 @@ class Compromised_Accounts_Analyzer {
 			'high_risk_accounts'     => array(),
 		);
 
-		$login_history     = get_transient( 'wpshadow_login_history' );
-		$suspicious_events = get_transient( 'wpshadow_suspicious_account_events' );
+		$login_history     = \WPShadow\Core\Cache_Manager::get(
+			'login_history',
+			'wpshadow_monitoring'
+		);
+		$suspicious_events = \WPShadow\Core\Cache_Manager::get(
+			'suspicious_account_events',
+			'wpshadow_monitoring'
+		);
 
 		// Analyze login patterns
 		if ( is_array( $login_history ) ) {
@@ -247,8 +267,13 @@ class Compromised_Accounts_Analyzer {
 			}
 		}
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_compromised_account_analysis', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set(
+			'compromised_account_analysis',
+			$results,
+			'wpshadow_monitoring',
+			HOUR_IN_SECONDS
+		);
 
 		return $results;
 	}
@@ -278,8 +303,8 @@ class Compromised_Accounts_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_login_history' );
-		delete_transient( 'wpshadow_suspicious_account_events' );
-		delete_transient( 'wpshadow_compromised_account_analysis' );
+		\WPShadow\Core\Cache_Manager::delete( 'login_history', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'suspicious_account_events', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'compromised_account_analysis', 'wpshadow_monitoring' );
 	}
 }
