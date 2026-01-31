@@ -74,7 +74,7 @@ class Academy_UI extends AJAX_Handler_Base {
 	 */
 	public static function render_dashboard_widget() {
 		$user_id  = get_current_user_id();
-		$manager  = new Academy_Manager();
+		$manager  = Academy_Manager::get_instance();
 		$progress = $manager->get_user_progress( $user_id );
 
 		?>
