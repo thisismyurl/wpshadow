@@ -212,7 +212,7 @@ The batch creator includes:
 
 ---
 
-**Last Updated**: 2026-01-20  
-**Status**: Awaiting Authentication Fix  
-**Ready to Execute**: Yes ✅ (once credentials confirmed)  
+**Last Updated**: 2026-01-20
+**Status**: Awaiting Authentication Fix
+**Ready to Execute**: Yes ✅ (once credentials confirmed)
 **Total KB Articles**: 2,786 📚
