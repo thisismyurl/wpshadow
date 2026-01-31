@@ -63,7 +63,73 @@ protected static $family = 'multisite';
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
-		// TODO: Requires domain-specific implementation.
-		return null;
-}
-}
+		// Only run on multisite.
+		if ( ! is_multisite() ) {
+			return null;
+		}
+
+		$issues = array();
+
+		// Check for network-wide privacy policy.
+		$network_privacy_page = get_site_option( 'wp_page_for_privacy_policy' );
+		if ( ! $network_privacy_page ) {
+			$issues[] = __( 'No network-wide privacy policy configured', 'wpshadow' );
+		}
+
+		// Check if subsites have inconsistent privacy settings.
+		$sites = get_sites( array( 'number' => 10 ) );
+		$privacy_settings = array();
+
+		foreach ( $sites as $site ) {
+			switch_to_blog( $site->blog_id );
+			$privacy_settings[ $site->blog_id ] = get_option( 'blog_public' );
+			restore_current_blog();
+		}
+
+		// Check if settings are inconsistent.
+		$unique_settings = array_unique( $privacy_settings );
+		if ( count( $unique_settings ) > 1 ) {
+			$issues[] = __( 'Subsites have inconsistent privacy settings', 'wpshadow' );
+		}
+
+		// Check for GDPR compliance plugins.
+		$active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+		$gdpr_plugins = array( 'gdpr', 'cookie-notice', 'cookie-law', 'privacy' );
+		$has_gdpr = false;
+
+		foreach ( array_keys( $active_plugins ) as $plugin ) {
+			foreach ( $gdpr_plugins as $gdpr_plugin ) {
+				if ( stripos( $plugin, $gdpr_plugin ) !== false ) {
+					$has_gdpr = true;
+					break 2;
+				}
+			}
+		}
+
+		if ( ! $has_gdpr ) {
+			$issues[] = __( 'No network-wide GDPR/privacy plugin detected', 'wpshadow' );
+		}
+
+		// Check for data retention policies.
+		$retention_policy = get_site_option( 'wpshadow_data_retention_days' );
+		if ( ! $retention_policy ) {
+			$issues[] = __( 'No network data retention policy configured', 'wpshadow' );
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: comma-separated list of issues */
+				__( 'Multisite privacy concerns: %s. Network should have consistent privacy policies.', 'wpshadow' ),
+				implode( ', ', $issues )
+			),
+			'severity'     => 'high',
+			'threat_level' => 70,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/multisite-privacy-consistency',
+		);

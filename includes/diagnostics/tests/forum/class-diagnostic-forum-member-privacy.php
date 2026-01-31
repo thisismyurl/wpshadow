@@ -63,7 +63,73 @@ protected static $family = 'forum';
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
-		// TODO: Requires domain-specific implementation.
-		return null;
-}
-}
+		// Check for forum plugins.
+		$active_plugins = get_option( 'active_plugins', array() );
+		$forum_plugins = array( 'bbpress', 'buddypress', 'wpforo', 'asgaros-forum', 'simple-forum' );
+		$has_forum = false;
+
+		foreach ( $active_plugins as $plugin ) {
+			foreach ( $forum_plugins as $f_plugin ) {
+				if ( stripos( $plugin, $f_plugin ) !== false ) {
+					$has_forum = true;
+					break 2;
+				}
+			}
+		}
+
+		if ( ! $has_forum ) {
+			return null;
+		}
+
+		$issues = array();
+
+		// Check if author archives are enabled (exposes member activity).
+		if ( get_option( 'show_avatars' ) ) {
+			// Check if profiles are publicly accessible.
+			$author_base = get_option( 'author_base', 'author' );
+			if ( ! empty( $author_base ) ) {
+				$issues[] = __( 'User profiles publicly accessible via author archives', 'wpshadow' );
+			}
+		}
+
+		// Check for privacy plugins.
+		$privacy_plugins = array( 'profile-privacy', 'buddypress-profile-privacy', 'member-privacy' );
+		$has_privacy = false;
+
+		foreach ( $active_plugins as $plugin ) {
+			foreach ( $privacy_plugins as $p_plugin ) {
+				if ( stripos( $plugin, $p_plugin ) !== false ) {
+					$has_privacy = true;
+					break 2;
+				}
+			}
+		}
+
+		if ( ! $has_privacy ) {
+			$issues[] = __( 'No profile privacy control plugin detected', 'wpshadow' );
+		}
+
+		// Check if search engines can index member profiles.
+		if ( ! get_option( 'blog_public' ) ) {
+			// Good - search engines discouraged.
+		} else {
+			$issues[] = __( 'Search engines allowed to index site (may expose member profiles)', 'wpshadow' );
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: comma-separated list of issues */
+				__( 'Forum privacy concerns: %s. Member profiles should have privacy controls.', 'wpshadow' ),
+				implode( ', ', $issues )
+			),
+			'severity'     => 'medium',
+			'threat_level' => 60,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/forum-member-privacy',
+		);
