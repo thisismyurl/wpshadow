@@ -63,7 +63,7 @@ protected static $family = 'multisite';
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
-- requires domain-specific implementation
- null;
+		// TODO: Requires domain-specific implementation.
+		return null;
 }
 }

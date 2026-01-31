@@ -26,7 +26,7 @@ exit;
  *
  * @since 1.6031.1445
  */
-class Diagnostic_ForumMemberPrivacy extends Diagnostic_Base {
+class Diagnostic_Forum_Member_Privacy extends Diagnostic_Base {
 
 /**
  * The diagnostic slug
@@ -63,7 +63,7 @@ protected static $family = 'forum';
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
-- requires domain-specific implementation
- null;
+		// TODO: Requires domain-specific implementation.
+		return null;
 }
 }
