@@ -1,18 +1,18 @@
 /**
  * WPShadow Workflow Builder - Modern Visual Interface
- * 
+ *
  * Scratch-inspired block-based automation builder
  * Follows WPShadow Design System 2.0
  * Phase 3 Enhancement: Epic #667/#686
  * Issue #664: Visual Interface Modernization
- * 
+ *
  * WCAG 2.1 Level AA Compliance:
  * - All text colors meet 4.5:1 minimum contrast ratio
  * - UI components meet 3:1 minimum contrast ratio
  * - Placeholder text uses gray-500 (5.14:1 contrast)
  * - Warning/success colors only for UI elements, not text
  * - See docs/COLOR_CONTRAST_VALIDATION.md for full audit
- * 
+ *
  * @package WPShadow
  * @since   1.2601.2148
  */
@@ -490,9 +490,9 @@
 	height: 120px;
 	border: 3px dashed var(--wps-info, #3b82f6);
 	border-radius: 0.75rem;
-	background: linear-gradient(135deg, 
-		rgba(59, 130, 246, 0.03) 0%, 
-		rgba(59, 130, 246, 0.06) 50%, 
+	background: linear-gradient(135deg,
+		rgba(59, 130, 246, 0.03) 0%,
+		rgba(59, 130, 246, 0.06) 50%,
 		rgba(59, 130, 246, 0.03) 100%);
 	position: relative;
 	animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -599,8 +599,8 @@
 	bottom: -1.75rem;
 	width: 3px;
 	height: 1.75rem;
-	background: linear-gradient(to bottom, 
-		var(--wps-gray-300, #d1d5db) 0%, 
+	background: linear-gradient(to bottom,
+		var(--wps-gray-300, #d1d5db) 0%,
 		var(--wps-gray-400, #9ca3af) 100%);
 	transform: translateX(-50%);
 	z-index: 1;
@@ -620,8 +620,8 @@
 }
 
 .wps-block.trigger .wps-block-connector {
-	background: linear-gradient(to bottom, 
-		var(--wps-info, #3b82f6) 0%, 
+	background: linear-gradient(to bottom,
+		var(--wps-info, #3b82f6) 0%,
 		var(--wps-info-dark, #2563eb) 100%);
 }
 
@@ -630,8 +630,8 @@
 }
 
 .wps-block.action .wps-block-connector {
-	background: linear-gradient(to bottom, 
-		var(--wps-success, #10b981) 0%, 
+	background: linear-gradient(to bottom,
+		var(--wps-success, #10b981) 0%,
 		var(--wps-success-dark, #047857) 100%);
 }
 
@@ -1026,11 +1026,11 @@
 	.wps-block {
 		border-width: 3px;
 	}
-	
+
 	.wps-block-item {
 		border-width: 3px;
 	}
-	
+
 	.wps-block-connector {
 		width: 4px;
 	}
@@ -1059,7 +1059,7 @@
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
 	}
-	
+
 	.wps-block,
 	.wps-block-item,
 	.wps-block-config-panel {
@@ -1087,7 +1087,7 @@
 		width: 100%;
 		top: 0;
 	}
-	
+
 	.wps-canvas-controls {
 		bottom: 1rem;
 		right: 1rem;
@@ -1424,21 +1424,21 @@
 		right: 1rem;
 		left: 1rem;
 	}
-	
+
 	.wps-block {
 		padding: 1rem;
 	}
-	
+
 	.wps-palette-section {
 		margin-bottom: 1rem;
 	}
-	
+
 	.wps-canvas-controls {
 		bottom: 0.75rem;
 		right: 0.75rem;
 		padding: 0.375rem;
 	}
-	
+
 	.wps-canvas-control-btn {
 		width: 2rem;
 		height: 2rem;
@@ -1451,11 +1451,11 @@
 		flex-direction: column;
 		align-items: stretch;
 	}
-	
+
 	.wps-workflow-toolbar {
 		width: 100%;
 	}
-	
+
 	.wps-block-config-panel {
 		width: 100vw;
 	}

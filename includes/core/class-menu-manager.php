@@ -136,7 +136,14 @@ class Menu_Manager {
 		);
 
 		// Achievements (with Leaderboard & Rewards as submenus)
-		// Note: Achievements submenus are registered by Gamification_UI::register_menu_pages()
+		add_submenu_page(
+			'wpshadow',
+			__( 'Achievements', 'wpshadow' ),
+			__( 'Achievements', 'wpshadow' ),
+			'read',
+			'wpshadow-achievements',
+			array( 'WPShadow\Gamification\Gamification_UI', 'render_achievements_page' )
+		);
 
 		// Help & Documentation
 		add_submenu_page(

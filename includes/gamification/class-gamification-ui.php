@@ -34,7 +34,7 @@ class Gamification_UI {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'register_menu_pages' ), 9 );
+		add_action( 'admin_menu', array( __CLASS__, 'register_menu_pages' ), 10 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 	}
 
@@ -48,16 +48,6 @@ class Gamification_UI {
 	 * @return void
 	 */
 	public static function register_menu_pages() {
-		// Achievements page (under WPShadow parent menu)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Achievements', 'wpshadow' ),
-			__( 'Achievements', 'wpshadow' ),
-			'read',
-			'wpshadow-achievements',
-			array( __CLASS__, 'render_achievements_page' )
-		);
-
 		// Leaderboard page (under Achievements parent)
 		add_submenu_page(
 			'wpshadow-achievements',
