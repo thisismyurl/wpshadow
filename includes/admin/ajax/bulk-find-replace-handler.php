@@ -56,8 +56,6 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 				'tables'        => array(),
 			);
 
-			global $wpdb;
-
 			// Search in post content
 			if ( in_array( 'content', $search_scope, true ) ) {
 				$content_result = self::find_replace_in_posts(
