@@ -32,9 +32,6 @@ class Diagnostic_GridpaneStagingSites extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
-			return null;
-		}
 		
 		$issues = array();
 		// Check if feature is configured
@@ -43,7 +40,7 @@ class Diagnostic_GridpaneStagingSites extends Diagnostic_Base {
 		if (!$configured) {
 			$issues[] = 'feature not configured';
 		}
-		$has_issue = !empty($issues)
+		$has_issue = !empty($issues);
 		
 		if ( $has_issue ) {
 			return array(

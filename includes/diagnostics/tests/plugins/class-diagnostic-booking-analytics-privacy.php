@@ -32,7 +32,7 @@ class Diagnostic_BookingAnalyticsPrivacy extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic plugin check ) {
+		if ( ! function_exists('some_check') ) {
 			return null;
 		}
 		

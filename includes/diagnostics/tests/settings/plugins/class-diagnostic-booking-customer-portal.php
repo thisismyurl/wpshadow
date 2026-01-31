@@ -32,7 +32,7 @@ class Diagnostic_BookingCustomerPortal extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // Generic plugin check ) {
+		if ( ! function_exists('some_check') ) {
 			return null;
 		}
 		
@@ -43,7 +43,7 @@ class Diagnostic_BookingCustomerPortal extends Diagnostic_Base {
 		if (!$configured) {
 			$issues[] = 'feature not configured';
 		}
-		$has_issue = !empty($issues)
+		$has_issue = !empty($issues);
 		
 		if ( $has_issue ) {
 			return array(

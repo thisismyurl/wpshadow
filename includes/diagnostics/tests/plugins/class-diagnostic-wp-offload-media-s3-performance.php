@@ -32,9 +32,6 @@ class Diagnostic_WpOffloadMediaS3Performance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
-			return null;
-		}
 		
 		$issues = array();
 		$configured = get_option('diagnostic_' . self::$slug, false);

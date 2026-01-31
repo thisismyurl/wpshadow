@@ -43,7 +43,7 @@ class Diagnostic_OptinmonsterCampaignPublishing extends Diagnostic_Base {
 		if (!$configured) {
 			$issues[] = 'feature not configured';
 		}
-		$has_issue = !empty($issues)
+		$has_issue = !empty($issues);
 		
 		if ( $has_issue ) {
 			return array(

@@ -37,22 +37,52 @@ class Diagnostic_BeaverBuilderAssetOptimization extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		// Check if feature is configured
-		$option_prefix = 'diagnostic_' . str_replace('-', '_', self::$slug);
-		$configured = get_option($option_prefix, false);
-		if (!$configured) {
-			$issues[] = 'feature not configured';
-		}
-		$has_issue = !empty($issues)
 		
-		if ( $has_issue ) {
+		// Check 1: CSS minification.
+		$css_minify = get_option( '_fl_builder_css_minify', '0' );
+		if ( '0' === $css_minify ) {
+			$issues[] = 'CSS minification disabled';
+		}
+		
+		// Check 2: JS minification.
+		$js_minify = get_option( '_fl_builder_js_minify', '0' );
+		if ( '0' === $js_minify ) {
+			$issues[] = 'JS minification disabled';
+		}
+		
+		// Check 3: Combine CSS files.
+		$combine_css = get_option( '_fl_builder_combine_css', '0' );
+		if ( '0' === $combine_css ) {
+			$issues[] = 'CSS files not combined';
+		}
+		
+		// Check 4: Combine JS files.
+		$combine_js = get_option( '_fl_builder_combine_js', '0' );
+		if ( '0' === $combine_js ) {
+			$issues[] = 'JS files not combined';
+		}
+		
+		// Check 5: Defer JS.
+		$defer_js = get_option( '_fl_builder_defer_js', '0' );
+		if ( '0' === $defer_js ) {
+			$issues[] = 'JS not deferred';
+		}
+		
+		// Check 6: Remove unused CSS.
+		$remove_unused = get_option( '_fl_builder_remove_unused_css', '0' );
+		if ( '0' === $remove_unused ) {
+			$issues[] = 'unused CSS not removed';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 55 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => 'Beaver Builder asset issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/beaver-builder-asset-optimization',
 			);
 		}

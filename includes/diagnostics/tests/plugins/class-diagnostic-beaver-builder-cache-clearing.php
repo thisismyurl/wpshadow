@@ -37,20 +37,51 @@ class Diagnostic_BeaverBuilderCacheClearing extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Auto clear cache.
+		$auto_clear = get_option( '_fl_builder_auto_clear_cache', '1' );
+		if ( '0' === $auto_clear ) {
+			$issues[] = 'auto cache clearing disabled';
+		}
+		
+		// Check 2: Cache directory writable.
+		$cache_dir = get_option( '_fl_builder_cache_dir', '' );
+		if ( ! empty( $cache_dir ) && ! is_writable( $cache_dir ) ) {
+			$issues[] = 'cache directory not writable';
+		}
+		
+		// Check 3: Clear on save.
+		$clear_on_save = get_option( '_fl_builder_clear_cache_on_save', '1' );
+		if ( '0' === $clear_on_save ) {
+			$issues[] = 'cache not cleared on save';
+		}
+		
+		// Check 4: Global cache enabled.
+		$global_cache = get_option( '_fl_builder_enable_cache', '1' );
+		if ( '0' === $global_cache ) {
+			$issues[] = 'global caching disabled';
+		}
+		
+		// Check 5: Cache timeout.
+		$cache_timeout = get_option( '_fl_builder_cache_timeout', 3600 );
+		if ( $cache_timeout > 86400 ) {
+			$issues[] = 'cache timeout too long';
+		}
+		
+		// Check 6: Debug mode.
+		if ( defined( 'FL_BUILDER_DEBUG' ) && FL_BUILDER_DEBUG ) {
+			$issues[] = 'debug mode enabled (disables cache)';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 50 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'Beaver Builder cache issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/beaver-builder-cache-clearing',
 			);
 		}

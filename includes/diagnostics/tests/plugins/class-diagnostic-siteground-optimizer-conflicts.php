@@ -32,9 +32,6 @@ class Diagnostic_SitegroundOptimizerConflicts extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // Generic check ) {
-			return null;
-		}
 		
 		$issues = array();
 		$configured = get_option('diagnostic_' . self::$slug, false);
