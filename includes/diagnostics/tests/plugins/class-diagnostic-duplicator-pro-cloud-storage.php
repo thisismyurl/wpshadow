@@ -37,20 +37,51 @@ class Diagnostic_DuplicatorProCloudStorage extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: SSL for cloud sync.
+		if ( ! is_ssl() ) {
+			$issues[] = 'cloud sync without HTTPS';
+		}
+		
+		// Check 2: Credentials encryption.
+		$encrypt = get_option( 'duplicator_pro_encrypt_credentials', '1' );
+		if ( '0' === $encrypt ) {
+			$issues[] = 'credentials not encrypted';
+		}
+		
+		// Check 3: Cloud storage access.
+		$storage = get_option( 'duplicator_pro_storage', array() );
+		if ( ! empty( $storage ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$issues[] = 'cloud credentials visible with debug on';
+		}
+		
+		// Check 4: Backup retention.
+		$retention = get_option( 'duplicator_pro_retention_count', 0 );
+		if ( 0 === $retention ) {
+			$issues[] = 'no retention policy';
+		}
+		
+		// Check 5: Transfer encryption.
+		$transfer_encrypt = get_option( 'duplicator_pro_transfer_encryption', '1' );
+		if ( '0' === $transfer_encrypt ) {
+			$issues[] = 'transfer encryption disabled';
+		}
+		
+		// Check 6: Storage test.
+		$test_storage = get_option( 'duplicator_pro_test_storage', '1' );
+		if ( '0' === $test_storage ) {
+			$issues[] = 'storage testing disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 70 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => 'Duplicator Pro security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/duplicator-pro-cloud-storage',
 			);
 		}

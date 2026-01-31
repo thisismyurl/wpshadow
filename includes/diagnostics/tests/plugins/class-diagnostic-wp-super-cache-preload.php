@@ -37,20 +37,52 @@ class Diagnostic_WpSuperCachePreload extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Preload enabled.
+		$preload = get_option( 'wp_super_cache_preload', '0' );
+		if ( '0' === $preload ) {
+			$issues[] = 'cache preload disabled';
+		}
+		
+		// Check 2: Preload interval.
+		$interval = get_option( 'wp_super_cache_preload_interval', 600 );
+		if ( $interval < 300 ) {
+			$issues[] = 'preload interval too frequent';
+		}
+		
+		// Check 3: Preload posts.
+		$posts = get_option( 'wp_super_cache_preload_posts', '1' );
+		if ( '0' === $posts ) {
+			$issues[] = 'post preloading disabled';
+		}
+		
+		// Check 4: Preload pages.
+		$pages = get_option( 'wp_super_cache_preload_pages', '1' );
+		if ( '0' === $pages ) {
+			$issues[] = 'page preloading disabled';
+		}
+		
+		// Check 5: Notification on completion.
+		$notify = get_option( 'wp_super_cache_preload_notify', '0' );
+		if ( '0' === $notify ) {
+			$issues[] = 'completion notifications disabled';
+		}
+		
+		// Check 6: Taxonomies preload.
+		$taxonomies = get_option( 'wp_super_cache_preload_taxonomies', '0' );
+		if ( '0' === $taxonomies ) {
+			$issues[] = 'taxonomy preloading disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 50 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'WP Super Cache preload issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wp-super-cache-preload',
 			);
 		}

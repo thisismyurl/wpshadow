@@ -54,7 +54,7 @@ class Usage_Tracker {
 	 */
 	public static function init() {
 		// Hook into Activity_Logger events
-		add_action( 'wpshadow_activity_logged', array( __CLASS__, 'track_activity' ), 10, 2 );
+		add_action( 'wpshadow_activity_logged', array( __CLASS__, 'track_activity' ), 10, 1 );
 
 		// AJAX endpoint for fetching stats
 		add_action( 'wp_ajax_wpshadow_get_usage_stats', array( __CLASS__, 'ajax_get_stats' ) );
@@ -64,11 +64,17 @@ class Usage_Tracker {
 	 * Track activity and calculate savings.
 	 *
 	 * @since  1.2601.2200
-	 * @param  string $action Activity action type.
-	 * @param  array  $data   Activity data.
+	 * @param  array $activity Activity array with keys: action, details, metadata, etc.
 	 * @return void
 	 */
-	public static function track_activity( $action, $data ) {
+	public static function track_activity( $activity ) {
+		// Validate activity parameter
+		if ( ! is_array( $activity ) || ! isset( $activity['action'] ) ) {
+			return;
+		}
+
+		$action = $activity['action'];
+
 		// Map activity actions to utility types
 		$utility_map = array(
 			'site_clone_started'          => 'site_cloner',
