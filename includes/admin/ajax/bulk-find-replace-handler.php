@@ -327,60 +327,47 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	 * @return array Results.
 	 */
 	private static function find_replace_in_options( $find, $replace, $case_sensitive, $whole_word, $dry_run ) {
-		global $wpdb;
+		// Get all options using WordPress API
+		$all_options = wp_load_alloptions();
 
-		$like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
+		$matches  = 0;
+		$replaced = 0;
 
-		// Count matches
-		$matches = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_value LIKE %s",
-				$like_pattern
-			)
-		);
+		// Search through options using WordPress functions
+		foreach ( $all_options as $option_name => $option_value ) {
+			// Skip if not a string
+			if ( ! is_string( $option_value ) ) {
+				continue;
+			}
 
-		if ( $dry_run || 0 === $matches ) {
-			return array(
-				'matches'  => $matches,
-				'replaced' => 0,
-			);
-		}
+			// Count occurrences
+			$found_count = 0;
+			if ( $case_sensitive ) {
+				$found_count = substr_count( $option_value, $find );
+			} else {
+				$found_count = substr_count( strtolower( $option_value ), strtolower( $find ) );
+			}
 
-		// Perform replacement
-		if ( $case_sensitive ) {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->options} 
-					SET option_value = REPLACE(BINARY option_value, %s, %s) 
-					WHERE option_value LIKE %s",
-					$find,
-					$replace,
-					$like_pattern
-				)
-			);
-		} else {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->options} 
-					SET option_value = REPLACE(option_value, %s, %s) 
-					WHERE option_value LIKE %s",
-					$find,
-					$replace,
-					$like_pattern
-				)
-			);
-		}
+			if ( $found_count > 0 ) {
+				$matches += $found_count;
 
-		return array(
-			'matches'  => $matches,
-			'replaced' => $replaced,
-		);
-	}
+				if ( ! $dry_run ) {
+					// Perform replacement
+					if ( $case_sensitive ) {
+						$new_value = str_replace( $find, $replace, $option_value );
+					} else {
+						$new_value = preg_replace(
+							'/' . preg_quote( $find, '/' ) . '/i',
+							$replace,
+							$option_value
+						);
+					}
 
-	/**
-	 * Find and replace in comments.
-	 *
-	 * @since  1.2601.2200
+					// Update option using WordPress API
+					update_option( $option_name, $new_value );
+					$replaced += $found_count;
+				}
+			}
 	 * @param  string $find           Text to find.
 	 * @param  string $replace        Replacement text.
 	 * @param  bool   $case_sensitive Case sensitive search.
@@ -389,48 +376,60 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	 * @return array Results.
 	 */
 	private static function find_replace_in_comments( $find, $replace, $case_sensitive, $whole_word, $dry_run ) {
-		global $wpdb;
-
-		$like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
-
-		// Count matches
-		$matches = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_content LIKE %s",
-				$like_pattern
+		// Get all comments using WordPress API
+		$comments = get_comments(
+			array(
+				'number'       => 0,
+				'status'       => 'any',
+				'type'         => 'comment',
+				'fields'       => 'ids',
 			)
 		);
 
-		if ( $dry_run || 0 === $matches ) {
-			return array(
-				'matches'  => $matches,
-				'replaced' => 0,
-			);
-		}
+		$matches  = 0;
+		$replaced = 0;
 
-		// Perform replacement
-		if ( $case_sensitive ) {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->comments} 
-					SET comment_content = REPLACE(BINARY comment_content, %s, %s) 
-					WHERE comment_content LIKE %s",
-					$find,
-					$replace,
-					$like_pattern
-				)
-			);
-		} else {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->comments} 
-					SET comment_content = REPLACE(comment_content, %s, %s) 
-					WHERE comment_content LIKE %s",
-					$find,
-					$replace,
-					$like_pattern
-				)
-			);
+		// Search through comments using WordPress functions
+		foreach ( $comments as $comment_id ) {
+			$comment = get_comment( $comment_id );
+
+			if ( ! $comment || empty( $comment->comment_content ) ) {
+				continue;
+			}
+
+			// Count occurrences
+			$found_count = 0;
+			if ( $case_sensitive ) {
+				$found_count = substr_count( $comment->comment_content, $find );
+			} else {
+				$found_count = substr_count( strtolower( $comment->comment_content ), strtolower( $find ) );
+			}
+
+			if ( $found_count > 0 ) {
+				$matches += $found_count;
+
+				if ( ! $dry_run ) {
+					// Perform replacement
+					if ( $case_sensitive ) {
+						$new_content = str_replace( $find, $replace, $comment->comment_content );
+					} else {
+						$new_content = preg_replace(
+							'/' . preg_quote( $find, '/' ) . '/i',
+							$replace,
+							$comment->comment_content
+						);
+					}
+
+					// Update comment using WordPress API
+					wp_update_comment(
+						array(
+							'comment_ID'      => $comment_id,
+							'comment_content' => $new_content,
+						)
+					);
+					$replaced += $found_count;
+				}
+			}
 		}
 
 		return array(
