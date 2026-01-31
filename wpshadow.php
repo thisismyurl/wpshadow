@@ -17,13 +17,6 @@ define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
 
 /**
- * Load translations immediately
- *
- * Must be loaded early (before activation hook) to avoid "translations loaded too early" warnings.
- */
-load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
-
-/**
  * Load Composer autoloader (PSR-4)
  *
  * Enables automatic class loading for PSR-4 compliant files.
@@ -76,11 +69,12 @@ require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-backup-schedule
 /**
  * Register settings on init
  *
- * Note: Translations are already loaded earlier to avoid "too early" warnings
+ * Load translations at the correct time to avoid "too early" warnings.
  */
 add_action(
 	'init',
 	function () {
+		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
 		\WPShadow\Core\Settings_Registry::register();
 	},
 	5
