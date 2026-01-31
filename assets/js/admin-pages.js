@@ -328,6 +328,27 @@
                     e.preventDefault();
                 }
             });
+
+            $(document).on('click', '.wps-card[data-utility-url]', function(e) {
+                if ($(e.target).closest('a, button, input, select, textarea, label').length) {
+                    return;
+                }
+
+                const url = $(this).data('utility-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+
+            $(document).on('keydown', '.wps-card[data-utility-url]', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const url = $(this).data('utility-url');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                }
+            });
         },
 
         /**

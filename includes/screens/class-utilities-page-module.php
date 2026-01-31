@@ -434,7 +434,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 							$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
 							$utility_url = admin_url( 'admin.php?page=wpshadow-utilities&tab=' . $item['tool'] );
 							?>
-			<div class="wps-card">
+			<div class="wps-card<?php echo ! empty( $item['enabled'] ) ? ' wps-card--link' : ''; ?>"<?php if ( ! empty( $item['enabled'] ) ) : ?> data-utility-url="<?php echo esc_url( $utility_url ); ?>" role="link" tabindex="0" aria-label="<?php echo esc_attr( sprintf( __( 'Open %s utility', 'wpshadow' ), $item['title'] ) ); ?>"<?php endif; ?>>
 				<div class="wps-card-header wps-pb-3 wps-border-bottom">
 					<div class="wps-flex wps-gap-3 wps-items-start">
 						<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-3xl wps-text-primary"></span>
