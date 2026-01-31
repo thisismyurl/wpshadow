@@ -63,53 +63,40 @@ class Diagnostic_Inactive_User_Account_Locking extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$issues = array();
 		$inactive_users = array();
+		$inactive_admins = array();
 
 		// Calculate date 90 days ago
 		$ninety_days_ago = gmdate( 'Y-m-d H:i:s', time() - ( 90 * 24 * 60 * 60 ) );
 
-		// Get users not logged in for 90+ days
-		$inactive = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT u.ID, u.user_login, MAX(pm.meta_value) as last_login
-				FROM {$wpdb->users} u
-				LEFT JOIN {$wpdb->usermeta} pm ON (u.ID = pm.user_id AND pm.meta_key = 'last_login')
-				WHERE u.user_status = 0
-				AND (pm.meta_value IS NULL OR pm.meta_value < %s)
-				GROUP BY u.ID
-				LIMIT 100",
-				$ninety_days_ago
+		// Get all users and check for last_login meta
+		$all_users = get_users(
+			array(
+				'number' => -1,
+				'fields' => 'all',
 			)
 		);
 
-		if ( $inactive && is_array( $inactive ) ) {
-			$inactive_users = $inactive;
+		// Check each user for inactivity
+		foreach ( $all_users as $user ) {
+			if ( 0 !== (int) $user->user_status ) {
+				continue; // Skip non-active users
+			}
+
+			$last_login = get_user_meta( $user->ID, 'last_login', true );
+
+			// User is inactive if no last_login or if last_login is before 90 days ago
+			if ( empty( $last_login ) || $last_login < $ninety_days_ago ) {
+				$inactive_users[] = $user;
+			}
 		}
 
-		// Check for unused administrator accounts
-		$admin_users = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT u.ID, u.user_login, u.user_registered
-				FROM {$wpdb->users} u
-				INNER JOIN {$wpdb->usermeta} um ON (u.ID = um.user_id)
-				WHERE um.meta_key = %s
-				AND um.meta_value LIKE %s",
-				$wpdb->prefix . 'capabilities',
-				'%administrator%'
-			)
-		);
-
-		$inactive_admins = array();
-		if ( $admin_users && is_array( $admin_users ) ) {
-			foreach ( $admin_users as $admin ) {
-				foreach ( $inactive_users as $inactive ) {
-					if ( $admin->ID === $inactive->ID ) {
-						$inactive_admins[] = $admin;
-						break;
-					}
+		// Check for inactive administrators using caps check
+		if ( ! empty( $inactive_users ) ) {
+			foreach ( $inactive_users as $user ) {
+				// Check if user has administrator capabilities
+				if ( user_can( $user, 'manage_options' ) ) {
+					$inactive_admins[] = $user;
 				}
 			}
 		}
