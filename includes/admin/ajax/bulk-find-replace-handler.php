@@ -366,6 +366,18 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 					$replaced += $found_count;
 				}
 			}
+		}
+
+		return array(
+			'matches'  => $matches,
+			'replaced' => $replaced,
+		);
+	}
+
+	/**
+	 * Find and replace in comments.
+	 *
+	 * @since  1.2601.2200
 	 * @param  string $find           Text to find.
 	 * @param  string $replace        Replacement text.
 	 * @param  bool   $case_sensitive Case sensitive search.
