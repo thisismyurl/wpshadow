@@ -92,9 +92,9 @@ class Guardian_Inactive_Notice {
 				e.preventDefault();
 				var $btn = $(this);
 				var originalText = $btn.text();
-				
+
 				$btn.prop('disabled', true).text('<?php esc_js_e( 'Activating...', 'wpshadow' ); ?>');
-				
+
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
@@ -121,13 +121,13 @@ class Guardian_Inactive_Notice {
 					}
 				});
 			});
-			
+
 			// Handle dismiss
 			$('#wpshadow-guardian-notice').on('click', '.notice-dismiss, #wpshadow-dismiss-guardian-notice', function(e) {
 				if (e.target.id === 'wpshadow-dismiss-guardian-notice') {
 					e.preventDefault();
 				}
-				
+
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
