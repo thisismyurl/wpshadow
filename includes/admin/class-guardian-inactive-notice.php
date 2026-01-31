@@ -33,6 +33,7 @@ class Guardian_Inactive_Notice {
 	public static function init(): void {
 		add_action( 'admin_notices', array( __CLASS__, 'display_notice' ) );
 		add_action( 'wp_ajax_wpshadow_dismiss_guardian_notice', array( __CLASS__, 'dismiss_notice' ) );
+		add_action( 'wp_ajax_wpshadow_activate_guardian_from_notice', array( __CLASS__, 'activate_guardian' ) );
 	}
 
 	/**
@@ -75,9 +76,9 @@ class Guardian_Inactive_Notice {
 				<?php esc_html_e( 'Keep your site healthy automatically. Enable Guardian to run scheduled health checks and apply safe fixes without manual intervention.', 'wpshadow' ); ?>
 			</p>
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>" class="button button-primary">
+				<button type="button" class="button button-primary" id="wpshadow-activate-guardian-btn" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_activate_guardian_from_notice' ) ); ?>">
 					<?php esc_html_e( 'Activate Guardian', 'wpshadow' ); ?>
-				</a>
+				</button>
 				<button type="button" class="button" id="wpshadow-dismiss-guardian-notice">
 					<?php esc_html_e( 'Dismiss', 'wpshadow' ); ?>
 				</button>
@@ -86,6 +87,42 @@ class Guardian_Inactive_Notice {
 
 		<script>
 		jQuery(document).ready(function($) {
+			// Handle direct Guardian activation
+			$('#wpshadow-guardian-notice').on('click', '#wpshadow-activate-guardian-btn', function(e) {
+				e.preventDefault();
+				var $btn = $(this);
+				var originalText = $btn.text();
+				
+				$btn.prop('disabled', true).text('<?php esc_js_e( 'Activating...', 'wpshadow' ); ?>');
+				
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpshadow_activate_guardian_from_notice',
+						nonce: $btn.attr('data-nonce')
+					},
+					success: function(response) {
+						if (response.success) {
+							$btn.text('<?php esc_js_e( 'Guardian Activated!', 'wpshadow' ); ?>').addClass('disabled');
+							setTimeout(function() {
+								$('#wpshadow-guardian-notice').fadeOut(300, function() {
+									$(this).remove();
+								});
+							}, 1500);
+						} else {
+							$btn.prop('disabled', false).text(originalText);
+							alert(response.data.message || '<?php esc_js_e( 'Failed to activate Guardian', 'wpshadow' ); ?>');
+						}
+					},
+					error: function() {
+						$btn.prop('disabled', false).text(originalText);
+						alert('<?php esc_js_e( 'Error activating Guardian', 'wpshadow' ); ?>');
+					}
+				});
+			});
+			
+			// Handle dismiss
 			$('#wpshadow-guardian-notice').on('click', '.notice-dismiss, #wpshadow-dismiss-guardian-notice', function(e) {
 				if (e.target.id === 'wpshadow-dismiss-guardian-notice') {
 					e.preventDefault();
@@ -120,5 +157,50 @@ class Guardian_Inactive_Notice {
 		update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
 
 		wp_send_json_success( array( 'message' => __( 'Notice dismissed', 'wpshadow' ) ) );
+	}
+
+	/**
+	 * Handle AJAX activate request
+	 *
+	 * Directly enables Guardian without requiring navigation to Guardian page.
+	 *
+	 * @since 1.2601.2148
+	 */
+	public static function activate_guardian(): void {
+		check_ajax_referer( 'wpshadow_activate_guardian_from_notice' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		}
+
+		// Verify Guardian Manager is available
+		if ( ! class_exists( 'WPShadow\Guardian\Guardian_Manager' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Guardian module not available', 'wpshadow' ) ) );
+		}
+
+		// Enable Guardian with default settings
+		set_transient( 'wpshadow_guardian_first_activation', true, 3600 );
+		$success = \WPShadow\Guardian\Guardian_Manager::update_settings(
+			array(
+				'enabled' => true,
+			)
+		);
+
+		if ( $success ) {
+			// Dismiss the notice automatically
+			update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
+
+			wp_send_json_success(
+				array(
+					'message' => __( 'Guardian has been activated successfully!', 'wpshadow' ),
+				)
+			);
+		} else {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Failed to activate Guardian. Please try again.', 'wpshadow' ),
+				)
+			);
+		}
 	}
 }
