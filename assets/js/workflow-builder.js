@@ -1,9 +1,9 @@
 /**
  * WPShadow Workflow Builder - Enhanced Interactions
- * 
+ *
  * Modern drag-and-drop workflow builder with accessibility support
  * Phase 3 Enhancement: Epic #667/#686 - Scratch-style visual blocks
- * 
+ *
  * @package WPShadow
  * @since   1.2601.2148
  */
@@ -36,7 +36,7 @@
 			this.setupAccessibility();
 			this.addCanvasControls();
 			this.addSearchFilter();
-			
+
 			// Auto-generate a silly workflow name on page load
 			const sillyName = this.generateRidiculousName();
 			$('#wps-workflow-name').val(sillyName).attr('placeholder', sillyName);
@@ -50,10 +50,10 @@
 		 */
 		setupCanvas: function() {
 			const $canvas = $('#wps-canvas');
-			
+
 			// Wrap canvas content in viewport for zoom/pan
 			$canvas.wrapInner('<div class="wps-canvas-viewport"><div class="wps-canvas-content"></div></div>');
-			
+
 			// Add SVG layer for connections
 			$('.wps-canvas-viewport').prepend('<svg class="wps-workflow-connections"><g></g></svg>');
 		},
@@ -109,9 +109,9 @@
 			const searchHTML = `
 				<div class="wps-palette-search">
 					<span class="dashicons dashicons-search"></span>
-					<input type="text" 
-						   id="wps-block-search" 
-						   placeholder="Search blocks..." 
+					<input type="text"
+						   id="wps-block-search"
+						   placeholder="Search blocks..."
 						   aria-label="Search workflow blocks"
 					/>
 				</div>
@@ -159,7 +159,7 @@
 		updateCanvasTransform: function() {
 			const transform = `translate(${this.canvasPosition.x}px, ${this.canvasPosition.y}px) scale(${this.canvasZoom})`;
 			$('.wps-canvas-content').css('transform', transform);
-			
+
 			// Update connections
 			this.updateConnections();
 		},
@@ -225,7 +225,7 @@
 
 			// Keyboard shortcuts
 			$(document).on('keydown', this.handleKeyboardShortcuts.bind(this));
-			
+
 			// Canvas reordering
 			$(document).on('dragstart', '.wps-block', this.handleBlockDragStart.bind(this));
 			$(document).on('dragend', '.wps-block', this.handleBlockDragEnd.bind(this));
@@ -242,7 +242,7 @@
 				const touch = e.originalEvent.touches[0];
 				this.touchedBlock = $(e.currentTarget);
 				this.touchStartPos = { x: touch.clientX, y: touch.clientY };
-				
+
 				this.touchedBlock.addClass('dragging');
 			});
 
@@ -320,7 +320,7 @@
 					WorkflowBuilder.announceToScreenReader('Block added to canvas');
 				}
 			});
-			
+
 			// Add keyboard hint
 			if ($('.wps-keyboard-hint').length === 0) {
 				$('.wps-workflow-builder').append(
@@ -336,7 +336,7 @@
 		 */
 		createConfigPanel: function() {
 			if ($('#wps-config-panel').length > 0) return;
-			
+
 			const panelHTML = `
 				<div id="wps-config-panel" class="wps-block-config-panel" role="dialog" aria-labelledby="config-panel-title" aria-modal="true">
 					<div class="wps-config-panel-header">
@@ -357,14 +357,14 @@
 					</div>
 				</div>
 			`;
-			
+
 			$('body').append(panelHTML);
 			this.configPanel = $('#wps-config-panel');
-			
+
 			// Bind panel events
 			$('.wps-config-panel-close, #wps-config-cancel').on('click', this.closeConfigPanel.bind(this));
 			$('#wps-config-save').on('click', this.saveBlockConfig.bind(this));
-			
+
 			// Focus trap
 			this.configPanel.on('keydown', this.handleConfigPanelKeydown.bind(this));
 		},
@@ -374,7 +374,7 @@
 		 */
 		createCanvasControls: function() {
 			if ($('.wps-canvas-controls').length > 0) return;
-			
+
 			const controlsHTML = `
 				<div class="wps-canvas-controls" role="toolbar" aria-label="Canvas controls">
 					<button class="wps-canvas-control-btn" id="wps-zoom-out" aria-label="Zoom out" title="Zoom out">
@@ -389,9 +389,9 @@
 					</button>
 				</div>
 			`;
-			
+
 			$('.wps-workflow-canvas-wrapper').append(controlsHTML);
-			
+
 			// Bind zoom events
 			$('#wps-zoom-in').on('click', this.zoomIn.bind(this));
 			$('#wps-zoom-out').on('click', this.zoomOut.bind(this));
@@ -552,7 +552,7 @@
 
 			try {
 				const data = JSON.parse(e.originalEvent.dataTransfer.getData('text/plain'));
-				
+
 				if (data.isNew) {
 					// Adding new block from palette
 					this.addBlockToCanvas(data.blockId, data.blockType);
@@ -571,17 +571,17 @@
 		handleBlockDragStart: function(e) {
 			const $block = $(e.currentTarget);
 			const blockId = $block.data('block-id');
-			
+
 			this.draggedElement = $block;
 			this.draggedBlock = this.blocks.find(b => b.id === blockId);
-			
+
 			$block.addClass('dragging');
 			e.originalEvent.dataTransfer.effectAllowed = 'move';
-			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify({ 
-				blockId: blockId, 
-				isReorder: true 
+			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify({
+				blockId: blockId,
+				isReorder: true
 			}));
-			
+
 			this.announceToScreenReader('Dragging block. Drop on another block to reorder.');
 		},
 
@@ -599,19 +599,19 @@
 		 */
 		handleBlockDragOver: function(e) {
 			if (!this.draggedElement) return;
-			
+
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			const $target = $(e.currentTarget);
 			if ($target.hasClass('dragging')) return;
-			
+
 			const rect = e.currentTarget.getBoundingClientRect();
 			const midpoint = rect.top + rect.height / 2;
 			const insertBefore = e.clientY < midpoint;
-			
+
 			$('.wps-block-drop-placeholder').remove();
-			
+
 			if (insertBefore) {
 				$target.before('<div class="wps-block-drop-placeholder"></div>');
 			} else {
@@ -624,36 +624,36 @@
 		 */
 		handleBlockDrop: function(e) {
 			if (!this.draggedElement) return;
-			
+
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			const $target = $(e.currentTarget);
 			if ($target.hasClass('dragging')) return;
-			
+
 			const rect = e.currentTarget.getBoundingClientRect();
 			const midpoint = rect.top + rect.height / 2;
 			const insertBefore = e.clientY < midpoint;
-			
+
 			// Reorder DOM
 			if (insertBefore) {
 				$target.before(this.draggedElement);
 			} else {
 				$target.after(this.draggedElement);
 			}
-			
+
 			// Reorder state array
 			const draggedId = this.draggedElement.data('block-id');
 			const targetId = $target.data('block-id');
 			const draggedIndex = this.blocks.findIndex(b => b.id === draggedId);
 			const targetIndex = this.blocks.findIndex(b => b.id === targetId);
-			
+
 			if (draggedIndex !== -1 && targetIndex !== -1) {
 				const [movedBlock] = this.blocks.splice(draggedIndex, 1);
 				const newTargetIndex = insertBefore ? targetIndex : targetIndex + 1;
 				this.blocks.splice(newTargetIndex > draggedIndex ? newTargetIndex - 1 : newTargetIndex, 0, movedBlock);
 			}
-			
+
 			$('.wps-block-drop-placeholder').remove();
 			this.announceToScreenReader('Block reordered');
 		},
@@ -664,7 +664,7 @@
 		zoomIn: function() {
 			const levels = [0.75, 1, 1.25, 1.5];
 			const currentIndex = levels.indexOf(this.zoomLevel);
-			
+
 			if (currentIndex < levels.length - 1) {
 				this.zoomLevel = levels[currentIndex + 1];
 				this.applyZoom();
@@ -677,7 +677,7 @@
 		zoomOut: function() {
 			const levels = [0.75, 1, 1.25, 1.5];
 			const currentIndex = levels.indexOf(this.zoomLevel);
-			
+
 			if (currentIndex > 0) {
 				this.zoomLevel = levels[currentIndex - 1];
 				this.applyZoom();
@@ -700,11 +700,11 @@
 			$canvas.attr('data-zoom', this.zoomLevel);
 			$canvas.addClass('zoomed');
 			$('#wps-zoom-level').text(Math.round(this.zoomLevel * 100) + '%');
-			
+
 			// Update button states
 			$('#wps-zoom-out').prop('disabled', this.zoomLevel <= 0.75);
 			$('#wps-zoom-in').prop('disabled', this.zoomLevel >= 1.5);
-			
+
 			this.announceToScreenReader('Zoom level: ' + Math.round(this.zoomLevel * 100) + '%');
 		},
 
@@ -717,7 +717,7 @@
 
 			if ('trigger' === blockType && triggerCount >= 1) {
 				const message = wpshadowWorkflow.strings.singleTrigger || 'Only one trigger is allowed per workflow';
-				
+
 				// Issue #1677: Use accessible modal instead of alert
 				if (typeof WPSModal !== 'undefined') {
 					WPSModal.show({
@@ -729,7 +729,7 @@
 				} else {
 					this.showNotification('error', message);
 				}
-				
+
 				this.announceToScreenReader(message);
 				return;
 			}
@@ -781,13 +781,13 @@
 				this.updateConnections();
 				// Validate workflow
 				this.validateWorkflow();
-				
+
 				// Issue #1677: Hide triggers panel after first trigger is added
 				if (blockType === 'trigger') {
 					$('.wps-palette-section:has([data-block-type="trigger"])').fadeOut(300);
 					this.announceToScreenReader('Trigger added. Only one trigger allowed per workflow.');
 				}
-				
+
 				// Issue #1677: Show actions panel once trigger exists
 				if (blockType === 'trigger' && $('.wps-palette-section:has([data-block-type="action"])').is(':hidden')) {
 					$('.wps-palette-section:has([data-block-type="action"])').fadeIn(300);
@@ -805,10 +805,10 @@
 			const description = blockDef.description || 'Click to configure';
 
 			return `
-				<div class="wps-block ${blockType}" 
-				     data-block-id="${uniqueId}" 
-				     role="listitem" 
-				     tabindex="0" 
+				<div class="wps-block ${blockType}"
+				     data-block-id="${uniqueId}"
+				     role="listitem"
+				     tabindex="0"
 				     draggable="true"
 				     aria-label="${blockType}: ${label}. Press Enter to configure, Delete to remove, or drag to reorder.">
 					<div class="wps-block-header">
@@ -816,8 +816,8 @@
 							<span class="dashicons ${iconClass}" aria-hidden="true"></span>
 							<span>${label}</span>
 						</div>
-						<button class="wps-block-remove" 
-						        data-block-id="${uniqueId}" 
+						<button class="wps-block-remove"
+						        data-block-id="${uniqueId}"
 						        aria-label="Remove ${label} block"
 						        tabindex="0">
 							×
@@ -875,18 +875,18 @@
 		moveBlockUp: function(blockId) {
 			const $block = $(`[data-block-id="${blockId}"]`);
 			const $prev = $block.prev('.wps-block');
-			
+
 			if ($prev.length) {
 				$block.insertBefore($prev);
 				$block.focus();
-				
+
 				// Update state array
 				const index = this.blocks.findIndex(b => b.id === blockId);
 				if (index > 0) {
 					const [block] = this.blocks.splice(index, 1);
 					this.blocks.splice(index - 1, 0, block);
 				}
-				
+
 				this.announceToScreenReader('Block moved up');
 			}
 		},
@@ -897,18 +897,18 @@
 		moveBlockDown: function(blockId) {
 			const $block = $(`[data-block-id="${blockId}"]`);
 			const $next = $block.next('.wps-block');
-			
+
 			if ($next.length) {
 				$block.insertAfter($next);
 				$block.focus();
-				
+
 				// Update state array
 				const index = this.blocks.findIndex(b => b.id === blockId);
 				if (index < this.blocks.length - 1) {
 					const [block] = this.blocks.splice(index, 1);
 					this.blocks.splice(index + 1, 0, block);
 				}
-				
+
 				this.announceToScreenReader('Block moved down');
 			}
 		},
@@ -920,7 +920,7 @@
 			// Get block info before removing
 			const block = this.blocks.find(b => b.id === blockId);
 			const blockType = block ? block.type : null;
-			
+
 			// Remove from state
 			this.blocks = this.blocks.filter(b => b.id !== blockId);
 
@@ -935,7 +935,7 @@
 					// Update connections after block removal
 					this.updateConnections();
 				}
-				
+
 				// Issue #1677: Show triggers panel when trigger removed
 				if (blockType === 'trigger') {
 					$('.wps-palette-section:has([data-block-type="trigger"])').fadeIn(300);
@@ -945,7 +945,7 @@
 						$('.wps-palette-section:has([data-block-type="action"])').fadeOut(300);
 					}
 				}
-				
+
 				// Validate workflow
 				this.validateWorkflow();
 			});
@@ -976,15 +976,15 @@
 			// Build config form
 			let formHTML = `<p><strong>${blockDef.label || block.blockId}</strong></p>`;
 			formHTML += `<p class="description">${blockDef.description || ''}</p>`;
-			
+
 			if (blockDef.fields) {
 				Object.keys(blockDef.fields).forEach(fieldKey => {
 					const field = blockDef.fields[fieldKey];
 					const value = block.config[fieldKey] || field.default || '';
-					
+
 					formHTML += `<div class="wps-config-field">`;
 					formHTML += `<label for="config-${fieldKey}">${field.label}</label>`;
-					
+
 					if (field.type === 'select') {
 						formHTML += `<select id="config-${fieldKey}" name="${fieldKey}">`;
 						Object.keys(field.options).forEach(optKey => {
@@ -1000,19 +1000,19 @@
 					} else {
 						formHTML += `<input type="${field.type || 'text'}" id="config-${fieldKey}" name="${fieldKey}" value="${value}" />`;
 					}
-					
+
 					formHTML += `</div>`;
 				});
 			}
-			
+
 			$('#wps-config-panel-body').html(formHTML);
 			this.configPanel.addClass('active');
-			
+
 			// Focus first field
 			setTimeout(() => {
 				$('#wps-config-panel-body').find('input, select, textarea').first().focus();
 			}, 100);
-			
+
 			this.announceToScreenReader('Configuration panel opened. Use Tab to navigate fields.');
 		},
 
@@ -1023,7 +1023,7 @@
 			this.configPanel.removeClass('active');
 			$('.wps-block').removeClass('selected');
 			this.selectedBlock = null;
-			
+
 			// Return focus to canvas
 			$('#wps-canvas').focus();
 			this.announceToScreenReader('Configuration panel closed');
@@ -1034,27 +1034,27 @@
 		 */
 		saveBlockConfig: function() {
 			if (!this.selectedBlock) return;
-			
+
 			// Gather form data
 			const formData = {};
 			$('#wps-config-panel-body').find('input, select, textarea').each(function() {
 				const $field = $(this);
 				const name = $field.attr('name');
-				
+
 				if ($field.is(':checkbox')) {
 					formData[name] = $field.is(':checked');
 				} else {
 					formData[name] = $field.val();
 				}
 			});
-			
+
 			// Update block config
 			this.selectedBlock.config = formData;
-			
+
 			// Update block display
 			const $block = $(`[data-block-id="${this.selectedBlock.id}"]`);
 			$block.find('.wps-block-config p').text('Configured');
-			
+
 			this.closeConfigPanel();
 			this.announceToScreenReader(wpshadowWorkflow.strings.configSaved);
 		},
@@ -1064,20 +1064,20 @@
 		 */
 		handleConfigPanelKeydown: function(e) {
 			if (!this.configPanel.hasClass('active')) return;
-			
+
 			// Escape to close
 			if (e.key === 'Escape') {
 				e.preventDefault();
 				this.closeConfigPanel();
 				return;
 			}
-			
+
 			// Tab focus trap
 			if (e.key === 'Tab') {
 				const $focusable = this.configPanel.find('button, input, select, textarea, [tabindex="0"]');
 				const $first = $focusable.first();
 				const $last = $focusable.last();
-				
+
 				if (e.shiftKey && document.activeElement === $first[0]) {
 					e.preventDefault();
 					$last.focus();
@@ -1115,7 +1115,7 @@
 			e.preventDefault();
 
 			let name = $('#wps-workflow-name').val().trim();
-			
+
 			// Issue #1677: Generate ridiculous name if empty
 			if (!name) {
 				name = this.generateRidiculousName();
@@ -1149,7 +1149,7 @@
 					if (response.success) {
 						this.announceToScreenReader(wpshadowWorkflow.strings.saveSuccess);
 						this.showNotification('success', wpshadowWorkflow.strings.saveSuccess);
-						
+
 						// Store workflow ID if returned
 						if (response.data && response.data.workflow_id) {
 							$('#wps-canvas').data('workflow-id', response.data.workflow_id);
@@ -1265,7 +1265,7 @@
 		handleKeyboardShortcuts: function(e) {
 			// Ignore if typing in input
 			if ($(e.target).is('input, textarea, select')) return;
-			
+
 			// Ctrl+S or Cmd+S to save
 			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 				e.preventDefault();
@@ -1281,23 +1281,23 @@
 					this.selectedBlock = null;
 				}
 			}
-			
+
 			// Arrow keys for block navigation
 			if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
 				e.preventDefault();
 				const $blocks = $('.wps-block');
 				const $focused = $blocks.filter(':focus');
-				
+
 				if ($focused.length) {
 					const currentIndex = $blocks.index($focused);
 					let newIndex;
-					
+
 					if (e.key === 'ArrowUp' && currentIndex > 0) {
 						newIndex = currentIndex - 1;
 					} else if (e.key === 'ArrowDown' && currentIndex < $blocks.length - 1) {
 						newIndex = currentIndex + 1;
 					}
-					
+
 					if (newIndex !== undefined) {
 						$blocks.eq(newIndex).focus();
 						this.announceToScreenReader('Moved to block ' + (newIndex + 1) + ' of ' + $blocks.length);
@@ -1308,7 +1308,7 @@
 					this.announceToScreenReader('Focused first block');
 				}
 			}
-			
+
 			// Zoom shortcuts
 			if (e.ctrlKey || e.metaKey) {
 				if (e.key === '+' || e.key === '=') {
@@ -1410,12 +1410,12 @@
 				'Mechanism', 'Protocol', 'Procedure', 'Operation', 'System',
 				'Algorithm', 'Pattern', 'Strategy', 'Method', 'Scheme'
 			];
-			
+
 			const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
 			const noun = nouns[Math.floor(Math.random() * nouns.length)];
 			const thing = things[Math.floor(Math.random() * things.length)];
 			const number = Math.floor(Math.random() * 100) + 1;
-			
+
 			return `${adjective} ${noun} ${thing} #${number}`;
 		},
 
@@ -1535,7 +1535,7 @@
 		 */
 		toggleShortcutsPanel: function() {
 			$('.wps-shortcuts-panel, .wps-shortcuts-backdrop').toggleClass('active');
-			
+
 			if ($('.wps-shortcuts-panel').hasClass('active')) {
 				$('.wps-shortcuts-panel').focus();
 				this.announceToScreenReader('Keyboard shortcuts panel opened');

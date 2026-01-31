@@ -49,7 +49,7 @@ function wpshadow_get_reports_catalog() {
 			'family'  => 'analysis',
 			'enabled' => true,
 		),
-		
+
 		// Security Reports
 		array(
 			'title'   => __( 'Security Report', 'wpshadow' ),
@@ -60,7 +60,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'badge'   => 'new',
 		),
-		
+
 		// Performance Reports
 		array(
 			'title'   => __( 'Performance Report', 'wpshadow' ),
@@ -71,7 +71,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'badge'   => 'new',
 		),
-		
+
 		// SEO Reports
 		array(
 			'title'   => __( 'SEO Report', 'wpshadow' ),
@@ -82,7 +82,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'badge'   => 'new',
 		),
-		
+
 		// Optimization Reports
 		array(
 			'title'   => __( 'Database Optimization Report', 'wpshadow' ),
@@ -102,7 +102,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'badge'   => 'new',
 		),
-		
+
 		// Commerce Reports
 		array(
 			'title'   => __( 'E-Commerce Health Report', 'wpshadow' ),
@@ -113,7 +113,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'badge'   => 'new',
 		),
-		
+
 		// Compliance & Operations Reports
 		array(
 			'title'   => __( 'Compliance & Privacy Report', 'wpshadow' ),
@@ -151,7 +151,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'badge'   => 'new',
 		),
-		
+
 		// Page-Specific Reports
 		array(
 			'title'   => __( 'Mobile Friendliness Report', 'wpshadow' ),
@@ -177,7 +177,7 @@ function wpshadow_get_reports_catalog() {
 			'family'  => 'page-analysis',
 			'enabled' => true,
 		),
-		
+
 		// Comparison & Historical Reports
 		array(
 			'title'   => __( 'Visual Comparison Report', 'wpshadow' ),
@@ -195,7 +195,7 @@ function wpshadow_get_reports_catalog() {
 			'family'  => 'comparison',
 			'enabled' => true,
 		),
-		
+
 		// Activity & History Reports
 		array(
 			'title'   => __( 'Activity History Report', 'wpshadow' ),
@@ -392,7 +392,7 @@ function wpshadow_render_report_card( $item ) {
 		<?php if ( isset( $item['badge'] ) ) : ?>
 			<span class="wps-badge wps-badge-new"><?php echo esc_html( ucfirst( $item['badge'] ) ); ?></span>
 		<?php endif; ?>
-		
+
 		<div class="wps-card-header wps-pb-3 wps-border-bottom">
 			<div class="wps-flex wps-gap-3 wps-items-start">
 				<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?> wps-text-2xl wps-text-primary"></span>
@@ -401,11 +401,11 @@ function wpshadow_render_report_card( $item ) {
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="wps-card-body">
 			<p class="wps-text-muted wps-mb-0"><?php echo esc_html( $item['desc'] ); ?></p>
 		</div>
-		
+
 		<div class="wps-card-footer wps-pt-3 wps-border-top">
 			<span class="wps-button-link">
 				<?php esc_html_e( 'Generate Report', 'wpshadow' ); ?>

@@ -1,16 +1,16 @@
 /**
  * Kanban Board Styles - Consolidated
- * 
+ *
  * Merged from:
  * - kanban-board.css (1333 lines)
  * - kanban-board-modern.css (500 lines)
- * 
+ *
  * Modern, accessible drag-and-drop interface inspired by Replit and Linear.
  * Provides effortless task management with keyboard navigation support.
- * 
+ *
  * Philosophy: Inspire Confidence (#8) - Effortless task management
  * CANON: Accessibility-first with keyboard navigation
- * 
+ *
  * @package WPShadow
  * @since 1.2601.2148
  */
@@ -1349,17 +1349,17 @@
 /**
  * Modern Kanban Board Enhancements
  * Phase 2: UI/UX Modernization (Epic #685, Issue #667)
- * 
+ *
  * Enhances the existing kanban-board.css with:
  * - Replit-inspired modern card design
  * - Improved drag-and-drop visual feedback
  * - Enhanced keyboard navigation
  * - Better animations and interactions
  * - WCAG AA accessibility compliance
- * 
+ *
  * Philosophy: Inspire Confidence (#8), Effortless task management
  * CANON: Accessibility First with keyboard navigation
- * 
+ *
  * @package WPShadow
  * @since 1.2601.2148
  */

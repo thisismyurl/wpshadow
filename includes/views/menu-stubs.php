@@ -31,7 +31,7 @@ if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
 	/**
 	 * Legacy function name - redirects to wpshadow_render_findings()
-	 * 
+	 *
 	 * @deprecated Use wpshadow_render_findings() instead
 	 */
 	function wpshadow_render_action_items() {
@@ -60,12 +60,12 @@ if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 		if ( ! class_exists( '\WPShadow\Guardian\Recovery_System' ) ) {
 			require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-recovery-system.php';
 		}
-		
+
 		// Load Guardian Dashboard class if not already loaded
 		if ( ! class_exists( '\WPShadow\Admin\Guardian_Dashboard' ) ) {
 			require_once WPSHADOW_PATH . 'includes/admin/class-guardian-dashboard.php';
 		}
-		
+
 		if ( class_exists( '\WPShadow\Admin\Guardian_Dashboard' ) ) {
 			echo \WPShadow\Admin\Guardian_Dashboard::render();
 		} else {
@@ -104,7 +104,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 		if ( 'backup' === $tab ) {
 			$tab = 'vault-light';
 		}
-		
+
 		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
 			$settings_pages = array(
@@ -137,7 +137,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					<h1 class="wps-page-title">
 						<span class="dashicons dashicons-admin-settings"></span>
 						<?php
-						echo esc_html( 
+						echo esc_html(
 							sprintf(
 								/* translators: %s: settings tab name */
 								__( '%s Settings', 'wpshadow' ),
@@ -150,7 +150,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ); ?>">&larr; <?php esc_html_e( 'Back to Settings', 'wpshadow' ); ?></a>
 					</p>
 				</div>
-				
+
 				<div class="wps-card wps-card--warning">
 					<div class="wps-card-body">
 						<p><?php esc_html_e( 'This settings section is not available. Please check the URL or select a different settings tab.', 'wpshadow' ); ?></p>
@@ -160,7 +160,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			<?php
 			return;
 		}
-		
+
 		// Show settings overview grid
 		?>
 		<div class="wps-page-container">
@@ -367,7 +367,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	/**
 	 * Legacy function name - redirects to wpshadow_render_utilities()
-	 * 
+	 *
 	 * @deprecated Use wpshadow_render_utilities() instead
 	 */
 	function wpshadow_render_tools() {

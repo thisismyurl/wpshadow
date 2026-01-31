@@ -1,6 +1,6 @@
 /**
  * WPShadow Dashboard: Real-Time Updates and Full-Screen Mode
- * 
+ *
  * Features:
  * - Real-time gauge and kanban updates during scans
  * - Full-screen dashboard mode for office screens/screensaver
@@ -12,7 +12,7 @@
 	'use strict';
 
 	const WPShadowDashboard = {
-		
+
 		// Configuration
 		config: {
 			updateInterval: 5000, // Update dashboard every 5 seconds during scan
@@ -58,7 +58,7 @@
 				const enabled = $(this).prop('checked');
 				self.config.enableAutoRefresh = enabled;
 				localStorage.setItem('wpshadow_autorefresh', enabled ? '1' : '0');
-				
+
 				if (enabled) {
 					self.initAutoRefresh();
 					$(this).closest('label').html('Auto-refresh: <span style="color: #2e7d32;">ON</span>');
@@ -85,7 +85,7 @@
 		 */
 		startRealtimeUpdates: function() {
 			const self = this;
-			
+
 			// Stop existing interval if any
 			if (this.realtimeInterval) {
 				clearInterval(this.realtimeInterval);
@@ -160,7 +160,7 @@
 					const dasharray = Math.round((gaugeData.percent / 100) * 251) + ' 251';
 					$gauge.find('circle').eq(circleIndex).css('stroke-dasharray', dasharray);
 					$gauge.find('text').text(Math.round(gaugeData.percent) + '%');
-					
+
 					// Update finding count
 					$gauge.closest('a').find('.wpshadow-finding-count').text(
 						gaugeData.findings_count + ' issue' + (gaugeData.findings_count !== 1 ? 's' : '')
@@ -240,10 +240,10 @@
 			if (!this.config.enableAutoRefresh) return;
 
 			const self = this;
-			
+
 			// Check if we're in fullscreen mode
-			const isFullscreen = document.fullscreenElement || 
-				document.webkitFullscreenElement || 
+			const isFullscreen = document.fullscreenElement ||
+				document.webkitFullscreenElement ||
 				document.mozFullScreenElement;
 
 			if (!isFullscreen) return;
@@ -272,15 +272,15 @@
 	 * Toggle fullscreen mode
 	 */
 	toggleFullscreen: function() {
-		const elem = document.querySelector('.wpshadow-dashboard') || 
+		const elem = document.querySelector('.wpshadow-dashboard') ||
 			document.getElementById('wpshadow-dashboard-wrapper');
-		
+
 		if (!elem) {
 			return;
 		}
 
-		const isFullscreen = document.fullscreenElement || 
-			document.webkitFullscreenElement || 
+		const isFullscreen = document.fullscreenElement ||
+			document.webkitFullscreenElement ||
 			document.mozFullScreenElement;
 
 		if (!isFullscreen) {
@@ -297,8 +297,8 @@
 		const self = this;
 
 		// Request fullscreen
-		const requestFullscreen = elem.requestFullscreen || 
-			elem.webkitRequestFullscreen || 
+		const requestFullscreen = elem.requestFullscreen ||
+			elem.webkitRequestFullscreen ||
 			elem.mozRequestFullScreen;
 
 		if (requestFullscreen) {
@@ -341,7 +341,7 @@
 				alert('Fullscreen mode is not supported in your browser.');
 			}
 		}
-		
+
 		// Listen for ESC key to exit
 		$(document).on('keydown.wpshadow-fullscreen', function(e) {
 			if (e.key === 'Escape') {
@@ -356,8 +356,8 @@
 		 * Exit fullscreen mode
 		 */
 		exitFullscreen: function() {
-			const exitFullscreen = document.exitFullscreen || 
-				document.webkitExitFullscreen || 
+			const exitFullscreen = document.exitFullscreen ||
+				document.webkitExitFullscreen ||
 				document.mozCancelFullScreen;
 
 			if (exitFullscreen) {
@@ -412,7 +412,7 @@
 		checkFullscreenMode: function() {
 			// Check for fullscreen parameter in URL or localStorage
 			const urlParams = new URLSearchParams(window.location.search);
-			const forceFullscreen = urlParams.get('wpshadow_fullscreen') === '1' || 
+			const forceFullscreen = urlParams.get('wpshadow_fullscreen') === '1' ||
 				localStorage.getItem('wpshadow_fullscreen_mode') === '1';
 
 			if (forceFullscreen && this.config.enableFullscreen) {
