@@ -251,48 +251,62 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	 * @return array Results.
 	 */
 	private static function find_replace_in_postmeta( $find, $replace, $case_sensitive, $whole_word, $dry_run ) {
-		global $wpdb;
-
-		$like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
-
-		// Count matches
-		$matches = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_value LIKE %s",
-				$like_pattern
+		// Get all post IDs using WordPress API
+		$post_ids = get_posts(
+			array(
+				'post_type'      => 'any',
+				'posts_per_page' => -1,
+				'post_status'    => 'any',
+				'fields'         => 'ids',
 			)
 		);
 
-		if ( $dry_run || 0 === $matches ) {
-			return array(
-				'matches'  => $matches,
-				'replaced' => 0,
-			);
-		}
+		$matches  = 0;
+		$replaced = 0;
 
-		// Perform replacement
-		if ( $case_sensitive ) {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->postmeta} 
-					SET meta_value = REPLACE(BINARY meta_value, %s, %s) 
-					WHERE meta_value LIKE %s",
-					$find,
-					$replace,
-					$like_pattern
-				)
-			);
-		} else {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->postmeta} 
-					SET meta_value = REPLACE(meta_value, %s, %s) 
-					WHERE meta_value LIKE %s",
-					$find,
-					$replace,
-					$like_pattern
-				)
-			);
+		// Search through post meta using WordPress functions
+		foreach ( $post_ids as $post_id ) {
+			$meta_data = get_post_meta( $post_id );
+
+			foreach ( $meta_data as $meta_key => $meta_values ) {
+				// get_post_meta returns single value as string, multiple as array
+				$values = is_array( $meta_values ) ? $meta_values : array( $meta_values );
+
+				foreach ( $values as $meta_value ) {
+					// Skip if not a string
+					if ( ! is_string( $meta_value ) ) {
+						continue;
+					}
+
+					$found_count = 0;
+					if ( $case_sensitive ) {
+						$found_count = substr_count( $meta_value, $find );
+					} else {
+						$found_count = substr_count( strtolower( $meta_value ), strtolower( $find ) );
+					}
+
+					if ( $found_count > 0 ) {
+						$matches += $found_count;
+
+						if ( ! $dry_run ) {
+							// Perform replacement
+							if ( $case_sensitive ) {
+								$new_value = str_replace( $find, $replace, $meta_value );
+							} else {
+								$new_value = preg_replace(
+									'/' . preg_quote( $find, '/' ) . '/i',
+									$replace,
+									$meta_value
+								);
+							}
+
+							// Update post meta using WordPress API
+							update_post_meta( $post_id, $meta_key, $new_value, $meta_value );
+							$replaced += $found_count;
+						}
+					}
+				}
+			}
 		}
 
 		return array(

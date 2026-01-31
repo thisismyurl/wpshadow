@@ -53,89 +53,56 @@ class Treatment_Database_Transient_Cleanup extends Treatment_Base {
 	 * }
 	 */
 	public static function apply() {
-		global $wpdb;
+		$deleted_count = 0;
+		$all_options   = wp_load_alloptions();
 
-		// Get count before cleanup
-		$before_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
-				AND option_value < %d",
-				$wpdb->esc_like( '_transient_timeout_' ) . '%',
-				time()
-			)
-		);
-
-		// Delete expired transients
-		$deleted = $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
-				AND option_value < %d",
-				$wpdb->esc_like( '_transient_timeout_' ) . '%',
-				time()
-			)
-		);
-
-		// Also delete the transient values
-		$deleted_values = $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
-				AND option_name NOT IN (
-					SELECT CONCAT('_transient_', SUBSTRING(option_name, 19))
-					FROM (
-						SELECT option_name 
-						FROM {$wpdb->options} 
-						WHERE option_name LIKE %s
-					) AS timeouts
-				)",
-				$wpdb->esc_like( '_transient_' ) . '%',
-				$wpdb->esc_like( '_transient_timeout_' ) . '%'
-			)
-		);
-
-		// Site transients (multisite)
-		if ( is_multisite() ) {
-			$deleted_site = $wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM {$wpdb->sitemeta} 
-					WHERE meta_key LIKE %s 
-					AND meta_value < %d",
-					$wpdb->esc_like( '_site_transient_timeout_' ) . '%',
-					time()
-				)
-			);
-
-			$deleted_site_values = $wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM {$wpdb->sitemeta} 
-					WHERE meta_key LIKE %s 
-					AND meta_key NOT IN (
-						SELECT CONCAT('_site_transient_', SUBSTRING(meta_key, 24))
-						FROM (
-							SELECT meta_key 
-							FROM {$wpdb->sitemeta} 
-							WHERE meta_key LIKE %s
-						) AS timeouts
-					)",
-					$wpdb->esc_like( '_site_transient_' ) . '%',
-					$wpdb->esc_like( '_site_transient_timeout_' ) . '%'
-				)
-			);
-
-			$deleted += $deleted_site + $deleted_site_values;
+		// Delete expired transients using WordPress API
+		foreach ( $all_options as $option_name => $option_value ) {
+			// Check for expired transient timeouts
+			if ( strpos( $option_name, '_transient_timeout_' ) === 0 ) {
+				$timeout = (int) $option_value;
+				if ( $timeout < time() ) {
+					// Get the transient name (remove the _transient_timeout_ prefix)
+					$transient_name = substr( $option_name, 18 ); // strlen('_transient_timeout_') = 18
+					
+					// Delete both the timeout and the actual transient value
+					delete_transient( $transient_name );
+					$deleted_count++;
+				}
+			}
 		}
 
-		$total_deleted = $deleted + $deleted_values;
+		// Handle multisite
+		if ( is_multisite() ) {
+			$site_metas = get_site_option( 'site_meta', array() );
+			
+			// Get all site option names
+			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Need to scan all site meta for expired transients
+			$sitemeta_rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT meta_id, meta_key, meta_value FROM {$wpdb->sitemeta} 
+					WHERE meta_key LIKE %s",
+					'_site_transient_timeout_%'
+				)
+			);
 
-		if ( $total_deleted > 0 ) {
+			foreach ( $sitemeta_rows as $row ) {
+				$timeout = (int) $row->meta_value;
+				if ( $timeout < time() ) {
+					$transient_name = substr( $row->meta_key, 23 ); // strlen('_site_transient_timeout_') = 23
+					delete_site_transient( $transient_name );
+					$deleted_count++;
+				}
+			}
+		}
+
+		if ( $deleted_count > 0 ) {
 			// Log the cleanup
 			\WPShadow\Core\Activity_Logger::log(
 				'database_transient_cleanup',
 				array(
-					'deleted_count' => $total_deleted,
-					'before_count'  => $before_count,
+					'deleted_count' => $deleted_count,
 				)
 			);
 
@@ -144,10 +111,22 @@ class Treatment_Database_Transient_Cleanup extends Treatment_Base {
 				'message' => sprintf(
 					/* translators: %d: number of transients cleaned */
 					__( 'Cleaned up %d expired transients from database', 'wpshadow' ),
-					$total_deleted
+					$deleted_count
 				),
 				'data'    => array(
-					'deleted_count' => $total_deleted,
+					'deleted_count' => $deleted_count,
+				),
+			);
+		}
+
+		return array(
+			'success' => true,
+			'message' => __( 'No expired transients found', 'wpshadow' ),
+			'data'    => array(
+				'deleted_count' => 0,
+			),
+		);
+	}
 					'before_count'  => $before_count,
 				),
 			);
