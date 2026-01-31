@@ -213,8 +213,13 @@ class KB_Article_Manager {
 			return;
 		}
 
-		// Get contextual tip based on current page
-		$tip = self::get_contextual_tip( $screen->id );
+		// Check login frequency (show only on 2nd or 3rd login in a week)
+		if ( ! self::should_show_tip_based_on_login_frequency( $user_id ) ) {
+			return;
+		}
+
+		// Get contextual tip based on current page and user role
+		$tip = self::get_contextual_tip( $screen->id, $user_id );
 		if ( ! $tip ) {
 			return;
 		}
@@ -245,13 +250,59 @@ class KB_Article_Manager {
 	}
 
 	/**
+	 * Check if tip should be shown based on login frequency
+	 *
+	 * Shows tips only on 2nd or 3rd login in a 7-day period to avoid overwhelming users
+	 *
+	 * @since  1.2605.1357
+	 * @param  int $user_id User ID.
+	 * @return bool Whether tip should be shown.
+	 */
+	private static function should_show_tip_based_on_login_frequency( int $user_id ): bool {
+		// Track login count in past 7 days
+		$login_count_key = 'wpshadow_login_count_' . gmdate( 'W-Y' ); // Weekly key
+		$login_count     = (int) get_user_meta( $user_id, $login_count_key, true );
+
+		// Get when last login count was recorded
+		$last_count_date_key = 'wpshadow_last_count_date';
+		$last_count_date     = (int) get_user_meta( $user_id, $last_count_date_key, true );
+
+		// Reset if more than 7 days have passed
+		if ( time() - $last_count_date > WEEK_IN_SECONDS ) {
+			$login_count = 0;
+		}
+
+		// Increment login count
+		$login_count++;
+		update_user_meta( $user_id, $login_count_key, $login_count );
+		update_user_meta( $user_id, $last_count_date_key, time() );
+
+		// Show tips on 2nd and 3rd login only
+		return $login_count >= 2 && $login_count <= 3;
+	}
+
+	/**
 	 * Get contextual tip for current screen
 	 *
 	 * @since  1.2604.0100
 	 * @param  string $screen_id Current screen ID.
+	 * @param  int    $user_id   User ID.
 	 * @return array|null Tip data or null if no tip available.
 	 */
-	private static function get_contextual_tip( string $screen_id ): ?array {
+	private static function get_contextual_tip( string $screen_id, int $user_id = 0 ): ?array {
+		if ( $user_id === 0 ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Get user roles
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return null;
+		}
+
+		$user_roles = $user->roles;
+
+		// Tips array with role restrictions
 		$tips = array(
 			'toplevel_page_wpshadow'        => array(
 				'message' => __( 'New to WordPress security? Our free 5-minute course covers the essentials of keeping your site safe.', 'wpshadow' ),
@@ -267,6 +318,8 @@ class KB_Article_Manager {
 						'icon' => 'book-alt',
 					),
 				),
+				// Admin and administrator only
+				'allowed_roles' => array( 'administrator' ),
 			),
 			'wpshadow_page_wpshadow-reports' => array(
 				'message' => __( 'Understanding your site\'s health metrics helps you make informed decisions. Learn how to interpret these reports.', 'wpshadow' ),
@@ -277,6 +330,7 @@ class KB_Article_Manager {
 						'icon' => 'book-alt',
 					),
 				),
+				'allowed_roles' => array( 'administrator', 'editor' ),
 			),
 			'wpshadow_page_wpshadow-utilities' => array(
 				'message' => __( 'Each utility is designed to solve specific problems. Learn when and how to use each one effectively.', 'wpshadow' ),
@@ -287,10 +341,36 @@ class KB_Article_Manager {
 						'icon' => 'book-alt',
 					),
 				),
+				'allowed_roles' => array( 'administrator' ),
 			),
 		);
 
-		return $tips[ $screen_id ] ?? null;
+		$tip = $tips[ $screen_id ] ?? null;
+		if ( ! $tip ) {
+			return null;
+		}
+
+		// Check role-based filtering
+		$allowed_roles = $tip['allowed_roles'] ?? array();
+		if ( ! empty( $allowed_roles ) ) {
+			// Check if user has at least one allowed role
+			$has_allowed_role = false;
+			foreach ( $user_roles as $role ) {
+				if ( in_array( $role, $allowed_roles, true ) ) {
+					$has_allowed_role = true;
+					break;
+				}
+			}
+
+			if ( ! $has_allowed_role ) {
+				return null; // User doesn't have required role
+			}
+		}
+
+		// Remove role info before returning
+		unset( $tip['allowed_roles'] );
+
+		return $tip;
 	}
 
 	/**
