@@ -69,7 +69,7 @@ class Diagnostic_User_Role_Permission_Inconsistency extends Diagnostic_Base {
 		if ( ! empty( $wp_roles ) && ! empty( $wp_roles->roles ) ) {
 			foreach ( $wp_roles->roles as $role_name => $role_data ) {
 				$capabilities = isset( $role_data['capabilities'] ) ? $role_data['capabilities'] : array();
-				
+
 				// Check for roles with no capabilities (corrupted)
 				if ( empty( $capabilities ) && ! in_array( $role_name, array( 'subscriber', 'contributor' ), true ) ) {
 					return array(

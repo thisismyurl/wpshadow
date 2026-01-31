@@ -74,7 +74,7 @@ class Diagnostic_Plugin_Accessibility_Declarations_Missing extends Diagnostic_Ba
 
 			// Check if plugin header includes accessibility-ready tag
 			$plugin_headers = get_file_data( WP_PLUGIN_DIR . '/' . $plugin_file, array( 'Tags' => 'Tags' ) );
-			
+
 			if ( empty( $plugin_headers['Tags'] ) || stripos( $plugin_headers['Tags'], 'accessibility' ) === false ) {
 				$non_accessible_plugins++;
 			}

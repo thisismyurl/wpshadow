@@ -67,9 +67,9 @@ class Diagnostic_Image_Alt_Text_Not_Enforced extends Diagnostic_Base {
 
 		// Count images without alt text
 		$images_without_alt = $wpdb->get_var(
-			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p 
-			WHERE p.post_type = 'attachment' AND p.post_mime_type LIKE 'image/%' 
-			AND (p.post_excerpt = '' OR p.post_excerpt IS NULL) 
+			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p
+			WHERE p.post_type = 'attachment' AND p.post_mime_type LIKE 'image/%'
+			AND (p.post_excerpt = '' OR p.post_excerpt IS NULL)
 			AND post_status = 'inherit'"
 		);
 

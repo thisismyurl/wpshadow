@@ -82,9 +82,9 @@ class Diagnostic_Internal_Linking_Strategy_Not_Optimized extends Diagnostic_Base
 
 		// Count posts with no links to other posts
 		$orphaned_posts = $wpdb->get_var(
-			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p 
-			WHERE p.post_type = 'post' AND p.post_status = 'publish' 
-			AND p.post_content NOT LIKE '%<a href=\"%wp-content%\">%' 
+			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p
+			WHERE p.post_type = 'post' AND p.post_status = 'publish'
+			AND p.post_content NOT LIKE '%<a href=\"%wp-content%\">%'
 			AND p.post_content NOT LIKE '%<a href=\"%/blog/%\">%'"
 		);
 

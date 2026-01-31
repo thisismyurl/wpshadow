@@ -332,7 +332,7 @@ class Points_System {
 	 */
 	public static function get_next_milestone( $user_id ) {
 		$balance = self::get_balance( $user_id );
-		
+
 		$milestones = array(
 			100   => __( 'Getting Started', 'wpshadow' ),
 			500   => __( 'Active User', 'wpshadow' ),

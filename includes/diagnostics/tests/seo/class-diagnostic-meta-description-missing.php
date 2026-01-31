@@ -67,8 +67,8 @@ class Diagnostic_Meta_Description_Missing extends Diagnostic_Base {
 
 		// Check for posts without meta descriptions
 		$posts_without_meta = $wpdb->get_var(
-			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p 
-			LEFT JOIN {$wpdb->postmeta} pm ON (p.ID = pm.post_id AND pm.meta_key = '_yoast_wpseo_metadesc') 
+			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p
+			LEFT JOIN {$wpdb->postmeta} pm ON (p.ID = pm.post_id AND pm.meta_key = '_yoast_wpseo_metadesc')
 			WHERE p.post_type IN ('post', 'page') AND p.post_status = 'publish' AND (pm.meta_value IS NULL OR pm.meta_value = '')"
 		);
 

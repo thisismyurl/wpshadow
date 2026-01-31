@@ -73,7 +73,9 @@ class Academy_UI extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function render_dashboard_widget() {
-		$progress = Academy_Manager::get_user_progress();
+		$user_id  = get_current_user_id();
+		$manager  = new Academy_Manager();
+		$progress = $manager->get_user_progress( $user_id );
 
 		?>
 		<div class="wpshadow-academy-widget">

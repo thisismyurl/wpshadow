@@ -68,7 +68,7 @@ class Diagnostic_Dashboard_Widget_Loading_Performance extends Diagnostic_Base {
 		// Count dashboard widget hooks
 		if ( isset( $wp_filter['wp_dashboard_setup'] ) ) {
 			$dashboard_filters = count( $wp_filter['wp_dashboard_setup'] );
-			
+
 			if ( $dashboard_filters > 15 ) {
 				return array(
 					'id'            => self::$slug,

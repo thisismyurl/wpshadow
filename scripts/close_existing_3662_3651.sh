@@ -13,23 +13,23 @@ comments=(
 for i in "${!issues[@]}"; do
   issue="${issues[$i]}"
   comment="${comments[$i]}"
-  
+
   echo "Closing #$issue..."
-  
+
   # Add comment
   curl -s -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.v3+json" \
     "https://api.github.com/repos/thisismyurl/wpshadow/issues/$issue/comments" \
     -d "{\"body\":\"$comment\"}" > /dev/null
-  
+
   # Close issue
   curl -s -X PATCH \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.v3+json" \
     "https://api.github.com/repos/thisismyurl/wpshadow/issues/$issue" \
     -d '{"state":"closed"}' > /dev/null
-  
+
   echo "✓ Closed #$issue"
   sleep 1
 done

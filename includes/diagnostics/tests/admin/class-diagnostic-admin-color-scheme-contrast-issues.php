@@ -74,7 +74,7 @@ class Diagnostic_Admin_Color_Scheme_Contrast_Issues extends Diagnostic_Base {
 		// Check if custom color schemes might have contrast issues
 		// WordPress core schemes are WCAG compliant, but custom ones might not be
 		global $_wp_admin_css_colors;
-		
+
 		if ( ! empty( $_wp_admin_css_colors ) && count( $_wp_admin_css_colors ) > 7 ) {
 			return array(
 				'id'            => self::$slug,

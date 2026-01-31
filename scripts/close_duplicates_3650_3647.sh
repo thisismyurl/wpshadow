@@ -10,23 +10,23 @@ declare -A duplicates=(
 
 for issue in 3650 3649 3648 3647; do
   comment="${duplicates[$issue]}"
-  
+
   echo "Closing duplicate #$issue..."
-  
+
   # Add comment
   curl -s -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.v3+json" \
     "https://api.github.com/repos/thisismyurl/wpshadow/issues/$issue/comments" \
     -d "{\"body\":\"$comment\"}" > /dev/null
-  
+
   # Close issue
   curl -s -X PATCH \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.v3+json" \
     "https://api.github.com/repos/thisismyurl/wpshadow/issues/$issue" \
     -d '{"state":"closed"}' > /dev/null
-  
+
   echo "✓ Closed duplicate #$issue"
   sleep 1
 done

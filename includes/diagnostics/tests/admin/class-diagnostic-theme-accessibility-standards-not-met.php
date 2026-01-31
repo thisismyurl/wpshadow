@@ -66,7 +66,7 @@ class Diagnostic_Theme_Accessibility_Standards_Not_Met extends Diagnostic_Base {
 		// Check if theme declares accessibility support
 		if ( ! current_theme_supports( 'accessibility-ready' ) ) {
 			$theme = wp_get_theme();
-			
+
 			// Check theme tags for accessibility declaration
 			$tags = $theme->get( 'Tags' );
 			if ( empty( $tags ) || ! in_array( 'accessibility-ready', $tags, true ) ) {
