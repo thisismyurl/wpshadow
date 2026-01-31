@@ -179,22 +179,29 @@
 		 * Bind all event handlers
 		 */
 		bindEvents: function() {
-			// Palette block drag events (desktop)
-			$('.wps-block-item').on('dragstart', this.handlePaletteDragStart.bind(this));
-			$('.wps-block-item').on('dragend', this.handlePaletteDragEnd.bind(this));
+			// Palette block drag events (desktop) - use native addEventListener for drag events
+			// jQuery's .on() doesn't properly handle drag events
+			document.querySelectorAll('.wps-block-item').forEach((el) => {
+				el.addEventListener('dragstart', this.handlePaletteDragStart.bind(this));
+				el.addEventListener('dragend', this.handlePaletteDragEnd.bind(this));
+				el.addEventListener('touchstart', this.handlePaletteTouchStart.bind(this));
+				el.addEventListener('touchend', this.handlePaletteTouchEnd.bind(this));
+			});
 
-			// Touch events for mobile
-			$('.wps-block-item').on('touchstart', this.handlePaletteTouchStart.bind(this));
-			$('.wps-block-item').on('touchend', this.handlePaletteTouchEnd.bind(this));
+			// Canvas drop events - use native addEventListener for drag events
+			const canvasElements = [
+				document.getElementById('wps-canvas'),
+				document.querySelector('.wps-canvas-viewport'),
+				document.querySelector('.wps-canvas-content')
+			].filter(el => el !== null);
 
-			// Canvas drop events - bind to both canvas and inner viewport/content for nested structure
-			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('dragover', this.handleCanvasDragOver.bind(this));
-			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('dragleave', this.handleCanvasDragLeave.bind(this));
-			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('drop', this.handleCanvasDrop.bind(this));
-
-			// Canvas touch events
-			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('touchmove', this.handleCanvasTouchMove.bind(this));
-			$('#wps-canvas, .wps-canvas-viewport, .wps-canvas-content').on('touchend', this.handleCanvasTouchEnd.bind(this));
+			canvasElements.forEach((el) => {
+				el.addEventListener('dragover', this.handleCanvasDragOver.bind(this));
+				el.addEventListener('dragleave', this.handleCanvasDragLeave.bind(this));
+				el.addEventListener('drop', this.handleCanvasDrop.bind(this));
+				el.addEventListener('touchmove', this.handleCanvasTouchMove.bind(this));
+				el.addEventListener('touchend', this.handleCanvasTouchEnd.bind(this));
+			});
 
 			// Toolbar actions
 			$('#wps-save-workflow').on('click', this.handleSaveWorkflow.bind(this));
@@ -204,11 +211,27 @@
 			// Keyboard shortcuts
 			$(document).on('keydown', this.handleKeyboardShortcuts.bind(this));
 
-			// Canvas reordering
-			$(document).on('dragstart', '.wps-block', this.handleBlockDragStart.bind(this));
-			$(document).on('dragend', '.wps-block', this.handleBlockDragEnd.bind(this));
-			$(document).on('dragover', '.wps-block', this.handleBlockDragOver.bind(this));
-			$(document).on('drop', '.wps-block', this.handleBlockDrop.bind(this));
+			// Canvas reordering - use native addEventListener for drag events
+			document.addEventListener('dragstart', (e) => {
+				if (e.target.closest('.wps-block')) {
+					this.handleBlockDragStart.call(this, e);
+				}
+			});
+			document.addEventListener('dragend', (e) => {
+				if (e.target.closest('.wps-block')) {
+					this.handleBlockDragEnd.call(this, e);
+				}
+			});
+			document.addEventListener('dragover', (e) => {
+				if (e.target.closest('.wps-block')) {
+					this.handleBlockDragOver.call(this, e);
+				}
+			});
+			document.addEventListener('drop', (e) => {
+				if (e.target.closest('.wps-block')) {
+					this.handleBlockDrop.call(this, e);
+				}
+			});
 		},
 
 		/**
@@ -822,6 +845,7 @@
 		 */
 		bindBlockActions: function(blockId) {
 			const $block = $(`[data-block-id="${blockId}"]`);
+			const blockEl = $block[0];
 
 			// Click to configure
 			$block.on('click', (e) => {
@@ -854,6 +878,14 @@
 					this.moveBlockDown(blockId);
 				}
 			});
+
+			// Bind drag events to newly added canvas block - use native addEventListener
+			if (blockEl) {
+				blockEl.addEventListener('dragstart', this.handleBlockDragStart.bind(this));
+				blockEl.addEventListener('dragend', this.handleBlockDragEnd.bind(this));
+				blockEl.addEventListener('dragover', this.handleBlockDragOver.bind(this));
+				blockEl.addEventListener('drop', this.handleBlockDrop.bind(this));
+			}
 		},
 
 		/**
