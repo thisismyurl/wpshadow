@@ -33,43 +33,43 @@ class Diagnostic_MouseflowFunnelAnalysis extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Mouseflow tracking code installed
 		$tracking_code = get_option( 'mouseflow_tracking_id', '' );
 		if ( empty( $tracking_code ) ) {
 			$issues[] = 'Tracking code not installed';
 		}
-		
+
 		// Check 2: Funnel steps configured
 		$funnel_steps = get_option( 'mouseflow_funnel_steps', array() );
 		if ( empty( $funnel_steps ) ) {
 			$issues[] = 'Funnel steps not configured';
 		}
-		
+
 		// Check 3: Conversion goals defined
 		$conversion_goals = get_option( 'mouseflow_conversion_goals', array() );
 		if ( empty( $conversion_goals ) ) {
 			$issues[] = 'Conversion goals not defined';
 		}
-		
+
 		// Check 4: Heatmap tracking enabled
 		$heatmaps = get_option( 'mouseflow_heatmaps_enabled', false );
 		if ( ! $heatmaps ) {
 			$issues[] = 'Heatmap tracking disabled';
 		}
-		
+
 		// Check 5: Session recording enabled
 		$session_recording = get_option( 'mouseflow_session_recording', false );
 		if ( ! $session_recording ) {
 			$issues[] = 'Session recording disabled';
 		}
-		
+
 		// Check 6: Privacy compliance configured
 		$privacy_compliance = get_option( 'mouseflow_privacy_compliance', false );
 		if ( ! $privacy_compliance ) {
 			$issues[] = 'Privacy compliance not configured';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
@@ -82,7 +82,7 @@ class Diagnostic_MouseflowFunnelAnalysis extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/mouseflow-funnel-analysis',
 			);
 		}
-		
+
 		return null;
 	}
 		}

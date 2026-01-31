@@ -35,7 +35,7 @@ class Diagnostic_BusinessDirectoryImageUploads extends Diagnostic_Base {
 		if ( ! function_exists( 'wpbdp' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify file type restrictions

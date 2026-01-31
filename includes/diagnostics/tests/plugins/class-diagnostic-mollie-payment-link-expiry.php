@@ -35,7 +35,7 @@ class Diagnostic_MolliePaymentLinkExpiry extends Diagnostic_Base {
 		if ( ! class_exists( 'Mollie_WC_Plugin' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify payment link expiration time

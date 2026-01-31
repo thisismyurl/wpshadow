@@ -35,45 +35,45 @@ class Diagnostic_SmushProLazyLoad extends Diagnostic_Base {
 		if ( ! defined( 'WP_SMUSH_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Lazy load enabled
 		$lazy_enabled = get_option( 'wp_smush_lazy_load', false );
 		if ( ! $lazy_enabled ) {
 			$issues[] = 'Lazy load not enabled';
 		}
-		
+
 		// Check 2: Exclusions configured
 		$exclusions = get_option( 'wp_smush_lazy_load_exclusions', array() );
 		if ( empty( $exclusions ) ) {
 			$issues[] = 'No lazy load exclusions configured';
 		}
-		
+
 		// Check 3: Native lazy load enabled
 		$native_lazy = get_option( 'wp_smush_native_lazy_load', false );
 		if ( ! $native_lazy ) {
 			$issues[] = 'Native lazy load disabled';
 		}
-		
+
 		// Check 4: Placeholder images
 		$placeholders = get_option( 'wp_smush_lazy_load_placeholders', false );
 		if ( ! $placeholders ) {
 			$issues[] = 'Placeholder images disabled';
 		}
-		
+
 		// Check 5: Fade-in effect enabled
 		$fade_in = get_option( 'wp_smush_lazy_load_fadein', false );
 		if ( ! $fade_in ) {
 			$issues[] = 'Fade-in effect disabled';
 		}
-		
+
 		// Check 6: Viewport threshold configured
 		$threshold = get_option( 'wp_smush_lazy_load_threshold', 0 );
 		if ( $threshold <= 0 ) {
 			$issues[] = 'Viewport threshold not configured';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
@@ -86,7 +86,7 @@ class Diagnostic_SmushProLazyLoad extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/smush-pro-lazy-load',
 			);
 		}
-		
+
 
 		// Feature availability checks
 		if ( ! function_exists( 'add_action' ) ) {

@@ -35,45 +35,45 @@ class Diagnostic_WoocommerceDynamicPricingRules extends Diagnostic_Base {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Pricing rule conflicts
 		$rule_conflicts = get_option( 'wc_dynamic_pricing_check_conflicts', false );
 		if ( ! $rule_conflicts ) {
 			$issues[] = 'Pricing rule conflict detection disabled';
 		}
-		
+
 		// Check 2: Performance impact monitoring
 		$perf_monitoring = get_option( 'wc_dynamic_pricing_performance_monitoring', false );
 		if ( ! $perf_monitoring ) {
 			$issues[] = 'Performance monitoring disabled';
 		}
-		
+
 		// Check 3: Cache compatibility
 		$cache_compat = get_option( 'wc_dynamic_pricing_cache_compatibility', false );
 		if ( ! $cache_compat ) {
 			$issues[] = 'Cache compatibility not configured';
 		}
-		
+
 		// Check 4: Rule priority conflicts
 		$priority_check = get_option( 'wc_dynamic_pricing_priority_check', false );
 		if ( ! $priority_check ) {
 			$issues[] = 'Rule priority conflicts not checked';
 		}
-		
+
 		// Check 5: Rule expiration monitoring
 		$expiration_monitor = get_option( 'wc_dynamic_pricing_expiration_monitor', false );
 		if ( ! $expiration_monitor ) {
 			$issues[] = 'Rule expiration monitoring disabled';
 		}
-		
+
 		// Check 6: Testing mode available
 		$testing_mode = get_option( 'wc_dynamic_pricing_testing_mode', false );
 		if ( ! $testing_mode ) {
 			$issues[] = 'Testing mode not configured';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
@@ -86,7 +86,7 @@ class Diagnostic_WoocommerceDynamicPricingRules extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-dynamic-pricing-rules',
 			);
 		}
-		
+
 		return null;
 	}
 }

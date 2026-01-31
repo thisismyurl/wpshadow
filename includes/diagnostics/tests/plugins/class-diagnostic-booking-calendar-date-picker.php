@@ -35,7 +35,7 @@ class Diagnostic_BookingCalendarDatePicker extends Diagnostic_Base {
 		if ( ! class_exists( 'WPBC_AJX' ) && ! function_exists( 'wpbc_get_bookings' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify availability calendar caching

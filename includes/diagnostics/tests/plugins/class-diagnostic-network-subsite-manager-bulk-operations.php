@@ -35,7 +35,7 @@ class Diagnostic_NetworkSubsiteManagerBulkOperations extends Diagnostic_Base {
 		if ( ! is_multisite() ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify bulk operation site limit

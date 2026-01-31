@@ -35,7 +35,7 @@ class Diagnostic_ServerpilotSslCertificates extends Diagnostic_Base {
 		if ( ! defined( 'SERVERPILOT_VERSION' ) && ! get_option( 'serverpilot_app_id' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify SSL certificate is active

@@ -35,7 +35,7 @@ class Diagnostic_WeglotApiKeySecurity extends Diagnostic_Base {
 		if ( ! defined( 'WEGLOT_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify API key is not stored in plain text

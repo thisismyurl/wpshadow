@@ -33,43 +33,43 @@ class Diagnostic_WordpressPingbackTrackbackSecurity extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Pingbacks disabled
 		$pingbacks = get_option( 'default_ping_status', 'open' );
 		if ( 'open' === $pingbacks ) {
 			$issues[] = 'Pingbacks enabled (security risk)';
 		}
-		
+
 		// Check 2: Trackbacks disabled
 		$trackbacks = get_option( 'default_pingback_flag', '1' );
 		if ( '1' === $trackbacks ) {
 			$issues[] = 'Trackbacks enabled (security risk)';
 		}
-		
+
 		// Check 3: XML-RPC access restricted
 		$xmlrpc_restricted = get_option( 'wpshadow_xmlrpc_restricted', false );
 		if ( ! $xmlrpc_restricted ) {
 			$issues[] = 'XML-RPC not restricted';
 		}
-		
+
 		// Check 4: Pingback DDoS protection
 		$ddos_protection = get_option( 'wpshadow_pingback_ddos_protection', false );
 		if ( ! $ddos_protection ) {
 			$issues[] = 'Pingback DDoS protection disabled';
 		}
-		
+
 		// Check 5: IP blacklist for pingbacks
 		$ip_blacklist = get_option( 'wpshadow_pingback_ip_blacklist', array() );
 		if ( empty( $ip_blacklist ) ) {
 			$issues[] = 'No IP blacklist configured';
 		}
-		
+
 		// Check 6: Rate limiting enabled
 		$rate_limiting = get_option( 'wpshadow_pingback_rate_limiting', false );
 		if ( ! $rate_limiting ) {
 			$issues[] = 'Rate limiting not enabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 85, 55 + ( count( $issues ) * 5 ) );
 			return array(
@@ -82,7 +82,7 @@ class Diagnostic_WordpressPingbackTrackbackSecurity extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-pingback-trackback-security',
 			);
 		}
-		
+
 		return null;
 	}
 		// Additional checks

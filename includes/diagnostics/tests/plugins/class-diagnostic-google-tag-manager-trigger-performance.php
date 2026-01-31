@@ -35,45 +35,45 @@ class Diagnostic_GoogleTagManagerTriggerPerformance extends Diagnostic_Base {
 		if ( ! defined( 'GTM4WP_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: GTM container ID configured
 		$container_id = get_option( 'googletagmanager_container_id', '' );
 		if ( empty( $container_id ) ) {
 			$issues[] = 'GTM container ID not configured';
 		}
-		
+
 		// Check 2: Trigger optimization enabled
 		$trigger_opt = get_option( 'googletagmanager_trigger_optimization', false );
 		if ( ! $trigger_opt ) {
 			$issues[] = 'Trigger optimization disabled';
 		}
-		
+
 		// Check 3: Data layer configured
 		$data_layer = get_option( 'googletagmanager_datalayer_name', '' );
 		if ( empty( $data_layer ) ) {
 			$issues[] = 'Data layer name not configured';
 		}
-		
+
 		// Check 4: Event tracking configured
 		$event_tracking = get_option( 'googletagmanager_event_tracking', false );
 		if ( ! $event_tracking ) {
 			$issues[] = 'Event tracking not configured';
 		}
-		
+
 		// Check 5: Tag firing rules optimized
 		$firing_rules = get_option( 'googletagmanager_firing_rules_optimized', false );
 		if ( ! $firing_rules ) {
 			$issues[] = 'Tag firing rules not optimized';
 		}
-		
+
 		// Check 6: Container version up to date
 		$version_check = get_option( 'googletagmanager_version_check', false );
 		if ( ! $version_check ) {
 			$issues[] = 'Container version not checked';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 5 ) );
 			return array(

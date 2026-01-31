@@ -35,7 +35,7 @@ class Diagnostic_JetpackContactFormAkismet extends Diagnostic_Base {
 		if ( ! class_exists( 'Jetpack' ) || ! function_exists( 'jetpack_is_module_active' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify Akismet integration is enabled

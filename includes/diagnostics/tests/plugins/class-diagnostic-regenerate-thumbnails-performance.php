@@ -33,13 +33,13 @@ class Diagnostic_RegenerateThumbnailsPerformance extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Execution timeout sufficient
 		$max_execution = ini_get( 'max_execution_time' );
 		if ( $max_execution && $max_execution < 300 && 0 !== (int) $max_execution ) {
 			$issues[] = 'Execution timeout too low for regeneration';
 		}
-		
+
 		// Check 2: Memory limit sufficient
 		$memory_limit = ini_get( 'memory_limit' );
 		if ( $memory_limit ) {
@@ -48,30 +48,30 @@ class Diagnostic_RegenerateThumbnailsPerformance extends Diagnostic_Base {
 				$issues[] = 'Memory limit too low for regeneration';
 			}
 		}
-		
+
 		// Check 3: Batch size configured
 		$batch_size = get_option( 'regenerate_thumbnails_batch_size', 0 );
 		if ( $batch_size <= 0 || $batch_size > 50 ) {
 			$issues[] = 'Batch size not optimally configured';
 		}
-		
+
 		// Check 4: Concurrent regeneration disabled
 		$concurrent = get_option( 'regenerate_thumbnails_concurrent', false );
 		if ( $concurrent ) {
 			$issues[] = 'Concurrent regeneration enabled (risky)';
 		}
-		
+
 		// Check 5: Image library available (GD or Imagick)
 		if ( ! extension_loaded( 'gd' ) && ! extension_loaded( 'imagick' ) ) {
 			$issues[] = 'No image processing library available';
 		}
-		
+
 		// Check 6: Error logging enabled
 		$error_logging = get_option( 'regenerate_thumbnails_log_errors', false );
 		if ( ! $error_logging ) {
 			$issues[] = 'Error logging disabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 5 ) );
 			return array(
@@ -84,7 +84,7 @@ class Diagnostic_RegenerateThumbnailsPerformance extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/regenerate-thumbnails-performance',
 			);
 		}
-		
+
 		return null;
 	}
 }

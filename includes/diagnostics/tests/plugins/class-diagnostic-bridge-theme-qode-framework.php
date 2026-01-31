@@ -33,43 +33,43 @@ class Diagnostic_BridgeThemeQodeFramework extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Qode Framework version
 		$framework_version = get_option( 'qode_framework_version', '' );
 		if ( empty( $framework_version ) ) {
 			$issues[] = 'Qode Framework version not detected';
 		}
-		
+
 		// Check 2: Theme update available
 		$update_available = get_option( 'qode_theme_update_available', false );
 		if ( $update_available ) {
 			$issues[] = 'Theme update available';
 		}
-		
+
 		// Check 3: Shortcode optimization
 		$shortcode_opt = get_option( 'qode_shortcode_optimization', false );
 		if ( ! $shortcode_opt ) {
 			$issues[] = 'Shortcode optimization disabled';
 		}
-		
+
 		// Check 4: CSS optimization enabled
 		$css_opt = get_option( 'qode_css_optimization', false );
 		if ( ! $css_opt ) {
 			$issues[] = 'CSS optimization disabled';
 		}
-		
+
 		// Check 5: JavaScript minification
 		$js_min = get_option( 'qode_js_minification', false );
 		if ( ! $js_min ) {
 			$issues[] = 'JavaScript minification disabled';
 		}
-		
+
 		// Check 6: Demo content cleanup
 		$demo_cleanup = get_option( 'qode_demo_content_cleaned', false );
 		if ( ! $demo_cleanup ) {
 			$issues[] = 'Demo content not cleaned up';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
@@ -82,7 +82,7 @@ class Diagnostic_BridgeThemeQodeFramework extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/bridge-theme-qode-framework',
 			);
 		}
-		
+
 		return null;
 	}
 		}

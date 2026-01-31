@@ -35,7 +35,7 @@ class Diagnostic_RegenerateThumbnailsMemoryUsage extends Diagnostic_Base {
 		if ( ! function_exists( 'regenerate_thumbnails' ) && ! class_exists( 'RegenerateThumbnails' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify memory limit is adequate

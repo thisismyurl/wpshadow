@@ -112,10 +112,10 @@ class Phase4_Settings_Page {
 								<?php esc_html_e( 'Slack Integration', 'wpshadow' ); ?>
 							</label>
 							<label class="wps-toggle">
-								<input type="checkbox" 
-									   name="slack_enabled" 
-									   id="slack_enabled" 
-									   value="1" 
+								<input type="checkbox"
+									   name="slack_enabled"
+									   id="slack_enabled"
+									   value="1"
 									   <?php checked( $settings['slack_enabled'] ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
@@ -128,11 +128,11 @@ class Phase4_Settings_Page {
 							<label for="slack_webhook" class="wps-form-label">
 								<?php esc_html_e( 'Slack Webhook URL', 'wpshadow' ); ?>
 							</label>
-							<input type="url" 
-								   name="slack_webhook" 
-								   id="slack_webhook" 
-								   value="<?php echo esc_attr( $settings['slack_webhook'] ); ?>" 
-								   class="wps-input" 
+							<input type="url"
+								   name="slack_webhook"
+								   id="slack_webhook"
+								   value="<?php echo esc_attr( $settings['slack_webhook'] ); ?>"
+								   class="wps-input"
 								   placeholder="https://hooks.slack.com/services/..." />
 							<p class="wps-form-description">
 								<?php
@@ -151,10 +151,10 @@ class Phase4_Settings_Page {
 								<?php esc_html_e( 'Microsoft Teams', 'wpshadow' ); ?>
 							</label>
 							<label class="wps-toggle">
-								<input type="checkbox" 
-									   name="teams_enabled" 
-									   id="teams_enabled" 
-									   value="1" 
+								<input type="checkbox"
+									   name="teams_enabled"
+									   id="teams_enabled"
+									   value="1"
 									   <?php checked( $settings['teams_enabled'] ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
@@ -167,11 +167,11 @@ class Phase4_Settings_Page {
 							<label for="teams_webhook" class="wps-form-label">
 								<?php esc_html_e( 'Teams Webhook URL', 'wpshadow' ); ?>
 							</label>
-							<input type="url" 
-								   name="teams_webhook" 
-								   id="teams_webhook" 
-								   value="<?php echo esc_attr( $settings['teams_webhook'] ); ?>" 
-								   class="wps-input" 
+							<input type="url"
+								   name="teams_webhook"
+								   id="teams_webhook"
+								   value="<?php echo esc_attr( $settings['teams_webhook'] ); ?>"
+								   class="wps-input"
 								   placeholder="https://outlook.office.com/webhook/..." />
 							<p class="wps-form-description">
 								<?php esc_html_e( 'Configure incoming webhooks in your Teams channel settings.', 'wpshadow' ); ?>
@@ -184,10 +184,10 @@ class Phase4_Settings_Page {
 								<?php esc_html_e( 'Custom Webhook', 'wpshadow' ); ?>
 							</label>
 							<label class="wps-toggle">
-								<input type="checkbox" 
-									   name="webhook_enabled" 
-									   id="webhook_enabled" 
-									   value="1" 
+								<input type="checkbox"
+									   name="webhook_enabled"
+									   id="webhook_enabled"
+									   value="1"
 									   <?php checked( $settings['webhook_enabled'] ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
@@ -200,11 +200,11 @@ class Phase4_Settings_Page {
 							<label for="webhook_url" class="wps-form-label">
 								<?php esc_html_e( 'Webhook URL', 'wpshadow' ); ?>
 							</label>
-							<input type="url" 
-								   name="webhook_url" 
-								   id="webhook_url" 
-								   value="<?php echo esc_attr( $settings['webhook_url'] ); ?>" 
-								   class="wps-input" 
+							<input type="url"
+								   name="webhook_url"
+								   id="webhook_url"
+								   value="<?php echo esc_attr( $settings['webhook_url'] ); ?>"
+								   class="wps-input"
 								   placeholder="https://your-service.com/webhook" />
 						</div>
 
@@ -347,12 +347,12 @@ class Phase4_Settings_Page {
 								<?php esc_html_e( 'Hourly Rate', 'wpshadow' ); ?>
 							</label>
 							<div class="wps-input-group">
-								<input type="number" 
-									   name="hourly_rate" 
-									   id="hourly_rate" 
-									   value="<?php echo esc_attr( get_option( 'wpshadow_hourly_rate', '100' ) ); ?>" 
-									   min="0" 
-									   step="1" 
+								<input type="number"
+									   name="hourly_rate"
+									   id="hourly_rate"
+									   value="<?php echo esc_attr( get_option( 'wpshadow_hourly_rate', '100' ) ); ?>"
+									   min="0"
+									   step="1"
 									   class="wps-input wps-w-32" />
 								<span class="wps-input-addon">USD</span>
 							</div>

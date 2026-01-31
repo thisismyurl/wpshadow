@@ -35,7 +35,7 @@ class Diagnostic_WoocommerceProductVendorsSecurity extends Diagnostic_Base {
 		if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'WC_Product_Vendors' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify vendor registration requires approval

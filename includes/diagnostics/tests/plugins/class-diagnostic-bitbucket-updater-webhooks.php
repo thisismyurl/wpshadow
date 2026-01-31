@@ -33,43 +33,43 @@ class Diagnostic_BitbucketUpdaterWebhooks extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Webhook URL configured
 		$webhook_url = get_option( 'bitbucket_updater_webhook_url', '' );
 		if ( empty( $webhook_url ) ) {
 			$issues[] = 'Webhook URL not configured';
 		}
-		
+
 		// Check 2: Webhook secret key
 		$secret_key = get_option( 'bitbucket_updater_webhook_secret', '' );
 		if ( empty( $secret_key ) ) {
 			$issues[] = 'Webhook secret key not set';
 		}
-		
+
 		// Check 3: SSL verification enabled
 		$ssl_verify = get_option( 'bitbucket_updater_ssl_verify', false );
 		if ( ! $ssl_verify ) {
 			$issues[] = 'SSL verification disabled';
 		}
-		
+
 		// Check 4: Webhook retry mechanism
 		$retry_enabled = get_option( 'bitbucket_updater_retry_enabled', false );
 		if ( ! $retry_enabled ) {
 			$issues[] = 'Retry mechanism not enabled';
 		}
-		
+
 		// Check 5: Payload validation
 		$payload_validation = get_option( 'bitbucket_updater_payload_validation', false );
 		if ( ! $payload_validation ) {
 			$issues[] = 'Payload validation disabled';
 		}
-		
+
 		// Check 6: Webhook logs enabled
 		$webhook_logs = get_option( 'bitbucket_updater_webhook_logs', false );
 		if ( ! $webhook_logs ) {
 			$issues[] = 'Webhook logs disabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
@@ -82,7 +82,7 @@ class Diagnostic_BitbucketUpdaterWebhooks extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/bitbucket-updater-webhooks',
 			);
 		}
-		
+
 		return null;
 	}
 		}

@@ -33,42 +33,42 @@ class Diagnostic_GridpaneRedisObjectCache extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Redis extension loaded
 		if ( ! extension_loaded( 'redis' ) ) {
 			$issues[] = 'Redis extension not loaded';
 		}
-		
+
 		// Check 2: Object cache enabled
 		$object_cache = get_option( 'gridpane_redis_enabled', false );
 		if ( ! $object_cache ) {
 			$issues[] = 'Redis object cache disabled';
 		}
-		
+
 		// Check 3: Redis connection configured
 		$redis_host = get_option( 'gridpane_redis_host', '' );
 		if ( empty( $redis_host ) ) {
 			$issues[] = 'Redis host not configured';
 		}
-		
+
 		// Check 4: Persistent connections enabled
 		$persistent = get_option( 'gridpane_redis_persistent', false );
 		if ( ! $persistent ) {
 			$issues[] = 'Persistent connections disabled';
 		}
-		
+
 		// Check 5: Key prefix configured
 		$key_prefix = get_option( 'gridpane_redis_prefix', '' );
 		if ( empty( $key_prefix ) ) {
 			$issues[] = 'Redis key prefix not set';
 		}
-		
+
 		// Check 6: Max TTL configured
 		$max_ttl = get_option( 'gridpane_redis_max_ttl', 0 );
 		if ( $max_ttl <= 0 ) {
 			$issues[] = 'Max TTL not configured';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 5 ) );
 			return array(
@@ -81,7 +81,7 @@ class Diagnostic_GridpaneRedisObjectCache extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/gridpane-redis-object-cache',
 			);
 		}
-		
+
 		return null;
 	}
 		}

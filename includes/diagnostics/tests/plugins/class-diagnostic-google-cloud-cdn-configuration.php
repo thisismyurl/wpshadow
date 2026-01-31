@@ -35,7 +35,7 @@ class Diagnostic_GoogleCloudCdnConfiguration extends Diagnostic_Base {
 		if ( ! defined( 'GCP_PLUGIN_VERSION' ) && ! get_option( 'gcp_cdn_enabled' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify CDN is enabled

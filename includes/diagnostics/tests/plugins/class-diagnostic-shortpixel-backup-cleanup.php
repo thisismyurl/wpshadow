@@ -35,7 +35,7 @@ class Diagnostic_ShortpixelBackupCleanup extends Diagnostic_Base {
 		if ( ! defined( 'SHORTPIXEL_PLUGIN_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify backup retention policy

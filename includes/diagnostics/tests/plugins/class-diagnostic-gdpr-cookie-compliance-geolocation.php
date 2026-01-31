@@ -35,7 +35,7 @@ class Diagnostic_GdprCookieComplianceGeolocation extends Diagnostic_Base {
 		if ( ! function_exists( 'gdpr_cookie_is_accepted' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify geolocation feature is enabled

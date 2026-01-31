@@ -35,7 +35,7 @@ class Diagnostic_WpSyncDbPerformance extends Diagnostic_Base {
 		if ( ! function_exists( 'wpsdb_setup' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify sync batch size configuration

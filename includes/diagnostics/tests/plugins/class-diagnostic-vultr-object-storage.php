@@ -35,7 +35,7 @@ class Diagnostic_VultrObjectStorage extends Diagnostic_Base {
 		if ( ! get_option( 'vultr_storage_enabled' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify storage credentials are configured

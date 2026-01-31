@@ -35,7 +35,7 @@ class Diagnostic_BuddypressGroupPermissions extends Diagnostic_Base {
 		if ( ! class_exists( 'BuddyPress' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify default group creation settings

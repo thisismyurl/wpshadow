@@ -35,7 +35,7 @@ class Diagnostic_CptuiMenuIconPerformance extends Diagnostic_Base {
 		if ( ! defined( 'CPT_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify menu icon URL format and optimization

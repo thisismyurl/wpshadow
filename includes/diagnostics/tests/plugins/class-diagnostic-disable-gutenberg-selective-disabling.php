@@ -35,7 +35,7 @@ class Diagnostic_DisableGutenbergSelectiveDisabling extends Diagnostic_Base {
 		if ( ! function_exists( 'use_block_editor_for_post_type' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify post types with selective Gutenberg disabling

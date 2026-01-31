@@ -35,7 +35,7 @@ class Diagnostic_WpCrontrolScheduledEvents extends Diagnostic_Base {
 		if ( ! function_exists( 'wp_get_schedules' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify excessive scheduled events

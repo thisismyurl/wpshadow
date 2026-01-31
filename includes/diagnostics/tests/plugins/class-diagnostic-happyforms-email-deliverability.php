@@ -35,7 +35,7 @@ class Diagnostic_HappyformsEmailDeliverability extends Diagnostic_Base {
 		if ( ! function_exists( 'happyforms_get_form_controller' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify SMTP configuration

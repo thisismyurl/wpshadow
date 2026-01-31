@@ -35,7 +35,7 @@ class Diagnostic_GeneratepressPremiumMobileHeader extends Diagnostic_Base {
 		if ( ! defined( 'GP_PREMIUM_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify mobile menu is enabled
