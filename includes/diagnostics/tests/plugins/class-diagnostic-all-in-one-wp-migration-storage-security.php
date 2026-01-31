@@ -35,16 +35,16 @@ class Diagnostic_AllInOneWpMigrationStorageSecurity extends Diagnostic_Base {
 		if ( ! defined( 'AI1WM_PLUGIN_NAME' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Storage directory location.
 		$storage_path = defined( 'AI1WM_STORAGE_PATH' ) ? AI1WM_STORAGE_PATH : WP_CONTENT_DIR . '/ai1wm-backups';
 		$is_public = strpos( $storage_path, WP_CONTENT_DIR ) !== false;
 		if ( $is_public ) {
 			$issues[] = 'backups stored in wp-content (potentially publicly accessible)';
 		}
-		
+
 		// Check 2: .htaccess protection.
 		$htaccess_file = $storage_path . '/.htaccess';
 		if ( ! file_exists( $htaccess_file ) ) {
@@ -55,13 +55,13 @@ class Diagnostic_AllInOneWpMigrationStorageSecurity extends Diagnostic_Base {
 				$issues[] = '.htaccess exists but does not deny access';
 			}
 		}
-		
+
 		// Check 3: index.php protection.
 		$index_file = $storage_path . '/index.php';
 		if ( ! file_exists( $index_file ) ) {
 			$issues[] = 'no index.php file to prevent directory listing';
 		}
-		
+
 		// Check 4: Old backup files.
 		if ( is_dir( $storage_path ) ) {
 			$backups = glob( $storage_path . '/*.wpress' );
@@ -77,7 +77,7 @@ class Diagnostic_AllInOneWpMigrationStorageSecurity extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 5: Backup file permissions.
 		if ( is_dir( $storage_path ) ) {
 			$backups = glob( $storage_path . '/*.wpress' );
@@ -90,13 +90,13 @@ class Diagnostic_AllInOneWpMigrationStorageSecurity extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 6: Auto-cleanup enabled.
 		$auto_cleanup = get_option( 'ai1wm_auto_cleanup', '0' );
 		if ( '0' === $auto_cleanup ) {
 			$issues[] = 'automatic cleanup disabled (old backups accumulate)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
@@ -109,7 +109,7 @@ class Diagnostic_AllInOneWpMigrationStorageSecurity extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-wp-migration-storage-security',
 			);
 		}
-		
+
 		return null;
 	}
 }

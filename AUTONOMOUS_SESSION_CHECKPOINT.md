@@ -20,7 +20,7 @@
 public static function check() {
     // 1. Plugin detection (return null early if not present)
     if ( ! class_exists( 'PluginClass' ) ) { return null; }
-    
+
     // 2. Build issues array from 6 real checks
     $issues = array();
     // Check 1: get_option() based
@@ -29,7 +29,7 @@ public static function check() {
     // Check 4: is_ssl() or permission check
     // Check 5: array/validation operation
     // Check 6: timing/calculation based
-    
+
     // 3. Return formatted finding or null
     if ( ! empty( $issues ) ) {
         $threat = min( MAX, BASE + ( count( $issues ) * MULT ) );

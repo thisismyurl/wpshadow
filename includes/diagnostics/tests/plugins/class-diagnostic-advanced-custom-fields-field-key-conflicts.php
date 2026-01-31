@@ -35,15 +35,15 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Duplicate field keys.
 		global $wpdb;
 		$duplicate_keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT post_excerpt, COUNT(*) as cnt FROM {$wpdb->posts} 
-				WHERE post_type = %s AND post_status = %s AND post_excerpt != '' 
+				"SELECT post_excerpt, COUNT(*) as cnt FROM {$wpdb->posts}
+				WHERE post_type = %s AND post_status = %s AND post_excerpt != ''
 				GROUP BY post_excerpt HAVING cnt > 1",
 				'acf-field',
 				'publish'
@@ -53,7 +53,7 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 			$count = count( $duplicate_keys );
 			$issues[] = "{$count} duplicate field keys detected (data corruption risk)";
 		}
-		
+
 		// Check 2: Missing field keys.
 		$missing_keys = $wpdb->get_var(
 			$wpdb->prepare(
@@ -65,12 +65,12 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 		if ( $missing_keys > 0 ) {
 			$issues[] = "{$missing_keys} fields without unique keys (import/export issues)";
 		}
-		
+
 		// Check 3: Field name collisions.
 		$duplicate_names = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT post_title, COUNT(*) as cnt FROM {$wpdb->posts} 
-				WHERE post_type = %s AND post_status = %s 
+				"SELECT post_title, COUNT(*) as cnt FROM {$wpdb->posts}
+				WHERE post_type = %s AND post_status = %s
 				GROUP BY post_title HAVING cnt > 1",
 				'acf-field',
 				'publish'
@@ -80,17 +80,17 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 			$count = count( $duplicate_names );
 			$issues[] = "{$count} field name collisions (data retrieval conflicts)";
 		}
-		
+
 		// Check 4: Orphaned field data.
 		$orphaned_meta = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
-			LEFT JOIN {$wpdb->posts} p ON pm.meta_key = CONCAT('_', p.post_name) 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON pm.meta_key = CONCAT('_', p.post_name)
 			WHERE pm.meta_key LIKE 'field_%' AND p.ID IS NULL"
 		);
 		if ( $orphaned_meta > 0 ) {
 			$issues[] = "{$orphaned_meta} orphaned field references (cleanup needed)";
 		}
-		
+
 		// Check 5: JSON sync conflicts.
 		$json_path = get_option( 'acf_json_save_path', '' );
 		if ( ! empty( $json_path ) && is_dir( $json_path ) ) {
@@ -119,12 +119,12 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 6: Field group key conflicts.
 		$duplicate_group_keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT post_excerpt, COUNT(*) as cnt FROM {$wpdb->posts} 
-				WHERE post_type = %s AND post_status = %s AND post_excerpt != '' 
+				"SELECT post_excerpt, COUNT(*) as cnt FROM {$wpdb->posts}
+				WHERE post_type = %s AND post_status = %s AND post_excerpt != ''
 				GROUP BY post_excerpt HAVING cnt > 1",
 				'acf-field-group',
 				'publish'
@@ -134,7 +134,7 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 			$count = count( $duplicate_group_keys );
 			$issues[] = "{$count} duplicate field group keys (import conflicts)";
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -147,7 +147,7 @@ class Diagnostic_AdvancedCustomFieldsFieldKeyConflicts extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-custom-fields-field-key-conflicts',
 			);
 		}
-		
+
 		return null;
 	}
 }

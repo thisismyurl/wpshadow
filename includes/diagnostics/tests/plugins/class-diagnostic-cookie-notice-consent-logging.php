@@ -35,52 +35,52 @@ class Diagnostic_CookieNoticeConsentLogging extends Diagnostic_Base {
 		if ( ! defined( 'COOKIE_NOTICE_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Consent logging enabled
 		$logging = get_option( 'cookie_notice_consent_logging_enabled', 0 );
 		if ( ! $logging ) {
 			$issues[] = 'Consent logging not enabled';
 		}
-		
+
 		// Check 2: User IP logging
 		$ip = get_option( 'cookie_notice_user_ip_logging_enabled', 0 );
 		if ( ! $ip ) {
 			$issues[] = 'User IP logging not enabled';
 		}
-		
+
 		// Check 3: Timestamp recording
 		$timestamp = get_option( 'cookie_notice_timestamp_recording_enabled', 0 );
 		if ( ! $timestamp ) {
 			$issues[] = 'Timestamp recording not enabled';
 		}
-		
+
 		// Check 4: Consent choice logging
 		$choices = get_option( 'cookie_notice_choice_logging_enabled', 0 );
 		if ( ! $choices ) {
 			$issues[] = 'Consent choice logging not enabled';
 		}
-		
+
 		// Check 5: Log access restrictions
 		$access = get_option( 'cookie_notice_log_access_restricted', 0 );
 		if ( ! $access ) {
 			$issues[] = 'Log access not properly restricted';
 		}
-		
+
 		// Check 6: Log data retention
 		$retention = get_option( 'cookie_notice_log_retention_configured', 0 );
 		if ( ! $retention ) {
 			$issues[] = 'Log retention policy not configured';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 40;
 			$threat_multiplier = 6;
 			$max_threat = 70;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -95,7 +95,7 @@ class Diagnostic_CookieNoticeConsentLogging extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/cookie-notice-consent-logging',
 			);
 		}
-		
+
 		return null;
 	}
 }

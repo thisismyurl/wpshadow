@@ -33,50 +33,50 @@ class Diagnostic_PoeditPluralForms extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Plural forms configured
 		$plural = get_option( 'poedit_plural_forms_configured', 0 );
 		if ( ! $plural ) {
 			$issues[] = 'Plural forms not configured';
 		}
-		
+
 		// Check 2: Language detection
 		$lang = get_option( 'poedit_language_detection_enabled', 0 );
 		if ( ! $lang ) {
 			$issues[] = 'Language detection not enabled';
 		}
-		
+
 		// Check 3: Translation strings parsed
 		$strings = get_option( 'poedit_translation_strings_parsed', 0 );
 		if ( ! $strings ) {
 			$issues[] = 'Translation strings not parsed';
 		}
-		
+
 		// Check 4: Context usage
 		$context = get_option( 'poedit_context_usage_enabled', 0 );
 		if ( ! $context ) {
 			$issues[] = 'Context usage not enabled';
 		}
-		
+
 		// Check 5: Comments for translators
 		$comments = get_option( 'poedit_translator_comments_enabled', 0 );
 		if ( ! $comments ) {
 			$issues[] = 'Translator comments not enabled';
 		}
-		
+
 		// Check 6: Validation rules
 		$validation = get_option( 'poedit_plural_validation_rules_enabled', 0 );
 		if ( ! $validation ) {
 			$issues[] = 'Plural validation rules not enabled';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 25;
 			$threat_multiplier = 6;
 			$max_threat = 55;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -91,7 +91,7 @@ class Diagnostic_PoeditPluralForms extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/poedit-plural-forms',
 			);
 		}
-		
+
 		return null;
 	}
 }

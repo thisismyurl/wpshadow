@@ -36,25 +36,53 @@ class Diagnostic_BbpressDatabaseOptimization extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
+		$issues = array();
 		
-		$has_issue = false; // Replace with actual check logic
+		// Check 1: Database optimization.
+		$db_optimized = get_option( 'bbpress_db_optimized', '0' );
+		if ( '0' === $db_optimized ) {
+			$issues[] = 'database indexes not optimized';
+		}
 		
-		if ( $has_issue ) {
+		// Check 2: Auto cleanup.
+		$cleanup_enabled = get_option( 'bbpress_auto_cleanup', '0' );
+		if ( '0' === $cleanup_enabled ) {
+			$issues[] = 'automatic cleanup disabled';
+		}
+		
+		// Check 3: Spam cleanup frequency.
+		$spam_freq = get_option( 'bbpress_spam_cleanup_frequency', 'monthly' );
+		if ( 'monthly' === $spam_freq || 'never' === $spam_freq ) {
+			$issues[] = 'spam not cleaned frequently';
+		}
+		
+		// Check 4: Archive old content.
+		$archive_enabled = get_option( 'bbpress_archive_old_topics', '0' );
+		if ( '0' === $archive_enabled ) {
+			$issues[] = 'old content not archived';
+		}
+		
+		// Check 5: Query monitoring.
+		$monitor_enabled = get_option( 'bbpress_query_monitor', '0' );
+		if ( '0' === $monitor_enabled ) {
+			$issues[] = 'query monitoring disabled';
+		}
+		
+		// Check 6: Caching.
+		$cache_enabled = get_option( 'bbpress_enable_caching', '1' );
+		if ( '0' === $cache_enabled ) {
+			$issues[] = 'internal caching disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 55 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
-				'auto_fixable' => true,
+				'description' => 'bbPress database issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/bbpress-database-optimization',
 			);
 		}

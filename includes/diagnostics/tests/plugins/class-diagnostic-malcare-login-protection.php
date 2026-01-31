@@ -35,52 +35,52 @@ class Diagnostic_MalcareLoginProtection extends Diagnostic_Base {
 		if ( ! defined( 'MALCARE_VERSION' ) && ! class_exists( 'MalCare' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Verify login protection enabled
 		$login_protection = get_option( 'malcare_login_protection', 0 );
 		if ( ! $login_protection ) {
 			$issues[] = 'Login protection not enabled';
 		}
-		
+
 		// Check 2: Check for CAPTCHA on login
 		$captcha = get_option( 'malcare_login_captcha', 0 );
 		if ( ! $captcha ) {
 			$issues[] = 'Login CAPTCHA not enabled';
 		}
-		
+
 		// Check 3: Verify brute force protection
 		$brute_force = get_option( 'malcare_bruteforce_protection', 0 );
 		if ( ! $brute_force ) {
 			$issues[] = 'Brute force protection not enabled';
 		}
-		
+
 		// Check 4: Check for IP lockouts
 		$ip_lockout = get_option( 'malcare_ip_lockout', 0 );
 		if ( ! $ip_lockout ) {
 			$issues[] = 'IP lockout not enabled';
 		}
-		
+
 		// Check 5: Verify login alert emails
 		$alert_email = get_option( 'malcare_login_alerts', 0 );
 		if ( ! $alert_email ) {
 			$issues[] = 'Login alert emails not enabled';
 		}
-		
+
 		// Check 6: Check for 2FA support
 		$two_factor = get_option( 'malcare_2fa', 0 );
 		if ( ! $two_factor ) {
 			$issues[] = 'Two-factor authentication not enabled';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 70;
 			$threat_multiplier = 5;
 			$max_threat = 95;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -95,7 +95,7 @@ class Diagnostic_MalcareLoginProtection extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/malcare-login-protection',
 			);
 		}
-		
+
 		return null;
 	}
 }

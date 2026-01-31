@@ -35,9 +35,9 @@ class Diagnostic_ElementorProGlobalWidgets extends Diagnostic_Base {
 		if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Verify global widgets exist
 		$global_widgets = get_posts( array(
 			'post_type'      => 'elementor_library',
@@ -50,43 +50,43 @@ class Diagnostic_ElementorProGlobalWidgets extends Diagnostic_Base {
 		if ( empty( $global_widgets ) ) {
 			$issues[] = 'No global widgets configured';
 		}
-		
+
 		// Check 2: Check for excessive global widgets
 		if ( is_array( $global_widgets ) && count( $global_widgets ) > 50 ) {
 			$issues[] = 'Too many global widgets (over 50)';
 		}
-		
+
 		// Check 3: Verify global widgets caching
 		$cache_enabled = get_option( 'elementor_global_widget_cache', 0 );
 		if ( ! $cache_enabled ) {
 			$issues[] = 'Global widget cache not enabled';
 		}
-		
+
 		// Check 4: Check for update syncing
 		$sync_enabled = get_option( 'elementor_global_widget_sync', 0 );
 		if ( ! $sync_enabled ) {
 			$issues[] = 'Global widget sync not enabled';
 		}
-		
+
 		// Check 5: Verify reuse restrictions
 		$reuse_restrictions = get_option( 'elementor_global_widget_reuse', 0 );
 		if ( ! $reuse_restrictions ) {
 			$issues[] = 'Global widget reuse restrictions not configured';
 		}
-		
+
 		// Check 6: Check for template library caching
 		$library_cache = get_option( 'elementor_library_cache', 0 );
 		if ( ! $library_cache ) {
 			$issues[] = 'Template library cache not enabled';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 40;
 			$threat_multiplier = 6;
 			$max_threat = 70;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -101,7 +101,7 @@ class Diagnostic_ElementorProGlobalWidgets extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/elementor-pro-global-widgets',
 			);
 		}
-		
+
 		return null;
 	}
 }

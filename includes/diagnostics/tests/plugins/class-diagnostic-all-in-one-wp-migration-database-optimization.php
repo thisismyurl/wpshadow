@@ -35,19 +35,19 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 		if ( ! defined( 'AI1WM_PLUGIN_NAME' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Database optimization before backup.
 		$auto_optimize = get_option( 'ai1wm_auto_optimize_db', '0' );
 		if ( '0' === $auto_optimize ) {
 			$issues[] = 'database not optimized before backups (larger file sizes)';
 		}
-		
+
 		// Check 2: Table overhead.
 		global $wpdb;
 		$overhead = $wpdb->get_results(
-			"SELECT table_name, data_free FROM information_schema.tables 
+			"SELECT table_name, data_free FROM information_schema.tables
 			WHERE table_schema = DATABASE() AND data_free > 0",
 			ARRAY_A
 		);
@@ -58,7 +58,7 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 				$issues[] = "{$overhead_mb}MB database overhead (run OPTIMIZE TABLE)";
 			}
 		}
-		
+
 		// Check 3: Post revisions accumulation.
 		$revision_count = $wpdb->get_var(
 			$wpdb->prepare(
@@ -69,7 +69,7 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 		if ( $revision_count > 1000 ) {
 			$issues[] = "{$revision_count} post revisions (consider cleanup or limiting revisions)";
 		}
-		
+
 		// Check 4: Transients cleanup.
 		$expired_transients = $wpdb->get_var(
 			$wpdb->prepare(
@@ -81,7 +81,7 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 		if ( $expired_transients > 100 ) {
 			$issues[] = "{$expired_transients} expired transients (bloating database)";
 		}
-		
+
 		// Check 5: Autoload options size.
 		$autoload_size = $wpdb->get_var(
 			"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} WHERE autoload = 'yes'"
@@ -90,7 +90,7 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 		if ( $autoload_mb > 2 ) {
 			$issues[] = "{$autoload_mb}MB autoload data (slows every page load)";
 		}
-		
+
 		// Check 6: Spam comments.
 		$spam_count = $wpdb->get_var(
 			$wpdb->prepare(
@@ -101,7 +101,7 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 		if ( $spam_count > 500 ) {
 			$issues[] = "{$spam_count} spam comments (wasting database space)";
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 45 + ( count( $issues ) * 5 ) );
 			return array(
@@ -114,7 +114,7 @@ class Diagnostic_AllInOneWpMigrationDatabaseOptimization extends Diagnostic_Base
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-wp-migration-database-optimization',
 			);
 		}
-		
+
 		return null;
 	}
 }

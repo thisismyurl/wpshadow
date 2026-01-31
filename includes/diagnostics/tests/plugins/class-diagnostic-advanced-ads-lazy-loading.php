@@ -35,21 +35,21 @@ class Diagnostic_AdvancedAdsLazyLoading extends Diagnostic_Base {
 		if ( ! defined( 'ADVADS_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Lazy loading enabled.
 		$lazy_loading = get_option( 'advads_lazy_loading', '0' );
 		if ( '0' === $lazy_loading ) {
 			$issues[] = 'lazy loading disabled (ads loaded immediately on page load)';
 		}
-		
+
 		// Check 2: Lazy load offset configuration.
 		$lazy_offset = get_option( 'advads_lazy_offset', 0 );
 		if ( 0 === $lazy_offset && '1' === $lazy_loading ) {
 			$issues[] = 'lazy load offset not configured (ads load at viewport edge)';
 		}
-		
+
 		// Check 3: Above-the-fold ads.
 		global $wpdb;
 		$above_fold_ads = $wpdb->get_var(
@@ -62,25 +62,25 @@ class Diagnostic_AdvancedAdsLazyLoading extends Diagnostic_Base {
 		if ( $above_fold_ads > 0 && '1' === $lazy_loading ) {
 			$issues[] = "{$above_fold_ads} above-the-fold ads with lazy loading (may reduce revenue)";
 		}
-		
+
 		// Check 4: Mobile lazy loading.
 		$mobile_lazy_load = get_option( 'advads_mobile_lazy_load', 'same' );
 		if ( 'same' === $mobile_lazy_load ) {
 			$issues[] = 'same lazy load settings for mobile (consider more aggressive mobile lazy loading)';
 		}
-		
+
 		// Check 5: IntersectionObserver support.
 		$use_intersection = get_option( 'advads_use_intersection_observer', '1' );
 		if ( '0' === $use_intersection && '1' === $lazy_loading ) {
 			$issues[] = 'IntersectionObserver disabled (using less efficient scroll events)';
 		}
-		
+
 		// Check 6: Placeholder configuration.
 		$placeholder_enabled = get_option( 'advads_lazy_placeholder', '0' );
 		if ( '0' === $placeholder_enabled && '1' === $lazy_loading ) {
 			$issues[] = 'lazy load placeholders disabled (may cause layout shift)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 75, 45 + ( count( $issues ) * 6 ) );
 			return array(
@@ -93,7 +93,7 @@ class Diagnostic_AdvancedAdsLazyLoading extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-ads-lazy-loading',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -35,33 +35,33 @@ class Diagnostic_AgeGateUnderageAccess extends Diagnostic_Base {
 		if ( ! class_exists( 'Age_Gate' ) && ! defined( 'AGE_GATE_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Minimum age requirement.
 		$min_age = get_option( 'age_gate_minimum_age', 0 );
 		if ( $min_age < 13 ) {
 			$issues[] = "minimum age set to {$min_age} (consider COPPA compliance - 13+)";
 		}
-		
+
 		// Check 2: Bypass parameter in URL.
 		$allow_bypass = get_option( 'age_gate_allow_bypass', '0' );
 		if ( '1' === $allow_bypass ) {
 			$issues[] = 'URL bypass parameter enabled (age verification can be skipped)';
 		}
-		
+
 		// Check 3: Remember me functionality.
 		$remember_verification = get_option( 'age_gate_remember', '1' );
 		if ( '0' === $remember_verification ) {
 			$issues[] = 'remember me disabled (users must verify on every visit)';
 		}
-		
+
 		// Check 4: Form validation strength.
 		$validation_method = get_option( 'age_gate_validation', 'simple' );
 		if ( 'simple' === $validation_method ) {
 			$issues[] = 'simple validation used (easily bypassed by entering false data)';
 		}
-		
+
 		// Check 5: Age verification on restricted content.
 		global $wpdb;
 		$restricted_content = $wpdb->get_var(
@@ -75,13 +75,13 @@ class Diagnostic_AgeGateUnderageAccess extends Diagnostic_Base {
 		if ( $restricted_content > 0 && '0' === $gate_enabled ) {
 			$issues[] = "{$restricted_content} posts marked age-restricted but gate is disabled";
 		}
-		
+
 		// Check 6: JavaScript-only validation.
 		$js_validation = get_option( 'age_gate_js_validation', '1' );
 		if ( '1' === $js_validation && ! has_filter( 'age_gate_server_validation' ) ) {
 			$issues[] = 'JavaScript-only validation (easily bypassed by disabling JS)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -94,7 +94,7 @@ class Diagnostic_AgeGateUnderageAccess extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/age-gate-underage-access',
 			);
 		}
-		
+
 		return null;
 	}
 }

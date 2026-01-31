@@ -35,15 +35,15 @@ class Diagnostic_AssetCleanupRegexRules extends Diagnostic_Base {
 		if ( ! class_exists( 'AssetCleanUp' ) && ! function_exists( 'assetcleanup_is_active' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Regex rules configured.
 		$regex_rules = get_option( 'asset_cleanup_regex_rules', array() );
 		if ( empty( $regex_rules ) || ! is_array( $regex_rules ) ) {
 			$issues[] = 'no regex rules configured';
 		}
-		
+
 		// Check 2: Invalid regex patterns.
 		$invalid_count = 0;
 		if ( is_array( $regex_rules ) ) {
@@ -56,13 +56,13 @@ class Diagnostic_AssetCleanupRegexRules extends Diagnostic_Base {
 		if ( $invalid_count > 0 ) {
 			$issues[] = "{$invalid_count} invalid regex patterns";
 		}
-		
+
 		// Check 3: Performance impact.
 		$rule_count = is_array( $regex_rules ) ? count( $regex_rules ) : 0;
 		if ( $rule_count > 50 ) {
 			$issues[] = "{$rule_count} rules (high performance impact)";
 		}
-		
+
 		// Check 4: Rule duplicates.
 		$patterns = array();
 		$dupes = 0;
@@ -77,19 +77,19 @@ class Diagnostic_AssetCleanupRegexRules extends Diagnostic_Base {
 		if ( $dupes > 0 ) {
 			$issues[] = "{$dupes} duplicate patterns";
 		}
-		
+
 		// Check 5: Case sensitivity.
 		$case_insensitive = get_option( 'asset_cleanup_regex_case_insensitive', '0' );
 		if ( '1' === $case_insensitive && $rule_count > 10 ) {
 			$issues[] = 'case-insensitive matching with many rules';
 		}
-		
+
 		// Check 6: Debugging enabled.
 		$debug = get_option( 'asset_cleanup_regex_debug', '0' );
 		if ( '1' === $debug ) {
 			$issues[] = 'regex debugging enabled in production';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 45 + ( count( $issues ) * 5 ) );
 			return array(
@@ -102,7 +102,7 @@ class Diagnostic_AssetCleanupRegexRules extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/asset-cleanup-regex-rules',
 			);
 		}
-		
+
 		return null;
 	}
 }

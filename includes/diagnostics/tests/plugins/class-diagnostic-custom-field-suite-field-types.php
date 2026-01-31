@@ -35,9 +35,9 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 		if ( ! class_exists( 'CFS' ) && ! function_exists( 'CFS' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Verify field groups are configured
 		$field_groups = get_posts( array(
 			'post_type'      => 'cfs',
@@ -47,7 +47,7 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 		if ( empty( $field_groups ) ) {
 			$issues[] = 'No custom field groups configured';
 		}
-		
+
 		// Check 2: Check for field group assignments
 		if ( ! empty( $field_groups ) ) {
 			foreach ( $field_groups as $group ) {
@@ -58,13 +58,13 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 3: Verify field types are properly registered
 		$registered_fields = apply_filters( 'cfs_field_types', array() );
 		if ( empty( $registered_fields ) ) {
 			$issues[] = 'No custom field types registered';
 		}
-		
+
 		// Check 4: Check for repeater field usage
 		if ( ! empty( $field_groups ) ) {
 			foreach ( $field_groups as $group ) {
@@ -81,7 +81,7 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 5: Verify database table exists
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'cfs_values';
@@ -89,7 +89,7 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 		if ( ! $table_exists ) {
 			$issues[] = 'CFS database table not found';
 		}
-		
+
 		// Check 6: Check for field validation
 		if ( ! empty( $field_groups ) ) {
 			$has_validation = false;
@@ -108,14 +108,14 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 				$issues[] = 'No required field validation configured';
 			}
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 40;
 			$threat_multiplier = 6;
 			$max_threat = 70;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -130,7 +130,7 @@ class Diagnostic_CustomFieldSuiteFieldTypes extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/custom-field-suite-field-types',
 			);
 		}
-		
+
 		return null;
 	}
 }

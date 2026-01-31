@@ -33,44 +33,44 @@ class Diagnostic_WordpressFileEditorDisabled extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: File editor disabled
 		if ( ! defined( 'DISALLOW_FILE_EDIT' ) || ! DISALLOW_FILE_EDIT ) {
 			$issues[] = 'File editor is enabled';
 		}
-		
+
 		// Check 2: File modifications disabled
 		if ( ! defined( 'DISALLOW_FILE_MODS' ) || ! DISALLOW_FILE_MODS ) {
 			$issues[] = 'File modifications are enabled';
 		}
-		
+
 		// Check 3: Theme editor capability present
 		if ( current_user_can( 'edit_themes' ) ) {
 			$issues[] = 'Theme editing capability is available';
 		}
-		
+
 		// Check 4: Plugin editor capability present
 		if ( current_user_can( 'edit_plugins' ) ) {
 			$issues[] = 'Plugin editing capability is available';
 		}
-		
+
 		// Check 5: Multisite super admin still allowed
 		if ( is_multisite() && is_super_admin() && ( ! defined( 'DISALLOW_FILE_EDIT' ) || ! DISALLOW_FILE_EDIT ) ) {
 			$issues[] = 'Multisite super admins can edit files';
 		}
-		
+
 		// Check 6: Debug logging with editor enabled
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && ( ! defined( 'DISALLOW_FILE_EDIT' ) || ! DISALLOW_FILE_EDIT ) ) {
 			$issues[] = 'File editor enabled with WP_DEBUG active';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 45;
 			$threat_multiplier = 6;
 			$max_threat = 75;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -85,7 +85,7 @@ class Diagnostic_WordpressFileEditorDisabled extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-file-editor-disabled',
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -36,16 +36,14 @@ class Diagnostic_AwsCloudfrontCdn extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
+		$issues = array();
+		// Check if feature is configured
+		$option_prefix = 'diagnostic_' . str_replace('-', '_', self::$slug);
+		$configured = get_option($option_prefix, false);
+		if (!$configured) {
+			$issues[] = 'feature not configured';
+		}
+		$has_issue = !empty($issues)
 		
 		if ( $has_issue ) {
 			return array(

@@ -35,52 +35,52 @@ class Diagnostic_OxygenBuilderCodeBlocksValidation extends Diagnostic_Base {
 		if ( ! get_option( 'oxygen_code_blocks_enabled', '' ) && ! get_option( 'oxygen_builder_active', '' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Code validation enabled
 		$code_validation = get_option( 'oxygen_code_validation_enabled', 0 );
 		if ( ! $code_validation ) {
 			$issues[] = 'Code validation not enabled';
 		}
-		
+
 		// Check 2: Security scanning
 		$security_scan = get_option( 'oxygen_code_security_scanning', 0 );
 		if ( ! $security_scan ) {
 			$issues[] = 'Security scanning not enabled';
 		}
-		
+
 		// Check 3: Syntax checking
 		$syntax_check = get_option( 'oxygen_code_syntax_checking', 0 );
 		if ( ! $syntax_check ) {
 			$issues[] = 'Syntax checking not enabled';
 		}
-		
+
 		// Check 4: Block library validation
 		$lib_validation = get_option( 'oxygen_block_lib_validation', 0 );
 		if ( ! $lib_validation ) {
 			$issues[] = 'Block library validation not enabled';
 		}
-		
+
 		// Check 5: Custom code review
 		$code_review = get_option( 'oxygen_custom_code_review', 0 );
 		if ( ! $code_review ) {
 			$issues[] = 'Custom code review not enabled';
 		}
-		
+
 		// Check 6: Code error logging
 		$error_logging = get_option( 'oxygen_code_error_logging', 0 );
 		if ( ! $error_logging ) {
 			$issues[] = 'Code error logging not enabled';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 50;
 			$threat_multiplier = 6;
 			$max_threat = 80;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -95,7 +95,7 @@ class Diagnostic_OxygenBuilderCodeBlocksValidation extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/oxygen-builder-code-blocks-validation',
 			);
 		}
-		
+
 		return null;
 	}
 }

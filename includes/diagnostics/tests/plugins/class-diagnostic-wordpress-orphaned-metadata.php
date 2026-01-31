@@ -34,7 +34,7 @@ class Diagnostic_WordpressOrphanedMetadata extends Diagnostic_Base {
 	public static function check() {
 		// This is a WordPress core feature, always applicable
 		$issues = array();
-		
+
 		// Check 1: Count orphaned postmeta
 		$orphaned_postmeta = get_posts( array(
 			'post_type'      => 'any',
@@ -45,7 +45,7 @@ class Diagnostic_WordpressOrphanedMetadata extends Diagnostic_Base {
 		if ( ! empty( $orphaned_postmeta ) ) {
 			$issues[] = 'Posts in trash may have orphaned metadata';
 		}
-		
+
 		// Check 2: Check for orphaned term relationships
 		$terms = get_terms( array(
 			'taxonomy'   => get_taxonomies(),
@@ -61,7 +61,7 @@ class Diagnostic_WordpressOrphanedMetadata extends Diagnostic_Base {
 		if ( $empty_terms > 10 ) {
 			$issues[] = sprintf( '%d unused terms found', $empty_terms );
 		}
-		
+
 		// Check 3: Check for orphaned user meta
 		$user_count = count_users();
 		if ( isset( $user_count['total_users'] ) && $user_count['total_users'] < 10 ) {
@@ -76,32 +76,32 @@ class Diagnostic_WordpressOrphanedMetadata extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 4: Check transient cleanup
 		$transients = get_option( '_transient_timeout_*', array() );
 		if ( ! empty( $transients ) ) {
 			$issues[] = 'Expired transients not cleaned up';
 		}
-		
+
 		// Check 5: Check for auto-draft posts
 		$auto_drafts = wp_count_posts( 'any' );
 		if ( isset( $auto_drafts->{'auto-draft'} ) && $auto_drafts->{'auto-draft'} > 20 ) {
 			$issues[] = sprintf( '%d auto-draft posts should be cleaned up', $auto_drafts->{'auto-draft'} );
 		}
-		
+
 		// Check 6: Check for revision buildup
 		$revisions = wp_count_posts( 'revision' );
 		if ( isset( $revisions->inherit ) && $revisions->inherit > 1000 ) {
 			$issues[] = sprintf( '%d revisions found (consider limiting)', $revisions->inherit );
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 40;
 			$threat_multiplier = 6;
 			$max_threat = 70;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -116,7 +116,7 @@ class Diagnostic_WordpressOrphanedMetadata extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-orphaned-metadata',
 			);
 		}
-		
+
 		return null;
 	}
 }

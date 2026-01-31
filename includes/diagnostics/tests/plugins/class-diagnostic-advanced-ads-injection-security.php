@@ -35,9 +35,9 @@ class Diagnostic_AdvancedAdsInjectionSecurity extends Diagnostic_Base {
 		if ( ! defined( 'ADVADS_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Plain text ads with unescaped content.
 		global $wpdb;
 		$plain_text_ads = $wpdb->get_var(
@@ -51,19 +51,19 @@ class Diagnostic_AdvancedAdsInjectionSecurity extends Diagnostic_Base {
 		if ( $plain_text_ads > 0 ) {
 			$issues[] = "{$plain_text_ads} ads with unescaped script tags (XSS vulnerability)";
 		}
-		
+
 		// Check 2: Ad content sanitization.
 		$sanitization_enabled = get_option( 'advads_sanitize_content', '1' );
 		if ( '0' === $sanitization_enabled ) {
 			$issues[] = 'ad content sanitization disabled (security risk)';
 		}
-		
+
 		// Check 3: User role permissions.
 		$manage_role = get_option( 'advads_manage_role', 'administrator' );
 		if ( 'administrator' !== $manage_role ) {
 			$issues[] = "non-admin role '{$manage_role}' can manage ads (security concern)";
 		}
-		
+
 		// Check 4: External script sources.
 		$external_scripts = $wpdb->get_var(
 			$wpdb->prepare(
@@ -76,7 +76,7 @@ class Diagnostic_AdvancedAdsInjectionSecurity extends Diagnostic_Base {
 		if ( $external_scripts > 0 ) {
 			$issues[] = "{$external_scripts} ads loading external scripts (verify sources)";
 		}
-		
+
 		// Check 5: iframe sandbox attributes.
 		$unsafe_iframes = $wpdb->get_var(
 			$wpdb->prepare(
@@ -89,13 +89,13 @@ class Diagnostic_AdvancedAdsInjectionSecurity extends Diagnostic_Base {
 		if ( $unsafe_iframes > 0 ) {
 			$issues[] = "{$unsafe_iframes} iframe ads without sandbox attributes";
 		}
-		
+
 		// Check 6: Ad code validation.
 		$code_validation = get_option( 'advads_code_validation', '1' );
 		if ( '0' === $code_validation ) {
 			$issues[] = 'ad code validation disabled (malicious code could be injected)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 95, 70 + ( count( $issues ) * 5 ) );
 			return array(
@@ -108,7 +108,7 @@ class Diagnostic_AdvancedAdsInjectionSecurity extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-ads-injection-security',
 			);
 		}
-		
+
 		return null;
 	}
 }

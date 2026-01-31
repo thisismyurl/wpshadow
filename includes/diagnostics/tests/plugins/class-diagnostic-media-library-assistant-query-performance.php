@@ -35,52 +35,52 @@ class Diagnostic_MediaLibraryAssistantQueryPerformance extends Diagnostic_Base {
 		if ( ! class_exists( 'MLACore' ) && ! defined( 'MLA_PLUGIN_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Verify query caching is enabled
 		$query_cache = get_option( 'mla_query_cache', 0 );
 		if ( ! $query_cache ) {
 			$issues[] = 'Query caching not enabled';
 		}
-		
+
 		// Check 2: Check for thumbnail generation optimization
 		$thumb_optimization = get_option( 'mla_thumbnail_generation', '' );
 		if ( $thumb_optimization !== 'on_demand' ) {
 			$issues[] = 'Thumbnail generation not optimized (use on-demand)';
 		}
-		
+
 		// Check 3: Verify database index optimization
 		$db_indexes = get_option( 'mla_custom_field_indexes', 0 );
 		if ( ! $db_indexes ) {
 			$issues[] = 'Database indexes not optimized for custom fields';
 		}
-		
+
 		// Check 4: Check for IPTC/EXIF processing load
 		$metadata_processing = get_option( 'mla_iptc_exif_standard_mapping', '' );
 		if ( $metadata_processing === 'on_upload' ) {
 			$issues[] = 'IPTC/EXIF processing on upload (causes delays)';
 		}
-		
+
 		// Check 5: Verify attachment count caching
 		$count_cache = get_option( 'mla_attachment_count_cache', 0 );
 		if ( ! $count_cache ) {
 			$issues[] = 'Attachment count caching not enabled';
 		}
-		
+
 		// Check 6: Check for bulk processing limits
 		$bulk_limit = get_option( 'mla_bulk_action_chunk_size', 0 );
 		if ( $bulk_limit <= 0 || $bulk_limit > 100 ) {
 			$issues[] = 'Bulk action chunk size not optimized (recommend 50-100)';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 45;
 			$threat_multiplier = 6;
 			$max_threat = 75;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -95,7 +95,7 @@ class Diagnostic_MediaLibraryAssistantQueryPerformance extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/media-library-assistant-query-performance',
 			);
 		}
-		
+
 		return null;
 	}
 }

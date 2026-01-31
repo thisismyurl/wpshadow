@@ -35,9 +35,9 @@ class Diagnostic_AllInOneSeoSitemap extends Diagnostic_Base {
 		if ( ! function_exists( 'aioseo' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Sitemap enabled.
 		$sitemap_enabled = get_option( 'aioseo_sitemap_enabled', '0' );
 		if ( '0' === $sitemap_enabled ) {
@@ -52,25 +52,25 @@ class Diagnostic_AllInOneSeoSitemap extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-sitemap',
 			);
 		}
-		
+
 		// Check 2: Conflicting sitemaps.
 		$wp_sitemap = get_option( 'wp_sitemap_enabled', '1' );
 		if ( '1' === $wp_sitemap && '1' === $sitemap_enabled ) {
 			$issues[] = 'both WordPress and AIOSEO sitemaps enabled (causes conflicts)';
 		}
-		
+
 		// Check 3: Post types included.
 		$included_post_types = get_option( 'aioseo_sitemap_post_types', array() );
 		if ( empty( $included_post_types ) ) {
 			$issues[] = 'no post types included in sitemap (empty sitemap)';
 		}
-		
+
 		// Check 4: Priority and frequency settings.
 		$auto_priority = get_option( 'aioseo_sitemap_auto_priority', '0' );
 		if ( '0' === $auto_priority ) {
 			$issues[] = 'auto-priority disabled (consider enabling for dynamic priority)';
 		}
-		
+
 		// Check 5: Large sitemap without pagination.
 		global $wpdb;
 		$post_count = $wpdb->get_var(
@@ -83,13 +83,13 @@ class Diagnostic_AllInOneSeoSitemap extends Diagnostic_Base {
 		if ( $post_count > 1000 && $per_page >= 1000 ) {
 			$issues[] = "{$post_count} posts in sitemap (consider reducing per-page limit for performance)";
 		}
-		
+
 		// Check 6: Image sitemap.
 		$image_sitemap = get_option( 'aioseo_sitemap_images', '0' );
 		if ( '0' === $image_sitemap ) {
 			$issues[] = 'image sitemap disabled (images not indexed efficiently)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -102,7 +102,7 @@ class Diagnostic_AllInOneSeoSitemap extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-sitemap',
 			);
 		}
-		
+
 		return null;
 	}
 }

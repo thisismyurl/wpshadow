@@ -35,21 +35,21 @@ class Diagnostic_AllInOneWpSecurityBlacklist extends Diagnostic_Base {
 		if ( ! class_exists( 'AIO_WP_Security' ) && ! defined( 'AIOWPSEC_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: IP blacklist enabled.
 		$blacklist_enabled = get_option( 'aiowps_enable_blacklisting', '0' );
 		if ( '0' === $blacklist_enabled ) {
 			$issues[] = 'IP blacklisting disabled (cannot block malicious IPs)';
 		}
-		
+
 		// Check 2: User agent blacklist.
 		$ua_blacklist = get_option( 'aiowps_enable_block_fake_googlebots', '0' );
 		if ( '0' === $ua_blacklist ) {
 			$issues[] = 'fake Googlebot blocking disabled (bots can scrape freely)';
 		}
-		
+
 		// Check 3: Banned IP count.
 		$banned_ips = get_option( 'aiowps_banned_ip_addresses', '' );
 		if ( empty( $banned_ips ) && '1' === $blacklist_enabled ) {
@@ -61,19 +61,19 @@ class Diagnostic_AllInOneWpSecurityBlacklist extends Diagnostic_Base {
 				$issues[] = "{$count} IPs in blacklist (may slow request processing)";
 			}
 		}
-		
+
 		// Check 4: User agent list.
 		$banned_uas = get_option( 'aiowps_banned_user_agents', '' );
 		if ( empty( $banned_uas ) ) {
 			$issues[] = 'no user agents banned (malicious bots not blocked)';
 		}
-		
+
 		// Check 5: Lockout integration.
 		$lockout_enabled = get_option( 'aiowps_enable_login_lockdown', '0' );
 		if ( '0' === $lockout_enabled ) {
 			$issues[] = 'login lockdown disabled (brute force attempts not automatically blocked)';
 		}
-		
+
 		// Check 6: Whitelist configuration.
 		$whitelist = get_option( 'aiowps_whitelist_ip_addresses', '' );
 		if ( ! empty( $whitelist ) ) {
@@ -83,7 +83,7 @@ class Diagnostic_AllInOneWpSecurityBlacklist extends Diagnostic_Base {
 				$issues[] = "{$count} IPs whitelisted (overly permissive)";
 			}
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 90, 70 + ( count( $issues ) * 4 ) );
 			return array(
@@ -96,7 +96,7 @@ class Diagnostic_AllInOneWpSecurityBlacklist extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-wp-security-blacklist',
 			);
 		}
-		
+
 		return null;
 	}
 }

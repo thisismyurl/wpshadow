@@ -33,49 +33,49 @@ class Diagnostic_WordpressLoginErrorMessages extends Diagnostic_Base {
 
 	public static function check() {
 		$issues = array();
-		
+
 		// Check 1: Verify login error messages are filtered
 		if ( ! has_filter( 'login_errors' ) ) {
 			$issues[] = 'Login error messages not filtered (username exposure risk)';
 		}
-		
+
 		// Check 2: Check for use of generic errors
 		$generic_errors = get_option( 'login_generic_errors', 0 );
 		if ( ! $generic_errors ) {
 			$issues[] = 'Generic login errors not enabled';
 		}
-		
+
 		// Check 3: Verify login throttling
 		$throttling = get_option( 'login_throttle_enabled', 0 );
 		if ( ! $throttling ) {
 			$issues[] = 'Login throttling not enabled';
 		}
-		
+
 		// Check 4: Check for account lockout
 		$lockout = get_option( 'login_lockout_enabled', 0 );
 		if ( ! $lockout ) {
 			$issues[] = 'Account lockout not enabled for repeated failures';
 		}
-		
+
 		// Check 5: Verify login URL obfuscation
 		$login_url = get_option( 'login_url_custom', '' );
 		if ( empty( $login_url ) ) {
 			$issues[] = 'Custom login URL not configured';
 		}
-		
+
 		// Check 6: Check for failed login alerts
 		$failed_alerts = get_option( 'login_failed_alerts', 0 );
 		if ( ! $failed_alerts ) {
 			$issues[] = 'Failed login alerts not configured';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 40;
 			$threat_multiplier = 6;
 			$max_threat = 70;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -90,7 +90,7 @@ class Diagnostic_WordpressLoginErrorMessages extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-login-error-messages',
 			);
 		}
-		
+
 		return null;
 	}
 }

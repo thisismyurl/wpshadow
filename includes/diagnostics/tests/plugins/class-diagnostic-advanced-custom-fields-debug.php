@@ -35,20 +35,20 @@ class Diagnostic_AdvancedCustomFieldsDebug extends Diagnostic_Base {
 		if ( ! class_exists( 'ACF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Debug mode enabled in production.
 		if ( defined( 'ACF_DEBUG' ) && ACF_DEBUG && ! defined( 'WP_DEBUG' ) ) {
 			$issues[] = 'ACF_DEBUG enabled in production (exposes field structure)';
 		}
-		
+
 		// Check 2: Show admin messages.
 		$show_admin = get_option( 'acf_show_admin', '1' );
 		if ( '1' === $show_admin && ! current_user_can( 'manage_options' ) ) {
 			$issues[] = 'ACF admin notices visible to non-administrators';
 		}
-		
+
 		// Check 3: Error logging enabled.
 		$error_log = get_option( 'acf_error_log', '0' );
 		if ( '1' === $error_log ) {
@@ -63,24 +63,24 @@ class Diagnostic_AdvancedCustomFieldsDebug extends Diagnostic_Base {
 				$issues[] = "{$log_entries} error log entries (database bloat)";
 			}
 		}
-		
+
 		// Check 4: Development mode indicators.
 		$dev_mode = get_option( 'acf_dev_mode', '0' );
 		if ( '1' === $dev_mode && ! defined( 'WP_DEBUG' ) ) {
 			$issues[] = 'ACF development mode active (should disable in production)';
 		}
-		
+
 		// Check 5: Field key debugging.
 		$show_keys = get_option( 'acf_show_field_keys', '0' );
 		if ( '1' === $show_keys ) {
 			$issues[] = 'field keys visible in admin (security concern)';
 		}
-		
+
 		// Check 6: PHP error display.
 		if ( defined( 'ACF_SHOW_ERRORS' ) && ACF_SHOW_ERRORS ) {
 			$issues[] = 'ACF_SHOW_ERRORS enabled (exposes internal errors to users)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -93,7 +93,7 @@ class Diagnostic_AdvancedCustomFieldsDebug extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/advanced-custom-fields-debug',
 			);
 		}
-		
+
 		return null;
 	}
 }

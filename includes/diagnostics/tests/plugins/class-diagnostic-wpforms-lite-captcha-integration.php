@@ -35,16 +35,16 @@ class Diagnostic_WpformsLiteCaptchaIntegration extends Diagnostic_Base {
 		if ( ! function_exists( 'wpforms' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Verify CAPTCHA is enabled
 		$captcha_provider = get_option( 'wpforms_settings', array() );
 		$captcha_enabled = isset( $captcha_provider['recaptcha-type'] ) ? $captcha_provider['recaptcha-type'] : '';
 		if ( empty( $captcha_enabled ) ) {
 			$issues[] = 'CAPTCHA not enabled on forms';
 		}
-		
+
 		// Check 2: Check for valid reCAPTCHA keys
 		if ( ! empty( $captcha_enabled ) ) {
 			$site_key = isset( $captcha_provider['recaptcha-site-key'] ) ? $captcha_provider['recaptcha-site-key'] : '';
@@ -53,12 +53,12 @@ class Diagnostic_WpformsLiteCaptchaIntegration extends Diagnostic_Base {
 				$issues[] = 'reCAPTCHA keys not configured';
 			}
 		}
-		
+
 		// Check 3: Verify CAPTCHA version (v2 vs v3)
 		if ( $captcha_enabled === 'v2' ) {
 			$issues[] = 'Using reCAPTCHA v2 (v3 is more user-friendly)';
 		}
-		
+
 		// Check 4: Check for CAPTCHA on all public forms
 		$forms = wpforms()->form->get( '', array( 'orderby' => 'ID' ) );
 		if ( ! empty( $forms ) ) {
@@ -70,7 +70,7 @@ class Diagnostic_WpformsLiteCaptchaIntegration extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check 5: Verify CAPTCHA threshold (v3)
 		if ( $captcha_enabled === 'v3' ) {
 			$threshold = isset( $captcha_provider['recaptcha-v3-threshold'] ) ? (float) $captcha_provider['recaptcha-v3-threshold'] : 0.5;
@@ -78,20 +78,20 @@ class Diagnostic_WpformsLiteCaptchaIntegration extends Diagnostic_Base {
 				$issues[] = 'reCAPTCHA v3 threshold too low (allows more spam)';
 			}
 		}
-		
+
 		// Check 6: Check for hCaptcha alternative
 		$hcaptcha = isset( $captcha_provider['hcaptcha-site-key'] ) ? $captcha_provider['hcaptcha-site-key'] : '';
 		if ( empty( $captcha_enabled ) && empty( $hcaptcha ) ) {
 			$issues[] = 'No CAPTCHA provider configured (reCAPTCHA or hCaptcha)';
 		}
-		
+
 		$issue_count = count( $issues );
 		if ( $issue_count > 0 ) {
 			$base_threat = 40;
 			$threat_multiplier = 6;
 			$max_threat = 70;
 			$threat_level = min( $max_threat, $base_threat + ( $issue_count * $threat_multiplier ) );
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -106,7 +106,7 @@ class Diagnostic_WpformsLiteCaptchaIntegration extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wpforms-lite-captcha-integration',
 			);
 		}
-		
+
 		return null;
 	}
 }

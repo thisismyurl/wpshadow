@@ -35,9 +35,9 @@ class Diagnostic_AllInOneSeoImageSeo extends Diagnostic_Base {
 		if ( ! function_exists( 'aioseo' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Image alt text missing.
 		global $wpdb;
 		$missing_alt = $wpdb->get_var(
@@ -53,37 +53,37 @@ class Diagnostic_AllInOneSeoImageSeo extends Diagnostic_Base {
 		if ( $missing_alt > 0 ) {
 			$issues[] = "{$missing_alt} images missing alt text (SEO and accessibility issue)";
 		}
-		
+
 		// Check 2: Image title attributes.
 		$auto_generate_titles = get_option( 'aioseo_image_title_attr', '0' );
 		if ( '0' === $auto_generate_titles ) {
 			$issues[] = 'image title attributes not auto-generated (missing SEO metadata)';
 		}
-		
+
 		// Check 3: Image sitemap enabled.
 		$image_sitemap = get_option( 'aioseo_image_sitemap_enabled', '0' );
 		if ( '0' === $image_sitemap ) {
 			$issues[] = 'image sitemap disabled (Google cannot discover images)';
 		}
-		
+
 		// Check 4: Open Graph image settings.
 		$og_image_default = get_option( 'aioseo_og_default_image', '' );
 		if ( empty( $og_image_default ) ) {
 			$issues[] = 'no default Open Graph image (social sharing may show no image)';
 		}
-		
+
 		// Check 5: Image file name optimization.
 		$optimize_filenames = get_option( 'aioseo_optimize_image_filenames', '0' );
 		if ( '0' === $optimize_filenames ) {
 			$issues[] = 'image filename optimization disabled (SEO opportunity missed)';
 		}
-		
+
 		// Check 6: Schema.org image markup.
 		$schema_images = get_option( 'aioseo_schema_images', '0' );
 		if ( '0' === $schema_images ) {
 			$issues[] = 'schema.org image markup disabled (rich results may not show images)';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 40 + ( count( $issues ) * 6 ) );
 			return array(
@@ -96,7 +96,7 @@ class Diagnostic_AllInOneSeoImageSeo extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/all-in-one-seo-image-seo',
 			);
 		}
-		
+
 		return null;
 	}
 }

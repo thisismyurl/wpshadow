@@ -55,10 +55,10 @@ class Diagnostic_GravityFormsSpamProtection extends Diagnostic_Base {
 		// Check 2: Verify reCAPTCHA configured (v2/v3).
 		$recaptcha_settings = get_option( 'rg_gforms_captcha_public_key' );
 		$has_recaptcha = ! empty( $recaptcha_settings );
-		
+
 		if ( ! $has_recaptcha ) {
 			$issues[] = 'reCAPTCHA not configured globally';
-			
+
 			// Check individual forms for reCAPTCHA.
 			$forms_with_captcha = 0;
 			foreach ( $forms as $form ) {

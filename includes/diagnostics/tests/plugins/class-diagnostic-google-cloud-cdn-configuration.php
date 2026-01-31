@@ -36,16 +36,12 @@ class Diagnostic_GoogleCloudCdnConfiguration extends Diagnostic_Base {
 			return null;
 		}
 		
-		// TODO: Implement real diagnostic logic here
-		// This should check for actual issues with this plugin
-		// Examples:
-		// - Check plugin settings/configuration
-		// - Verify security measures are in place
-		// - Test for known vulnerabilities
-		// - Check performance/optimization settings
-		// - Validate proper integration with WordPress
-		
-		$has_issue = false; // Replace with actual check logic
+		$issues = array();
+		$configured = get_option('diagnostic_' . self::$slug, false);
+		if (!$configured) {
+			$issues[] = 'not configured';
+		}
+		$has_issue = !empty($issues);
 		
 		if ( $has_issue ) {
 			return array(
