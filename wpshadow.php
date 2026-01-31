@@ -67,14 +67,24 @@ require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-backup-schedule
 \WPShadow\Core\Error_Handler::init();
 
 /**
- * Register settings on init
+ * Load translations as early as possible after plugins load.
  *
- * Load translations at the correct time to avoid "too early" warnings.
+ * Prevents just-in-time translation loading warnings.
+ */
+add_action(
+	'plugins_loaded',
+	function () {
+		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
+	},
+	0
+);
+
+/**
+ * Register settings on init.
  */
 add_action(
 	'init',
 	function () {
-		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
 		\WPShadow\Core\Settings_Registry::register();
 	},
 	5

@@ -209,6 +209,8 @@
 	font-weight: 600;
 	color: var(--wps-gray-700, #374151);
 	margin: 0;
+	opacity: 1 !important;
+	visibility: visible !important;
 }
 
 .wps-kanban-count-badge {

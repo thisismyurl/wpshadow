@@ -66,41 +66,55 @@ class General_Settings_Page {
 					</div>
 					<div class="wps-card-body">
 						<div class="wps-form-group">
-							<label class="wps-toggle" for="wpshadow_cache_enabled">
-								<input 
-									type="checkbox" 
-									id="wpshadow_cache_enabled" 
-									name="wpshadow_cache_enabled" 
-									value="1"
-									<?php checked( get_option( 'wpshadow_cache_enabled', true ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Enable Result Caching', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Cache diagnostic results to reduce server load. Cache is automatically cleared when settings change.', 'wpshadow' ); ?>
-							</p>
+							<div class="wps-flex wps-gap-6 wps-items-start wps-justify-between">
+								<label class="wps-toggle" for="wpshadow_cache_enabled">
+									<input 
+										type="checkbox" 
+										id="wpshadow_cache_enabled" 
+										name="wpshadow_cache_enabled" 
+										value="1"
+										<?php checked( get_option( 'wpshadow_cache_enabled', true ) ); ?>
+									/>
+									<span class="wps-toggle-slider"></span>
+									<?php esc_html_e( 'Enable Result Caching', 'wpshadow' ); ?>
+								</label>
+								<p class="wps-form-description wps-m-0">
+									<?php esc_html_e( 'Cache diagnostic results to reduce server load. Cache is automatically cleared when settings change.', 'wpshadow' ); ?>
+								</p>
+							</div>
 						</div>
 
 						<div class="wps-form-group wps-mt-4">
-							<label for="wpshadow_cache_duration" class="wps-form-label">
-								<?php esc_html_e( 'Cache Duration', 'wpshadow' ); ?>
-							</label>
-							<div class="wps-input-group">
-								<input 
-									type="number" 
-									id="wpshadow_cache_duration" 
-									name="wpshadow_cache_duration" 
-									value="<?php echo esc_attr( get_option( 'wpshadow_cache_duration', 3600 ) ); ?>"
-									min="60"
-									step="60"
-									class="wps-input wps-w-32"
-								/>
-								<span class="wps-input-addon"><?php esc_html_e( 'seconds', 'wpshadow' ); ?></span>
+							<div class="wps-range-group">
+								<div class="wps-range-header">
+									<label for="wpshadow_cache_duration" class="wps-form-label">
+										<?php esc_html_e( 'Cache Duration', 'wpshadow' ); ?>
+									</label>
+									<span class="wps-range-value" id="wpshadow_cache_duration_display">
+										<?php echo esc_html( get_option( 'wpshadow_cache_duration', 3600 ) ); ?> <?php esc_html_e( 'seconds', 'wpshadow' ); ?>
+									</span>
+								</div>
+								<div class="wps-range-wrapper">
+									<input 
+										type="range" 
+										id="wpshadow_cache_duration" 
+										name="wpshadow_cache_duration" 
+										value="<?php echo esc_attr( get_option( 'wpshadow_cache_duration', 3600 ) ); ?>"
+										min="60"
+										max="86400"
+										step="60"
+										class="wps-range"
+										data-suffix=" seconds"
+										aria-valuemin="60"
+										aria-valuemax="86400"
+										aria-valuenow="<?php echo esc_attr( get_option( 'wpshadow_cache_duration', 3600 ) ); ?>"
+										aria-valuetext="<?php echo esc_attr( get_option( 'wpshadow_cache_duration', 3600 ) ); ?> seconds"
+									/>
+								</div>
+								<span class="wps-help-text">
+									<?php esc_html_e( 'How long to keep cached results before refreshing. Default is 1 hour (3600 seconds).', 'wpshadow' ); ?>
+								</span>
 							</div>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'How long to keep cached results before refreshing. Default is 1 hour (3600 seconds).', 'wpshadow' ); ?>
-							</p>
 						</div>
 					</div>
 				</div>
@@ -118,47 +132,69 @@ class General_Settings_Page {
 					</div>
 					<div class="wps-card-body">
 						<div class="wps-form-group">
-							<label for="wpshadow_visual_comparison_width" class="wps-form-label">
-								<?php esc_html_e( 'Screenshot Width', 'wpshadow' ); ?>
-							</label>
-							<div class="wps-input-group">
-								<input 
-									type="number" 
-									id="wpshadow_visual_comparison_width" 
-									name="wpshadow_visual_comparison_width" 
-									value="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_width', 1200 ) ); ?>"
-									min="640"
-									max="2560"
-									step="1"
-									class="wps-input wps-w-32"
-								/>
-								<span class="wps-input-addon">px</span>
+							<div class="wps-range-group">
+								<div class="wps-range-header">
+									<label for="wpshadow_visual_comparison_width" class="wps-form-label">
+										<?php esc_html_e( 'Screenshot Width', 'wpshadow' ); ?>
+									</label>
+									<span class="wps-range-value" id="wpshadow_visual_comparison_width_display">
+										<?php echo esc_html( get_option( 'wpshadow_visual_comparison_width', 1200 ) ); ?>px
+									</span>
+								</div>
+								<div class="wps-range-wrapper">
+									<input 
+										type="range" 
+										id="wpshadow_visual_comparison_width" 
+										name="wpshadow_visual_comparison_width" 
+										value="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_width', 1200 ) ); ?>"
+										min="640"
+										max="2560"
+										step="1"
+										class="wps-range"
+										data-suffix="px"
+										aria-valuemin="640"
+										aria-valuemax="2560"
+										aria-valuenow="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_width', 1200 ) ); ?>"
+										aria-valuetext="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_width', 1200 ) ); ?>px"
+									/>
+								</div>
+								<span class="wps-help-text">
+									<?php esc_html_e( 'Recommended: 1200px for desktop layouts. Range: 640-2560px.', 'wpshadow' ); ?>
+								</span>
 							</div>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Recommended: 1200px for desktop layouts. Range: 640-2560px.', 'wpshadow' ); ?>
-							</p>
 						</div>
 
 						<div class="wps-form-group wps-mt-4">
-							<label for="wpshadow_visual_comparison_height" class="wps-form-label">
-								<?php esc_html_e( 'Screenshot Height', 'wpshadow' ); ?>
-							</label>
-							<div class="wps-input-group">
-								<input 
-									type="number" 
-									id="wpshadow_visual_comparison_height" 
-									name="wpshadow_visual_comparison_height" 
-									value="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_height', 800 ) ); ?>"
-									min="480"
-									max="2160"
-									step="1"
-									class="wps-input wps-w-32"
-								/>
-								<span class="wps-input-addon">px</span>
+							<div class="wps-range-group">
+								<div class="wps-range-header">
+									<label for="wpshadow_visual_comparison_height" class="wps-form-label">
+										<?php esc_html_e( 'Screenshot Height', 'wpshadow' ); ?>
+									</label>
+									<span class="wps-range-value" id="wpshadow_visual_comparison_height_display">
+										<?php echo esc_html( get_option( 'wpshadow_visual_comparison_height', 800 ) ); ?>px
+									</span>
+								</div>
+								<div class="wps-range-wrapper">
+									<input 
+										type="range" 
+										id="wpshadow_visual_comparison_height" 
+										name="wpshadow_visual_comparison_height" 
+										value="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_height', 800 ) ); ?>"
+										min="480"
+										max="2160"
+										step="1"
+										class="wps-range"
+										data-suffix="px"
+										aria-valuemin="480"
+										aria-valuemax="2160"
+										aria-valuenow="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_height', 800 ) ); ?>"
+										aria-valuetext="<?php echo esc_attr( get_option( 'wpshadow_visual_comparison_height', 800 ) ); ?>px"
+									/>
+								</div>
+								<span class="wps-help-text">
+									<?php esc_html_e( 'Recommended: 800px for good detail. Range: 480-2160px.', 'wpshadow' ); ?>
+								</span>
 							</div>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Recommended: 800px for good detail. Range: 480-2160px.', 'wpshadow' ); ?>
-							</p>
 						</div>
 					</div>
 				</div>
@@ -173,6 +209,31 @@ class General_Settings_Page {
 					</div>
 				</div>
 			</form>
+
+			<script>
+			jQuery(function($) {
+				var rangeMap = [
+					{ input: '#wpshadow_cache_duration', display: '#wpshadow_cache_duration_display', suffix: ' <?php echo esc_js( __( 'seconds', 'wpshadow' ) ); ?>' },
+					{ input: '#wpshadow_visual_comparison_width', display: '#wpshadow_visual_comparison_width_display', suffix: 'px' },
+					{ input: '#wpshadow_visual_comparison_height', display: '#wpshadow_visual_comparison_height_display', suffix: 'px' }
+				];
+
+				rangeMap.forEach(function(item) {
+					var $input = $(item.input);
+					var $display = $(item.display);
+					if (!$input.length || !$display.length) {
+						return;
+					}
+					var update = function() {
+						$display.text($input.val() + item.suffix);
+						$input.attr('aria-valuenow', $input.val());
+						$input.attr('aria-valuetext', $input.val() + item.suffix);
+					};
+					$input.on('input change', update);
+					update();
+				});
+			});
+			</script>
 
 			<!-- Page-Specific Activity History Section -->
 			<div class="wps-section-divider">

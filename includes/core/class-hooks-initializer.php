@@ -395,6 +395,22 @@ class Hooks_Initializer {
 			WPSHADOW_VERSION
 		);
 
+		// Modal system (needed for dashboard Guardian actions)
+		wp_enqueue_style(
+			'wpshadow-modal',
+			WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-modal',
+			WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
 		wp_enqueue_style(
 			'wpshadow-guardian-dashboard-modern',
 			WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
@@ -406,7 +422,7 @@ class Hooks_Initializer {
 		wp_enqueue_script(
 			'wpshadow-dashboard-realtime',
 			WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-			array( 'jquery', 'wpshadow-design-system' ),
+			array( 'jquery', 'wpshadow-design-system', 'wpshadow-modal' ),
 			WPSHADOW_VERSION,
 			false
 		);

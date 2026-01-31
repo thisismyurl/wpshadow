@@ -50,8 +50,11 @@
 			// Fullscreen toggle button
 			$(document).on('click', '#wpshadow-fullscreen-toggle', function(e) {
 				e.preventDefault();
-			self.toggleFullscreen();
-		});
+				self.toggleFullscreen();
+			});
+
+			// Auto-refresh toggle
+			$(document).on('change', '#wpshadow-auto-refresh-toggle', function() {
 				const enabled = $(this).prop('checked');
 				self.config.enableAutoRefresh = enabled;
 				localStorage.setItem('wpshadow_autorefresh', enabled ? '1' : '0');
@@ -382,22 +385,26 @@
 		// Clean up event listener
 		$(document).off('keydown.wpshadow-fullscreen');
 	},
-					max-width: 300px;
-					line-height: 1.6;
-				">
-					<strong>Full Screen Mode</strong><br/>
-					Press <strong>ESC</strong> to exit<br/>
-					<span style="color: #aaa; font-size: 12px;">Dashboard updates every 30 seconds</span>
-				</div>
-			`);
 
-			$('body').append(instructions);
+	/**
+	 * Show fullscreen instructions
+	 */
+	showFullscreenInstructions: function() {
+		const instructions = $(
+			'<div class="wpshadow-fullscreen-instructions" style="position: fixed; top: 80px; right: 20px; z-index: 999999; background: rgba(0, 0, 0, 0.85); color: #fff; padding: 12px 16px; border-radius: 8px; max-width: 300px; line-height: 1.6;">' +
+				'<strong>Full Screen Mode</strong><br/>' +
+				'Press <strong>ESC</strong> to exit<br/>' +
+				'<span style="color: #aaa; font-size: 12px;">Dashboard updates every 30 seconds</span>' +
+			'</div>'
+		);
 
-			// Auto-hide after 5 seconds
-			setTimeout(function() {
-				instructions.fadeOut(500, function() { $(this).remove(); });
-			}, 5000);
-		},
+		$('body').append(instructions);
+
+		// Auto-hide after 5 seconds
+		setTimeout(function() {
+			instructions.fadeOut(500, function() { $(this).remove(); });
+		}, 5000);
+	},
 
 		/**
 		 * Check if we should enter fullscreen mode on page load

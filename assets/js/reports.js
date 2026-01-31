@@ -242,17 +242,19 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
+                        const data = response.data || {};
                         // Display report output
-                        if (response.html) {
-                            $('#wps-report-output').html(response.html).show();
-                            WPShadowAdmin.showNotice('success', response.message || wpshadowReportBuilder.i18n.reportGenerated);
+                        if (data.html) {
+                            $('#wps-report-output').html(data.html).show();
+                            WPShadowAdmin.showNotice('success', data.message || wpshadowReportBuilder.i18n.reportGenerated);
                             // Scroll to report
                             $('html, body').animate({
                                 scrollTop: $('#wps-report-output').offset().top - 100
                             }, 500);
                         }
                     } else {
-                        WPShadowAdmin.showNotice('error', response.message || wpshadowReportBuilder.i18n.error);
+                        const errorData = response.data || {};
+                        WPShadowAdmin.showNotice('error', errorData.message || wpshadowReportBuilder.i18n.error);
                     }
                 },
                 error: function() {
