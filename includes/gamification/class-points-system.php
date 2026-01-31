@@ -316,4 +316,49 @@ class Points_System {
 			'next_tier_points'  => $next_tier_points,
 		);
 	}
+
+	/**
+	 * Get the next milestone for a user
+	 *
+	 * @since  1.2604.0400
+	 * @param  int $user_id User ID.
+	 * @return array {
+	 *     Next milestone information.
+	 *
+	 *     @type int    $points   Points to next milestone.
+	 *     @type string $label    Milestone label.
+	 *     @type string $progress Progress percentage.
+	 * }
+	 */
+	public static function get_next_milestone( $user_id ) {
+		$balance = self::get_balance( $user_id );
+		
+		$milestones = array(
+			100   => __( 'Getting Started', 'wpshadow' ),
+			500   => __( 'Active User', 'wpshadow' ),
+			1000  => __( 'Power User', 'wpshadow' ),
+			5000  => __( 'Expert', 'wpshadow' ),
+			10000 => __( 'Master', 'wpshadow' ),
+		);
+
+		$next_milestone_points = 10100; // Default: beyond max
+		$next_label = __( 'Master Achieved', 'wpshadow' );
+
+		foreach ( $milestones as $points => $label ) {
+			if ( $balance < $points ) {
+				$next_milestone_points = $points;
+				$next_label = $label;
+				break;
+			}
+		}
+
+		$progress = ( $balance / $next_milestone_points ) * 100;
+		$progress = min( 100, max( 0, $progress ) );
+
+		return array(
+			'points'   => $next_milestone_points - $balance,
+			'label'    => $next_label,
+			'progress' => round( $progress, 1 ),
+		);
+	}
 }
