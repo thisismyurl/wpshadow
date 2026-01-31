@@ -32,36 +32,51 @@ class Diagnostic_DisableGutenbergSelectiveDisabling extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
+		if ( ! function_exists( 'use_block_editor_for_post_type' ) ) {
 			return null;
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/disable-gutenberg-selective-disabling',
-			);
-		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
+		// Check 1: Verify post types with selective Gutenberg disabling
+		$post_types = get_post_types( array( 'public' => true ), 'names' );
+		$selective_disable = get_option( 'disable_gutenberg_post_types', array() );
+		if ( empty( $selective_disable ) && count( $post_types ) > 0 ) {
+			$issues[] = __( 'No post types configured for selective Gutenberg disabling', 'wpshadow' );
 		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
+
+		// Check 2: Check Gutenberg status per post type
+		$gutenberg_enabled_count = 0;
+		foreach ( $post_types as $post_type ) {
+			if ( use_block_editor_for_post_type( $post_type ) ) {
+				$gutenberg_enabled_count++;
+			}
+		}
+		if ( $gutenberg_enabled_count === 0 ) {
+			$issues[] = __( 'Gutenberg disabled for all post types', 'wpshadow' );
+		}
+
+		// Check 3: Verify user role restrictions for Gutenberg
+		$disable_for_roles = get_option( 'disable_gutenberg_user_roles', array() );
+		if ( empty( $disable_for_roles ) ) {
+			$issues[] = __( 'No user role restrictions configured for Gutenberg', 'wpshadow' );
+		}
+
+		// Check 4: Check Gutenberg template support
+		$template_lock = get_option( 'disable_gutenberg_template_lock', '' );
+		if ( empty( $template_lock ) ) {
+			$issues[] = __( 'Gutenberg template locking not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify block editor default setting
+		$default_editor = get_option( 'classic-editor-replace', 'block' );
+		if ( 'classic' === $default_editor ) {
+			$issues[] = __( 'Classic editor set as default instead of selective disabling', 'wpshadow' );
+		}
+
+		// Check 6: Check for Classic Editor plugin conflict
+		if ( is_plugin_active( 'classic-editor/classic-editor.php' ) ) {
+			$issues[] = __( 'Classic Editor plugin may conflict with selective disabling', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {
