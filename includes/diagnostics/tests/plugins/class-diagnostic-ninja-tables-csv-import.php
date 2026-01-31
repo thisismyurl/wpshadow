@@ -37,36 +37,63 @@ class Diagnostic_NinjaTablesCsvImport extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify file type validation
+		$file_validation = get_option( 'ninja_tables_csv_file_validation', false );
+		if ( ! $file_validation ) {
+			$issues[] = __( 'CSV file type validation not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check file size limits
+		$size_limit = get_option( 'ninja_tables_csv_size_limit', 0 );
+		if ( $size_limit === 0 || $size_limit > 104857600 ) { // > 100MB
+			$issues[] = __( 'CSV import file size limit not properly configured', 'wpshadow' );
+		}
+
+		// Check 3: Verify sanitization
+		$sanitization = get_option( 'ninja_tables_csv_sanitization', false );
+		if ( ! $sanitization ) {
+			$issues[] = __( 'CSV data sanitization not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check access controls
+		$access_control = get_option( 'ninja_tables_csv_access_control', false );
+		if ( ! $access_control ) {
+			$issues[] = __( 'CSV import access control not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify import logging
+		$import_logging = get_option( 'ninja_tables_csv_import_logging', false );
+		if ( ! $import_logging ) {
+			$issues[] = __( 'CSV import logging not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check nonce verification
+		$nonce_enabled = get_option( 'ninja_tables_csv_nonce_verification', false );
+		if ( ! $nonce_enabled ) {
+			$issues[] = __( 'Nonce verification for CSV import not enabled', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 100, 75 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 65,
-				'threat_level' => 65,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Ninja Tables CSV import security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/ninja-tables-csv-import',
+				'kb_link'      => 'https://wpshadow.com/kb/ninja-tables-csv-import',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
+	}
+}
+
 	}
 }

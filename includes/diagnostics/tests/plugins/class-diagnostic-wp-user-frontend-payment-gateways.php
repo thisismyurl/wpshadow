@@ -32,38 +32,64 @@ class Diagnostic_WpUserFrontendPaymentGateways extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
+		if ( ! defined( 'WPUF_VERSION' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify payment encryption
+		$encryption_enabled = get_option( 'wpuf_payment_encryption', false );
+		if ( ! $encryption_enabled ) {
+			$issues[] = __( 'Payment data encryption not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check SSL for payment processing
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for payment processing', 'wpshadow' );
+		}
+
+		// Check 3: Verify gateway configuration
+		$gateway_config = get_option( 'wpuf_payment_gateway_config', array() );
+		if ( empty( $gateway_config ) ) {
+			$issues[] = __( 'Payment gateways not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check transaction logging
+		$transaction_logging = get_option( 'wpuf_transaction_logging', false );
+		if ( ! $transaction_logging ) {
+			$issues[] = __( 'Transaction logging not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify PCI compliance
+		$pci_compliance = get_option( 'wpuf_pci_compliance_mode', false );
+		if ( ! $pci_compliance ) {
+			$issues[] = __( 'PCI compliance mode not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check error handling
+		$error_handling = get_option( 'wpuf_payment_error_handling', false );
+		if ( ! $error_handling ) {
+			$issues[] = __( 'Payment error handling not properly configured', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 100, 80 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 70,
-				'threat_level' => 70,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WP User Frontend payment gateway security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-user-frontend-payment-gateways',
+				'kb_link'      => 'https://wpshadow.com/kb/wp-user-frontend-payment-gateways',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }
