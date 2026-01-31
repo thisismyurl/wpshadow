@@ -37,20 +37,52 @@ class Diagnostic_LocoTranslateFuzzyStrings extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Fuzzy string handling.
+		$fuzzy_handling = get_option( 'loco_handle_fuzzy', '1' );
+		if ( '0' === $fuzzy_handling ) {
+			$issues[] = 'fuzzy strings not handled';
+		}
+		
+		// Check 2: Auto-sync.
+		$auto_sync = get_option( 'loco_auto_sync', '1' );
+		if ( '0' === $auto_sync ) {
+			$issues[] = 'automatic sync disabled';
+		}
+		
+		// Check 3: Backup translations.
+		$backup = get_option( 'loco_backup_translations', '1' );
+		if ( '0' === $backup ) {
+			$issues[] = 'translation backups disabled';
+		}
+		
+		// Check 4: Template caching.
+		$template_cache = get_option( 'loco_cache_templates', '1' );
+		if ( '0' === $template_cache ) {
+			$issues[] = 'template caching disabled';
+		}
+		
+		// Check 5: Compile MO files.
+		$compile_mo = get_option( 'loco_compile_mo', '1' );
+		if ( '0' === $compile_mo ) {
+			$issues[] = 'MO compilation disabled';
+		}
+		
+		// Check 6: String extraction.
+		$extraction = get_option( 'loco_extract_strings', '1' );
+		if ( '0' === $extraction ) {
+			$issues[] = 'string extraction disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 50 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'Loco Translate issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/loco-translate-fuzzy-strings',
 			);
 		}

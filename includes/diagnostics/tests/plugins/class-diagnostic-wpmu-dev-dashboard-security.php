@@ -32,22 +32,56 @@ class Diagnostic_WpmuDevDashboardSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
+		if ( ! class_exists( 'WPMUDEV_Dashboard' ) && ! defined( 'WPMUDEV_VERSION' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: API key security.
+		$api_key = get_option( 'wpmudev_apikey', '' );
+		if ( ! empty( $api_key ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$issues[] = 'API key exposed with debug mode';
+		}
+		
+		// Check 2: Auto-updates.
+		$auto_update = get_option( 'wpmudev_auto_update', '1' );
+		if ( '0' === $auto_update ) {
+			$issues[] = 'automatic updates disabled';
+		}
+		
+		// Check 3: SSL connection.
+		if ( ! is_ssl() ) {
+			$issues[] = 'dashboard without HTTPS';
+		}
+		
+		// Check 4: Login notification.
+		$login_notify = get_option( 'wpmudev_login_notification', '1' );
+		if ( '0' === $login_notify ) {
+			$issues[] = 'login notifications disabled';
+		}
+		
+		// Check 5: Analytics tracking.
+		$analytics = get_option( 'wpmudev_analytics_enabled', '1' );
+		if ( '0' === $analytics ) {
+			$issues[] = 'analytics disabled';
+		}
+		
+		// Check 6: Security scanning.
+		$security_scan = get_option( 'wpmudev_security_scan', '1' );
+		if ( '0' === $security_scan ) {
+			$issues[] = 'security scanning disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 70 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
-				'auto_fixable' => true,
+				'description' => 'WPMU DEV security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/wpmu-dev-dashboard-security',
 			);
 		}

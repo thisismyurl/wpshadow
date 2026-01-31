@@ -37,20 +37,51 @@ class Diagnostic_MultisiteBillingIntegration extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Billing gateway configured.
+		$gateway = get_site_option( 'multisite_billing_gateway', '' );
+		if ( empty( $gateway ) ) {
+			$issues[] = 'billing gateway not configured';
+		}
+		
+		// Check 2: SSL for payments.
+		if ( ! is_ssl() ) {
+			$issues[] = 'billing without HTTPS';
+		}
+		
+		// Check 3: Subscription tracking.
+		$subscription_tracking = get_site_option( 'multisite_subscription_tracking', '1' );
+		if ( '0' === $subscription_tracking ) {
+			$issues[] = 'subscription tracking disabled';
+		}
+		
+		// Check 4: Invoice generation.
+		$invoices = get_site_option( 'multisite_generate_invoices', '1' );
+		if ( '0' === $invoices ) {
+			$issues[] = 'invoice generation disabled';
+		}
+		
+		// Check 5: Payment logging.
+		$payment_log = get_site_option( 'multisite_payment_logging', '1' );
+		if ( '0' === $payment_log ) {
+			$issues[] = 'payment logging disabled';
+		}
+		
+		// Check 6: Failed payment handling.
+		$failed_payments = get_site_option( 'multisite_handle_failed_payments', '1' );
+		if ( '0' === $failed_payments ) {
+			$issues[] = 'failed payments not handled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 50 + ( count( $issues ) * 3 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
-				'auto_fixable' => true,
+				'description' => 'Multisite billing issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
+				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/multisite-billing-integration',
 			);
 		}
