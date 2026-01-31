@@ -76,16 +76,16 @@ class Diagnostic_Theme_Function_Conflicts extends Diagnostic_Base {
 
 		// Check for functions without function_exists() wrapper.
 		preg_match_all( '/function\s+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\s*\(/i', $functions_content, $matches );
-		
+
 		if ( ! empty( $matches[1] ) ) {
 			$unwrapped_functions = array();
-			
+
 			foreach ( $matches[1] as $function_name ) {
 				// Skip anonymous functions and closures.
 				if ( $function_name === 'function' ) {
 					continue;
 				}
-				
+
 				// Check if function has function_exists() check.
 				$check_pattern = '/if\s*\(\s*!\s*function_exists\s*\(\s*[\'"]' . preg_quote( $function_name, '/' ) . '[\'"]\s*\)\s*\)/i';
 				if ( ! preg_match( $check_pattern, $functions_content ) ) {

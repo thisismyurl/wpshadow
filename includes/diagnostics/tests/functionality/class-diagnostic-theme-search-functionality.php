@@ -26,7 +26,7 @@ class Diagnostic_Theme_Search_Functionality extends Diagnostic_Base {
 	public static function check() {
 		$search_template = locate_template( 'search.php' );
 		$searchform = locate_template( 'searchform.php' );
-		
+
 		if ( empty( $search_template ) ) {
 			return array(
 				'id'           => self::$slug,

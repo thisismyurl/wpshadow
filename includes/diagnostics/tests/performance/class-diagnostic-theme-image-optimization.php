@@ -78,7 +78,7 @@ class Diagnostic_Theme_Image_Optimization extends Diagnostic_Base {
 				foreach ( $images as $image ) {
 					$size = filesize( $image );
 					$total_size += $size;
-					
+
 					if ( $size > 500000 ) { // > 500KB.
 						$large_images[] = array(
 							'file' => basename( $image ),
@@ -130,11 +130,11 @@ class Diagnostic_Theme_Image_Optimization extends Diagnostic_Base {
 		// Check for lazy loading implementation.
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url, array( 'timeout' => 10 ) );
-		
+
 		if ( ! is_wp_error( $response ) ) {
 			$html = wp_remote_retrieve_body( $response );
 			$has_lazy_loading = preg_match( '/loading=["\']lazy["\']/i', $html );
-			
+
 			if ( ! $has_lazy_loading ) {
 				$issues[] = __( 'Images not configured for lazy loading', 'wpshadow' );
 			}

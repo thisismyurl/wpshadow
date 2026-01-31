@@ -94,11 +94,11 @@ class Diagnostic_Theme_Responsive_Design_Check extends Diagnostic_Base {
 		// Check style.css for media queries.
 		$theme_dir = get_stylesheet_directory();
 		$style_css = $theme_dir . '/style.css';
-		
+
 		if ( file_exists( $style_css ) ) {
 			$css_content = file_get_contents( $style_css );
 			$media_query_count = substr_count( strtolower( $css_content ), '@media' );
-			
+
 			if ( $media_query_count < 3 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of media queries */

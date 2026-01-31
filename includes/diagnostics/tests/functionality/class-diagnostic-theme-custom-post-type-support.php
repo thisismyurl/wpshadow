@@ -75,7 +75,7 @@ class Diagnostic_Theme_Custom_Post_Type_Support extends Diagnostic_Base {
 			foreach ( $post_types as $post_type ) {
 				// Check for single-{post_type}.php template.
 				$single_template = locate_template( "single-{$post_type->name}.php" );
-				
+
 				// Check for archive-{post_type}.php template.
 				$archive_template = locate_template( "archive-{$post_type->name}.php" );
 

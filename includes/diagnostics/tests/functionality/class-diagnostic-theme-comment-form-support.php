@@ -82,7 +82,7 @@ class Diagnostic_Theme_Comment_Form_Support extends Diagnostic_Base {
 
 		if ( ! empty( $sample_post ) ) {
 			$post_id = $sample_post[0]->ID;
-			
+
 			// Check if comments are open on this post.
 			if ( comments_open( $post_id ) ) {
 				// Try to get comment form HTML.

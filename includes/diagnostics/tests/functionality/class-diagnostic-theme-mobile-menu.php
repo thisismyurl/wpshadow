@@ -26,16 +26,16 @@ class Diagnostic_Theme_Mobile_Menu extends Diagnostic_Base {
 	public static function check() {
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url );
-		
+
 		if ( is_wp_error( $response ) ) {
 			return null;
 		}
 
 		$html = wp_remote_retrieve_body( $response );
-		
+
 		// Check for mobile menu implementation.
 		$has_mobile_menu = preg_match( '/mobile-menu|hamburger|nav-toggle|menu-toggle/i', $html );
-		
+
 		if ( ! $has_mobile_menu && has_nav_menu( 'primary' ) ) {
 			return array(
 				'id'           => self::$slug,

@@ -26,7 +26,7 @@ class Diagnostic_Theme_Archive_Pages extends Diagnostic_Base {
 	public static function check() {
 		$archive_templates = array( 'archive.php', 'category.php', 'tag.php', 'author.php', 'date.php' );
 		$found_templates = 0;
-		
+
 		foreach ( $archive_templates as $template ) {
 			if ( locate_template( $template ) ) {
 				++$found_templates;

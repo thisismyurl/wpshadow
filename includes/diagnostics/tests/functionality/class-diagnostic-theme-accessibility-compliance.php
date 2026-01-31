@@ -73,7 +73,7 @@ class Diagnostic_Theme_Accessibility_Compliance extends Diagnostic_Base {
 		// Check for skip link.
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url, array( 'timeout' => 10 ) );
-		
+
 		if ( ! is_wp_error( $response ) ) {
 			$html = wp_remote_retrieve_body( $response );
 
@@ -98,7 +98,7 @@ class Diagnostic_Theme_Accessibility_Compliance extends Diagnostic_Base {
 			// Check for ARIA landmarks.
 			$has_main = preg_match( '/<main|role=["\']main["\']/i', $html );
 			$has_nav = preg_match( '/<nav|role=["\']navigation["\']/i', $html );
-			
+
 			if ( ! $has_main ) {
 				$issues[] = __( 'No <main> landmark found', 'wpshadow' );
 			}

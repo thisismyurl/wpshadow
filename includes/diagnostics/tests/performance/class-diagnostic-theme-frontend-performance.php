@@ -126,7 +126,7 @@ class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 		$render_blocking = 0;
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $style ) {
-				if ( isset( $style->src ) && 
+				if ( isset( $style->src ) &&
 					 strpos( $style->src, '/themes/' . $theme_slug ) !== false &&
 					 ! isset( $style->extra['defer'] ) ) {
 					$render_blocking++;

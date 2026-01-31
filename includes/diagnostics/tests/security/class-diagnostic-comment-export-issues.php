@@ -102,7 +102,7 @@ class Diagnostic_Comment_Export_Issues extends Diagnostic_Base {
 		// Check for comment export files in uploads directory.
 		$upload_dir = wp_upload_dir();
 		$export_files = glob( $upload_dir['basedir'] . '/*comment*export*.{csv,xml,json}', GLOB_BRACE );
-		
+
 		if ( ! empty( $export_files ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of export files */

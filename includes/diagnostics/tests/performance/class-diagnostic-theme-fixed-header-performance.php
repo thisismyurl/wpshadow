@@ -26,22 +26,22 @@ class Diagnostic_Theme_Fixed_Header_Performance extends Diagnostic_Base {
 	public static function check() {
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url );
-		
+
 		if ( is_wp_error( $response ) ) {
 			return null;
 		}
 
 		$html = wp_remote_retrieve_body( $response );
-		
+
 		// Check for fixed/sticky header.
 		$has_fixed = preg_match( '/position:\s*fixed|position:\s*sticky/i', $html ) ||
 		             preg_match( '/fixed-header|sticky-header/i', $html );
-		
+
 		if ( $has_fixed ) {
 			// Check if it contains heavy elements.
 			$has_heavy_content = preg_match( '/<img[^>]+>.*?fixed|sticky.*?<img[^>]+>/is', $html ) ||
 			                     preg_match( '/mega-menu.*?fixed|sticky.*?mega-menu/is', $html );
-			
+
 			if ( $has_heavy_content ) {
 				return array(
 					'id'           => self::$slug,

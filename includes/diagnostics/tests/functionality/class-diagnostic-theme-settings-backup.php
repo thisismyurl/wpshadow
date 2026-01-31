@@ -96,7 +96,7 @@ class Diagnostic_Theme_Settings_Backup extends Diagnostic_Base {
 				// Check for export functions in theme.
 				$theme_dir = get_stylesheet_directory();
 				$functions_file = $theme_dir . '/functions.php';
-				
+
 				if ( file_exists( $functions_file ) ) {
 					$functions_content = file_get_contents( $functions_file );
 					if ( preg_match( '/export|backup|import.*settings/i', $functions_content ) ) {

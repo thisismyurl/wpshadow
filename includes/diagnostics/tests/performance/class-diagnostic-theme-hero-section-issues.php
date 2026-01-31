@@ -26,16 +26,16 @@ class Diagnostic_Theme_Hero_Section_Issues extends Diagnostic_Base {
 	public static function check() {
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url );
-		
+
 		if ( is_wp_error( $response ) ) {
 			return null;
 		}
 
 		$html = wp_remote_retrieve_body( $response );
-		
+
 		// Check for large hero images or sliders.
 		$has_slider = preg_match( '/slider|carousel|swiper|slick/i', $html );
-		
+
 		if ( $has_slider ) {
 			// Check for unoptimized large images.
 			if ( preg_match_all( '/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', $html, $matches ) ) {

@@ -75,7 +75,7 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 				if ( isset( $script->src ) && strpos( $script->src, '/themes/' . $theme_slug ) !== false ) {
 					$file_path = str_replace( content_url(), WP_CONTENT_DIR, $script->src );
 					$file_path = preg_replace( '/\?.*$/', '', $file_path ); // Remove query string.
-					
+
 					if ( ! file_exists( $file_path ) ) {
 						$broken_assets[] = array(
 							'type'   => 'script',
@@ -93,7 +93,7 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 				if ( isset( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
 					$file_path = str_replace( content_url(), WP_CONTENT_DIR, $style->src );
 					$file_path = preg_replace( '/\?.*$/', '', $file_path );
-					
+
 					if ( ! file_exists( $file_path ) ) {
 						$broken_assets[] = array(
 							'type'   => 'style',

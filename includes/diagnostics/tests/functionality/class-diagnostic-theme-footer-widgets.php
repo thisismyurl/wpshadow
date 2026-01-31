@@ -25,7 +25,7 @@ class Diagnostic_Theme_Footer_Widgets extends Diagnostic_Base {
 
 	public static function check() {
 		global $wp_registered_sidebars;
-		
+
 		$has_footer_widget = false;
 		foreach ( $wp_registered_sidebars as $sidebar ) {
 			if ( stripos( $sidebar['id'], 'footer' ) !== false || stripos( $sidebar['name'], 'footer' ) !== false ) {

@@ -25,7 +25,7 @@ class Diagnostic_Theme_404_Page extends Diagnostic_Base {
 
 	public static function check() {
 		$template = locate_template( '404.php' );
-		
+
 		if ( empty( $template ) ) {
 			return array(
 				'id'           => self::$slug,

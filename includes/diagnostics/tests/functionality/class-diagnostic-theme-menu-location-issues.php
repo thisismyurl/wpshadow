@@ -68,7 +68,7 @@ class Diagnostic_Theme_Menu_Location_Issues extends Diagnostic_Base {
 
 		// Get registered menu locations.
 		$locations = get_registered_nav_menus();
-		
+
 		if ( empty( $locations ) ) {
 			$issues[] = __( 'Theme does not register any menu locations', 'wpshadow' );
 		} else {

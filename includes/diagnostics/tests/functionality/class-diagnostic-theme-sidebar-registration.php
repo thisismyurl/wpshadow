@@ -64,7 +64,7 @@ class Diagnostic_Theme_Sidebar_Registration extends Diagnostic_Base {
 	 */
 	public static function check() {
 		global $wp_registered_sidebars;
-		
+
 		$theme = wp_get_theme();
 		$issues = array();
 

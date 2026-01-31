@@ -76,7 +76,7 @@ class Diagnostic_Theme_Font_Loading_Issues extends Diagnostic_Base {
 			foreach ( $wp_styles->registered as $handle => $style ) {
 				if ( isset( $style->src ) && strpos( $style->src, 'fonts.googleapis.com' ) !== false ) {
 					$google_fonts_count++;
-					
+
 					// Extract font families.
 					if ( preg_match( '/family=([^&]+)/', $style->src, $matches ) ) {
 						$font_families[] = urldecode( $matches[1] );
@@ -116,20 +116,20 @@ class Diagnostic_Theme_Font_Loading_Issues extends Diagnostic_Base {
 		// Check for font-display property.
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url, array( 'timeout' => 10 ) );
-		
+
 		if ( ! is_wp_error( $response ) ) {
 			$html = wp_remote_retrieve_body( $response );
-			
+
 			// Check for font-display: swap.
 			$has_font_display = preg_match( '/font-display:\s*swap/i', $html );
-			
+
 			if ( ! $has_font_display && ( $google_fonts_count > 0 || count( $font_files ) > 0 ) ) {
 				$issues[] = __( 'Fonts lack font-display:swap (may cause FOIT)', 'wpshadow' );
 			}
 
 			// Check for preload hints.
 			$has_preload = preg_match( '/<link[^>]*rel=["\']preload["\']/i', $html );
-			
+
 			if ( ! $has_preload && count( $font_files ) > 0 ) {
 				$issues[] = __( 'Critical fonts not preloaded', 'wpshadow' );
 			}
