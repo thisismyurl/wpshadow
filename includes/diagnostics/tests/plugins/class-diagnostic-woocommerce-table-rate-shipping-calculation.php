@@ -35,7 +35,7 @@ class Diagnostic_WoocommerceTableRateShippingCalculation extends Diagnostic_Base
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify shipping calculation caching

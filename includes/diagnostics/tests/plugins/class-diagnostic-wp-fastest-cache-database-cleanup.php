@@ -35,7 +35,7 @@ class Diagnostic_WpFastestCacheDatabaseCleanup extends Diagnostic_Base {
 		if ( ! class_exists( 'WpFastestCache' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify database cleanup is enabled

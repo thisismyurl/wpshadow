@@ -35,7 +35,7 @@ class Diagnostic_DiviBuilderModuleSecurity extends Diagnostic_Base {
 		if ( ! function_exists( 'et_divi_fonts_url' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify SSL for module data transmission

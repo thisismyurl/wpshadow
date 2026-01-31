@@ -35,7 +35,7 @@ class Diagnostic_GoogleTagManagerEcommerceTracking extends Diagnostic_Base {
 		if ( ! defined( 'GTM4WP_VERSION' ) && ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify GTM container is configured

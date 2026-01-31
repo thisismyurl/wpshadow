@@ -37,36 +37,61 @@ class Diagnostic_WpMigrateDbMemoryLimits extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify memory limit allocation
+		$php_memory = ini_get( 'memory_limit' );
+		$php_memory_bytes = wp_convert_hr_to_bytes( $php_memory );
+		if ( $php_memory_bytes < 268435456 ) { // 256MB
+			$issues[] = __( 'PHP memory limit too low for migrations', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check migration batch size configuration
+		$batch_size = get_option( 'wpmdb_migration_batch_size', 0 );
+		if ( $batch_size > 50 ) {
+			$issues[] = __( 'Migration batch size too large', 'wpshadow' );
+		}
+
+		// Check 3: Verify timeout configuration
+		$timeout = get_option( 'wpmdb_timeout', 0 );
+		if ( $timeout > 300 || $timeout === 0 ) {
+			$issues[] = __( 'Migration timeout not optimally configured', 'wpshadow' );
+		}
+
+		// Check 4: Check memory optimization enabled
+		$memory_optimization = get_option( 'wpmdb_memory_optimization', false );
+		if ( ! $memory_optimization ) {
+			$issues[] = __( 'Memory optimization not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify progress caching
+		$progress_cache = get_transient( 'wpmdb_migration_progress' );
+		if ( false === $progress_cache ) {
+			$issues[] = __( 'Migration progress caching not active', 'wpshadow' );
+		}
+
+		// Check 6: Check garbage collection
+		$gc_enabled = gc_enabled();
+		if ( ! $gc_enabled ) {
+			$issues[] = __( 'Garbage collection not enabled', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 55 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 55,
-				'threat_level' => 55,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WP Migrate DB memory limit issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-migrate-db-memory-limits',
+				'kb_link'      => 'https://wpshadow.com/kb/wp-migrate-db-memory-limits',
 			);
 		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
-		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

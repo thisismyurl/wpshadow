@@ -35,7 +35,7 @@ class Diagnostic_WeglotWoocommerceIntegration extends Diagnostic_Base {
 		if ( ! defined( 'WEGLOT_VERSION' ) || ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify WooCommerce integration is enabled

@@ -35,7 +35,7 @@ class Diagnostic_BookingGroupReservations extends Diagnostic_Base {
 		if ( ! function_exists( 'booking_calendar_exists' ) && ! class_exists( 'Booking_Calendar' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify group size validation

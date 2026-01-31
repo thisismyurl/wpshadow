@@ -35,7 +35,7 @@ class Diagnostic_WpmlTranslationManagement extends Diagnostic_Base {
 		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify translation workflow configuration

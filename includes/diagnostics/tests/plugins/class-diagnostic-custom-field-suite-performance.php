@@ -35,7 +35,7 @@ class Diagnostic_CustomFieldSuitePerformance extends Diagnostic_Base {
 		if ( ! class_exists( 'CFS' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify field value caching

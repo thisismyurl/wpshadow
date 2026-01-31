@@ -35,7 +35,7 @@ class Diagnostic_WoocommerceOnePageCheckoutValidation extends Diagnostic_Base {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify checkout field validation

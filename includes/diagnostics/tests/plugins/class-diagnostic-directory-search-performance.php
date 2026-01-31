@@ -35,7 +35,7 @@ class Diagnostic_DirectorySearchPerformance extends Diagnostic_Base {
 		if ( ! function_exists( 'wpbdp' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify search indexing is enabled

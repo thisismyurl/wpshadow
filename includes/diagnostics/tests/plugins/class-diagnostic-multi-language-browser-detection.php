@@ -32,7 +32,7 @@ class Diagnostic_MultiLanguageBrowserDetection extends Diagnostic_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		
+
 		$issues = array();
 
 		// Check 1: Verify browser language detection is enabled

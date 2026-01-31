@@ -76,7 +76,7 @@ class Diagnostic_WooCommerce_Tax_Configuration_Missing extends Diagnostic_Base {
 		global $wpdb;
 
 		// Check if any tax rates are configured
-		$tax_rates = $wpdb->get_results( 
+		$tax_rates = $wpdb->get_results(
 			"SELECT * FROM {$wpdb->prefix}woocommerce_tax_rates LIMIT 1"
 		);
 

@@ -35,7 +35,7 @@ class Diagnostic_BeaverBuilderResponsiveSettings extends Diagnostic_Base {
 		if ( ! class_exists( 'FLBuilder' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify responsive editing is enabled

@@ -35,7 +35,7 @@ class Diagnostic_WordpressMenuQueryCaching extends Diagnostic_Base {
 		if ( ! function_exists( 'wp_get_nav_menus' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify menu caching is enabled

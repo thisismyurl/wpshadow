@@ -35,7 +35,7 @@ class Diagnostic_LitespeedCacheImageOptimization extends Diagnostic_Base {
 		if ( ! defined( 'LSCWP_V' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify image optimization is enabled

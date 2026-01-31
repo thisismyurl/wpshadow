@@ -72,9 +72,9 @@ class Diagnostic_WooCommerce_Product_Variation_Performance extends Diagnostic_Ba
 
 		// Count products with excessive variations
 		$products_with_many_variations = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_parent) FROM {$wpdb->posts} 
-			WHERE post_type = 'product_variation' 
-			GROUP BY post_parent 
+			"SELECT COUNT(DISTINCT post_parent) FROM {$wpdb->posts}
+			WHERE post_type = 'product_variation'
+			GROUP BY post_parent
 			HAVING COUNT(*) > 100"
 		);
 

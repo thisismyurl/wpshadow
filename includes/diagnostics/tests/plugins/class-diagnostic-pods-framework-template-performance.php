@@ -32,7 +32,7 @@ class Diagnostic_PodsFrameworkTemplatePerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		
+
 		$issues = array();
 
 		// Check 1: Verify template caching is enabled

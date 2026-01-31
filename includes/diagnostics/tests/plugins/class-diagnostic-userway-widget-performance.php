@@ -32,7 +32,7 @@ class Diagnostic_UserwayWidgetPerformance extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		
+
 		$issues = array();
 
 		// Check 1: Verify widget loading strategy

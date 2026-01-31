@@ -37,36 +37,60 @@ class Diagnostic_WoocommerceOnePageCheckoutPerformance extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify checkout page caching
+		$checkout_cache = get_option( 'wc_opc_checkout_cache', false );
+		if ( ! $checkout_cache ) {
+			$issues[] = __( 'One-page checkout page caching not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check checkout script optimization
+		$script_minified = get_option( 'wc_opc_script_minified', false );
+		if ( ! $script_minified ) {
+			$issues[] = __( 'Checkout scripts not minified', 'wpshadow' );
+		}
+
+		// Check 3: Verify AJAX performance
+		$ajax_optimization = get_option( 'wc_opc_ajax_optimization', false );
+		if ( ! $ajax_optimization ) {
+			$issues[] = __( 'AJAX request optimization not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check form submission optimization
+		$submit_optimization = get_option( 'wc_opc_submit_optimization', false );
+		if ( ! $submit_optimization ) {
+			$issues[] = __( 'Form submission performance not optimized', 'wpshadow' );
+		}
+
+		// Check 5: Verify CSS loading strategy
+		$css_strategy = get_option( 'wc_opc_css_loading', '' );
+		if ( 'defer' !== $css_strategy && 'inline' !== $css_strategy ) {
+			$issues[] = __( 'CSS loading strategy not optimized', 'wpshadow' );
+		}
+
+		// Check 6: Check payload size optimization
+		$payload_optimization = get_option( 'wc_opc_payload_optimization', false );
+		if ( ! $payload_optimization ) {
+			$issues[] = __( 'Checkout payload not optimized for performance', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 55 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 55,
-				'threat_level' => 55,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WooCommerce one-page checkout performance issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-one-page-checkout-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/woocommerce-one-page-checkout-performance',
 			);
 		}
-		
 
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
-		}
-		// Check transient support
-		if ( ! function_exists( 'set_transient' ) ) {
-			$issues[] = __( 'Transient functions unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

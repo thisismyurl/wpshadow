@@ -35,7 +35,7 @@ class Diagnostic_WpJobManagerApplicationData extends Diagnostic_Base {
 		if ( ! class_exists( 'WP_Job_Manager' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify SSL for application submissions

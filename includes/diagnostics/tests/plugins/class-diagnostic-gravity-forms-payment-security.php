@@ -35,7 +35,7 @@ class Diagnostic_GravityFormsPaymentSecurity extends Diagnostic_Base {
 		if ( ! class_exists( 'GFForms' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify SSL for payment processing

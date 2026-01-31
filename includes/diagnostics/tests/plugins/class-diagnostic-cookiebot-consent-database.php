@@ -34,36 +34,59 @@ class Diagnostic_CookiebotConsentDatabase extends Diagnostic_Base {
 	public static function check() {
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify SSL for consent data
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for consent database', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check consent database logging
+		$consent_logging = get_option( 'cookiebot_consent_logging', false );
+		if ( ! $consent_logging ) {
+			$issues[] = __( 'Consent logging not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify GDPR compliance
+		$gdpr_compliance = get_option( 'cookiebot_gdpr_compliance', false );
+		if ( ! $gdpr_compliance ) {
+			$issues[] = __( 'GDPR compliance mode not enabled', 'wpshadow' );
+		}
+
+		// Check 4: Check data retention policy
+		$retention_days = get_option( 'cookiebot_retention_days', 0 );
+		if ( $retention_days === 0 || $retention_days > 365 ) {
+			$issues[] = __( 'Consent data retention period not properly configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify consent revocation
+		$revocation_enabled = get_option( 'cookiebot_revocation_enabled', false );
+		if ( ! $revocation_enabled ) {
+			$issues[] = __( 'Consent revocation not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check consent proof audit trail
+		$audit_trail = get_option( 'cookiebot_audit_trail', false );
+		if ( ! $audit_trail ) {
+			$issues[] = __( 'Audit trail for consent proof not enabled', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 100, 70 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 70,
-				'threat_level' => 70,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Cookiebot consent database issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/cookiebot-consent-database',
+				'kb_link'      => 'https://wpshadow.com/kb/cookiebot-consent-database',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }
