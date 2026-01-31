@@ -35,7 +35,7 @@ class Diagnostic_SitegroundOptimizerConflicts extends Diagnostic_Base {
 		if ( ! defined( 'SITEGROUND_OPTIMIZER_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify optimizer enabled
@@ -45,7 +45,7 @@ class Diagnostic_SitegroundOptimizerConflicts extends Diagnostic_Base {
 		}
 
 		// Check 2: Check caching conflicts
-		$other_cache = is_plugin_active( 'wp-super-cache/wp-cache.php' ) || 
+		$other_cache = is_plugin_active( 'wp-super-cache/wp-cache.php' ) ||
 		              is_plugin_active( 'w3-total-cache/w3-total-cache.php' ) ||
 		              is_plugin_active( 'wp-fastest-cache/wpFastestCache.php' );
 		if ( $other_cache ) {

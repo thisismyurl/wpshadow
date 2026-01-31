@@ -35,7 +35,7 @@ class Diagnostic_WordfenceScanPerformance extends Diagnostic_Base {
 		if ( ! defined( 'WORDFENCE_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify scan scheduling

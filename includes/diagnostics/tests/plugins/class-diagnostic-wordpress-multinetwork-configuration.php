@@ -35,7 +35,7 @@ class Diagnostic_WordpressMultinetworkConfiguration extends Diagnostic_Base {
 		if ( ! function_exists( 'is_multisite' ) || ! is_multisite() ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify multinetwork detection

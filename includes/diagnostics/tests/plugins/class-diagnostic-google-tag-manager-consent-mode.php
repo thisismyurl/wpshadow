@@ -35,7 +35,7 @@ class Diagnostic_GoogleTagManagerConsentMode extends Diagnostic_Base {
 		if ( ! defined( 'GTM4WP_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify consent mode enabled

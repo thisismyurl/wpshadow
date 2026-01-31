@@ -35,7 +35,7 @@ class Diagnostic_TranslatepressSeoPack extends Diagnostic_Base {
 		if ( ! defined( 'TRP_PLUGIN_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify SEO pack enabled

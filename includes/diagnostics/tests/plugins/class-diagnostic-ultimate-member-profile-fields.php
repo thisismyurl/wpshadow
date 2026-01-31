@@ -35,7 +35,7 @@ class Diagnostic_UltimateMemberProfileFields extends Diagnostic_Base {
 		if ( ! defined( 'ultimatemember_version' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify field sanitization

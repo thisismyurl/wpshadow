@@ -35,12 +35,12 @@ class Diagnostic_SalientThemePageHeaderStyles extends Diagnostic_Base {
 		if ( ! function_exists( 'wp_get_theme' ) ) {
 			return null;
 		}
-		
+
 		$current_theme = wp_get_theme();
 		if ( 'Salient' !== $current_theme->get( 'Name' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify header styles enabled

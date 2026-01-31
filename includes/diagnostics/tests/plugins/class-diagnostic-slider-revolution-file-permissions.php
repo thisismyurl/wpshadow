@@ -35,7 +35,7 @@ class Diagnostic_SliderRevolutionFilePermissions extends Diagnostic_Base {
 		if ( ! defined( 'RS_REVISION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify file permissions

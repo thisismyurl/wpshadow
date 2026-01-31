@@ -35,7 +35,7 @@ class Diagnostic_WoocommerceCompositeProductsPricing extends Diagnostic_Base {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify composite pricing enabled

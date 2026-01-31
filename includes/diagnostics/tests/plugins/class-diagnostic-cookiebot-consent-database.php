@@ -32,7 +32,7 @@ class Diagnostic_CookiebotConsentDatabase extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		
+
 		$issues = array();
 
 		// Check 1: Verify SSL for consent data

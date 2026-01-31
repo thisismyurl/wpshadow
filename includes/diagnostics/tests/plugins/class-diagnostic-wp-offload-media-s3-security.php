@@ -35,7 +35,7 @@ class Diagnostic_WpOffloadMediaS3Security extends Diagnostic_Base {
 		if ( ! is_plugin_active( 'amazon-s3-and-cloudfront/wordpress-s3.php' ) && ! class_exists( 'AS3CF' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify S3 credentials

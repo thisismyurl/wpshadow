@@ -35,7 +35,7 @@ class Diagnostic_NinjaTablesCsvImport extends Diagnostic_Base {
 		if ( ! defined( 'NINJA_TABLES_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify file type validation

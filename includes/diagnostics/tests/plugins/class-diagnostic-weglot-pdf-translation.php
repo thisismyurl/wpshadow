@@ -35,7 +35,7 @@ class Diagnostic_WeglotPdfTranslation extends Diagnostic_Base {
 		if ( ! defined( 'WEGLOT_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify PDF translation enabled

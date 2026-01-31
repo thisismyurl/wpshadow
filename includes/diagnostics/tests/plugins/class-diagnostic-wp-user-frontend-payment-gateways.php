@@ -35,7 +35,7 @@ class Diagnostic_WpUserFrontendPaymentGateways extends Diagnostic_Base {
 		if ( ! defined( 'WPUF_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify payment encryption

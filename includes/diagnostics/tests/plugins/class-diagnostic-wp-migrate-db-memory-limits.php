@@ -35,7 +35,7 @@ class Diagnostic_WpMigrateDbMemoryLimits extends Diagnostic_Base {
 		if ( ! defined( 'WPMDB_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify memory limit allocation

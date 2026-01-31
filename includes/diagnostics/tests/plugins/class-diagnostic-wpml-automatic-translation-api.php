@@ -35,7 +35,7 @@ class Diagnostic_WpmlAutomaticTranslationApi extends Diagnostic_Base {
 		if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify API key configured

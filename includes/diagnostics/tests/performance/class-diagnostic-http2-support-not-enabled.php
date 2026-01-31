@@ -71,7 +71,7 @@ class Diagnostic_HTTP2_Support_Not_Enabled extends Diagnostic_Base {
 
 		$curl_info = curl_version();
 
-		if ( ! isset( $curl_info['protocols'] ) || 
+		if ( ! isset( $curl_info['protocols'] ) ||
 			 ( strpos( $curl_info['protocols'], 'h2' ) === false && strpos( $curl_info['protocols'], 'HTTP/2' ) === false ) ) {
 			return array(
 				'id'            => self::$slug,

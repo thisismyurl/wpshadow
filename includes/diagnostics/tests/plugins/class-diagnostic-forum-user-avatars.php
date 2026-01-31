@@ -35,7 +35,7 @@ class Diagnostic_ForumUserAvatars extends Diagnostic_Base {
 		if ( ! function_exists( 'bp_is_active' ) && ! class_exists( 'BuddyPress' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
 
 		// Check 1: Verify avatar optimization
