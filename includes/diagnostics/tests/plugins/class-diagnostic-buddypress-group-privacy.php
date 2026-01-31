@@ -37,31 +37,54 @@ class Diagnostic_BuddypressGroupPrivacy extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Group privacy levels enforced
+		$privacy_levels = get_option( 'bp_group_privacy_levels', false );
+		if ( ! $privacy_levels ) {
+			$issues[] = 'Group privacy levels not enforced';
+		}
+		
+		// Check 2: Default group privacy set to private
+		$default_privacy = get_option( 'bp_group_default_privacy', 'public' );
+		if ( 'public' === $default_privacy ) {
+			$issues[] = 'Default group privacy set to public';
+		}
+		
+		// Check 3: Invite-only groups supported
+		$invite_only = get_option( 'bp_group_invite_only_enabled', false );
+		if ( ! $invite_only ) {
+			$issues[] = 'Invite-only groups not supported';
+		}
+		
+		// Check 4: Private group directory listing restricted
+		$directory_restrict = get_option( 'bp_group_directory_restricted', false );
+		if ( ! $directory_restrict ) {
+			$issues[] = 'Private groups visible in directory';
+		}
+		
+		// Check 5: Member visibility controls
+		$member_visibility = get_option( 'bp_group_member_visibility', false );
+		if ( ! $member_visibility ) {
+			$issues[] = 'Member visibility controls disabled';
+		}
+		
+		// Check 6: Activity privacy enforcement
+		$activity_privacy = get_option( 'bp_group_activity_privacy', false );
+		if ( ! $activity_privacy ) {
+			$issues[] = 'Activity privacy not enforced';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 75, 45 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
+				'description' => 'BuddyPress group privacy issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/buddypress-group-privacy',
 			);
-		}
-		
-
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
 		}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {

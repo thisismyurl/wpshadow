@@ -37,31 +37,53 @@ class Diagnostic_ModernEventsCalendarPayment extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: SSL enabled for payments
+		if ( ! is_ssl() ) {
+			$issues[] = 'SSL not enabled for payment pages';
+		}
+		
+		// Check 2: Payment gateway security
+		$gateway_security = get_option( 'mec_payment_gateway_security', false );
+		if ( ! $gateway_security ) {
+			$issues[] = 'Payment gateway security not configured';
+		}
+		
+		// Check 3: PCI compliance mode
+		$pci_compliance = get_option( 'mec_pci_compliance_mode', false );
+		if ( ! $pci_compliance ) {
+			$issues[] = 'PCI compliance mode disabled';
+		}
+		
+		// Check 4: Payment logging enabled
+		$payment_logging = get_option( 'mec_payment_logging', false );
+		if ( ! $payment_logging ) {
+			$issues[] = 'Payment logging disabled';
+		}
+		
+		// Check 5: Refund handling configured
+		$refund_handling = get_option( 'mec_refund_handling', false );
+		if ( ! $refund_handling ) {
+			$issues[] = 'Refund handling not configured';
+		}
+		
+		// Check 6: Transaction verification enabled
+		$transaction_verify = get_option( 'mec_transaction_verification', false );
+		if ( ! $transaction_verify ) {
+			$issues[] = 'Transaction verification disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 90, 60 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 75 ),
-				'threat_level' => 75,
+				'description' => 'Modern Events Calendar payment security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/modern-events-calendar-payment',
 			);
-		}
-		
-
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
 		}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {

@@ -37,31 +37,54 @@ class Diagnostic_MonsterinsightsTrackingCode extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Google Analytics tracking ID
+		$tracking_id = get_option( 'monsterinsights_tracking_id', '' );
+		if ( empty( $tracking_id ) ) {
+			$issues[] = 'Tracking ID not configured';
+		}
+		
+		// Check 2: Tracking code placement
+		$code_placement = get_option( 'monsterinsights_code_placement', '' );
+		if ( empty( $code_placement ) || 'header' !== $code_placement ) {
+			$issues[] = 'Tracking code not in header';
+		}
+		
+		// Check 3: Duplicate tracking prevention
+		$duplicate_prevention = get_option( 'monsterinsights_duplicate_prevention', false );
+		if ( ! $duplicate_prevention ) {
+			$issues[] = 'Duplicate tracking not prevented';
+		}
+		
+		// Check 4: Bot filtering enabled
+		$bot_filtering = get_option( 'monsterinsights_bot_filtering', false );
+		if ( ! $bot_filtering ) {
+			$issues[] = 'Bot filtering disabled';
+		}
+		
+		// Check 5: Enhanced ecommerce tracking
+		$enhanced_ecommerce = get_option( 'monsterinsights_enhanced_ecommerce', false );
+		if ( class_exists( 'WooCommerce' ) && ! $enhanced_ecommerce ) {
+			$issues[] = 'Enhanced ecommerce tracking disabled';
+		}
+		
+		// Check 6: Demographics and interests
+		$demographics = get_option( 'monsterinsights_demographics_enabled', false );
+		if ( ! $demographics ) {
+			$issues[] = 'Demographics tracking disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
+				'description' => 'MonsterInsights tracking code issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/monsterinsights-tracking-code',
 			);
-		}
-		
-
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {

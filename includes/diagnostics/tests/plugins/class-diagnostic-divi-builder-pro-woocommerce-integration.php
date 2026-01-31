@@ -37,31 +37,54 @@ class Diagnostic_DiviBuilderProWoocommerceIntegration extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Product builder modules enabled
+		$product_modules = get_option( 'divi_woocommerce_product_modules', false );
+		if ( ! $product_modules ) {
+			$issues[] = 'Product builder modules disabled';
+		}
+		
+		// Check 2: Cart integration configured
+		$cart_integration = get_option( 'divi_woocommerce_cart_integration', false );
+		if ( ! $cart_integration ) {
+			$issues[] = 'Cart integration not configured';
+		}
+		
+		// Check 3: Checkout page styling
+		$checkout_styling = get_option( 'divi_woocommerce_checkout_styling', false );
+		if ( ! $checkout_styling ) {
+			$issues[] = 'Checkout styling not applied';
+		}
+		
+		// Check 4: Product filters enabled
+		$product_filters = get_option( 'divi_woocommerce_product_filters', false );
+		if ( ! $product_filters ) {
+			$issues[] = 'Product filters disabled';
+		}
+		
+		// Check 5: Custom templates configured
+		$custom_templates = get_option( 'divi_woocommerce_custom_templates', false );
+		if ( ! $custom_templates ) {
+			$issues[] = 'Custom templates not configured';
+		}
+		
+		// Check 6: AJAX cart enabled
+		$ajax_cart = get_option( 'divi_woocommerce_ajax_cart', false );
+		if ( ! $ajax_cart ) {
+			$issues[] = 'AJAX cart disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 65, 35 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 50 ),
-				'threat_level' => 50,
+				'description' => 'Divi Builder WooCommerce integration issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/divi-builder-pro-woocommerce-integration',
 			);
-		}
-		
-
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {
