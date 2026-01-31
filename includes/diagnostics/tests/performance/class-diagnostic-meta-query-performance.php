@@ -66,11 +66,11 @@ class Diagnostic_Meta_Query_Performance extends Diagnostic_Base {
 
 		// Check for meta keys using LIKE searches
 		$results = $wpdb->get_results(
-			"SELECT post_id, meta_key, COUNT(*) as cnt 
-			FROM {$wpdb->postmeta} 
-			GROUP BY meta_key 
+			"SELECT post_id, meta_key, COUNT(*) as cnt
+			FROM {$wpdb->postmeta}
+			GROUP BY meta_key
 			HAVING cnt > 1000
-			ORDER BY cnt DESC 
+			ORDER BY cnt DESC
 			LIMIT 10",
 			ARRAY_A
 		);
@@ -89,9 +89,9 @@ class Diagnostic_Meta_Query_Performance extends Diagnostic_Base {
 
 		// Check for posts with excessive meta entries
 		$excessive_meta = $wpdb->get_col(
-			"SELECT post_id FROM {$wpdb->postmeta} 
-			GROUP BY post_id 
-			HAVING COUNT(*) > 100 
+			"SELECT post_id FROM {$wpdb->postmeta}
+			GROUP BY post_id
+			HAVING COUNT(*) > 100
 			LIMIT 5"
 		);
 

@@ -66,7 +66,7 @@ class Diagnostic_Like_Query_Optimization extends Diagnostic_Base {
 
 		// Check for posts with long titles (often indicate LIKE search issues)
 		$long_titles = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
 			WHERE LENGTH(post_title) > 500"
 		);
 
@@ -80,7 +80,7 @@ class Diagnostic_Like_Query_Optimization extends Diagnostic_Base {
 
 		// Check for searchable content without full-text index
 		$post_content_size = $wpdb->get_var(
-			"SELECT SUM(LENGTH(post_content)) FROM {$wpdb->posts} 
+			"SELECT SUM(LENGTH(post_content)) FROM {$wpdb->posts}
 			WHERE post_type = 'post' AND post_status = 'publish'"
 		);
 
@@ -90,7 +90,7 @@ class Diagnostic_Like_Query_Optimization extends Diagnostic_Base {
 
 		// Check for high-volume search queries in logs (if available)
 		$high_activity = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
 			WHERE post_status = 'draft' OR post_status = 'pending'"
 		);
 

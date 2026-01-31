@@ -85,7 +85,7 @@ class Diagnostic_Slow_Query_Detection extends Diagnostic_Base {
 
 		// Check for NOT IN clauses (very expensive)
 		$orphaned_posts = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
 			WHERE post_type NOT IN ('post', 'page', 'attachment')"
 		);
 
@@ -108,7 +108,7 @@ class Diagnostic_Slow_Query_Detection extends Diagnostic_Base {
 
 		// Check for full table scans (no date filtering)
 		$old_posts = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
 			WHERE post_date < DATE_SUB(NOW(), INTERVAL 5 YEAR)"
 		);
 

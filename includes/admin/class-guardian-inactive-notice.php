@@ -93,7 +93,7 @@ class Guardian_Inactive_Notice {
 				var $btn = $(this);
 				var originalText = $btn.text();
 
-				$btn.prop('disabled', true).text('<?php esc_js_e( 'Activating...', 'wpshadow' ); ?>');
+				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Activating...', 'wpshadow' ) ); ?>');
 
 				$.ajax({
 					url: ajaxurl,

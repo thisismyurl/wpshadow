@@ -86,8 +86,8 @@ class Diagnostic_Query_Timeout_Risk extends Diagnostic_Base {
 
 		// Check for recursive meta queries
 		$large_meta = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} 
-			GROUP BY post_id 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta}
+			GROUP BY post_id
 			HAVING COUNT(*) > 200"
 		);
 
@@ -97,8 +97,8 @@ class Diagnostic_Query_Timeout_Risk extends Diagnostic_Base {
 
 		// Check for orphaned relationships
 		$orphaned_relations = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->term_relationships} tr 
-			LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID 
+			"SELECT COUNT(*) FROM {$wpdb->term_relationships} tr
+			LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 

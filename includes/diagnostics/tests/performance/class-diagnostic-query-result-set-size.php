@@ -66,7 +66,7 @@ class Diagnostic_Query_Result_Set_Size extends Diagnostic_Base {
 
 		// Check for tables with huge result potential
 		$posts_with_all_data = $wpdb->get_var(
-			"SELECT SUM(LENGTH(post_title) + LENGTH(post_content) + LENGTH(post_excerpt)) 
+			"SELECT SUM(LENGTH(post_title) + LENGTH(post_content) + LENGTH(post_excerpt))
 			FROM {$wpdb->posts}"
 		);
 
@@ -108,7 +108,7 @@ class Diagnostic_Query_Result_Set_Size extends Diagnostic_Base {
 		$user_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users}" );
 		$usermeta_avg = $wpdb->get_var(
 			"SELECT AVG(cnt) FROM (
-				SELECT COUNT(*) as cnt FROM {$wpdb->usermeta} 
+				SELECT COUNT(*) as cnt FROM {$wpdb->usermeta}
 				GROUP BY user_id
 			) as counts"
 		);

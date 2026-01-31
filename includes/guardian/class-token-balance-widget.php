@@ -107,10 +107,10 @@ class Token_Balance_Widget {
 
 		// Add submenu items
 		// Toggle Guardian on/off
-		$toggle_text = $is_enabled 
-			? '<span class="wpshadow-guardian-toggle-active">' . __( '✓ Guardian Running', 'wpshadow' ) . '</span>' 
+		$toggle_text = $is_enabled
+			? '<span class="wpshadow-guardian-toggle-active">' . __( '✓ Guardian Running', 'wpshadow' ) . '</span>'
 			: '<span class="wpshadow-guardian-toggle-inactive">' . __( '○ Guardian Stopped', 'wpshadow' ) . '</span>';
-		
+
 		$wp_admin_bar->add_node(
 			array(
 				'parent' => 'wpshadow-guardian',
@@ -252,16 +252,16 @@ class Token_Balance_Widget {
 		jQuery(document).ready(function($) {
 			$('#wp-admin-bar-wpshadow-guardian-toggle a').on('click', function(e) {
 				e.preventDefault();
-				
+
 				var $link = $(this);
 				var $text = $link.find('span');
 				var isActive = $text.hasClass('wpshadow-guardian-toggle-active');
 				var newState = !isActive;
-				
+
 				// Show loading state
 				var originalText = $text.text();
 				$text.text('<?php echo esc_js( __( 'Toggling...', 'wpshadow' ) ); ?>');
-				
+
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
@@ -282,7 +282,7 @@ class Token_Balance_Widget {
 									.addClass('wpshadow-guardian-toggle-inactive')
 									.text('<?php echo esc_js( __( '○ Guardian Stopped', 'wpshadow' ) ); ?>');
 							}
-							
+
 							// Update status dots in main toolbar item
 							var $statusDot = $('#wp-admin-bar-wpshadow-guardian > a .wpshadow-status-dot');
 							if (newState) {

@@ -94,10 +94,10 @@ class Diagnostic_Complex_Join_Performance extends Diagnostic_Base {
 
 		// Check for multiple meta keys on same post (indicates need for denormalization)
 		$high_meta_keys = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT meta_key) FROM {$wpdb->postmeta} 
+			"SELECT COUNT(DISTINCT meta_key) FROM {$wpdb->postmeta}
 			WHERE post_id IN (
-				SELECT post_id FROM {$wpdb->postmeta} 
-				GROUP BY post_id 
+				SELECT post_id FROM {$wpdb->postmeta}
+				GROUP BY post_id
 				HAVING COUNT(*) > 50
 			)"
 		);

@@ -109,8 +109,8 @@ class Diagnostic_Plugin_Memory_Usage extends Diagnostic_Base {
 		// Check for many large transients
 		global $wpdb;
 		$large_transients = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
-			WHERE option_name LIKE '%transient%' 
+			"SELECT COUNT(*) FROM {$wpdb->options}
+			WHERE option_name LIKE '%transient%'
 			AND LENGTH(option_value) > 1048576"
 		);
 

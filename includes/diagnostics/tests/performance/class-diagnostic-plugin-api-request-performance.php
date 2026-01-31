@@ -116,8 +116,8 @@ class Diagnostic_Plugin_API_Request_Performance extends Diagnostic_Base {
 		// Check for HTTPS everywhere (cURL performance)
 		global $wpdb;
 		$options = $wpdb->get_results(
-			"SELECT option_name, option_value FROM {$wpdb->options} 
-			WHERE option_value LIKE '%https://api%' 
+			"SELECT option_name, option_value FROM {$wpdb->options}
+			WHERE option_value LIKE '%https://api%'
 			LIMIT 5"
 		);
 

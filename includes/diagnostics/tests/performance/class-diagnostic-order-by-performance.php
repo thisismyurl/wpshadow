@@ -66,9 +66,9 @@ class Diagnostic_Order_By_Performance extends Diagnostic_Base {
 
 		// Check for posts with many revisions (ORDER BY gets expensive)
 		$high_revision_posts = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_parent) FROM {$wpdb->posts} 
-			WHERE post_type = 'revision' 
-			GROUP BY post_parent 
+			"SELECT COUNT(DISTINCT post_parent) FROM {$wpdb->posts}
+			WHERE post_type = 'revision'
+			GROUP BY post_parent
 			HAVING COUNT(*) > 100"
 		);
 
