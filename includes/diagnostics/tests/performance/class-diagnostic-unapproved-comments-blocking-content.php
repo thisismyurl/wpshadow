@@ -74,10 +74,10 @@ class Diagnostic_Unapproved_Comments_Blocking_Content extends Diagnostic_Base {
 
 		// Count unapproved comments per post
 		$unapproved_per_post = $wpdb->get_results(
-			"SELECT comment_post_ID, COUNT(*) as count 
-			 FROM {$wpdb->comments} 
-			 WHERE comment_approved = 0 
-			 GROUP BY comment_post_ID 
+			"SELECT comment_post_ID, COUNT(*) as count
+			 FROM {$wpdb->comments}
+			 WHERE comment_approved = 0
+			 GROUP BY comment_post_ID
 			 HAVING count > 10"
 		);
 

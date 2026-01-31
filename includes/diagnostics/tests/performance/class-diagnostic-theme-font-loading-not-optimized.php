@@ -68,7 +68,7 @@ class Diagnostic_Theme_Font_Loading_Not_Optimized extends Diagnostic_Base {
 
 		if ( ! empty( $wp_styles ) && ! empty( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $object ) {
-				if ( strpos( $object->src, 'fonts.googleapis.com' ) !== false || 
+				if ( strpos( $object->src, 'fonts.googleapis.com' ) !== false ||
 					 strpos( $object->src, 'fonts.gstatic.com' ) !== false ) {
 					// External fonts detected, not optimized
 					return array(

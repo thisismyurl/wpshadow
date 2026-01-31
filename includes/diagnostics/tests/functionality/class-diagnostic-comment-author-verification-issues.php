@@ -76,9 +76,9 @@ class Diagnostic_Comment_Author_Verification_Issues extends Diagnostic_Base {
 
 		// Check for comments with invalid email addresses
 		$invalid_emails = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
-			WHERE comment_author_email NOT LIKE '%@%.%' 
-			AND comment_author_email != '' 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
+			WHERE comment_author_email NOT LIKE '%@%.%'
+			AND comment_author_email != ''
 			AND 1=1"
 		);
 
@@ -92,8 +92,8 @@ class Diagnostic_Comment_Author_Verification_Issues extends Diagnostic_Base {
 
 		// Check for comments with empty author names
 		$empty_names = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
-			WHERE (comment_author = '' OR comment_author IS NULL) 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
+			WHERE (comment_author = '' OR comment_author IS NULL)
 			AND comment_type = 'comment'"
 		);
 
@@ -107,11 +107,11 @@ class Diagnostic_Comment_Author_Verification_Issues extends Diagnostic_Base {
 
 		// Check for comments from non-registered users marked as posts by author
 		$author_comments_unverified = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
-			WHERE user_id = 0 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
+			WHERE user_id = 0
 			AND comment_author IN (
 				SELECT user_login FROM {$wpdb->users}
-			) 
+			)
 			AND comment_type = 'comment'"
 		);
 

@@ -88,7 +88,7 @@ class Diagnostic_Login_Attempt_Rate_Limiting extends Diagnostic_Base {
 			$htaccess_path = ABSPATH . '.htaccess';
 			if ( file_exists( $htaccess_path ) ) {
 				$htaccess_content = file_get_contents( $htaccess_path );
-				if ( strpos( $htaccess_content, 'limit-noreq' ) !== false || 
+				if ( strpos( $htaccess_content, 'limit-noreq' ) !== false ||
 					 strpos( $htaccess_content, 'ratelimit' ) !== false ||
 					 strpos( $htaccess_content, 'limitrequestrate' ) !== false ) {
 					$rate_limiter_active = true;
