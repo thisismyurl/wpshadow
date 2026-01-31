@@ -89,7 +89,31 @@ class Feature_Tour {
 	 * @since 1.2601.2200
 	 * @return void
 	 */
+	/**
+	 * Show tour prompt (Killer Utilities alert).
+	 *
+	 * Disabled per bug #3867 - alert removed from admin UI
+	 * Feature tour still accessible via Help menu
+	 *
+	 * @since  1.2601.2200
+	 * @return void
+	 */
 	public static function show_tour_prompt() {
+		// Alert disabled per bug #3867
+		return;
+	}
+
+	/**
+	 * Show Killer Utilities tour prompt (legacy method, now disabled).
+	 *
+	 * @since  1.2601.2200
+	 * @return void
+	 */
+	private static function show_killer_utilities_prompt() {
+		// Disabled - see show_tour_prompt()
+		return;
+
+		/* Original code commented out per bug #3867
 		// Only show on WPShadow pages
 		$screen = get_current_screen();
 		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {

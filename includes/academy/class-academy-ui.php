@@ -180,7 +180,7 @@ class Academy_UI extends AJAX_Handler_Base {
 		add_submenu_page(
 			'wpshadow',
 			__( 'WPShadow Academy', 'wpshadow' ),
-			__( '🎓 Academy', 'wpshadow' ),
+			__( 'Academy', 'wpshadow' ),
 			'manage_options',
 			'wpshadow-academy',
 			array( __CLASS__, 'render_academy_page' )

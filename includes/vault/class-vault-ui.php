@@ -47,10 +47,16 @@ class Vault_UI extends AJAX_Handler_Base {
 	/**
 	 * Register admin menu pages
 	 *
+	 * Vault menu is disabled in core - this is a pro feature.
+	 * Vault Light functionality remains available programmatically.
+	 *
 	 * @since  1.6030.1845
 	 * @return void
 	 */
 	public static function register_menu_pages() {
+		// Vault submenu removed - pro feature handled by wpshadow-pro-vault
+		// Vault Light backup functionality still available via API
+		/* Commented out - Pro feature
 		add_submenu_page(
 			'wpshadow',
 			__( 'WPShadow Vault - Backups', 'wpshadow' ),
@@ -59,6 +65,7 @@ class Vault_UI extends AJAX_Handler_Base {
 			'wpshadow-vault',
 			array( __CLASS__, 'render_vault_page' )
 		);
+		*/
 	}
 
 	/**

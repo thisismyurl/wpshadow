@@ -125,6 +125,9 @@ class Menu_Manager {
 			'wpshadow_render_utilities'
 		);
 
+		// Note: Academy is registered by Academy_UI::register_admin_menu() - positioned here in menu order (after Utilities, before Rewards)
+		// Note: Rewards is registered by Gamification_UI::register_menu_pages() - positioned after Academy, before Help
+
 		// Help & Documentation
 		add_submenu_page(
 			'wpshadow',
@@ -134,6 +137,9 @@ class Menu_Manager {
 			'wpshadow-help',
 			'wpshadow_render_help'
 		);
+
+		// Note: Vault submenu removed - Vault is a pro feature handled by wpshadow-pro-vault plugin
+		// Vault Light functionality remains available without menu item
 	}
 
 	/**

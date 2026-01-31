@@ -82,10 +82,17 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Show policy update notice.
 	 *
+	 * Disabled per bug #3868 - alert removed from admin UI
+	 * Privacy policy still accessible via Help menu
+	 *
 	 * @since  1.2604.0200
 	 * @return void
 	 */
 	public static function show_update_notice() {
+		// Alert disabled per bug #3868
+		return;
+
+		/* Original code commented out per bug #3868
 		$user_id = get_current_user_id();
 
 		if ( ! get_transient( 'wpshadow_show_policy_notice_' . $user_id ) ) {
