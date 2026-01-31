@@ -326,7 +326,7 @@ class Achievement_System {
 				<span class="dashicons dashicons-awards" class="wps-achievement-icon"></span>
 				<h3 class="wps-m-0"><?php esc_html_e( 'Your Achievements', 'wpshadow' ); ?></h3>
 			</div>
-			
+
 			<!-- Progress Bar -->
 			<div class="wps-achievement-section">
 				<div class="wps-flex-justify-space-between">
@@ -344,7 +344,7 @@ class Achievement_System {
 					<?php printf( esc_html__( '%d%% Complete', 'wpshadow' ), $progress['percentage'] ); ?>
 				</div>
 			</div>
-			
+
 			<!-- Achievement Grid -->
 			<div class="wps-grid wps-grid-auto-140 wps-gap-3">
 				<?php foreach ( $all_achievements as $id => $achievement ) : ?>

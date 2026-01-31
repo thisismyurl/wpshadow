@@ -138,7 +138,7 @@ class Database_Indexes {
 		// Use information_schema which is available on all MySQL versions
 		$existing_indexes = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS 
+				"SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS
 				 WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND INDEX_NAME = %s",
 				DB_NAME,
 				str_replace( $wpdb->prefix, '', $table ),
@@ -196,7 +196,7 @@ class Database_Indexes {
 
 		$exists = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS 
+				"SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS
 				 WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND INDEX_NAME = %s LIMIT 1",
 				DB_NAME,
 				str_replace( $wpdb->prefix, '', $table ),
@@ -221,9 +221,9 @@ class Database_Indexes {
 
 		$indexes = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT INDEX_NAME, COLUMN_NAME, SEQ_IN_INDEX 
-				 FROM INFORMATION_SCHEMA.STATISTICS 
-				 WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s 
+				"SELECT INDEX_NAME, COLUMN_NAME, SEQ_IN_INDEX
+				 FROM INFORMATION_SCHEMA.STATISTICS
+				 WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
 				 ORDER BY INDEX_NAME, SEQ_IN_INDEX",
 				DB_NAME,
 				str_replace( $wpdb->prefix, '', $table )

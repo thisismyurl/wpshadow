@@ -151,15 +151,15 @@ class Training_Widget {
 									<?php endif; ?>
 								</div>
 								<div class="wpshadow-training-course__actions">
-									<a href="<?php echo esc_url( $course['video_url'] ); ?>" 
-									   target="_blank" 
+									<a href="<?php echo esc_url( $course['video_url'] ); ?>"
+									   target="_blank"
 									   class="button button-primary wpshadow-training-click"
 									   data-course="<?php echo esc_attr( $course['slug'] ); ?>">
 										<?php esc_html_e( 'Watch Free Video', 'wpshadow' ); ?>
 									</a>
 									<?php if ( ! empty( $course['kb_url'] ) ) : ?>
-										<a href="<?php echo esc_url( $course['kb_url'] ); ?>" 
-										   target="_blank" 
+										<a href="<?php echo esc_url( $course['kb_url'] ); ?>"
+										   target="_blank"
 										   class="button button-secondary">
 											<?php esc_html_e( 'Read Guide', 'wpshadow' ); ?>
 										</a>
@@ -188,8 +188,8 @@ class Training_Widget {
 			<ul class="wpshadow-training-list">
 				<?php foreach ( $args['courses'] as $course ) : ?>
 					<li class="wpshadow-training-item">
-						<a href="<?php echo esc_url( $course['video_url'] ); ?>" 
-						   target="_blank" 
+						<a href="<?php echo esc_url( $course['video_url'] ); ?>"
+						   target="_blank"
 						   class="wpshadow-training-click"
 						   data-course="<?php echo esc_attr( $course['slug'] ); ?>">
 							<span class="dashicons dashicons-video-alt3"></span>
@@ -220,8 +220,8 @@ class Training_Widget {
 			<span class="dashicons dashicons-lightbulb" style="color: #2271b1;"></span>
 			<span>
 				<strong><?php esc_html_e( 'Learn more:', 'wpshadow' ); ?></strong>
-				<a href="<?php echo esc_url( $course['video_url'] ); ?>" 
-				   target="_blank" 
+				<a href="<?php echo esc_url( $course['video_url'] ); ?>"
+				   target="_blank"
 				   class="wpshadow-training-click"
 				   data-course="<?php echo esc_attr( $course['slug'] ); ?>">
 					<?php echo esc_html( $course['title'] ); ?>
@@ -477,20 +477,20 @@ class Training_Widget {
 			$('.wpshadow-training-widget__dismiss').on('click', function() {
 				var widget = $(this).closest('.wpshadow-training-widget');
 				var context = widget.data('context');
-				
+
 				widget.fadeOut(300);
-				
+
 				$.post(ajaxurl, {
 					action: 'wpshadow_dismiss_training_widget',
 					context: context,
 					nonce: '" . wp_create_nonce( 'wpshadow_training_widget' ) . "'
 				});
 			});
-			
+
 			// Track clicks
 			$('.wpshadow-training-click').on('click', function() {
 				var course = $(this).data('course');
-				
+
 				$.post(ajaxurl, {
 					action: 'wpshadow_track_training_click',
 					course: course,

@@ -336,8 +336,13 @@ class Recommendation_Engine {
 			update_option( 'wpshadow_pending_recommendations', $recommendations );
 		}
 
-		// Set dismissal transient (don't show again for 30 days)
-		set_transient( 'wpshadow_dismissed_' . $id . '_' . get_current_user_id(), true, 30 * DAY_IN_SECONDS );
+		// Set dismissal cache (don't show again for 30 days)
+		\WPShadow\Core\Cache_Manager::set(
+			'dismissed_' . $id . '_' . get_current_user_id(),
+			true,
+			'wpshadow_recommendations',
+			30 * DAY_IN_SECONDS
+		);
 
 		// Log dismissal
 		Activity_Logger::log(

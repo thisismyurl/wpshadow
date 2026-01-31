@@ -101,7 +101,7 @@ class Vault_Registration extends AJAX_Handler_Base {
 			Settings_Registry::set( 'vault_email', $email );
 
 			// Clear tier cache.
-			delete_transient( 'wpshadow_vault_tier' );
+		\WPShadow\Core\Cache_Manager::delete( 'vault_tier', 'wpshadow_vault' );
 
 			Activity_Logger::log(
 				'vault_registered',
@@ -143,7 +143,7 @@ class Vault_Registration extends AJAX_Handler_Base {
 			Settings_Registry::set( 'vault_api_key', $api_key );
 
 			// Clear tier cache.
-			delete_transient( 'wpshadow_vault_tier' );
+		\WPShadow\Core\Cache_Manager::delete( 'vault_tier', 'wpshadow_vault' );
 
 			// Fetch account info.
 			$account_info = self::fetch_account_info( $api_key );
@@ -178,7 +178,7 @@ class Vault_Registration extends AJAX_Handler_Base {
 		Settings_Registry::set( 'vault_api_key', '' );
 		Settings_Registry::set( 'vault_email', '' );
 
-		delete_transient( 'wpshadow_vault_tier' );
+	\WPShadow\Core\Cache_Manager::delete( 'vault_tier', 'wpshadow_vault' );
 
 		Activity_Logger::log( 'vault_disconnected', array( 'site_url' => site_url() ) );
 
@@ -224,8 +224,11 @@ class Vault_Registration extends AJAX_Handler_Base {
 	 */
 	private static function validate_api_key( $api_key ) {
 		// Check cache first.
-		$cache_key = 'wpshadow_vault_key_valid_' . md5( $api_key );
-		$cached    = get_transient( $cache_key );
+		$cache_key = 'vault_key_valid_' . md5( $api_key );
+		$cached    = \WPShadow\Core\Cache_Manager::get(
+			$cache_key,
+			'wpshadow_vault'
+		);
 
 		if ( false !== $cached ) {
 			return (bool) $cached;
@@ -249,7 +252,12 @@ class Vault_Registration extends AJAX_Handler_Base {
 		$is_valid = isset( $body['valid'] ) && $body['valid'];
 
 		// Cache for 1 hour.
-		set_transient( $cache_key, $is_valid, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			$cache_key,
+			$is_valid,
+			'wpshadow_vault',
+			HOUR_IN_SECONDS
+		);
 
 		return $is_valid;
 	}
@@ -307,7 +315,12 @@ class Vault_Registration extends AJAX_Handler_Base {
 		$is_available = ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response );
 
 		// Cache for 5 minutes.
-		set_transient( $cache_key, $is_available, 5 * MINUTE_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			$cache_key,
+			$is_available,
+			'wpshadow_vault',
+			5 * MINUTE_IN_SECONDS
+		);
 
 		return $is_available;
 	}

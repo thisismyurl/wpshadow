@@ -181,12 +181,12 @@ class Notification_Manager {
 		$cache_key = "wpshadow_notif_{$type}_{$context}";
 
 		// Check if notification already sent recently (within 1 hour)
-		if ( get_transient( $cache_key ) ) {
+		if ( \WPShadow\Core\Cache_Manager::get( $cache_key, 'wpshadow_cloud' ) ) {
 			return false;
 		}
 
 		// Mark as sent
-		set_transient( $cache_key, true, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( $cache_key, true, 'wpshadow_cloud', HOUR_IN_SECONDS );
 
 		return true;
 	}

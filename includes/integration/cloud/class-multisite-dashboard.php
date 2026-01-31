@@ -32,7 +32,7 @@ class Multisite_Dashboard {
 	 */
 	public static function get_registered_sites(): array {
 		// Check cache first (1 hour TTL)
-		$cached = get_transient( 'wpshadow_registered_sites_list' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'registered_sites_list', 'wpshadow_cloud' );
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -47,7 +47,7 @@ class Multisite_Dashboard {
 		$sites = $response['sites'] ?? array();
 
 		// Cache for 1 hour
-		set_transient( 'wpshadow_registered_sites_list', $sites, 3600 );
+		\WPShadow\Core\Cache_Manager::set( 'registered_sites_list', $sites, 'wpshadow_cloud', 3600  );
 
 		return $sites;
 	}
@@ -66,7 +66,7 @@ class Multisite_Dashboard {
 		}
 
 		// Try cache first (5 minute TTL)
-		$cached = get_transient( "wpshadow_site_status_{$site_id}" );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'site_status_{$site_id}', 'wpshadow_cloud' );
 		if ( $cached ) {
 			return $cached;
 		}
@@ -82,7 +82,7 @@ class Multisite_Dashboard {
 		}
 
 		// Cache for 5 minutes
-		set_transient( "wpshadow_site_status_{$site_id}", $response, 300 );
+		\WPShadow\Core\Cache_Manager::set( 'site_status_{$site_id}', $response, 'wpshadow_cloud', 300  );
 
 		return $response;
 	}
@@ -203,7 +203,7 @@ class Multisite_Dashboard {
 		$period = sanitize_key( $period );
 
 		// Check cache (1 hour TTL)
-		$cached = get_transient( "wpshadow_trends_{$period}" );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'trends_{$period}', 'wpshadow_cloud' );
 		if ( $cached ) {
 			return $cached;
 		}
@@ -219,7 +219,7 @@ class Multisite_Dashboard {
 		}
 
 		// Cache for 1 hour
-		set_transient( "wpshadow_trends_{$period}", $response, 3600 );
+		\WPShadow\Core\Cache_Manager::set( 'trends_{$period}', $response, 'wpshadow_cloud', 3600  );
 
 		return $response;
 	}
@@ -238,7 +238,7 @@ class Multisite_Dashboard {
 		$limit = max( 1, min( 100, $limit ) );
 
 		// Check cache (5 minute TTL)
-		$cached = get_transient( 'wpshadow_network_alerts' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'network_alerts', 'wpshadow_cloud' );
 		if ( $cached ) {
 			return array_slice( $cached, 0, $limit );
 		}
@@ -253,7 +253,7 @@ class Multisite_Dashboard {
 		$alerts = $response['alerts'] ?? array();
 
 		// Cache for 5 minutes
-		set_transient( 'wpshadow_network_alerts', $alerts, 300 );
+		\WPShadow\Core\Cache_Manager::set( 'network_alerts', $alerts, 'wpshadow_cloud', 300  );
 
 		return array_slice( $alerts, 0, $limit );
 	}
@@ -328,16 +328,16 @@ class Multisite_Dashboard {
 	 * Called when site data changes significantly.
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_registered_sites_list' );
-		delete_transient( 'wpshadow_network_alerts' );
-		delete_transient( 'wpshadow_trends_week' );
-		delete_transient( 'wpshadow_trends_month' );
-		delete_transient( 'wpshadow_trends_quarter' );
+		\WPShadow\Core\Cache_Manager::delete( 'registered_sites_list', 'wpshadow_cloud' );
+		\WPShadow\Core\Cache_Manager::delete( 'network_alerts', 'wpshadow_cloud' );
+		\WPShadow\Core\Cache_Manager::delete( 'trends_week', 'wpshadow_cloud' );
+		\WPShadow\Core\Cache_Manager::delete( 'trends_month', 'wpshadow_cloud' );
+		\WPShadow\Core\Cache_Manager::delete( 'trends_quarter', 'wpshadow_cloud' );
 
 		// Clear site-specific caches
 		$site_id = get_option( 'wpshadow_site_id' );
 		if ( $site_id ) {
-			delete_transient( "wpshadow_site_status_{$site_id}" );
+			\WPShadow\Core\Cache_Manager::delete( 'site_status_{$site_id}', 'wpshadow_cloud' );
 		}
 	}
 

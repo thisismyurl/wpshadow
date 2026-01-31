@@ -92,7 +92,7 @@ class Admin_Page_Scanner {
 	 */
 	public static function end_capture(): string {
 		$output = ob_get_clean();
-		
+
 		// Store in transient for diagnostic access (5 minute expiry)
 		\WPShadow\Core\Cache_Manager::set(
 			'admin_page_capture',
@@ -100,10 +100,10 @@ class Admin_Page_Scanner {
 			'wpshadow_scanning',
 			300
 		);
-		
+
 		// Re-output the content so page renders normally
 		echo $output;
-		
+
 		return $output;
 	}
 
@@ -285,7 +285,7 @@ class Admin_Page_Scanner {
 	private static function count_missing_alt_images( string $html ): int {
 		// Find all img tags
 		preg_match_all( '/<img[^>]*>/i', $html, $matches );
-		
+
 		$missing_alt = 0;
 		foreach ( $matches[0] as $img_tag ) {
 			// Check if alt attribute exists
@@ -293,7 +293,7 @@ class Admin_Page_Scanner {
 				$missing_alt++;
 			}
 		}
-		
+
 		return $missing_alt;
 	}
 
@@ -307,20 +307,20 @@ class Admin_Page_Scanner {
 	private static function count_external_links( string $html ): int {
 		$site_url = get_site_url();
 		preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\']/i', $html, $matches );
-		
+
 		$external_count = 0;
 		foreach ( $matches[1] as $url ) {
 			// Skip anchors, mailto, tel, etc.
 			if ( strpos( $url, '#' ) === 0 || strpos( $url, 'mailto:' ) === 0 || strpos( $url, 'tel:' ) === 0 ) {
 				continue;
 			}
-			
+
 			// Check if external
 			if ( strpos( $url, 'http' ) === 0 && strpos( $url, $site_url ) === false ) {
 				$external_count++;
 			}
 		}
-		
+
 		return $external_count;
 	}
 
@@ -344,31 +344,31 @@ class Admin_Page_Scanner {
 	 */
 	public static function extract_meta_tags( string $html ): array {
 		preg_match_all( '/<meta[^>]+>/i', $html, $matches );
-		
+
 		$meta_tags = array();
 		foreach ( $matches[0] as $meta ) {
 			$attributes = array();
-			
+
 			// Extract name
 			if ( preg_match( '/name=["\']([^"\']+)["\']/i', $meta, $name_match ) ) {
 				$attributes['name'] = $name_match[1];
 			}
-			
+
 			// Extract property
 			if ( preg_match( '/property=["\']([^"\']+)["\']/i', $meta, $prop_match ) ) {
 				$attributes['property'] = $prop_match[1];
 			}
-			
+
 			// Extract content
 			if ( preg_match( '/content=["\']([^"\']+)["\']/i', $meta, $content_match ) ) {
 				$attributes['content'] = $content_match[1];
 			}
-			
+
 			if ( ! empty( $attributes ) ) {
 				$meta_tags[] = $attributes;
 			}
 		}
-		
+
 		return $meta_tags;
 	}
 
@@ -381,10 +381,10 @@ class Admin_Page_Scanner {
 	 */
 	public static function extract_headings( string $html ): array {
 		$headings = array();
-		
+
 		for ( $level = 1; $level <= 6; $level++ ) {
 			preg_match_all( "/<h{$level}[^>]*>(.*?)<\/h{$level}>/is", $html, $matches, PREG_SET_ORDER );
-			
+
 			foreach ( $matches as $match ) {
 				$headings[] = array(
 					'level' => $level,
@@ -392,7 +392,7 @@ class Admin_Page_Scanner {
 				);
 			}
 		}
-		
+
 		return $headings;
 	}
 }

@@ -109,7 +109,7 @@ class Diagnostic_Plugin_Database_Conflicts extends Diagnostic_Base {
 			$base_name = str_replace( $wpdb->prefix, '', $table );
 			// Remove common suffixes.
 			$base_name = preg_replace( '/_(data|meta|cache|log|temp|queue)$/', '', $base_name );
-			
+
 			if ( ! isset( $table_base_names[ $base_name ] ) ) {
 				$table_base_names[ $base_name ] = array();
 			}
@@ -182,11 +182,11 @@ class Diagnostic_Plugin_Database_Conflicts extends Diagnostic_Base {
 		foreach ( $custom_tables as $table ) {
 			$size_query = $wpdb->get_row(
 				$wpdb->prepare(
-					"SELECT 
+					"SELECT
 						ROUND(((data_length + index_length) / 1024 / 1024), 2) AS size_mb,
 						TABLE_ROWS as row_count
-					FROM information_schema.TABLES 
-					WHERE table_schema = %s 
+					FROM information_schema.TABLES
+					WHERE table_schema = %s
 					AND table_name = %s",
 					DB_NAME,
 					$table

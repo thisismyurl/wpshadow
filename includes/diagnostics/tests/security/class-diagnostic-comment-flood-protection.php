@@ -27,22 +27,39 @@ class Diagnostic_Comment_Flood_Protection extends Diagnostic_Base {
 		// WordPress has built-in flood protection, but check if it's been disabled.
 		$has_flood_filter = has_filter( 'comment_flood_filter' );
 
-		// Check for rapid commenting in database.
-		global $wpdb;
+		// Check for rapid commenting using WordPress API.
 		$flood_threshold = apply_filters( 'comment_flood_filter_time', 15 );
 
-		// Look for users/IPs submitting comments too rapidly.
-		$recent_floods = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT comment_author_IP, COUNT(*) as count
-				FROM {$wpdb->comments}
-				WHERE comment_date > DATE_SUB(NOW(), INTERVAL %d SECOND)
-				GROUP BY comment_author_IP
-				HAVING count > 3
-				LIMIT 5",
-				$flood_threshold
+		// Get recent comments (within flood threshold)
+		$flood_time = gmdate( 'Y-m-d H:i:s', time() - $flood_threshold );
+		$recent_comments = get_comments(
+			array(
+				'post_status' => 'any',
+				'date_query'  => array(
+					array(
+						'after' => $flood_time,
+					),
+				),
+				'status'  => 'any',
+				'number'  => 500,
+				'fields'  => 'ids',
 			)
 		);
+
+		// Group comments by IP to detect flooding pattern
+		$flood_ips = array();
+		foreach ( $recent_comments as $comment_id ) {
+			$comment = get_comment( $comment_id );
+			if ( $comment && ! empty( $comment->comment_author_IP ) ) {
+				$ip = $comment->comment_author_IP;
+				$flood_ips[ $ip ] = isset( $flood_ips[ $ip ] ) ? $flood_ips[ $ip ] + 1 : 1;
+			}
+		}
+
+		// Check for IPs with more than 3 comments in the flood threshold window
+		$recent_floods = array_filter( $flood_ips, function( $count ) {
+			return $count > 3;
+		});
 
 		if ( ! empty( $recent_floods ) || ! $has_flood_filter ) {
 			return array(

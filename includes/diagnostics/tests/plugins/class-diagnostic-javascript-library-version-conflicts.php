@@ -89,7 +89,7 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 		// Check registered scripts for library versions.
 		foreach ( $wp_scripts->registered as $handle => $script ) {
 			$handle_lower = strtolower( $handle );
-			
+
 			foreach ( $library_patterns as $library => $patterns ) {
 				foreach ( $patterns as $pattern ) {
 					if ( strpos( $handle_lower, $pattern ) !== false ) {
@@ -116,7 +116,7 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 					}
 				}
 				$unique_versions = array_unique( $versions );
-				
+
 				if ( count( $unique_versions ) > 1 ) {
 					$conflicts[] = sprintf(
 						/* translators: 1: library name, 2: number of versions */
@@ -143,7 +143,7 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 		// Check for no-conflict mode issues.
 		if ( isset( $libraries['jquery'] ) ) {
 			foreach ( $libraries['jquery'] as $jquery_instance ) {
-				if ( strpos( $jquery_instance['src'], 'jquery.min.js' ) !== false 
+				if ( strpos( $jquery_instance['src'], 'jquery.min.js' ) !== false
 					&& strpos( $jquery_instance['src'], 'wp-includes' ) === false ) {
 					$issues[] = __( 'Plugin loading jQuery directly (bypassing WordPress jQuery no-conflict mode)', 'wpshadow' );
 					break;

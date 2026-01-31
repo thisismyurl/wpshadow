@@ -24,14 +24,23 @@ class Diagnostic_Comment_Author_IP_Tracking extends Diagnostic_Base {
 	protected static $family = 'privacy';
 
 	public static function check() {
-		global $wpdb;
-
-		// Check if IPs are being stored.
-		$ip_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments}
-			WHERE comment_author_IP != '' AND comment_author_IP IS NOT NULL
-			LIMIT 100"
+		// Check if IPs are being stored using WordPress API
+		$comments_with_ip = get_comments(
+			array(
+				'number'       => 100,
+				'status'       => 'any',
+				'fields'       => 'ids',
+				'meta_query'   => array(
+					array(
+						'key'     => 'comment_author_IP',
+						'value'   => '',
+						'compare' => '!=',
+					),
+				),
+			)
 		);
+
+		$ip_count = count( $comments_with_ip );
 
 		if ( $ip_count > 0 ) {
 			// Check if privacy policy mentions IP logging.

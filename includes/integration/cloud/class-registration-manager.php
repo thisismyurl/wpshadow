@@ -146,7 +146,7 @@ class Registration_Manager {
 		}
 
 		// Get cached status (refresh every 24 hours)
-		$cached = get_transient( 'wpshadow_registration_status_cache' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'registration_status_cache', 'wpshadow_cloud' );
 		if ( $cached ) {
 			return $cached;
 		}
@@ -179,7 +179,7 @@ class Registration_Manager {
 		);
 
 		// Cache for 24 hours
-		set_transient( 'wpshadow_registration_status_cache', $status, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'registration_status_cache', $status, 'wpshadow_cloud', DAY_IN_SECONDS  );
 
 		// Update local subscription tier
 		update_option( 'wpshadow_subscription_tier', $status['tier'] );
@@ -230,7 +230,7 @@ class Registration_Manager {
 		delete_option( 'wpshadow_registration_date' );
 		delete_option( 'wpshadow_subscription_tier' );
 		delete_option( 'wpshadow_subscription_expires' );
-		delete_transient( 'wpshadow_registration_status_cache' );
+		\WPShadow\Core\Cache_Manager::delete( 'registration_status_cache', 'wpshadow_cloud' );
 
 		// Clean up scan cache using WordPress functions
 		// Get all option names starting with prefix
@@ -316,6 +316,6 @@ class Registration_Manager {
 	 * Called after subscription changes to force refresh.
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_registration_status_cache' );
+		\WPShadow\Core\Cache_Manager::delete( 'registration_status_cache', 'wpshadow_cloud' );
 	}
 }

@@ -135,8 +135,8 @@ class Post_Fix_Education {
 						<h4><?php esc_html_e( 'Want to Learn More?', 'wpshadow' ); ?></h4>
 						<div class="wpshadow-education-links">
 							<?php foreach ( $education['learn_more'] as $link ) : ?>
-								<a href="<?php echo esc_url( $link['url'] ); ?>" 
-								   target="_blank" 
+								<a href="<?php echo esc_url( $link['url'] ); ?>"
+								   target="_blank"
 								   class="button button-secondary">
 									<span class="dashicons dashicons-<?php echo esc_attr( $link['icon'] ?? 'external' ); ?>"></span>
 									<?php echo esc_html( $link['text'] ); ?>

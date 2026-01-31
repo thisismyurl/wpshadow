@@ -90,7 +90,7 @@ class Deep_Scanner {
 		KPI_Tracker::record_action( 'cloud_scan_initiated', 1 );
 
 		// Set transient to track scan status
-		set_transient( "wpshadow_scan_status_{$scan_id}", 'processing', 3600 );
+		\WPShadow\Core\Cache_Manager::set( 'scan_status_{$scan_id}', 'processing', 'wpshadow_cloud', 3600  );
 
 		return array(
 			'success' => true,
@@ -133,7 +133,7 @@ class Deep_Scanner {
 
 		// If completed, update transient
 		if ( $response['status'] === 'completed' ) {
-			delete_transient( "wpshadow_scan_status_{$scan_id}" );
+			\WPShadow\Core\Cache_Manager::delete( 'scan_status_{$scan_id}', 'wpshadow_cloud' );
 		}
 
 		return $response;
@@ -152,7 +152,7 @@ class Deep_Scanner {
 		$scan_id = sanitize_key( $scan_id );
 
 		// Check transient first (fast path)
-		$status = get_transient( "wpshadow_scan_status_{$scan_id}" );
+		$status = \WPShadow\Core\Cache_Manager::get( 'scan_status_{$scan_id}', 'wpshadow_cloud' );
 		if ( $status ) {
 			return array(
 				'scan_id' => $scan_id,
@@ -196,7 +196,7 @@ class Deep_Scanner {
 
 		// Clear local cache
 		delete_option( "wpshadow_cloud_scan_{$scan_id}" );
-		delete_transient( "wpshadow_scan_status_{$scan_id}" );
+		\WPShadow\Core\Cache_Manager::delete( 'scan_status_{$scan_id}', 'wpshadow_cloud' );
 
 		return true;
 	}
@@ -264,7 +264,7 @@ class Deep_Scanner {
 		$period = sanitize_key( $period );
 
 		// Check cache
-		$cached = get_transient( "wpshadow_scan_history_{$period}" );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'scan_history_{$period}', 'wpshadow_cloud' );
 		if ( $cached ) {
 			return $cached;
 		}
@@ -277,7 +277,7 @@ class Deep_Scanner {
 		}
 
 		// Cache for 6 hours
-		set_transient( "wpshadow_scan_history_{$period}", $response, 21600 );
+		\WPShadow\Core\Cache_Manager::set( 'scan_history_{$period}', $response, 'wpshadow_cloud', 21600  );
 
 		return $response;
 	}

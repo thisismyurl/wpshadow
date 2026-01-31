@@ -150,7 +150,10 @@ class Vault_Manager {
 		}
 
 		// Check cached tier first.
-		$cached_tier = get_transient( 'wpshadow_vault_tier' );
+		$cached_tier = \WPShadow\Core\Cache_Manager::get(
+			'vault_tier',
+			'wpshadow_vault'
+		);
 		if ( false !== $cached_tier ) {
 			return $cached_tier;
 		}

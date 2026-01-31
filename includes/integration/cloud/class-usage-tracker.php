@@ -43,7 +43,7 @@ class Usage_Tracker {
 		}
 
 		// Check cache (5-minute TTL)
-		$cached = get_transient( 'wpshadow_usage_stats' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'usage_stats', 'wpshadow_cloud' );
 		if ( $cached ) {
 			return $cached;
 		}
@@ -58,7 +58,7 @@ class Usage_Tracker {
 		}
 
 		// Cache for 5 minutes
-		set_transient( 'wpshadow_usage_stats', $response, 300 );
+		\WPShadow\Core\Cache_Manager::set( 'usage_stats', $response, 'wpshadow_cloud', 300  );
 
 		// Also store as option for offline access
 		update_option( 'wpshadow_usage_stats_cached', $response );

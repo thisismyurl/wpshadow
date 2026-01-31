@@ -60,12 +60,20 @@ class Workflow_Discovery_Hooks {
 	 * Checks if new files have been added since last check
 	 */
 	public static function auto_refresh_if_needed(): void {
-		$last_check    = get_transient( 'wpshadow_discovery_last_check' );
+		$last_check    = \WPShadow\Core\Cache_Manager::get(
+			'discovery_last_check',
+			'wpshadow_workflow'
+		);
 		$current_check = filemtime( WP_PLUGIN_DIR . '/wpshadow/includes/diagnostics/' );
 
 		if ( ! $last_check || $current_check > $last_check ) {
 			self::handle_refresh();
-			set_transient( 'wpshadow_discovery_last_check', time(), HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'discovery_last_check',
+				time(),
+				'wpshadow_workflow',
+				HOUR_IN_SECONDS
+			);
 		}
 	}
 
