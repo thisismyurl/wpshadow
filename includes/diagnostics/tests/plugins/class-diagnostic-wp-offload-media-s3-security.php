@@ -32,38 +32,64 @@ class Diagnostic_WpOffloadMediaS3Security extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
+		if ( ! is_plugin_active( 'amazon-s3-and-cloudfront/wordpress-s3.php' ) && ! class_exists( 'AS3CF' ) ) {
+			return null;
+		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify S3 credentials
+		$s3_credentials = get_option( 'as3cf_access_key', '' );
+		if ( empty( $s3_credentials ) ) {
+			$issues[] = __( 'S3 credentials not configured', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check SSL for media uploads
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for secure media uploads', 'wpshadow' );
+		}
+
+		// Check 3: Verify bucket security
+		$bucket_security = get_option( 'as3cf_bucket_security', false );
+		if ( ! $bucket_security ) {
+			$issues[] = __( 'S3 bucket security not configured', 'wpshadow' );
+		}
+
+		// Check 4: Check ACL permissions
+		$acl_configured = get_option( 'as3cf_acl_configured', false );
+		if ( ! $acl_configured ) {
+			$issues[] = __( 'S3 ACL permissions not configured', 'wpshadow' );
+		}
+
+		// Check 5: Verify signed URLs
+		$signed_urls = get_option( 'as3cf_signed_urls', false );
+		if ( ! $signed_urls ) {
+			$issues[] = __( 'Signed URLs for media not enabled', 'wpshadow' );
+		}
+
+		// Check 6: Check encryption
+		$encryption = get_option( 'as3cf_encryption', false );
+		if ( ! $encryption ) {
+			$issues[] = __( 'Server-side encryption for S3 not enabled', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 100, 75 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'WP Offload Media S3 security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/wp-offload-media-s3-security',
+				'kb_link'      => 'https://wpshadow.com/kb/wp-offload-media-s3-security',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
 	}
 }

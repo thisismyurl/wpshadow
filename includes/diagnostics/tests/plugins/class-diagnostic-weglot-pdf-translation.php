@@ -37,36 +37,63 @@ class Diagnostic_WeglotPdfTranslation extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify PDF translation enabled
+		$pdf_translation = get_option( 'weglot_pdf_translation_enabled', false );
+		if ( ! $pdf_translation ) {
+			$issues[] = __( 'PDF translation not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check PDF parsing
+		$pdf_parsing = get_option( 'weglot_pdf_parsing_enabled', false );
+		if ( ! $pdf_parsing ) {
+			$issues[] = __( 'PDF parsing not enabled', 'wpshadow' );
+		}
+
+		// Check 3: Verify supported languages
+		$languages = get_option( 'weglot_supported_languages', array() );
+		if ( empty( $languages ) ) {
+			$issues[] = __( 'No translation languages configured', 'wpshadow' );
+		}
+
+		// Check 4: Check translation quality
+		$quality_level = get_option( 'weglot_translation_quality', '' );
+		if ( empty( $quality_level ) ) {
+			$issues[] = __( 'PDF translation quality level not set', 'wpshadow' );
+		}
+
+		// Check 5: Verify conversion caching
+		$pdf_cache = get_transient( 'weglot_pdf_cache' );
+		if ( false === $pdf_cache ) {
+			$issues[] = __( 'PDF translation caching not active', 'wpshadow' );
+		}
+
+		// Check 6: Check API connectivity
+		$api_key = get_option( 'weglot_api_key', '' );
+		if ( empty( $api_key ) ) {
+			$issues[] = __( 'Weglot API key not configured', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 75, 50 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 50,
-				'threat_level' => 50,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Weglot PDF translation issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'medium',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/weglot-pdf-translation',
+				'kb_link'      => 'https://wpshadow.com/kb/weglot-pdf-translation',
 			);
 		}
-		
 
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
-		}
-		// Verify core functionality
-		if ( ! function_exists( 'get_post' ) ) {
-			$issues[] = __( 'Post functionality not available', 'wpshadow' );
-		}
 		return null;
+	}
+}
+
 	}
 }

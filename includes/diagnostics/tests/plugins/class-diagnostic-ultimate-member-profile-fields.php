@@ -37,36 +37,62 @@ class Diagnostic_UltimateMemberProfileFields extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
+
+		// Check 1: Verify field sanitization
+		$field_sanitization = get_option( 'um_field_sanitization', false );
+		if ( ! $field_sanitization ) {
+			$issues[] = __( 'Profile field sanitization not enabled', 'wpshadow' );
 		}
-		$has_issue = !empty($issues);
-		
-		if ( $has_issue ) {
+
+		// Check 2: Check profile validation
+		$profile_validation = get_option( 'um_profile_validation', false );
+		if ( ! $profile_validation ) {
+			$issues[] = __( 'Profile field validation not configured', 'wpshadow' );
+		}
+
+		// Check 3: Verify XSS protection
+		$xss_protection = get_option( 'um_xss_protection', false );
+		if ( ! $xss_protection ) {
+			$issues[] = __( 'XSS protection not enabled for profile fields', 'wpshadow' );
+		}
+
+		// Check 4: Check HTML/script filtering
+		$html_filtering = get_option( 'um_html_filtering', false );
+		if ( ! $html_filtering ) {
+			$issues[] = __( 'HTML and script filtering not enabled', 'wpshadow' );
+		}
+
+		// Check 5: Verify SSL for profile updates
+		if ( ! is_ssl() ) {
+			$issues[] = __( 'SSL not enabled for secure profile updates', 'wpshadow' );
+		}
+
+		// Check 6: Check nonce verification
+		$nonce_verification = get_option( 'um_nonce_verification', false );
+		if ( ! $nonce_verification ) {
+			$issues[] = __( 'Nonce verification not enabled for profile forms', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 95, 60 + ( count( $issues ) * 5 ) );
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => 60,
-				'threat_level' => 60,
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: Comma-separated list of issues */
+					__( 'Ultimate Member profile field security issues detected: %s', 'wpshadow' ),
+					implode( ', ', $issues )
+				),
+				'severity'     => 'high',
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/ultimate-member-profile-fields',
+				'kb_link'      => 'https://wpshadow.com/kb/ultimate-member-profile-fields',
 			);
 		}
-		
 
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
-		// Additional checks
-		if ( ! function_exists( 'wp_verify_nonce' ) ) {
-			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );
-		}
 		return null;
+	}
+}
+
 	}
 }
