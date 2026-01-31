@@ -1,0 +1,22 @@
+3687|Diagnostic #142: Paywall and Subscription Metering Transparency
+3686|Diagnostic #141: News Article Correction and Retraction Policy
+3685|Diagnostic #140: Journalism Source Protection and Whistleblower Privacy
+3679|Diagnostic #134: Client Proofing and Gallery Privacy
+3678|Diagnostic #133: Portfolio Accessibility for Visual Content
+3676|Diagnostic #131: Image Copyright and Watermark Protection
+3674|Diagnostic #129: Forum and Community Performance at Scale
+3673|Diagnostic #128: Forum Moderation and Content Policy Enforcement
+3672|Diagnostic #127: User-Generated Content Copyright and DMCA Compliance
+3671|Diagnostic #126: Forum and Community Member Privacy
+3670|Diagnostic #125: Multisite Network Registration and Anti-Spam
+3669|Diagnostic #124: Multisite Network Plugin and Theme Security
+3668|Diagnostic #123: Multisite Sub-site Data Isolation
+3666|Diagnostic #121: Membership Site Data Portability and Export
+3663|Diagnostic #118: E-commerce Accessibility (ADA/WCAG Compliance)
+3660|Diagnostic #115: Marketplace Seller Verification and Vetting
+3657|Diagnostic #112: Digital Product Delivery and Download Security
+3653|Diagnostic #108: Member-Generated Content Moderation
+3642|Diagnostic #97: E-commerce Checkout Accessibility
+3638|Diagnostic #93: Customer Account Security Standards
+3637|Diagnostic #92: Digital Product Delivery Privacy and Tracking
+3636|Diagnostic #91: Multisite Network Privacy Policy Consistency

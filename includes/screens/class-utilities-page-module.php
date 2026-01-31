@@ -38,7 +38,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
-		
+
 		// Cloud-Powered Utilities (Require WPShadow Cloud Registration)
 		array(
 			'title'   => __( 'Uptime Monitor', 'wpshadow' ),
@@ -175,7 +175,7 @@ function wpshadow_get_utilities_catalog() {
 			'enabled' => true,
 			'requires_cloud' => true,
 		),
-		
+
 		array(
 			'title'   => __( 'WPShadow Vault Light', 'wpshadow' ),
 			'desc'    => __( 'Schedule Vault Light snapshots, manage retention, and upgrade seamlessly to Vault.', 'wpshadow' ),
@@ -341,7 +341,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 						'',
 						'dashicons-admin-tools'
 					); ?>
-					
+
 					<div class="wps-card wps-card--warning">
 						<div class="wps-card-body">
 							<p>
@@ -374,7 +374,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 					'',
 					'dashicons-admin-tools'
 				); ?>
-				
+
 				<div class="wps-card wps-card--error">
 					<div class="wps-card-body">
 						<p>
@@ -402,7 +402,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			}
 			$families[ $family ][] = $item;
 		}
-		
+
 		$family_titles = array(
 			'cloud-monitoring' => __( 'Cloud Monitoring (Free with Registration)', 'wpshadow' ),
 			'cloud-ai'         => __( 'Cloud AI Tools (Free: 1,000 credits/month)', 'wpshadow' ),
@@ -426,7 +426,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 					<h2 style="font-size: 20px; margin-bottom: 15px; color: #1d2327;">
 						<?php echo esc_html( isset( $family_titles[ $family_key ] ) ? $family_titles[ $family_key ] : ucwords( str_replace( '-', ' ', $family_key ) ) ); ?>
 					</h2>
-					
+
 					<!-- Utilities Grid -->
 					<div class="wps-grid wps-grid-auto-320">
 						<?php
@@ -492,7 +492,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	/**
 	 * Legacy function name - redirects to wpshadow_render_utilities()
-	 * 
+	 *
 	 * @deprecated Use wpshadow_render_utilities() instead
 	 */
 	function wpshadow_render_tools() {
