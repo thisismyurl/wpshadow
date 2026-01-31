@@ -1,8 +1,8 @@
 <?php
 /**
- * Site Speed Optimization Goals Not Set Diagnostic
+ * Post Revisions Not Managed Diagnostic
  *
- * Checks if speed goals are set.
+ * Checks if post revisions are managed.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Site Speed Optimization Goals Not Set Diagnostic Class
+ * Post Revisions Not Managed Diagnostic Class
  *
- * Detects missing speed goals.
+ * Detects unmanaged post revisions.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_Site_Speed_Optimization_Goals_Not_Set extends Diagnostic_Base {
+class Diagnostic_Post_Revisions_Not_Managed extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'site-speed-optimization-goals-not-set';
+	protected static $slug = 'post-revisions-not-managed';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Site Speed Optimization Goals Not Set';
+	protected static $title = 'Post Revisions Not Managed';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if speed goals are set';
+	protected static $description = 'Checks if post revisions are managed';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_Site_Speed_Optimization_Goals_Not_Set extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if performance goals are set
-		if ( ! get_option( 'wpshadow_speed_goals' ) ) {
+		// Check if revision limit is set
+		if ( ! defined( 'WP_POST_REVISIONS' ) || WP_POST_REVISIONS === true ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Site speed optimization goals are not set. Set specific targets for page load time, Core Web Vitals, and other performance metrics.', 'wpshadow' ),
+				'description'   => __( 'Post revisions are not managed. Limit post revisions to reduce database bloat and improve performance.', 'wpshadow' ),
 				'severity'      => 'low',
 				'threat_level'  => 15,
 				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/site-speed-optimization-goals-not-set',
+				'kb_link'       => 'https://wpshadow.com/kb/post-revisions-not-managed',
 			);
 		}
 
