@@ -32,10 +32,10 @@ SKIPPED=0
 while IFS= read -r kb_link; do
   # Extract slug from KB link
   SLUG=$(echo "$kb_link" | sed 's|.*wpshadow.com/kb/||')
-  
+
   # Generate title from slug (convert hyphens to spaces, capitalize)
   TITLE=$(echo "$SLUG" | sed 's/-/ /g' | sed 's/\b\(.\)/\U\1/g')
-  
+
   # Generate basic content
   CONTENT="<h2>$TITLE</h2>
 <p>This knowledge base article covers: $SLUG</p>
@@ -51,7 +51,7 @@ while IFS= read -r kb_link; do
 <li><a href=\"https://wpshadow.com/kb/$SLUG\">Knowledge Base Article</a></li>
 <li>Related articles</li>
 </ul>"
-  
+
   # Create JSON payload
   PAYLOAD=$(cat <<EOF
 {
@@ -63,21 +63,21 @@ while IFS= read -r kb_link; do
 }
 EOF
 )
-  
+
   # URL encode password for Basic Auth
   ENCODED_PASS=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$WP_PASSWORD'))")
-  
+
   # Make API request
   RESPONSE=$(curl -s -w "\n%{http_code}" \
     -X POST "$SITE_URL/wp-json/wp/v2/posts" \
     -u "$WP_USER:$WP_PASSWORD" \
     -H "Content-Type: application/json" \
     -d "$PAYLOAD")
-  
+
   # Extract status code
   HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
   BODY=$(echo "$RESPONSE" | head -n-1)
-  
+
   if [ "$HTTP_CODE" = "201" ]; then
     POST_ID=$(echo "$BODY" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
     echo "✅ [$((++CREATED))/$TOTAL] Created: $SLUG (Post ID: $POST_ID)"
@@ -87,7 +87,7 @@ EOF
     echo "❌ [$((++FAILED))/$TOTAL] Failed: $SLUG (HTTP $HTTP_CODE)"
     echo "   Error: $(echo "$BODY" | grep -o '"message":"[^"]*' | head -1)"
   fi
-  
+
 done < "$KB_FILE"
 
 echo ""

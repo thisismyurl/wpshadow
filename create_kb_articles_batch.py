@@ -34,14 +34,14 @@ def get_kb_links():
         capture_output=True,
         text=True
     )
-    
+
     links = set()
     for line in result.stdout.split('\n'):
         import re
         match = re.search(r'wpshadow\.com/kb/([a-z0-9-]+)', line)
         if match:
             links.add(match.group(1))
-    
+
     return sorted(list(links))
 
 def slug_to_title(slug):
@@ -82,7 +82,7 @@ def create_article(slug, title, content):
     """Create KB article via REST API using curl"""
     endpoint = f"{SITE_URL}/wp-json/wp/v2/posts"
     auth_header = get_auth_header()
-    
+
     payload = {
         'title': title,
         'content': content,
@@ -90,7 +90,7 @@ def create_article(slug, title, content):
         'slug': slug,
         'categories': [CATEGORY_ID],
     }
-    
+
     try:
         cmd = [
             'curl',
@@ -102,11 +102,11 @@ def create_article(slug, title, content):
             '-H', 'Content-Type: application/json',
             '-d', json.dumps(payload)
         ]
-        
+
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
         lines = result.stdout.strip().split('\n')
         http_code = lines[-1]
-        
+
         if http_code == '201':
             return True, 'created'
         elif http_code == '400':
@@ -120,7 +120,7 @@ def main():
     print("\n" + "=" * 60)
     print("🚀 WPShadow KB Article Batch Creator")
     print("=" * 60)
-    
+
     # Get KB links
     print("\n📝 Extracting KB links from plugin...")
     kb_links = get_kb_links()
@@ -128,31 +128,31 @@ def main():
     print(f"✅ Found {total} KB articles to create")
     print(f"📋 Processing in batches of {BATCH_SIZE}...")
     print("=" * 60 + "\n")
-    
+
     # Statistics
     created = 0
     skipped = 0
     failed = 0
     start_time = time.time()
-    
+
     # Process in batches
     for batch_num, i in enumerate(range(0, total, BATCH_SIZE), 1):
         batch = kb_links[i:i+BATCH_SIZE]
         batch_start = time.time()
-        
+
         print(f"\n📦 Batch {batch_num} ({i+1}-{min(i+BATCH_SIZE, total)}):")
         print("-" * 60)
-        
+
         batch_created = 0
         batch_skipped = 0
         batch_failed = 0
-        
+
         for j, slug in enumerate(batch, 1):
             title = slug_to_title(slug)
             content = generate_content(slug, title)
-            
+
             success, result = create_article(slug, title, content)
-            
+
             if success:
                 batch_created += 1
                 created += 1
@@ -165,15 +165,15 @@ def main():
                 batch_failed += 1
                 failed += 1
                 status = "❌"
-            
+
             percent = int((i + j) / total * 100)
             print(f"{status} {percent}% [{i+j}/{total}] {slug}")
-            
+
             time.sleep(DELAY_BETWEEN_REQUESTS)
-        
+
         batch_duration = time.time() - batch_start
         print(f"\nBatch Stats: ✅{batch_created} ⏭️{batch_skipped} ❌{batch_failed} ({batch_duration:.1f}s)")
-    
+
     # Final summary
     total_duration = time.time() - start_time
     print("\n" + "=" * 60)
@@ -186,7 +186,7 @@ def main():
     print(f"⏱️  Duration: {total_duration:.1f} seconds ({total_duration/60:.1f} minutes)")
     print(f"📊 Rate:     {total/(total_duration/60):.0f} articles/minute")
     print("=" * 60 + "\n")
-    
+
     return failed == 0
 
 if __name__ == '__main__':
