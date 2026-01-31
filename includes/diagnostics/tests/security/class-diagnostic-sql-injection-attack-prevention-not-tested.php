@@ -1,8 +1,8 @@
 <?php
 /**
- * File Integrity Monitoring Not Configured Diagnostic
+ * SQL Injection Attack Prevention Not Tested Diagnostic
  *
- * Checks if file integrity monitoring is configured.
+ * Checks if SQL injection prevention is tested.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * File Integrity Monitoring Not Configured Diagnostic Class
+ * SQL Injection Attack Prevention Not Tested Diagnostic Class
  *
- * Detects missing file integrity monitoring.
+ * Detects untested SQL injection prevention.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_File_Integrity_Monitoring_Not_Configured extends Diagnostic_Base {
+class Diagnostic_SQL_Injection_Attack_Prevention_Not_Tested extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'file-integrity-monitoring-not-configured';
+	protected static $slug = 'sql-injection-attack-prevention-not-tested';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'File Integrity Monitoring Not Configured';
+	protected static $title = 'SQL Injection Attack Prevention Not Tested';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if file integrity monitoring is configured';
+	protected static $description = 'Checks if SQL injection prevention is tested';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_File_Integrity_Monitoring_Not_Configured extends Diagnostic_Bas
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if file monitoring plugin is active
+		// Check for security scanning plugins
 		if ( ! is_plugin_active( 'wordfence/wordfence.php' ) && ! is_plugin_active( 'sucuri-scanner/sucuri.php' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'File integrity monitoring is not configured. Set up file integrity monitoring to detect unauthorized changes and malware.', 'wpshadow' ),
+				'description'   => __( 'SQL injection prevention is not tested. Implement automated security testing to detect and prevent SQL injection vulnerabilities.', 'wpshadow' ),
 				'severity'      => 'high',
-				'threat_level'  => 65,
+				'threat_level'  => 75,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/file-integrity-monitoring-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/sql-injection-attack-prevention-not-tested',
 			);
 		}
 

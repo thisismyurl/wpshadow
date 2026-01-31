@@ -1,8 +1,8 @@
 <?php
 /**
- * Advanced Custom Fields Caching Not Optimized Diagnostic
+ * Database Query Optimization Not Configured Diagnostic
  *
- * Checks if ACF caching is optimized.
+ * Checks if query optimization is configured.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,34 +20,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Advanced Custom Fields Caching Not Optimized Diagnostic Class
+ * Database Query Optimization Not Configured Diagnostic Class
  *
- * Detects unoptimized ACF caching.
+ * Detects unoptimized database queries.
  *
  * @since 1.2601.2352
  */
-class Diagnostic_Advanced_Custom_Fields_Caching_Not_Optimized extends Diagnostic_Base {
+class Diagnostic_Database_Query_Optimization_Not_Configured extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'advanced-custom-fields-caching-not-optimized';
+	protected static $slug = 'database-query-optimization-not-configured';
 
 	/**
 	 * The diagnostic title
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Advanced Custom Fields Caching Not Optimized';
+	protected static $title = 'Database Query Optimization Not Configured';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if ACF caching is optimized';
+	protected static $description = 'Checks if query optimization is configured';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -63,16 +63,16 @@ class Diagnostic_Advanced_Custom_Fields_Caching_Not_Optimized extends Diagnostic
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if ACF is active and caching enabled
-		if ( is_plugin_active( 'advanced-custom-fields/acf.php' ) && ! defined( 'ACF_EARLY_ACCESS' ) ) {
+		// Check for query optimization plugin
+		if ( ! is_plugin_active( 'query-monitor/query-monitor.php' ) && ! defined( 'WP_DEBUG_DISPLAY' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Advanced Custom Fields caching is not optimized. Enable ACF caching and integrate with persistent object cache for better performance.', 'wpshadow' ),
+				'description'   => __( 'Database query optimization is not configured. Enable query monitoring and optimize slow queries for better performance.', 'wpshadow' ),
 				'severity'      => 'medium',
 				'threat_level'  => 35,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/advanced-custom-fields-caching-not-optimized',
+				'kb_link'       => 'https://wpshadow.com/kb/database-query-optimization-not-configured',
 			);
 		}
 
