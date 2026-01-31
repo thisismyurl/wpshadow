@@ -170,7 +170,7 @@ class Diagnostic_SeoPluginConflict extends Diagnostic_Base {
 		if ( count( $active_seo_plugins ) > 1 ) {
 			/**
 			 * NOTE: Using $wpdb for multi-pattern COUNT() query is intentional.
-			 * 
+			 *
 			 * WordPress API alternative: Individual get_option() calls
 			 * Not suitable because:
 			 * - We need aggregate count across multiple plugin prefixes

@@ -35,45 +35,45 @@ class Diagnostic_WordfenceBruteForceProtection extends Diagnostic_Base {
 		if ( ! defined( 'WORDFENCE_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Brute force protection enabled.
 		$brute_force = get_option( 'wordfence_brute_force', '1' );
 		if ( '0' === $brute_force ) {
 			$issues[] = 'brute force protection disabled';
 		}
-		
+
 		// Check 2: Login attempt limit.
 		$max_attempts = get_option( 'wordfence_max_login_attempts', 5 );
 		if ( $max_attempts > 10 ) {
 			$issues[] = 'login attempt limit too high';
 		}
-		
+
 		// Check 3: Lockout duration.
 		$lockout = get_option( 'wordfence_lockout_duration', 3600 );
 		if ( $lockout < 1800 ) {
 			$issues[] = 'lockout duration too short';
 		}
-		
+
 		// Check 4: Two-factor authentication.
 		$two_factor = get_option( 'wordfence_2fa_enabled', '0' );
 		if ( '0' === $two_factor ) {
 			$issues[] = 'two-factor authentication disabled';
 		}
-		
+
 		// Check 5: Login captcha.
 		$captcha = get_option( 'wordfence_login_captcha', '0' );
 		if ( '0' === $captcha ) {
 			$issues[] = 'login captcha disabled';
 		}
-		
+
 		// Check 6: Human detection.
 		$human_detect = get_option( 'wordfence_human_detection', '1' );
 		if ( '0' === $human_detect ) {
 			$issues[] = 'human detection disabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 90, 75 + ( count( $issues ) * 3 ) );
 			return array(
@@ -86,7 +86,7 @@ class Diagnostic_WordfenceBruteForceProtection extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/wordfence-brute-force-protection',
 			);
 		}
-		
+
 		return null;
 	}
 }

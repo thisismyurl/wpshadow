@@ -180,7 +180,7 @@ def count_checks(content):
 
 def enhance_check_method(content, family, slug):
     """Replace the check() method with enhanced version"""
-    
+
     # Select checks based on family
     additional_checks = ""
     if family == 'security':
@@ -195,12 +195,12 @@ def enhance_check_method(content, family, slug):
         additional_checks = SEO_CHECKS.format(slug=slug)
     else:
         additional_checks = FUNCTIONALITY_CHECKS.format(slug=slug)
-    
+
     # Find the check() method and replace it if it's minimal
     check_start = content.find('public static function check()')
     if check_start == -1:
         return content
-    
+
     # Find the end of the check() method (next closing brace at proper indentation)
     method_start = check_start
     brace_count = 0
@@ -214,9 +214,9 @@ def enhance_check_method(content, family, slug):
             break
     else:
         return content
-    
+
     old_method = content[method_start:check_end]
-    
+
     # Build new enhanced method
     new_method = f'''public static function check() {{
 \t\tglobal $wpdb;
@@ -260,41 +260,41 @@ def enhance_check_method(content, family, slug):
 \t\t\t'kb_link'      => 'https://wpshadow.com/kb/{slug}',
 \t\t);
 \t}}'''
-    
+
     return content.replace(old_method, new_method)
 
 def main():
     """Process all diagnostic files"""
     enhanced = 0
     skipped = 0
-    
+
     for filepath in glob.glob('includes/diagnostics/tests/**/*.php', recursive=True):
         if 'class-diagnostic-' not in filepath:
             continue
-        
+
         with open(filepath, 'r') as f:
             content = f.read()
-        
+
         # Skip if already well-implemented (5+ checks)
         check_count = count_checks(content)
         if check_count >= 5:
             skipped += 1
             continue
-        
+
         family = extract_family(content)
         slug = extract_slug(content)
-        
+
         # Enhance the check method
         enhanced_content = enhance_check_method(content, family, slug)
-        
+
         if enhanced_content != content:
             with open(filepath, 'w') as f:
                 f.write(enhanced_content)
             enhanced += 1
-            
+
             if enhanced % 50 == 0:
                 print(f"Enhanced: {enhanced}")
-    
+
     print(f"\n=== Results ===")
     print(f"Enhanced: {enhanced} diagnostics")
     print(f"Skipped (already well-implemented): {skipped} diagnostics")

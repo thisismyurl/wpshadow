@@ -35,45 +35,45 @@ class Diagnostic_BbpressDatabaseOptimization extends Diagnostic_Base {
 		if ( ! class_exists( 'bbPress' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Database optimization.
 		$db_optimized = get_option( 'bbpress_db_optimized', '0' );
 		if ( '0' === $db_optimized ) {
 			$issues[] = 'database indexes not optimized';
 		}
-		
+
 		// Check 2: Auto cleanup.
 		$cleanup_enabled = get_option( 'bbpress_auto_cleanup', '0' );
 		if ( '0' === $cleanup_enabled ) {
 			$issues[] = 'automatic cleanup disabled';
 		}
-		
+
 		// Check 3: Spam cleanup frequency.
 		$spam_freq = get_option( 'bbpress_spam_cleanup_frequency', 'monthly' );
 		if ( 'monthly' === $spam_freq || 'never' === $spam_freq ) {
 			$issues[] = 'spam not cleaned frequently';
 		}
-		
+
 		// Check 4: Archive old content.
 		$archive_enabled = get_option( 'bbpress_archive_old_topics', '0' );
 		if ( '0' === $archive_enabled ) {
 			$issues[] = 'old content not archived';
 		}
-		
+
 		// Check 5: Query monitoring.
 		$monitor_enabled = get_option( 'bbpress_query_monitor', '0' );
 		if ( '0' === $monitor_enabled ) {
 			$issues[] = 'query monitoring disabled';
 		}
-		
+
 		// Check 6: Caching.
 		$cache_enabled = get_option( 'bbpress_enable_caching', '1' );
 		if ( '0' === $cache_enabled ) {
 			$issues[] = 'internal caching disabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 70, 55 + ( count( $issues ) * 3 ) );
 			return array(
@@ -86,7 +86,7 @@ class Diagnostic_BbpressDatabaseOptimization extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/bbpress-database-optimization',
 			);
 		}
-		
+
 		return null;
 	}
 }

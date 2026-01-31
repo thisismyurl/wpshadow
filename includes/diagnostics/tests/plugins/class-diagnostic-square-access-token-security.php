@@ -35,44 +35,44 @@ class Diagnostic_SquareAccessTokenSecurity extends Diagnostic_Base {
 		if ( ! class_exists( 'WooCommerce_Square_Loader' ) && ! defined( 'WC_SQUARE_VERSION' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: SSL for API calls.
 		if ( ! is_ssl() ) {
 			$issues[] = 'API calls without HTTPS';
 		}
-		
+
 		// Check 2: Access token storage.
 		$access_token = get_option( 'wc_square_access_token', '' );
 		if ( ! empty( $access_token ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$issues[] = 'access token visible with debug on';
 		}
-		
+
 		// Check 3: Token encryption.
 		$token_encrypted = get_option( 'wc_square_encrypt_tokens', '1' );
 		if ( '0' === $token_encrypted ) {
 			$issues[] = 'token encryption disabled';
 		}
-		
+
 		// Check 4: Sandbox mode.
 		$sandbox = get_option( 'wc_square_sandbox', '0' );
 		if ( '1' === $sandbox ) {
 			$issues[] = 'sandbox mode on live site';
 		}
-		
+
 		// Check 5: Token refresh.
 		$last_refresh = get_option( 'wc_square_token_refresh', 0 );
 		if ( 0 === $last_refresh || ( time() - $last_refresh > 7776000 ) ) {
 			$issues[] = 'token not refreshed in 90 days';
 		}
-		
+
 		// Check 6: Webhook validation.
 		$webhook_validation = get_option( 'wc_square_validate_webhooks', '1' );
 		if ( '0' === $webhook_validation ) {
 			$issues[] = 'webhook validation disabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 90, 75 + ( count( $issues ) * 3 ) );
 			return array(
@@ -85,7 +85,7 @@ class Diagnostic_SquareAccessTokenSecurity extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/square-access-token-security',
 			);
 		}
-		
+
 		return null;
 	}
 }

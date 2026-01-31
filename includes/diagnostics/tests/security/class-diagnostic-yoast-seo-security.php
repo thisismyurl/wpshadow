@@ -119,7 +119,7 @@ class Diagnostic_YoastSeoSecurity extends Diagnostic_Base {
 		if ( ! $sitemap_disabled ) {
 			/**
 			 * NOTE: Using $wpdb for filtered COUNT() query is intentional.
-			 * 
+			 *
 			 * WordPress API limitation:
 			 * - Need to count options matching pattern with autoload filter
 			 * - wp_load_alloptions() only loads autoloaded options (can't count by pattern)

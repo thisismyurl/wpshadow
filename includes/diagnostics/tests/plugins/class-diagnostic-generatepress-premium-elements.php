@@ -35,45 +35,45 @@ class Diagnostic_GeneratepressPremiumElements extends Diagnostic_Base {
 		if ( ! defined( 'GP_PREMIUM_VERSION' ) && ! class_exists( 'GeneratePress_Elements' ) ) {
 			return null;
 		}
-		
+
 		$issues = array();
-		
+
 		// Check 1: Elements enabled.
 		$elements_enabled = get_option( 'generate_elements_enabled', '1' );
 		if ( '0' === $elements_enabled ) {
 			$issues[] = 'premium elements disabled';
 		}
-		
+
 		// Check 2: Element caching.
 		$element_cache = get_option( 'generate_elements_cache', '1' );
 		if ( '0' === $element_cache ) {
 			$issues[] = 'element caching disabled';
 		}
-		
+
 		// Check 3: Unused elements.
 		$active_elements = get_option( 'generate_active_elements', array() );
 		if ( empty( $active_elements ) ) {
 			$issues[] = 'no elements active';
 		}
-		
+
 		// Check 4: Element CSS minification.
 		$css_minify = get_option( 'generate_elements_minify_css', '1' );
 		if ( '0' === $css_minify ) {
 			$issues[] = 'CSS minification disabled';
 		}
-		
+
 		// Check 5: Element JS minification.
 		$js_minify = get_option( 'generate_elements_minify_js', '1' );
 		if ( '0' === $js_minify ) {
 			$issues[] = 'JS minification disabled';
 		}
-		
+
 		// Check 6: Display conditions.
 		$display_conditions = get_option( 'generate_elements_display_conditions', '1' );
 		if ( '0' === $display_conditions ) {
 			$issues[] = 'display conditions disabled';
 		}
-		
+
 		if ( ! empty( $issues ) ) {
 			$threat_level = min( 65, 50 + ( count( $issues ) * 3 ) );
 			return array(
@@ -86,7 +86,7 @@ class Diagnostic_GeneratepressPremiumElements extends Diagnostic_Base {
 				'kb_link'     => 'https://wpshadow.com/kb/generatepress-premium-elements',
 			);
 		}
-		
+
 		return null;
 	}
 }
