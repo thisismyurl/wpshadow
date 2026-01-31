@@ -341,6 +341,25 @@ class Hooks_Initializer {
 			true
 		);
 
+		// Enqueue AJAX helper (DRY utility for all AJAX calls)
+		wp_enqueue_script(
+			'wpshadow-ajax-helper',
+			WPSHADOW_URL . 'assets/js/wpshadow-ajax-helper.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		// Localize AJAX helper with nonce
+		wp_localize_script(
+			'wpshadow-ajax-helper',
+			'wpShadowData',
+			array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'wpshadow_ajax' ),
+			)
+		);
+
 		// Enqueue modern form controls
 		wp_enqueue_style(
 			'wpshadow-form-controls',

@@ -148,10 +148,10 @@ class Guardian_Inactive_Notice {
 	 * @since 1.2601.2148
 	 */
 	public static function dismiss_notice(): void {
-		check_ajax_referer( 'wpshadow_dismiss_guardian_notice' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_dismiss_guardian_notice', '_wpnonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
@@ -167,10 +167,10 @@ class Guardian_Inactive_Notice {
 	 * @since 1.2601.2148
 	 */
 	public static function activate_guardian(): void {
-		check_ajax_referer( 'wpshadow_activate_guardian_from_notice' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_activate_guardian_from_notice', '_wpnonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		// Verify Guardian Manager is available

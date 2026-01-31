@@ -173,51 +173,64 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	 * @return array Results.
 	 */
 	private static function find_replace_in_posts( $find, $replace, $post_types, $field, $case_sensitive, $whole_word, $dry_run ) {
-		global $wpdb;
-
-		// Build LIKE pattern
-		$like_pattern = '%' . $wpdb->esc_like( $find ) . '%';
-
-		// Build post types IN clause
-		$post_types_placeholders = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
-
-		// Count matches
-		$count_query = $wpdb->prepare(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE {$field} LIKE %s 
-			AND post_type IN ({$post_types_placeholders})", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			array_merge( array( $like_pattern ), $post_types )
+		// Get all posts of the specified types using WordPress API
+		$posts = get_posts(
+			array(
+				'post_type'      => $post_types,
+				'posts_per_page' => -1,
+				'post_status'    => 'any',
+				'fields'         => 'ids',
+			)
 		);
-		$matches = (int) $wpdb->get_var( $count_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( $dry_run || 0 === $matches ) {
-			return array(
-				'matches'  => $matches,
-				'replaced' => 0,
-			);
-		}
+		$matches  = 0;
+		$replaced = 0;
 
-		// Perform replacement
-		if ( $case_sensitive ) {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->posts} 
-					SET {$field} = REPLACE(BINARY {$field}, %s, %s) 
-					WHERE {$field} LIKE %s 
-					AND post_type IN ({$post_types_placeholders})", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					array_merge( array( $find, $replace, $like_pattern ), $post_types )
-				)
-			);
-		} else {
-			$replaced = $wpdb->query(
-				$wpdb->prepare(
-					"UPDATE {$wpdb->posts} 
-					SET {$field} = REPLACE({$field}, %s, %s) 
-					WHERE {$field} LIKE %s 
-					AND post_type IN ({$post_types_placeholders})", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					array_merge( array( $find, $replace, $like_pattern ), $post_types )
-				)
-			);
+		// Search for matches using WordPress functions
+		foreach ( $posts as $post_id ) {
+			$post_data = get_post( $post_id );
+			$field_value = $post_data->$field ?? '';
+
+			// Check if find text is in the field
+			if ( empty( $field_value ) ) {
+				continue;
+			}
+
+			$found_count = 0;
+			if ( $case_sensitive ) {
+				// Case-sensitive search
+				$found_count = substr_count( $field_value, $find );
+			} else {
+				// Case-insensitive search
+				$found_count = substr_count( strtolower( $field_value ), strtolower( $find ) );
+			}
+
+			if ( $found_count > 0 ) {
+				$matches += $found_count;
+
+				if ( ! $dry_run ) {
+					// Perform replacement
+					if ( $case_sensitive ) {
+						$new_value = str_replace( $find, $replace, $field_value );
+					} else {
+						// Case-insensitive replace
+						$new_value = preg_replace(
+							'/' . preg_quote( $find, '/' ) . '/i',
+							$replace,
+							$field_value
+						);
+					}
+
+					// Update post using WordPress API
+					wp_update_post(
+						array(
+							'ID'       => $post_id,
+							$field     => $new_value,
+						)
+					);
+					$replaced += $found_count;
+				}
+			}
 		}
 
 		return array(

@@ -32,6 +32,7 @@ if ( file_exists( WPSHADOW_PATH . 'vendor/autoload.php' ) ) {
  * These are loaded here rather than in Plugin_Bootstrap because they're
  * dependencies for other classes that might be loaded before plugins_loaded.
  */
+require_once WPSHADOW_PATH . 'includes/core/class-security-validator.php';
 require_once WPSHADOW_PATH . 'includes/core/class-ajax-handler-base.php';
 require_once WPSHADOW_PATH . 'includes/core/class-treatment-interface.php';
 require_once WPSHADOW_PATH . 'includes/core/class-treatment-base.php';

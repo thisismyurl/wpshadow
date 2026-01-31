@@ -393,18 +393,13 @@ class Diagnostic_Scheduler {
 	 */
 	public static function on_upgrader_complete( $upgrader, $options ): void {
 		// Reset all last run times to trigger fresh diagnostics using WordPress functions
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- No native WP function for bulk prefix deletion
-		$option_names = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
-				'wpshadow_last_run_%'
-			)
-		);
+		$all_options = wp_load_alloptions();
 
-		// Use native WordPress function to delete each option
-		foreach ( $option_names as $option_name ) {
-			delete_option( $option_name );
+		// Delete all options starting with 'wpshadow_last_run_'
+		foreach ( $all_options as $option_name => $option_value ) {
+			if ( strpos( $option_name, 'wpshadow_last_run_' ) === 0 ) {
+				delete_option( $option_name );
+			}
 		}
 	}
 

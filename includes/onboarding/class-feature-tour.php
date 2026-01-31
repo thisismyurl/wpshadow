@@ -212,10 +212,10 @@ class Feature_Tour {
 	 * @return void
 	 */
 	public static function ajax_start_tour() {
-		check_ajax_referer( 'wpshadow_feature_tour', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$tour_id = isset( $_POST['tour_id'] ) ? sanitize_key( $_POST['tour_id'] ) : '';
@@ -251,10 +251,10 @@ class Feature_Tour {
 	 * @return void
 	 */
 	public static function ajax_complete_step() {
-		check_ajax_referer( 'wpshadow_feature_tour', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$tour_id = isset( $_POST['tour_id'] ) ? sanitize_key( $_POST['tour_id'] ) : '';
@@ -307,10 +307,10 @@ class Feature_Tour {
 	 * @return void
 	 */
 	public static function ajax_dismiss_tour() {
-		check_ajax_referer( 'wpshadow_feature_tour', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$tour_id = isset( $_POST['tour_id'] ) ? sanitize_key( $_POST['tour_id'] ) : '';

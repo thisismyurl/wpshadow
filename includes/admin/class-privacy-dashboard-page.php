@@ -663,11 +663,8 @@ class Privacy_Dashboard_Page {
 	 * @return void Dies after sending file.
 	 */
 	public static function handle_export_data() {
-		check_ajax_referer( 'wpshadow_privacy_actions', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions', 'wpshadow' ) );
-		}
+		// Use Security_Validator for consistent security checks
+		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_privacy_actions', 'manage_options', 'nonce' );
 
 		$user_id = get_current_user_id();
 
@@ -714,10 +711,10 @@ class Privacy_Dashboard_Page {
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_delete_data() {
-		check_ajax_referer( 'wpshadow_privacy_actions', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_privacy_actions', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$user_id = get_current_user_id();
@@ -747,10 +744,10 @@ class Privacy_Dashboard_Page {
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_update_consent() {
-		check_ajax_referer( 'wpshadow_privacy_actions', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		// Use Security_Validator for consistent security checks
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_privacy_actions', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
 		$user_id = get_current_user_id();
