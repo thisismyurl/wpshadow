@@ -37,31 +37,53 @@ class Diagnostic_BusinessDirectoryListingSecurity extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Listing moderation enabled
+		$moderation = get_option( 'wpbdp_listing_moderation', false );
+		if ( ! $moderation ) {
+			$issues[] = 'Listing moderation disabled';
+		}
+		
+		// Check 2: Spam protection enabled
+		$spam_protection = get_option( 'wpbdp_spam_protection', false );
+		if ( ! $spam_protection ) {
+			$issues[] = 'Spam protection disabled';
+		}
+		
+		// Check 3: User verification required
+		$user_verification = get_option( 'wpbdp_user_verification', false );
+		if ( ! $user_verification ) {
+			$issues[] = 'User verification not required';
+		}
+		
+		// Check 4: Secure listing submissions
+		if ( ! is_ssl() ) {
+			$issues[] = 'HTTPS not enabled for submissions';
+		}
+		
+		// Check 5: reCAPTCHA enabled
+		$recaptcha = get_option( 'wpbdp_recaptcha_enabled', false );
+		if ( ! $recaptcha ) {
+			$issues[] = 'reCAPTCHA not enabled';
+		}
+		
+		// Check 6: Content sanitization enabled
+		$content_sanitization = get_option( 'wpbdp_content_sanitization', false );
+		if ( ! $content_sanitization ) {
+			$issues[] = 'Content sanitization disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 80, 50 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 65 ),
-				'threat_level' => 65,
+				'description' => 'Business directory listing security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/business-directory-listing-security',
 			);
-		}
-		
-
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
 		}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {

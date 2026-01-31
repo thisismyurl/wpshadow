@@ -37,31 +37,54 @@ class Diagnostic_SocialWarfarePinterestVerification extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Pinterest meta tag configured
+		$pinterest_meta = get_option( 'swp_pinterest_verification', '' );
+		if ( empty( $pinterest_meta ) ) {
+			$issues[] = 'Pinterest verification meta tag not configured';
+		}
+		
+		// Check 2: Pinterest board verification
+		$board_verified = get_option( 'swp_pinterest_board_verified', false );
+		if ( ! $board_verified ) {
+			$issues[] = 'Pinterest board not verified';
+		}
+		
+		// Check 3: Rich pins enabled
+		$rich_pins = get_option( 'swp_pinterest_rich_pins', false );
+		if ( ! $rich_pins ) {
+			$issues[] = 'Rich pins not enabled';
+		}
+		
+		// Check 4: Pin count display
+		$pin_counts = get_option( 'swp_pinterest_pin_counts', false );
+		if ( ! $pin_counts ) {
+			$issues[] = 'Pin counts not displayed';
+		}
+		
+		// Check 5: Pinterest image optimization
+		$image_opt = get_option( 'swp_pinterest_image_optimization', false );
+		if ( ! $image_opt ) {
+			$issues[] = 'Pinterest image optimization disabled';
+		}
+		
+		// Check 6: Verification status check
+		$verification_status = get_option( 'swp_pinterest_verification_status', '' );
+		if ( 'verified' !== $verification_status ) {
+			$issues[] = 'Pinterest verification incomplete';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 50, 20 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 30 ),
-				'threat_level' => 30,
+				'description' => 'Social Warfare Pinterest verification issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/social-warfare-pinterest-verification',
 			);
-		}
-		
-
-		// Feature availability checks
-		if ( ! function_exists( 'add_action' ) ) {
-			$issues[] = __( 'WordPress hooks unavailable', 'wpshadow' );
-		}
-		if ( empty( $GLOBALS['wpdb'] ) ) {
-			$issues[] = __( 'Database not initialized', 'wpshadow' );
 		}
 		// Verify core functionality
 		if ( ! function_exists( 'get_post' ) ) {

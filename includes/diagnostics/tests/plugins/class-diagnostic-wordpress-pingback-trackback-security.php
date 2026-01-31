@@ -32,37 +32,59 @@ class Diagnostic_WordpressPingbackTrackbackSecurity extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		if ( ! true // WordPress core feature ) {
-			return null;
-		}
-		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Pingbacks disabled
+		$pingbacks = get_option( 'default_ping_status', 'open' );
+		if ( 'open' === $pingbacks ) {
+			$issues[] = 'Pingbacks enabled (security risk)';
+		}
+		
+		// Check 2: Trackbacks disabled
+		$trackbacks = get_option( 'default_pingback_flag', '1' );
+		if ( '1' === $trackbacks ) {
+			$issues[] = 'Trackbacks enabled (security risk)';
+		}
+		
+		// Check 3: XML-RPC access restricted
+		$xmlrpc_restricted = get_option( 'wpshadow_xmlrpc_restricted', false );
+		if ( ! $xmlrpc_restricted ) {
+			$issues[] = 'XML-RPC not restricted';
+		}
+		
+		// Check 4: Pingback DDoS protection
+		$ddos_protection = get_option( 'wpshadow_pingback_ddos_protection', false );
+		if ( ! $ddos_protection ) {
+			$issues[] = 'Pingback DDoS protection disabled';
+		}
+		
+		// Check 5: IP blacklist for pingbacks
+		$ip_blacklist = get_option( 'wpshadow_pingback_ip_blacklist', array() );
+		if ( empty( $ip_blacklist ) ) {
+			$issues[] = 'No IP blacklist configured';
+		}
+		
+		// Check 6: Rate limiting enabled
+		$rate_limiting = get_option( 'wpshadow_pingback_rate_limiting', false );
+		if ( ! $rate_limiting ) {
+			$issues[] = 'Rate limiting not enabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 85, 55 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 70 ),
-				'threat_level' => 70,
+				'description' => 'WordPress pingback/trackback security issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/wordpress-pingback-trackback-security',
 			);
 		}
 		
-
-		// Security validation checks
-		if ( is_ssl() === false ) {
-			$issues[] = __( 'HTTPS not enabled', 'wpshadow' );
-		}
-		if ( defined( 'FORCE_SSL' ) === false || ! FORCE_SSL ) {
-			$issues[] = __( 'SSL not forced', 'wpshadow' );
-		}
+		return null;
+	}
 		// Additional checks
 		if ( ! function_exists( 'wp_verify_nonce' ) ) {
 			$issues[] = __( 'Nonce verification unavailable', 'wpshadow' );

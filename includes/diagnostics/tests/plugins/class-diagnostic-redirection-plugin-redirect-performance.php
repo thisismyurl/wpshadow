@@ -37,31 +37,54 @@ class Diagnostic_RedirectionPluginRedirectPerformance extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: Redirect caching enabled
+		$redirect_cache = get_option( 'redirection_cache_enabled', false );
+		if ( ! $redirect_cache ) {
+			$issues[] = 'Redirect caching disabled';
+		}
+		
+		// Check 2: 301 redirects preferred over 302
+		$default_type = get_option( 'redirection_default_type', 302 );
+		if ( 302 === $default_type ) {
+			$issues[] = '302 redirects used (301 preferred for SEO)';
+		}
+		
+		// Check 3: Regex redirects optimized
+		$regex_optimization = get_option( 'redirection_regex_optimization', false );
+		if ( ! $regex_optimization ) {
+			$issues[] = 'Regex redirects not optimized';
+		}
+		
+		// Check 4: Redirect logging limited
+		$log_limit = get_option( 'redirection_log_limit', 0 );
+		if ( $log_limit <= 0 || $log_limit > 1000 ) {
+			$issues[] = 'Redirect logging limit not configured';
+		}
+		
+		// Check 5: Database cleanup enabled
+		$db_cleanup = get_option( 'redirection_database_cleanup', false );
+		if ( ! $db_cleanup ) {
+			$issues[] = 'Database cleanup disabled';
+		}
+		
+		// Check 6: Performance monitoring enabled
+		$perf_monitoring = get_option( 'redirection_performance_monitoring', false );
+		if ( ! $perf_monitoring ) {
+			$issues[] = 'Performance monitoring disabled';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
+				'description' => 'Redirection plugin performance issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/redirection-plugin-redirect-performance',
 			);
-		}
-		
-
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {

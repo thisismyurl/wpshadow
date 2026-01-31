@@ -37,31 +37,54 @@ class Diagnostic_GoogleTagManagerTriggerPerformance extends Diagnostic_Base {
 		}
 		
 		$issues = array();
-		$configured = get_option('diagnostic_' . self::$slug, false);
-		if (!$configured) {
-			$issues[] = 'not configured';
-		}
-		$has_issue = !empty($issues);
 		
-		if ( $has_issue ) {
+		// Check 1: GTM container ID configured
+		$container_id = get_option( 'googletagmanager_container_id', '' );
+		if ( empty( $container_id ) ) {
+			$issues[] = 'GTM container ID not configured';
+		}
+		
+		// Check 2: Trigger optimization enabled
+		$trigger_opt = get_option( 'googletagmanager_trigger_optimization', false );
+		if ( ! $trigger_opt ) {
+			$issues[] = 'Trigger optimization disabled';
+		}
+		
+		// Check 3: Data layer configured
+		$data_layer = get_option( 'googletagmanager_datalayer_name', '' );
+		if ( empty( $data_layer ) ) {
+			$issues[] = 'Data layer name not configured';
+		}
+		
+		// Check 4: Event tracking configured
+		$event_tracking = get_option( 'googletagmanager_event_tracking', false );
+		if ( ! $event_tracking ) {
+			$issues[] = 'Event tracking not configured';
+		}
+		
+		// Check 5: Tag firing rules optimized
+		$firing_rules = get_option( 'googletagmanager_firing_rules_optimized', false );
+		if ( ! $firing_rules ) {
+			$issues[] = 'Tag firing rules not optimized';
+		}
+		
+		// Check 6: Container version up to date
+		$version_check = get_option( 'googletagmanager_version_check', false );
+		if ( ! $version_check ) {
+			$issues[] = 'Container version not checked';
+		}
+		
+		if ( ! empty( $issues ) ) {
+			$threat_level = min( 70, 40 + ( count( $issues ) * 5 ) );
 			return array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
-				'description' => self::$description,
-				'severity'    => self::calculate_severity( 55 ),
-				'threat_level' => 55,
+				'description' => 'Google Tag Manager trigger performance issues: ' . implode( ', ', $issues ),
+				'severity'    => self::calculate_severity( $threat_level ),
+				'threat_level' => $threat_level,
 				'auto_fixable' => true,
 				'kb_link'     => 'https://wpshadow.com/kb/google-tag-manager-trigger-performance',
 			);
-		}
-		
-
-		// Performance optimization checks
-		if ( ! defined( 'WP_CACHE' ) || ! WP_CACHE ) {
-			$issues[] = __( 'Caching not enabled', 'wpshadow' );
-		}
-		if ( ! extension_loaded( 'zlib' ) ) {
-			$issues[] = __( 'Gzip compression unavailable', 'wpshadow' );
 		}
 		// Check transient support
 		if ( ! function_exists( 'set_transient' ) ) {
