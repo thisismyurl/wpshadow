@@ -24,7 +24,10 @@ class Domain_Expiration_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (check weekly)
-		$cached = get_transient( 'wpshadow_domain_expiry_data' );
+		$cached = \WPShadow\Core\Cache_Manager::get(
+			'domain_expiry_data',
+			'wpshadow_guardian'
+		);
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -44,7 +47,12 @@ class Domain_Expiration_Analyzer {
 
 		if ( ! $domain ) {
 			$results['error'] = 'Could not parse domain';
-			set_transient( 'wpshadow_domain_expiry_data', $results, WEEK_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'domain_expiry_data',
+				$results,
+				'wpshadow_guardian',
+				WEEK_IN_SECONDS
+			);
 			return $results;
 		}
 
@@ -63,7 +71,12 @@ class Domain_Expiration_Analyzer {
 		}
 
 		// Cache for 1 week
-		set_transient( 'wpshadow_domain_expiry_data', $results, WEEK_IN_SECONDS );
+		\\WPShadow\\Core\\Cache_Manager::set(
+			'domain_expiry_data',
+			$results,
+			'wpshadow_guardian',
+			WEEK_IN_SECONDS
+		);
 
 		return $results;
 	}
@@ -200,6 +213,9 @@ class Domain_Expiration_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_domain_expiry_data' );
+		\WPShadow\Core\Cache_Manager::delete(
+			'domain_expiry_data',
+			'wpshadow_guardian'
+		);
 	}
 }

@@ -94,7 +94,12 @@ class Admin_Page_Scanner {
 		$output = ob_get_clean();
 		
 		// Store in transient for diagnostic access (5 minute expiry)
-		set_transient( 'wpshadow_admin_page_capture', $output, 300 );
+		\WPShadow\Core\Cache_Manager::set(
+			'admin_page_capture',
+			$output,
+			'wpshadow_scanning',
+			300
+		);
 		
 		// Re-output the content so page renders normally
 		echo $output;
@@ -109,7 +114,10 @@ class Admin_Page_Scanner {
 	 * @return string|false Captured HTML or false if not available.
 	 */
 	public static function get_captured_output() {
-		return get_transient( 'wpshadow_admin_page_capture' );
+		return \WPShadow\Core\Cache_Manager::get(
+			'admin_page_capture',
+			'wpshadow_scanning'
+		);
 	}
 
 	/**
@@ -119,7 +127,10 @@ class Admin_Page_Scanner {
 	 * @return void
 	 */
 	public static function clear_capture(): void {
-		delete_transient( 'wpshadow_admin_page_capture' );
+		\WPShadow\Core\Cache_Manager::delete(
+			'admin_page_capture',
+			'wpshadow_scanning'
+		);
 	}
 
 	/**

@@ -42,7 +42,10 @@ class Options_Manager {
 		// Use transient if requested (for temporary data)
 		if ( $use_transient ) {
 			$transient_name = self::get_transient_name( $option );
-			$cached         = get_transient( $transient_name );
+			$cached         = \WPShadow\Core\Cache_Manager::get(
+				$transient_name,
+				'wpshadow_options'
+			);
 			if ( false !== $cached ) {
 				return $cached;
 			}
@@ -75,7 +78,12 @@ class Options_Manager {
 		// Cache with transient if requested
 		if ( $use_transient ) {
 			$transient_name = self::get_transient_name( $option );
-			set_transient( $transient_name, $value, $transient_ttl );
+			\WPShadow\Core\Cache_Manager::set(
+				$transient_name,
+				$value,
+				'wpshadow_options',
+				$transient_ttl
+			);
 		}
 
 		return $result;
@@ -138,9 +146,12 @@ class Options_Manager {
 		// Delete option
 		delete_option( $option );
 
-		// Delete associated transient
+		// Delete associated cache
 		$transient_name = self::get_transient_name( $option );
-		delete_transient( $transient_name );
+		\WPShadow\Core\Cache_Manager::delete(
+			$transient_name,
+			'wpshadow_options'
+		);
 
 		return true;
 	}

@@ -45,7 +45,10 @@ class Compromised_Accounts_Analyzer {
 	 */
 	public static function track_login( string $user_login, $user ): void {
 		// Get login history
-		$history = get_transient( 'wpshadow_login_history' );
+		$history = \WPShadow\Core\Cache_Manager::get(
+			'login_history',
+			'wpshadow_monitoring'
+		);
 		if ( ! is_array( $history ) ) {
 			$history = array();
 		}
@@ -66,7 +69,12 @@ class Compromised_Accounts_Analyzer {
 			$history[ $user_id ] = array_slice( $history[ $user_id ], -50 );
 		}
 
-		set_transient( 'wpshadow_login_history', $history, WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'login_history',
+			$history,
+			'wpshadow_monitoring',
+			WEEK_IN_SECONDS
+		);
 	}
 
 	/**

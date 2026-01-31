@@ -75,12 +75,20 @@ class Onboarding_Wizard {
 
 		// Check if we've already shown the wizard this session
 		$user_id = get_current_user_id();
-		if ( get_transient( 'wpshadow_onboarding_shown_' . $user_id ) ) {
+		if ( \WPShadow\Core\Cache_Manager::get(
+			'onboarding_shown_' . $user_id,
+			'wpshadow_onboarding'
+		) ) {
 			return;
 		}
 
 		// Set transient to prevent redirect loop
-		set_transient( 'wpshadow_onboarding_shown_' . $user_id, true, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'onboarding_shown_' . $user_id,
+			true,
+			'wpshadow_onboarding',
+			HOUR_IN_SECONDS
+		);
 
 		// Don't redirect during AJAX or REST requests
 		if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
@@ -222,7 +230,10 @@ class Onboarding_Wizard {
 		delete_user_meta( $user_id, 'wpshadow_onboarding_shown_count' );
 
 		// Clear transient
-		delete_transient( 'wpshadow_onboarding_shown_' . $user_id );
+		\WPShadow\Core\Cache_Manager::delete(
+			'onboarding_shown_' . $user_id,
+			'wpshadow_onboarding'
+		);
 
 		return true;
 	}

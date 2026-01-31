@@ -131,7 +131,12 @@ class Hooks_Initializer {
 			);
 		}
 
-		set_transient( 'wpshadow_redirect_to_dashboard', true, 30 );
+		\WPShadow\Core\Cache_Manager::set(
+			'redirect_to_dashboard',
+			true,
+			'wpshadow_hooks',
+			30
+		);
 	}
 
 	/**
@@ -159,8 +164,14 @@ class Hooks_Initializer {
 	 */
 	public static function on_admin_init() {
 		// Redirect to dashboard on first activation
-		if ( get_transient( 'wpshadow_redirect_to_dashboard' ) ) {
-			delete_transient( 'wpshadow_redirect_to_dashboard' );
+		if ( \WPShadow\Core\Cache_Manager::get(
+			'redirect_to_dashboard',
+			'wpshadow_hooks'
+		) ) {
+			\WPShadow\Core\Cache_Manager::delete(
+				'redirect_to_dashboard',
+				'wpshadow_hooks'
+			);
 			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
 			exit;
 		}

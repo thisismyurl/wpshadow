@@ -42,7 +42,10 @@ function wpshadow_fetch_page_html( string $url, int $cache_ttl = 3600, string $c
 
 	// Check cache first
 	$cache_key = 'html_' . md5( $url );
-	$cached    = get_transient( $cache_group . '_' . $cache_key );
+	$cached    = \WPShadow\Core\Cache_Manager::get(
+		$cache_group . '_' . $cache_key,
+		'wpshadow_html_fetch'
+	);
 
 	if ( false !== $cached ) {
 		return $cached;
@@ -104,7 +107,12 @@ function wpshadow_fetch_page_html( string $url, int $cache_ttl = 3600, string $c
 	}
 
 	// Cache the result
-	set_transient( $cache_group . '_' . $cache_key, $html, $cache_ttl );
+	set_transient(
+		$cache_group . '_' . $cache_key,
+		$html,
+		'wpshadow_html_fetch',
+		$cache_ttl
+	);
 
 	return $html;
 }
@@ -182,7 +190,10 @@ function wpshadow_clear_html_cache(): int {
 
 		// Use native WordPress function to delete each transient
 		foreach ( $transient_names as $transient_name ) {
-			if ( delete_transient( $transient_name ) ) {
+			if ( \WPShadow\Core\Cache_Manager::delete(
+				$transient_name,
+				'wpshadow_html_fetch'
+			) ) {
 				++$deleted;
 			}
 		}

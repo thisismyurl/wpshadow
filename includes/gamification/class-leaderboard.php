@@ -126,7 +126,10 @@ class Leaderboard {
 	 */
 	public static function get_global( $period = 'all_time', $limit = 50 ) {
 		$cache_key = "wpshadow_leaderboard_{$period}_{$limit}";
-		$cached = get_transient( $cache_key );
+		$cached = \WPShadow\Core\Cache_Manager::get(
+			$cache_key,
+			'wpshadow_leaderboard'
+		);
 
 		if ( false !== $cached ) {
 			return $cached;
@@ -209,7 +212,12 @@ class Leaderboard {
 		}
 
 		// Cache for 1 hour
-		set_transient( $cache_key, $leaderboard, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			$cache_key,
+			$leaderboard,
+			'wpshadow_leaderboard',
+			HOUR_IN_SECONDS
+		);
 
 		return $leaderboard;
 	}
@@ -245,8 +253,8 @@ class Leaderboard {
 	 * @return void
 	 */
 	public static function refresh_cache() {
-		delete_transient( 'wpshadow_leaderboard_all_time_50' );
-		delete_transient( 'wpshadow_leaderboard_monthly_50' );
-		delete_transient( 'wpshadow_leaderboard_weekly_50' );
+		\WPShadow\Core\Cache_Manager::delete( 'leaderboard_all_time_50', 'wpshadow_leaderboard' );
+		\WPShadow\Core\Cache_Manager::delete( 'leaderboard_monthly_50', 'wpshadow_leaderboard' );
+		\WPShadow\Core\Cache_Manager::delete( 'leaderboard_weekly_50', 'wpshadow_leaderboard' );
 	}
 }

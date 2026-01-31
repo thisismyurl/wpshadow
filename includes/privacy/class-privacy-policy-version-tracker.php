@@ -75,7 +75,12 @@ class Privacy_Policy_Version_Tracker {
 
 		// If never acknowledged or different version, show notice
 		if ( empty( $last_acknowledged ) || version_compare( $last_acknowledged, self::CURRENT_VERSION, '<' ) ) {
-			set_transient( 'wpshadow_show_policy_notice_' . $user_id, true, WEEK_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'show_policy_notice_' . $user_id,
+				true,
+				'wpshadow_privacy',
+				WEEK_IN_SECONDS
+			);
 		}
 	}
 
@@ -109,7 +114,10 @@ class Privacy_Policy_Version_Tracker {
 		update_user_meta( $user_id, 'wpshadow_policy_acknowledged_date', current_time( 'mysql' ) );
 
 		// Clear notice
-		delete_transient( 'wpshadow_show_policy_notice_' . $user_id );
+		\WPShadow\Core\Cache_Manager::delete(
+			'show_policy_notice_' . $user_id,
+			'wpshadow_privacy'
+		);
 
 		// Log activity
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {

@@ -27,13 +27,21 @@ class Achievement_System {
 	 * @return array Achievement definitions
 	 */
 	public static function get_all_achievements(): array {
-		$cached = get_transient( 'wpshadow_achievements_cached' );
+		$cached = \WPShadow\Core\Cache_Manager::get(
+			'achievements_cached',
+			'wpshadow_engagement'
+		);
 		if ( $cached ) {
 			return $cached;
 		}
 
 		$achievements = self::define_achievements();
-		set_transient( 'wpshadow_achievements_cached', $achievements, WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'achievements_cached',
+			$achievements,
+			'wpshadow_engagement',
+			WEEK_IN_SECONDS
+		);
 
 		return $achievements;
 	}

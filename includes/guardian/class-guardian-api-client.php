@@ -53,7 +53,10 @@ class Guardian_API_Client {
 	 * @return bool True if Guardian service is reachable.
 	 */
 	public static function is_available() {
-		$status = get_transient( 'wpshadow_guardian_status' );
+		$status = \WPShadow\Core\Cache_Manager::get(
+			'guardian_status',
+			'wpshadow_guardian'
+		);
 
 		if ( false !== $status ) {
 			return 'available' === $status;
@@ -73,7 +76,12 @@ class Guardian_API_Client {
 		$is_available = ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response );
 
 		// Cache status for 5 minutes
-		set_transient( 'wpshadow_guardian_status', $is_available ? 'available' : 'unavailable', 5 * MINUTE_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'guardian_status',
+			$is_available ? 'available' : 'unavailable',
+			'wpshadow_guardian',
+			5 * MINUTE_IN_SECONDS
+		);
 
 		return $is_available;
 	}
@@ -92,7 +100,10 @@ class Guardian_API_Client {
 		}
 
 		// Check if key is still valid (cached)
-		$validation = get_transient( 'wpshadow_guardian_key_valid' );
+		$validation = \WPShadow\Core\Cache_Manager::get(
+			'guardian_key_valid',
+			'wpshadow_guardian'
+		);
 
 		if ( false !== $validation ) {
 			return (bool) $validation;
@@ -102,7 +113,12 @@ class Guardian_API_Client {
 		$is_valid = self::validate_api_key( $api_key );
 
 		// Cache validation for 1 hour
-		set_transient( 'wpshadow_guardian_key_valid', $is_valid, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'guardian_key_valid',
+			$is_valid,
+			'wpshadow_guardian',
+			HOUR_IN_SECONDS
+		);
 
 		return $is_valid;
 	}
@@ -126,7 +142,10 @@ class Guardian_API_Client {
 	 */
 	public static function set_api_key( $api_key ) {
 		// Clear validation cache when key changes
-		delete_transient( 'wpshadow_guardian_key_valid' );
+		\WPShadow\Core\Cache_Manager::delete(
+			'guardian_key_valid',
+			'wpshadow_guardian'
+		);
 
 		return update_option( 'wpshadow_guardian_api_key', sanitize_text_field( $api_key ) );
 	}
@@ -139,8 +158,8 @@ class Guardian_API_Client {
 	 */
 	public static function disconnect() {
 		delete_option( 'wpshadow_guardian_api_key' );
-		delete_transient( 'wpshadow_guardian_key_valid' );
-		delete_transient( 'wpshadow_guardian_account_info' );
+		\WPShadow\Core\Cache_Manager::delete( 'guardian_key_valid', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'guardian_account_info', 'wpshadow_guardian' );
 
 		// Log activity
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
@@ -189,7 +208,10 @@ class Guardian_API_Client {
 		}
 
 		// Check cache first
-		$cached = get_transient( 'wpshadow_guardian_account_info' );
+		$cached = \WPShadow\Core\Cache_Manager::get(
+			'guardian_account_info',
+			'wpshadow_guardian'
+		);
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -201,7 +223,12 @@ class Guardian_API_Client {
 		}
 
 		// Cache for 15 minutes
-		set_transient( 'wpshadow_guardian_account_info', $response, 15 * MINUTE_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'guardian_account_info',
+			$response,
+			'wpshadow_guardian',
+			15 * MINUTE_IN_SECONDS
+		);
 
 		return $response;
 	}
@@ -272,7 +299,10 @@ class Guardian_API_Client {
 		}
 
 		// Clear token balance cache
-		delete_transient( 'wpshadow_guardian_account_info' );
+		\WPShadow\Core\Cache_Manager::delete(
+			'guardian_account_info',
+			'wpshadow_guardian'
+		);
 
 		// Log activity
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {

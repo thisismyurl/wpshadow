@@ -110,14 +110,15 @@ class Visual_Comparator {
 		$screenshot_path = self::capture_screenshot( $page_url, 'before' );
 
 		if ( $screenshot_path ) {
-			// Store in transient for later use in after hook
-			set_transient(
-				'wpshadow_before_screenshot_' . $finding_id,
+			// Store in cache for later use in after hook
+			\WPShadow\Core\Cache_Manager::set(
+				'before_screenshot_' . $finding_id,
 				array(
 					'path'  => $screenshot_path,
 					'url'   => $page_url,
 					'class' => $class,
 				),
+				'wpshadow_visual',
 				HOUR_IN_SECONDS
 			);
 		}
@@ -139,12 +140,18 @@ class Visual_Comparator {
 		// Only capture after screenshot if treatment was successful
 		if ( empty( $result['success'] ) ) {
 			// Clean up before screenshot transient
-			delete_transient( 'wpshadow_before_screenshot_' . $finding_id );
+			\WPShadow\Core\Cache_Manager::delete(
+				'before_screenshot_' . $finding_id,
+				'wpshadow_visual'
+			);
 			return;
 		}
 
 		// Get before screenshot data
-		$before_data = get_transient( 'wpshadow_before_screenshot_' . $finding_id );
+		$before_data = \WPShadow\Core\Cache_Manager::get(
+			'before_screenshot_' . $finding_id,
+			'wpshadow_visual'
+		);
 		if ( ! $before_data ) {
 			return;
 		}
@@ -163,8 +170,11 @@ class Visual_Comparator {
 			);
 		}
 
-		// Clean up transient
-		delete_transient( 'wpshadow_before_screenshot_' . $finding_id );
+		// Clean up cache
+		\WPShadow\Core\Cache_Manager::delete(
+			'before_screenshot_' . $finding_id,
+			'wpshadow_visual'
+		);
 	}
 
 	/**

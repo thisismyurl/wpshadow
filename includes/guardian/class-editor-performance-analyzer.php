@@ -78,7 +78,10 @@ class Editor_Performance_Analyzer {
 
 		$load_time_ms = (int) ( ( microtime( true ) - self::$editor_start_time ) * 1000 );
 
-		$loads = get_transient( 'wpshadow_editor_load_times' );
+		$loads = \WPShadow\Core\Cache_Manager::get(
+			'editor_load_times',
+			'wpshadow_guardian'
+		);
 		if ( ! is_array( $loads ) ) {
 			$loads = array();
 		}
@@ -94,7 +97,12 @@ class Editor_Performance_Analyzer {
 			$loads = array_slice( $loads, -50 );
 		}
 
-		set_transient( 'wpshadow_editor_load_times', $loads, WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'editor_load_times',
+			$loads,
+			'wpshadow_guardian',
+			WEEK_IN_SECONDS
+		);
 	}
 
 	/**
@@ -103,7 +111,10 @@ class Editor_Performance_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$loads = get_transient( 'wpshadow_editor_load_times' );
+		$loads = \WPShadow\Core\Cache_Manager::get(
+			'editor_load_times',
+			'wpshadow_guardian'
+		);
 
 		$results = array(
 			'total_loads'          => 0,
@@ -141,7 +152,12 @@ class Editor_Performance_Analyzer {
 		$results['editor_plugins_count'] = self::count_editor_plugins();
 
 		// Set transient for diagnostic
-		set_transient( 'wpshadow_editor_performance', $results, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'editor_performance',
+			$results,
+			'wpshadow_guardian',
+			HOUR_IN_SECONDS
+		);
 
 		return $results;
 	}
@@ -182,7 +198,10 @@ class Editor_Performance_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_editor_performance' );
+		$results = \WPShadow\Core\Cache_Manager::get(
+			'editor_performance',
+			'wpshadow_guardian'
+		);
 		return is_array( $results ) ? $results : array(
 			'total_loads'      => 0,
 			'avg_load_time_ms' => 0,
@@ -196,7 +215,7 @@ class Editor_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_editor_load_times' );
-		delete_transient( 'wpshadow_editor_performance' );
+		\WPShadow\Core\Cache_Manager::delete( 'editor_load_times', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'editor_performance', 'wpshadow_guardian' );
 	}
 }
