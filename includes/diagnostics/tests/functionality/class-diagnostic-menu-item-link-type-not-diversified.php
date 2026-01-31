@@ -67,8 +67,8 @@ class Diagnostic_Menu_Item_Link_Type_Not_Diversified extends Diagnostic_Base {
 
 		// Check menu item types
 		$menu_items = $wpdb->get_results(
-			"SELECT pm.meta_value as type FROM {$wpdb->postmeta} pm 
-			 WHERE pm.meta_key = '_menu_item_type' 
+			"SELECT pm.meta_value as type FROM {$wpdb->postmeta} pm
+			 WHERE pm.meta_key = '_menu_item_type'
 			 GROUP BY pm.meta_value"
 		);
 

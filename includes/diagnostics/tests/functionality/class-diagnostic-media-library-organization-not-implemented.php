@@ -72,9 +72,9 @@ class Diagnostic_Media_Library_Organization_Not_Implemented extends Diagnostic_B
 
 		// Get media without descriptions
 		$no_description = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			 WHERE post_type = 'attachment' 
-			 AND post_excerpt = '' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			 WHERE post_type = 'attachment'
+			 AND post_excerpt = ''
 			 AND post_content = ''"
 		);
 

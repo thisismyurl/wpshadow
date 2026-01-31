@@ -67,9 +67,9 @@ class Diagnostic_Content_Repurposing_Strategy_Not_Implemented extends Diagnostic
 
 		// Check if has recently published posts
 		$recent_posts = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			 WHERE post_type = 'post' 
-			 AND post_status = 'publish' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			 WHERE post_type = 'post'
+			 AND post_status = 'publish'
 			 AND post_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 
