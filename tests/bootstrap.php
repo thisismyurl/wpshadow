@@ -79,6 +79,12 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
+			return true;
+		}
+	}
+	
 	if ( ! function_exists( 'plugin_basename' ) ) {
 		function plugin_basename( $file ) {
 			return basename( dirname( $file ) ) . '/' . basename( $file );
@@ -172,6 +178,11 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	
 	// Load WPShadow plugin
 	require_once WPSHADOW_PLUGIN_DIR . '/wpshadow.php';
+	
+	// Load specific diagnostics for testing
+	if ( file_exists( WPSHADOW_PLUGIN_DIR . '/includes/diagnostics/tests/seo/class-diagnostic-custom-permalink-structure.php' ) ) {
+		require_once WPSHADOW_PLUGIN_DIR . '/includes/diagnostics/tests/seo/class-diagnostic-custom-permalink-structure.php';
+	}
 	
 	// Create test helper functions
 	if ( ! function_exists( 'get_option' ) ) {
