@@ -130,6 +130,11 @@ class Plugin_Bootstrap {
 			require_once $core_path . 'class-query-batch-optimizer.php';
 		}
 
+		// PHASE 3 OPTIMIZATION: Load dashboard page-level cache
+		if ( file_exists( $core_path . 'class-dashboard-cache.php' ) ) {
+			require_once $core_path . 'class-dashboard-cache.php';
+		}
+
 		// Load additional core classes
 		if ( file_exists( $core_path . 'class-kpi-tracker.php' ) ) {
 			require_once $core_path . 'class-kpi-tracker.php';
@@ -287,6 +292,16 @@ class Plugin_Bootstrap {
 			if ( class_exists( '\\WPShadow\\Optimizer\\Performance_Optimizer' ) ) {
 				\WPShadow\Optimizer\Performance_Optimizer::init();
 			}
+		}
+
+		// PHASE 3 OPTIMIZATION: Initialize query batch optimizer
+		if ( class_exists( '\\WPShadow\\Core\\Query_Batch_Optimizer' ) ) {
+			\WPShadow\Core\Query_Batch_Optimizer::init();
+		}
+
+		// PHASE 3 OPTIMIZATION: Initialize dashboard cache system
+		if ( class_exists( '\\WPShadow\\Core\\Dashboard_Cache' ) ) {
+			\WPShadow\Core\Dashboard_Cache::init();
 		}
 	}
 

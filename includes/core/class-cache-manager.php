@@ -54,7 +54,7 @@ class Cache_Manager {
 	 *
 	 * @var bool|null
 	 */
-	private static $has_object_cache = null;
+	private static $has_object_cache;
 
 	/**
 	 * Get cached value with object cache priority
@@ -218,10 +218,10 @@ class Cache_Manager {
 	public static function has_object_cache(): bool {
 		// Cache the result to avoid repeated function calls
 		if ( null === self::$has_object_cache ) {
-			self::$has_object_cache = wp_using_ext_object_cache();
+			self::$has_object_cache = (bool) wp_using_ext_object_cache();
 		}
 
-		return self::$has_object_cache;
+		return (bool) self::$has_object_cache;
 	}
 
 	/**

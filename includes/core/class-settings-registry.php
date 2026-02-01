@@ -196,6 +196,58 @@ class Settings_Registry {
 		);
 
 		// =================================================================
+		// WPSHADOW ACCOUNT SETTINGS (Unified Registration)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_account_settings',
+			'wpshadow_account_api_key',
+			array(
+				'type'              => 'string',
+				'default'           => '',
+				'sanitize_callback' => 'sanitize_text_field',
+				'show_in_rest'      => false, // Security - never expose API key
+				'description'       => __( 'WPShadow account API key', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_account_settings',
+			'wpshadow_account_email',
+			array(
+				'type'              => 'string',
+				'default'           => '',
+				'sanitize_callback' => 'sanitize_email',
+				'show_in_rest'      => false, // Privacy - don't expose email
+				'description'       => __( 'WPShadow account email address', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_account_settings',
+			'wpshadow_account_registered_at',
+			array(
+				'type'              => 'integer',
+				'default'           => 0,
+				'sanitize_callback' => 'absint',
+				'show_in_rest'      => false,
+				'description'       => __( 'Registration timestamp', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_account_settings',
+			'wpshadow_account_services',
+			array(
+				'type'              => 'array',
+				'default'           => array(),
+				'sanitize_callback' => array( __CLASS__, 'sanitize_services_array' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Enabled services and free tier limits', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
 		// WORKFLOW SETTINGS GROUP
 		// =================================================================
 
@@ -628,6 +680,48 @@ class Settings_Registry {
 				'description'       => __( 'Automatically send followup emails (requires email service)', 'wpshadow' ),
 			)
 		);
+	}
+
+	/**
+	 * Sanitize services array
+	 *
+	 * @param mixed $value Input value
+	 * @return array Sanitized services configuration
+	 */
+	public static function sanitize_services_array( $value ): array {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+
+		$valid_services = array( 'guardian', 'vault', 'cloud' );
+		$sanitized      = array();
+
+		foreach ( $value as $service => $config ) {
+			if ( ! in_array( $service, $valid_services, true ) || ! is_array( $config ) ) {
+				continue;
+			}
+
+			$sanitized[ $service ] = array(
+				'tier' => isset( $config['tier'] ) ? sanitize_text_field( $config['tier'] ) : 'free',
+			);
+
+			// Add service-specific fields.
+			foreach ( $config as $key => $val ) {
+				if ( 'tier' === $key ) {
+					continue;
+				}
+				// Sanitize based on type.
+				if ( is_int( $val ) ) {
+					$sanitized[ $service ][ $key ] = absint( $val );
+				} elseif ( is_bool( $val ) ) {
+					$sanitized[ $service ][ $key ] = rest_sanitize_boolean( $val );
+				} elseif ( is_string( $val ) ) {
+					$sanitized[ $service ][ $key ] = sanitize_text_field( $val );
+				}
+			}
+		}
+
+		return $sanitized;
 	}
 
 	/**
