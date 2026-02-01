@@ -59,6 +59,18 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $function ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $function ) {
+			return true;
+		}
+	}
+	
 	if ( ! function_exists( 'do_action' ) ) {
 		function do_action( $tag, ...$args ) {
 			// Mock implementation for testing
@@ -176,6 +188,8 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'current_theme_supports' ) ) {
+		function current_theme_supports( $feature ) {
 	if ( ! function_exists( 'register_activation_hook' ) ) {
 		function register_activation_hook( $file, $function ) {
 			return true;
@@ -203,6 +217,18 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	if ( ! function_exists( 'is_admin' ) ) {
 		function is_admin() {
 			return false;
+		}
+	}
+	
+	if ( ! function_exists( 'get_template_directory' ) ) {
+		function get_template_directory() {
+			return '/tmp/theme';
+		}
+	}
+	
+	if ( ! function_exists( '_n' ) ) {
+		function _n( $single, $plural, $count, $domain = 'default' ) {
+			return $count === 1 ? $single : $plural;
 		}
 	}
 	
