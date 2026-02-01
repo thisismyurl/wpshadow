@@ -127,7 +127,7 @@ $action_labels = array(
 );
 ?>
 
-<div class="wrap">
+<div class="wrap wps-page-container">
 	<?php wpshadow_render_page_header(
 		__( 'Activity History', 'wpshadow' ),
 		__( 'Comprehensive audit log of all WPShadow actions and system changes.', 'wpshadow' )

@@ -22,7 +22,10 @@ Tool_View_Base::verify_access( 'manage_options' );
 Tool_View_Base::enqueue_assets( 'simple-cache' );
 
 // Render header
-Tool_View_Base::render_header( __( 'WPShadow Cache', 'wpshadow' ) );
+Tool_View_Base::render_header(
+	__( 'WPShadow Cache', 'wpshadow' ),
+	__( 'Save copies of your pages so they load instantly for visitors.', 'wpshadow' )
+);
 
 $cache_dir  = WP_CONTENT_DIR . '/cache/wpshadow';
 $cache_size = 0;
@@ -70,22 +73,18 @@ $kanban_cards = array(
 );
 ?>
 
-<div class="wpshadow-tool-container">
-	<h2><?php esc_html_e( 'WPShadow Cache', 'wpshadow' ); ?></h2>
-	<p><?php esc_html_e( 'Save copies of your pages so they load instantly for visitors.', 'wpshadow' ); ?></p>
+<style>
+	.wps-kanban { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+	.wps-kanban-card { background: #fff; border: 1px solid #dcdcde; border-left: 4px solid #2271b1; padding: 12px; width: 260px; box-sizing: border-box; }
+	.wps-kanban-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; margin-bottom: 6px; }
+	.wps-kanban-card.wps-status-ok { border-left-color: #46b450; }
+	.wps-kanban-card.wps-status-issue { border-left-color: #d63638; }
+	.wps-kanban-card.wps-status-action { border-left-color: #d98300; }
+</style>
 
-	<style>
-		.wps-kanban { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-		.wps-kanban-card { background: #fff; border: 1px solid #dcdcde; border-left: 4px solid #2271b1; padding: 12px; width: 260px; box-sizing: border-box; }
-		.wps-kanban-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; margin-bottom: 6px; }
-		.wps-kanban-card.wps-status-ok { border-left-color: #46b450; }
-		.wps-kanban-card.wps-status-issue { border-left-color: #d63638; }
-		.wps-kanban-card.wps-status-action { border-left-color: #d98300; }
-	</style>
-
-	<div class="notice notice-info" style="margin-top:10px;">
-		<p><strong><?php esc_html_e( 'Enable caching to speed up your site.', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Use the switch below to turn on the page cache and choose what gets cached.', 'wpshadow' ); ?></p>
-	</div>
+<div class="notice notice-info" style="margin-top:10px;">
+	<p><strong><?php esc_html_e( 'Enable caching to speed up your site.', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Use the switch below to turn on the page cache and choose what gets cached.', 'wpshadow' ); ?></p>
+</div>
 
 	<div class="notice notice-success" style="margin-top:10px;">
 		<p><strong><?php esc_html_e( 'Free Offsite Storage for Registered Users', 'wpshadow' ); ?></strong></p>

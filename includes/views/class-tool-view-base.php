@@ -92,7 +92,7 @@ class Tool_View_Base {
 	 */
 	public static function render_header( string $title, string $description = '' ): void {
 		?>
-		<div class="wrap wpshadow-tool-container">
+		<div class="wrap wps-page-container">
 			<?php wpshadow_render_page_header( $title, $description ); ?>
 		<?php
 	}
@@ -107,7 +107,7 @@ class Tool_View_Base {
 	 */
 	public static function render_footer(): void {
 		?>
-		</div><!-- .wrap.wpshadow-tool-container -->
+		</div><!-- .wrap.wps-page-container -->
 		<?php
 	}
 

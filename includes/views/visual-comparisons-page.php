@@ -48,7 +48,7 @@ class Visual_Comparisons_Page {
 		$comparisons = Visual_Comparator::get_comparisons( array( 'limit' => 20 ) );
 
 		?>
-		<div class="wrap">
+		<div class="wrap wps-page-container">
 			<?php wpshadow_render_page_header(
 				__( 'Visual Comparisons', 'wpshadow' ),
 				__( 'Visual comparison captures screenshots before and after treatments are applied, helping you ensure changes don\'t break your site.', 'wpshadow' )

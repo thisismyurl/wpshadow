@@ -30,7 +30,7 @@ function wpshadow_render_scan_settings() {
 
 	$nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	?>
-	<div class="wrap">
+	<div class="wrap wps-page-container">
 		<?php wpshadow_render_page_header(
 			__( 'Scan Settings', 'wpshadow' ),
 			__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' )

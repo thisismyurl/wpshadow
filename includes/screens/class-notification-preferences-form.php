@@ -28,7 +28,7 @@ class Notification_Preferences_Form {
 	public static function render(): string {
 		ob_start();
 		?>
-		<div class="wpshadow-notification-preferences">
+		<div class="wpshadow-notification-preferences wps-page-container">
 			<?php wpshadow_render_page_header(
 				__( 'Notification Preferences', 'wpshadow' ),
 				__( 'Choose which events should trigger notifications.', 'wpshadow' )

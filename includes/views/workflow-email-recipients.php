@@ -21,7 +21,7 @@ $recipients = Email_Recipient_Manager::get_approved_recipients();
 $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 ?>
 
-<div class="wrap wpshadow-email-recipients">
+<div class="wrap wpshadow-email-recipients wps-page-container">
 	<?php wpshadow_render_page_header(
 		__( 'Workflow Email Recipients', 'wpshadow' ),
 		__( 'Manage approved email recipients that can be used when sending emails from workflows. All emails must be verified or approved by an admin before they can be used.', 'wpshadow' )

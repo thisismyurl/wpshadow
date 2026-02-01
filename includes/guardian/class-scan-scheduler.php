@@ -499,10 +499,16 @@ class Scan_Scheduler {
 			return;
 		}
 
+		// Check if user has dismissed this notice
+		$dismissed = get_user_meta( get_current_user_id(), 'wpshadow_cron_disabled_notice_dismissed', true );
+		if ( ! empty( $dismissed ) ) {
+			return;
+		}
+
 		// Check if WP_DISABLE_CRON is true
 		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
 			?>
-			<div class="notice notice-info">
+			<div class="notice notice-info is-dismissible" id="wpshadow-cron-disabled-notice">
 				<p>
 					<?php
 					printf(
@@ -512,6 +518,20 @@ class Scan_Scheduler {
 					?>
 				</p>
 			</div>
+			<script>
+			jQuery(document).ready(function($) {
+				$('#wpshadow-cron-disabled-notice').on('click', '.notice-dismiss', function() {
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'wpshadow_dismiss_cron_disabled_notice',
+							nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_dismiss_cron_disabled_notice' ) ); ?>'
+						}
+					});
+				});
+			});
+			</script>
 			<?php
 		}
 	}

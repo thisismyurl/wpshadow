@@ -22,7 +22,10 @@ Tool_View_Base::verify_access( 'manage_options' );
 Tool_View_Base::enqueue_assets( 'magic-link-support' );
 
 // Render header
-Tool_View_Base::render_header( __( 'Magic Link Support', 'wpshadow' ) );
+Tool_View_Base::render_header(
+	__( 'Magic Link Support', 'wpshadow' ),
+	__( 'Create secure, temporary login links to invite contributors, editors, or administrators to your site without creating permanent accounts or sharing passwords.', 'wpshadow' )
+);
 
 $magic_links  = get_option( 'wpshadow_magic_links', array() );
 $active_links = array_filter(
@@ -37,18 +40,14 @@ $permanent_user_created = isset( $_GET['permanent_user_created'] ) ? sanitize_te
 $permanent_user_message = isset( $_GET['permanent_user_message'] ) ? sanitize_text_field( wp_unslash( $_GET['permanent_user_message'] ) ) : '';
 ?>
 
-<div class="wpshadow-tool-container">
-	<h2><?php esc_html_e( 'Temporary User Access', 'wpshadow' ); ?></h2>
-	<p><?php esc_html_e( 'Create secure, temporary login links to invite contributors, editors, or administrators to your site without creating permanent accounts or sharing passwords.', 'wpshadow' ); ?></p>
+<?php if ( ! empty( $permanent_user_created ) ) : ?>
+	<div class="notice notice-<?php echo '1' === $permanent_user_created ? 'success' : 'error'; ?> is-dismissible">
+		<p><?php echo esc_html( rawurldecode( $permanent_user_message ) ); ?></p>
+	</div>
+<?php endif; ?>
 
-	<?php if ( ! empty( $permanent_user_created ) ) : ?>
-		<div class="notice notice-<?php echo '1' === $permanent_user_created ? 'success' : 'error'; ?> is-dismissible">
-			<p><?php echo esc_html( rawurldecode( $permanent_user_message ) ); ?></p>
-		</div>
-	<?php endif; ?>
-
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>
+<div class="wpshadow-tool-section">
+	<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>
 		<form id="wpshadow-create-magic-link">
 			<?php wp_nonce_field( 'wpshadow_magic_link_nonce', 'wpshadow_magic_link_nonce' ); ?>
 			<div class="wps-settings-section">
@@ -92,10 +91,10 @@ $permanent_user_message = isset( $_GET['permanent_user_message'] ) ? sanitize_te
 			</button>
 			<div id="wpshadow-magic-link-message" class="wps-none"></div>
 		</form>
-	</div>
+</div>
 
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Active Links', 'wpshadow' ); ?></h3>
+<div class="wpshadow-tool-section">
+	<h3><?php esc_html_e( 'Active Links', 'wpshadow' ); ?></h3>
 		<?php if ( empty( $active_links ) ) : ?>
 			<p><?php esc_html_e( 'No active magic links. Create one above to provide temporary access.', 'wpshadow' ); ?></p>
 		<?php else : ?>
@@ -139,7 +138,6 @@ $permanent_user_message = isset( $_GET['permanent_user_message'] ) ? sanitize_te
 			<li><?php esc_html_e( 'Each link can only be used once', 'wpshadow' ); ?></li>
 		</ul>
 	</div>
-</div>
 
 <script>
 jQuery(document).ready(function($) {
