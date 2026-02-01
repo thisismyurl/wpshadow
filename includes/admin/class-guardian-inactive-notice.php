@@ -104,7 +104,7 @@ class Guardian_Inactive_Notice {
 					},
 					success: function(response) {
 						if (response.success) {
-							$btn.text('<?php esc_js_e( 'Guardian Activated!', 'wpshadow' ); ?>').addClass('disabled');
+							$btn.text('<?php echo esc_js( __( 'Guardian Activated!', 'wpshadow' ) ); ?>').addClass('disabled');
 							setTimeout(function() {
 								$('#wpshadow-guardian-notice').fadeOut(300, function() {
 									$(this).remove();
@@ -112,12 +112,12 @@ class Guardian_Inactive_Notice {
 							}, 1500);
 						} else {
 							$btn.prop('disabled', false).text(originalText);
-							alert(response.data.message || '<?php esc_js_e( 'Failed to activate Guardian', 'wpshadow' ); ?>');
+							alert(response.data.message || '<?php echo esc_js( __( 'Failed to activate Guardian', 'wpshadow' ) ); ?>');
 						}
 					},
 					error: function() {
 						$btn.prop('disabled', false).text(originalText);
-						alert('<?php esc_js_e( 'Error activating Guardian', 'wpshadow' ); ?>');
+						alert('<?php echo esc_js( __( 'Error activating Guardian', 'wpshadow' ) ); ?>');
 					}
 				});
 			});

@@ -203,7 +203,7 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 
 		// Approve email recipient
 		$(document).on('click', '.approve-email-btn', function() {
-			if (!confirm('<?php esc_js_e( 'Are you sure you want to approve this email?', 'wpshadow' ); ?>')) {
+			if (!confirm('<?php echo esc_js( __( 'Are you sure you want to approve this email?', 'wpshadow' ) ); ?>')) {
 				return;
 			}
 
@@ -230,7 +230,7 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 
 		// Remove email recipient
 		$(document).on('click', '.remove-email-btn', function() {
-			if (!confirm('<?php esc_js_e( 'Are you sure you want to remove this email?', 'wpshadow' ); ?>')) {
+			if (!confirm('<?php echo esc_js( __( 'Are you sure you want to remove this email?', 'wpshadow' ) ); ?>')) {
 				return;
 			}
 
