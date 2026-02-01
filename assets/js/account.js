@@ -16,7 +16,7 @@
          */
         init: function() {
             this.bindEvents();
-            
+
             if (wpShadowAccount.is_registered) {
                 this.refreshStatus();
             }
@@ -28,13 +28,13 @@
         bindEvents: function() {
             // Registration form
             $('#wpshadow-account-register-form').on('submit', this.handleRegister.bind(this));
-            
+
             // Connect form
             $('#wpshadow-account-connect-form').on('submit', this.handleConnect.bind(this));
-            
+
             // Disconnect button
             $('#wpshadow-disconnect-account').on('click', this.handleDisconnect.bind(this));
-            
+
             // Sync services button
             $('#wpshadow-sync-services').on('click', this.handleSyncServices.bind(this));
         },
@@ -44,13 +44,13 @@
          */
         handleRegister: function(e) {
             e.preventDefault();
-            
+
             const $form = $(e.currentTarget);
             const $btn = $form.find('button[type="submit"]');
             const originalText = $btn.text();
-            
+
             $btn.prop('disabled', true).text(wpShadowAccount.i18n.registering);
-            
+
             $.ajax({
                 url: wpShadowAccount.ajax_url,
                 type: 'POST',
@@ -83,13 +83,13 @@
          */
         handleConnect: function(e) {
             e.preventDefault();
-            
+
             const $form = $(e.currentTarget);
             const $btn = $form.find('button[type="submit"]');
             const originalText = $btn.text();
-            
+
             $btn.prop('disabled', true).text(wpShadowAccount.i18n.connecting);
-            
+
             $.ajax({
                 url: wpShadowAccount.ajax_url,
                 type: 'POST',
@@ -121,16 +121,16 @@
          */
         handleDisconnect: function(e) {
             e.preventDefault();
-            
+
             if (!confirm(wpShadowAccount.i18n.confirm_disconnect)) {
                 return;
             }
-            
+
             const $btn = $(e.currentTarget);
             const originalText = $btn.text();
-            
+
             $btn.prop('disabled', true).text(wpShadowAccount.i18n.disconnecting);
-            
+
             $.ajax({
                 url: wpShadowAccount.ajax_url,
                 type: 'POST',
@@ -161,12 +161,12 @@
          */
         handleSyncServices: function(e) {
             e.preventDefault();
-            
+
             const $btn = $(e.currentTarget);
             const originalText = $btn.text();
-            
+
             $btn.prop('disabled', true).text(wpShadowAccount.i18n.syncing);
-            
+
             $.ajax({
                 url: wpShadowAccount.ajax_url,
                 type: 'POST',
@@ -217,12 +217,12 @@
             if (data.services) {
                 // Guardian tokens
                 if (data.services.guardian) {
-                    this.updateUsageBar('guardian', 
+                    this.updateUsageBar('guardian',
                         data.services.guardian.tokens_current || 0,
                         data.services.guardian.tokens_per_month || 100
                     );
                 }
-                
+
                 // Vault storage
                 if (data.services.vault) {
                     this.updateUsageBar('vault',
@@ -249,21 +249,21 @@
             const $notice = $('<div>')
                 .addClass('notice notice-' + type + ' is-dismissible')
                 .html('<p>' + message + '</p>');
-            
+
             $notices.html($notice);
-            
+
             // Scroll to notice
             $('html, body').animate({
                 scrollTop: $notices.offset().top - 50
             }, 500);
-            
+
             // Auto-dismiss success notices
             if (type === 'success') {
                 setTimeout(() => {
                     $notice.fadeOut();
                 }, 5000);
             }
-            
+
             // Handle dismiss button
             $notice.on('click', '.notice-dismiss', function() {
                 $notice.fadeOut();

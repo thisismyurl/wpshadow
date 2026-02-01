@@ -114,15 +114,18 @@ class Auto_Deploy {
 	 * @return bool True if signature is valid.
 	 */
 	private static function verify_github_signature( string $payload ): bool {
-		$secret = get_option( 'wpshadow_webhook_secret', '' );
+		// Use Secret_Manager to retrieve encrypted secret
+		$secret = \WPShadow\Core\Secret_Manager::retrieve( 'webhook_secret' );
 		if ( empty( $secret ) ) {
-			// If no secret configured, require it to be set
+			// If no secret configured, reject request
+			self::log_webhook( 'signature_missing_secret' );
 			return false;
 		}
 
 		// Get signature from header
-		$hub_signature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? '';
+		$hub_signature = isset( $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ) ) : '';
 		if ( empty( $hub_signature ) ) {
+			self::log_webhook( 'signature_missing_header' );
 			return false;
 		}
 
@@ -130,7 +133,13 @@ class Auto_Deploy {
 		$expected_signature = 'sha256=' . hash_hmac( 'sha256', $payload, $secret );
 
 		// Constant-time comparison to prevent timing attacks
-		return hash_equals( $expected_signature, $hub_signature );
+		$is_valid = hash_equals( $expected_signature, $hub_signature );
+
+		if ( ! $is_valid ) {
+			self::log_webhook( 'signature_invalid' );
+		}
+
+		return $is_valid;
 	}
 
 	/**
@@ -259,11 +268,14 @@ class Auto_Deploy {
 		// Save settings if submitted
 		if ( isset( $_POST['wpshadow_webhook_secret'] ) && check_admin_referer( 'wpshadow_auto_deploy_settings' ) ) {
 			$secret = sanitize_text_field( wp_unslash( $_POST['wpshadow_webhook_secret'] ) );
-			update_option( 'wpshadow_webhook_secret', $secret );
+			// Use Secret_Manager to store encrypted secret
+			\WPShadow\Core\Secret_Manager::store( 'webhook_secret', $secret );
+			\WPShadow\Core\Secret_Audit_Log::log_access( 'webhook_secret', 'updated' );
 			echo '<div class="notice notice-success"><p>' . esc_html__( 'Settings saved!', 'wpshadow' ) . '</p></div>';
 		}
 
-		$webhook_secret = get_option( 'wpshadow_webhook_secret', '' );
+		// Retrieve encrypted secret (empty if not set)
+		$webhook_secret = \WPShadow\Core\Secret_Manager::retrieve( 'webhook_secret' ) ?? '';
 		$webhook_url = home_url( 'wpshadow-deploy' );
 		$logs = get_option( 'wpshadow_deploy_logs', array() );
 		$is_enabled = defined( 'WPSHADOW_AUTO_DEPLOY' ) && WPSHADOW_AUTO_DEPLOY;
@@ -316,10 +328,10 @@ class Auto_Deploy {
 								<label for="wpshadow_webhook_secret"><?php esc_html_e( 'Webhook Secret', 'wpshadow' ); ?></label>
 							</th>
 							<td>
-								<input type="text" name="wpshadow_webhook_secret" id="wpshadow_webhook_secret" class="regular-text" value="<?php echo esc_attr( $webhook_secret ); ?>" autocomplete="off">
+								<input type="password" name="wpshadow_webhook_secret" id="wpshadow_webhook_secret" class="regular-text" value="<?php echo esc_attr( $webhook_secret ); ?>" autocomplete="off" placeholder="<?php echo $webhook_secret ? esc_attr__( '••••••••••••••••••••••••', 'wpshadow' ) : ''; ?>">
 								<p class="description">
-									<?php esc_html_e( 'Generate a random secret and use the same value in GitHub webhook settings.', 'wpshadow' ); ?>
-									<button type="button" class="button" onclick="document.getElementById('wpshadow_webhook_secret').value = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);">
+									<?php esc_html_e( 'Generate a random secret and use the same value in GitHub webhook settings. 🔒 Secrets are encrypted before storage.', 'wpshadow' ); ?>
+									<button type="button" class="button" onclick="generateWebhookSecret();">
 										<?php esc_html_e( 'Generate Random', 'wpshadow' ); ?>
 									</button>
 								</p>
@@ -381,5 +393,77 @@ class Auto_Deploy {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Log webhook attempt for security auditing
+	 *
+	 * @since  1.26032.1000
+	 * @param  string $status Webhook status (success|signature_invalid|rate_limit_exceeded|etc).
+	 * @param  array  $data   Optional additional data to log.
+	 * @return void
+	 */
+	private static function log_webhook( string $status, array $data = array() ): void {
+		$log_entry = array_merge(
+			array(
+				'status'          => $status,
+				'ip_address'      => self::get_client_ip(),
+				'has_signature'   => ! empty( $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ) ? 'yes' : 'no',
+				'event_type'      => sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_GITHUB_EVENT'] ?? 'unknown' ) ),
+				'github_delivery' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_GITHUB_DELIVERY'] ?? 'unknown' ) ),
+			),
+			$data
+		);
+
+		// Log to Activity Logger
+		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+			\WPShadow\Core\Activity_Logger::log( 'webhook_access', $log_entry );
+		}
+	}
+
+	/**
+	 * Get client IP address
+	 *
+	 * @since  1.26032.1000
+	 * @return string Client IP address.
+	 */
+	private static function get_client_ip(): string {
+		// Check for IPs passed from proxy
+		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
+			if ( self::is_valid_ip( $ip ) ) {
+				return $ip;
+			}
+		}
+
+		// Check for IPs passed from remote proxy
+		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			$ips = explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) );
+			$ip = trim( $ips[0] );
+			if ( self::is_valid_ip( $ip ) ) {
+				return $ip;
+			}
+		}
+
+		// Fall back to REMOTE_ADDR
+		if ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+			if ( self::is_valid_ip( $ip ) ) {
+				return $ip;
+			}
+		}
+
+		return '0.0.0.0';
+	}
+
+	/**
+	 * Validate IP address format
+	 *
+	 * @since  1.26032.1000
+	 * @param  string $ip IP address to validate.
+	 * @return bool True if valid IPv4 or IPv6.
+	 */
+	private static function is_valid_ip( string $ip ): bool {
+		return false !== filter_var( $ip, FILTER_VALIDATE_IP );
 	}
 }

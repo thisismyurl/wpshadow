@@ -168,4 +168,76 @@ class Security_Validator {
 		$sanitized = esc_url_raw( $url );
 		return filter_var( $sanitized, FILTER_VALIDATE_URL ) ? $sanitized : false;
 	}
+
+	/**
+	 * Validate file path for security
+	 *
+	 * Ensures file path is within allowed directory to prevent path traversal attacks.
+	 * Resolves symlinks and checks against base directory.
+	 *
+	 * @since  1.26032.1000
+	 * @param  string $file_path File path to validate.
+	 * @param  string $base_dir  Optional base directory (default: WPSHADOW_PATH).
+	 * @return string|false Validated real path or false if invalid.
+	 */
+	public static function validate_file_path( string $file_path, string $base_dir = '' ): ?string {
+		// Sanitize input
+		if ( empty( $file_path ) ) {
+			return null;
+		}
+
+		// Use default base if not provided
+		if ( empty( $base_dir ) ) {
+			$base_dir = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH : WP_PLUGIN_DIR;
+		}
+
+		// Resolve symlinks and relative paths
+		$real_path = realpath( $file_path );
+		$real_base = realpath( $base_dir );
+
+		// Both must be valid and resolvable
+		if ( ! $real_path || ! $real_base ) {
+			return null;
+		}
+
+		// Ensure path is within base directory (prevents ../../../ traversal)
+		if ( strpos( $real_path, $real_base ) !== 0 ) {
+			return null;
+		}
+
+		return $real_path;
+	}
+
+	/**
+	 * Validate file path with multiple allowed directories
+	 *
+	 * @since  1.26032.1000
+	 * @param  string $file_path   File path to validate.
+	 * @param  array  $allowed_dirs Array of allowed base directories.
+	 * @return string|false Validated real path or false if invalid.
+	 */
+	public static function validate_file_path_multi( string $file_path, array $allowed_dirs ): ?string {
+		if ( empty( $file_path ) || empty( $allowed_dirs ) ) {
+			return null;
+		}
+
+		$real_path = realpath( $file_path );
+		if ( ! $real_path ) {
+			return null;
+		}
+
+		foreach ( $allowed_dirs as $base_dir ) {
+			$real_base = realpath( $base_dir );
+			if ( ! $real_base ) {
+				continue;
+			}
+
+			// Check if path is within this directory
+			if ( strpos( $real_path, $real_base ) === 0 ) {
+				return $real_path;
+			}
+		}
+
+		return null;
+	}
 }
