@@ -238,7 +238,7 @@ function wpshadow_render_reports_page() {
 	}
 
 	?>
-	<div class="wps-page-container">
+	<div class="wrap wps-page-container">
 		<!-- Page Header -->
 		<?php
 		wpshadow_render_page_header(

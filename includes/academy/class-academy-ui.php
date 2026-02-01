@@ -182,50 +182,33 @@ class Academy_UI extends AJAX_Handler_Base {
 
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 
-		// If a specific tab is requested, render that content
+		// If a specific tab is requested, render that content (only learning-path is supported)
 		if ( ! empty( $tab ) ) {
-			?>
-			<div class="wps-page-container">
-				<?php wpshadow_render_page_header(
-					ucwords( str_replace( array( '_', '-' ), ' ', $tab ) ),
-					'',
-					'dashicons-welcome-learn-more'
-				); ?>
+			if ( 'learning-path' === $tab ) {
+				?>
+				<div class="wps-page-container">
+					<?php wpshadow_render_page_header(
+						__( 'My Learning Path', 'wpshadow' ),
+						__( 'Personalized recommendations based on your site\'s diagnostics.', 'wpshadow' ),
+						'dashicons-superhero'
+					); ?>
 
-				<div style="margin-top: -10px;">
-					<p>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy' ) ); ?>">&larr; <?php esc_html_e( 'Back to Academy', 'wpshadow' ); ?></a>
-					</p>
-				</div>
+					<div style="margin-top: -10px;">
+						<p>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy' ) ); ?>">&larr; <?php esc_html_e( 'Back to Academy', 'wpshadow' ); ?></a>
+						</p>
+					</div>
 
-				<div class="tab-content">
-					<?php
-					switch ( $tab ) {
-						case 'courses':
-							self::render_courses_tab();
-							break;
-						case 'learning-path':
-							self::render_learning_path_tab();
-							break;
-						case 'articles':
-							self::render_articles_tab();
-							break;
-						case 'videos':
-							self::render_videos_tab();
-							break;
-						default:
-							?>
-							<div class="wps-card wps-card--warning">
-								<div class="wps-card-body">
-									<p><?php esc_html_e( 'This section is not available. Please check the URL or select a different section.', 'wpshadow' ); ?></p>
-								</div>
-							</div>
-							<?php
-					}
-					?>
+					<div class="tab-content">
+						<?php self::render_learning_path_tab(); ?>
+					</div>
 				</div>
-			</div>
-			<?php
+				<?php
+				return;
+			}
+
+			// For any other tab, redirect back to main academy page
+			wp_safe_remote_get( admin_url( 'admin.php?page=wpshadow-academy' ) );
 			return;
 		}
 
@@ -247,7 +230,7 @@ class Academy_UI extends AJAX_Handler_Base {
 							<span class="dashicons dashicons-media-video wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=courses' ) ); ?>" style="color: inherit; text-decoration: none;">
+									<a href="https://wpshadow.com/academy/courses?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=courses" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
 										<?php esc_html_e( 'Courses', 'wpshadow' ); ?>
 									</a>
 								</h3>
@@ -258,8 +241,8 @@ class Academy_UI extends AJAX_Handler_Base {
 						</div>
 					</div>
 					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=courses' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
+						<a href="https://wpshadow.com/academy/courses?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=courses" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
+							<span class="dashicons dashicons-external"></span>
 							<?php esc_html_e( 'Browse Courses', 'wpshadow' ); ?>
 						</a>
 					</div>
@@ -297,7 +280,7 @@ class Academy_UI extends AJAX_Handler_Base {
 							<span class="dashicons dashicons-book wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=articles' ) ); ?>" style="color: inherit; text-decoration: none;">
+									<a href="https://wpshadow.com/kb?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=kb_articles" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
 										<?php esc_html_e( 'KB Articles', 'wpshadow' ); ?>
 									</a>
 								</h3>
@@ -308,8 +291,8 @@ class Academy_UI extends AJAX_Handler_Base {
 						</div>
 					</div>
 					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=articles' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
+						<a href="https://wpshadow.com/kb?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=kb_articles" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
+							<span class="dashicons dashicons-external"></span>
 							<?php esc_html_e( 'Browse Articles', 'wpshadow' ); ?>
 						</a>
 					</div>
@@ -322,7 +305,7 @@ class Academy_UI extends AJAX_Handler_Base {
 							<span class="dashicons dashicons-video-alt3 wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=videos' ) ); ?>" style="color: inherit; text-decoration: none;">
+									<a href="https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
 										<?php esc_html_e( 'Training Videos', 'wpshadow' ); ?>
 									</a>
 								</h3>
@@ -333,48 +316,75 @@ class Academy_UI extends AJAX_Handler_Base {
 						</div>
 					</div>
 					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=videos' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
+						<a href="https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
+							<span class="dashicons dashicons-external"></span>
 							<?php esc_html_e( 'Watch Videos', 'wpshadow' ); ?>
 						</a>
 					</div>
 				</div>
 			</div>
 
-			<!-- Recent Activity Section -->
+			<!-- My Learning Path Summary Section -->
 			<?php
 			$user_id  = get_current_user_id();
 			$manager  = Academy_Manager::get_instance();
 			$progress = $manager->get_user_progress( $user_id );
+			$learning_path = isset( $progress['learning_path'] ) ? $progress['learning_path'] : array();
+			?>
+			<div style="margin-top: 40px;">
+				<h2 style="font-size: 20px; margin-bottom: 20px; color: #1d2327;">
+					<?php esc_html_e( 'Your Learning Path', 'wpshadow' ); ?>
+				</h2>
+				<div class="wps-card">
+					<div class="wps-card-body">
+						<?php if ( ! empty( $learning_path ) ) : ?>
+							<p><?php esc_html_e( 'Based on your site diagnostics, we recommend focusing on:', 'wpshadow' ); ?></p>
+							<ul style="list-style: disc; margin-left: 20px;">
+								<?php 
+								foreach ( array_slice( $learning_path, 0, 5 ) as $item ) :
+									$title = isset( $item['course'] ) ? $item['course'] : ( isset( $item['title'] ) ? $item['title'] : __( 'Course', 'wpshadow' ) );
+									?>
+									<li><?php echo esc_html( $title ); ?></li>
+								<?php endforeach; ?>
+							</ul>
+							<div style="margin-top: 20px;">
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=learning-path' ) ); ?>" class="wps-btn wps-btn--primary">
+									<?php esc_html_e( 'View Full Learning Path', 'wpshadow' ); ?>
+								</a>
+							</div>
+						<?php else : ?>
+							<p><?php esc_html_e( 'Start exploring courses and articles to build your personalized learning path.', 'wpshadow' ); ?></p>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
 
-			if ( ! empty( $progress['in_progress'] ) || $progress['articles_viewed'] > 0 || $progress['videos_completed'] > 0 ) :
-				?>
-				<div style="margin-top: 40px;">
-					<h2 style="font-size: 20px; margin-bottom: 20px; color: #1d2327;">
-						<?php esc_html_e( 'Your Learning Progress', 'wpshadow' ); ?>
-					</h2>
-					<div class="wps-grid wps-grid-auto-320">
-						<div class="wps-card">
-							<div class="wps-card-body">
-								<div class="academy-stats" style="display: flex; justify-content: space-around; text-align: center;">
-									<div class="stat">
-										<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['articles_viewed'] ); ?></span>
-										<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Articles Read', 'wpshadow' ); ?></span>
-									</div>
-									<div class="stat">
-										<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['videos_completed'] ); ?></span>
-										<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Videos Watched', 'wpshadow' ); ?></span>
-									</div>
-									<div class="stat">
-										<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['courses_completed'] ); ?></span>
-										<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Courses Completed', 'wpshadow' ); ?></span>
-									</div>
+			<!-- Recent Training Activity Section -->
+			<div style="margin-top: 40px;">
+				<h2 style="font-size: 20px; margin-bottom: 20px; color: #1d2327;">
+					<?php esc_html_e( 'Your Training Activity', 'wpshadow' ); ?>
+				</h2>
+				<div class="wps-grid wps-grid-auto-320">
+					<div class="wps-card">
+						<div class="wps-card-body">
+							<div class="academy-stats" style="display: flex; justify-content: space-around; text-align: center;">
+								<div class="stat">
+									<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['articles_viewed'] ); ?></span>
+									<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Articles Read', 'wpshadow' ); ?></span>
+								</div>
+								<div class="stat">
+									<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['videos_completed'] ); ?></span>
+									<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Videos Watched', 'wpshadow' ); ?></span>
+								</div>
+								<div class="stat">
+									<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['courses_completed'] ); ?></span>
+									<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Courses Completed', 'wpshadow' ); ?></span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			<?php endif; ?>
+			</div>
 		</div>
 		<?php
 	}

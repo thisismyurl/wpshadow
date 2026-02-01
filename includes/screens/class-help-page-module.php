@@ -84,7 +84,7 @@ function wpshadow_render_help() {
 	$catalog = wpshadow_get_help_catalog();
 
 	?>
-	<div class="wps-page-container">
+	<div class="wrap wps-page-container">
 		<!-- Page Header -->
 		<?php wpshadow_render_page_header(
 			__( 'WPShadow Help & Learning', 'wpshadow' ),
