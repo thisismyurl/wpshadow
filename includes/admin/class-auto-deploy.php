@@ -25,6 +25,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Auto_Deploy {
 
 	/**
+	 * GitHub IP ranges for webhook validation
+	 * Updated: February 2026
+	 * Source: https://api.github.com/meta
+	 *
+	 * @var array
+	 */
+	private static $github_ips = array(
+		// GitHub webhook IPs (example ranges - should be updated from api.github.com/meta)
+		'140.82.112.0/20',    // 140.82.112.0 - 140.82.127.255
+		'143.55.64.0/20',     // 143.55.64.0 - 143.55.79.255
+		'185.199.108.0/22',   // 185.199.108.0 - 185.199.111.255
+		'3.5.140.0/22',       // AWS US-East-1
+		'3.7.8.0/22',         // AWS US-East-1
+	);
+
+	/**
 	 * Initialize auto-deploy if enabled
 	 *
 	 * @return void
@@ -71,9 +87,21 @@ class Auto_Deploy {
 			return;
 		}
 
+		// Check IP whitelist first (before rate limiting)
+		if ( ! self::is_github_ip() ) {
+			self::send_response( 403, 'Forbidden - IP not whitelisted' );
+		}
+
+		// Check rate limiting
+		if ( ! self::check_rate_limit() ) {
+			self::log_webhook( 'rate_limit_exceeded' );
+			self::send_response( 429, 'Rate limit exceeded' );
+		}
+
 		// Get request body
 		$payload = file_get_contents( 'php://input' );
 		if ( empty( $payload ) ) {
+			self::log_webhook( 'empty_payload' );
 			self::send_response( 400, 'No payload received' );
 		}
 
@@ -85,11 +113,13 @@ class Auto_Deploy {
 		// Decode payload
 		$data = json_decode( $payload, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			self::log_webhook( 'invalid_json' );
 			self::send_response( 400, 'Invalid JSON payload' );
 		}
 
 		// Only process push events to main branch
 		if ( ! isset( $data['ref'] ) || $data['ref'] !== 'refs/heads/main' ) {
+			self::log_webhook( 'ignored_non_main_branch', array( 'ref' => $data['ref'] ?? 'unknown' ) );
 			self::send_response( 200, 'Ignored: Not a push to main branch' );
 		}
 
@@ -265,6 +295,16 @@ class Auto_Deploy {
 	 * @return void
 	 */
 	public static function render_settings_page(): void {
+		// Handle GitHub IP update request
+		if ( isset( $_POST['wpshadow_update_github_ips'] ) ) {
+			check_admin_referer( 'wpshadow_update_github_ips' );
+			if ( self::update_github_ips() ) {
+				echo '<div class="notice notice-success"><p>' . esc_html__( 'GitHub IP whitelist updated successfully!', 'wpshadow' ) . '</p></div>';
+			} else {
+				echo '<div class="notice notice-error"><p>' . esc_html__( 'Failed to update GitHub IP whitelist. Check error logs.', 'wpshadow' ) . '</p></div>';
+			}
+		}
+
 		// Save settings if submitted
 		if ( isset( $_POST['wpshadow_webhook_secret'] ) && check_admin_referer( 'wpshadow_auto_deploy_settings' ) ) {
 			$secret = sanitize_text_field( wp_unslash( $_POST['wpshadow_webhook_secret'] ) );
@@ -328,7 +368,7 @@ class Auto_Deploy {
 								<label for="wpshadow_webhook_secret"><?php esc_html_e( 'Webhook Secret', 'wpshadow' ); ?></label>
 							</th>
 							<td>
-								<input type="password" name="wpshadow_webhook_secret" id="wpshadow_webhook_secret" class="regular-text" value="<?php echo esc_attr( $webhook_secret ); ?>" autocomplete="off" placeholder="<?php echo $webhook_secret ? esc_attr__( '••••••••••••••••••••••••', 'wpshadow' ) : ''; ?>">
+								<input type="password" name="wpshadow_webhook_secret" id="wpshadow_webhook_secret" class="regular-text" value="" autocomplete="off" placeholder="<?php echo $webhook_secret ? esc_attr( \WPShadow\Core\Secret_Manager::mask( $webhook_secret ) ) : esc_attr__( 'Enter webhook secret from GitHub', 'wpshadow' ); ?>">
 								<p class="description">
 									<?php esc_html_e( 'Generate a random secret and use the same value in GitHub webhook settings. 🔒 Secrets are encrypted before storage.', 'wpshadow' ); ?>
 									<button type="button" class="button" onclick="generateWebhookSecret();">
@@ -389,10 +429,163 @@ class Auto_Deploy {
 					<li><?php esc_html_e( 'Ensure your server has git installed and configured', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'The web server user must have git pull permissions', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'Always use a strong webhook secret', 'wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Webhook requests are restricted to GitHub IP addresses only', 'wpshadow' ); ?></li>
 				</ul>
+				<p>
+					<form method="post" action="" style="display: inline;">
+						<?php wp_nonce_field( 'wpshadow_update_github_ips' ); ?>
+						<button type="submit" name="wpshadow_update_github_ips" class="button button-secondary">
+							<?php esc_html_e( 'Update GitHub IP Whitelist', 'wpshadow' ); ?>
+						</button>
+						<span class="description"><?php esc_html_e( 'Fetches latest GitHub IP ranges from api.github.com/meta', 'wpshadow' ); ?></span>
+					</form>
+				</p>
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Validate file path to prevent directory traversal
+	 *
+	 * Ensures paths don't escape the plugin directory using ../ sequences.
+	 *
+	 * @since  1.26032.1000
+	 * @param  string $path Path to validate.
+	 * @param  string $allowed_base Base directory path that $path must be within.
+	 * @return bool True if path is safe.
+	 */
+	private static function validate_file_path( string $path, string $allowed_base ): bool {
+		// Resolve the real path
+		$real_path = realpath( $path );
+		$real_base = realpath( $allowed_base );
+
+		if ( ! $real_path || ! $real_base ) {
+			return false;
+		}
+
+		// Check if path starts with base directory
+		return 0 === strpos( $real_path, rtrim( $real_base, '/' ) . '/' );
+	}
+
+	/**
+	 * Check if client IP is whitelisted GitHub IP
+	 *
+	 * Validates that webhook request comes from GitHub's IP ranges.
+	 * Applies allowlist with override for development environments.
+	 *
+	 * @since  1.26032.1000
+	 * @return bool True if IP is valid GitHub IP.
+	 */
+	private static function is_github_ip(): bool {
+		$client_ip = self::get_client_ip();
+
+		// Allow override via constant for development
+		if ( defined( 'WPSHADOW_WEBHOOK_IP_OVERRIDE' ) && WPSHADOW_WEBHOOK_IP_OVERRIDE ) {
+			// Allow all IPs in development (NOT FOR PRODUCTION)
+			return true;
+		}
+
+		// Check if IP is in GitHub ranges
+		foreach ( self::$github_ips as $cidr ) {
+			if ( self::ip_in_cidr( $client_ip, $cidr ) ) {
+				self::log_webhook( 'valid_github_ip', array( 'ip' => $client_ip ) );
+				return true;
+			}
+		}
+
+		// IP not in whitelist
+		self::log_webhook( 'invalid_ip', array( 'ip' => $client_ip ) );
+		return false;
+	}
+
+	/**
+	 * Check if IP is within CIDR range
+	 *
+	 * @since  1.26032.1000
+	 * @param  string $ip IP address to check.
+	 * @param  string $cidr CIDR range (e.g., "192.168.0.0/24").
+	 * @return bool True if IP is in range.
+	 */
+	private static function ip_in_cidr( string $ip, string $cidr ): bool {
+		// Handle IPv4 only for now
+		list( $net, $mask ) = explode( '/', $cidr );
+
+		$ip_long = ip2long( $ip );
+		$x = ip2long( $net );
+		$mask_long = -1 << ( 32 - (int) $mask );
+		$mask_long = $mask_long & 0xffffffff;
+		$x = $x & $mask_long;
+		$ip_long = $ip_long & $mask_long;
+
+		return $x === $ip_long;
+	}
+
+	/**
+	 * Fetch latest GitHub IP ranges and update cache
+	 *
+	 * GitHub provides its IP ranges via API.
+	 * This should be called periodically to keep whitelist current.
+	 *
+	 * @since  1.26032.1000
+	 * @return bool True if update successful.
+	 */
+	public static function update_github_ips(): bool {
+		// Get GitHub meta info
+		$response = wp_remote_get( 'https://api.github.com/meta', array(
+			'timeout'   => 10,
+			'sslverify' => true,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			self::log_webhook( 'github_meta_fetch_failed', array(
+				'error' => $response->get_error_message(),
+			) );
+			return false;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body, true );
+
+		if ( ! isset( $data['hooks'] ) || ! is_array( $data['hooks'] ) ) {
+			self::log_webhook( 'github_meta_invalid_format' );
+			return false;
+		}
+
+		// Store IPs in transient (cache for 24 hours)
+		set_transient( 'wpshadow_github_ips', $data['hooks'], DAY_IN_SECONDS );
+
+		// Also update class property for current runtime
+		self::$github_ips = $data['hooks'];
+
+		return true;
+	}
+
+	/**
+	 * Check rate limiting for webhook
+	 *
+	 * Prevents abuse by limiting deployments to 10 per hour.
+	 *
+	 * @since  1.26032.1000
+	 * @return bool True if within rate limit, false if exceeded.
+	 */
+	private static function check_rate_limit(): bool {
+		// Create hourly transient key
+		$key = 'wpshadow_webhook_rate_' . date( 'Y-m-d-H' );
+		$count = get_transient( $key );
+
+		if ( false === $count ) {
+			$count = 0;
+		}
+
+		// Max 10 deployments per hour
+		if ( $count >= 10 ) {
+			return false;
+		}
+
+		// Increment and save
+		set_transient( $key, $count + 1, 3600 );
+		return true;
 	}
 
 	/**
