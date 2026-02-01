@@ -300,8 +300,8 @@ class Vault_Registration extends AJAX_Handler_Base {
 	 * @return bool True if available, false otherwise.
 	 */
 	public static function is_service_available() {
-		$cache_key = 'wpshadow_vault_service_available';
-		$cached    = get_transient( $cache_key );
+		$cache_key = 'vault_service_available';
+		$cached    = \WPShadow\Core\Cache_Manager::get( $cache_key, 'wpshadow_vault' );
 
 		if ( false !== $cached ) {
 			return (bool) $cached;

@@ -111,7 +111,7 @@ class Cache_Invalidation_Analyzer {
 	 * @return void
 	 */
 	private static function record_cache_event( string $type, int $object_id = 0, string $extra = '' ): void {
-		$events = get_transient( 'wpshadow_cache_invalidation_events' );
+		$events = \WPShadow\Core\Cache_Manager::get( 'cache_invalidation_events', 'wpshadow_monitoring' );
 		if ( ! is_array( $events ) ) {
 			$events = array(
 				'hourly' => array(),
@@ -150,7 +150,7 @@ class Cache_Invalidation_Analyzer {
 			}
 		);
 
-		set_transient( 'wpshadow_cache_invalidation_events', $events, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_events', $events, 'wpshadow_monitoring', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -159,7 +159,7 @@ class Cache_Invalidation_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$events = get_transient( 'wpshadow_cache_invalidation_events' );
+		$events = \WPShadow\Core\Cache_Manager::get( 'cache_invalidation_events', 'wpshadow_monitoring' );
 
 		$results = array(
 			'hourly_count'     => 0,
@@ -170,7 +170,7 @@ class Cache_Invalidation_Analyzer {
 		);
 
 		if ( ! is_array( $events ) ) {
-			set_transient( 'wpshadow_cache_invalidation_frequency', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_frequency', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -196,8 +196,8 @@ class Cache_Invalidation_Analyzer {
 			$results['top_invalidators'] = array_slice( $results['events_by_type'], 0, 5, true );
 		}
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_cache_invalidation_frequency', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_frequency', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -208,7 +208,7 @@ class Cache_Invalidation_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_cache_invalidation_frequency' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'cache_invalidation_frequency', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'hourly_count' => 0,
 			'daily_count'  => 0,
@@ -222,7 +222,7 @@ class Cache_Invalidation_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_cache_invalidation_events' );
-		delete_transient( 'wpshadow_cache_invalidation_frequency' );
+		\WPShadow\Core\Cache_Manager::delete( 'cache_invalidation_events', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'cache_invalidation_frequency', 'wpshadow_monitoring' );
 	}
 }

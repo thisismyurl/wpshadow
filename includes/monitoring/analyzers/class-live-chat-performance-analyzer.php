@@ -47,7 +47,7 @@ class Live_Chat_Performance_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (hourly)
-		$cached = get_transient( 'wpshadow_live_chat_performance' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'live_chat_performance', 'wpshadow_monitoring' );
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -64,7 +64,7 @@ class Live_Chat_Performance_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			set_transient( 'wpshadow_live_chat_performance', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'live_chat_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -127,7 +127,7 @@ class Live_Chat_Performance_Analyzer {
 		$results['has_inline_chat'] = self::check_inline_chat_scripts();
 
 		// Cache for 1 hour
-		set_transient( 'wpshadow_live_chat_performance', $results, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'live_chat_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -185,7 +185,7 @@ class Live_Chat_Performance_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_live_chat_performance' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'live_chat_performance', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'has_chat'      => false,
 			'chat_services' => array(),
@@ -199,6 +199,6 @@ class Live_Chat_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_live_chat_performance' );
+		\WPShadow\Core\Cache_Manager::delete( 'live_chat_performance', 'wpshadow_monitoring' );
 	}
 }

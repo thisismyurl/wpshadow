@@ -53,7 +53,7 @@ class Third_Party_Script_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (24 hours)
-		$cached = get_transient( 'wpshadow_third_party_script_analysis' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'third_party_script_analysis', 'wpshadow_monitoring' );
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -69,7 +69,7 @@ class Third_Party_Script_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			set_transient( 'wpshadow_third_party_script_analysis', $results, DAY_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'third_party_script_analysis', $results, 'wpshadow_monitoring', DAY_IN_SECONDS );
 			return $results;
 		}
 
@@ -104,9 +104,9 @@ class Third_Party_Script_Analyzer {
 			}
 		}
 
-		// Set transients
-		set_transient( 'wpshadow_third_party_script_count', $results['third_party_count'], DAY_IN_SECONDS );
-		set_transient( 'wpshadow_third_party_script_analysis', $results, DAY_IN_SECONDS );
+		// Set cache
+		\WPShadow\Core\Cache_Manager::set( 'third_party_script_count', $results['third_party_count'], 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'third_party_script_analysis', $results, 'wpshadow_monitoring', DAY_IN_SECONDS );
 
 		return $results;
 	}
@@ -152,7 +152,7 @@ class Third_Party_Script_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_third_party_script_count' );
-		delete_transient( 'wpshadow_third_party_script_analysis' );
+		\WPShadow\Core\Cache_Manager::delete( 'third_party_script_count', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'third_party_script_analysis', 'wpshadow_monitoring' );
 	}
 }

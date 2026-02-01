@@ -82,7 +82,7 @@ class Shortcode_Execution_Analyzer {
 			return;
 		}
 
-		$stored = get_transient( 'wpshadow_shortcode_execution_data' );
+		$stored = \WPShadow\Core\Cache_Manager::get( 'shortcode_execution_data', 'wpshadow_monitoring' );
 		if ( ! is_array( $stored ) ) {
 			$stored = array();
 		}
@@ -104,7 +104,7 @@ class Shortcode_Execution_Analyzer {
 			$stored = array_slice( $stored, -1000 );
 		}
 
-		set_transient( 'wpshadow_shortcode_execution_data', $stored, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_data', $stored, 'wpshadow_monitoring', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Shortcode_Execution_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$data = get_transient( 'wpshadow_shortcode_execution_data' );
+		$data = \WPShadow\Core\Cache_Manager::get( 'shortcode_execution_data', 'wpshadow_monitoring' );
 
 		$results = array(
 			'total_executions'  => 0,
@@ -124,7 +124,7 @@ class Shortcode_Execution_Analyzer {
 		);
 
 		if ( ! is_array( $data ) || empty( $data ) ) {
-			set_transient( 'wpshadow_shortcode_execution_time', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -178,8 +178,8 @@ class Shortcode_Execution_Analyzer {
 		$total_time             = array_sum( array_column( $data, 'time_ms' ) );
 		$results['avg_time_ms'] = (int) ( $total_time / count( $data ) );
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_shortcode_execution_time', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -190,7 +190,7 @@ class Shortcode_Execution_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_shortcode_execution_time' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'shortcode_execution_time', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'total_executions'  => 0,
 			'unique_shortcodes' => 0,
@@ -205,7 +205,7 @@ class Shortcode_Execution_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_shortcode_execution_data' );
-		delete_transient( 'wpshadow_shortcode_execution_time' );
+		\WPShadow\Core\Cache_Manager::delete( 'shortcode_execution_data', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'shortcode_execution_time', 'wpshadow_monitoring' );
 	}
 }

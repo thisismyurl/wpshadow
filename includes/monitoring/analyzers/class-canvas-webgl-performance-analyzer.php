@@ -24,7 +24,7 @@ class Canvas_WebGL_Performance_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (hourly)
-		$cached = get_transient( 'wpshadow_canvas_webgl_performance' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'canvas_webgl_performance', 'wpshadow_monitoring' );
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -41,7 +41,7 @@ class Canvas_WebGL_Performance_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			set_transient( 'wpshadow_canvas_webgl_performance', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'canvas_webgl_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -104,7 +104,7 @@ class Canvas_WebGL_Performance_Analyzer {
 		}
 
 		// Cache for 1 hour
-		set_transient( 'wpshadow_canvas_webgl_performance', $results, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'canvas_webgl_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -168,7 +168,7 @@ class Canvas_WebGL_Performance_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_canvas_webgl_performance' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'canvas_webgl_performance', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'has_canvas'       => false,
 			'has_webgl'        => false,
@@ -182,6 +182,6 @@ class Canvas_WebGL_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_canvas_webgl_performance' );
+		\WPShadow\Core\Cache_Manager::delete( 'canvas_webgl_performance', 'wpshadow_monitoring' );
 	}
 }

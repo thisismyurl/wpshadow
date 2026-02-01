@@ -312,7 +312,7 @@ class Realtime_Monitoring {
 		}
 
 		// Check if we've already alerted for this type recently (avoid alert fatigue)
-		$last_alert = get_transient( 'wpshadow_last_alert_' . $anomaly['type'] );
+		$last_alert = \WPShadow\Core\Cache_Manager::get( 'last_alert_' . $anomaly['type'], 'wpshadow_monitoring' );
 		if ( $last_alert ) {
 			return false; // Don't alert again within cooldown period
 		}
@@ -350,7 +350,7 @@ class Realtime_Monitoring {
 		wp_mail( $admin_email, $subject, $message );
 
 		// Set cooldown to avoid alert fatigue (30 minutes)
-		set_transient( 'wpshadow_last_alert_' . $anomaly['type'], time(), 1800 );
+		\WPShadow\Core\Cache_Manager::set( 'last_alert_' . $anomaly['type'], time(), 'wpshadow_monitoring', 1800 );
 
 		/**
 		 * Fires after an alert is sent.
@@ -548,7 +548,7 @@ class Realtime_Monitoring {
 	 * @return int Number of failed logins.
 	 */
 	private static function get_recent_failed_logins(): int {
-		$attempts = get_transient( 'wpshadow_failed_logins_5min' );
+		$attempts = \WPShadow\Core\Cache_Manager::get( 'failed_logins_5min', 'wpshadow_monitoring' );
 		return (int) ( $attempts ?? 0 );
 	}
 

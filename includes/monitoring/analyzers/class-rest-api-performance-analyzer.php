@@ -60,7 +60,7 @@ class REST_API_Performance_Analyzer {
 		$route       = $request->get_route();
 
 		// Get current metrics
-		$metrics = get_transient( 'wpshadow_rest_api_metrics' );
+		$metrics = \WPShadow\Core\Cache_Manager::get( 'rest_api_metrics', 'wpshadow_monitoring' );
 		if ( ! is_array( $metrics ) ) {
 			$metrics = array(
 				'requests'       => array(),
@@ -86,9 +86,9 @@ class REST_API_Performance_Analyzer {
 		// Calculate average
 		$avg_time_ms = (int) ( $metrics['total_time_ms'] / $metrics['total_requests'] );
 
-		// Set transients
-		set_transient( 'wpshadow_rest_api_avg_time_ms', $avg_time_ms, WEEK_IN_SECONDS );
-		set_transient( 'wpshadow_rest_api_metrics', $metrics, WEEK_IN_SECONDS );
+		// Set cache
+		\WPShadow\Core\Cache_Manager::set( 'rest_api_avg_time_ms', $avg_time_ms, 'wpshadow_monitoring', WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'rest_api_metrics', $metrics, 'wpshadow_monitoring', WEEK_IN_SECONDS );
 
 		return $response;
 	}
@@ -99,8 +99,8 @@ class REST_API_Performance_Analyzer {
 	 * @return array Analysis data
 	 */
 	public static function get_summary(): array {
-		$avg_time_ms = (int) get_transient( 'wpshadow_rest_api_avg_time_ms' );
-		$metrics     = get_transient( 'wpshadow_rest_api_metrics' );
+		$avg_time_ms = (int) \WPShadow\Core\Cache_Manager::get( 'rest_api_avg_time_ms', 'wpshadow_monitoring' );
+		$metrics     = \WPShadow\Core\Cache_Manager::get( 'rest_api_metrics', 'wpshadow_monitoring' );
 
 		$summary = array(
 			'avg_time_ms'    => $avg_time_ms,
@@ -147,7 +147,7 @@ class REST_API_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_rest_api_avg_time_ms' );
-		delete_transient( 'wpshadow_rest_api_metrics' );
+		\WPShadow\Core\Cache_Manager::delete( 'rest_api_avg_time_ms', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'rest_api_metrics', 'wpshadow_monitoring' );
 	}
 }

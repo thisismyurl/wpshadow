@@ -40,7 +40,7 @@ class Backup_Manager {
 		// Store in transient (4 weeks expiration)
 		$retention_days = max( 1, absint( $retention_days ) );
 		$ttl            = DAY_IN_SECONDS * $retention_days;
-		set_transient( "wpshadow_{$backup_id}", $backup, $ttl );
+		\WPShadow\Core\Cache_Manager::set( $backup_id, $backup, 'wpshadow_recovery', $ttl );
 
 		// Add to manifest
 		self::add_to_manifest( $backup_id, $reason, $retention_days );
@@ -60,7 +60,7 @@ class Backup_Manager {
 	 * @return bool Success
 	 */
 	public static function restore_backup( string $backup_id ): bool {
-		$backup = get_transient( "wpshadow_{$backup_id}" );
+		$backup = \WPShadow\Core\Cache_Manager::get( $backup_id, 'wpshadow_recovery' );
 
 		if ( ! $backup ) {
 			return false; // Backup expired or not found
@@ -88,7 +88,7 @@ class Backup_Manager {
 		$available = array();
 		foreach ( $manifest as $backup_info ) {
 			$backup_id = $backup_info['id'];
-			if ( get_transient( "wpshadow_{$backup_id}" ) ) {
+			if ( \WPShadow\Core\Cache_Manager::get( $backup_id, 'wpshadow_recovery' ) ) {
 				$available[] = $backup_info;
 			}
 		}
@@ -104,7 +104,7 @@ class Backup_Manager {
 	 * @return bool Success
 	 */
 	public static function delete_backup( string $backup_id ): bool {
-		delete_transient( "wpshadow_{$backup_id}" );
+		\WPShadow\Core\Cache_Manager::delete( $backup_id, 'wpshadow_recovery' );
 
 		// Remove from manifest
 		$manifest = get_option( 'wpshadow_backup_manifest', array() );

@@ -58,13 +58,13 @@ class Recommendation_Engine {
 	 */
 	public static function recommend_before_update() {
 		// Check if user has dismissed this recommendation recently
-		$dismissed = get_transient( 'wpshadow_dismissed_clone_before_update_' . get_current_user_id() );
+		$dismissed = \WPShadow\Core\Cache_Manager::get( 'dismissed_clone_before_update_' . get_current_user_id(), 'wpshadow_recommendations' );
 		if ( $dismissed ) {
 			return;
 		}
 
 		// Check if they've used site cloner recently
-		$recent_clone = get_transient( 'wpshadow_recent_clone_' . get_current_user_id() );
+		$recent_clone = \WPShadow\Core\Cache_Manager::get( 'recent_clone_' . get_current_user_id(), 'wpshadow_recommendations' );
 		if ( $recent_clone ) {
 			return;
 		}
@@ -97,13 +97,13 @@ class Recommendation_Engine {
 		}
 
 		// Check if dismissed
-		$dismissed = get_transient( 'wpshadow_dismissed_conflict_detector_' . get_current_user_id() );
+		$dismissed = \WPShadow\Core\Cache_Manager::get( 'dismissed_conflict_detector_' . get_current_user_id(), 'wpshadow_recommendations' );
 		if ( $dismissed ) {
 			return;
 		}
 
 		// Check if they've used it recently
-		$used_recently = get_transient( 'wpshadow_used_conflict_detector_' . get_current_user_id() );
+		$used_recently = \WPShadow\Core\Cache_Manager::get( 'used_conflict_detector_' . get_current_user_id(), 'wpshadow_recommendations' );
 		if ( $used_recently ) {
 			return;
 		}
@@ -130,7 +130,7 @@ class Recommendation_Engine {
 	 */
 	public static function recommend_theme_workflow() {
 		// Check if dismissed
-		$dismissed = get_transient( 'wpshadow_dismissed_theme_workflow_' . get_current_user_id() );
+		$dismissed = \WPShadow\Core\Cache_Manager::get( 'dismissed_theme_workflow_' . get_current_user_id(), 'wpshadow_recommendations' );
 		if ( $dismissed ) {
 			return;
 		}

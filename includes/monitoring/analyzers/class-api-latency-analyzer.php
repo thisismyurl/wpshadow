@@ -109,7 +109,7 @@ class API_Latency_Analyzer {
 			return;
 		}
 
-		$stored = get_transient( 'wpshadow_api_latency_data' );
+		$stored = \WPShadow\Core\Cache_Manager::get( 'api_latency_data', 'wpshadow_monitoring' );
 		if ( ! is_array( $stored ) ) {
 			$stored = array();
 		}
@@ -131,7 +131,7 @@ class API_Latency_Analyzer {
 			$stored = array_slice( $stored, -1000 );
 		}
 
-		set_transient( 'wpshadow_api_latency_data', $stored, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'api_latency_data', $stored, 'wpshadow_monitoring', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -140,7 +140,7 @@ class API_Latency_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$data = get_transient( 'wpshadow_api_latency_data' );
+		$data = \WPShadow\Core\Cache_Manager::get( 'api_latency_data', 'wpshadow_monitoring' );
 
 		$results = array(
 			'total_calls'    => 0,
@@ -152,7 +152,7 @@ class API_Latency_Analyzer {
 		);
 
 		if ( ! is_array( $data ) || empty( $data ) ) {
-			set_transient( 'wpshadow_api_latency', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'api_latency', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -223,8 +223,8 @@ class API_Latency_Analyzer {
 		$total_time                = array_sum( array_column( $data, 'time_ms' ) );
 		$results['avg_latency_ms'] = (int) ( $total_time / count( $data ) );
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_api_latency', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set( 'api_latency', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -235,7 +235,7 @@ class API_Latency_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_api_latency' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'api_latency', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'total_calls'    => 0,
 			'unique_apis'    => 0,
@@ -250,7 +250,7 @@ class API_Latency_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_api_latency_data' );
-		delete_transient( 'wpshadow_api_latency' );
+		\WPShadow\Core\Cache_Manager::delete( 'api_latency_data', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'api_latency', 'wpshadow_monitoring' );
 	}
 }

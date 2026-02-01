@@ -24,7 +24,10 @@ class SSL_Expiration_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (check daily)
-		$cached = get_transient( 'wpshadow_ssl_expiry_data' );
+		$cached = \WPShadow\Core\Cache_Manager::get(
+			'ssl_expiry_data',
+			'wpshadow_guardian'
+		);
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -42,7 +45,12 @@ class SSL_Expiration_Analyzer {
 		$site_url = get_site_url();
 		if ( strpos( $site_url, 'https://' ) !== 0 ) {
 			$results['error'] = 'Site not using HTTPS';
-			set_transient( 'wpshadow_ssl_expiry_data', $results, DAY_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'ssl_expiry_data',
+				$results,
+				'wpshadow_guardian',
+				DAY_IN_SECONDS
+			);
 			return $results;
 		}
 
@@ -50,7 +58,12 @@ class SSL_Expiration_Analyzer {
 		$domain = parse_url( $site_url, PHP_URL_HOST );
 		if ( ! $domain ) {
 			$results['error'] = 'Could not parse domain';
-			set_transient( 'wpshadow_ssl_expiry_data', $results, DAY_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set(
+				'ssl_expiry_data',
+				$results,
+				'wpshadow_guardian',
+				DAY_IN_SECONDS
+			);
 			return $results;
 		}
 
@@ -67,7 +80,12 @@ class SSL_Expiration_Analyzer {
 		}
 
 		// Cache for 24 hours
-		set_transient( 'wpshadow_ssl_expiry_data', $results, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'ssl_expiry_data',
+			$results,
+			'wpshadow_guardian',
+			DAY_IN_SECONDS
+		);
 
 		return $results;
 	}
@@ -132,6 +150,6 @@ class SSL_Expiration_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_ssl_expiry_data' );
+		\WPShadow\Core\Cache_Manager::delete( 'ssl_expiry_data', 'wpshadow_guardian' );
 	}
 }

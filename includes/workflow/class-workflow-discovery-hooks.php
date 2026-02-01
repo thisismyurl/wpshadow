@@ -88,7 +88,7 @@ class Workflow_Discovery_Hooks {
 		return array(
 			'diagnostics_count' => count( Workflow_Discovery::discover_diagnostics() ),
 			'treatments_count'  => count( Workflow_Discovery::discover_treatments() ),
-			'last_refreshed'    => get_transient( 'wpshadow_discovery_last_check' ),
+			'last_refreshed'    => \WPShadow\Core\Cache_Manager::get( 'discovery_last_check', 'wpshadow_workflow' ),
 		);
 	}
 }

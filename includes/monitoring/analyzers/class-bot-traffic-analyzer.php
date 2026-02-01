@@ -91,7 +91,7 @@ class Bot_Traffic_Analyzer {
 			return; // Not a bot
 		}
 
-		$requests = get_transient( 'wpshadow_bot_traffic_data' );
+		$requests = \WPShadow\Core\Cache_Manager::get( 'bot_traffic_data', 'wpshadow_monitoring' );
 		if ( ! is_array( $requests ) ) {
 			$requests = array();
 		}
@@ -118,7 +118,7 @@ class Bot_Traffic_Analyzer {
 			$requests = array_slice( $requests, -2000 );
 		}
 
-		set_transient( 'wpshadow_bot_traffic_data', $requests, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'bot_traffic_data', $requests, 'wpshadow_monitoring', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Bot_Traffic_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$data = get_transient( 'wpshadow_bot_traffic_data' );
+		$data = \WPShadow\Core\Cache_Manager::get( 'bot_traffic_data', 'wpshadow_monitoring' );
 
 		$results = array(
 			'total_bot_requests' => 0,
@@ -170,7 +170,7 @@ class Bot_Traffic_Analyzer {
 		);
 
 		if ( ! is_array( $data ) || empty( $data ) ) {
-			set_transient( 'wpshadow_bot_traffic', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'bot_traffic', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -234,8 +234,8 @@ class Bot_Traffic_Analyzer {
 		$results['is_excessive'] = $results['requests_per_hour'] > 500 ||
 									$results['bad_bot_count'] > 50;
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_bot_traffic', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set( 'bot_traffic', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -265,7 +265,7 @@ class Bot_Traffic_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_bot_traffic' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'bot_traffic', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'total_bot_requests' => 0,
 			'requests_per_hour'  => 0,
@@ -279,7 +279,7 @@ class Bot_Traffic_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_bot_traffic_data' );
-		delete_transient( 'wpshadow_bot_traffic' );
+		\WPShadow\Core\Cache_Manager::delete( 'bot_traffic_data', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'bot_traffic', 'wpshadow_monitoring' );
 	}
 }

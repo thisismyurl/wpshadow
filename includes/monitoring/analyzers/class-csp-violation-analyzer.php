@@ -83,7 +83,7 @@ class CSP_Violation_Analyzer {
 		$violation = $report['csp-report'];
 
 		// Get current violations
-		$violations = get_transient( 'wpshadow_csp_violations' );
+		$violations = \WPShadow\Core\Cache_Manager::get( 'csp_violations', 'wpshadow_monitoring' );
 		if ( ! is_array( $violations ) ) {
 			$violations = array(
 				'reports' => array(),
@@ -105,9 +105,9 @@ class CSP_Violation_Analyzer {
 			$violations['reports'] = array_slice( $violations['reports'], -100 );
 		}
 
-		// Set transients
-		set_transient( 'wpshadow_csp_violation_count', $violations['count'], WEEK_IN_SECONDS );
-		set_transient( 'wpshadow_csp_violations', $violations, WEEK_IN_SECONDS );
+		// Set cache
+		\WPShadow\Core\Cache_Manager::set( 'csp_violation_count', $violations['count'], 'wpshadow_monitoring', WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'csp_violations', $violations, 'wpshadow_monitoring', WEEK_IN_SECONDS );
 
 		return new \WP_REST_Response( array( 'status' => 'recorded' ), 204 );
 	}
@@ -118,8 +118,8 @@ class CSP_Violation_Analyzer {
 	 * @return array Analysis data
 	 */
 	public static function get_summary(): array {
-		$count      = (int) get_transient( 'wpshadow_csp_violation_count' );
-		$violations = get_transient( 'wpshadow_csp_violations' );
+		$count      = (int) \WPShadow\Core\Cache_Manager::get( 'csp_violation_count', 'wpshadow_monitoring' );
+		$violations = \WPShadow\Core\Cache_Manager::get( 'csp_violations', 'wpshadow_monitoring' );
 
 		$summary = array(
 			'total_violations'    => $count,
@@ -149,7 +149,7 @@ class CSP_Violation_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_csp_violation_count' );
-		delete_transient( 'wpshadow_csp_violations' );
+		\WPShadow\Core\Cache_Manager::delete( 'csp_violation_count', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'csp_violations', 'wpshadow_monitoring' );
 	}
 }

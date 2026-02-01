@@ -36,7 +36,7 @@ class CSS_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check if analysis ran recently (cache for 24 hours)
-		$cached = get_transient( 'wpshadow_css_analysis_details' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'css_analysis_details', 'wpshadow_guardian' );
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -93,12 +93,12 @@ class CSS_Analyzer {
 		);
 		$results['complex_examples'] = array_slice( $results['complex_examples'], 0, 10 );
 
-		// Store results in transients for diagnostics to consume
-		set_transient( 'wpshadow_complex_selector_count', $results['complex_count'], DAY_IN_SECONDS );
-		set_transient( 'wpshadow_css_custom_properties_count', $results['css_variables_count'], DAY_IN_SECONDS );
-		set_transient( 'wpshadow_css_import_count', $results['import_count'], DAY_IN_SECONDS );
-		set_transient( 'wpshadow_css_animation_count', $results['animation_count'], DAY_IN_SECONDS );
-		set_transient( 'wpshadow_css_analysis_details', $results, DAY_IN_SECONDS );
+		// Store results in cache for diagnostics to consume
+		\WPShadow\Core\Cache_Manager::set( 'complex_selector_count', $results['complex_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'css_custom_properties_count', $results['css_variables_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'css_import_count', $results['import_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'css_animation_count', $results['animation_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'css_analysis_details', $results, 'wpshadow_guardian', DAY_IN_SECONDS );
 
 		return $results;
 	}
@@ -344,7 +344,7 @@ class CSS_Analyzer {
 	 * @return array|null Analysis results or null if no cache
 	 */
 	public static function get_results(): ?array {
-		return get_transient( 'wpshadow_css_analysis_details' ) ?: null;
+		return \WPShadow\Core\Cache_Manager::get( 'css_analysis_details', 'wpshadow_guardian' ) ?: null;
 	}
 
 	/**
@@ -354,10 +354,10 @@ class CSS_Analyzer {
 	 * Useful when theme/plugins are updated.
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_complex_selector_count' );
-		delete_transient( 'wpshadow_css_custom_properties_count' );
-		delete_transient( 'wpshadow_css_import_count' );
-		delete_transient( 'wpshadow_css_animation_count' );
-		delete_transient( 'wpshadow_css_analysis_details' );
+		\WPShadow\Core\Cache_Manager::delete( 'complex_selector_count', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'css_custom_properties_count', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'css_import_count', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'css_animation_count', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'css_analysis_details', 'wpshadow_guardian' );
 	}
 }

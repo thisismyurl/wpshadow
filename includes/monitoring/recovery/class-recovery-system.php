@@ -44,10 +44,11 @@ class Recovery_System {
 			'snapshot'    => self::capture_snapshot(),
 		);
 
-		// Store in transient (28 days)
-		set_transient(
-			"wpshadow_recovery_{$backup_id}",
+		// Store in cache (28 days)
+		\WPShadow\Core\Cache_Manager::set(
+			$backup_id,
 			$backup,
+			'wpshadow_recovery',
 			28 * DAY_IN_SECONDS
 		);
 
@@ -73,7 +74,7 @@ class Recovery_System {
 		$backup_id = sanitize_key( $backup_id );
 
 		// Get backup
-		$backup = get_transient( "wpshadow_recovery_{$backup_id}" );
+		$backup = \WPShadow\Core\Cache_Manager::get( $backup_id, 'wpshadow_recovery' );
 		if ( ! $backup ) {
 			return array(
 				'success' => false,
@@ -129,7 +130,7 @@ class Recovery_System {
 	public static function get_recovery_point( string $backup_id ): ?array {
 		$backup_id = sanitize_key( $backup_id );
 
-		$backup = get_transient( "wpshadow_recovery_{$backup_id}" );
+		$backup = \WPShadow\Core\Cache_Manager::get( $backup_id, 'wpshadow_recovery' );
 		if ( ! $backup ) {
 			return null;
 		}
@@ -156,8 +157,8 @@ class Recovery_System {
 	public static function delete_recovery_point( string $backup_id ): bool {
 		$backup_id = sanitize_key( $backup_id );
 
-		// Remove transient
-		delete_transient( "wpshadow_recovery_{$backup_id}" );
+		// Remove cached recovery point
+		\WPShadow\Core\Cache_Manager::delete( $backup_id, 'wpshadow_recovery' );
 
 		// Remove from manifest
 		$manifest = get_option( 'wpshadow_recovery_manifest', array() );
@@ -187,8 +188,8 @@ class Recovery_System {
 			function ( $entry ) use ( $cutoff ) {
 				$entry_time = strtotime( $entry['timestamp'] );
 				if ( $entry_time < $cutoff ) {
-					// Delete transient
-					delete_transient( "wpshadow_recovery_{$entry['id']}" );
+					// Delete cached recovery point
+					\WPShadow\Core\Cache_Manager::delete( $entry['id'], 'wpshadow_recovery' );
 					return false;
 				}
 				return true;

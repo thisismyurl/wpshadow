@@ -99,7 +99,7 @@ class Block_Rendering_Performance_Analyzer {
 			$page_time_ms = (int) ( ( microtime( true ) - self::$page_start_time ) * 1000 );
 		}
 
-		$stored = get_transient( 'wpshadow_block_rendering_data' );
+		$stored = \WPShadow\Core\Cache_Manager::get( 'block_rendering_data', 'wpshadow_monitoring' );
 		if ( ! is_array( $stored ) ) {
 			$stored = array(
 				'blocks' => array(),
@@ -142,7 +142,7 @@ class Block_Rendering_Performance_Analyzer {
 			$stored['pages'] = array_slice( $stored['pages'], -100 );
 		}
 
-		set_transient( 'wpshadow_block_rendering_data', $stored, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'block_rendering_data', $stored, 'wpshadow_monitoring', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -151,7 +151,7 @@ class Block_Rendering_Performance_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$data = get_transient( 'wpshadow_block_rendering_data' );
+		$data = \WPShadow\Core\Cache_Manager::get( 'block_rendering_data', 'wpshadow_monitoring' );
 
 		$results = array(
 			'total_blocks'     => 0,
@@ -163,7 +163,7 @@ class Block_Rendering_Performance_Analyzer {
 		);
 
 		if ( ! is_array( $data ) ) {
-			set_transient( 'wpshadow_block_rendering_time', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'block_rendering_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -226,8 +226,8 @@ class Block_Rendering_Performance_Analyzer {
 			$results['avg_page_time_ms'] = (int) ( $total_page_time / count( $pages ) );
 		}
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_block_rendering_time', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set( 'block_rendering_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -238,7 +238,7 @@ class Block_Rendering_Performance_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_block_rendering_time' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'block_rendering_time', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'total_blocks'     => 0,
 			'unique_blocks'    => 0,
@@ -253,7 +253,7 @@ class Block_Rendering_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_block_rendering_data' );
-		delete_transient( 'wpshadow_block_rendering_time' );
+		\WPShadow\Core\Cache_Manager::delete( 'block_rendering_data', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'block_rendering_time', 'wpshadow_monitoring' );
 	}
 }

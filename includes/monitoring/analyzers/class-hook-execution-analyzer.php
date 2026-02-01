@@ -81,7 +81,7 @@ class Hook_Execution_Analyzer {
 			return;
 		}
 
-		$stored = get_transient( 'wpshadow_hook_execution_data' );
+		$stored = \WPShadow\Core\Cache_Manager::get( 'hook_execution_data', 'wpshadow_monitoring' );
 		if ( ! is_array( $stored ) ) {
 			$stored = array(
 				'hooks'       => array(),
@@ -104,7 +104,7 @@ class Hook_Execution_Analyzer {
 		arsort( $stored['hooks'] );
 		$stored['hooks'] = array_slice( $stored['hooks'], 0, 100, true );
 
-		set_transient( 'wpshadow_hook_execution_data', $stored, DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'hook_execution_data', $stored, 'wpshadow_monitoring', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Hook_Execution_Analyzer {
 	 * @return array Analysis results
 	 */
 	public static function analyze(): array {
-		$data = get_transient( 'wpshadow_hook_execution_data' );
+		$data = \WPShadow\Core\Cache_Manager::get( 'hook_execution_data', 'wpshadow_monitoring' );
 
 		$results = array(
 			'total_hook_executions' => 0,
@@ -124,7 +124,7 @@ class Hook_Execution_Analyzer {
 		);
 
 		if ( ! is_array( $data ) ) {
-			set_transient( 'wpshadow_hook_execution_overhead', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'hook_execution_overhead', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -149,8 +149,8 @@ class Hook_Execution_Analyzer {
 			$results['hooks_per_request'] = (int) ( $results['total_hook_executions'] / 100 );
 		}
 
-		// Set transient for diagnostic
-		set_transient( 'wpshadow_hook_execution_overhead', $results, HOUR_IN_SECONDS );
+		// Set cache for diagnostic
+		\WPShadow\Core\Cache_Manager::set( 'hook_execution_overhead', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -161,7 +161,7 @@ class Hook_Execution_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_hook_execution_overhead' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'hook_execution_overhead', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'total_hook_executions' => 0,
 			'hooks_per_request'     => 0,
@@ -175,7 +175,7 @@ class Hook_Execution_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_hook_execution_data' );
-		delete_transient( 'wpshadow_hook_execution_overhead' );
+		\WPShadow\Core\Cache_Manager::delete( 'hook_execution_data', 'wpshadow_monitoring' );
+		\WPShadow\Core\Cache_Manager::delete( 'hook_execution_overhead', 'wpshadow_monitoring' );
 	}
 }

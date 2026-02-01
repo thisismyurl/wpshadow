@@ -171,7 +171,7 @@ class Phone_Home_Indicator {
 		}
 
 		// Get recent connections
-		$connections = get_transient( 'wpshadow_recent_connections' ) ?: array();
+		$connections = \WPShadow\Core\Cache_Manager::get( 'recent_connections', 'wpshadow_admin' ) ?: array();
 		if ( empty( $connections ) ) {
 			return;
 		}

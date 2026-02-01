@@ -132,17 +132,21 @@ class Anomaly_Detector {
 	 * @return bool Anomaly detected
 	 */
 	private static function check_recent_changes_anomaly(): bool {
-		$last_check = get_transient( 'wpshadow_anomaly_baseline' );
+		$last_check = \WPShadow\Core\Cache_Manager::get(
+			'anomaly_baseline',
+			'wpshadow_guardian'
+		);
 
 		if ( ! $last_check ) {
 			// Set baseline on first check
-			set_transient(
-				'wpshadow_anomaly_baseline',
+			\WPShadow\Core\Cache_Manager::set(
+				'anomaly_baseline',
 				array(
 					'timestamp' => time(),
 					'plugins'   => md5( serialize( get_option( 'active_plugins' ) ) ),
 					'theme'     => md5( get_stylesheet() ),
 				),
+				'wpshadow_guardian',
 				HOUR_IN_SECONDS * 6
 			);
 			return false;
@@ -197,16 +201,16 @@ class Anomaly_Detector {
 			return false;
 		}
 
-		$last_size    = (int) get_transient( 'wpshadow_debug_log_size' );
+		$last_size    = (int) \WPShadow\Core\Cache_Manager::get( 'debug_log_size', 'wpshadow_guardian' );
 		$current_size = filesize( $log_file );
 
 		// If log grew by > 100KB in 5 minutes, anomaly
 		if ( $last_size > 0 && ( $current_size - $last_size ) > 102400 ) {
-			set_transient( 'wpshadow_debug_log_size', $current_size, 300 );
+			\WPShadow\Core\Cache_Manager::set( 'debug_log_size', $current_size, 'wpshadow_guardian', 300 );
 			return true;
 		}
 
-		set_transient( 'wpshadow_debug_log_size', $current_size, 300 );
+		\WPShadow\Core\Cache_Manager::set( 'debug_log_size', $current_size, 'wpshadow_guardian', 300 );
 		return false;
 	}
 
@@ -253,8 +257,8 @@ class Anomaly_Detector {
 	 * Called after successful auto-fixes to reset for next run.
 	 */
 	public static function clear_baselines(): void {
-		delete_transient( 'wpshadow_anomaly_baseline' );
+		Cache_Manager::delete( 'anomaly_baseline', 'wpshadow_guardian' );
 		delete_option( 'wpshadow_last_plugin_check' );
-		delete_transient( 'wpshadow_debug_log_size' );
+		Cache_Manager::delete( 'debug_log_size', 'wpshadow_guardian' );
 	}
 }

@@ -29,7 +29,7 @@ class Icon_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (24 hours)
-		$cached = get_transient( 'wpshadow_icon_analysis_details' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'icon_analysis_details', 'wpshadow_guardian' );
 		if ( $cached ) {
 			return $cached;
 		}
@@ -88,9 +88,9 @@ class Icon_Analyzer {
 		$format_used                     = self::determine_format_used( $results );
 		$results['recommended_strategy'] = self::recommend_strategy( $results );
 
-		// Set transients for diagnostic consumption
-		set_transient( 'wpshadow_icon_format_used', $format_used, DAY_IN_SECONDS );
-		set_transient( 'wpshadow_icon_analysis_details', $results, DAY_IN_SECONDS );
+		// Set cache for diagnostic consumption
+		\WPShadow\Core\Cache_Manager::set( 'icon_format_used', $format_used, 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'icon_analysis_details', $results, 'wpshadow_guardian', DAY_IN_SECONDS );
 
 		return $results;
 	}
@@ -238,7 +238,7 @@ class Icon_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_icon_format_used' );
-		delete_transient( 'wpshadow_icon_analysis_details' );
+		\WPShadow\Core\Cache_Manager::delete( 'icon_format_used', 'wpshadow_guardian' );
+		\WPShadow\Core\Cache_Manager::delete( 'icon_analysis_details', 'wpshadow_guardian' );
 	}
 }

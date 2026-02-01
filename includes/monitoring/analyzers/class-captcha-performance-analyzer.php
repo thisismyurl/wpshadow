@@ -38,7 +38,7 @@ class Captcha_Performance_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (hourly)
-		$cached = get_transient( 'wpshadow_captcha_performance' );
+		$cached = \WPShadow\Core\Cache_Manager::get( 'captcha_performance', 'wpshadow_monitoring' );
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -56,7 +56,7 @@ class Captcha_Performance_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			set_transient( 'wpshadow_captcha_performance', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'captcha_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -103,7 +103,7 @@ class Captcha_Performance_Analyzer {
 		$results['forms_with_captcha'] = self::detect_captcha_forms();
 
 		// Cache for 1 hour
-		set_transient( 'wpshadow_captcha_performance', $results, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'captcha_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
 
 		return $results;
 	}
@@ -187,7 +187,7 @@ class Captcha_Performance_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_captcha_performance' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'captcha_performance', 'wpshadow_monitoring' );
 		return is_array( $results ) ? $results : array(
 			'has_captcha'            => false,
 			'captcha_service'        => '',
@@ -202,6 +202,6 @@ class Captcha_Performance_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_captcha_performance' );
+		\WPShadow\Core\Cache_Manager::delete( 'captcha_performance', 'wpshadow_monitoring' );
 	}
 }

@@ -125,6 +125,11 @@ class Plugin_Bootstrap {
 			require_once $core_path . 'class-cache-manager.php';
 		}
 
+		// PHASE 3 OPTIMIZATION: Load query optimization classes
+		if ( file_exists( $core_path . 'class-query-batch-optimizer.php' ) ) {
+			require_once $core_path . 'class-query-batch-optimizer.php';
+		}
+
 		// Load additional core classes
 		if ( file_exists( $core_path . 'class-kpi-tracker.php' ) ) {
 			require_once $core_path . 'class-kpi-tracker.php';
@@ -176,6 +181,16 @@ class Plugin_Bootstrap {
 		$dashboard_file = WPSHADOW_PATH . 'includes/views/dashboard-page.php';
 		if ( file_exists( $dashboard_file ) ) {
 			require_once $dashboard_file;
+		}
+
+		// PHASE 3 OPTIMIZATION: Load lazy widget loader
+		$lazy_loader_file = WPSHADOW_PATH . 'includes/dashboard/class-lazy-widget-loader.php';
+		if ( file_exists( $lazy_loader_file ) ) {
+			require_once $lazy_loader_file;
+
+			if ( class_exists( '\\WPShadow\\Dashboard\\Lazy_Widget_Loader' ) ) {
+				\WPShadow\Dashboard\Lazy_Widget_Loader::init();
+			}
 		}
 
 		// Load visual comparisons page

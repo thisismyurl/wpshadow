@@ -263,7 +263,7 @@ class Auto_Fix_Executor {
 	 * @return bool Execution in progress
 	 */
 	public static function is_executing(): bool {
-		$lock = get_transient( 'wpshadow_auto_fix_lock' );
+		$lock = \WPShadow\Core\Cache_Manager::get( 'auto_fix_lock', 'wpshadow_guardian' );
 		return ! empty( $lock );
 	}
 

@@ -47,7 +47,10 @@ class AB_Test_Overhead_Analyzer {
 	 */
 	public static function analyze(): array {
 		// Check cache first (hourly)
-		$cached = get_transient( 'wpshadow_ab_test_overhead' );
+		$cached = \WPShadow\Core\Cache_Manager::get(
+			'ab_test_overhead',
+			'wpshadow_guardian'
+		);
 		if ( $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -65,7 +68,7 @@ class AB_Test_Overhead_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			set_transient( 'wpshadow_ab_test_overhead', $results, HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'ab_test_overhead', $results, 'wpshadow_guardian', HOUR_IN_SECONDS );
 			return $results;
 		}
 
@@ -138,7 +141,12 @@ class AB_Test_Overhead_Analyzer {
 		$results['tests_detected'] = self::detect_active_tests();
 
 		// Cache for 1 hour
-		set_transient( 'wpshadow_ab_test_overhead', $results, HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set(
+			'ab_test_overhead',
+			$results,
+			'wpshadow_guardian',
+			HOUR_IN_SECONDS
+		);
 
 		return $results;
 	}
@@ -192,7 +200,7 @@ class AB_Test_Overhead_Analyzer {
 	 * @return array Summary data
 	 */
 	public static function get_summary(): array {
-		$results = get_transient( 'wpshadow_ab_test_overhead' );
+		$results = \WPShadow\Core\Cache_Manager::get( 'ab_test_overhead', 'wpshadow_guardian' );
 		return is_array( $results ) ? $results : array(
 			'has_ab_testing'        => false,
 			'test_platforms'        => array(),
@@ -207,6 +215,6 @@ class AB_Test_Overhead_Analyzer {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wpshadow_ab_test_overhead' );
+		\WPShadow\Core\Cache_Manager::delete( 'ab_test_overhead', 'wpshadow_guardian' );
 	}
 }
