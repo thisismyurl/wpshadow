@@ -64,6 +64,9 @@ class Scan_Scheduler {
 
 		// Check cron status
 		add_action( 'admin_notices', array( __CLASS__, 'check_cron_health' ) );
+
+		// AJAX handler for dismissing cron disabled notice
+		add_action( 'wp_ajax_wpshadow_dismiss_cron_disabled_notice', array( __CLASS__, 'dismiss_cron_disabled_notice' ) );
 	}
 
 	/**
@@ -534,6 +537,29 @@ class Scan_Scheduler {
 			</script>
 			<?php
 		}
+	}
+
+	/**
+	 * Handle AJAX request to dismiss cron disabled notice
+	 *
+	 * @since  1.26032.1748
+	 * @return void Dies after sending JSON response.
+	 */
+	public static function dismiss_cron_disabled_notice() {
+		// Verify nonce
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpshadow_dismiss_cron_disabled_notice' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
+		}
+
+		// Verify capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		}
+
+		// Save dismiss state to user meta
+		update_user_meta( get_current_user_id(), 'wpshadow_cron_disabled_notice_dismissed', true );
+
+		wp_send_json_success( array( 'message' => __( 'Notice dismissed', 'wpshadow' ) ) );
 	}
 
 	/**
