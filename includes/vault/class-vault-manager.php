@@ -163,7 +163,7 @@ class Vault_Manager {
 		$tier    = $this->fetch_account_tier( $api_key );
 
 		// Cache for 1 hour.
-		\WPShadow\Core\Cache_Manager::set( 'vault_tier', $tier, 'wpshadow_vault', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'vault_tier', $tier, HOUR_IN_SECONDS, 'wpshadow_vault' );
 
 		return $tier;
 	}

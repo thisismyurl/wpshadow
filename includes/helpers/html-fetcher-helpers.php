@@ -110,8 +110,8 @@ function wpshadow_fetch_page_html( string $url, int $cache_ttl = 3600, string $c
 	\WPShadow\Core\Cache_Manager::set(
 		$cache_group . '_' . $cache_key,
 		$html,
-		'wpshadow_html_fetch',
-		$cache_ttl
+		$cache_ttl,
+		'wpshadow_html_fetch'
 	);
 
 	return $html;

@@ -48,8 +48,8 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 		\WPShadow\Core\Cache_Manager::set(
 			$cache_key,
 			$all_tooltips,
-			'wpshadow_tooltips',
-			24 * HOUR_IN_SECONDS
+			24 * HOUR_IN_SECONDS,
+			'wpshadow_tooltips'
 		);
 		return $all_tooltips;
 	}

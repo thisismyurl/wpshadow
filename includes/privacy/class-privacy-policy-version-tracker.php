@@ -78,8 +78,8 @@ class Privacy_Policy_Version_Tracker {
 			\WPShadow\Core\Cache_Manager::set(
 				'show_policy_notice_' . $user_id,
 				true,
-				'wpshadow_privacy',
-				WEEK_IN_SECONDS
+				WEEK_IN_SECONDS,
+				'wpshadow_privacy'
 			);
 		}
 	}
