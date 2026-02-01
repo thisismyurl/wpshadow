@@ -186,7 +186,7 @@ class Notification_Manager {
 		}
 
 		// Mark as sent
-		\WPShadow\Core\Cache_Manager::set( $cache_key, true, 'wpshadow_cloud', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( $cache_key, true, HOUR_IN_SECONDS , 'wpshadow_cloud');
 
 		return true;
 	}

@@ -142,7 +142,7 @@ class Block_Rendering_Performance_Analyzer {
 			$stored['pages'] = array_slice( $stored['pages'], -100 );
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'block_rendering_data', $stored, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'block_rendering_data', $stored, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**
@@ -163,7 +163,7 @@ class Block_Rendering_Performance_Analyzer {
 		);
 
 		if ( ! is_array( $data ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'block_rendering_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'block_rendering_time', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -227,7 +227,7 @@ class Block_Rendering_Performance_Analyzer {
 		}
 
 		// Set cache for diagnostic
-		\WPShadow\Core\Cache_Manager::set( 'block_rendering_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'block_rendering_time', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

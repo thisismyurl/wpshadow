@@ -48,9 +48,9 @@ class Recovery_System {
 		\WPShadow\Core\Cache_Manager::set(
 			$backup_id,
 			$backup,
-			'wpshadow_recovery',
-			28 * DAY_IN_SECONDS
-		);
+			28 * DAY_IN_SECONDS,
+			'wpshadow_recovery'
+			);
 
 		// Add to manifest
 		self::add_to_manifest( $backup_id, $reason, $description );

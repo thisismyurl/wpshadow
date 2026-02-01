@@ -98,8 +98,8 @@ class Phone_Home_Indicator {
 		\WPShadow\Core\Cache_Manager::set(
 			'recent_connections',
 			self::$connections,
-			'wpshadow_phone_home',
-			HOUR_IN_SECONDS
+			HOUR_IN_SECONDS,
+			'wpshadow_phone_home'
 		);
 
 		// Log activity

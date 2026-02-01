@@ -56,7 +56,7 @@ class Captcha_Performance_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'captcha_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'captcha_performance', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -103,7 +103,7 @@ class Captcha_Performance_Analyzer {
 		$results['forms_with_captcha'] = self::detect_captcha_forms();
 
 		// Cache for 1 hour
-		\WPShadow\Core\Cache_Manager::set( 'captcha_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'captcha_performance', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}
