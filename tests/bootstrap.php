@@ -79,6 +79,12 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
+			return true;
+		}
+	}
+	
 	if ( ! function_exists( 'plugin_basename' ) ) {
 		function plugin_basename( $file ) {
 			return basename( dirname( $file ) ) . '/' . basename( $file );
