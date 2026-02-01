@@ -253,6 +253,8 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $callback ) {
 	if ( ! function_exists( 'current_theme_supports' ) ) {
 		function current_theme_supports( $feature ) {
 	if ( ! function_exists( 'register_activation_hook' ) ) {
@@ -262,11 +264,23 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	}
 	
 	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
 		function register_deactivation_hook( $file, $function ) {
 			return true;
 		}
 	}
 	
+	if ( ! function_exists( 'get_option' ) ) {
+		function get_option( $option, $default = false ) {
+			static $options = array();
+			return $options[ $option ] ?? $default;
+		}
+	}
+	
+	if ( ! function_exists( 'update_option' ) ) {
+		function update_option( $option, $value ) {
+			static $options = array();
+			$options[ $option ] = $value;
 
 	if ( ! function_exists( 'load_plugin_textdomain' ) ) {
 		function load_plugin_textdomain( $domain, $deprecated = false, $plugin_rel_path = false ) {
@@ -274,6 +288,26 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'get_transient' ) ) {
+		function get_transient( $transient ) {
+			return false;
+		}
+	}
+	
+	if ( ! function_exists( 'set_transient' ) ) {
+		function set_transient( $transient, $value, $expiration = 0 ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'current_theme_supports' ) ) {
+		function current_theme_supports( $feature ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'has_post_thumbnail' ) ) {
+		function has_post_thumbnail( $post = null ) {
 	if ( ! function_exists( 'get_intermediate_image_sizes' ) ) {
 		function get_intermediate_image_sizes() {
 			// Return default WordPress image sizes, with filter support for testing
@@ -297,6 +331,34 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	if ( ! function_exists( 'is_admin' ) ) {
 		function is_admin() {
 			return false;
+		}
+	}
+	
+	if ( ! function_exists( 'wp_get_theme' ) ) {
+		function wp_get_theme( $stylesheet = null ) {
+			return new class {
+				public function get( $header ) {
+					return 'Test Theme';
+				}
+			};
+		}
+	}
+	
+	if ( ! function_exists( 'get_stylesheet' ) ) {
+		function get_stylesheet() {
+			return 'test-theme';
+		}
+	}
+	
+	if ( ! function_exists( 'get_template_directory' ) ) {
+		function get_template_directory() {
+			return '/tmp/test-theme';
+		}
+	}
+	
+	if ( ! function_exists( 'sprintf' ) && ! function_exists( '_n' ) ) {
+		function _n( $single, $plural, $number, $domain = 'default' ) {
+			return $number === 1 ? $single : $plural;
 		}
 	}
 	
