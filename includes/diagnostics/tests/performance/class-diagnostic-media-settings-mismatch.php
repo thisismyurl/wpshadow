@@ -31,6 +31,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 
 	/**
+	 * Minimum dimension tolerance in pixels.
+	 *
+	 * When comparing actual vs expected dimensions, we allow at least this many
+	 * pixels of difference to account for rounding in image processing.
+	 *
+	 * @var int
+	 */
+	const MIN_DIMENSION_TOLERANCE = 10;
+
+	/**
+	 * Percentage tolerance for dimension matching.
+	 *
+	 * Allows 10% variance from expected dimensions to accommodate aspect ratio
+	 * preservation during thumbnail generation.
+	 *
+	 * @var float
+	 */
+	const DIMENSION_TOLERANCE_PERCENT = 0.1;
+
+	/**
 	 * The diagnostic slug
 	 *
 	 * @var string
@@ -169,7 +189,6 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 				),
 			);
 
-			// No significant issues found.
 			set_transient( 'wpshadow_media_settings_check', $result, HOUR_IN_SECONDS );
 			return $result;
 		}
@@ -258,8 +277,8 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 			return true;
 		}
 
-		// Allow 10% tolerance for aspect ratio preservation.
-		$tolerance  = max( 10, $expected * 0.1 );
+		// Calculate tolerance: minimum of MIN_DIMENSION_TOLERANCE pixels or 10% of expected.
+		$tolerance  = max( self::MIN_DIMENSION_TOLERANCE, $expected * self::DIMENSION_TOLERANCE_PERCENT );
 		$difference = abs( $actual - $expected );
 
 		return $difference <= $tolerance;
