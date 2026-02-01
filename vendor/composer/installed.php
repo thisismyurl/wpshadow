@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'wpshadow/plugin-wpshadow',
-        'pretty_version' => 'dev-copilot/implement-gdpr-data-retention-diagnostic',
-        'version' => 'dev-copilot/implement-gdpr-data-retention-diagnostic',
-        'reference' => '77acef7c981bbcbf4a4b4bda29dea7ae152d17c4',
+        'pretty_version' => 'dev-copilot/add-functional-diagnostic-tests',
+        'version' => 'dev-copilot/add-functional-diagnostic-tests',
+        'reference' => '2d0c145573052f33dcaf904841600d5c4ed9abe9',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -308,9 +308,9 @@
             'dev_requirement' => true,
         ),
         'wpshadow/plugin-wpshadow' => array(
-            'pretty_version' => 'dev-copilot/implement-gdpr-data-retention-diagnostic',
-            'version' => 'dev-copilot/implement-gdpr-data-retention-diagnostic',
-            'reference' => '77acef7c981bbcbf4a4b4bda29dea7ae152d17c4',
+            'pretty_version' => 'dev-copilot/add-functional-diagnostic-tests',
+            'version' => 'dev-copilot/add-functional-diagnostic-tests',
+            'reference' => '2d0c145573052f33dcaf904841600d5c4ed9abe9',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

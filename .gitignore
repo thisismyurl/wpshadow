@@ -83,3 +83,4 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+vendor/composer/installed.php
