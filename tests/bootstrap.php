@@ -222,15 +222,21 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	// Create test helper functions
 	if ( ! function_exists( 'get_option' ) ) {
 		function get_option( $option, $default = false ) {
-			static $options = array();
-			return $options[ $option ] ?? $default;
+			global $wp_options_mock;
+			if ( ! isset( $wp_options_mock ) ) {
+				$wp_options_mock = array();
+			}
+			return $wp_options_mock[ $option ] ?? $default;
 		}
 	}
 	
 	if ( ! function_exists( 'update_option' ) ) {
 		function update_option( $option, $value ) {
-			static $options = array();
-			$options[ $option ] = $value;
+			global $wp_options_mock;
+			if ( ! isset( $wp_options_mock ) ) {
+				$wp_options_mock = array();
+			}
+			$wp_options_mock[ $option ] = $value;
 			return true;
 		}
 	}
