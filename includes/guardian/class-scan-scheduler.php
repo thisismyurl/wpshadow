@@ -59,8 +59,8 @@ class Scan_Scheduler {
 		add_action( self::$cron_hook, array( __CLASS__, 'execute_scheduled_scan' ) );
 
 		// Setup/clear cron on activation/deactivation
-		register_activation_hook( WPSHADOW_FILE, array( __CLASS__, 'schedule_cron' ) );
-		register_deactivation_hook( WPSHADOW_FILE, array( __CLASS__, 'unschedule_cron' ) );
+		register_activation_hook( \WPSHADOW_FILE, array( __CLASS__, 'schedule_cron' ) );
+		register_deactivation_hook( \WPSHADOW_FILE, array( __CLASS__, 'unschedule_cron' ) );
 
 		// Check cron status
 		add_action( 'admin_notices', array( __CLASS__, 'check_cron_health' ) );
