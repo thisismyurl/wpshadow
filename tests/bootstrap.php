@@ -45,6 +45,18 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	}
 	
 	// Define WordPress mock functions BEFORE loading plugin
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $function ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $function ) {
+			return true;
+		}
+	}
+	
 	if ( ! function_exists( 'add_action' ) ) {
 		function add_action( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
 			// Mock implementation for testing
