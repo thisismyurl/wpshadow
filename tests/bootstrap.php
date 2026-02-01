@@ -170,21 +170,57 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $callback ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'wp_schedule_event' ) ) {
+		function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array() ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'wp_next_scheduled' ) ) {
+		function wp_next_scheduled( $hook, $args = array() ) {
+			return false;
+		}
+	}
+	
+	if ( ! function_exists( 'wp_clear_scheduled_hook' ) ) {
+		function wp_clear_scheduled_hook( $hook, $args = array() ) {
+			return true;
+		}
+	}
+	
 	// Load WPShadow plugin
 	require_once WPSHADOW_PLUGIN_DIR . '/wpshadow.php';
 	
 	// Create test helper functions
 	if ( ! function_exists( 'get_option' ) ) {
 		function get_option( $option, $default = false ) {
-			static $options = array();
-			return $options[ $option ] ?? $default;
+			global $wp_options_mock;
+			if ( ! isset( $wp_options_mock ) ) {
+				$wp_options_mock = array();
+			}
+			return $wp_options_mock[ $option ] ?? $default;
 		}
 	}
 	
 	if ( ! function_exists( 'update_option' ) ) {
 		function update_option( $option, $value ) {
-			static $options = array();
-			$options[ $option ] = $value;
+			global $wp_options_mock;
+			if ( ! isset( $wp_options_mock ) ) {
+				$wp_options_mock = array();
+			}
+			$wp_options_mock[ $option ] = $value;
 			return true;
 		}
 	}
