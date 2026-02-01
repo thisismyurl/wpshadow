@@ -215,8 +215,8 @@ class Leaderboard {
 		\WPShadow\Core\Cache_Manager::set(
 			$cache_key,
 			$leaderboard,
-			'wpshadow_leaderboard',
-			HOUR_IN_SECONDS
+			HOUR_IN_SECONDS,
+			'wpshadow_leaderboard'
 		);
 
 		return $leaderboard;

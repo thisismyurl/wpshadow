@@ -50,9 +50,9 @@ class Domain_Expiration_Analyzer {
 			\WPShadow\Core\Cache_Manager::set(
 				'domain_expiry_data',
 				$results,
-				'wpshadow_guardian',
-				WEEK_IN_SECONDS
-			);
+				WEEK_IN_SECONDS,
+				'wpshadow_guardian'
+				);
 			return $results;
 		}
 
@@ -74,9 +74,9 @@ class Domain_Expiration_Analyzer {
 		\\WPShadow\\Core\\Cache_Manager::set(
 			'domain_expiry_data',
 			$results,
-			'wpshadow_guardian',
-			WEEK_IN_SECONDS
-		);
+			WEEK_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $results;
 	}

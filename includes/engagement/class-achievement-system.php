@@ -39,8 +39,8 @@ class Achievement_System {
 		\WPShadow\Core\Cache_Manager::set(
 			'achievements_cached',
 			$achievements,
-			'wpshadow_engagement',
-			WEEK_IN_SECONDS
+			WEEK_IN_SECONDS,
+			'wpshadow_engagement'
 		);
 
 		return $achievements;

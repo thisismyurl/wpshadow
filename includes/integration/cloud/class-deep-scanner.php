@@ -90,7 +90,7 @@ class Deep_Scanner {
 		KPI_Tracker::record_action( 'cloud_scan_initiated', 1 );
 
 		// Set transient to track scan status
-		\WPShadow\Core\Cache_Manager::set( 'scan_status_{$scan_id}', 'processing', 'wpshadow_cloud', 3600  );
+		\WPShadow\Core\Cache_Manager::set( 'scan_status_{$scan_id}', 'processing', 3600  , 'wpshadow_cloud');
 
 		return array(
 			'success' => true,
@@ -277,7 +277,7 @@ class Deep_Scanner {
 		}
 
 		// Cache for 6 hours
-		\WPShadow\Core\Cache_Manager::set( 'scan_history_{$period}', $response, 'wpshadow_cloud', 21600  );
+		\WPShadow\Core\Cache_Manager::set( 'scan_history_{$period}', $response, 21600  , 'wpshadow_cloud');
 
 		return $response;
 	}

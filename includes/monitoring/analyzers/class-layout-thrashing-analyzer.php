@@ -96,8 +96,8 @@ class Layout_Thrashing_Analyzer {
 		}
 
 		// Set cache
-		\WPShadow\Core\Cache_Manager::set( 'layout_thrash_count', $results['thrash_patterns'], 'wpshadow_monitoring', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'layout_thrash_analysis', $results, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'layout_thrash_count', $results['thrash_patterns'], DAY_IN_SECONDS , 'wpshadow_monitoring');
+		\WPShadow\Core\Cache_Manager::set( 'layout_thrash_analysis', $results, DAY_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

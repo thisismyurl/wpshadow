@@ -104,7 +104,7 @@ class Shortcode_Execution_Analyzer {
 			$stored = array_slice( $stored, -1000 );
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_data', $stored, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_data', $stored, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**
@@ -124,7 +124,7 @@ class Shortcode_Execution_Analyzer {
 		);
 
 		if ( ! is_array( $data ) || empty( $data ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_time', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -179,7 +179,7 @@ class Shortcode_Execution_Analyzer {
 		$results['avg_time_ms'] = (int) ( $total_time / count( $data ) );
 
 		// Set cache for diagnostic
-		\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_time', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'shortcode_execution_time', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

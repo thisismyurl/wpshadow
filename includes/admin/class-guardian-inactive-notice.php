@@ -182,8 +182,8 @@ class Guardian_Inactive_Notice {
 		\WPShadow\Core\Cache_Manager::set(
 			'guardian_first_activation',
 			true,
-			'wpshadow_notices',
-			3600
+			3600,
+			'wpshadow_notices'
 		);
 		$success = \WPShadow\Guardian\Guardian_Manager::update_settings(
 			array(

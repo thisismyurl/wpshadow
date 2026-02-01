@@ -134,8 +134,8 @@ class Hooks_Initializer {
 		\WPShadow\Core\Cache_Manager::set(
 			'redirect_to_dashboard',
 			true,
-			'wpshadow_hooks',
-			30
+			30,
+			'wpshadow_hooks'
 		);
 	}
 

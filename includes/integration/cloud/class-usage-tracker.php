@@ -58,7 +58,7 @@ class Usage_Tracker {
 		}
 
 		// Cache for 5 minutes
-		\WPShadow\Core\Cache_Manager::set( 'usage_stats', $response, 'wpshadow_cloud', 300  );
+		\WPShadow\Core\Cache_Manager::set( 'usage_stats', $response, 300  , 'wpshadow_cloud');
 
 		// Also store as option for offline access
 		update_option( 'wpshadow_usage_stats_cached', $response );
