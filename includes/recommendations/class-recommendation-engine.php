@@ -248,6 +248,12 @@ class Recommendation_Engine {
 	 * @return void
 	 */
 	public static function show_recommendations() {
+		// Check if another notice has already been shown (only one at a time)
+		$shown_notice = get_transient( 'wpshadow_active_notice_' . get_current_user_id() );
+		if ( ! empty( $shown_notice ) ) {
+			return;
+		}
+
 		// Only show on WPShadow pages or dashboard
 		$screen = get_current_screen();
 		if ( ! $screen ) {
@@ -269,6 +275,9 @@ class Recommendation_Engine {
 		}
 
 		$rec = $recommendations[0];
+
+		// Mark this notice as active (blocks other notices)
+		set_transient( 'wpshadow_active_notice_' . get_current_user_id(), 'recommendation_' . $rec['id'], HOUR_IN_SECONDS );
 
 		// Determine notice class based on priority
 		$notice_class = 'notice-info';
@@ -343,6 +352,9 @@ class Recommendation_Engine {
 			30 * DAY_IN_SECONDS,
 			'wpshadow_recommendations'
 			);
+
+		// Clear the active notice transient so other notices can show
+		delete_transient( 'wpshadow_active_notice_' . get_current_user_id() );
 
 		// Log dismissal
 		Activity_Logger::log(

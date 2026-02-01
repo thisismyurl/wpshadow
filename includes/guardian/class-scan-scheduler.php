@@ -502,11 +502,11 @@ class Scan_Scheduler {
 		// Check if WP_DISABLE_CRON is true
 		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
 			?>
-			<div class="notice notice-warning">
+			<div class="notice notice-info">
 				<p>
 					<?php
 					printf(
-						wp_kses_post( __( '<strong>WPShadow:</strong> WordPress cron is disabled. Scheduled scans will not run automatically. <a href="%s">Learn how to enable WP-Cron</a>', 'wpshadow' ) ),
+						wp_kses_post( __( '<strong>WPShadow:</strong> WordPress cron is disabled. Scans will run via the WordPress Heartbeat API instead (triggered by user activity). For unattended scans, <a href="%s">learn how to enable WP-Cron or use a system cron job</a>.', 'wpshadow' ) ),
 						esc_url( 'https://wpshadow.com/kb/wordpress-cron-disabled' )
 					);
 					?>

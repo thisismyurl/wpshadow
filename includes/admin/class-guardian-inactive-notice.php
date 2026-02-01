@@ -42,6 +42,12 @@ class Guardian_Inactive_Notice {
 	 * @since 1.2601.2148
 	 */
 	public static function display_notice(): void {
+		// Check if another notice has already been shown (only one at a time)
+		$shown_notice = get_transient( 'wpshadow_active_notice_' . get_current_user_id() );
+		if ( ! empty( $shown_notice ) ) {
+			return;
+		}
+
 		// Only show on WPShadow pages
 		if ( ! isset( $_GET['page'] ) || strpos( (string) $_GET['page'], 'wpshadow' ) === false ) {
 			return;
@@ -67,6 +73,9 @@ class Guardian_Inactive_Notice {
 		if ( ! empty( $dismissed ) ) {
 			return;
 		}
+
+		// Mark this notice as active (blocks other notices)
+		set_transient( 'wpshadow_active_notice_' . get_current_user_id(), 'guardian', HOUR_IN_SECONDS );
 
 		// Display the notice
 		?>
@@ -155,6 +164,9 @@ class Guardian_Inactive_Notice {
 		}
 
 		update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
+
+		// Clear the active notice transient so other notices can show
+		delete_transient( 'wpshadow_active_notice_' . get_current_user_id() );
 
 		wp_send_json_success( array( 'message' => __( 'Notice dismissed', 'wpshadow' ) ) );
 	}
