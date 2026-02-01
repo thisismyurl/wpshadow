@@ -71,9 +71,9 @@ class Workflow_Discovery_Hooks {
 			\WPShadow\Core\Cache_Manager::set(
 				'discovery_last_check',
 				time(),
-				'wpshadow_workflow',
-				HOUR_IN_SECONDS
-			);
+				HOUR_IN_SECONDS,
+				'wpshadow_workflow'
+				);
 		}
 	}
 

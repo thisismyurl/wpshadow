@@ -53,6 +53,8 @@ class Plugin_Bootstrap {
 		// 7. Load performance optimizer
 		self::load_performance_optimizer();
 
+		// 7.5. Load notifications system (email alerts)
+		self::load_notifications_system();
 		// 8. Load onboarding system
 		self::load_onboarding_system();
 
@@ -160,6 +162,14 @@ class Plugin_Bootstrap {
 			require_once $core_path . 'class-treatment-hooks.php';
 		}
 
+		// Load rollback/undo system for treatments
+		$rollback_path = WPSHADOW_PATH . 'includes/treatments/class-rollback-manager.php';
+		if ( file_exists( $rollback_path ) ) {
+			require_once $rollback_path;
+			if ( class_exists( '\\WPShadow\\Treatments\\Rollback_Manager' ) ) {
+				\WPShadow\Treatments\Rollback_Manager::init();
+			}
+		}
 		if ( file_exists( $core_path . 'class-trend-chart.php' ) ) {
 			require_once $core_path . 'class-trend-chart.php';
 		}
@@ -174,6 +184,22 @@ class Plugin_Bootstrap {
 
 		if ( file_exists( $core_path . 'class-visual-comparator.php' ) ) {
 			require_once $core_path . 'class-visual-comparator.php';
+		}
+	}
+
+	/**
+	 * Load dashboard page
+	 *
+	 * @return void
+	 */
+	private static function load_notifications_system() {
+		// Initialize email notifications system
+		$notifications_path = WPSHADOW_PATH . 'includes/notifications/class-email-notifier.php';
+		if ( file_exists( $notifications_path ) ) {
+			require_once $notifications_path;
+			if ( class_exists( '\\WPShadow\\Notifications\\Email_Notifier' ) ) {
+				\WPShadow\Notifications\Email_Notifier::init();
+			}
 		}
 	}
 
@@ -302,6 +328,14 @@ class Plugin_Bootstrap {
 		// PHASE 3 OPTIMIZATION: Initialize dashboard cache system
 		if ( class_exists( '\\WPShadow\\Core\\Dashboard_Cache' ) ) {
 			\WPShadow\Core\Dashboard_Cache::init();
+				// Initialize scheduled scans system
+				$scan_scheduler_path = WPSHADOW_PATH . 'includes/guardian/class-scan-scheduler.php';
+				if ( file_exists( $scan_scheduler_path ) ) {
+					require_once $scan_scheduler_path;
+					if ( class_exists( '\\WPShadow\\Guardian\\Scan_Scheduler' ) ) {
+						\WPShadow\Guardian\Scan_Scheduler::init();
+					}
+				}
 		}
 	}
 

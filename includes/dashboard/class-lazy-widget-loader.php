@@ -203,7 +203,7 @@ class Lazy_Widget_Loader {
 	 * @return void
 	 */
 	public static function cache_widget( string $widget_id, string $html, int $ttl = HOUR_IN_SECONDS ): void {
-		Cache_Manager::set( 'widget_' . $widget_id, $html, 'wpshadow_widgets', $ttl );
+		Cache_Manager::set( 'widget_' . $widget_id, $html, $ttl, 'wpshadow_widgets' );
 	}
 
 	/**

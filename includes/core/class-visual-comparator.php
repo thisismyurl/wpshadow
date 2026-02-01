@@ -118,9 +118,9 @@ class Visual_Comparator {
 					'url'   => $page_url,
 					'class' => $class,
 				),
-				'wpshadow_visual',
-				HOUR_IN_SECONDS
-			);
+				HOUR_IN_SECONDS,
+				'wpshadow_visual'
+				);
 		}
 	}
 

@@ -150,7 +150,7 @@ class Cache_Invalidation_Analyzer {
 			}
 		);
 
-		\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_events', $events, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_events', $events, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**
@@ -170,7 +170,7 @@ class Cache_Invalidation_Analyzer {
 		);
 
 		if ( ! is_array( $events ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_frequency', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_frequency', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -197,7 +197,7 @@ class Cache_Invalidation_Analyzer {
 		}
 
 		// Set cache for diagnostic
-		\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_frequency', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'cache_invalidation_frequency', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

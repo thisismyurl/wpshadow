@@ -86,8 +86,8 @@ class Onboarding_Wizard {
 		\WPShadow\Core\Cache_Manager::set(
 			'onboarding_shown_' . $user_id,
 			true,
-			'wpshadow_onboarding',
-			HOUR_IN_SECONDS
+			HOUR_IN_SECONDS,
+			'wpshadow_onboarding'
 		);
 
 		// Don't redirect during AJAX or REST requests

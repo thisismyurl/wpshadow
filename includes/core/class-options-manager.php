@@ -81,9 +81,9 @@ class Options_Manager {
 			\WPShadow\Core\Cache_Manager::set(
 				$transient_name,
 				$value,
-				'wpshadow_options',
-				$transient_ttl
-			);
+				$transient_ttl,
+				'wpshadow_options'
+				);
 		}
 
 		return $result;

@@ -340,9 +340,9 @@ class Recommendation_Engine {
 		\WPShadow\Core\Cache_Manager::set(
 			'dismissed_' . $id . '_' . get_current_user_id(),
 			true,
-			'wpshadow_recommendations',
-			30 * DAY_IN_SECONDS
-		);
+			30 * DAY_IN_SECONDS,
+			'wpshadow_recommendations'
+			);
 
 		// Log dismissal
 		Activity_Logger::log(

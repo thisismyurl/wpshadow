@@ -88,8 +88,8 @@ class First_Activation_Welcome {
 			\WPShadow\Core\Cache_Manager::set(
 				'first_activation_' . $user_id,
 				true,
-				'wpshadow_activation',
-				HOUR_IN_SECONDS
+				HOUR_IN_SECONDS,
+				'wpshadow_activation'
 			);
 		}
 	}

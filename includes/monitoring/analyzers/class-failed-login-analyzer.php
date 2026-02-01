@@ -50,9 +50,9 @@ class Failed_Login_Analyzer {
 		++$failed_30min;
 
 		// Update transients
-		\WPShadow\Core\Cache_Manager::set( 'failed_logins_24h', $failed_24h, 'wpshadow_monitoring', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'failed_logins_count', $failed_1h, 'wpshadow_monitoring', HOUR_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'recent_login_failures', $failed_30min, 'wpshadow_monitoring', 30 * MINUTE_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'failed_logins_24h', $failed_24h, DAY_IN_SECONDS , 'wpshadow_monitoring');
+		\WPShadow\Core\Cache_Manager::set( 'failed_logins_count', $failed_1h, HOUR_IN_SECONDS , 'wpshadow_monitoring');
+		\WPShadow\Core\Cache_Manager::set( 'recent_login_failures', $failed_30min, 30 * MINUTE_IN_SECONDS , 'wpshadow_monitoring');
 
 		// Store detailed log entry
 		$log = \WPShadow\Core\Cache_Manager::get( 'failed_login_log', 'wpshadow_monitoring' );
@@ -72,7 +72,7 @@ class Failed_Login_Analyzer {
 			$log = array_slice( $log, -100 );
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'failed_login_log', $log, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'failed_login_log', $log, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**
@@ -86,7 +86,7 @@ class Failed_Login_Analyzer {
 		// Increment successful login counter
 		$successful_24h = (int) \WPShadow\Core\Cache_Manager::get( 'successful_logins_24h', 'wpshadow_monitoring' );
 		++$successful_24h;
-		\WPShadow\Core\Cache_Manager::set( 'successful_logins_24h', $successful_24h, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'successful_logins_24h', $successful_24h, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**

@@ -100,9 +100,9 @@ class Editor_Performance_Analyzer {
 		\WPShadow\Core\Cache_Manager::set(
 			'editor_load_times',
 			$loads,
-			'wpshadow_guardian',
-			WEEK_IN_SECONDS
-		);
+			WEEK_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 	}
 
 	/**
@@ -155,9 +155,9 @@ class Editor_Performance_Analyzer {
 		\WPShadow\Core\Cache_Manager::set(
 			'editor_performance',
 			$results,
-			'wpshadow_guardian',
-			HOUR_IN_SECONDS
-		);
+			HOUR_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $results;
 	}
