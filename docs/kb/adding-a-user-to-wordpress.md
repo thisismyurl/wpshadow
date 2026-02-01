@@ -38,7 +38,7 @@ Before adding users, understand WordPress user roles:
 ### Step 1: Navigate to Users
 1. Log in to your WordPress dashboard
 2. Click on **Users** in the left sidebar
-3. Click the **Add New** button
+3. Click the **Add User** button
 
 ### Step 2: Enter User Information
 Fill in the following fields:
