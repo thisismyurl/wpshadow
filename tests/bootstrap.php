@@ -73,6 +73,20 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $callback ) {
+			// Mock implementation for testing
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
+			// Mock implementation for testing
+			return true;
+		}
+	}
+	
 	if ( ! function_exists( 'register_setting' ) ) {
 		function register_setting( $option_group, $option_name, $args = array() ) {
 			return true;
@@ -173,18 +187,21 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	// Load WPShadow plugin
 	require_once WPSHADOW_PLUGIN_DIR . '/wpshadow.php';
 	
-	// Create test helper functions
+	// Create test helper functions with shared state
+	global $test_options;
+	$test_options = array();
+	
 	if ( ! function_exists( 'get_option' ) ) {
 		function get_option( $option, $default = false ) {
-			static $options = array();
-			return $options[ $option ] ?? $default;
+			global $test_options;
+			return $test_options[ $option ] ?? $default;
 		}
 	}
 	
 	if ( ! function_exists( 'update_option' ) ) {
 		function update_option( $option, $value ) {
-			static $options = array();
-			$options[ $option ] = $value;
+			global $test_options;
+			$test_options[ $option ] = $value;
 			return true;
 		}
 	}
