@@ -86,18 +86,18 @@ $kanban_cards = array(
 	<p><strong><?php esc_html_e( 'Enable caching to speed up your site.', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Use the switch below to turn on the page cache and choose what gets cached.', 'wpshadow' ); ?></p>
 </div>
 
-	<div class="notice notice-success" style="margin-top:10px;">
-		<p><strong><?php esc_html_e( 'Free Offsite Storage for Registered Users', 'wpshadow' ); ?></strong></p>
-		<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three WPShadow Vault Light snapshots and free restores whenever you need them.', 'wpshadow' ); ?> <a href="https://wpshadow.com/features/offsite-backup/" target="_blank"><?php esc_html_e( 'Learn more', 'wpshadow' ); ?></a></p>
-	</div>
+<div class="notice notice-success" style="margin-top:10px;">
+	<p><strong><?php esc_html_e( 'Free Offsite Storage for Registered Users', 'wpshadow' ); ?></strong></p>
+	<p><?php esc_html_e( 'When you register for WPShadow (free!), you get secure offsite storage for your last three WPShadow Vault Light snapshots and free restores whenever you need them.', 'wpshadow' ); ?> <a href="https://wpshadow.com/features/offsite-backup/" target="_blank"><?php esc_html_e( 'Learn more', 'wpshadow' ); ?></a></p>
+</div>
 
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Cache Status', 'wpshadow' ); ?></h3>
-		<table class="widefat">
-			<tr>
-				<td><strong><?php esc_html_e( 'Cache Enabled', 'wpshadow' ); ?></strong></td>
-				<td><?php echo $cache_enabled ? '<span style="color: green;">✓ ' . esc_html__( 'Yes', 'wpshadow' ) . '</span>' : '<span style="color: red;">✗ ' . esc_html__( 'No', 'wpshadow' ) . '</span>'; ?></td>
-			</tr>
+<div class="wpshadow-tool-section">
+	<h3><?php esc_html_e( 'Cache Status', 'wpshadow' ); ?></h3>
+	<table class="widefat">
+		<tr>
+			<td><strong><?php esc_html_e( 'Cache Enabled', 'wpshadow' ); ?></strong></td>
+			<td><?php echo $cache_enabled ? '<span style="color: green;">✓ ' . esc_html__( 'Yes', 'wpshadow' ) . '</span>' : '<span style="color: red;">✗ ' . esc_html__( 'No', 'wpshadow' ) . '</span>'; ?></td>
+		</tr>
 			<tr>
 				<td><strong><?php esc_html_e( 'Cache Size', 'wpshadow' ); ?></strong></td>
 				<td><?php echo esc_html( size_format( $cache_size, 2 ) ); ?></td>
@@ -229,7 +229,7 @@ $kanban_cards = array(
 		<?php else : ?>
 			<p class="description"><?php esc_html_e( 'No cache activity yet. Changes you make here will appear in this timeline.', 'wpshadow' ); ?></p>
 		<?php endif; ?>
-	</div>
+
 </div>
 
 <script>

@@ -26,7 +26,10 @@ Tool_View_Base::verify_access( 'manage_options' );
 Tool_View_Base::enqueue_assets( 'timezone-alignment' );
 
 // Render header
-Tool_View_Base::render_header( __( 'Timezone Alignment', 'wpshadow' ) );
+Tool_View_Base::render_header(
+	__( 'Timezone Alignment', 'wpshadow' ),
+	__( 'Automatically detect and align your timezone with WordPress. Ensures all timestamps reflect your actual location, not the server\'s timezone.', 'wpshadow' )
+);
 
 use WPShadow\Core\Timezone_Manager;
 
@@ -39,25 +42,18 @@ $suggestion   = Timezone_Manager::get_timezone_suggestion();
 $us_timezones = Timezone_Manager::get_us_timezones();
 ?>
 
-<div class="wpshadow-tool-container timezone-alignment-tool">
-		<h2><?php esc_html_e( 'Timezone Alignment', 'wpshadow' ); ?></h2>
-		<p class="description">
-			<?php esc_html_e( 'Automatically detect and align your timezone with WordPress. Ensures all timestamps reflect your actual location, not the server\'s timezone.', 'wpshadow' ); ?>
-		</p>
-	</div>
-
-	<div class="tool-content">
-		<?php if ( $suggestion['needs_adjustment'] ) : ?>
-			<div class="notice notice-warning inline">
-				<p>
-					<strong><?php esc_html_e( 'Timezone Mismatch Detected', 'wpshadow' ); ?></strong><br>
-					<?php echo esc_html( $suggestion['message'] ); ?>
-				</p>
+<div class="timezone-alignment-tool">
+	<?php if ( $suggestion['needs_adjustment'] ) : ?>
+		<div class="notice notice-warning inline">
+			<p>
+				<strong><?php esc_html_e( 'Timezone Mismatch Detected', 'wpshadow' ); ?></strong><br>
+				<?php echo esc_html( $suggestion['message'] ); ?>
+			</p>
 			</div>
-		<?php endif; ?>
+	<?php endif; ?>
 
-		<!-- Current Status Section -->
-		<div class="status-section">
+	<!-- Current Status Section -->
+	<div class="status-section">
 			<h3><?php esc_html_e( 'Current Status', 'wpshadow' ); ?></h3>
 			<table class="widefat striped">
 				<tbody>
@@ -134,8 +130,6 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 				<li><?php esc_html_e( 'Diagnostic timestamps match your time', 'wpshadow' ); ?></li>
 			</ul>
 		</div>
-	</div>
-</div>
 
 <style>
 	.timezone-alignment-tool {
