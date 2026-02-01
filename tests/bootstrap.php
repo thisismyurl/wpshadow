@@ -240,6 +240,13 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
+			// Mock implementation for testing
+			return true;
+		}
+	}
+	
 	if ( ! function_exists( 'wp_parse_args' ) ) {
 		function wp_parse_args( $args, $defaults = array() ) {
 			if ( is_object( $args ) ) {

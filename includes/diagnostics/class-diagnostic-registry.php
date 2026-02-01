@@ -143,7 +143,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 					continue;
 				}
 
-				$family = self::get_family_from_path( $file_info->getPathname() );
+				$family             = self::get_family_from_path( $file_info->getPathname() );
 				$map[ $class_name ] = array(
 					'file'   => $file_info->getPathname(),
 					'family' => $family,
@@ -444,6 +444,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @return void
 	 */
 	public static function handle_plugin_update( $upgrader, $options ): void {
+		if ( isset( $options['action'], $options['type'] ) && 'update' === $options['action'] && 'plugin' === $options['type'] ) {
 		if ( 'update' === $options['action'] && 'plugin' === $options['type'] ) {
 			self::clear_cache();
 		}
