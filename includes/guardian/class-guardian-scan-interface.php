@@ -501,7 +501,7 @@ class Guardian_Scan_Interface extends AJAX_Handler_Base {
 			<h2><?php esc_html_e( 'Account Information', 'wpshadow' ); ?></h2>
 
 			<?php if ( is_wp_error( $account ) ) : ?>
-				<div class="notice notice-error">
+				<div class="notice notice-error is-dismissible">
 					<p><?php echo esc_html( $account->get_error_message() ); ?></p>
 				</div>
 			<?php else : ?>

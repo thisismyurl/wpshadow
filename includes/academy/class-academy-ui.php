@@ -176,26 +176,24 @@ class Academy_UI extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function render_academy_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'Insufficient permissions.' );
+		}
+
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 
 		// If a specific tab is requested, render that content
 		if ( ! empty( $tab ) ) {
 			?>
 			<div class="wps-page-container">
-				<div class="wps-page-header">
-					<h1 class="wps-page-title">
-						<span class="dashicons dashicons-welcome-learn-more"></span>
-						<?php
-						echo esc_html(
-							sprintf(
-								/* translators: %s: tab name */
-								__( '%s', 'wpshadow' ),
-								ucwords( str_replace( array( '_', '-' ), ' ', $tab ) )
-							)
-						);
-						?>
-					</h1>
-					<p class="wps-page-subtitle">
+				<?php wpshadow_render_page_header(
+					ucwords( str_replace( array( '_', '-' ), ' ', $tab ) ),
+					'',
+					'dashicons-welcome-learn-more'
+				); ?>
+
+				<div style="margin-top: -10px;">
+					<p>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy' ) ); ?>">&larr; <?php esc_html_e( 'Back to Academy', 'wpshadow' ); ?></a>
 					</p>
 				</div>
@@ -234,17 +232,11 @@ class Academy_UI extends AJAX_Handler_Base {
 		// Show academy overview grid
 		?>
 		<div class="wps-page-container">
-			<!-- Page Header -->
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-welcome-learn-more"></span>
-					<?php esc_html_e( 'WPShadow Academy', 'wpshadow' ); ?>
-					<small style="font-size: 14px; color: #666; margin-left: 12px;">v<?php echo esc_html( WPSHADOW_VERSION ); ?></small>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Learn WordPress security, performance, privacy, and best practices.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php wpshadow_render_page_header(
+				__( 'WPShadow Academy', 'wpshadow' ),
+				__( 'Learn WordPress security, performance, privacy, and best practices.', 'wpshadow' ),
+				'dashicons-welcome-learn-more'
+			); ?>
 
 			<!-- Academy Grid -->
 			<div class="wps-grid wps-grid-auto-320">

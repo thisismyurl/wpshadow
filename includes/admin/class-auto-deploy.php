@@ -299,9 +299,9 @@ class Auto_Deploy {
 		if ( isset( $_POST['wpshadow_update_github_ips'] ) ) {
 			check_admin_referer( 'wpshadow_update_github_ips' );
 			if ( self::update_github_ips() ) {
-				echo '<div class="notice notice-success"><p>' . esc_html__( 'GitHub IP whitelist updated successfully!', 'wpshadow' ) . '</p></div>';
+				echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'GitHub IP whitelist updated successfully!', 'wpshadow' ) . '</p></div>';
 			} else {
-				echo '<div class="notice notice-error"><p>' . esc_html__( 'Failed to update GitHub IP whitelist. Check error logs.', 'wpshadow' ) . '</p></div>';
+				echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Failed to update GitHub IP whitelist. Check error logs.', 'wpshadow' ) . '</p></div>';
 			}
 		}
 
@@ -311,7 +311,7 @@ class Auto_Deploy {
 			// Use Secret_Manager to store encrypted secret
 			\WPShadow\Core\Secret_Manager::store( 'webhook_secret', $secret );
 			\WPShadow\Core\Secret_Audit_Log::log_access( 'webhook_secret', 'updated' );
-			echo '<div class="notice notice-success"><p>' . esc_html__( 'Settings saved!', 'wpshadow' ) . '</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved!', 'wpshadow' ) . '</p></div>';
 		}
 
 		// Retrieve encrypted secret (empty if not set)
@@ -325,7 +325,7 @@ class Auto_Deploy {
 			<h1><?php esc_html_e( 'Auto Deploy from GitHub', 'wpshadow' ); ?></h1>
 
 			<?php if ( ! $is_enabled ) : ?>
-				<div class="notice notice-warning">
+				<div class="notice notice-warning is-dismissible">
 					<p>
 						<strong><?php esc_html_e( 'Auto Deploy is currently DISABLED.', 'wpshadow' ); ?></strong><br>
 						<?php
@@ -340,7 +340,7 @@ class Auto_Deploy {
 					</p>
 				</div>
 			<?php else : ?>
-				<div class="notice notice-success">
+				<div class="notice notice-success is-dismissible">
 					<p><strong><?php esc_html_e( 'Auto Deploy is ENABLED', 'wpshadow' ); ?></strong></p>
 				</div>
 			<?php endif; ?>

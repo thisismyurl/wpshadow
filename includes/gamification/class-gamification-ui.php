@@ -123,13 +123,21 @@ class Gamification_UI {
 	 * @return void
 	 */
 	public static function render_achievements_page() {
+		if ( ! current_user_can( 'read' ) ) {
+			wp_die( 'Insufficient permissions.' );
+		}
+
 		$user_id = get_current_user_id();
 		$progress = Achievement_Registry::get_progress( $user_id );
 		$unlocked = Achievement_Registry::get_unlocked( $user_id );
 		$locked = Achievement_Registry::get_locked( $user_id );
 		?>
-		<div class="wrap wpshadow-gamification-page">
-			<h1><?php esc_html_e( 'Achievements', 'wpshadow' ); ?></h1>
+		<div class="wps-page-container">
+			<?php wpshadow_render_page_header(
+				__( 'Achievements', 'wpshadow' ),
+				__( 'Unlock achievements and earn points by maintaining your WordPress site.', 'wpshadow' ),
+				'dashicons-awards'
+			); ?>
 
 			<div class="wpshadow-achievements-stats">
 				<div class="stat-card">

@@ -56,7 +56,7 @@ class Scheduled_Scans_Settings {
 			<p><?php esc_html_e( 'Automatically scan your site on a schedule to detect issues without manual intervention.', 'wpshadow' ); ?></p>
 
 			<?php if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) : ?>
-				<div class="notice notice-warning inline">
+				<div class="notice notice-warning inline is-dismissible">
 					<p>
 						<?php 
 						printf(

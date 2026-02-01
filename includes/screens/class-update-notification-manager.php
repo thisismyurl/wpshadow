@@ -328,7 +328,7 @@ class Update_Notification_Manager {
 
 		if ( ! empty( $message ) ) {
 			printf(
-				'<div class="notice notice-success"><p>%s</p></div>',
+				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 				esc_html( $message )
 			);
 		}
@@ -354,7 +354,7 @@ class Update_Notification_Manager {
 		if ( self::is_snoozed() ) {
 			$updates_url = admin_url( 'update-core.php' );
 			printf(
-				'<div class="notice notice-info"><p>%s <a class="button button-secondary" href="%s">%s</a> <a class="button" href="%s">%s</a></p></div>',
+				'<div class="notice notice-info is-dismissible"><p>%s <a class="button button-secondary" href="%s">%s</a> <a class="button" href="%s">%s</a></p></div>',
 				esc_html__( 'Update notifications are snoozed. They will return when you open the Updates screen.', 'wpshadow' ),
 				esc_url( $updates_url ),
 				esc_html__( 'Open Updates', 'wpshadow' ),
@@ -370,7 +370,7 @@ class Update_Notification_Manager {
 		}
 
 		printf(
-			'<div class="notice notice-info"><p>%s <a class="button" href="%s">%s</a></p></div>',
+			'<div class="notice notice-info is-dismissible"><p>%s <a class="button" href="%s">%s</a></p></div>',
 			esc_html__( 'Want quiet time? Snooze update notifications until you intentionally check Updates.', 'wpshadow' ),
 			esc_url( wp_nonce_url( add_query_arg( array( 'wpshadow_action' => 'snooze_updates' ), $base_url ), 'wpshadow_snooze_updates' ) ),
 			esc_html__( 'Snooze updates', 'wpshadow' )
@@ -600,7 +600,7 @@ class Update_Notification_Manager {
 			add_action(
 				'admin_notices',
 				function () {
-					printf( '<div class="notice notice-success"><p>%s</p></div>', esc_html__( 'Update notifications restored after visiting the Updates screen.', 'wpshadow' ) );
+					printf( '<div class="notice notice-success is-dismissible"><p>%s</p></div>', esc_html__( 'Update notifications restored after visiting the Updates screen.', 'wpshadow' ) );
 				}
 			);
 		}
