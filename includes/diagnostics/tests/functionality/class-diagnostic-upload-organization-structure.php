@@ -224,7 +224,7 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 								// Check if it's a valid month folder (01-12).
 								if ( is_dir( $item_path . '/' . $month_item ) && ! preg_match( '/^(0[1-9]|1[0-2])$/', $month_item ) ) {
 									$issues[] = sprintf(
-										/* translators: %s: malformed folder path */
+										/* translators: 1: year folder, 2: month folder */
 										__( 'Malformed month folder found: %1$s/%2$s', 'wpshadow' ),
 										$item,
 										$month_item
@@ -327,7 +327,12 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 		}
 
 		// Consider organized if at least 80% of recent uploads follow pattern.
-		return ( $organized_count / count( $recent_attachments ) ) >= 0.8;
+		$total_attachments = count( $recent_attachments );
+		if ( $total_attachments > 0 ) {
+			return ( $organized_count / $total_attachments ) >= 0.8;
+		}
+
+		return true;
 	}
 
 	/**
