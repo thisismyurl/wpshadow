@@ -80,7 +80,7 @@ class Browser_Compatibility_Analyzer {
 			$browsers = array_slice( $browsers, -1000 );
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'browser_usage_data', $browsers, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'browser_usage_data', $browsers, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**
@@ -181,7 +181,7 @@ class Browser_Compatibility_Analyzer {
 			$errors = array_slice( $errors, -100 );
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'js_errors', $errors, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'js_errors', $errors, DAY_IN_SECONDS , 'wpshadow_monitoring');
 
 		return new \WP_REST_Response( array( 'status' => 'recorded' ), 204 );
 	}
@@ -238,7 +238,7 @@ class Browser_Compatibility_Analyzer {
 		}
 
 		// Set cache for diagnostic
-		\WPShadow\Core\Cache_Manager::set( 'browser_issues', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'browser_issues', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

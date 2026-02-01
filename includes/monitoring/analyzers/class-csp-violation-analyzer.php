@@ -106,8 +106,8 @@ class CSP_Violation_Analyzer {
 		}
 
 		// Set cache
-		\WPShadow\Core\Cache_Manager::set( 'csp_violation_count', $violations['count'], 'wpshadow_monitoring', WEEK_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'csp_violations', $violations, 'wpshadow_monitoring', WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'csp_violation_count', $violations['count'], WEEK_IN_SECONDS , 'wpshadow_monitoring');
+		\WPShadow\Core\Cache_Manager::set( 'csp_violations', $violations, WEEK_IN_SECONDS , 'wpshadow_monitoring');
 
 		return new \WP_REST_Response( array( 'status' => 'recorded' ), 204 );
 	}

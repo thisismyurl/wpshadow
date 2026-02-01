@@ -89,8 +89,8 @@ class Icon_Analyzer {
 		$results['recommended_strategy'] = self::recommend_strategy( $results );
 
 		// Set cache for diagnostic consumption
-		\WPShadow\Core\Cache_Manager::set( 'icon_format_used', $format_used, 'wpshadow_guardian', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'icon_analysis_details', $results, 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'icon_format_used', $format_used, DAY_IN_SECONDS , 'wpshadow_guardian');
+		\WPShadow\Core\Cache_Manager::set( 'icon_analysis_details', $results, DAY_IN_SECONDS , 'wpshadow_guardian');
 
 		return $results;
 	}

@@ -63,8 +63,8 @@ class Post_Fix_Education {
 		\WPShadow\Core\Cache_Manager::set(
 			'education_' . get_current_user_id(),
 			$education,
-			'wpshadow_education',
-			300 // 5 minutes
+			300, // 5 minutes
+			'wpshadow_education'
 		);
 	}
 

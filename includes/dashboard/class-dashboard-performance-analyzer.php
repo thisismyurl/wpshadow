@@ -95,14 +95,14 @@ class Dashboard_Performance_Analyzer {
 		\WPShadow\Core\Cache_Manager::set(
 			'dashboard_load_ms',
 			$avg_load_ms,
-			'wpshadow_dashboard',
-			WEEK_IN_SECONDS
+			WEEK_IN_SECONDS,
+			'wpshadow_dashboard'
 		);
 		\WPShadow\Core\Cache_Manager::set(
 			'dashboard_metrics',
 			$metrics,
-			'wpshadow_dashboard',
-			WEEK_IN_SECONDS
+			WEEK_IN_SECONDS,
+			'wpshadow_dashboard'
 		);
 	}
 
@@ -126,8 +126,8 @@ class Dashboard_Performance_Analyzer {
 		\WPShadow\Core\Cache_Manager::set(
 			'dashboard_widget_count',
 			$widget_count,
-			'wpshadow_dashboard',
-			DAY_IN_SECONDS
+			DAY_IN_SECONDS,
+			'wpshadow_dashboard'
 		);
 	}
 

@@ -1,4 +1,7 @@
 {
+  "image": "mcr.microsoft.com/devcontainers/universal",
+  "remoteUser": "vscode",
+  "containerUser": "vscode",
   "features": {
     "node": {
       "version": "lts"

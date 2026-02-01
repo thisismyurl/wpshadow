@@ -97,9 +97,9 @@ class Admin_Page_Scanner {
 		\WPShadow\Core\Cache_Manager::set(
 			'admin_page_capture',
 			$output,
-			'wpshadow_scanning',
-			300
-		);
+			300,
+			'wpshadow_scanning'
+			);
 
 		// Re-output the content so page renders normally
 		echo $output;

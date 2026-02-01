@@ -206,11 +206,11 @@ class Anomaly_Detector {
 
 		// If log grew by > 100KB in 5 minutes, anomaly
 		if ( $last_size > 0 && ( $current_size - $last_size ) > 102400 ) {
-			\WPShadow\Core\Cache_Manager::set( 'debug_log_size', $current_size, 'wpshadow_guardian', 300 );
+			\WPShadow\Core\Cache_Manager::set( 'debug_log_size', $current_size, 300 , 'wpshadow_guardian');
 			return true;
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'debug_log_size', $current_size, 'wpshadow_guardian', 300 );
+		\WPShadow\Core\Cache_Manager::set( 'debug_log_size', $current_size, 300 , 'wpshadow_guardian');
 		return false;
 	}
 

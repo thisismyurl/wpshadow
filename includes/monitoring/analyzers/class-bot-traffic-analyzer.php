@@ -118,7 +118,7 @@ class Bot_Traffic_Analyzer {
 			$requests = array_slice( $requests, -2000 );
 		}
 
-		\WPShadow\Core\Cache_Manager::set( 'bot_traffic_data', $requests, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'bot_traffic_data', $requests, DAY_IN_SECONDS , 'wpshadow_monitoring');
 	}
 
 	/**
@@ -170,7 +170,7 @@ class Bot_Traffic_Analyzer {
 		);
 
 		if ( ! is_array( $data ) || empty( $data ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'bot_traffic', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'bot_traffic', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -235,7 +235,7 @@ class Bot_Traffic_Analyzer {
 									$results['bad_bot_count'] > 50;
 
 		// Set cache for diagnostic
-		\WPShadow\Core\Cache_Manager::set( 'bot_traffic', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'bot_traffic', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}
