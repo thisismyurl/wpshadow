@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Load all workflow-related classes
+require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-manager.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-suggestions.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-kanban-workflow-helper.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-executor.php';
+
 // Ensure Block_Registry is loaded.
 require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
 
