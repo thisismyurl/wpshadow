@@ -191,7 +191,7 @@ class Guardian_Dashboard {
 
 		$html .= sprintf(
 			'<a href="%s" class="wps-btn wps-btn--secondary" aria-label="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wpshadow-guardian-settings' ) ),
+			esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ),
 			esc_attr__( 'Configure Guardian settings', 'wpshadow' ),
 			esc_html__( 'Settings', 'wpshadow' )
 		);

@@ -298,6 +298,14 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
+		array(
+			'title'   => __( 'Privacy Dashboard', 'wpshadow' ),
+			'desc'    => __( 'Manage data exports, deletion requests, and privacy preferences for your users.', 'wpshadow' ),
+			'tool'    => 'privacy-dashboard',
+			'icon'    => 'dashicons-lock',
+			'family'  => 'site-management',
+			'enabled' => true,
+		),
 	);
 }
 
@@ -414,35 +422,6 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			__( 'Additional utilities for site analysis and optimization.', 'wpshadow' ),
 			'dashicons-admin-tools'
 		); ?>
-
-		<!-- Privacy Dashboard Quick Access -->
-		<div style="margin-bottom: 40px;">
-			<div class="wps-grid wps-grid-auto-320">
-				<div class="wps-card wps-card--link" role="link" tabindex="0" aria-label="<?php esc_attr_e( 'Open Privacy Dashboard', 'wpshadow' ); ?>" onclick="window.location.href='<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>';">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-lock wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Privacy Dashboard', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Manage data export, deletion, and privacy preferences.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Open', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
 
 		<?php foreach ( $families as $family_key => $family_items ) : ?>
 			<?php if ( ! empty( $family_items ) ) : ?>

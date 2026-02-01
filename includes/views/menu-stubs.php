@@ -327,6 +327,13 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				</div>
 				<div class="wps-card-body">
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=vault-light' ) ); ?>" class="wps-btn wps-btn--secondary">
+						<span class="dashicons dashicons-arrow-right-alt"></span>
+						<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
+					</a>
+				</div>
+			</div>
+
+			<!-- Advanced Settings -->
 				<div class="wps-card">
 					<div class="wps-card-header wps-pb-3 wps-border-bottom">
 						<div class="wps-flex wps-gap-3 wps-items-start">
