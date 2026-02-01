@@ -47,28 +47,79 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	// Define WordPress mock functions BEFORE loading plugin
 	if ( ! function_exists( 'add_action' ) ) {
 		function add_action( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
-			// Mock implementation for testing
+			global $wp_filter;
+			if ( ! isset( $wp_filter ) ) {
+				$wp_filter = array();
+			}
+			if ( ! isset( $wp_filter[ $tag ] ) ) {
+				$wp_filter[ $tag ] = array();
+			}
+			if ( ! isset( $wp_filter[ $tag ][ $priority ] ) ) {
+				$wp_filter[ $tag ][ $priority ] = array();
+			}
+			$wp_filter[ $tag ][ $priority ][] = $function_to_add;
 			return true;
 		}
 	}
 	
 	if ( ! function_exists( 'add_filter' ) ) {
 		function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
-			// Mock implementation for testing
+			global $wp_filter;
+			if ( ! isset( $wp_filter ) ) {
+				$wp_filter = array();
+			}
+			if ( ! isset( $wp_filter[ $tag ] ) ) {
+				$wp_filter[ $tag ] = array();
+			}
+			if ( ! isset( $wp_filter[ $tag ][ $priority ] ) ) {
+				$wp_filter[ $tag ][ $priority ] = array();
+			}
+			$wp_filter[ $tag ][ $priority ][] = $function_to_add;
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'remove_all_filters' ) ) {
+		function remove_all_filters( $tag, $priority = false ) {
+			global $wp_filter;
+			if ( isset( $wp_filter[ $tag ] ) ) {
+				if ( false === $priority ) {
+					unset( $wp_filter[ $tag ] );
+				} elseif ( isset( $wp_filter[ $tag ][ $priority ] ) ) {
+					unset( $wp_filter[ $tag ][ $priority ] );
+				}
+			}
 			return true;
 		}
 	}
 	
 	if ( ! function_exists( 'do_action' ) ) {
 		function do_action( $tag, ...$args ) {
-			// Mock implementation for testing
-			return null;
+			global $wp_filter;
+			if ( ! isset( $wp_filter[ $tag ] ) ) {
+				return;
+			}
+			ksort( $wp_filter[ $tag ] );
+			foreach ( $wp_filter[ $tag ] as $priority => $functions ) {
+				foreach ( $functions as $function ) {
+					call_user_func_array( $function, $args );
+				}
+			}
 		}
 	}
 	
 	if ( ! function_exists( 'apply_filters' ) ) {
 		function apply_filters( $tag, $value, ...$args ) {
-			// Mock implementation for testing
+			global $wp_filter;
+			if ( ! isset( $wp_filter[ $tag ] ) ) {
+				return $value;
+			}
+			ksort( $wp_filter[ $tag ] );
+			foreach ( $wp_filter[ $tag ] as $priority => $functions ) {
+				foreach ( $functions as $function ) {
+					$value = call_user_func_array( $function, array_merge( array( $value ), $args ) );
+				}
+			}
 			return $value;
 		}
 	}
@@ -167,6 +218,32 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 				parse_str( $args, $parsed_args );
 			}
 			return array_merge( $defaults, $parsed_args );
+		}
+	}
+	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $function ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $function ) {
+			return true;
+		}
+	}
+	
+	if ( ! function_exists( 'get_intermediate_image_sizes' ) ) {
+		function get_intermediate_image_sizes() {
+			// Return default WordPress image sizes, with filter support for testing
+			$sizes = array( 'thumbnail', 'medium', 'medium_large', 'large', '1536x1536', '2048x2048' );
+			return apply_filters( 'intermediate_image_sizes', $sizes );
+		}
+	}
+	
+	if ( ! function_exists( 'absint' ) ) {
+		function absint( $maybeint ) {
+			return abs( (int) $maybeint );
 		}
 	}
 	

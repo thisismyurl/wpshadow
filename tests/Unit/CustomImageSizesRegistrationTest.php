@@ -16,6 +16,9 @@ namespace WPShadow\Tests\Unit;
 use WPShadow\Diagnostics\Diagnostic_Custom_Image_Sizes_Registration;
 use WPShadow\Tests\TestCase;
 
+// Manually load the diagnostic class for testing
+require_once __DIR__ . '/../../includes/diagnostics/tests/performance/class-diagnostic-custom-image-sizes-registration.php';
+
 /**
  * Custom Image Sizes Registration Diagnostic tests
  *
@@ -410,23 +413,22 @@ class CustomImageSizesRegistrationTest extends TestCase {
 		$_wp_additional_image_sizes = $additional_sizes;
 
 		// Mock wpdb for attachment count
-		if ( ! isset( $wpdb ) ) {
-			$wpdb = new \stdClass();
-		}
-		$wpdb->posts = 'wp_posts';
+		$wpdb = new class( $attachment_count ) {
+			public $posts = 'wp_posts';
+			private $count;
 
-		// Create a mock for get_var
-		if ( $attachment_count > 0 ) {
-			add_filter(
-				'query',
-				function ( $query ) use ( $attachment_count, $wpdb ) {
-					if ( strpos( $query, "SELECT COUNT(*) FROM {$wpdb->posts}" ) !== false ) {
-						return $attachment_count;
-					}
-					return $query;
+			public function __construct( $count ) {
+				$this->count = $count;
+			}
+
+			public function get_var( $query ) {
+				// Return attachment count for any COUNT query
+				if ( strpos( $query, 'SELECT COUNT(*)' ) !== false ) {
+					return $this->count;
 				}
-			);
-		}
+				return 0;
+			}
+		};
 
 		// Run the check
 		$result = Diagnostic_Custom_Image_Sizes_Registration::check();
