@@ -206,13 +206,13 @@ class Plugin_Bootstrap {
 	/**
 	 * Load dashboard page
 	 *
+	 * NOTE: dashboard-page.php is now loaded in wpshadow.php so the 
+	 * wpshadow_render_dashboard() function exists before admin_menu fires.
+	 *
 	 * @return void
 	 */
 	private static function load_dashboard_page() {
-		$dashboard_file = WPSHADOW_PATH . 'includes/views/dashboard-page.php';
-		if ( file_exists( $dashboard_file ) ) {
-			require_once $dashboard_file;
-		}
+		// dashboard-page.php already loaded in wpshadow.php
 
 		// PHASE 3 OPTIMIZATION: Load lazy widget loader
 		$lazy_loader_file = WPSHADOW_PATH . 'includes/dashboard/class-lazy-widget-loader.php';
