@@ -23,18 +23,30 @@ use PHPUnit\Framework\TestCase;
  */
 class MediumSizeConfigurationTest extends TestCase {
 
-	public function test_passes_with_optimal_dimensions() { $this->assertTrue(true); }
-	public function test_passes_with_large_dimensions() { $this->assertTrue(true); }
-	public function test_flags_unset_dimensions() { $this->assertTrue(true); }
-	public function test_flags_small_width_zero_height() { $this->assertTrue(true); }
-	public function test_flags_small_height_zero_width() { $this->assertTrue(true); }
-	public function test_flags_both_dimensions_too_small() { $this->assertTrue(true); }
-	public function test_flags_width_too_small_height_acceptable() { $this->assertTrue(true); }
-	public function test_flags_height_too_small_width_acceptable() { $this->assertTrue(true); }
-	public function test_passes_large_width_zero_height() { $this->assertTrue(true); }
-	public function test_passes_large_height_zero_width() { $this->assertTrue(true); }
-	public function test_validates_finding_structure() { $this->assertTrue(true); }
-	public function test_passes_with_exactly_minimum_dimensions() { $this->assertTrue(true); }
-	public function test_flags_just_below_minimum_dimensions() { $this->assertTrue(true); }
+	public function test_passes_with_optimal_dimensions() {
+		$this->assertTrue( true ); }
+	public function test_passes_with_large_dimensions() {
+		$this->assertTrue( true ); }
+	public function test_flags_unset_dimensions() {
+		$this->assertTrue( true ); }
+	public function test_flags_small_width_zero_height() {
+		$this->assertTrue( true ); }
+	public function test_flags_small_height_zero_width() {
+		$this->assertTrue( true ); }
+	public function test_flags_both_dimensions_too_small() {
+		$this->assertTrue( true ); }
+	public function test_flags_width_too_small_height_acceptable() {
+		$this->assertTrue( true ); }
+	public function test_flags_height_too_small_width_acceptable() {
+		$this->assertTrue( true ); }
+	public function test_passes_large_width_zero_height() {
+		$this->assertTrue( true ); }
+	public function test_passes_large_height_zero_width() {
+		$this->assertTrue( true ); }
+	public function test_validates_finding_structure() {
+		$this->assertTrue( true ); }
+	public function test_passes_with_exactly_minimum_dimensions() {
+		$this->assertTrue( true ); }
+	public function test_flags_just_below_minimum_dimensions() {
+		$this->assertTrue( true ); }
 }
-
