@@ -255,25 +255,18 @@ class Academy_UI extends AJAX_Handler_Base {
 							<span class="dashicons dashicons-superhero wps-text-3xl wps-text-primary"></span>
 							<div>
 								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=learning-path' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'My Learning Path', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Personalized recommendations based on your site\'s diagnostics.', 'wpshadow' ); ?>
-								</p>
-							</div>
+								<a href="https://wpshadow.com/academy/learning-path/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+									<?php esc_html_e( 'My Learning Path', 'wpshadow' ); ?>
+								</a>
+							</h3>
+							<p class="wps-card-description wps-m-0">
+								<?php esc_html_e( 'Personalized recommendations based on your site\'s diagnostics.', 'wpshadow' ); ?>
+							</p>
 						</div>
 					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=learning-path' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'View Path', 'wpshadow' ); ?>
-						</a>
-					</div>
 				</div>
-
-				<!-- KB Articles -->
+				<div class="wps-card-body">
+					<a href="https://wpshadow.com/academy/learning-path/" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
 				<div class="wps-card">
 					<div class="wps-card-header wps-pb-3 wps-border-bottom">
 						<div class="wps-flex wps-gap-3 wps-items-start">
