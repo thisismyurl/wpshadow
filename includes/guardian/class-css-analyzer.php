@@ -94,11 +94,11 @@ class CSS_Analyzer {
 		$results['complex_examples'] = array_slice( $results['complex_examples'], 0, 10 );
 
 		// Store results in cache for diagnostics to consume
-		\WPShadow\Core\Cache_Manager::set( 'complex_selector_count', $results['complex_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'css_custom_properties_count', $results['css_variables_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'css_import_count', $results['import_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'css_animation_count', $results['animation_count'], 'wpshadow_guardian', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'css_analysis_details', $results, 'wpshadow_guardian', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'complex_selector_count', $results['complex_count'], DAY_IN_SECONDS , 'wpshadow_guardian');
+		\WPShadow\Core\Cache_Manager::set( 'css_custom_properties_count', $results['css_variables_count'], DAY_IN_SECONDS , 'wpshadow_guardian');
+		\WPShadow\Core\Cache_Manager::set( 'css_import_count', $results['import_count'], DAY_IN_SECONDS , 'wpshadow_guardian');
+		\WPShadow\Core\Cache_Manager::set( 'css_animation_count', $results['animation_count'], DAY_IN_SECONDS , 'wpshadow_guardian');
+		\WPShadow\Core\Cache_Manager::set( 'css_analysis_details', $results, DAY_IN_SECONDS , 'wpshadow_guardian');
 
 		return $results;
 	}

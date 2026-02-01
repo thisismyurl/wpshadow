@@ -76,9 +76,9 @@ class WPShadow_Account_API {
 		Cache_Manager::set(
 			'account_service_status',
 			$is_available ? 'available' : 'unavailable',
-			'wpshadow_account',
-			5 * MINUTE_IN_SECONDS
-		);
+			5 * MINUTE_IN_SECONDS,
+			'wpshadow_account'
+			);
 
 		return $is_available;
 	}
@@ -353,9 +353,9 @@ class WPShadow_Account_API {
 		Cache_Manager::set(
 			$cache_key,
 			$is_valid,
-			'wpshadow_account',
-			HOUR_IN_SECONDS
-		);
+			HOUR_IN_SECONDS,
+			'wpshadow_account'
+			);
 
 		return $is_valid;
 	}
@@ -407,9 +407,9 @@ class WPShadow_Account_API {
 		Cache_Manager::set(
 			'account_info',
 			$account_info,
-			'wpshadow_account',
-			15 * MINUTE_IN_SECONDS
-		);
+			15 * MINUTE_IN_SECONDS,
+			'wpshadow_account'
+			);
 
 		return $account_info;
 	}

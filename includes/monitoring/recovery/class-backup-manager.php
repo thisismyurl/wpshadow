@@ -40,7 +40,7 @@ class Backup_Manager {
 		// Store in transient (4 weeks expiration)
 		$retention_days = max( 1, absint( $retention_days ) );
 		$ttl            = DAY_IN_SECONDS * $retention_days;
-		\WPShadow\Core\Cache_Manager::set( $backup_id, $backup, 'wpshadow_recovery', $ttl );
+		\WPShadow\Core\Cache_Manager::set( $backup_id, $backup, $ttl , 'wpshadow_recovery');
 
 		// Add to manifest
 		self::add_to_manifest( $backup_id, $reason, $retention_days );

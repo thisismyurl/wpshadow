@@ -87,8 +87,8 @@ class REST_API_Performance_Analyzer {
 		$avg_time_ms = (int) ( $metrics['total_time_ms'] / $metrics['total_requests'] );
 
 		// Set cache
-		\WPShadow\Core\Cache_Manager::set( 'rest_api_avg_time_ms', $avg_time_ms, 'wpshadow_monitoring', WEEK_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'rest_api_metrics', $metrics, 'wpshadow_monitoring', WEEK_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'rest_api_avg_time_ms', $avg_time_ms, WEEK_IN_SECONDS , 'wpshadow_monitoring');
+		\WPShadow\Core\Cache_Manager::set( 'rest_api_metrics', $metrics, WEEK_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $response;
 	}

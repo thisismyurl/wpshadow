@@ -48,9 +48,9 @@ class SSL_Expiration_Analyzer {
 			\WPShadow\Core\Cache_Manager::set(
 				'ssl_expiry_data',
 				$results,
-				'wpshadow_guardian',
-				DAY_IN_SECONDS
-			);
+				DAY_IN_SECONDS,
+				'wpshadow_guardian'
+				);
 			return $results;
 		}
 
@@ -61,9 +61,9 @@ class SSL_Expiration_Analyzer {
 			\WPShadow\Core\Cache_Manager::set(
 				'ssl_expiry_data',
 				$results,
-				'wpshadow_guardian',
-				DAY_IN_SECONDS
-			);
+				DAY_IN_SECONDS,
+				'wpshadow_guardian'
+				);
 			return $results;
 		}
 
@@ -83,9 +83,9 @@ class SSL_Expiration_Analyzer {
 		\WPShadow\Core\Cache_Manager::set(
 			'ssl_expiry_data',
 			$results,
-			'wpshadow_guardian',
-			DAY_IN_SECONDS
-		);
+			DAY_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $results;
 	}
