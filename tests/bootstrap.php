@@ -253,6 +253,8 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_deactivation_hook' ) ) {
+		function register_deactivation_hook( $file, $callback ) {
 	if ( ! function_exists( 'register_activation_hook' ) ) {
 		function register_activation_hook( $file, $callback ) {
 	if ( ! function_exists( 'current_theme_supports' ) ) {
@@ -263,6 +265,14 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'register_activation_hook' ) ) {
+		function register_activation_hook( $file, $callback ) {
+			return true;
+		}
+	}
+	
+	// Load WPShadow plugin
+	require_once WPSHADOW_PLUGIN_DIR . '/wpshadow.php';
 	if ( ! function_exists( 'register_deactivation_hook' ) ) {
 		function register_deactivation_hook( $file, $callback ) {
 		function register_deactivation_hook( $file, $function ) {
