@@ -350,7 +350,7 @@ class Realtime_Monitoring {
 		wp_mail( $admin_email, $subject, $message );
 
 		// Set cooldown to avoid alert fatigue (30 minutes)
-		\WPShadow\Core\Cache_Manager::set( 'last_alert_' . $anomaly['type'], time(), 'wpshadow_monitoring', 1800 );
+		\WPShadow\Core\Cache_Manager::set( 'last_alert_' . $anomaly['type'], time(), 1800 , 'wpshadow_monitoring');
 
 		/**
 		 * Fires after an alert is sent.

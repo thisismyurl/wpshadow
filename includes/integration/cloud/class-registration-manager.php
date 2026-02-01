@@ -179,7 +179,7 @@ class Registration_Manager {
 		);
 
 		// Cache for 24 hours
-		\WPShadow\Core\Cache_Manager::set( 'registration_status_cache', $status, 'wpshadow_cloud', DAY_IN_SECONDS  );
+		\WPShadow\Core\Cache_Manager::set( 'registration_status_cache', $status, DAY_IN_SECONDS  , 'wpshadow_cloud');
 
 		// Update local subscription tier
 		update_option( 'wpshadow_subscription_tier', $status['tier'] );

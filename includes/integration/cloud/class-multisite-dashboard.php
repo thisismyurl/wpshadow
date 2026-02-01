@@ -47,7 +47,7 @@ class Multisite_Dashboard {
 		$sites = $response['sites'] ?? array();
 
 		// Cache for 1 hour
-		\WPShadow\Core\Cache_Manager::set( 'registered_sites_list', $sites, 'wpshadow_cloud', 3600  );
+		\WPShadow\Core\Cache_Manager::set( 'registered_sites_list', $sites, 3600  , 'wpshadow_cloud');
 
 		return $sites;
 	}
@@ -82,7 +82,7 @@ class Multisite_Dashboard {
 		}
 
 		// Cache for 5 minutes
-		\WPShadow\Core\Cache_Manager::set( 'site_status_{$site_id}', $response, 'wpshadow_cloud', 300  );
+		\WPShadow\Core\Cache_Manager::set( 'site_status_{$site_id}', $response, 300  , 'wpshadow_cloud');
 
 		return $response;
 	}
@@ -219,7 +219,7 @@ class Multisite_Dashboard {
 		}
 
 		// Cache for 1 hour
-		\WPShadow\Core\Cache_Manager::set( 'trends_{$period}', $response, 'wpshadow_cloud', 3600  );
+		\WPShadow\Core\Cache_Manager::set( 'trends_{$period}', $response, 3600  , 'wpshadow_cloud');
 
 		return $response;
 	}
@@ -253,7 +253,7 @@ class Multisite_Dashboard {
 		$alerts = $response['alerts'] ?? array();
 
 		// Cache for 5 minutes
-		\WPShadow\Core\Cache_Manager::set( 'network_alerts', $alerts, 'wpshadow_cloud', 300  );
+		\WPShadow\Core\Cache_Manager::set( 'network_alerts', $alerts, 300  , 'wpshadow_cloud');
 
 		return array_slice( $alerts, 0, $limit );
 	}

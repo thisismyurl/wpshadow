@@ -69,7 +69,7 @@ class Third_Party_Script_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'third_party_script_analysis', $results, 'wpshadow_monitoring', DAY_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'third_party_script_analysis', $results, DAY_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -105,8 +105,8 @@ class Third_Party_Script_Analyzer {
 		}
 
 		// Set cache
-		\WPShadow\Core\Cache_Manager::set( 'third_party_script_count', $results['third_party_count'], 'wpshadow_monitoring', DAY_IN_SECONDS );
-		\WPShadow\Core\Cache_Manager::set( 'third_party_script_analysis', $results, 'wpshadow_monitoring', DAY_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'third_party_script_count', $results['third_party_count'], DAY_IN_SECONDS , 'wpshadow_monitoring');
+		\WPShadow\Core\Cache_Manager::set( 'third_party_script_analysis', $results, DAY_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

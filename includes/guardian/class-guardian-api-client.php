@@ -79,9 +79,9 @@ class Guardian_API_Client {
 		\WPShadow\Core\Cache_Manager::set(
 			'guardian_status',
 			$is_available ? 'available' : 'unavailable',
-			'wpshadow_guardian',
-			5 * MINUTE_IN_SECONDS
-		);
+			5 * MINUTE_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $is_available;
 	}
@@ -116,9 +116,9 @@ class Guardian_API_Client {
 		\WPShadow\Core\Cache_Manager::set(
 			'guardian_key_valid',
 			$is_valid,
-			'wpshadow_guardian',
-			HOUR_IN_SECONDS
-		);
+			HOUR_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $is_valid;
 	}
@@ -226,9 +226,9 @@ class Guardian_API_Client {
 		\WPShadow\Core\Cache_Manager::set(
 			'guardian_account_info',
 			$response,
-			'wpshadow_guardian',
-			15 * MINUTE_IN_SECONDS
-		);
+			15 * MINUTE_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $response;
 	}

@@ -429,6 +429,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		// Clear cache when plugins are activated/deactivated/updated
 		add_action( 'activated_plugin', array( __CLASS__, 'clear_cache' ) );
 		add_action( 'deactivated_plugin', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'upgrader_process_complete', array( __CLASS__, 'clear_cache' ) );
 
 		// Clear cache on WPShadow plugin update
 		add_action( 'upgrader_process_complete', array( __CLASS__, 'handle_plugin_update' ), 10, 2 );
@@ -444,6 +445,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 */
 	public static function handle_plugin_update( $upgrader, $options ): void {
 		if ( isset( $options['action'], $options['type'] ) && 'update' === $options['action'] && 'plugin' === $options['type'] ) {
+		if ( 'update' === $options['action'] && 'plugin' === $options['type'] ) {
 			self::clear_cache();
 		}
 	}

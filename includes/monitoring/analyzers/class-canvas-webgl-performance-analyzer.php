@@ -41,7 +41,7 @@ class Canvas_WebGL_Performance_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'canvas_webgl_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'canvas_webgl_performance', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 			return $results;
 		}
 
@@ -104,7 +104,7 @@ class Canvas_WebGL_Performance_Analyzer {
 		}
 
 		// Cache for 1 hour
-		\WPShadow\Core\Cache_Manager::set( 'canvas_webgl_performance', $results, 'wpshadow_monitoring', HOUR_IN_SECONDS );
+		\WPShadow\Core\Cache_Manager::set( 'canvas_webgl_performance', $results, HOUR_IN_SECONDS , 'wpshadow_monitoring');
 
 		return $results;
 	}

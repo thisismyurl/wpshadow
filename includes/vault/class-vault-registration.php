@@ -255,9 +255,9 @@ class Vault_Registration extends AJAX_Handler_Base {
 		\WPShadow\Core\Cache_Manager::set(
 			$cache_key,
 			$is_valid,
-			'wpshadow_vault',
-			HOUR_IN_SECONDS
-		);
+			HOUR_IN_SECONDS,
+			'wpshadow_vault'
+			);
 
 		return $is_valid;
 	}
@@ -318,9 +318,9 @@ class Vault_Registration extends AJAX_Handler_Base {
 		\WPShadow\Core\Cache_Manager::set(
 			$cache_key,
 			$is_available,
-			'wpshadow_vault',
-			5 * MINUTE_IN_SECONDS
-		);
+			5 * MINUTE_IN_SECONDS,
+			'wpshadow_vault'
+			);
 
 		return $is_available;
 	}

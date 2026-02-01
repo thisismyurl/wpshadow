@@ -68,7 +68,7 @@ class AB_Test_Overhead_Analyzer {
 		global $wp_scripts;
 
 		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
-			\WPShadow\Core\Cache_Manager::set( 'ab_test_overhead', $results, 'wpshadow_guardian', HOUR_IN_SECONDS );
+			\WPShadow\Core\Cache_Manager::set( 'ab_test_overhead', $results, HOUR_IN_SECONDS , 'wpshadow_guardian');
 			return $results;
 		}
 
@@ -144,9 +144,9 @@ class AB_Test_Overhead_Analyzer {
 		\WPShadow\Core\Cache_Manager::set(
 			'ab_test_overhead',
 			$results,
-			'wpshadow_guardian',
-			HOUR_IN_SECONDS
-		);
+			HOUR_IN_SECONDS,
+			'wpshadow_guardian'
+			);
 
 		return $results;
 	}
