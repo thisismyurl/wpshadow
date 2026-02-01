@@ -95,7 +95,7 @@ class Privacy_Dashboard_Page {
 		$prefs   = Consent_Preferences::get_preferences( $user_id );
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wpshadow-privacy wps-page-container">
 			<div class="wps-page-header">
 				<h1 class="wps-page-title">
 					<span class="dashicons dashicons-shield-alt"></span>

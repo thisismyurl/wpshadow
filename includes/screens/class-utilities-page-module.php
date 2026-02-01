@@ -335,10 +335,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			// If utility not found or not enabled, show error
 			if ( ! $found_utility || empty( $found_utility['enabled'] ) ) {
 				?>
-				<div class="wps-page-container">
-					<?php wpshadow_render_page_header(
-						__( 'Utility Not Found', 'wpshadow' ),
-						'',
+			<div class="wrap wps-page-container">
 						'dashicons-admin-tools'
 					); ?>
 
@@ -368,7 +365,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 
 			// Fallback if file doesn't exist
 			?>
-			<div class="wps-page-container">
+			<div class="wrap wps-page-container">
 				<?php wpshadow_render_page_header(
 					esc_html( $found_utility['title'] ),
 					'',
@@ -410,7 +407,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			'other'            => __( 'Other Utilities', 'wpshadow' ),
 		);
 		?>
-	<div class="wps-page-container">
+	<div class="wrap wps-page-container">
 		<!-- Page Header -->
 		<?php wpshadow_render_page_header(
 			__( 'WPShadow Utilities', 'wpshadow' ),

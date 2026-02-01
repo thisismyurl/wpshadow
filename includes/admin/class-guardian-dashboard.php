@@ -38,7 +38,7 @@ class Guardian_Dashboard {
 	public static function render(): string {
 		ob_start();
 		?>
-		<div class="wps-page-container" role="main">
+		<div class="wrap wpshadow-guardian wps-page-container" role="main">
 			<!-- Page Header -->
 			<?php wpshadow_render_page_header(
 				__( 'WPShadow Guardian', 'wpshadow' ),

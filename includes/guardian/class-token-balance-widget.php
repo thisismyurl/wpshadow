@@ -68,10 +68,10 @@ class Token_Balance_Widget {
 								'<span class="dashicons dashicons-cloud" style="font-size: 20px; vertical-align: middle;"></span> ' .
 								__( 'Connect Guardian', 'wpshadow' ) .
 								'</span>',
-					'href'  => admin_url( 'admin.php?page=wpshadow-guardian' ),
+					'href'  => '#',
 					'meta'  => array(
-						'class' => 'wpshadow-guardian-adminbar',
-						'title' => __( 'Connect to Guardian AI Scanning', 'wpshadow' ),
+						'class' => 'wpshadow-guardian-adminbar wpshadow-guardian-main-toggle',
+						'title' => __( 'Click to toggle Guardian', 'wpshadow' ),
 					),
 				)
 			);
@@ -92,15 +92,15 @@ class Token_Balance_Widget {
 			);
 		}
 
-		// Show token balance with status indicator
+		// Show token balance with status indicator (main item is now toggleable)
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'wpshadow-guardian',
 				'title' => self::get_admin_bar_html( $balance, $status_dot ),
-				'href'  => admin_url( 'admin.php?page=wpshadow-guardian' ),
+				'href'  => '#',
 				'meta'  => array(
-					'class' => 'wpshadow-guardian-adminbar',
-					'title' => $title,
+					'class' => 'wpshadow-guardian-adminbar wpshadow-guardian-main-toggle',
+					'title' => __( 'Click to toggle Guardian', 'wpshadow' ),
 				),
 			)
 		);
@@ -214,6 +214,7 @@ class Token_Balance_Widget {
 				height: 8px;
 				border-radius: 50%;
 				margin-right: 2px;
+				transition: opacity 0.2s ease;
 			}
 			.wpshadow-status-active {
 				background-color: #00a32a;
@@ -235,6 +236,9 @@ class Token_Balance_Widget {
 			.wpshadow-guardian-toggle-inactive {
 				color: #dc3232 !important;
 			}
+			.wpshadow-guardian-main-toggle {
+				cursor: pointer;
+			}
 		</style>
 		<?php
 	}
@@ -250,17 +254,17 @@ class Token_Balance_Widget {
 		?>
 		<script>
 		jQuery(document).ready(function($) {
-			$('#wp-admin-bar-wpshadow-guardian-toggle a').on('click', function(e) {
+			// Toggle function for both main item and submenu
+			function toggleGuardian(e) {
 				e.preventDefault();
 
 				var $link = $(this);
-				var $text = $link.find('span');
-				var isActive = $text.hasClass('wpshadow-guardian-toggle-active');
+				var $statusDot = $link.find('.wpshadow-status-dot');
+				var isActive = $statusDot.hasClass('wpshadow-status-active');
 				var newState = !isActive;
 
-				// Show loading state
-				var originalText = $text.text();
-				$text.text('<?php echo esc_js( __( 'Toggling...', 'wpshadow' ) ); ?>');
+				// Show loading state on status dot
+				$statusDot.css('opacity', '0.5');
 
 				$.ajax({
 					url: ajaxurl,
@@ -272,39 +276,46 @@ class Token_Balance_Widget {
 					},
 					success: function(response) {
 						if (response.success) {
-							// Update the link text and class
+							// Update all status dots in main toolbar item
+							var $mainStatusDot = $('#wp-admin-bar-wpshadow-guardian > a .wpshadow-status-dot');
 							if (newState) {
-								$text.removeClass('wpshadow-guardian-toggle-inactive')
+								$mainStatusDot.removeClass('wpshadow-status-inactive')
+									.addClass('wpshadow-status-active')
+									.attr('title', '<?php echo esc_js( __( 'Guardian Active', 'wpshadow' ) ); ?>');
+							} else {
+								$mainStatusDot.removeClass('wpshadow-status-active')
+									.addClass('wpshadow-status-inactive')
+									.attr('title', '<?php echo esc_js( __( 'Guardian Inactive', 'wpshadow' ) ); ?>');
+							}
+
+							// Update toggle submenu text
+							var $toggleText = $('#wp-admin-bar-wpshadow-guardian-toggle a span');
+							if (newState) {
+								$toggleText.removeClass('wpshadow-guardian-toggle-inactive')
 									.addClass('wpshadow-guardian-toggle-active')
 									.text('<?php echo esc_js( __( '✓ Guardian Running', 'wpshadow' ) ); ?>');
 							} else {
-								$text.removeClass('wpshadow-guardian-toggle-active')
+								$toggleText.removeClass('wpshadow-guardian-toggle-active')
 									.addClass('wpshadow-guardian-toggle-inactive')
 									.text('<?php echo esc_js( __( '○ Guardian Stopped', 'wpshadow' ) ); ?>');
 							}
 
-							// Update status dots in main toolbar item
-							var $statusDot = $('#wp-admin-bar-wpshadow-guardian > a .wpshadow-status-dot');
-							if (newState) {
-								$statusDot.removeClass('wpshadow-status-inactive')
-									.addClass('wpshadow-status-active')
-									.attr('title', '<?php echo esc_js( __( 'Guardian Active', 'wpshadow' ) ); ?>');
-							} else {
-								$statusDot.removeClass('wpshadow-status-active')
-									.addClass('wpshadow-status-inactive')
-									.attr('title', '<?php echo esc_js( __( 'Guardian Inactive', 'wpshadow' ) ); ?>');
-							}
+							$statusDot.css('opacity', '1');
 						} else {
-							$text.text(originalText);
+							$statusDot.css('opacity', '1');
 							alert(response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Failed to toggle Guardian', 'wpshadow' ) ); ?>');
 						}
 					},
 					error: function() {
-						$text.text(originalText);
+						$statusDot.css('opacity', '1');
 						alert('<?php echo esc_js( __( 'Failed to toggle Guardian', 'wpshadow' ) ); ?>');
 					}
 				});
-			});
+			}
+
+			// Bind toggle to main admin bar item and submenu toggle
+			$('#wp-admin-bar-wpshadow-guardian > a.wpshadow-guardian-main-toggle').on('click', toggleGuardian);
+			$('#wp-admin-bar-wpshadow-guardian-toggle a').on('click', toggleGuardian);
 		});
 		</script>
 		<?php
