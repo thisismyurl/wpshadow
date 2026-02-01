@@ -12,10 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Require necessary class files
-require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-manager.php';
-require_once WPSHADOW_PATH . 'includes/core/class-activity-logger.php';
-
 /**
  * Handle AJAX request to get automation activity
  *
