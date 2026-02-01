@@ -422,8 +422,10 @@ class CustomImageSizesRegistrationTest extends TestCase {
 			}
 
 			public function get_var( $query ) {
-				// Return attachment count for any COUNT query
-				if ( strpos( $query, 'SELECT COUNT(*)' ) !== false ) {
+				// Return attachment count for COUNT queries on posts table
+				if ( strpos( $query, 'SELECT COUNT(*)' ) !== false && 
+				     strpos( $query, 'post_type' ) !== false && 
+				     strpos( $query, 'attachment' ) !== false ) {
 					return $this->count;
 				}
 				return 0;

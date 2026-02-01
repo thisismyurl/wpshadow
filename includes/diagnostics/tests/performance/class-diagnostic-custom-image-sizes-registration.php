@@ -136,7 +136,7 @@ class Diagnostic_Custom_Image_Sizes_Registration extends Diagnostic_Base {
 				}
 
 				// Check for duplicate or similar dimensions
-				$dimension_key = sprintf( '%dx%d', min( $width, $height ), max( $width, $height ) );
+				$dimension_key = sprintf( '%dx%d', $width, $height );
 				if ( isset( $dimension_map[ $dimension_key ] ) ) {
 					$duplicate_candidates[] = sprintf(
 						/* translators: 1: first size name, 2: second size name */
