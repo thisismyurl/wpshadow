@@ -13,6 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Require necessary class files
+require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-manager.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-suggestions.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-kanban-workflow-helper.php';
+require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
+
 $workflows   = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 $suggestions = \WPShadow\Workflow\Workflow_Suggestions::get_suggestions();
 $suggestions = array_slice( $suggestions, 0, 5 );

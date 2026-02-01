@@ -31,7 +31,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-chart-line',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 		array(
 			'title'   => __( 'Deep Scan Report', 'wpshadow' ),
@@ -58,7 +57,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'security',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 
 		// Performance Reports
@@ -69,7 +67,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'performance',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 
 		// SEO Reports
@@ -80,7 +77,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'seo',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 
 		// Optimization Reports
@@ -91,7 +87,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-database',
 			'family'  => 'optimization',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 		array(
 			'title'   => __( 'Plugin Audit Report', 'wpshadow' ),
@@ -100,7 +95,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'optimization',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 
 		// Commerce Reports
@@ -111,7 +105,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-cart',
 			'family'  => 'commerce',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 
 		// Compliance & Operations Reports
@@ -122,7 +115,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-privacy',
 			'family'  => 'operations',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 		array(
 			'title'   => __( 'Email Deliverability Report', 'wpshadow' ),
@@ -131,7 +123,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-email-alt',
 			'family'  => 'operations',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 		array(
 			'title'   => __( 'Backup Readiness Report', 'wpshadow' ),
@@ -140,7 +131,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'operations',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 		array(
 			'title'   => __( 'Multisite Network Report', 'wpshadow' ),
@@ -149,7 +139,6 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-multisite',
 			'family'  => 'operations',
 			'enabled' => true,
-			'badge'   => 'new',
 		),
 
 		// Page-Specific Reports

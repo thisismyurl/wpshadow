@@ -352,31 +352,14 @@ class Academy_UI extends AJAX_Handler_Base {
 				</div>
 			</div>
 
-			<!-- Recent Training Activity Section -->
+			<!-- Recent Activity Section -->
 			<div style="margin-top: 40px;">
-				<h2 style="font-size: 20px; margin-bottom: 20px; color: #1d2327;">
-					<?php esc_html_e( 'Your Training Activity', 'wpshadow' ); ?>
-				</h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<div class="wps-card">
-						<div class="wps-card-body">
-							<div class="academy-stats" style="display: flex; justify-content: space-around; text-align: center;">
-								<div class="stat">
-									<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['articles_viewed'] ); ?></span>
-									<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Articles Read', 'wpshadow' ); ?></span>
-								</div>
-								<div class="stat">
-									<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['videos_completed'] ); ?></span>
-									<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Videos Watched', 'wpshadow' ); ?></span>
-								</div>
-								<div class="stat">
-									<span class="stat-value" style="display: block; font-size: 32px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $progress['courses_completed'] ); ?></span>
-									<span class="stat-label" style="display: block; font-size: 12px; color: #646970;"><?php esc_html_e( 'Courses Completed', 'wpshadow' ); ?></span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<?php
+				// Use the centralized activity rendering function
+				if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
+					wpshadow_render_recent_activity();
+				}
+				?>
 			</div>
 		</div>
 		<?php
