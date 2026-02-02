@@ -51,7 +51,11 @@ jQuery(document).ready(function ($) {
 			return;
 		}
 
-		alert((title ? title + ': ' : '') + message);
+		WPShadowModal.alert({
+			title: title || 'Alert',
+			message: message,
+			type: tone || 'info'
+		});
 	}
 
 	function confirmAction(message, onConfirm, onCancel) {
@@ -60,11 +64,18 @@ jQuery(document).ready(function ($) {
 			return;
 		}
 
-		if (confirm(message)) {
-			onConfirm();
-		} else if (onCancel) {
-			onCancel();
-		}
+		WPShadowModal.confirm({
+			title: 'Confirm',
+			message: message,
+			onConfirm: function() {
+				onConfirm();
+			},
+			onCancel: function() {
+				if (onCancel) {
+					onCancel();
+				}
+			}
+		});
 	}
 
 	/**

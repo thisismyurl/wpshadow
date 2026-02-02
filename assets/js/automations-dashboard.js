@@ -220,15 +220,26 @@ jQuery( function( $ ) {
 		 * @param {jQuery} $btn Button element
 		 */
 		deleteAutomation( $btn ) {
-			if ( !confirm( wpshadowAutomationsDashboard.strings.confirmDelete ) ) {
-				return;
-			}
-
 			const workflowId = $btn.data( 'workflow-id' );
-		const $card = $btn.closest( '.wpshadow-automation-card' );
-		const originalText = $btn.text();
+			const $card = $btn.closest( '.wpshadow-automation-card' );
+			const originalText = $btn.text();
+			const self = this;
 
-		$btn.prop( 'disabled', true ).text( 'Deleting...' );
+			WPShadowModal.confirm({
+				title: 'Delete Automation',
+				message: wpshadowAutomationsDashboard.strings.confirmDelete,
+				onCancel: function() {
+					return;
+				},
+				onConfirm: function() {
+					self.proceedWithAutomationDeletion( $btn, $card, originalText, workflowId );
+				}
+			});
+		}
+
+		proceedWithAutomationDeletion( $btn, $card, originalText, workflowId ) {
+			const self = this;
+			$btn.prop( 'disabled', true ).text( 'Deleting...' );
 
 		$.ajax({
 			url: wpshadowAutomationsDashboard.ajaxUrl,
@@ -248,17 +259,17 @@ jQuery( function( $ ) {
 								window.location.reload();
 							}
 						});
-						this.showNotice( wpshadowAutomationsDashboard.strings.deleteSuccess, 'success' );
+						self.showNotice( wpshadowAutomationsDashboard.strings.deleteSuccess, 'success' );
 						// Close modal if open
 						if ( $( '#wpshadow-automation-detail-modal' ).is( ':visible' ) ) {
 							AutomationModal.close();
 						}
 					} else {
-						this.showNotice( response.data.message || wpshadowAutomationsDashboard.strings.deleteError, 'error' );
+						self.showNotice( response.data.message || wpshadowAutomationsDashboard.strings.deleteError, 'error' );
 					}
 				},
 				error: () => {
-					this.showNotice( wpshadowAutomationsDashboard.strings.deleteError, 'error' );
+					self.showNotice( wpshadowAutomationsDashboard.strings.deleteError, 'error' );
 				},
 				complete: () => {
 					$btn.prop( 'disabled', false ).text( originalText );

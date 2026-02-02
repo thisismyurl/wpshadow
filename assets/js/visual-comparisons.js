@@ -159,12 +159,18 @@
 						message: 'You can only capture screenshots of your own site.',
 						type: 'warning'
 					});
+					return;
+				}
+
 					// Extract path + query
 					const path = urlObj.pathname + urlObj.search;
 					this.value = path || '/';
 				} catch (e) {
 					this.value = '/';
-					alert('Invalid URL format. Please enter a valid path or URL.');
+					WPShadowModal.alert({
+						title: 'Invalid URL',
+						message: 'Invalid URL format. Please enter a valid path or URL.'
+					});
 				}
 			} else if (!value.startsWith('/')) {
 				// Ensure path starts with /

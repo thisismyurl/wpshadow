@@ -140,7 +140,10 @@
 						if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 							window.WPShadowDesign.alert('Invalid URL', message, 'warning');
 						} else {
-							alert(message);
+							WPShadowModal.alert({
+								title: 'Invalid URL',
+								message: message
+							});
 						}
 						return;
 					}
@@ -154,7 +157,10 @@
 					if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 						window.WPShadowDesign.alert('Invalid URL', message, 'warning');
 					} else {
-						alert(message);
+						WPShadowModal.alert({
+							title: 'Invalid URL',
+							message: message
+						});
 					}
 				}
 			} else if (!value.startsWith('/')) {

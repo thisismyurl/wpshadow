@@ -230,8 +230,14 @@
 			if ($('.wrap').length) {
 				this.showAdminNotice(message, options);
 			} else {
-				// Fallback to alert
-				alert(message);
+				// Fallback to modal
+				WPShadowModal.alert({
+					title: 'Notification',
+					message: message
+				}.alert({
+					title: 'Notification',
+					message: message
+				});
 			}
 		},
 

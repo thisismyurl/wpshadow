@@ -221,7 +221,15 @@
                     return;
                 }
 
-                if (confirm && !window.confirm(confirm)) {
+                if (confirm) {
+                    WPShadowModal.confirm({
+                        title: 'Confirm',
+                        message: confirm,
+                        onConfirm: triggerAction,
+                        onCancel: function() {
+                            return;
+                        }
+                    });
                     return;
                 }
 
