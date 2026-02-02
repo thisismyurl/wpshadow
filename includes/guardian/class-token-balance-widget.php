@@ -210,19 +210,19 @@ class Token_Balance_Widget {
 			}
 			.wpshadow-status-dot {
 				display: inline-block;
-				width: 8px;
-				height: 8px;
+				width: 10px;
+				height: 10px;
 				border-radius: 50%;
-				margin-right: 2px;
+				flex-shrink: 0;
 				transition: opacity 0.2s ease;
 			}
 			.wpshadow-status-active {
 				background-color: #00a32a;
-				box-shadow: 0 0 3px rgba(0, 163, 42, 0.6);
+				box-shadow: 0 0 4px rgba(0, 163, 42, 0.8);
 			}
 			.wpshadow-status-inactive {
 				background-color: #dc3232;
-				box-shadow: 0 0 3px rgba(220, 50, 50, 0.6);
+				box-shadow: 0 0 4px rgba(220, 50, 50, 0.8);
 			}
 			#wpshadow-guardian-buy-tokens {
 				border-top: 1px solid rgba(255,255,255,0.1);
