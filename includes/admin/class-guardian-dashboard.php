@@ -46,6 +46,15 @@ class Guardian_Dashboard {
 				'dashicons-shield-alt'
 			); ?>
 
+			<?php 
+			// Check if Guardian has run
+			$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
+			$never_run = empty( $last_scan );
+			if ( $never_run ) {
+				wpshadow_render_guardian_not_run_modal();
+			}
+			?>
+
 			<!-- Status and Actions Bar -->
 			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Guardian status and actions', 'wpshadow' ); ?>">
 				<?php

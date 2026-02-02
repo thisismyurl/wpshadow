@@ -445,7 +445,6 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 */
 	public static function handle_plugin_update( $upgrader, $options ): void {
 		if ( isset( $options['action'], $options['type'] ) && 'update' === $options['action'] && 'plugin' === $options['type'] ) {
-		if ( 'update' === $options['action'] && 'plugin' === $options['type'] ) {
 			self::clear_cache();
 		}
 	}

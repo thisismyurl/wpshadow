@@ -45,15 +45,81 @@ function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class =
 function wpshadow_render_page_footer() {
 	include WPSHADOW_PATH . 'includes/views/page-footer.php';
 }
+
+/**
+ * Render modal when Guardian hasn't been run yet.
+ *
+ * @since  1.26032.1945
+ * @return void
+ */
+function wpshadow_render_guardian_not_run_modal() {
+	$last_run = get_option( 'wpshadow_last_quick_scan', 0 );
+	$never_run = empty( $last_run );
+
+	if ( ! $never_run ) {
+		return; // Guardian has run, no modal needed
+	}
+	?>
+	<div class="wps-scan-overlay" id="wpshadow-guardian-not-run-overlay" role="dialog" aria-labelledby="wpshadow-guardian-not-run-heading" aria-modal="true">
+		<div class="wps-scan-overlay-content">
+			<div class="wps-cta-card wps-cta-warning" style="max-width: 500px;">
+				<button type="button" class="wps-cta-dismiss" id="wpshadow-dismiss-guardian-modal" aria-label="<?php esc_attr_e( 'Dismiss message', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+				</button>
+				<div class="wps-cta-icon" aria-hidden="true">
+					<span class="dashicons dashicons-warning"></span>
+				</div>
+				<div class="wps-cta-content">
+					<h2 id="wpshadow-guardian-not-run-heading" class="wps-cta-heading"><?php esc_html_e( 'Guardian Needs to Run First', 'wpshadow' ); ?></h2>
+					<p class="wps-cta-description">
+						<?php esc_html_e( 'This page requires Guardian to have run a scan first. Guardian will analyze your site and provide detailed insights.', 'wpshadow' ); ?>
+					</p>
+					<div class="wps-cta-actions">
+						<button type="button" class="wps-btn wps-btn--success wps-btn-icon-left" id="wpshadow-enable-guardian-btn" aria-label="<?php esc_attr_e( 'Enable Guardian to run scans', 'wpshadow' ); ?>">
+							<span class="dashicons dashicons-update"></span>
+							<?php esc_html_e( 'Enable Guardian', 'wpshadow' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		// Dismiss button
+		$('#wpshadow-dismiss-guardian-modal').on('click', function() {
+			$('#wpshadow-guardian-not-run-overlay').fadeOut();
+		});
+
+		// Enable Guardian button
+		$('#wpshadow-enable-guardian-btn').on('click', function() {
+			// Toggle Guardian on
+			$.post(ajaxurl, {
+				action: 'wpshadow_toggle_guardian',
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_guardian_toggle' ) ); ?>',
+				enabled: 1
+			}, function(response) {
+				if (response.success) {
+					// Reload page
+					location.reload();
+				} else {
+					alert('<?php esc_attr_e( 'Unable to enable Guardian. Please try again.', 'wpshadow' ); ?>');
+				}
+			});
+		});
+	});
+	</script>
+	<?php
+}
 /**
  * Load and render page-specific activities component
  *
- * Includes the page-activities component file which provides functions for
- * rendering real-time activity displays with AJAX auto-refresh.
- *
- * @since  1.2601.2148
- * @return void
- */
+	 * Includes the page-activities component file which provides functions for
+	 * rendering real-time activity displays with AJAX auto-refresh.
+	 *
+	 * @since  1.2601.2148
+	 * @return void
+	 */
 function wpshadow_load_page_activities_component() {
 	// First, attempt to move the file from temp location if needed
 	if ( file_exists( WPSHADOW_PATH . 'includes/views/move-activities-component.php' ) ) {
@@ -69,6 +135,7 @@ function wpshadow_load_page_activities_component() {
 		}
 	}
 }
+
 
 // Load page activities component on init
 add_action( 'wp_loaded', 'wpshadow_load_page_activities_component' );

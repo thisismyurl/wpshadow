@@ -146,6 +146,15 @@ $severity_legend = array(
 		'dashicons-grid-view'
 	); ?>
 
+	<?php 
+	// Check if Guardian has run
+	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
+	$never_run = empty( $last_scan );
+	if ( $never_run ) {
+		wpshadow_render_guardian_not_run_modal();
+	}
+	?>
+
 	<!-- Kanban Board -->
 	<div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
 	<div id="wpshadow-kanban-status" class="wps-none wps-m-0 wps-p-3 wps-rounded-md" role="status" aria-live="polite" aria-atomic="true"></div>

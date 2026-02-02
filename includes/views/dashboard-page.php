@@ -82,6 +82,11 @@ function wpshadow_render_dashboard() {
 		<?php endif; ?>
 
 		<?php if ( $never_run ) : ?>
+			<!-- Guardian Not Run Modal -->
+			<?php wpshadow_render_guardian_not_run_modal(); ?>
+		<?php endif; ?>
+
+		<?php if ( $never_run ) : ?>
 			<!-- First-time Quick Scan prompt (centered modal) -->
 			<div class="wps-scan-overlay wps-first-scan-overlay" id="wpshadow-first-scan-overlay" role="dialog" aria-labelledby="wpshadow-first-scan-heading" aria-modal="true">
 				<div class="wps-scan-overlay-content">
