@@ -33,8 +33,8 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	 * Handle AJAX request to create workflow from suggestion
 	 */
 	public static function handle(): void {
-		// Security check (reuse workflow nonce for consistency)
-		self::verify_request( 'wpshadow_workflow', 'manage_options' );
+		// Security check (use automations dashboard nonce)
+		self::verify_request( 'wpshadow_automations', 'manage_options' );
 
 		// Get parameters
 		$title   = self::get_post_param( 'title', 'text', '', true );
