@@ -65,12 +65,14 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		if (!confirm('Run workflow "' + workflowName + '" now?')) {
-			return;
-		}
-		
-		runWorkflow();
-		
+		window.WPShadowModal.confirm({
+			title: 'Run Workflow',
+			message: 'Run workflow "' + workflowName + '" now?',
+			confirmText: 'Run',
+			cancelText: 'Cancel',
+			type: 'info',
+			onConfirm: runWorkflow
+		});
 	});
 	
 	// Test workflow (dry run)
@@ -138,11 +140,14 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		if (!confirm('Delete workflow "' + workflowName + '"? This cannot be undone.')) {
-			return;
-		}
-		
-		deleteWorkflow();
+		window.WPShadowModal.confirm({
+			title: 'Delete Workflow',
+			message: 'Delete workflow "' + workflowName + '"? This cannot be undone.',
+			confirmText: 'Delete',
+			cancelText: 'Cancel',
+			type: 'danger',
+			onConfirm: deleteWorkflow
+		});
 	});
 	
 	// Show admin notice

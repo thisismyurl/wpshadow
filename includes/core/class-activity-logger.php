@@ -243,15 +243,37 @@ class Activity_Logger {
 		foreach ( $activities as $activity ) {
 			$csv .= sprintf(
 				'"%s","%s","%s","%s","%s"' . "\n",
-				$activity['date'],
-				$activity['user_name'],
-				$activity['action'],
-				$activity['category'],
-				str_replace( '"', '""', $activity['details'] )
+				self::escape_csv_value( $activity['date'] ),
+				self::escape_csv_value( $activity['user_name'] ),
+				self::escape_csv_value( $activity['action'] ),
+				self::escape_csv_value( $activity['category'] ),
+				self::escape_csv_value( $activity['details'] )
 			);
 		}
 
 		return $csv;
+	}
+
+	/**
+	 * Escape CSV value to prevent formula injection
+	 *
+	 * Prevents CSV injection by prepending single quote to values that
+	 * start with potentially dangerous characters (=, +, -, @, tab, return).
+	 *
+	 * @since  1.2602.0200
+	 * @param  string $value Value to escape.
+	 * @return string Escaped value.
+	 */
+	private static function escape_csv_value( string $value ): string {
+		// Prevent formula injection by prepending single quote
+		if ( in_array( substr( $value, 0, 1 ), array( '=', '+', '-', '@', "\t", "\r" ), true ) ) {
+			$value = "'" . $value;
+		}
+
+		// Escape double quotes for CSV format
+		$value = str_replace( '"', '""', $value );
+
+		return $value;
 	}
 
 	/**

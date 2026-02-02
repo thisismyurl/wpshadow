@@ -45,7 +45,7 @@ if ( empty( $trigger_id ) ) {
 jQuery(document).ready(function($) {
 	const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
 	const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
-	const actionIndex = <?php echo $action_index; ?>;
+	const actionIndex = <?php echo wp_json_encode( $action_index ); ?>;
 	const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
 	
 	// Load actions from sessionStorage

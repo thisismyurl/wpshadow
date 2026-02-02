@@ -58,15 +58,16 @@
 				const button = $(this);
 				const rewardId = button.data('reward-id');
 
-				if (!confirm('Are you sure you want to redeem this reward?')) {
+			WPShadowModal.confirm({
+				title: 'Redeem Reward',
+				message: 'Are you sure you want to redeem this reward?',
+				confirmText: 'Redeem',
+				cancelText: 'Cancel',
+				type: 'info',
+				onCancel: function() {
 					return;
-				}
-
-				button.prop('disabled', true).text('Processing...');
-
-				$.ajax({
-					url: wpShadowGamification.ajaxurl,
-					method: 'POST',
+				},
+				onConfirm: function() {
 					data: {
 						action: 'wpshadow_redeem_reward',
 						nonce: wpShadowGamification.nonce,

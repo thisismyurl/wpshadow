@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Utils;
 
 use WPShadow\Core\Options_Manager;
+use WPShadow\Core\Security_Hardening;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -240,6 +241,26 @@ class Magic_Link_Manager {
 	}
 
 	/**
+	 * Validate magic link token and return link data
+	 *
+	 * @since  1.2602.0200
+	 * @param  string $token Plaintext token from URL.
+	 * @return array|null Link data if valid, null otherwise.
+	 */
+	public static function validate_token( string $token ): ?array {
+		$magic_links = Options_Manager::get_array( 'wpshadow_magic_links', array() );
+
+		// Iterate through hashed tokens and verify
+		foreach ( $magic_links as $token_hash => $link_data ) {
+			if ( Security_Hardening::verify_token( $token, $token_hash ) ) {
+				return $link_data;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Create permanent user from expired magic link
 	 *
 	 * @since  1.2601.2330
@@ -247,16 +268,14 @@ class Magic_Link_Manager {
 	 * @return array Result array with success status and message.
 	 */
 	public static function create_permanent_user( string $token ): array {
-		$magic_links = Options_Manager::get_array( 'wpshadow_magic_links', array() );
+		$link = self::validate_token( $token );
 
-		if ( ! isset( $magic_links[ $token ] ) ) {
+		if ( ! $link ) {
 			return array(
 				'success' => false,
 				'message' => __( 'Magic link not found.', 'wpshadow' ),
 			);
 		}
-
-		$link = $magic_links[ $token ];
 
 		$user_name  = $link['user_name'] ?? $link['developer_name'] ?? '';
 		$user_email = $link['user_email'] ?? $link['developer_email'] ?? '';

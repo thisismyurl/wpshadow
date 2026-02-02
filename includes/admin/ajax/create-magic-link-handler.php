@@ -12,6 +12,7 @@ namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Options_Manager;
+use WPShadow\Core\Security_Hardening;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,12 +51,16 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 			$user_role = 'editor'; // Default to editor if invalid role
 		}
 
+		// Generate random token for URL (stored only once)
 		$token      = wp_generate_password( 32, false );
 		$created_at = current_time( 'timestamp' );
 		$expires_at = $created_at + ( $duration_hours * HOUR_IN_SECONDS );
 
-		$magic_links           = Options_Manager::get_array( 'wpshadow_magic_links', array() );
-		$magic_links[ $token ] = array(
+		// Hash token before storage (security best practice)
+		$token_hash = Security_Hardening::hash_token( $token );
+
+		$magic_links             = Options_Manager::get_array( 'wpshadow_magic_links', array() );
+		$magic_links[ $token_hash ] = array(
 			'user_name'       => $user_name,
 			'user_email'      => $user_email,
 			'user_role'       => $user_role,

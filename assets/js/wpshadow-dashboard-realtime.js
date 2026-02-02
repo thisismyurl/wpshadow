@@ -331,14 +331,22 @@
 				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 					window.WPShadowDesign.alert('Fullscreen unavailable', 'Unable to enter fullscreen mode. Error: ' + err.message, 'error');
 				} else {
-					alert('Unable to enter fullscreen mode. Error: ' + err.message);
+					window.WPShadowModal.alert({
+						title: 'Fullscreen Unavailable',
+						message: 'Unable to enter fullscreen mode. Error: ' + err.message,
+						type: 'danger'
+					});
 				}
 			});
 		} else {
 			if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 				window.WPShadowDesign.alert('Fullscreen unavailable', 'Fullscreen mode is not supported in your browser.', 'warning');
 			} else {
-				alert('Fullscreen mode is not supported in your browser.');
+				window.WPShadowModal.alert({
+					title: 'Fullscreen Unavailable',
+					message: 'Fullscreen mode is not supported in your browser.',
+					type: 'warning'
+				});
 			}
 		}
 

@@ -122,9 +122,13 @@
         handleDisconnect: function(e) {
             e.preventDefault();
 
-            if (!confirm(wpShadowAccount.i18n.confirm_disconnect)) {
-                return;
-            }
+            WPShadowModal.confirm({
+                title: 'Disconnect Account',
+                message: wpShadowAccount.i18n.confirm_disconnect,
+                confirmText: 'Disconnect',
+                cancelText: 'Cancel',
+                type: 'warning',
+                onConfirm: function() {
 
             const $btn = $(e.currentTarget);
             const originalText = $btn.text();

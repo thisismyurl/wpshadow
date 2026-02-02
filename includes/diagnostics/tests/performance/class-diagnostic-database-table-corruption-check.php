@@ -100,12 +100,22 @@ class Diagnostic_Database_Table_Corruption_Check extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Database table corruption was detected.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
+				'description'  => sprintf(
+					/* translators: %d: number of corrupt tables */
+					_n(
+						'%d database table has corruption and needs repair',
+						'%d database tables have corruption and need repair',
+						count( $corrupt ),
+						'wpshadow'
+					),
+					count( $corrupt )
+				),
+				'severity'     => 'critical',
+				'threat_level' => 90,
+				'auto_fixable' => true,
 				'details'      => array(
 					'corrupt_tables' => $corrupt,
+					'tables_affected' => array_column( $corrupt, 'table' ),
 				),
 				'kb_link'      => 'https://wpshadow.com/kb/database-table-corruption-check',
 			);

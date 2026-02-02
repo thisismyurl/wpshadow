@@ -266,7 +266,11 @@
 	const exportPdfBtn = document.getElementById('wpshadow-dna-export-pdf');
 	if (exportPdfBtn) {
 		exportPdfBtn.addEventListener('click', function() {
-			alert('PDF export feature coming soon!');
+			window.WPShadowModal.alert({
+				title: 'Coming Soon',
+				message: 'PDF export feature coming soon!',
+				type: 'info'
+			});
 		});
 	}
 
@@ -274,7 +278,11 @@
 	const shareBadgeBtn = document.getElementById('wpshadow-dna-share-badge');
 	if (shareBadgeBtn) {
 		shareBadgeBtn.addEventListener('click', function() {
-			alert('Shareable badge feature coming soon!');
+			window.WPShadowModal.alert({
+				title: 'Coming Soon',
+				message: 'Shareable badge feature coming soon!',
+				type: 'info'
+			});
 		});
 	}
 
@@ -282,7 +290,11 @@
 	const compareHistoricalBtn = document.getElementById('wpshadow-dna-compare-historical');
 	if (compareHistoricalBtn) {
 		compareHistoricalBtn.addEventListener('click', function() {
-			alert('Historical comparison feature coming soon!');
+			window.WPShadowModal.alert({
+				title: 'Coming Soon',
+				message: 'Historical comparison feature coming soon!',
+				type: 'info'
+			});
 		});
 	}
 })();

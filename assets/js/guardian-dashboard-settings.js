@@ -294,11 +294,14 @@
 				return;
 			}
 
-			if (!confirm('Are you sure you want to restore from this recovery point?')) {
-				return;
-			}
-
-			restoreAction();
+			window.WPShadowModal.confirm({
+				title: 'Restore Recovery Point',
+				message: 'Are you sure you want to restore from this recovery point?',
+				confirmText: 'Restore',
+				cancelText: 'Cancel',
+				type: 'warning',
+				onConfirm: restoreAction
+			});
 		},
 		
 		/**
@@ -516,11 +519,14 @@
 				return;
 			}
 
-			if (!confirm('Are you sure you want to remove this subscription?')) {
-				return;
-			}
-
-			removeSubscription();
+			window.WPShadowModal.confirm({
+				title: 'Remove Subscription',
+				message: 'Are you sure you want to remove this subscription?',
+				confirmText: 'Remove',
+				cancelText: 'Cancel',
+				type: 'warning',
+				onConfirm: removeSubscription
+			});
 		},
 		
 		/**

@@ -67,20 +67,24 @@
             const originalText = $btn.text();
 
             // Prompt for backup label
-            const label = prompt(
-                'Enter a label for this backup (optional):',
-                'Manual Backup - ' + new Date().toLocaleDateString()
-            );
+			window.WPShadowModal.prompt({
+				title: 'Create Backup',
+				message: 'Enter a label for this backup (optional):',
+				placeholder: 'Backup label',
+				defaultValue: 'Manual Backup - ' + new Date().toLocaleDateString(),
+				submitText: 'Create',
+				cancelText: 'Cancel',
+				onSubmit: function(label) {
+					$btn.prop('disabled', true).text(wpShadowVault.strings.creating);
+					VaultUI.createBackupWithLabel(label, $btn, originalText);
+				}
+			});
+		},
 
-            if (label === null) {
-                return; // User cancelled
-            }
-
-            $btn.prop('disabled', true).text(wpShadowVault.strings.creating);
-
-            $.ajax({
-                url: wpShadowVault.ajax_url,
-                type: 'POST',
+		/**
+		 * Create backup with label
+		 */
+		createBackupWithLabel: function(label, $btn, originalText) {
                 data: {
                     action: 'wpshadow_vault_create_backup',
                     nonce: wpShadowVault.nonces.create_backup,
@@ -112,39 +116,44 @@
 
             const $btn = $(e.currentTarget);
             const backupId = $btn.data('backup-id');
-
-            if (!confirm(wpShadowVault.strings.confirm_delete)) {
-                return;
-            }
-
             const originalText = $btn.text();
-            $btn.prop('disabled', true).text(wpShadowVault.strings.deleting);
 
-            $.ajax({
-                url: wpShadowVault.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'wpshadow_vault_delete_backup',
-                    nonce: wpShadowVault.nonces.delete_backup,
-                    backup_id: backupId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        VaultUI.showNotice('success', response.data.message);
-                        $btn.closest('tr').fadeOut(300, function() {
-                            $(this).remove();
-                        });
-                    } else {
-                        VaultUI.showNotice('error', response.data);
-                        $btn.prop('disabled', false).text(originalText);
-                    }
-                },
-                error: function() {
-                    VaultUI.showNotice('error', 'Failed to delete backup. Please try again.');
-                    $btn.prop('disabled', false).text(originalText);
+            window.WPShadowModal.confirm({
+                title: 'Delete Backup',
+                message: wpShadowVault.strings.confirm_delete,
+                confirmText: 'Delete',
+                cancelText: 'Cancel',
+                type: 'danger',
+                onConfirm: function() {
+                    $btn.prop('disabled', true).text(wpShadowVault.strings.deleting);
+
+					$.ajax({
+						url: wpShadowVault.ajax_url,
+						type: 'POST',
+						data: {
+							action: 'wpshadow_vault_delete_backup',
+							nonce: wpShadowVault.nonces.delete_backup,
+							backup_id: backupId
+						},
+						success: function(response) {
+							if (response.success) {
+								VaultUI.showNotice('success', response.data.message);
+								$btn.closest('tr').fadeOut(300, function() {
+									$(this).remove();
+								});
+							} else {
+								VaultUI.showNotice('error', response.data);
+								$btn.prop('disabled', false).text(originalText);
+							}
+						},
+						error: function() {
+							VaultUI.showNotice('error', 'Failed to delete backup. Please try again.');
+							$btn.prop('disabled', false).text(originalText);
+						}
+					});
                 }
             });
-        },
+		},
 
         /**
          * Handle restore backup
@@ -154,36 +163,41 @@
 
             const $btn = $(e.currentTarget);
             const backupId = $btn.data('backup-id');
-
-            if (!confirm(wpShadowVault.strings.confirm_restore)) {
-                return;
-            }
-
             const originalText = $btn.text();
-            $btn.prop('disabled', true).text(wpShadowVault.strings.restoring);
 
-            $.ajax({
-                url: wpShadowVault.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'wpshadow_vault_restore_backup',
-                    nonce: wpShadowVault.nonces.restore_backup,
-                    backup_id: backupId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        VaultUI.showNotice('success', response.data.message);
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        VaultUI.showNotice('error', response.data);
-                        $btn.prop('disabled', false).text(originalText);
-                    }
-                },
-                error: function() {
-                    VaultUI.showNotice('error', 'Failed to restore backup. Please try again.');
-                    $btn.prop('disabled', false).text(originalText);
+            window.WPShadowModal.confirm({
+                title: 'Restore Backup',
+                message: wpShadowVault.strings.confirm_restore,
+                confirmText: 'Restore',
+                cancelText: 'Cancel',
+                type: 'warning',
+                onConfirm: function() {
+                    $btn.prop('disabled', true).text(wpShadowVault.strings.restoring);
+
+					$.ajax({
+						url: wpShadowVault.ajax_url,
+						type: 'POST',
+						data: {
+							action: 'wpshadow_vault_restore_backup',
+							nonce: wpShadowVault.nonces.restore_backup,
+							backup_id: backupId
+						},
+						success: function(response) {
+							if (response.success) {
+								VaultUI.showNotice('success', response.data.message);
+								setTimeout(function() {
+									location.reload();
+								}, 2000);
+							} else {
+								VaultUI.showNotice('error', response.data);
+								$btn.prop('disabled', false).text(originalText);
+							}
+						},
+						error: function() {
+							VaultUI.showNotice('error', 'Failed to restore backup. Please try again.');
+							$btn.prop('disabled', false).text(originalText);
+						}
+					});
                 }
             });
         },

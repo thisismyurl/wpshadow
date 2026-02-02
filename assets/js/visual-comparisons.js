@@ -154,10 +154,11 @@
 					// Validate same-site
 					if (urlObj.hostname !== siteUrlObj.hostname) {
 						this.value = '/';
-						alert('You can only capture screenshots of your own site.');
-						return;
-					}
-
+					WPShadowModal.alert({
+						title: 'Invalid URL',
+						message: 'You can only capture screenshots of your own site.',
+						type: 'warning'
+					});
 					// Extract path + query
 					const path = urlObj.pathname + urlObj.search;
 					this.value = path || '/';

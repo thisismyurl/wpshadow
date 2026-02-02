@@ -73,12 +73,20 @@
 							$(this).remove();
 						});
 					} else {
-						alert(response.data.message || 'Failed to dismiss suggestion');
+						window.WPShadowModal.alert({
+							title: 'Error',
+							message: response.data.message || 'Failed to dismiss suggestion',
+							type: 'danger'
+						});
 						button.prop('disabled', false).text('Dismiss');
 					}
 				},
 				error: () => {
-					alert('Network error. Please try again.');
+					window.WPShadowModal.alert({
+						title: 'Network Error',
+						message: 'Network error. Please try again.',
+						type: 'danger'
+					});
 					button.prop('disabled', false).text('Dismiss');
 				}
 			});

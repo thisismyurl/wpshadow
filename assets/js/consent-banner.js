@@ -57,7 +57,11 @@
 					}
 				} else {
 					// Show error message
-					alert(response.data && response.data.message ? response.data.message : 'Failed to dismiss. Please try again.');
+					WPShadowModal.alert({
+						title: 'Dismiss Failed',
+						message: response.data && response.data.message ? response.data.message : 'Failed to dismiss. Please try again.',
+						type: 'warning'
+					});
 					$allButtons.prop('disabled', false);
 					if ($button && buttonText) {
 						$button.text(buttonText.replace('...', ''));
@@ -65,7 +69,11 @@
 				}
 			},
 			error: function() {
-				alert('Network error occurred. Please try again.');
+				WPShadowModal.alert({
+					title: 'Network Error',
+					message: 'Network error occurred. Please try again.',
+					type: 'danger'
+				});
 				$allButtons.prop('disabled', false);
 				if ($button && buttonText) {
 					$button.text(buttonText.replace('...', ''));
@@ -129,13 +137,21 @@
 						}, 2000);
 					} else {
 						// Show error message
-						alert(response.data.message || 'Failed to save preferences. Please try again.');
+						WPShadowModal.alert({
+							title: 'Save Failed',
+							message: response.data.message || 'Failed to save preferences. Please try again.',
+							type: 'warning'
+						});
 						$acceptBtn.prop('disabled', false).text('Save preferences');
 						$dismissBtn.prop('disabled', false);
 					}
 				},
 				error: function() {
-					alert('Failed to save preferences. Please try again.');
+					WPShadowModal.alert({
+						title: 'Save Failed',
+						message: 'Failed to save preferences. Please try again.',
+						type: 'danger'
+					});
 					$acceptBtn.prop('disabled', false).text('Save preferences');
 					$dismissBtn.prop('disabled', false);
 				}

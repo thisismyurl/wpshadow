@@ -1197,11 +1197,11 @@
 				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 					window.WPShadowDesign.alert(wpshadowWorkflow.strings.testTitle || 'Workflow Test', wpshadowWorkflow.strings.noBlocks, 'warning');
 				} else {
-					alert(wpshadowWorkflow.strings.noBlocks);
-				}
-				return;
-			}
-
+				window.WPShadowModal.alert({
+					title: wpshadowWorkflow.strings.testTitle || 'Workflow Test',
+					message: wpshadowWorkflow.strings.noBlocks,
+					type: 'warning'
+				});
 			// Show loading state
 			const $btn = $('#wps-test-workflow');
 			const originalText = $btn.html();
@@ -1273,9 +1273,14 @@
 				return;
 			}
 
-			if (confirm(wpshadowWorkflow.strings.clearConfirm)) {
-				clearCanvas();
-			}
+			window.WPShadowModal.confirm({
+				title: 'Clear Canvas',
+				message: wpshadowWorkflow.strings.clearConfirm,
+				confirmText: 'Clear',
+				cancelText: 'Cancel',
+				type: 'warning',
+				onConfirm: clearCanvas
+			});
 		},
 
 		/**

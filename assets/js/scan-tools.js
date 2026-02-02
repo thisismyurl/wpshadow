@@ -47,7 +47,11 @@
 				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 					window.WPShadowDesign.alert('AJAX unavailable', message, 'error');
 				} else {
-					alert(message);
+					window.WPShadowModal.alert({
+						title: 'AJAX Unavailable',
+						message: message,
+						type: 'danger'
+					});
 				}
 				return;
 			}

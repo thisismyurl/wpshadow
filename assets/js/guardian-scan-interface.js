@@ -134,7 +134,11 @@
             const apiKey = $('#guardian-api-key').val().trim();
 
             if (!apiKey) {
-                alert('Please enter your API key.');
+                WPShadowModal.alert({
+                    title: 'API Key Required',
+                    message: 'Please enter your API key.',
+                    type: 'warning'
+                });
                 return;
             }
 
@@ -175,12 +179,15 @@
         handleDisconnect: function(e) {
             e.preventDefault();
 
-            if (!confirm('Are you sure you want to disconnect Guardian? You can reconnect anytime.')) {
-                return;
-            }
-
             const button = $(this);
-            button.prop('disabled', true).text('Disconnecting...');
+            WPShadowModal.confirm({
+                title: 'Disconnect Guardian',
+                message: 'Are you sure you want to disconnect Guardian? You can reconnect anytime.',
+                confirmText: 'Disconnect',
+                cancelText: 'Cancel',
+                type: 'warning',
+                onConfirm: function() {
+                    button.prop('disabled', true).text('Disconnecting...');
 
             $.ajax({
                 url: wpShadowGuardian.ajaxUrl,
@@ -202,7 +209,9 @@
                 },
                 error: function() {
                     GuardianScan.showNotice('Network error. Please try again.', 'error');
-                    button.prop('disabled', false).text('Disconnect Guardian');
+                        button.prop('disabled', false).text('Disconnect');
+                    }
+                });
                 }
             });
         },

@@ -36,9 +36,16 @@
 		// Handle recipe cancellation
 		$(document).on('click', '.wpshadow-cancel-recipe', function(e) {
 			e.preventDefault();
-			if (confirm('Are you sure you want to cancel this workflow? Progress will be lost.')) {
-				cancelRecipe();
-			}
+			window.WPShadowModal.confirm({
+				title: 'Cancel Workflow',
+				message: 'Are you sure you want to cancel this workflow? Progress will be lost.',
+				confirmText: 'Yes, Cancel',
+				cancelText: 'Keep Working',
+				type: 'warning',
+				onConfirm: function() {
+					cancelRecipe();
+				}
+			});
 		});
 
 		// Load recipes on page load if on workflows page
@@ -154,12 +161,20 @@
 					// Render recipe execution UI
 					renderRecipeExecution();
 				} else {
-					alert('Failed to start recipe: ' + (response.data.message || 'Unknown error'));
+					window.WPShadowModal.alert({
+						title: 'Recipe Start Failed',
+						message: 'Failed to start recipe: ' + (response.data.message || 'Unknown error'),
+						type: 'danger'
+					});
 				}
 			},
 			error: function() {
 				hideLoadingOverlay();
-				alert('Error starting recipe. Please try again.');
+				window.WPShadowModal.alert({
+					title: 'Error',
+					message: 'Error starting recipe. Please try again.',
+					type: 'danger'
+				});
 			}
 		});
 	}
@@ -333,12 +348,20 @@
 					}
 				} else {
 					$button.prop('disabled', false).text(originalText);
-					alert('Failed to complete step: ' + (response.data.message || 'Unknown error'));
+					window.WPShadowModal.alert({
+						title: 'Step Failed',
+						message: 'Failed to complete step: ' + (response.data.message || 'Unknown error'),
+						type: 'danger'
+					});
 				}
 			},
 			error: function() {
 				$button.prop('disabled', false).text(originalText);
-				alert('Error completing step. Please try again.');
+				window.WPShadowModal.alert({
+					title: 'Error',
+					message: 'Error completing step. Please try again.',
+					type: 'danger'
+				});
 			}
 		});
 	}

@@ -225,19 +225,19 @@ jQuery( function( $ ) {
 			}
 
 			const workflowId = $btn.data( 'workflow-id' );
-			const $card = $btn.closest( '.wpshadow-automation-card' );
-			const originalText = $btn.text();
+		const $card = $btn.closest( '.wpshadow-automation-card' );
+		const originalText = $btn.text();
 
-			$btn.prop( 'disabled', true ).text( 'Deleting...' );
+		$btn.prop( 'disabled', true ).text( 'Deleting...' );
 
-			$.ajax({
-				url: wpshadowAutomationsDashboard.ajaxUrl,
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					action: 'wpshadow_delete_automation',
-					nonce: wpshadowAutomationsDashboard.nonce,
-					workflow_id: workflowId,
+		$.ajax({
+			url: wpshadowAutomationsDashboard.ajaxUrl,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'wpshadow_delete_automation',
+				nonce: wpshadowAutomationsDashboard.nonce,
+				workflow_id: workflowId,
 				},
 				success: ( response ) => {
 					if ( response.success ) {
