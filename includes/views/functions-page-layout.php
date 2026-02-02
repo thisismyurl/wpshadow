@@ -72,3 +72,166 @@ function wpshadow_load_page_activities_component() {
 
 // Load page activities component on init
 add_action( 'wp_loaded', 'wpshadow_load_page_activities_component' );
+
+/**
+ * Render a context-specific activity log section.
+ *
+ * Displays a card with recent activities filtered by the specified context.
+ * Each page/section can show activities relevant to its purpose.
+ *
+ * @since  1.26032.1848
+ * @param  string $context The context identifier for filtering activities.
+ *                         Valid values: 'training', 'achievements', 'settings',
+ *                         'guardian', 'workflow', 'diagnostics', 'general'.
+ * @param  int    $limit   Optional. Number of activities to display. Default 10.
+ * @return void
+ */
+function wpshadow_render_activity_log( $context = 'general', $limit = 10 ) {
+	// Context-specific configurations
+	$context_config = array(
+		'training'     => array(
+			'title'       => __( 'Training Activity Log', 'wpshadow' ),
+			'description' => __( 'Your recent training activities and course progress.', 'wpshadow' ),
+			'filters'     => array( 'category' => 'academy' ),
+			'icon'        => 'dashicons-video-alt2',
+		),
+		'achievements' => array(
+			'title'       => __( 'Achievements Activity Log', 'wpshadow' ),
+			'description' => __( 'Your recent achievements and gamification activities.', 'wpshadow' ),
+			'filters'     => array( 'category' => 'gamification' ),
+			'icon'        => 'dashicons-awards',
+		),
+		'settings'     => array(
+			'title'       => __( 'Settings Activity Log', 'wpshadow' ),
+			'description' => __( 'Recent configuration changes and settings updates.', 'wpshadow' ),
+			'filters'     => array( 'category' => 'settings' ),
+			'icon'        => 'dashicons-admin-settings',
+		),
+		'guardian'     => array(
+			'title'       => __( 'Guardian Activity Log', 'wpshadow' ),
+			'description' => __( 'Recent security scans and protection activities.', 'wpshadow' ),
+			'filters'     => array( 'category' => 'security' ),
+			'icon'        => 'dashicons-shield',
+		),
+		'workflow'     => array(
+			'title'       => __( 'Workflow Activity Log', 'wpshadow' ),
+			'description' => __( 'Recent workflow and automation activities.', 'wpshadow' ),
+			'filters'     => array( 'category' => 'workflow' ),
+			'icon'        => 'dashicons-update',
+		),
+		'diagnostics'  => array(
+			'title'       => __( 'Diagnostics Activity Log', 'wpshadow' ),
+			'description' => __( 'Recent diagnostic scans and treatment applications.', 'wpshadow' ),
+			'filters'     => array(
+				'category' => array( 'diagnostics', 'treatments' ),
+			),
+			'icon'        => 'dashicons-search',
+		),
+		'general'      => array(
+			'title'       => __( 'Recent Activity', 'wpshadow' ),
+			'description' => __( 'Your latest WPShadow actions and events.', 'wpshadow' ),
+			'filters'     => array(),
+			'icon'        => 'dashicons-clock',
+		),
+	);
+
+	// Get context configuration
+	$config = isset( $context_config[ $context ] ) ? $context_config[ $context ] : $context_config['general'];
+
+	// Apply filters to allow customization
+	$config = apply_filters( 'wpshadow_activity_log_config', $config, $context );
+
+	// Get activities
+	$activities_result = \WPShadow\Core\Activity_Logger::get_activities( $config['filters'], $limit, 0 );
+
+	// If no activities, don't render anything
+	if ( empty( $activities_result['activities'] ) ) {
+		return;
+	}
+
+	// Build URL with context filter if not general
+	$view_all_url = admin_url( 'admin.php?page=wpshadow-reports&tab=activity' );
+	if ( 'general' !== $context && ! empty( $config['filters'] ) ) {
+		$view_all_url = add_query_arg(
+			array(
+				'context' => $context,
+			),
+			$view_all_url
+		);
+	}
+
+	?>
+	<div class="wps-card wps-mt-8">
+		<div class="wps-card-header">
+			<div class="wps-flex wps-items-center wps-justify-between">
+				<div>
+					<h2 class="wps-card-title wps-m-0">
+						<span class="dashicons <?php echo esc_attr( $config['icon'] ); ?>"></span>
+						<?php echo esc_html( $config['title'] ); ?>
+					</h2>
+					<p class="wps-card-description wps-m-0">
+						<?php echo esc_html( $config['description'] ); ?>
+					</p>
+				</div>
+				<a href="<?php echo esc_url( $view_all_url ); ?>" class="wps-btn wps-btn--secondary wps-btn--small">
+					<?php esc_html_e( 'View All', 'wpshadow' ); ?>
+				</a>
+			</div>
+		</div>
+		<div class="wps-card-body">
+			<div class="wps-activity-list">
+				<?php foreach ( $activities_result['activities'] as $activity ) : ?>
+					<div class="wps-activity-item wps-flex wps-gap-3 wps-py-3 wps-border-bottom">
+						<div class="wps-activity-icon wps-flex-shrink-0">
+							<?php
+							// Icon based on action type
+							$icon_class = 'dashicons-admin-generic';
+							if ( strpos( $activity['action'], 'diagnostic' ) !== false ) {
+								$icon_class = 'dashicons-search';
+							} elseif ( strpos( $activity['action'], 'treatment' ) !== false ) {
+								$icon_class = 'dashicons-admin-tools';
+							} elseif ( strpos( $activity['action'], 'workflow' ) !== false ) {
+								$icon_class = 'dashicons-update';
+							} elseif ( strpos( $activity['action'], 'scan' ) !== false ) {
+								$icon_class = 'dashicons-shield';
+							} elseif ( strpos( $activity['action'], 'training' ) !== false || strpos( $activity['action'], 'academy' ) !== false ) {
+								$icon_class = 'dashicons-video-alt2';
+							} elseif ( strpos( $activity['action'], 'achievement' ) !== false || strpos( $activity['action'], 'gamification' ) !== false ) {
+								$icon_class = 'dashicons-awards';
+							}
+							?>
+							<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-2xl wps-text-muted"></span>
+						</div>
+						<div class="wps-flex-1">
+							<div class="wps-font-medium wps-text-sm">
+								<?php echo esc_html( $activity['details'] ); ?>
+							</div>
+							<?php if ( ! empty( $activity['category'] ) ) : ?>
+								<div class="wps-text-xs wps-text-muted wps-mt-1">
+									<span class="wps-badge wps-badge--<?php echo esc_attr( $activity['category'] ); ?>">
+										<?php echo esc_html( ucfirst( $activity['category'] ) ); ?>
+									</span>
+								</div>
+							<?php endif; ?>
+						</div>
+						<div class="wps-activity-meta wps-text-xs wps-text-muted wps-text-right wps-flex-shrink-0">
+							<div><?php echo esc_html( $activity['user_name'] ); ?></div>
+							<div title="<?php echo esc_attr( $activity['date'] ); ?>">
+								<?php
+								echo esc_html(
+									sprintf(
+										/* translators: %s: Human-readable time difference */
+										__( '%s ago', 'wpshadow' ),
+										human_time_diff( $activity['timestamp'], current_time( 'timestamp' ) )
+									)
+								);
+								?>
+							</div>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}

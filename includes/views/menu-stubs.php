@@ -308,31 +308,6 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					</div>
 				</div>
 
-				<!-- WPShadow Vault Light -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-backup wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=vault-light' ) ); ?>" style="color: inherit; text-decoration: none;">
-									<?php esc_html_e( 'WPShadow Vault Light', 'wpshadow' ); ?>
-								</a>
-							</h3>
-							<p class="wps-card-description wps-m-0">
-								<?php esc_html_e( 'Schedule Vault Light snapshots and prep for a seamless Vault upgrade.', 'wpshadow' ); ?>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="wps-card-body">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=vault-light' ) ); ?>" class="wps-btn wps-btn--secondary">
-						<span class="dashicons dashicons-arrow-right-alt"></span>
-						<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-					</a>
-				</div>
-			</div>
-
 			<!-- Advanced Settings -->
 				<div class="wps-card">
 					<div class="wps-card-header wps-pb-3 wps-border-bottom">

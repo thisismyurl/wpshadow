@@ -169,72 +169,7 @@ function wpshadow_render_help() {
 		</div>
 
 		<!-- Recent Activity -->
-		<?php
-		$recent_activities = \WPShadow\Core\Activity_Logger::get_activities( array(), 10, 0 );
-		if ( ! empty( $recent_activities['activities'] ) ) :
-		?>
-		<div class="wps-card wps-mt-8">
-			<div class="wps-card-header">
-				<div class="wps-flex wps-items-center wps-justify-between">
-					<div>
-						<h2 class="wps-card-title wps-m-0">
-							<span class="dashicons dashicons-clock"></span>
-							<?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?>
-						</h2>
-						<p class="wps-card-description wps-m-0">
-							<?php esc_html_e( 'Your latest WPShadow actions and events.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-reports&tab=activity' ) ); ?>" class="wps-btn wps-btn--secondary wps-btn--small">
-						<?php esc_html_e( 'View All', 'wpshadow' ); ?>
-					</a>
-				</div>
-			</div>
-			<div class="wps-card-body">
-				<div class="wps-activity-list">
-					<?php foreach ( $recent_activities['activities'] as $activity ) : ?>
-						<div class="wps-activity-item wps-flex wps-gap-3 wps-py-3 wps-border-bottom">
-							<div class="wps-activity-icon wps-flex-shrink-0">
-								<?php
-								// Icon based on action type
-								$icon_class = 'dashicons-admin-generic';
-								if ( strpos( $activity['action'], 'diagnostic' ) !== false ) {
-									$icon_class = 'dashicons-search';
-								} elseif ( strpos( $activity['action'], 'treatment' ) !== false ) {
-									$icon_class = 'dashicons-admin-tools';
-								} elseif ( strpos( $activity['action'], 'workflow' ) !== false ) {
-									$icon_class = 'dashicons-update';
-								} elseif ( strpos( $activity['action'], 'scan' ) !== false ) {
-									$icon_class = 'dashicons-shield';
-								}
-								?>
-								<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-2xl wps-text-muted"></span>
-							</div>
-							<div class="wps-flex-1">
-								<div class="wps-font-medium wps-text-sm">
-									<?php echo esc_html( $activity['details'] ); ?>
-								</div>
-								<?php if ( ! empty( $activity['category'] ) ) : ?>
-									<div class="wps-text-xs wps-text-muted wps-mt-1">
-										<span class="wps-badge wps-badge--<?php echo esc_attr( $activity['category'] ); ?>">
-											<?php echo esc_html( ucfirst( $activity['category'] ) ); ?>
-										</span>
-									</div>
-								<?php endif; ?>
-							</div>
-							<div class="wps-activity-meta wps-text-xs wps-text-muted wps-text-right wps-flex-shrink-0">
-								<div><?php echo esc_html( $activity['user_name'] ); ?></div>
-								<div title="<?php echo esc_attr( $activity['date'] ); ?>">
-									<?php echo esc_html( human_time_diff( $activity['timestamp'], current_time( 'timestamp' ) ) ); ?>
-									<?php esc_html_e( 'ago', 'wpshadow' ); ?>
-								</div>
-							</div>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div>
-		<?php endif; ?>
+		<?php wpshadow_render_activity_log( 'general', 10 ); ?>
 	</div>
 	<?php
 }
