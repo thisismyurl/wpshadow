@@ -360,9 +360,8 @@ function wpshadow_render_reports_page() {
 	<?php
 }
 
-/**
- * Render individual report card.
- *
+	<!-- Reports Activity Log -->
+	<?php wpshadow_render_activity_log( 'general', 10 ); ?>
  * @param array $item Report configuration.
  * @return void
  */

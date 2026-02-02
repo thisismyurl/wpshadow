@@ -807,3 +807,5 @@ if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
 		}
 	});
 </script>
+<!-- Findings Activity Log -->
+<?php wpshadow_render_activity_log( 'diagnostics', 10 ); ?>
