@@ -1,0 +1,470 @@
+/**
+ * Wizard Steps CSS
+ *
+ * Styling for wizard interface components.
+ *
+ * @package WPShadow
+ * @since   1.2601.2148
+ */
+
+/* Wizard Container */
+.wpshadow-wizard-container {
+	max-width: 800px;
+	margin: 0 auto;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba( 0, 0, 0, 0.08 );
+	overflow: hidden;
+}
+
+.wpshadow-wizard-header {
+	background: linear-gradient( 135deg, #2271b1 0%, #1e5494 100% );
+	color: white;
+	padding: 30px;
+	margin-bottom: 30px;
+}
+
+.wpshadow-wizard-header h1 {
+	margin: 0 0 10px 0;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+.wpshadow-wizard-header p {
+	margin: 0;
+	opacity: 0.9;
+	font-size: 14px;
+}
+
+/* Progress Bar */
+.wpshadow-progress-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 30px;
+	background: #f9f9f9;
+	margin-bottom: 30px;
+	position: relative;
+}
+
+.wpshadow-progress-step {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+	flex: 1;
+	text-align: center;
+}
+
+.wpshadow-progress-step:not( :last-child )::after {
+	content: '';
+	position: absolute;
+	top: 20px;
+	left: 50%;
+	width: 100%;
+	height: 2px;
+	background: #e0e0e0;
+	z-index: 0;
+}
+
+.wpshadow-progress-step.active:not( :last-child )::after,
+.wpshadow-progress-step.completed:not( :last-child )::after {
+	background: #2271b1;
+}
+
+.wpshadow-progress-step-number {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: white;
+	border: 2px solid #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+	font-size: 16px;
+	color: #666;
+	margin-bottom: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.wpshadow-progress-step.active .wpshadow-progress-step-number {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: white;
+}
+
+.wpshadow-progress-step.completed .wpshadow-progress-step-number {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: white;
+}
+
+.wpshadow-progress-step.completed .wpshadow-progress-step-number::after {
+	content: '✓';
+	position: absolute;
+	font-size: 20px;
+}
+
+.wpshadow-progress-step-label {
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: #666;
+	letter-spacing: 0.5px;
+}
+
+.wpshadow-progress-step.active .wpshadow-progress-step-label {
+	color: #2271b1;
+}
+
+/* Wizard Content */
+.wpshadow-wizard-content {
+	padding: 0 30px 30px 30px;
+	min-height: 400px;
+}
+
+.wpshadow-wizard-step {
+	display: none;
+}
+
+.wpshadow-wizard-step.active {
+	display: block;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.wpshadow-wizard-step h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	color: #1a1a1a;
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.wpshadow-wizard-step p {
+	color: #666;
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+
+/* Form Groups */
+.wpshadow-form-group {
+	margin-bottom: 20px;
+}
+
+.wpshadow-form-group label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+	color: #1a1a1a;
+	font-size: 14px;
+}
+
+.wpshadow-form-group input[type="text"],
+.wpshadow-form-group input[type="email"],
+.wpshadow-form-group input[type="time"],
+.wpshadow-form-group input[type="number"],
+.wpshadow-form-group select,
+.wpshadow-form-group textarea {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+	font-family: inherit;
+	box-sizing: border-box;
+	transition: all 0.2s ease;
+}
+
+.wpshadow-form-group input[type="text"]:focus,
+.wpshadow-form-group input[type="email"]:focus,
+.wpshadow-form-group input[type="time"]:focus,
+.wpshadow-form-group input[type="number"]:focus,
+.wpshadow-form-group select:focus,
+.wpshadow-form-group textarea:focus {
+	outline: none;
+	border-color: #2271b1;
+	box-shadow: 0 0 0 3px rgba( 34, 113, 177, 0.1 );
+}
+
+.wpshadow-form-group small {
+	display: block;
+	margin-top: 6px;
+	color: #666;
+	font-size: 12px;
+}
+
+/* Radio Buttons */
+.wpshadow-radio-group {
+	margin-bottom: 15px;
+}
+
+.wpshadow-radio-option {
+	display: flex;
+	align-items: flex-start;
+	padding: 15px;
+	border: 2px solid #e0e0e0;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-bottom: 10px;
+	transition: all 0.2s ease;
+	background: white;
+}
+
+.wpshadow-radio-option:hover {
+	border-color: #2271b1;
+	background: #f9f9f9;
+}
+
+.wpshadow-radio-option input[type="radio"] {
+	margin-top: 4px;
+	margin-right: 12px;
+	cursor: pointer;
+	accent-color: #2271b1;
+}
+
+.wpshadow-radio-option.selected {
+	border-color: #2271b1;
+	background: #f0f5ff;
+}
+
+.wpshadow-radio-option-content {
+	flex: 1;
+}
+
+.wpshadow-radio-option-title {
+	font-weight: 600;
+	color: #1a1a1a;
+	margin-bottom: 4px;
+}
+
+.wpshadow-radio-option-description {
+	font-size: 13px;
+	color: #666;
+	line-height: 1.4;
+}
+
+/* Conditional Fields */
+.wpshadow-conditional-field {
+	display: none;
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.wpshadow-conditional-field.show {
+	display: block;
+	animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY( -10px );
+	}
+	to {
+		opacity: 1;
+		transform: translateY( 0 );
+	}
+}
+
+/* Review Section */
+.wpshadow-review-flow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: #f0f5ff;
+	padding: 20px;
+	border-radius: 4px;
+	margin-bottom: 30px;
+	gap: 20px;
+}
+
+.wpshadow-flow-section {
+	flex: 1;
+	text-align: center;
+}
+
+.wpshadow-flow-section h3 {
+	margin: 0 0 10px 0;
+	font-size: 12px;
+	text-transform: uppercase;
+	color: #2271b1;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+}
+
+.wpshadow-flow-section p {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 500;
+	color: #1a1a1a;
+}
+
+.wpshadow-flow-arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #2271b1;
+	font-size: 20px;
+}
+
+.wpshadow-review-section {
+	background: #f9f9f9;
+	padding: 20px;
+	border-radius: 4px;
+	margin-bottom: 30px;
+}
+
+.wpshadow-review-item {
+	margin-bottom: 15px;
+}
+
+.wpshadow-review-item:last-child {
+	margin-bottom: 0;
+}
+
+.wpshadow-review-item-label {
+	font-size: 12px;
+	text-transform: uppercase;
+	color: #666;
+	font-weight: 600;
+	margin-bottom: 6px;
+	letter-spacing: 0.5px;
+}
+
+.wpshadow-review-item-value {
+	margin: 0;
+	font-size: 14px;
+	color: #1a1a1a;
+	font-weight: 500;
+}
+
+.wpshadow-review-item-value a {
+	color: #2271b1;
+	text-decoration: none;
+	border-bottom: 1px solid #2271b1;
+}
+
+.wpshadow-review-item-value a:hover {
+	color: #135a9d;
+	border-bottom-color: #135a9d;
+}
+
+/* Wizard Footer */
+.wpshadow-wizard-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 30px;
+	background: #f9f9f9;
+	border-top: 1px solid #e0e0e0;
+}
+
+/* Buttons */
+.wpshadow-wizard-btn {
+	padding: 10px 24px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wpshadow-wizard-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.wpshadow-wizard-cancel-btn {
+	background: white;
+	color: #666;
+	border: 1px solid #ccc;
+}
+
+.wpshadow-wizard-cancel-btn:hover:not( :disabled ) {
+	background: #f9f9f9;
+	border-color: #999;
+}
+
+.wpshadow-wizard-back-btn {
+	background: white;
+	color: #666;
+	border: 1px solid #ccc;
+}
+
+.wpshadow-wizard-back-btn:hover:not( :disabled ) {
+	background: #f9f9f9;
+	border-color: #999;
+}
+
+.wpshadow-wizard-next-btn,
+.wpshadow-wizard-save-btn {
+	background: #2271b1;
+	color: white;
+	border: none;
+}
+
+.wpshadow-wizard-next-btn:hover:not( :disabled ),
+.wpshadow-wizard-save-btn:hover:not( :disabled ) {
+	background: #135a9d;
+	box-shadow: 0 2px 8px rgba( 34, 113, 177, 0.3 );
+}
+
+/* Mobile Responsive */
+@media ( max-width: 768px ) {
+	.wpshadow-wizard-container {
+		margin: 0;
+		border-radius: 0;
+	}
+
+	.wpshadow-progress-bar {
+		flex-wrap: wrap;
+	}
+
+	.wpshadow-progress-step {
+		min-width: 50%;
+		margin-bottom: 15px;
+	}
+
+	.wpshadow-progress-step:not( :last-child )::after {
+		display: none;
+	}
+
+	.wpshadow-review-flow {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.wpshadow-wizard-footer {
+		flex-direction: column-reverse;
+	}
+
+	.wpshadow-wizard-btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.wpshadow-wizard-content {
+		padding: 0 15px 15px 15px;
+	}
+
+	.wpshadow-wizard-header {
+		padding: 20px 15px;
+	}
+}
