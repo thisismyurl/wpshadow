@@ -127,6 +127,15 @@ require_once WPSHADOW_PATH . 'includes/admin/class-auto-deploy.php';
 require_once WPSHADOW_PATH . 'includes/admin/class-guardian-inactive-notice.php';
 \WPShadow\Admin\Guardian_Inactive_Notice::init();
 
+// Load Health History Analytics
+require_once WPSHADOW_PATH . 'includes/analytics/class-health-history.php';
+require_once WPSHADOW_PATH . 'includes/admin/class-health-history-page.php';
+require_once WPSHADOW_PATH . 'includes/admin/class-health-history-widget.php';
+require_once WPSHADOW_PATH . 'includes/admin/ajax/class-ajax-get-health-history.php';
+\WPShadow\Analytics\Health_History::init();
+\WPShadow\Admin\Health_History_Page::init();
+\WPShadow\Admin\Health_History_Widget::init();
+
 add_action(
 	'init',
 	function () {
