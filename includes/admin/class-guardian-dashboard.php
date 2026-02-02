@@ -80,13 +80,7 @@ class Guardian_Dashboard {
 			</div>
 
 			<!-- Page-Specific Activity History Section -->
-			<div class="wps-section-divider">
-				<?php
-				if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-					wpshadow_render_page_activities( 'guardian', 10 );
-				}
-				?>
-			</div>
+			<?php wpshadow_render_activity_log( 'guardian', 10 ); ?>
 		</div>
 		<?php
 		return ob_get_clean();

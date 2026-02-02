@@ -236,13 +236,7 @@ class General_Settings_Page {
 			</script>
 
 			<!-- Page-Specific Activity History Section -->
-			<div class="wps-section-divider">
-				<?php
-				if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-					wpshadow_render_page_activities( 'settings', 10 );
-				}
-				?>
-			</div>
+			<?php wpshadow_render_activity_log( 'settings', 10 ); ?>
 		</div>
 		<?php
 	}

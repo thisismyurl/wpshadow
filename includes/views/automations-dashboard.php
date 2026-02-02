@@ -239,7 +239,7 @@ $workflows           = array_filter(
 <style>
 /* Automations Dashboard Styles */
 .wpshadow-automations-dashboard {
-	max-width: 1000px;
+	/* Uses default wps-page-container max-width of 1400px */
 }
 
 /* Add Automation Card */
@@ -899,4 +899,8 @@ if ( ! function_exists( 'wpshadow_workflow_get_action_summary' ) ) {
 		return __( '1 action', 'wpshadow' );
 	}
 }
+
+<!-- Workflow Activity Log -->
+<?php wpshadow_render_activity_log( 'workflow', 10 ); ?>
+</div>
 

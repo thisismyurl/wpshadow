@@ -353,14 +353,7 @@ class Academy_UI extends AJAX_Handler_Base {
 			</div>
 
 			<!-- Recent Activity Section -->
-			<div style="margin-top: 40px;">
-				<?php
-				// Use the centralized activity rendering function
-				if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
-					wpshadow_render_recent_activity();
-				}
-				?>
-			</div>
+			<?php wpshadow_render_activity_log( 'training', 10 ); ?>
 		</div>
 		<?php
 	}

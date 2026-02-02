@@ -202,6 +202,9 @@ class Gamification_UI {
 				</div>
 			</div>
 		</div>
+
+		<!-- Achievements Activity Log -->
+		<?php wpshadow_render_activity_log( 'achievements', 10 ); ?>
 		<?php
 	}
 
