@@ -47,6 +47,7 @@ require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
 require_once WPSHADOW_PATH . 'includes/core/class-form-param-helper.php';
 require_once WPSHADOW_PATH . 'includes/core/class-options-manager.php';
 require_once WPSHADOW_PATH . 'includes/core/class-abstract-registry.php';
+require_once WPSHADOW_PATH . 'includes/core/class-upgrade-path-helper.php';
 require_once WPSHADOW_PATH . 'includes/diagnostics/class-diagnostic-registry.php';
 require_once WPSHADOW_PATH . 'includes/core/functions-treatment.php';
 require_once WPSHADOW_PATH . 'includes/core/class-utm-link-manager.php';

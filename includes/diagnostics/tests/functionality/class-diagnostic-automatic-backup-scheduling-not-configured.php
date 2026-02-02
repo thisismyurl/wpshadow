@@ -65,15 +65,27 @@ class Diagnostic_Automatic_Backup_Scheduling_Not_Configured extends Diagnostic_B
 	public static function check() {
 		// Check for backup plugin
 		if ( ! is_plugin_active( 'backwpup/backwpup.php' ) && ! is_plugin_active( 'jetpack/jetpack.php' ) ) {
-			return array(
+			$finding = array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Automatic backup scheduling is not configured. Set up automatic daily backups to protect against data loss.', 'wpshadow' ),
+				'description'   => __( 'No automatic backup system is configured. Without scheduled backups, you risk losing all your content, customer data, and months of work if something goes wrong. The average cost of data loss for a small business: $3,000+ per hour of downtime.', 'wpshadow' ),
 				'severity'      => 'high',
 				'threat_level'  => 65,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/automatic-backup-scheduling-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/automatic-backup-scheduling',
 			);
+
+			// Add upgrade path if Vault not active
+			if ( ! \WPShadow\Core\Upgrade_Path_Helper::has_pro_product( 'vault' ) ) {
+				$finding = \WPShadow\Core\Upgrade_Path_Helper::add_upgrade_path(
+					$finding,
+					'vault',
+					'scheduled-backups',
+					'https://wpshadow.com/kb/manual-backup-scheduling'
+				);
+			}
+
+			return $finding;
 		}
 
 		return null;
