@@ -74,7 +74,11 @@ function wpshadow_render_dashboard() {
 				</p>
 			</div>
 		<?php else : ?>
-			<?php wpshadow_render_page_header( __( 'WPShadow Dashboard', 'wpshadow' ) ); ?>
+			<?php wpshadow_render_page_header(
+				__( 'WPShadow Dashboard', 'wpshadow' ),
+				'',
+				'dashicons-dashboard'
+			); ?>
 		<?php endif; ?>
 
 		<?php if ( $never_run ) : ?>
@@ -150,6 +154,15 @@ function wpshadow_render_dashboard() {
 			 */
 			do_action( 'wpshadow_dashboard_activity', $category_filter );
 			?>
+
+			<!-- Recent Activity Section -->
+			<div style="margin-top: 40px;">
+				<?php
+				if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
+					wpshadow_render_recent_activity();
+				}
+				?>
+			</div>
 		</div>
 	</div>
 
