@@ -20,6 +20,9 @@ require_once WPSHADOW_PATH . 'includes/workflow/class-kanban-workflow-helper.php
 require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
 require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-executor.php';
 
+// Load AJAX handlers
+require_once WPSHADOW_PATH . 'includes/admin/ajax-handlers/class-ajax-save-automation.php';
+
 // Ensure Block_Registry is loaded.
 require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
 
