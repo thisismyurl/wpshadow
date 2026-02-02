@@ -283,5 +283,5 @@ function wpshadow_render_dashboard() {
 		}
 	});
 	</script>
-	<?php
-}
+<!-- Dashboard Activity Log -->
+<?php wpshadow_render_activity_log( 'general', 10 ); ?>
