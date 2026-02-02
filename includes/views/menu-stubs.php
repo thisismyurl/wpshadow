@@ -169,12 +169,10 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 		// Show settings overview grid
 		?>
 		<div class="wps-page-container">
-			<!-- Page Header -->
 			<div class="wps-page-header">
 				<h1 class="wps-page-title">
 					<span class="dashicons dashicons-admin-settings"></span>
 					<?php esc_html_e( 'WPShadow Settings', 'wpshadow' ); ?>
-					<small style="font-size: 14px; color: #666; margin-left: 12px;">v<?php echo esc_html( WPSHADOW_VERSION ); ?></small>
 				</h1>
 				<p class="wps-page-subtitle">
 					<?php esc_html_e( 'Configure WPShadow plugin settings and preferences.', 'wpshadow' ); ?>
