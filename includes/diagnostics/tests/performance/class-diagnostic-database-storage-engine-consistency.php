@@ -2,7 +2,29 @@
 /**
  * Database Storage Engine Consistency Diagnostic
  *
- * Checks that all database tables use the same storage engine.
+ * Ensures all WordPress tables use a consistent storage engine (InnoDB
+ * recommended). Mixed engines can cause performance issues and inconsistent
+ * behavior. InnoDB supports transactions and row-level locking; MyISAM does not.
+ *
+ * **What This Check Does:**
+ * - Lists all WordPress tables by prefix
+ * - Reads storage engine for each table
+ * - Flags mixed engines or non-InnoDB usage
+ * - Highlights tables that should be converted
+ *
+ * **Why This Matters:**
+ * Mixed engines can lead to:
+ * - Inconsistent backups and restores
+ * - Table locks during writes (MyISAM)
+ * - Failed transactions or foreign key limitations
+ *
+ * **Philosophy Alignment:**
+ * - #9 Show Value: Improves database stability and performance
+ * - #8 Inspire Confidence: Consistent, predictable data behavior
+ *
+ * **Learn More:**
+ * See https://wpshadow.com/kb/database-storage-engines
+ * or https://wpshadow.com/training/mysql-innodb-best-practices
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +44,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Database Storage Engine Consistency Diagnostic Class
  *
- * Detects tables using different storage engines.
+ * Uses `SHOW TABLE STATUS` to inspect engine metadata.
+ *
+ * **Implementation Pattern:**
+ * 1. Fetch tables by prefix
+ * 2. Read engine for each table
+ * 3. Group by engine
+ * 4. Return finding if multiple engines detected
+ *
+ * **Related Diagnostics:**
+ * - Database Table Corruption Check
+ * - Database Index Efficiency
  *
  * @since 1.5049.1401
  */

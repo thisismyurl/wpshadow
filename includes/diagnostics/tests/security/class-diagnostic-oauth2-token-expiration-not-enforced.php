@@ -2,7 +2,46 @@
 /**
  * OAuth2 Token Expiration Not Enforced Diagnostic
  *
- * Checks if OAuth2 token expiration is enforced.
+ * Validates that OAuth2 tokens have expiration (time-limited).
+ * Non-expiring tokens = permanent access. Stolen token never expires.
+ * Attacker maintains access indefinitely even if password changed.
+ *
+ * **What This Check Does:**
+ * - Detects if OAuth2 tokens implemented
+ * - Validates token expiration time limit (usually 1-24 hours)
+ * - Tests if refresh tokens supported (renewal)
+ * - Confirms expired tokens rejected
+ * - Checks if token revocation implemented
+ * - Validates logout removes tokens
+ *
+ * **Why This Matters:**
+ * Non-expiring tokens = permanent account compromise. Scenarios:
+ * - OAuth2 tokens generated without expiration
+ * - User password changed (compromised account recovered)
+ * - But stolen token still works (never expires)
+ * - Attacker maintains access despite password change
+ * - User thinks account is safe (it's not)
+ *
+ * **Business Impact:**
+ * User's account compromised (phishing). User changes password (thinks secure).
+ * Attacker still has non-expiring OAuth token. Maintains access for 2 years.
+ * Exfiltrates data continuously. User never discovers. Organization liable for
+ * $500K+ breach (negligent token management). Expiring tokens (1 hour) would
+ * limit attacker access to 1 hour from compromise.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Password change actually secures account
+ * - #9 Show Value: Limits attacker persistence
+ * - #10 Beyond Pure: Time-bounded trust
+ *
+ * **Related Checks:**
+ * - OAuth/SSO Integration Security (overall OAuth)
+ * - Session Management (session expiration)
+ * - Logout Implementation (token revocation)
+ *
+ * **Learn More:**
+ * OAuth2 token expiration: https://wpshadow.com/kb/oauth2-token-expiration
+ * Video: OAuth2 security (11min): https://wpshadow.com/training/oauth2-tokens
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +62,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * OAuth2 Token Expiration Not Enforced Diagnostic Class
  *
  * Detects missing OAuth2 token expiration.
+ *
+ * **Detection Pattern:**
+ * 1. Query OAuth2 token configuration
+ * 2. Check for expiration time setting
+ * 3. Test token validity after expiration
+ * 4. Confirm refresh token mechanism
+ * 5. Validate expired tokens rejected
+ * 6. Return severity if no expiration
+ *
+ * **Real-World Scenario:**
+ * Developer creates OAuth2 implementation. Forgets to add token expiration.
+ * Tokens live forever (no timeout). User account stolen (phishing). User
+ * changes password. Attacker's token still works (no expiration = permanent).
+ * Attacker steals data for 6 months before discovered. With expiration
+ * (1 hour): attacker only has 1 hour access. Damage limited dramatically.
+ *
+ * **Implementation Notes:**
+ * - Checks OAuth2 token configuration
+ * - Validates expiration time (1-24 hours typical)
+ * - Tests refresh token implementation
+ * - Severity: critical (no expiration), medium (very long expiration)
+ * - Treatment: add token expiration + refresh mechanism
  *
  * @since 1.2601.2352
  */

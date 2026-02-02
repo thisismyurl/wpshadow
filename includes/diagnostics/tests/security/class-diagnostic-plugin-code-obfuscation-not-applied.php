@@ -2,7 +2,46 @@
 /**
  * Plugin Code Obfuscation Not Applied Diagnostic
  *
- * Checks if plugin code is obfuscated.
+ * Detects plugins without code obfuscation that expose sensitive logic.
+ * Clear code = security researchers + attackers can easily find vulnerabilities.
+ * Obfuscation makes reverse-engineering extremely difficult (takes weeks instead of hours).
+ *
+ * **What This Check Does:**
+ * - Scans plugin code for readable variable names
+ * - Detects if code is obfuscated (minified, encrypted)
+ * - Tests if security-critical logic is visible
+ * - Checks for debug information in production
+ * - Validates if API endpoints hidden
+ * - Returns severity if easily readable code
+ *
+ * **Why This Matters:**
+ * Clear code = vulnerability discovery accelerated. Scenarios:
+ * - Plugin source code is clearly readable
+ * - Security researcher can identify vulnerability
+ * - Attacker uses same research, exploits site
+ * - Clear code = vulnerability disclosed publicly
+ * - Everyone can exploit before patch available
+ *
+ * **Business Impact:**
+ * Premium WordPress plugin used by 50K sites. Code is clear/unobfuscated.
+ * Researcher finds SQL injection in 30 minutes (code is obvious). Publishes
+ * vulnerability. All 50K sites compromised within 1 week (before patch).
+ * Your site: breach + $500K liability. Obfuscated code: would have taken
+ * weeks to reverse-engineer (researcher gave up).
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Security through reasonable obscurity
+ * - #9 Show Value: Slows vulnerability discovery
+ * - #10 Beyond Pure: Defense in depth
+ *
+ * **Related Checks:**
+ * - Plugin Vulnerability Detection (overall security)
+ * - Code Integrity Verification (tampering detection)
+ * - Update Management (security patches)
+ *
+ * **Learn More:**
+ * Code obfuscation: https://wpshadow.com/kb/wordpress-code-obfuscation
+ * Video: Plugin security practices (11min): https://wpshadow.com/training/plugin-practices
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +62,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Code Obfuscation Not Applied Diagnostic Class
  *
  * Detects non-obfuscated plugin code.
+ *
+ * **Detection Pattern:**
+ * 1. Scan plugin PHP files
+ * 2. Check for readable variable names (security_key = unobfuscated)
+ * 3. Detect if code is minified/encoded
+ * 4. Test for obvious SQL queries/API calls
+ * 5. Validate API endpoints not exposed
+ * 6. Return severity if readable code found
+ *
+ * **Real-World Scenario:**
+ * Popular plugin with 100K installations. Code is clear (developer didn't obfuscate).
+ * Researcher downloads plugin from WordPress.org. Reads code. Finds SQL injection.
+ * Emails plugin dev. Dev is slow to respond. Researcher publishes. All 100K sites
+ * at risk. With obfuscation: researcher can't easily read code, gives up.
+ *
+ * **Implementation Notes:**
+ * - Scans plugin source files
+ * - Checks for code obfuscation (minified, encoded)
+ * - Tests for sensitive logic exposure
+ * - Severity: medium (clear code), high (obvious vulnerabilities exposed)
+ * - Treatment: use code obfuscation tools
  *
  * @since 1.2601.2352
  */

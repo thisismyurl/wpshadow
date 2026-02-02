@@ -2,10 +2,50 @@
 /**
  * Plugin Data Exfiltration Risk Diagnostic
  *
- * Detects plugins sending data to external servers without consent.
+ * Detects plugins sending user/site data to external servers without consent.
+ * Plugin collects "for analytics" but sends to unknown third-party.
+ * Data = customer emails, payment info, passwords, site configuration.
  *
- * @since   1.4031.1939
- * @package WPShadow\Diagnostics
+ * **What This Check Does:**
+ * - Scans active plugins for external API calls
+ * - Detects data being sent to remote servers
+ * - Checks if external calls disclosed in documentation
+ * - Tests for encryption in transit (HTTPS)
+ * - Validates third-party servers are legitimate
+ * - Returns severity if undisclosed data exfiltration
+ *
+ * **Why This Matters:**
+ * Hidden data collection = privacy violation + breach risk. Scenarios:
+ * - Plugin sends site admin email to analytics company (no disclosure)
+ * - Plugin sends customer data to marketing firm (no consent)
+ * - Third-party server breached, customer data compromised
+ * - You're liable (used plugin that exfiltrated data)
+ * - GDPR fine + user lawsuits
+ *
+ * **Business Impact:**
+ * Site uses form plugin. Plugin docs say "free analytics". Hidden: sends
+ * form submissions to third-party (not disclosed). Third-party server
+ * breached. 100K customer records exposed (via your plugin). GDPR fine:
+ * $2M. Lawsuit settlement: $1M. Plus reputation damage. Total: $5M+.
+ * Exfiltration audit would have caught before deployment.
+ *
+ * **Philosophy Alignment:**
+ * - #10 Beyond Pure: Privacy-first, no hidden data collection
+ * - #8 Inspire Confidence: Data destination disclosed
+ * - #9 Show Value: Prevents data breach via plugins
+ *
+ * **Related Checks:**
+ * - Privacy Policy Compliance (data handling disclosure)
+ * - Consent Banner Implementation (user permission)
+ * - Database User Privileges (data access control)
+ *
+ * **Learn More:**
+ * Data exfiltration: https://wpshadow.com/kb/wordpress-data-exfiltration
+ * Video: Auditing plugin data collection (13min): https://wpshadow.com/training/data-audit
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.4031.1939
  */
 
 declare(strict_types=1);
@@ -22,6 +62,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic_Plugin_Data_Exfiltration_Risk Class
  *
  * Identifies plugins sending data to external servers.
+ *
+ * **Detection Pattern:**
+ * 1. Scan plugin files for wp_remote_*() calls
+ * 2. Check external URLs being contacted
+ * 3. Test data payloads being sent
+ * 4. Validate if exfiltration disclosed
+ * 5. Check HTTPS/encryption in transit
+ * 6. Return severity if undisclosed exfiltration
+ *
+ * **Real-World Scenario:**
+ * Form builder plugin sends all submissions to "analytics partner" (undisclosed).
+ * Partner processes contact forms (customer info, emails, messages).
+ * Partner is acquired by data broker. All customer data goes to data market.
+ * Your customers' information sold to spammers. You're liable. Audit would have
+ * detected: "Plugin sends form data to third-party.com" (red flag).
+ *
+ * **Implementation Notes:**
+ * - Scans plugin files for external API calls
+ * - Tests actual data being sent
+ * - Checks destination legitimacy
+ * - Severity: critical (undisclosed exfiltration), high (data sent unencrypted)
+ * - Treatment: disable plugin or require explicit user consent
+ *
+ * @since 1.4031.1939
  */
 class Diagnostic_Plugin_Data_Exfiltration_Risk extends Diagnostic_Base {
 

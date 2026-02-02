@@ -2,10 +2,50 @@
 /**
  * Plugin Privilege Escalation Risk Diagnostic
  *
- * Detects plugins allowing privilege escalation.
+ * Detects plugins allowing privilege escalation attacks.
+ * Vulnerability allows low-privilege user to gain high privileges (admin access).
+ * Escalation = account takeover from low-privilege account.
  *
- * @since   1.4031.1939
- * @package WPShadow\Diagnostics
+ * **What This Check Does:**
+ * - Scans plugins for privilege escalation patterns
+ * - Tests if low-privilege users can gain admin access
+ * - Detects if capabilities checked on privileged operations
+ * - Validates current_user_can() present
+ * - Tests for role bypass methods
+ * - Returns severity if escalation possible
+ *
+ * **Why This Matters:**
+ * Escalation = low account → high account. Scenarios:
+ * - Plugin has function only admins should call
+ * - Function doesn't check user role
+ * - Subscriber calls function directly (via admin page)
+ * - Subscriber gains admin powers
+ * - Full site compromise from subscriber account
+ *
+ * **Business Impact:**
+ * Form plugin vulnerable to privilege escalation. Subscriber account can call
+ * admin settings function. Subscriber calls function. Gains admin access.
+ * Modifies form. Injects malware. Takes over site. From subscriber account
+ * (harmless). With escalation: becomes admin (dangerous). Cost: $200K recovery.
+ * Proper checks: subscriber can't escalate (capability denied).
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Admin access protected
+ * - #9 Show Value: Prevents low→high escalation
+ * - #10 Beyond Pure: Principle of least privilege
+ *
+ * **Related Checks:**
+ * - Plugin Capability Escalation (similar attack)
+ * - User Capability Auditing (role validation)
+ * - Authentication Cookie Security (account protection)
+ *
+ * **Learn More:**
+ * Privilege escalation: https://wpshadow.com/kb/wordpress-privilege-escalation
+ * Video: Testing escalation vulnerabilities (13min): https://wpshadow.com/training/escalation-testing
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.4031.1939
  */
 
 declare(strict_types=1);
@@ -22,6 +62,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic_Plugin_Privilege_Escalation_Risk Class
  *
  * Identifies plugins vulnerable to privilege escalation.
+ *
+ * **Detection Pattern:**
+ * 1. Identify admin functions in plugin
+ * 2. Check if current_user_can() validation present
+ * 3. Test if functions callable by low-privilege users
+ * 4. Attempt escalation (test actual vulnerability)
+ * 5. Validate role hierarchy enforced
+ * 6. Return severity if escalation possible
+ *
+ * **Real-World Scenario:**
+ * Custom role plugin has bug: settings page shows admin form to all users.
+ * Subscriber accesses form. Modifies their role to admin. Submits. Becomes
+ * admin (no capability check). Full site access from subscriber. Proper code:
+ * if (!current_user_can('manage_options')) return error. Prevents escalation.
+ *
+ * **Implementation Notes:**
+ * - Scans plugin admin functions
+ * - Tests capability checks (current_user_can)
+ * - Attempts actual privilege escalation
+ * - Severity: critical (escalation confirmed), high (weak checks)
+ * - Treatment: add capability checks to all privileged functions
+ *
+ * @since 1.4031.1939
  */
 class Diagnostic_Plugin_Privilege_Escalation_Risk extends Diagnostic_Base {
 

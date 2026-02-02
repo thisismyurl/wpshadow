@@ -2,7 +2,46 @@
 /**
  * Theme Code Injection Vulnerabilities Diagnostic
  *
- * Scans theme files for potential code injection patterns.
+ * Scans theme files for dangerous functions (eval, create_function, etc).
+ * eval/exec execute arbitrary code. Theme includes eval = arbitrary code exec.
+ * Attacker injects code = full compromise.
+ *
+ * **What This Check Does:**
+ * - Searches theme files for eval, exec, assert
+ * - Detects create_function (deprecated, dangerous)
+ * - Finds base64_decode + eval pattern (obfuscation)
+ * - Tests for preg_replace with /e modifier
+ * - Checks for serialization->unserialize->code exec
+ * - Returns severity for each dangerous pattern
+ *
+ * **Why This Matters:**
+ * Theme uses eval() on user input. Attacker provides PHP code.
+ * Theme evaluates it. Code executes with full permissions.
+ * Total compromise.
+ *
+ * **Business Impact:**
+ * Custom theme uses eval to parse template variables:
+ * ```
+ * eval(\$_POST['template_code']);
+ * ```
+ * Attacker injects malicious PHP. Server executes. Attacker has
+ * shell access. Files exfiltrated. Site defaced. Cost: $500K+
+ * (forensics, recovery, notification). With check: eval never used.
+ * Template variables processed safely.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Theme code is safe
+ * - #9 Show Value: Prevents arbitrary code execution
+ * - #10 Beyond Pure: Code safety scanning
+ *
+ * **Related Checks:**
+ * - Plugin Code Obfuscation Not Applied (similar risk)
+ * - Theme Data Validation (input handling)
+ * - PHP Code Quality Scanning (broader checks)
+ *
+ * **Learn More:**
+ * Theme code safety: https://wpshadow.com/kb/theme-code-injection
+ * Video: Dangerous PHP patterns (13min): https://wpshadow.com/training/code-injection
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +62,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme Code Injection Vulnerabilities Diagnostic
  *
  * Flags risky eval/exec patterns in theme files.
+ *
+ * **Detection Pattern:**
+ * 1. List all active theme PHP files
+ * 2. Search for dangerous functions (eval, exec)
+ * 3. Detect base64_decode + eval patterns
+ * 4. Find create_function usage
+ * 5. Search for preg_replace with /e modifier
+ * 6. Return each finding
+ *
+ * **Real-World Scenario:**
+ * Theme builder plugin uses eval to compile templates:
+ * ```
+ * eval('\$output = \"' . \$template_html . '\";');
+ * ```
+ * Attacker creates template with PHP: {${shell}}. Evaluated.
+ * Executes. With patterns-based check: eval never appears in
+ * theme. Templates parsed safely without eval.
+ *
+ * **Implementation Notes:**
+ * - Scans theme files (not all plugins, just active theme)
+ * - Detects eval, exec, system, passthru patterns
+ * - Includes obfuscated patterns (base64+eval)
+ * - Severity: critical (eval/exec), high (create_function)
+ * - Treatment: remove dangerous functions, use safe APIs
  *
  * @since 1.2601.2240
  */

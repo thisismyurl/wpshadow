@@ -2,7 +2,45 @@
 /**
  * Plugin Installation Source Verification Diagnostic
  *
- * Verifies plugins are installed from trusted sources.
+ * Verifies plugins are installed from trusted sources (WordPress.org,
+ * verified vendors). Plugins from unknown sources = high compromise risk.
+ * Attacker creates "free plugin" with backdoor, distributes to WordPress sites.
+ *
+ * **What This Check Does:**
+ * - Scans active plugins for origin/source
+ * - Checks if from WordPress.org repository
+ * - Tests if from trusted vendors (Automattic, etc)
+ * - Detects if from unknown/suspicious sources
+ * - Validates plugin can be verified
+ * - Returns severity for untrusted sources
+ *
+ * **Why This Matters:**
+ * Unknown source plugin = instant backdoor. Scenarios:
+ * - "Free SEO plugin" found on third-party site
+ * - Admin installs plugin
+ * - Plugin contains backdoor (intentional)
+ * - Attacker has permanent access
+ * - User never discovers (backdoor hidden)
+ *
+ * **Business Impact:**
+ * Admin downloads "free caching plugin" from third-party site (not WordPress.org).
+ * Plugin looks legitimate. Actually contains backdoor. Attacker maintains access.
+ * For 1 year (undetected). Exfiltrates data monthly. GDPR liability: $3M+.
+ * Using WordPress.org only: plugins vetted (vetting reduces backdoor risk).
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Plugin sources trusted
+ * - #9 Show Value: Prevents intentional backdoors
+ * - #10 Beyond Pure: Principle of trusted sources
+ *
+ * **Related Checks:**
+ * - Plugin Integrity Verification (tampering detection)
+ * - Update Management (security patches)
+ * - Code Review Recommendations (vetted plugins)
+ *
+ * **Learn More:**
+ * Plugin source verification: https://wpshadow.com/kb/plugin-sources-trust
+ * Video: Safe plugin installation (10min): https://wpshadow.com/training/plugin-sources
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +61,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Installation Source Verification Diagnostic
  *
  * Checks that plugins are installed from official WordPress sources.
+ *
+ * **Detection Pattern:**
+ * 1. Query each plugin's origin (where it was installed from)
+ * 2. Check if from WordPress.org repository
+ * 3. Test if from known trusted vendors
+ * 4. Detect if from third-party/unknown sources
+ * 5. Validate plugin can be verified
+ * 6. Return severity if untrusted source
+ *
+ * **Real-World Scenario:**
+ * Admin installs "free performance plugin" from developer's site (not WP.org).
+ * Plugin works well initially. Months later: attacker uses plugin backdoor.
+ * Compromises site. If admin had used WordPress.org only: plugin would have
+ * been vetted (reduced backdoor risk). Third-party plugins: zero vetting.
+ *
+ * **Implementation Notes:**
+ * - Queries plugin origin metadata
+ * - Checks WordPress.org repository
+ * - Tests plugin verification status
+ * - Severity: high (untrusted source), medium (unverified)
+ * - Treatment: use WordPress.org only, or trusted vendors
  *
  * @since 1.2601.2240
  */

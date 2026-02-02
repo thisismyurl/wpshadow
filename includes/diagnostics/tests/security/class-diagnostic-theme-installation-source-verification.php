@@ -4,6 +4,47 @@
  *
  * Validates that installed themes come from verified sources and that
  * the theme installation process is secure and authenticated.
+ * Theme from untrusted source = backdoor risk. Malware pre-installed.
+ *
+ * **What This Check Does:**
+ * - Checks theme source (WordPress.org vs custom)
+ * - Validates installation authentication
+ * - Tests for signed/checksummed themes
+ * - Checks if theme auto-updates enabled
+ * - Tests for theme trust verification
+ * - Returns severity for unverified themes
+ *
+ * **Why This Matters:**
+ * Custom theme from untrusted developer.
+ * Theme includes backdoor malware pre-installed.
+ * Site compromised from day 1. Every user exposed.
+ *
+ * **Business Impact:**
+ * Client buys cheap theme from marketplace (not WP.org).
+ * Theme installed. All works. Six months later: site hacked.
+ * Attacker had backdoor. Theme had hidden malware. Client:
+ * - Lost customer data
+ * - GDPR fines: $50K+
+ * - Notification costs: $200K
+ * - Recovery: $50K
+ * - Insurance deductible: $50K
+ * - Reputation: irreparable
+ * Total cost: $400K+. With verification: install only from WP.org
+ * or verified sources. Backdoors blocked at theme review.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Theme source is trusted
+ * - #9 Show Value: Prevents pre-installed backdoors
+ * - #10 Beyond Pure: Supply chain security
+ *
+ * **Related Checks:**
+ * - Plugin Installation Source Verification (similar for plugins)
+ * - Theme Backdoor Installation Risk (related)
+ * - WordPress Installation Security (broader)
+ *
+ * **Learn More:**
+ * Theme sources: https://wpshadow.com/kb/theme-sources
+ * Video: Choosing safe themes (11min): https://wpshadow.com/training/theme-sources
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +65,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme Installation Source Verification Diagnostic Class
  *
  * Checks theme installation source verification.
+ *
+ * **Detection Pattern:**
+ * 1. Get active theme information
+ * 2. Check theme source (WP.org or custom)
+ * 3. Validate theme signature/checksum if available
+ * 4. Test if theme from WP.org can auto-update
+ * 5. Check for security certifications
+ * 6. Return severity for unverified themes
+ *
+ * **Real-World Scenario:**
+ * Admin downloads free theme from random marketplace. No verification.
+ * Theme installed. Code review skipped (not WP.org approved). Theme
+ * contains backdoor. Months later: attacker exploits backdoor. Site
+ * hacked. With verification: only WP.org themes (reviewed) or themes
+ * with known publisher signature. Backdoors caught during WP.org review.
+ *
+ * **Implementation Notes:**
+ * - Checks active theme source
+ * - Validates WP.org or verified status
+ * - Tests for theme updates/auto-updates
+ * - Severity: high (unverified custom), medium (WP.org non-updated)
+ * - Treatment: only use WP.org themes or verified commercial themes
  *
  * @since 1.6032.1340
  */

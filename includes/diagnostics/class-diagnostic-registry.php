@@ -2,8 +2,6 @@
 /**
  * Diagnostic Registry
  *
- * Manages auto-discovery and registration of all diagnostic classes.
- * Scans subdirectories (tests/, help/, todo/) for diagnostic files.
  *
  * @package WPShadow
  */

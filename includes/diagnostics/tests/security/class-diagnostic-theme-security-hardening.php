@@ -3,6 +3,43 @@
  * Theme Security Hardening Diagnostic
  *
  * Checks if theme implements security best practices and hardening measures.
+ * Theme using best practices = defense-in-depth. Attack surface reduced.
+ * Each practice prevents entire class of vulnerabilities.
+ *
+ * **What This Check Does:**
+ * - Checks if theme hides WordPress version
+ * - Validates REST API disabled for unauthenticated users
+ * - Tests for XML-RPC disabled (brute force prevention)
+ * - Checks if file editing disabled in theme
+ * - Validates for wp-content-security headers
+ * - Returns severity for missing hardening
+ *
+ * **Why This Matters:**
+ * Theme doesn't implement hardening = more attack vectors.
+ * Each missing hardening = one more way to attack.
+ * Cumulative: 10 hardening measures = 90% fewer vulnerabilities.
+ *
+ * **Business Impact:**
+ * Theme lacks hardening. Site vulnerable on every level.
+ * Attacker discovers WordPress version (header exposed).
+ * Finds CVE for that version. Exploits. Site compromised.
+ * Cost: $300K+. With hardening: version hidden, API restricted,
+ * XML-RPC disabled, file edit off. Attack vectors eliminated.
+ * Attacker finds nothing to exploit.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Defense-in-depth security
+ * - #9 Show Value: Hardens site against multiple attack types
+ * - #10 Beyond Pure: Security best practices embedded
+ *
+ * **Related Checks:**
+ * - Security Headers Not Configured (related hardening)
+ * - WordPress Hardening Overall (broader)
+ * - Plugin Security Hardening (similar for plugins)
+ *
+ * **Learn More:**
+ * WordPress hardening: https://wpshadow.com/kb/wordpress-hardening
+ * Video: Hardening WordPress (14min): https://wpshadow.com/training/hardening
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +60,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme Security Hardening Diagnostic Class
  *
  * Analyzes theme code for security best practices implementation.
+ *
+ * **Detection Pattern:**
+ * 1. Check theme support declarations
+ * 2. Search for hardening functions
+ * 3. Test for version removal filters
+ * 4. Validate API protection
+ * 5. Check XML-RPC restrictions
+ * 6. Return list of missing hardening measures
+ *
+ * **Real-World Scenario:**
+ * Theme doesn't remove WordPress version. Header shows WP 5.0.
+ * CVE published for WP 5.0. Attacker finds 1000+ unpatched sites.
+ * Attacks all. Gets access to many. With hardening: version hidden,
+ * only latest version shown (or nothing). Attacker's CVE useless.
+ *
+ * **Implementation Notes:**
+ * - Scans active theme
+ * - Checks for hardening functions/filters
+ * - Validates security best practices
+ * - Severity: high (no hardening), medium (partial)
+ * - Treatment: add recommended hardening measures to theme
  *
  * @since 1.5049.1300
  */

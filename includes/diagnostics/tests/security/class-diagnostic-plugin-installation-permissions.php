@@ -2,7 +2,46 @@
 /**
  * Plugin Installation Permissions Diagnostic
  *
- * Verifies proper permissions for plugin installation and management.
+ * Verifies plugin installation and management permissions are properly
+ * restricted. Without restriction, compromised user account can install
+ * malicious plugins (full site compromise).
+ *
+ * **What This Check Does:**
+ * - Checks who has plugin installation permission
+ * - Validates only admins can install/activate plugins
+ * - Tests if file permissions allow write
+ * - Confirms update permissions restricted
+ * - Checks for overrides (capabilities wrong)
+ * - Returns severity if permissions too permissive
+ *
+ * **Why This Matters:**
+ * Over-permissive installation = account takeover. Scenarios:
+ * - Editor role can install plugins (should be admin only)
+ * - Attacker compromises editor account
+ * - Uses editor account to install malicious plugin
+ * - Plugin becomes fully executed code on your site
+ * - Site fully compromised despite limited account
+ *
+ * **Business Impact:**
+ * Client site allows editor role to install plugins (misconfigured). Editor
+ * account compromised (weak password). Attacker installs backdoor plugin.
+ * Site compromised via editor account. Recovery: $200K+. With proper perms:
+ * editor can't install plugins (admin-only feature). Even with editor
+ * compromise: site stays safe (can't install malicious code).
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Plugin installation protected
+ * - #9 Show Value: Limits damage from compromised accounts
+ * - #10 Beyond Pure: Principle of least privilege
+ *
+ * **Related Checks:**
+ * - User Capability Auditing (role permissions)
+ * - Administrator Account Security (admin protection)
+ * - Plugin Capability Escalation (permission bypass)
+ *
+ * **Learn More:**
+ * Plugin installation security: https://wpshadow.com/kb/plugin-install-permissions
+ * Video: Restricting plugin access (9min): https://wpshadow.com/training/plugin-perms
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +62,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Installation Permissions Diagnostic
  *
  * Checks for proper file permissions and capability restrictions.
+ *
+ * **Detection Pattern:**
+ * 1. Check current_user_can('install_plugins') for various roles
+ * 2. Test if non-admins can access Plugin install page
+ * 3. Validate file permissions on plugins directory
+ * 4. Confirm plugin update permissions restricted
+ * 5. Test capability grants/overrides
+ * 6. Return severity if permissions too permissive
+ *
+ * **Real-World Scenario:**
+ * WordPress site configured to allow "contributor" to install plugins
+ * (accidental setting). Attacker compromises contributor account. Uses
+ * contributor to install backdoor plugin. Site fully compromised via
+ * contributor account (should be harmless). Proper setup: install_plugins
+ * capability restricted to admin_only (using filters). Contributor stays safe.
+ *
+ * **Implementation Notes:**
+ * - Checks plugin directory permissions
+ * - Validates capability restrictions (install_plugins)
+ * - Tests role access to plugin install page
+ * - Severity: critical (non-admin can install), high (weak file perms)
+ * - Treatment: restrict install_plugins to admin roles
  *
  * @since 1.2601.2240
  */

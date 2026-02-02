@@ -2,7 +2,6 @@
 /**
  * Mobile Check AJAX Handler
  *
- * Uses diagnostic system for mobile friendliness checks.
  *
  * @since   1.2601.2148
  * @package WPShadow
@@ -22,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Mobile Check Handler Class
  *
+ *
  * Refactored to use existing diagnostic system.
  *
  * @since 1.2601.2148
@@ -29,6 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Mobile_Check_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX handler.
+	 *
+	 * Called during plugin initialization. Adds this handler to WordPress'
+	 * AJAX dispatch system. Any POST request to `admin-ajax.php?action=wpshadow_mobile_check`
+	 * will be routed here.
 	 *
 	 * @since 1.2601.2148
 	 */
@@ -38,6 +42,23 @@ class Mobile_Check_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle mobile check request using diagnostic system.
+	 *
+	 * **Security Flow:**
+	 * 1. Verify nonce: Proves AJAX request from current WordPress install
+	 * 2. Verify capability: 'read' allows all logged-in users to check their site
+	 * 3. Sanitize URL: Validate requested URL is for current site
+	 *
+	 * **Processing Flow:**
+	 * 1. Get/validate URL parameter (defaults to home_url())
+	 * 2. Query diagnostic registry for all mobile-related checks
+	 * 3. Execute each diagnostic's check() method
+	 * 4. Aggregate results: count pass/warn/fail
+	 * 5. Format for frontend dashboard display
+	 *
+	 * **Error Handling:**
+	 * Individual diagnostic failures don't crash entire report.
+	 * If a check throws exception, it's caught and marked as "error".
+	 * Report still shows other checks' results.
 	 *
 	 * @since 1.2601.2148
 	 */

@@ -12,11 +12,6 @@ use WPShadow\Core\Activity_Logger;
 /**
  * AJAX Handler: Quick Scan
  *
- * Action: wp_ajax_wpshadow_quick_scan
- * Nonce: wpshadow_scan_nonce
- * Capability: manage_options
- *
- * Philosophy: Show value (#9) - Quick baseline scan
  *
  * @package WPShadow
  */
@@ -25,6 +20,10 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX hook
+	 * Register AJAX hook
+	 *
+	 * Called during plugin initialization. WordPress listens for
+	 * admin-ajax.php?action=wpshadow_quick_scan and routes to handle() method.
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_quick_scan', array( __CLASS__, 'handle' ) );
@@ -32,6 +31,25 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle quick scan AJAX request
+	 *
+	 * **Execution Flow:**
+	 * 1. Verify nonce + capability (security)
+	 * 2. Check Diagnostic_Registry availability
+	 * 3. Get execution mode: 'now' (immediate) or 'schedule' (recurring)
+	 * 4. If schedule: Configure cron job for recurring scans
+	 * 5. If now: Execute diagnostics immediately
+	 * 6. Log scan to Activity_Logger for KPI tracking
+	 * 7. Return results with severity summary
+	 *
+	 * **Error Handling:**
+	 * If Diagnostic_Registry not loaded, throw exception.
+	 * All exceptions caught here and converted to AJAX error response.
+	 * Ensures clean error messages rather than blank response.
+	 *
+	 * **Performance Note:**
+	 * First execution may take 45-60 seconds. JavaScript shows spinner.
+	 * Subsequent scans use cached results unless 5-minute TTL expired.
+	 * If timeout occurs, results sent as background job with email notification.
 	 */
 	public static function handle(): void {
 		try {

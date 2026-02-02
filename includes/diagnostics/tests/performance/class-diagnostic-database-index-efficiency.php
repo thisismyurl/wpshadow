@@ -2,7 +2,27 @@
 /**
  * Database Index Efficiency Diagnostic
  *
- * Checks for missing or inefficient database indexes.
+ * Detects missing or inefficient indexes on high‑traffic WordPress tables.
+ * Without indexes, common queries require full table scans, which can turn
+ * millisecond queries into multi‑second delays under load.
+ *
+ * **What This Check Does:**
+ * - Reviews indexes on posts, postmeta, comments, and term tables
+ * - Identifies frequently queried columns without indexes
+ * - Highlights potential performance bottlenecks
+ * - Provides actionable index recommendations
+ *
+ * **Why This Matters:**
+ * Indexes are the fastest performance win for large WordPress sites. Missing
+ * indexes on `postmeta.meta_key` or `posts.post_type` can slow every page load.
+ *
+ * **Philosophy Alignment:**
+ * - #9 Show Value: Performance gains are measurable and immediate
+ * - #8 Inspire Confidence: Prevents slow queries under traffic spikes
+ *
+ * **Learn More:**
+ * See https://wpshadow.com/kb/database-index-efficiency
+ * or https://wpshadow.com/training/wordpress-database-performance
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +42,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Database Index Efficiency Diagnostic Class
  *
- * Checks for missing indexes on commonly queried columns.
+ * Uses `SHOW INDEX` to compare expected indexes with actual indexes.
+ *
+ * **Implementation Pattern:**
+ * 1. Define critical tables and columns
+ * 2. Retrieve existing indexes via `SHOW INDEX`
+ * 3. Compare expected vs actual
+ * 4. Return missing index list (limited for performance)
+ *
+ * **Related Diagnostics:**
+ * - Missing Query Indexes
+ * - Database Table Corruption Check
  *
  * @since 1.5049.1401
  */

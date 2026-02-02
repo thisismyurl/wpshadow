@@ -2,8 +2,42 @@
 /**
  * Custom Role Definition Audit Diagnostic
  *
- * Audits custom WordPress roles to ensure they are properly defined
- * with appropriate capabilities and security considerations.
+ * Audits custom WordPress roles to ensure they are properly defined with appropriate
+ * capabilities, no privilege escalation backdoors, and compliance with principle of
+ * least privilege. Custom roles are common attack targets because they often contain
+ * misconfigured capabilities that grant unintended permissions.
+ *
+ * **What This Check Does:**
+ * - Scans all custom (non-core) WordPress roles
+ * - Detects roles with overly broad capabilities (e.g., manage_options on non-admin role)
+ * - Identifies capability naming anomalies (typos that might create unintended permissions)
+ * - Checks for duplicate or conflicting role definitions
+ * - Flags roles with dangerous capabilities (unfiltered_html, edit_others_posts without context)
+ * - Validates role naming follows WordPress conventions
+ *
+ * **Why This Matters:**
+ * Custom roles are prime candidates for privilege escalation. Real attack scenarios:
+ * - Plugin bug grants manage_options to custom role (attacker gains admin on any site using that plugin)
+ * - Typo in capability name: role gets unfiltered_html instead of intended edit_html
+ * - Competing plugins define same role with different capabilities (unpredictable access)
+ * - Author role given delete_users capability intended for editor role only
+ * - Custom role inherits from admin but should have limited permissions (accidental admin creation)\n *
+ * **Business Impact:**
+ * Misconfigured custom roles = privilege escalation without code execution needed. Attacker with
+ * low-privilege account (contributor) finds typo'd capability and escalates to admin in seconds.
+ * Impact: full site compromise, immediate data access, user data exfiltration.\n *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Eliminate privilege escalation class\n * - #9 Show Value: Prevents silent privilege creep
+ * - #10 Beyond Pure: Respects principle of least privilege (trust boundary enforcement)
+ *
+ * **Related Checks:**
+ * - User Capability Auditing (actual user capability assignments)
+ * - Unused Administrator Accounts (who has admin role)
+ * - Database User Privileges Not Minimized (infrastructure-level least privilege)
+ *
+ * **Learn More:**
+ * Custom role security: https://wpshadow.com/kb/custom-role-security
+ * Video: WordPress role management guide (10min): https://wpshadow.com/training/roles-capabilities
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,11 +57,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Custom Role Definition Audit Diagnostic Class
  *
- * Audits custom role definitions for security issues.
- *
- * @since 1.6032.1330
- */
-class Diagnostic_Custom_Role_Definition_Audit extends Diagnostic_Base {
+ * Implements role configuration validation by querying $wp_roles global and inspecting\n * each role's capability list. Detection: compares custom role capabilities against\n * expected WordPress capabilities, flags roles with dangerous combos (delete_users without\n * manage_options), checks for conflicting definitions.\n *
+ * **Detection Pattern:**
+ * 1. Query get_editable_roles() for all site roles\n * 2. Filter out built-in roles (administrator, editor, author, contributor, subscriber)\n * 3. For each custom role, iterate capabilities\n * 4. Check for dangerous capability: manage_options, unfiltered_html, delete_users (on author/contributor)\n * 5. Validate capabilities are registered in WordPress global \$wp_capabilities\n * 6. Return custom roles with flagged capabilities or naming issues\n *
+ * **Real-World Scenario:**
+ * Agency manages 50 WordPress sites. They created custom "author+" role for trusted clients.\n * Role definition accidentally included manage_options (copy-paste error from editor definition).\n * Six months later: compromised contractor account used to inject malware via admin panel.\n * Attacker had full access because \"author+\" role carried manage_options from 18 months ago.\n *
+ * **Implementation Notes:**
+ * - Uses get_editable_roles() to safely retrieve all roles\n * - Compares against \$wp_roles->role_objects[\$role_name]->capabilities\n * - Returns severity: critical (dangerous capability detected), medium (naming anomaly)\n * - Non-fixable diagnostic (requires manual role audit/reconfiguration)\n *\n * @since 1.6032.1330\n */\nclass Diagnostic_Custom_Role_Definition_Audit extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

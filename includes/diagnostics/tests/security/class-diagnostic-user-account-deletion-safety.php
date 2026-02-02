@@ -4,6 +4,43 @@
  *
  * Validates that user account deletion has proper safeguards to prevent
  * accidental data loss and maintain content attribution.
+ * Unsafe deletion = orphaned posts (no author). Or: posts deleted with account.
+ * Best practice: reassign posts before deletion.
+ *
+ * **What This Check Does:**
+ * - Checks WordPress deletion policy (post reassignment)
+ * - Validates if posts reassigned to admin
+ * - Tests if deletion confirmation required
+ * - Checks for audit trail of deletions
+ * - Validates if account recovery possible
+ * - Returns severity for unsafe deletion settings
+ *
+ * **Why This Matters:**
+ * Admin deletes user without backup. User had 100 posts.
+ * Posts deleted (or orphaned). Content lost.
+ * With safeguard: posts reassigned to another author.
+ * Content preserved. No data loss.
+ *
+ * **Business Impact:**
+ * Blog has 5000 posts. Admin contractor account deleted.
+ * Contractor had 500 posts. Without safeguard: posts deleted.
+ * Lost 500 articles (searchable, ranked). SEO damage: $200K+.
+ * With safeguard: posts reassigned to site owner. Content preserved.
+ * Value retained.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Data safely handled
+ * - #9 Show Value: Prevents accidental data loss
+ * - #10 Beyond Pure: Content lifecycle management
+ *
+ * **Related Checks:**
+ * - Data Backup Strategy (related)
+ * - Personal Data Export Functionality (GDPR)
+ * - Account Audit Trails (related)
+ *
+ * **Learn More:**
+ * User deletion best practices: https://wpshadow.com/kb/user-deletion
+ * Video: User management (11min): https://wpshadow.com/training/user-deletion
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +61,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * User Account Deletion Safety Diagnostic Class
  *
  * Checks user deletion safety measures.
+ *
+ * **Detection Pattern:**
+ * 1. Check wp options for user deletion policy
+ * 2. Get delete_option('users_can_register')
+ * 3. Check posts reassignment setting
+ * 4. Validate if admin confirmation required
+ * 5. Test deletion audit logging
+ * 6. Return each missing safeguard
+ *
+ * **Real-World Scenario:**
+ * CMS has user deletion safeguard: "reassign posts to admin".
+ * Editor account deleted (went to competitor). 200 posts
+ * automatically reassigned to site owner. Content preserved. Site
+ * traffic unaffected. Without safeguard: posts deleted. 5 year old
+ * content lost. Search traffic drops 30%. Revenue impact: $50K.
+ *
+ * **Implementation Notes:**
+ * - Checks deletion policy settings
+ * - Validates post reassignment
+ * - Tests confirmation requirements
+ * - Severity: high (no reassignment), medium (no confirmation)
+ * - Treatment: enable post reassignment and delete confirmation
  *
  * @since 1.6032.1335
  */

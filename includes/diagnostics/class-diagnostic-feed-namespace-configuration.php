@@ -2,7 +2,36 @@
 /**
  * Feed Namespace Configuration Diagnostic
  *
- * Checks if the feed XML includes required namespaces for compatibility.
+ * Validates that feed XML includes required namespaces for compatibility
+ * across readers and aggregators. Missing namespaces can break parsing of
+ * common elements like content:encoded, media:thumbnail, or dc:creator.
+ *
+ * **What This Check Does:**
+ * - Inspects feed XML for required namespaces
+ * - Validates common namespace prefixes (content, dc, media, atom)
+ * - Flags feeds missing namespaces used by their elements
+ * - Encourages standards-compliant feed output
+ *
+ * **Why This Matters:**
+ * Many feed readers rely on namespace declarations to interpret advanced
+ * elements. If namespaces are missing, readers may ignore important fields
+ * like full content, author names, or media attachments.
+ *
+ * **Real-World Impact:**
+ * - Feed includes `<content:encoded>` but no `content` namespace
+ * - Reader ignores full content, shows only summary
+ * - Subscribers think posts are incomplete
+ *
+ * Result: Reduced engagement and confusion about content quality.
+ *
+ * **Philosophy Alignment:**
+ * - #1 Helpful Neighbor: Prevents silent parsing failures
+ * - #9 Show Value: Ensures full content reaches readers
+ * - Accessibility First: Supports assistive feed tooling
+ *
+ * **Learn More:**
+ * See https://wpshadow.com/kb/feed-namespace-configuration
+ * or https://wpshadow.com/training/rss-xml-standards
  *
  * @since   1.26032.1921
  * @package WPShadow\Diagnostics
@@ -21,7 +50,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Feed_Namespace_Configuration Class
  *
- * Checks if the feed XML includes required namespaces for compatibility.
+ * Parses feed XML headers to verify namespace declarations are present.
+ *
+ * **Implementation Pattern:**
+ * 1. Fetch feed XML
+ * 2. Parse namespace declarations
+ * 3. Validate expected prefixes for elements found
+ * 4. Return findings with compatibility guidance
+ *
+ * **Related Diagnostics:**
+ * - Feed XML Validity: Ensures XML structure is correct
+ * - Feed Content Encoding: Ensures encoding matches XML declarations
+ * - Feed Custom Endpoints: Validates custom feed output
  */
 class Diagnostic_Feed_Namespace_Configuration extends Diagnostic_Base {
 	/**

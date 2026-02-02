@@ -2,7 +2,47 @@
 /**
  * Remember Me Cookie Security Diagnostic
  *
- * Validates "Remember Me" cookie security configuration.
+ * Validates "Remember Me" login cookie security configuration.
+ * Long-lived login cookies = theft risk (attacker steals cookie = permanent access).
+ * Cookies must be encrypted, HttpOnly, secure flag set.
+ *
+ * **What This Check Does:**
+ * - Detects if "Remember Me" cookies implemented
+ * - Validates cookie HttpOnly flag (prevents JS theft)
+ * - Tests if Secure flag set (HTTPS only)
+ * - Checks cookie expiration (should be weeks, not months)
+ * - Tests if cookies encrypted (optional but recommended)
+ * - Returns severity if insecure cookie configuration
+ *
+ * **Why This Matters:**
+ * Weak remember-me cookie = account compromise. Scenarios:
+ * - Cookie stored plain-text in browser
+ * - Attacker steals via XSS or malware
+ * - Cookie never expires (permanent access)
+ * - Attacker maintains access indefinitely
+ * - Password change doesn't help (cookie still valid)
+ *
+ * **Business Impact:**
+ * User logs in with "Remember Me" (2-week cookie, no HttpOnly flag).
+ * User's computer infected with malware. Malware steals cookies. Attacker
+ * uses cookie to access account. User changes password. Attacker's cookie
+ * still works (never expires). Account compromised 3 months. With security:
+ * HttpOnly (malware can't steal), 2-week expiration, Secure flag, refresh
+ * token rotation. Compromised cookie becomes useless.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Convenience without compromise
+ * - #9 Show Value: Long-term account protection
+ * - #10 Beyond Pure: Secure by default
+ *
+ * **Related Checks:**
+ * - Authentication Cookie Security (overall cookie safety)
+ * - Session Management (session timeout)
+ * - Logout Implementation (cookie revocation)
+ *
+ * **Learn More:**
+ * Remember Me security: https://wpshadow.com/kb/remember-me-cookie-security
+ * Video: Secure authentication cookies (11min): https://wpshadow.com/training/cookie-security
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +63,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Remember Me Cookie Security Diagnostic
  *
  * Checks "Remember Me" cookie security settings and best practices.
+ *
+ * **Detection Pattern:**
+ * 1. Check if "Remember Me" feature implemented
+ * 2. Validate HttpOnly flag (prevents JS access)
+ * 3. Test Secure flag (HTTPS only)
+ * 4. Check cookie expiration (2-4 weeks typical)
+ * 5. Validate if encryption used
+ * 6. Return severity if insecure config
+ *
+ * **Real-World Scenario:**
+ * WordPress "Remember Me" cookie: 90 days, no HttpOnly, no Secure flag.
+ * User's computer compromised (malware). Malware reads cookies (not HttpOnly).
+ * Steals "Remember Me" cookie. Uses it to log in as user. Password changed.
+ * Cookie still works (90-day expiration). Attacker has 90 days access.
+ * With security: HttpOnly (malware can't read), 14-day cookie, auto-refresh.
+ *
+ * **Implementation Notes:**
+ * - Checks WordPress login cookie configuration
+ * - Tests cookie flags (HttpOnly, Secure, SameSite)
+ * - Validates expiration timeframe
+ * - Severity: high (no security flags), medium (weak expiration)
+ * - Treatment: set HttpOnly + Secure + SameSite=Lax, 2-4 week expiration
  *
  * @since 1.2601.2240
  */

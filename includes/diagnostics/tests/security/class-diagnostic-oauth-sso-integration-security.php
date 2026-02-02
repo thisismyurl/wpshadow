@@ -2,7 +2,46 @@
 /**
  * OAuth/SSO Integration Security Diagnostic
  *
- * Detects OAuth/SSO plugins and validates security configuration.
+ * Detects and validates OAuth/single sign-on implementations for security.
+ * OAuth implemented poorly = account takeover (attacker intercepts tokens).
+ * SSO misconfiguration = unauthorized access to multiple sites.
+ *
+ * **What This Check Does:**
+ * - Detects if OAuth/SSO plugin active
+ * - Validates OAuth client secret storage (should not be in code)
+ * - Tests if tokens are encrypted (at rest)
+ * - Confirms token refresh implemented
+ * - Checks if user identity verified (not spoofed)
+ * - Validates single logout across all sites
+ *
+ * **Why This Matters:**
+ * Weak OAuth = session hijacking. Scenarios:
+ * - OAuth token stored in plaintext browser storage
+ * - Attacker steals JavaScript (via XSS)
+ * - Attacker extracts OAuth token
+ * - Replays token to impersonate user
+ * - Gains access to multiple connected sites
+ *
+ * **Business Impact:**
+ * SaaS platform uses OAuth for single sign-on (5 connected services). Token
+ * stored in localStorage (bad). Attacker injects XSS (via plugin vulnerability).
+ * Steals OAuth token. Uses it to access user's email, documents, and payment info
+ * (all 5 services). Fraud: $50K. Plus liability + incident response = $500K+.
+ * Secure token storage (encrypted) would have prevented.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: OAuth secure end-to-end
+ * - #9 Show Value: Prevents multi-site compromise
+ * - #10 Beyond Pure: Trust federation
+ *
+ * **Related Checks:**
+ * - Authentication Cookie Security (token validation)
+ * - CSRF Protection (OAuth state parameter)
+ * - Session Management (token refresh)
+ *
+ * **Learn More:**
+ * OAuth security: https://wpshadow.com/kb/wordpress-oauth-security
+ * Video: Secure OAuth setup (15min): https://wpshadow.com/training/oauth-sso
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,9 +59,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OAuth/SSO Integration Security Diagnostic
+ * Diagnostic_OAuth_SSO_Integration_Security Class
  *
  * Analyzes OAuth and single sign-on implementations for security.
+ *
+ * **Detection Pattern:**
+ * 1. Check for OAuth/SSO plugin
+ * 2. Validate client secret storage (encrypted)
+ * 3. Test token encryption (at rest)
+ * 4. Confirm token expiration + refresh
+ * 5. Check identity verification (prevent spoofing)
+ * 6. Return severity if misconfigured
+ *
+ * **Real-World Scenario:**
+ * WordPress integrates OAuth for Google login. Developer stores client ID in
+ * wp-config (visible in source control). Client secret hardcoded in plugin
+ * (accessible via backup download). Attacker finds both. Creates fake OAuth
+ * app. Redirects users to attacker's app. Steals session tokens. Impersonates
+ * users across platform. Secure approach: store secrets in environment variables
+ * (never in code). Encrypt tokens. Validate origin.
+ *
+ * **Implementation Notes:**
+ * - Checks for OAuth plugin configuration
+ * - Validates secret storage (encrypted, not hardcoded)
+ * - Tests token handling (encrypted, time-limited)
+ * - Severity: critical (exposed secrets), high (weak token handling)
+ * - Treatment: use secure token storage + encryption
  *
  * @since 1.2601.2240
  */

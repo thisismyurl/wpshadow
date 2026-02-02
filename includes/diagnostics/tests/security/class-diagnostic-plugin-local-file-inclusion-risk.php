@@ -2,10 +2,50 @@
 /**
  * Plugin Local File Inclusion Risk Diagnostic
  *
- * Detects plugins vulnerable to Local File Inclusion attacks.
+ * Detects plugins vulnerable to Local File Inclusion (LFI) attacks.
+ * LFI = attacker includes arbitrary server files (config, admin pages, etc).
+ * Plugin doesn't validate file paths. Attacker traverses to /etc/passwd.
  *
- * @since   1.4031.1939
- * @package WPShadow\Diagnostics
+ * **What This Check Does:**
+ * - Scans plugin files for include/require statements
+ * - Checks if file paths validated
+ * - Detects if user input included directly
+ * - Tests for path traversal protection
+ * - Validates directory traversal prevented (../../../etc/passwd)
+ * - Returns severity if LFI vulnerable
+ *
+ * **Why This Matters:**
+ * Unvalidated file inclusion = arbitrary file access. Scenarios:
+ * - Plugin includes files based on user input
+ * - Attacker passes: "../../etc/passwd"
+ * - Server includes /etc/passwd
+ * - Attacker reads sensitive config files
+ * - May expose credentials, paths, secrets
+ *
+ * **Business Impact:**
+ * Document plugin includes files based on document ID. No validation.
+ * Attacker modifies URL: "doc.php?id=../../wp-config.php". Server includes
+ * wp-config.php. Attacker reads database credentials. Uses creds to connect.
+ * Steals entire database. Cost: $500K+. Validation (prevent ../) would prevent
+ * entirely. 5-minute fix. Prevents $500K+ exposure.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: File access is controlled
+ * - #9 Show Value: Prevents config file exposure
+ * - #10 Beyond Pure: Input validation everywhere
+ *
+ * **Related Checks:**
+ * - Remote File Inclusion (related attack vector)
+ * - File Permission Security (file access control)
+ * - Plugin CSRF Protection (similar surface)
+ *
+ * **Learn More:**
+ * Local file inclusion: https://wpshadow.com/kb/wordpress-lfi-attacks
+ * Video: Preventing LFI vulnerabilities (11min): https://wpshadow.com/training/lfi-prevention
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.4031.1939
  */
 
 declare(strict_types=1);
@@ -22,6 +62,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic_Plugin_Local_File_Inclusion_Risk Class
  *
  * Identifies plugins vulnerable to LFI attacks.
+ *
+ * **Detection Pattern:**
+ * 1. Scan plugin files for include/require statements
+ * 2. Check if file path comes from user input
+ * 3. Test if path traversal prevented (../)
+ * 4. Validate realpath() checks present
+ * 5. Test if file is within expected directory
+ * 6. Return severity if LFI vulnerable
+ *
+ * **Real-World Scenario:**
+ * Template plugin includes template based on GET parameter:
+ * include($_GET['template'] . '.php'). Attacker passes: template=../../etc/passwd%00.
+ * Server includes /etc/passwd (null byte injection). Attacker reads password hashes.
+ * Proper implementation: validate template name (whitelist), prevent ../ (realpath check).
+ *
+ * **Implementation Notes:**
+ * - Scans plugin files for include/require patterns
+ * - Tests path traversal attacks
+ * - Checks for realpath/sanitization
+ * - Severity: critical (LFI confirmed), high (potential LFI)
+ * - Treatment: validate file paths, use realpath(), whitelist allowed files
+ *
+ * @since 1.4031.1939
  */
 class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 

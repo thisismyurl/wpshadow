@@ -2,10 +2,49 @@
 /**
  * Plugin Capability Escalation Diagnostic
  *
- * Detects plugins that grant excessive capabilities to users.
+ * Detects plugins that grant excessive capabilities to users (privilege escalation).
+ * Plugin grants "admin" cap to all users (instead of requiring admin role).
+ * Attacker creates subscriber account. Plugin grants admin powers to subscriber.
  *
- * @since   1.4031.1939
- * @package WPShadow\Diagnostics
+ * **What This Check Does:**
+ * - Scans active plugins for capability grants
+ * - Checks if admin capabilities granted to low-privilege roles
+ * - Detects if capabilities granted without verification
+ * - Tests privilege escalation paths
+ * - Validates role hierarchy maintained
+ * - Returns severity if escalation possible
+ *
+ * **Why This Matters:**
+ * Capability escalation = instant admin takeover. Scenarios:
+ * - Plugin grants "manage_options" to "contributor" role
+ * - Attacker creates contributor account
+ * - Contributor automatically gets admin powers
+ * - Attacker modifies site, installs malware
+ * - Full compromise despite low initial access
+ *
+ * **Business Impact:**
+ * Plugin grants admin capabilities to "subscriber" role (developer mistake).
+ * Attacker registers free account (subscriber). Gains admin access. Modifies
+ * homepage, injects malware links. Site deindexed. 6-month recovery. Revenue
+ * loss: $200K+. With proper checks: subscriber stays subscriber (can't escalate).
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Admin access protected
+ * - #9 Show Value: Prevents privilege escalation
+ * - #10 Beyond Pure: Principle of least privilege
+ *
+ * **Related Checks:**
+ * - User Capability Auditing (role validation)
+ * - Plugin CSRF Protection (related vulnerability)
+ * - Administrator Account Security (role protection)
+ *
+ * **Learn More:**
+ * Privilege escalation: https://wpshadow.com/kb/wordpress-privilege-escalation
+ * Video: Identifying privilege escalation (12min): https://wpshadow.com/training/escalation
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.4031.1939
  */
 
 declare(strict_types=1);
@@ -22,6 +61,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic_Plugin_Capability_Escalation Class
  *
  * Identifies plugins granting excessive capabilities.
+ *
+ * **Detection Pattern:**
+ * 1. Scan plugin files for add_cap() calls
+ * 2. Check if admin caps granted to low-privilege roles
+ * 3. Test actual capabilities available to roles
+ * 4. Validate if escalation is possible
+ * 5. Confirm role hierarchy maintained
+ * 6. Return severity if escalation detected
+ *
+ * **Real-World Scenario:**
+ * Popular form plugin has escalation bug. Grants manage_options to all users.
+ * Attacker registers. Gains instant admin. Modifies wp-config. Changes database
+ * password. Locks out real admins. Takes full control. Uninstalling plugin
+ * doesn't help (damage already done). Early detection via capability audit
+ * would have caught this before attacker exploited.
+ *
+ * **Implementation Notes:**
+ * - Scans plugin files for capability grants
+ * - Tests actual role capabilities
+ * - Validates hierarchy (subscriber < contributor < editor < admin)
+ * - Severity: critical (escalation possible), high (suspicious grants)
+ * - Treatment: disable plugin or replace with secure version
+ *
+ * @since 1.4031.1939
  */
 class Diagnostic_Plugin_Capability_Escalation extends Diagnostic_Base {
 

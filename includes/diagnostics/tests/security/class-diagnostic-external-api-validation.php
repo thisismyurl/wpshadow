@@ -1,9 +1,21 @@
 <?php
+<?php
 /**
  * External API Validation Diagnostic
  *
- * Checks that external API responses are properly validated before caching.
- *
+ * Checks that external API responses are properly validated before caching or\n * processing. Unvalidated API responses enable poisoning attacks: attacker\n * compromises external API = malicious data injected into WordPress site.\n *
+ * **What This Check Does:**
+ * - Detects external API calls in active plugins/themes\n * - Validates response validation before storage\n * - Checks if API responses sanitized before display\n * - Tests caching headers (don't cache untrusted data indefinitely)\n * - Validates error handling (no data leak on errors)\n * - Confirms HTTPS for all external API calls\n *
+ * **Why This Matters:**
+ * Unvalidated external data enables supply chain attacks. Scenarios:\n * - Plugin calls external service (weather, exchange rates, etc)\n * - Plugin doesn't validate response structure\n * - Attacker compromises external service (or performs MITM)\n * - Injects malicious data/HTML into response\n * - WordPress displays injected data to users\n * - Phishing links, malware, credential theft\n *
+ * **Business Impact:**
+ * WordPress site uses exchange rate API (not validated). API returns current\n * rates + bonus JavaScript payload. Plugin caches response without validation.\n * JavaScript executes on site. Redirects to phishing page. 1% of 10K daily visitors\n * click redirect (100 people). 5% enter credentials (5 people). Account takeovers\n * + fraud. Liability: $50K-$100K.\n *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: External data trustworthy after validation\n * - #9 Show Value: Prevents supply chain attacks\n * - #10 Beyond Pure: Defense in depth, validate all inputs\n *
+ * **Related Checks:**
+ * - Input Sanitization Not Implemented (XSS prevention)\n * - SSL/TLS Configuration Not Set (transport security)\n * - API Throttling Not Configured (abuse prevention)\n *
+ * **Learn More:**
+ * API security best practices: https://wpshadow.com/kb/external-api-security\n * Video: Secure API integration (12min): https://wpshadow.com/training/api-validation\n *
  * @since   1.26032.1000
  * @package WPShadow\Diagnostics
  */
@@ -21,8 +33,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_External_API_Validation Class
  *
- * Verifies that external API calls validate responses before storage.
- *
+ * Verifies that external API calls validate responses before storage.\n * Implements detection of unvalidated API response usage.\n *
+ * **Detection Pattern:**
+ * 1. Scan active plugins/themes for wp_remote_get/post calls\n * 2. Check response validation (is_array check, isset calls)\n * 3. Validate sanitization before storage (sanitize_*())\n * 4. Check if responses cached (how long?)\n * 5. Validate error handling (log errors, don't display)\n * 6. Return severity if validation missing\n *
+ * **Real-World Scenario:**
+ * Plugin calls external service for logo images. Response: Array with image URLs.\n * Plugin doesn't validate response structure. Attacker compromises service.\n * Response now contains: {\"images\": [\"https://attacker.com/inject.php?redirect=phishing\"]}.\n * Plugin displays without validation. Users click \"logo\" link (appears legitimate).\n * Redirected to phishing page. Credentials stolen.\n *
+ * **Implementation Notes:**
+ * - Scans for wp_remote_get/post/request calls\n * - Checks for response validation (is_array, isset)\n * - Validates sanitization before database storage\n * - Severity: critical (no validation), high (weak validation)\n * - Treatment: add response structure validation\n *
  * @since 1.26032.1000
  */
 class Diagnostic_External_API_Validation extends Diagnostic_Base {

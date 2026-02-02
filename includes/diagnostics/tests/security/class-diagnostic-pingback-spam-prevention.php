@@ -2,7 +2,46 @@
 /**
  * Pingback Spam Prevention Diagnostic
  *
- * Tests pingback spam prevention measures.
+ * Validates pingback feature is disabled or rate-limited. Pingbacks allow
+ * content to be notified when other sites link to it. Attacker abuses pingback
+ * to launch DDoS attacks + spread malware links.
+ *
+ * **What This Check Does:**
+ * - Detects if pingback feature enabled
+ * - Tests if XML-RPC endpoint available (pingback mechanism)
+ * - Validates rate limiting on pingback requests
+ * - Checks for pingback spam filtering
+ * - Tests if pingback notifications sent
+ * - Validates self-pingback protection
+ *
+ * **Why This Matters:**
+ * Pingback feature = DDoS amplification vector. Scenarios:
+ * - Attacker crafts malicious pingback request
+ * - Attacker's server: "Your site linked to us"
+ * - Your site: ping attack destination (your IP)
+ * - Your server attacks another target (unwitting participant)
+ * - Site becomes "DDoS amplifier" (hits third-party site)
+ *
+ * **Business Impact:**
+ * WordPress site with pingback enabled. Attacker uses site as DDoS amplifier.
+ * Site generates millions of pingback requests to competitor. Competitor loses
+ * revenue (site down). Notices attack originating from your IP. Contacts your
+ * ISP. Your site removed from internet (taken offline). Revenue loss: $100K/day.
+ * Disabled pingback: attacker can't use your site as weapon.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Site not weaponized by attackers
+ * - #9 Show Value: Prevents DDoS amplification abuse
+ * - #10 Beyond Pure: Responsible internet citizen
+ *
+ * **Related Checks:**
+ * - XML-RPC Authentication (similar vector)
+ * - Comment Spam Prevention (spam vectors)
+ * - Rate Limiting (prevent abuse)
+ *
+ * **Learn More:**
+ * Pingback security: https://wpshadow.com/kb/wordpress-pingback-security
+ * Video: Disabling dangerous WordPress features (8min): https://wpshadow.com/training/pingback-security
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +62,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Pingback Spam Prevention Diagnostic Class
  *
  * Validates that pingback spam prevention measures are in place.
+ *
+ * **Detection Pattern:**
+ * 1. Check if pingback feature enabled
+ * 2. Query XML-RPC pingback endpoint
+ * 3. Test rate limiting (pingback requests limited)
+ * 4. Validate self-pingback protection
+ * 5. Check spam filtering on pingbacks
+ * 6. Return severity if disabled/unprotected
+ *
+ * **Real-World Scenario:**
+ * Site owner enables pingback (to track who links to them). Attacker discovers.
+ * Uses pingback to launch DDoS amplification attacks. Your site becomes attack
+ * weapon. ISP notices unusual traffic. Investigates. Finds your server. Removes
+ * your IP from internet (DDoS source mitigation). Site offline. Revenue loss.
+ * Disabled pingback: attacker can't weaponize your site.
+ *
+ * **Implementation Notes:**
+ * - Checks WordPress pingback setting
+ * - Validates XML-RPC disabled or protected
+ * - Tests rate limiting on pingback
+ * - Severity: high (unprotected pingback), medium (no rate limiting)
+ * - Treatment: disable pingback or implement rate limiting
  *
  * @since 1.2601.1531
  */

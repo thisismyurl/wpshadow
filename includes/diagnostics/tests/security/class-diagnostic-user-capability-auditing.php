@@ -1,9 +1,21 @@
 <?php
 /**
  * User Capability Auditing Diagnostic
- *
- * Performs a comprehensive audit of user capabilities across all roles
- * to identify privilege escalation risks and capability misconfigurations.
+n *
+ * Performs a comprehensive audit of user capabilities across all roles to identify\n * privilege escalation risks, capability misconfigurations, and over-privileged accounts.\n * This diagnostic detects when users have more permissions than needed: attackers target\n * high-privilege accounts, and over-privileging reduces security surface attack.\n *
+ * **What This Check Does:**
+ * - Scans all user accounts and their assigned role(s)\n * - Detects users with unnecessary administrator role (account takeover = full compromise)\n * - Identifies accounts with capability overload (contributor with edit_others_posts)\n * - Flags accounts with zero activity but high privilege (inactive admins)\n * - Detects capability mixing (roles shouldn't have capabilities from other levels)\n * - Reports on total number of super-admin accounts (multisite)\n *
+ * **Why This Matters:**
+ * Over-privileged accounts are primary targets for account takeover attacks. Real scenarios:\n * - Contractor account with admin role not downgraded after project end (persistent backdoor)\n * - Marketing contributor accidentally given editor role (data access they don't need)\n * - Compromised password: if account is contributor, attacker limited to own posts.\n *   If account is admin, attacker gets full site access.\n * - Email compromise: attacker resets password via email, gains whatever role account has\n *
+ * **Business Impact:**
+ * Over-privileged account compromise = full site takeover. Scenario: marketing team member\n * account compromised. Account was accidentally given admin role. Attacker installs malware,\n * exfiltrates customer database. Recovery: forensics (8hrs), malware removal (4hrs), notification\n * (legal cost), credit monitoring costs ($50K+). Prevention: audit and fix roles in 30 minutes.\n *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Proactive privilege escalation prevention\n * - #9 Show Value: Quantifiable risk reduction\n * - #10 Beyond Pure: Respects principle of least privilege, reduces attack surface\n *
+ * **Related Checks:**
+ * - Custom Role Definition Audit (role definitions themselves)\n * - Inactive User Account Locking (unused high-privilege accounts)\n * - Database User Privileges Not Minimized (infrastructure-level privilege)\n *
+ * **Learn More:**
+ * User capability management: https://wpshadow.com/kb/user-capability-auditing
+ * Video: WordPress user roles deep dive (12min): https://wpshadow.com/training/user-roles-guide
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,11 +35,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * User Capability Auditing Diagnostic Class
  *
- * Audits user capabilities across all roles.
- *
+ * Implements comprehensive capability audit by iterating all users, extracting assigned\n * roles, and checking for over-privileging. Detection: queries WordPress users table,\n * extracts user meta roles, cross-references against expected role/capability mappings.\n *
+ * **Detection Pattern:**
+ * 1. Query get_users() to fetch all site users\n * 2. For each user: extract user->roles array\n * 3. Check for unnecessary privilege: non-admin user with manage_options capability\n * 4. Flag accounts with role mismatch (contributor with editor/admin role)\n * 5. Identify inactive high-privilege accounts (90+ days, admin role)\n * 6. Return array of over-privileged accounts with recommendations\n *
+ * **Real-World Scenario:**
+ * E-commerce site with 5 team members. Jan 2024: freelancer left, owner forgot to downgrade\n * account from admin to contributor. June 2024: contractor's email compromised in LinkedIn breach.\n * Attacker tests password on site: admin account = access granted. Within 4 hours: malware\n * installed, payment forms modified to steal credit cards. Owner discovered during bank\n * fraud notification (40+ fraudulent orders). Cleanup cost: $80K. Prevention: this check\n * would have caught 5-month-old admin account unused since contractor departure.\n *
+ * **Implementation Notes:**
+ * - Uses get_users() with role parameter for multisite compatibility\n * - Respects custom roles (doesn't assume WordPress defaults)\n * - Returns severity: critical (inactive admin), high (unexpected admin assignment)\n * - Auto-fixable treatment: downgrade identified over-privileged accounts\n *
  * @since 1.6032.1340
- */
-class Diagnostic_User_Capability_Auditing extends Diagnostic_Base {
+ */\nclass Diagnostic_User_Capability_Auditing extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

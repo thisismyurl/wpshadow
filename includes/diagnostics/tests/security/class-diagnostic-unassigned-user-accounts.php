@@ -4,6 +4,43 @@
  *
  * Identifies user accounts without proper role assignments or with
  * orphaned/legacy roles that could pose security risks.
+ * User without proper role = security risk (unexpected permissions).
+ * Database error, migration issue, or malicious backdoor.
+ *
+ * **What This Check Does:**
+ * - Scans all user accounts
+ * - Checks if each user has valid role assignment
+ * - Detects orphaned/deleted role names
+ * - Identifies users with no capabilities
+ * - Finds legacy roles from uninstalled plugins
+ * - Returns severity for each unassigned user
+ *
+ * **Why This Matters:**
+ * User with no assigned role = undefined permissions.
+ * Could allow escalation or provide backdoor access.
+ * Best practice: every user has clear, documented role.
+ *
+ * **Business Impact:**
+ * Migration from theme: user roles corrupted. 50 users have no role.
+ * One of these users is compromised account (attacker registered).
+ * Without role: permissions undefined. Could have unexpected access.
+ * Admin doesn't see account (hidden in filtered lists). Attacker
+ * exploits. With audit: unassigned accounts identified. Deleted or
+ * properly assigned. Risk eliminated.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: User roles clear and valid
+ * - #9 Show Value: Prevents orphaned account exploitation
+ * - #10 Beyond Pure: Role-based access control integrity
+ *
+ * **Related Checks:**
+ * - Unused Administrator Accounts (similar)
+ * - User Capability Auditing (broader)
+ * - Custom Role Definition Audit (related)
+ *
+ * **Learn More:**
+ * User role management: https://wpshadow.com/kb/user-roles
+ * Video: Managing user accounts (10min): https://wpshadow.com/training/user-roles
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +61,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Unassigned User Accounts Diagnostic Class
  *
  * Detects users without valid role assignments.
+ *
+ * **Detection Pattern:**
+ * 1. Get all users from database
+ * 2. For each user: get assigned role from usermeta
+ * 3. Check if role exists in registered roles
+ * 4. Flag if role is empty or not found
+ * 5. Detect orphaned roles (from deleted plugins)
+ * 6. Return list of unassigned users
+ *
+ * **Real-World Scenario:**
+ * Plugin uninstalled. It registered custom role. Users assigned to
+ * that role. Users now have no valid role assignment. One user is
+ * backdoor account (attacker created via SQL). With audit: unassigned
+ * accounts identified. Deleted or assigned to subscriber. Backdoor
+ * account removed. Attack vector closed.
+ *
+ * **Implementation Notes:**
+ * - Queries all WordPress users
+ * - Checks role validity
+ * - Detects orphaned roles
+ * - Severity: high (unassigned), medium (orphaned role)
+ * - Treatment: delete unneeded users or assign proper role
  *
  * @since 1.6032.1200
  */

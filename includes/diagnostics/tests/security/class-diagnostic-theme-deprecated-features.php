@@ -2,7 +2,46 @@
 /**
  * Theme Deprecated Features Diagnostic
  *
- * Detects use of deprecated WordPress functions, features, or APIs in theme code.
+ * Detects use of deprecated WordPress functions in theme code.
+ * Deprecated functions removed in future WordPress versions.
+ * Theme using deprecated functions = breaks after WordPress update.
+ * Also = security gaps (deprecated often removed for security reasons).
+ *
+ * **What This Check Does:**
+ * - Scans theme files for deprecated function calls
+ * - Detects removed_action with old hook names
+ * - Finds screen_icon() (removed WP 5.2+)
+ * - Detects add_filter on deprecated hooks
+ * - Searches for old template tags (the_*_rss)
+ * - Returns list of deprecated usage
+ *
+ * **Why This Matters:**
+ * Deprecated functions removed for security reasons.
+ * Theme continues using = security gaps introduced.
+ * Example: WP 5.2 removed screen_icon() and added icon system.
+ * Theme using old system = missing security improvements.
+ *
+ * **Business Impact:**
+ * Theme uses 12 deprecated WordPress functions.
+ * WordPress updates to new major version. Deprecated functions
+ * removed. Theme breaks. Site shows fatal errors. Down 72 hours.
+ * Users can't access. Revenue loss: $500K+. Cost to fix theme: $50K.
+ * With monitoring: deprecated functions identified. Updated before
+ * WordPress update. Zero downtime.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Theme stays compatible
+ * - #9 Show Value: Prevents upgrade-related downtime
+ * - #10 Beyond Pure: Proactive deprecation tracking
+ *
+ * **Related Checks:**
+ * - Plugin Deprecated Features (similar risk in plugins)
+ * - WordPress Version Compatibility (broader compatibility)
+ * - Theme Code Quality (general code standards)
+ *
+ * **Learn More:**
+ * WordPress deprecations: https://wpshadow.com/kb/theme-deprecated
+ * Video: Updating themes (11min): https://wpshadow.com/training/deprecations
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +62,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme Deprecated Features Diagnostic Class
  *
  * Scans theme code for deprecated WordPress functions and features.
+ *
+ * **Detection Pattern:**
+ * 1. Get list of WordPress deprecated functions (from _deprecated_*)
+ * 2. Scan active theme files
+ * 3. Search for each deprecated function call
+ * 4. Record WordPress version when deprecated
+ * 5. Note version when removed
+ * 6. Return list with removal timeline
+ *
+ * **Real-World Scenario:**
+ * Theme uses screen_icon() on admin pages (deprecated WP 5.2,
+ * removed 5.3). When WP 5.3 released and site updated, function
+ * no longer exists. Fatal error. Admin pages broken. With monitoring:
+ * admin gets list of deprecated functions. Updates theme before
+ * WP 5.3 release. Transition smooth.
+ *
+ * **Implementation Notes:**
+ * - Scans active theme files
+ * - Cross-references WordPress deprecated functions registry
+ * - Notes deprecation timeline
+ * - Severity: high (soon removed), medium (recently removed)
+ * - Treatment: replace with current equivalents
  *
  * @since 1.5049.1300
  */

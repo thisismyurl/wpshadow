@@ -2,8 +2,19 @@
 /**
  * Content Access Control Not Implemented Diagnostic
  *
- * Checks if content access control is implemented.
- *
+ * Validates that access control checks are implemented for protected content.\n * Without access control, authenticated users see all content regardless of\n * permissions. Scenario: Private customer portal accessed by any logged-in user.\n *
+ * **What This Check Does:**
+ * - Detects if content read capability checks are implemented\n * - Scans for missing capability verification in template output\n * - Checks if private pages/posts have before_display checks\n * - Validates access control on custom post types\n * - Tests if user roles restrict content appropriately\n * - Confirms unpublished content only visible to authors\n *
+ * **Why This Matters:**
+ * Missing access control exposes confidential content. Scenarios:\n * - Employee accesses another employee's private profile (salary, performance)\n * - Customer views other customer orders/private documents\n * - Freelancer sees competitor proposals shared in protected area\n *
+ * **Business Impact:**
+ * B2B SaaS portal without per-client access control. 50 customers access shared area.\n * Missing check: any logged-in user sees all other companies' data. One employee\n * accidentally grants access to competitor. Competitor downloads customer list,\n * intellectual property, pricing. Total damage: $500K-$1M breach liability.\n *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Data properly segregated by role\n * - #9 Show Value: Prevents catastrophic data breaches\n * - #10 Beyond Pure: Privacy by design, not by accident\n *
+ * **Related Checks:**
+ * - User Capability Auditing (role permissions)\n * - Private Content Not Indexed (SEO+security)\n * - Custom Role Definition Audit (permission mapping)\n *
+ * **Learn More:**
+ * Access control patterns: https://wpshadow.com/kb/access-control-implementation\n * Video: Implementing access checks (12min): https://wpshadow.com/training/access-control\n *
  * @package    WPShadow
  * @subpackage Diagnostics
  * @since      1.2601.2352
@@ -22,8 +33,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Content Access Control Not Implemented Diagnostic Class
  *
- * Detects missing access control.
- *
+ * Implements detection of missing capability checks in content rendering.\n *
+ * **Detection Pattern:**
+ * 1. Query all posts with non-public post_status\n * 2. Scan template files for current_user_can() calls\n * 3. Check if access checks precede content output\n * 4. Validate private custom post types have capability mapping\n * 5. Test non-published content visibility\n * 6. Return severity if access control missing\n *
+ * **Real-World Scenario:**
+ * Developer builds WordPress site with client data portal. Uses password-protected\n * posts for each client. Forgot to add capability checks before displaying content.\n * Any user with account sees all client portfolios/pricing. Client A employee views\n * Client B portfolio. Contracts Client B directly (competitor discovery).\n *
+ * **Implementation Notes:**
+ * - Checks current_user_can() usage in templates\n * - Validates private post visibility\n * - CPT capability mapping verification\n * - Severity: critical (data exposed), medium (partial)\n * - Treatment: add capability checks to templates\n *
  * @since 1.2601.2352
  */
 class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base {

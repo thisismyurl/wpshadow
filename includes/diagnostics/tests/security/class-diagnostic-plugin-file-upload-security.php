@@ -2,10 +2,50 @@
 /**
  * Plugin File Upload Security Diagnostic
  *
- * Detects plugins with insecure file upload handling.
+ * Detects plugins with insecure file upload handling. Attacker uploads malicious
+ * file (PHP webshell, EXE, etc). Plugin doesn't validate extension/content.
+ * Attacker executes file. Gets code execution. Full site compromise.
  *
- * @since   1.4031.1939
- * @package WPShadow\Diagnostics
+ * **What This Check Does:**
+ * - Scans plugins for file upload functions
+ * - Checks if file extension validated
+ * - Tests if MIME type verified
+ * - Detects if uploads stored outside web root
+ * - Validates execution disabled in upload dir
+ * - Tests for known upload attack patterns
+ *
+ * **Why This Matters:**
+ * Unvalidated file upload = remote code execution. Scenarios:
+ * - Plugin accepts file uploads (for documents, avatars, etc)
+ * - Plugin doesn't check file extension
+ * - Attacker uploads "profile.php" disguised as image
+ * - Browser opens file. PHP executes. Attacker has shell.
+ * - Full site compromise within seconds
+ *
+ * **Business Impact:**
+ * Media gallery plugin allows uploads. No validation. Attacker uploads PHP
+ * webshell (disguised as JPG). Plugin stores in web-accessible folder.
+ * Attacker executes webshell. Downloads database. Steals 100K customer
+ * records. GDPR fine: $2M+. With validation: PHP file rejected (wrong extension).
+ * Attack impossible. Cost difference: $1M+ damage prevented.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: File uploads are safe
+ * - #9 Show Value: Prevents remote code execution
+ * - #10 Beyond Pure: Input validation everywhere
+ *
+ * **Related Checks:**
+ * - File Permission Security (upload directory safety)
+ * - Executable File Prevention (disable execution)
+ * - Plugin Code Injection Prevention (related vector)
+ *
+ * **Learn More:**
+ * File upload security: https://wpshadow.com/kb/wordpress-file-upload-security
+ * Video: Securing file uploads (12min): https://wpshadow.com/training/upload-security
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.4031.1939
  */
 
 declare(strict_types=1);
@@ -22,6 +62,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic_Plugin_File_Upload_Security Class
  *
  * Identifies plugins with insecure file upload handling.
+ *
+ * **Detection Pattern:**
+ * 1. Scan plugin files for upload handling ($_FILES, move_uploaded_file)
+ * 2. Check if file extension validated
+ * 3. Test MIME type verification
+ * 4. Detect if uploads in web root (dangerous)
+ * 5. Validate execution disabled (.htaccess)
+ * 6. Return severity if upload insecure
+ *
+ * **Real-World Scenario:**
+ * Comment system plugin allows avatar uploads. Doesn't validate extension.
+ * Attacker uploads "avatar.php". Plugin saves as /wp-content/uploads/avatar.php.
+ * Attacker visits /wp-content/uploads/avatar.php. PHP executes. Code execution.
+ * Proper implementation: validate extension (only JPG/PNG), store outside web root,
+ * disable execution in upload directory.
+ *
+ * **Implementation Notes:**
+ * - Scans plugin files for upload functions
+ * - Tests extension/MIME validation
+ * - Checks upload directory configuration
+ * - Severity: critical (RCE possible), high (weak validation)
+ * - Treatment: implement proper file upload validation
+ *
+ * @since 1.4031.1939
  */
 class Diagnostic_Plugin_File_Upload_Security extends Diagnostic_Base {
 

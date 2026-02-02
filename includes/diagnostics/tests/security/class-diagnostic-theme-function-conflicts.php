@@ -3,6 +3,43 @@
  * Theme Function Conflicts Diagnostic
  *
  * Detects function name conflicts or redeclaration errors in theme.
+ * Theme + plugin define same function = fatal error (E_FATAL).
+ * Site stops working. Users see blank page.
+ *
+ * **What This Check Does:**
+ * - Parses active theme PHP files
+ * - Extracts all function definitions
+ * - Checks against plugin functions
+ * - Tests against WordPress core functions
+ * - Detects naming conventions violations
+ * - Returns severity for each conflict
+ *
+ * **Why This Matters:**
+ * Two plugins define get_user_meta() differently.
+ * Plugin loads: Theme loads = fatal error (already defined).
+ * Site completely breaks. Users can't access.
+ *
+ * **Business Impact:**
+ * Developer releases theme. Works alone. User installs plugin.
+ * Both define my_custom_function(). Fatal error. Site down.
+ * White screen of death. Users can't access. Revenue stops.
+ * Support tickets flood. One conflict = site broken (not partial).
+ * Cost: $100K+ (emergency support, PR damage). With tracking:
+ * conflicts detected before activation. Admin warned. Crisis prevented.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: No fatal errors
+ * - #9 Show Value: Prevents site-breaking conflicts
+ * - #10 Beyond Pure: Naming convention enforcement
+ *
+ * **Related Checks:**
+ * - Plugin Function Conflicts (similar for plugins)
+ * - Theme Capability Checks (general theme security)
+ * - PHP Code Quality Scanning (broad checks)
+ *
+ * **Learn More:**
+ * Naming conventions: https://wpshadow.com/kb/theme-function-names
+ * Video: Preventing function conflicts (9min): https://wpshadow.com/training/function-conflicts
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +60,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme Function Conflicts Diagnostic Class
  *
  * Checks for function naming conflicts in theme code.
+ *
+ * **Detection Pattern:**
+ * 1. Get active theme
+ * 2. Parse all PHP files for function definitions
+ * 3. Extract function names (function get_user_meta()...)
+ * 4. Cross-reference against WordPress core functions
+ * 5. Cross-reference against active plugins
+ * 6. Return list of naming conflicts
+ *
+ * **Real-World Scenario:**
+ * Theme author defines: function get_user_info() {
+ * Later, plugin developer independently defines: function get_user_info() {
+ * Both activated on same site. Whichever loads first declares function.
+ * Second plugin/theme tries to load. Fatal error: function already defined.
+ * Site breaks. With detection: warning shown before both activated.
+ * Admin avoids installing conflicting plugin. No conflict.
+ *
+ * **Implementation Notes:**
+ * - Parses active theme files
+ * - Checks all function definitions
+ * - Validates against core + active plugins
+ * - Severity: critical (will cause fatal error)
+ * - Treatment: rename functions with prefix (theme_name_function_name)
  *
  * @since 1.5049.1245
  */

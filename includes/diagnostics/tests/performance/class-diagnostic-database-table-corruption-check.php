@@ -2,7 +2,36 @@
 /**
  * Database Table Corruption Check Diagnostic
  *
- * Verifies database table integrity.
+ * Verifies database table integrity by running integrity checks on WordPress
+ * tables. Corruption can cause missing posts, broken admin screens, or failed
+ * updates. This diagnostic detects early warning signs so you can repair tables
+ * before data loss escalates.
+ *
+ * **What This Check Does:**
+ * - Runs `CHECK TABLE` on WordPress core tables
+ * - Detects warnings or errors returned by the database engine
+ * - Reports which tables are affected and why
+ * - Enables automatic repair via the associated treatment
+ *
+ * **Why This Matters:**
+ * Table corruption can occur after abrupt shutdowns, disk issues, or failed
+ * migrations. Corrupted tables often manifest as white screens, missing data,
+ * or errors like “Table is marked as crashed.”
+ *
+ * **Real-World Failure Scenario:**
+ * - Hosting server crashes during update
+ * - `wp_posts` table becomes corrupted
+ * - Admin can’t edit posts; front-end pages 500
+ *
+ * Result: Site downtime and potential data loss.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Early detection prevents catastrophic failures
+ * - #9 Show Value: Protects uptime and data integrity
+ *
+ * **Learn More:**
+ * See https://wpshadow.com/kb/database-table-corruption
+ * or https://wpshadow.com/training/database-maintenance
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +51,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Database Table Corruption Check Diagnostic Class
  *
- * Runs CHECK TABLE on WordPress tables to identify corruption.
+ * Uses `CHECK TABLE` to validate table health and detect corruption signals.
+ *
+ * **Implementation Pattern:**
+ * 1. Enumerate WordPress tables with `$wpdb->prefix`
+ * 2. Run `CHECK TABLE` for each table
+ * 3. Collect warnings/errors
+ * 4. Return findings with affected table list
+ *
+ * **Related Diagnostics:**
+ * - Database Storage Engine Consistency
+ * - Database Index Efficiency
+ * - Plugin Database Corruption
  *
  * @since 1.5049.1401
  */

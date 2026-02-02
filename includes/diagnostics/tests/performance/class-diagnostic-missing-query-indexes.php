@@ -2,7 +2,26 @@
 /**
  * Missing Query Indexes Diagnostic
  *
- * Detects frequently queried columns without indexes.
+ * Identifies columns frequently used in queries that lack proper indexes.
+ * This diagnostic focuses on practical query patterns and flags missing indexes
+ * that cause slow admin screens, delayed searches, and high database load.
+ *
+ * **What This Check Does:**
+ * - Scans critical tables for missing indexes
+ * - Focuses on columns used in WHERE clauses
+ * - Provides a short list of the most impactful missing indexes
+ *
+ * **Why This Matters:**
+ * Missing indexes are a top cause of slow WordPress sites. As content grows,
+ * queries that were fast at 1,000 posts become slow at 100,000 posts.
+ *
+ * **Philosophy Alignment:**
+ * - #9 Show Value: Delivers clear, measurable performance wins
+ * - #8 Inspire Confidence: Prevents slowdowns as sites scale
+ *
+ * **Learn More:**
+ * See https://wpshadow.com/kb/missing-query-indexes
+ * or https://wpshadow.com/training/database-indexing-101
  *
  * @since   1.4031.1939
  * @package WPShadow\Diagnostics
@@ -21,7 +40,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Missing_Query_Indexes Class
  *
- * Identifies columns that should be indexed but aren't.
+ * Uses `SHOW INDEX` data to detect missing indexes on common columns.
+ *
+ * **Implementation Pattern:**
+ * 1. Define critical tables and columns
+ * 2. Fetch existing index metadata
+ * 3. Identify columns lacking indexes
+ * 4. Return findings with top-impact items
+ *
+ * **Related Diagnostics:**
+ * - Database Index Efficiency
+ * - Database Storage Engine Consistency
  */
 class Diagnostic_Missing_Query_Indexes extends Diagnostic_Base {
 

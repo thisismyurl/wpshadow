@@ -3,9 +3,49 @@
  * Plugin Backdoor Installation Risk Diagnostic
  *
  * Detects plugins vulnerable to backdoor installation.
+ * Vulnerability allows attacker to install persistent backdoor (stays even after
+ * password change). Backdoor = permanent access, permanent compromise.
  *
- * @since   1.4031.1939
- * @package WPShadow\Diagnostics
+ * **What This Check Does:**
+ * - Scans active plugins for backdoor installation vulnerabilities
+ * - Checks if file upload/write capabilities properly restricted
+ * - Tests for arbitrary code execution vulnerabilities
+ * - Detects if plugin allows execution of uploaded files
+ * - Validates file permissions (non-executable)
+ * - Tests for known backdoor patterns
+ *
+ * **Why This Matters:**
+ * Backdoor vulnerability = permanent compromise. Scenarios:
+ * - Plugin allows unauthenticated file upload
+ * - Attacker uploads PHP webshell (backdoor)
+ * - Webshell persists on server (even if password changed)
+ * - Attacker maintains access indefinitely
+ * - Site fully compromised for months/years
+ *
+ * **Business Impact:**
+ * Plugin with backdoor vulnerability (unpatched). Attacker uploads PHP webshell.
+ * Backdoor active for 1 year (undetected). Exfiltrates customer data monthly.
+ * Data: 100K records. GDPR fine: $2M. Plus incident response, forensics,
+ * notification: $3M additional. Total: $5M+ damage from single vulnerability.
+ * Early detection + patching prevents entirely.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Sites protected from backdoors
+ * - #9 Show Value: Quantified prevention of long-term compromise
+ * - #10 Beyond Pure: Proactive threat detection
+ *
+ * **Related Checks:**
+ * - Plugin Vulnerability Detection (general security)
+ * - File Permission Security (upload restrictions)
+ * - Malware Scanning Not Configured (detection)
+ *
+ * **Learn More:**
+ * Backdoor vulnerabilities: https://wpshadow.com/kb/wordpress-backdoor-risks
+ * Video: Identifying plugin backdoors (14min): https://wpshadow.com/training/backdoor-detection
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.4031.1939
  */
 
 declare(strict_types=1);
@@ -22,6 +62,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic_Plugin_Backdoor_Installation_Risk Class
  *
  * Identifies plugins vulnerable to backdoor installation.
+ *
+ * **Detection Pattern:**
+ * 1. Scan active plugin files for upload handling
+ * 2. Check if file execution prevented (not executable)
+ * 3. Detect arbitrary code execution patterns
+ * 4. Test for file write vulnerabilities
+ * 5. Validate proper permission checks
+ * 6. Return severity if backdoor risk detected
+ *
+ * **Real-World Scenario:**
+ * Plugin handles file uploads (media manager). Doesn't validate file extension.
+ * Attacker uploads PHP file disguised as image. PHP file executes. Attacker
+ * has code execution. Uploads backdoor webshell. Now has persistent access.
+ * Password change won't help (backdoor still there). Site compromised for
+ * months before discovered. Proper implementation: validate extension +
+ * store uploads outside web root + disable PHP execution.
+ *
+ * **Implementation Notes:**
+ * - Scans plugin files for upload/execution patterns
+ * - Tests file handling security
+ * - Checks permission validation
+ * - Severity: critical (backdoor found), high (unsafe file handling)
+ * - Treatment: update plugin or remove if unpatched
+ *
+ * @since 1.4031.1939
  */
 class Diagnostic_Plugin_Backdoor_Installation_Risk extends Diagnostic_Base {
 

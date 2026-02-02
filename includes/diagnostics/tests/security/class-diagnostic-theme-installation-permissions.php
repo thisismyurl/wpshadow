@@ -4,6 +4,42 @@
  *
  * Validates that theme files have appropriate permissions and are not
  * writable by web processes, preventing unauthorized modifications.
+ * Theme files world-writable = attacker modifies theme = site compromised.
+ *
+ * **What This Check Does:**
+ * - Checks theme directory permissions
+ * - Validates theme files not world-writable (777)
+ * - Tests for group-writable configurations
+ * - Ensures owner is correct (not root or www-data)
+ * - Checks functions.php permissions
+ * - Returns severity for each permission issue
+ *
+ * **Why This Matters:**
+ * Theme files writable by web server = attacker modifies.
+ * Attacker injects malicious code. Every page load executes code.
+ * Malware runs. Users compromised. Total site compromise.
+ *
+ * **Business Impact:**
+ * Hosting provider sets theme directory to 777 (temporary, forgot).
+ * Attacker discovers. Injects malicious code in functions.php.
+ * Every visitor gets redirected to scam site. Site reputation destroyed.
+ * 100K+ visitors sent to phishing page. Users blame site owner.
+ * Lawsuits filed. Insurance covers $500K+. Cost: $1M+ (legal + reputation).
+ * With proper permissions: attacker can't modify files. Malware injection impossible.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Theme files are protected
+ * - #9 Show Value: Prevents file modification attacks
+ * - #10 Beyond Pure: Least privilege principle
+ *
+ * **Related Checks:**
+ * - Plugin Installation Permissions (similar for plugins)
+ * - WordPress Installation Permissions (overall security)
+ * - File System Security (broader checks)
+ *
+ * **Learn More:**
+ * File permissions guide: https://wpshadow.com/kb/theme-file-permissions
+ * Video: Setting proper file permissions (10min): https://wpshadow.com/training/permissions
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +60,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme Installation Permissions Diagnostic Class
  *
  * Checks theme file permissions.
+ *
+ * **Detection Pattern:**
+ * 1. Locate active theme directory
+ * 2. Get directory permissions (stat)
+ * 3. Check all PHP files permissions
+ * 4. Test if writable by web server/group/others
+ * 5. Verify owner/group correct
+ * 6. Return each permission violation
+ *
+ * **Real-World Scenario:**
+ * Hosting migration: files extracted with 777 permissions (temporary).
+ * Admin forgets to fix. Attacker discovers theme directory writable.
+ * Modifies functions.php:
+ * ```
+ * eval(base64_decode(\$_GET['c']));
+ * ```
+ * Attacker has shell. With correct permissions (755): attacker can't
+ * write to files. Shell injection impossible.
+ *
+ * **Implementation Notes:**
+ * - Checks active theme permissions
+ * - Validates against recommendations (755 dirs, 644 files)
+ * - Tests for world-writable (777) conditions
+ * - Severity: critical (777 permissions), high (group writable)
+ * - Treatment: fix permissions via chmod or hosting panel
  *
  * @since 1.6032.1340
  */
