@@ -82,7 +82,8 @@ function wpshadow_run_automation_handler() {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 
-	if ( ! current_user_can( 'read' ) ) {
+	// SECURITY: Require admin capability for executing automations.
+	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
 	}
 
@@ -145,7 +146,8 @@ function wpshadow_delete_automation_handler() {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 
-	if ( ! current_user_can( 'read' ) ) {
+	// SECURITY: Require admin capability for deleting automations.
+	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
 	}
 
@@ -199,7 +201,8 @@ function wpshadow_toggle_automation_handler() {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 
-	if ( ! current_user_can( 'read' ) ) {
+	// SECURITY: Require admin capability for toggling automations.
+	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
 	}
 

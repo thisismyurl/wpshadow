@@ -210,7 +210,15 @@
 		updateSummary(payload.summary || {});
 
 		if (lastUrl && payload.url) {
-			lastUrl.textContent = payload.url;
+			// Extract path from URL, prepending only the path (not domain)
+			try {
+				const urlObj = new URL(payload.url);
+				const path = urlObj.pathname + urlObj.search + urlObj.hash;
+				lastUrl.textContent = path || '/';
+			} catch (e) {
+				// If URL parsing fails, use raw value
+				lastUrl.textContent = payload.url;
+			}
 		}
 
 		resultsWrap.classList.remove('wps-none');

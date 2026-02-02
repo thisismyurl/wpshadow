@@ -107,6 +107,22 @@ class Vault_Manager {
 	 * @return bool True if directory ready, false on failure.
 	 */
 	private function ensure_backup_directory() {
+		// SECURITY: Validate backup directory is within upload directory.
+		$upload_dir       = wp_upload_dir();
+		$normalized_backup = wp_normalize_path( $this->backup_dir );
+		$normalized_upload = wp_normalize_path( $upload_dir['basedir'] );
+
+		if ( 0 !== strpos( $normalized_backup, $normalized_upload ) ) {
+			Error_Handler::log_error(
+				'Vault backup directory outside allowed path',
+				array(
+					'requested' => $this->backup_dir,
+					'allowed'   => $upload_dir['basedir'],
+				)
+			);
+			return false;
+		}
+
 		if ( ! file_exists( $this->backup_dir ) ) {
 			if ( ! wp_mkdir_p( $this->backup_dir ) ) {
 				Error_Handler::log_error(
@@ -116,12 +132,25 @@ class Vault_Manager {
 				return false;
 			}
 
+			// Use WordPress Filesystem API for secure file operations.
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+			global $wp_filesystem;
+
 			// Create .htaccess to prevent direct access.
 			$htaccess_content = "Order deny,allow\nDeny from all\n";
-			file_put_contents( $this->backup_dir . '/.htaccess', $htaccess_content );
+			$wp_filesystem->put_contents(
+				$this->backup_dir . '/.htaccess',
+				$htaccess_content,
+				FS_CHMOD_FILE
+			);
 
 			// Create index.php to prevent directory listing.
-			file_put_contents( $this->backup_dir . '/index.php', '<?php // Silence is golden.' );
+			$wp_filesystem->put_contents(
+				$this->backup_dir . '/index.php',
+				'<?php // Silence is golden.',
+				FS_CHMOD_FILE
+			);
 		}
 
 		return true;

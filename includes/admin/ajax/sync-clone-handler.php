@@ -175,17 +175,31 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 		$tables = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix ) . '%' ) );
 
 		foreach ( $tables as $table ) {
-			// Skip already cloned tables
+			// Skip already cloned tables.
 			if ( strpos( $table, $clone_prefix ) === 0 ) {
+				continue;
+			}
+
+			// Validate table name starts with current prefix (security check).
+			if ( 0 !== strpos( $table, $wpdb->prefix ) ) {
 				continue;
 			}
 
 			$new_table = str_replace( $wpdb->prefix, $clone_prefix, $table );
 
-			// Drop and recreate clone table
-			$wpdb->query( "DROP TABLE IF EXISTS `{$new_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$wpdb->query( "CREATE TABLE `{$new_table}` LIKE `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$wpdb->query( "INSERT INTO `{$new_table}` SELECT * FROM `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// Validate new table name contains only safe characters.
+			if ( ! preg_match( '/^[a-zA-Z0-9_]+$/', $new_table ) ) {
+				continue;
+			}
+
+			// Escape table names for safe SQL execution.
+			$escaped_new_table = esc_sql( $new_table );
+			$escaped_table     = esc_sql( $table );
+
+			// Drop and recreate clone table.
+			$wpdb->query( "DROP TABLE IF EXISTS `{$escaped_new_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( "CREATE TABLE `{$escaped_new_table}` LIKE `{$escaped_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( "INSERT INTO `{$escaped_new_table}` SELECT * FROM `{$escaped_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
 
 		// Update URLs in cloned database

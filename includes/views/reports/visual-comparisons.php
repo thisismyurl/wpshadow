@@ -148,8 +148,10 @@ $statistics  = Visual_Comparator::get_statistics();
 				<?php foreach ( $comparisons as $comparison ) : ?>
 				<tr>
 					<td>
-						<a href="<?php echo esc_url( $comparison['page_url'] ); ?>" target="_blank">
-							<?php echo esc_html( wp_parse_url( $comparison['page_url'], PHP_URL_PATH ) ?: '/' ); ?>
+						<a href="<?php echo esc_url( $comparison['page_url'] ); ?>" target="_blank" title="<?php echo esc_attr( $comparison['page_url'] ); ?>">
+							<span style="display: inline-block; background: #f8f9fa; padding: 4px 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
+								<span style="color: #666;"><?php echo esc_html( wp_parse_url( home_url(), PHP_URL_HOST ) ); ?></span><span style="color: #333;"><?php echo esc_html( wp_parse_url( $comparison['page_url'], PHP_URL_PATH ) ?: '/' ); ?></span>
+							</span>
 						</a>
 					</td>
 					<td>

@@ -87,34 +87,28 @@ class AJAX_Validate_Snippet extends AJAX_Handler_Base {
 	 * @return array Validation result.
 	 */
 	private static function validate_php( $code ) {
-		// Wrap code in PHP tags if not present
+		// Wrap code in PHP tags if not present.
 		if ( strpos( $code, '<?php' ) === false ) {
 			$code = '<?php ' . $code;
 		}
 
-		// Create temporary file for syntax check
-		$temp_file = wp_tempnam( 'snippet-' );
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-		file_put_contents( $temp_file, $code );
+		// Use token_get_all() for safe syntax checking (no command execution).
+		$tokens = @token_get_all( $code );
 
-		// Use php -l to check syntax
-		$output = array();
-		$return_var = 0;
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_exec
-		exec( 'php -l ' . escapeshellarg( $temp_file ) . ' 2>&1', $output, $return_var );
-
-		// Clean up
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
-		unlink( $temp_file );
-
-		if ( 0 !== $return_var ) {
-			$error_message = implode( "\n", $output );
-			// Remove file path from error message
-			$error_message = str_replace( $temp_file, 'snippet', $error_message );
-
+		// Check for parse errors.
+		if ( false === $tokens ) {
 			return array(
 				'valid' => false,
-				'error' => $error_message,
+				'error' => __( 'PHP syntax error detected', 'wpshadow' ),
+			);
+		}
+
+		// Additional validation: check for unterminated strings/comments.
+		$last_token = end( $tokens );
+		if ( is_array( $last_token ) && in_array( $last_token[0], array( T_ENCAPSED_AND_WHITESPACE, T_COMMENT ), true ) ) {
+			return array(
+				'valid' => false,
+				'error' => __( 'Unterminated string or comment', 'wpshadow' ),
 			);
 		}
 

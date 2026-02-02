@@ -87,15 +87,17 @@ class Auto_Deploy {
 			return;
 		}
 
-		// Check IP whitelist first (before rate limiting)
-		if ( ! self::is_github_ip() ) {
-			self::send_response( 403, 'Forbidden - IP not whitelisted' );
-		}
-
-		// Check rate limiting
-		if ( ! self::check_rate_limit() ) {
+		// SECURITY: Check rate limiting first.
+		if ( ! \WPShadow\Core\Security_Hardening::check_rate_limit( 'github_webhook', 10, 60 ) ) {
 			self::log_webhook( 'rate_limit_exceeded' );
 			self::send_response( 429, 'Rate limit exceeded' );
+		}
+
+		// Check IP whitelist (using new security class).
+		$client_ip = \WPShadow\Core\Security_Hardening::get_client_ip();
+		if ( ! \WPShadow\Core\Security_Hardening::is_github_ip( $client_ip ) ) {
+			self::log_webhook( 'ip_not_whitelisted', array( 'ip' => $client_ip ) );
+			self::send_response( 403, 'Forbidden - IP not whitelisted' );
 		}
 
 		// Get request body

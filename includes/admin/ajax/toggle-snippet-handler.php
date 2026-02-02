@@ -90,31 +90,35 @@ class AJAX_Toggle_Snippet extends AJAX_Handler_Base {
 	 * @return array Validation result.
 	 */
 	private static function validate_php_snippet( $code ) {
-		// Wrap code if needed
+		// Wrap code if needed.
 		if ( strpos( $code, '<?php' ) === false ) {
 			$code = '<?php ' . $code;
 		}
 
-		// Create temp file
-		$temp_file = wp_tempnam( 'snippet-' );
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-		file_put_contents( $temp_file, $code );
+		// Use token_get_all() for safe syntax checking (no command execution).
+		$tokens = @token_get_all( $code );
 
-		// Check syntax
-		$output = array();
-		$return_var = 0;
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_exec
-		exec( 'php -l ' . escapeshellarg( $temp_file ) . ' 2>&1', $output, $return_var );
-
-		// Clean up
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
-		unlink( $temp_file );
-
-		if ( 0 !== $return_var ) {
+		// Check for parse errors.
+		if ( false === $tokens ) {
 			return array(
 				'valid' => false,
-				'error' => implode( "\n", $output ),
+				'error' => __( 'PHP syntax error detected', 'wpshadow' ),
 			);
+		}
+
+		// Check for dangerous functions.
+		$dangerous_functions = array( 'eval', 'exec', 'system', 'shell_exec', 'passthru', 'popen', 'proc_open' );
+		foreach ( $dangerous_functions as $func ) {
+			if ( preg_match( '/\\b' . preg_quote( $func, '/' ) . '\\s*\\(/i', $code ) ) {
+				return array(
+					'valid' => false,
+					'error' => sprintf(
+						/* translators: %s: function name */
+						__( 'Dangerous function not allowed: %s', 'wpshadow' ),
+						$func
+					),
+				);
+			}
 		}
 
 		return array( 'valid' => true );

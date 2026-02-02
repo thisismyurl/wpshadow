@@ -134,8 +134,8 @@ class Guardian_Dashboard {
 			const proceedWithToggle = function() {
 				jQuery.post(ajaxurl, {
 					action: "wpshadow_toggle_guardian",
-					nonce: "<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>",
-					enabled: <?php echo $is_enabled ? 'false' : 'true'; ?>
+					nonce: <?php echo wp_json_encode( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>,
+					enabled: <?php echo wp_json_encode( ! $is_enabled ); ?>
 				}, function(response) {
 					if (response.success) {
 						location.reload();
@@ -159,7 +159,7 @@ class Guardian_Dashboard {
 				WPShadowModal.confirm({
 					title: confirmMessage,
 					message: confirmDetails,
-					type: '<?php echo $is_enabled ? 'warning' : 'info'; ?>',
+				type: <?php echo wp_json_encode( $is_enabled ? 'warning' : 'info' ); ?>,
 					confirmText: '<?php echo esc_js( __( 'Confirm', 'wpshadow' ) ); ?>',
 					cancelText: '<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>',
 					onConfirm: proceedWithToggle
