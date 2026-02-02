@@ -12,7 +12,7 @@
 	const siteUrlObj = new URL(siteUrl);
 	const siteHost = siteUrlObj.hostname;
 
-	const pathInput = document.getElementById('wpshadow-link-path');
+	const urlInput = document.getElementById('wpshadow-link-url');
 	const submitBtn = document.getElementById('wpshadow-link-submit-btn');
 	const errorBox = document.getElementById('wpshadow-link-error');
 	const resultsWrap = document.getElementById('wpshadow-link-results');
@@ -226,13 +226,21 @@
 			resultsWrap.classList.add('wps-none');
 		}
 
-		let path = (pathInput && pathInput.value) ? pathInput.value.trim() : '/';
-		if (!path.startsWith('/')) {
-			path = '/' + path;
+		let url = (urlInput && urlInput.value) ? urlInput.value.trim() : siteUrl;
+		
+		// If just a path, prepend site URL
+		if (url.startsWith('/')) {
+			url = siteUrl + url;
 		}
-
-		// Reconstruct full URL
-		const url = siteUrl + path;
+		
+		// Ensure it's a valid URL
+		try {
+			new URL(url);
+		} catch (e) {
+			showError(settings.i18nError || 'Invalid URL');
+			setLoading(false);
+			return;
+		}
 
 		const formData = new FormData();
 		formData.append('action', 'wpshadow_check_broken_links');
@@ -264,8 +272,8 @@
 			});
 	});
 
-	// Pre-fill path from settings or site origin.
-	if (pathInput && !pathInput.value) {
-		pathInput.value = '/';
+	// Pre-fill URL from settings
+	if (urlInput && !urlInput.value) {
+		urlInput.value = siteUrl;
 	}
 })();

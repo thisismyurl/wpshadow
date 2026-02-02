@@ -40,29 +40,37 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Common Use Cases', 'wpshadow' ); ?></h3>
 	
-	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-		<div class="use-case-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; cursor: pointer;" data-find="http://oldsite.com" data-replace="https://newsite.com">
-			<h4><span class="dashicons dashicons-admin-site"></span> <?php esc_html_e( 'Domain Change', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Update all URLs after domain migration', 'wpshadow' ); ?></p>
-			<code style="display: block; margin-top: 5px; font-size: 11px;">http://old.com → https://new.com</code>
+	<div class="wps-grid wps-grid-auto-280">
+		<div class="wps-card wpshadow-use-case-card" data-find="http://oldsite.com" data-replace="https://newsite.com" style="cursor: pointer;">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><span class="dashicons dashicons-admin-site"></span> <?php esc_html_e( 'Domain Change', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Update all URLs after domain migration', 'wpshadow' ); ?></p>
+				<code style="display: block; margin-top: 10px; font-size: 11px;">http://old.com → https://new.com</code>
+			</div>
 		</div>
 		
-		<div class="use-case-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; cursor: pointer;" data-find="http://" data-replace="https://">
-			<h4><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'HTTP to HTTPS', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Convert all links to secure SSL', 'wpshadow' ); ?></p>
-			<code style="display: block; margin-top: 5px; font-size: 11px;">http:// → https://</code>
+		<div class="wps-card wpshadow-use-case-card" data-find="http://" data-replace="https://" style="cursor: pointer;">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'HTTP to HTTPS', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Convert all links to secure SSL', 'wpshadow' ); ?></p>
+				<code style="display: block; margin-top: 10px; font-size: 11px;">http:// → https://</code>
+			</div>
 		</div>
 		
-		<div class="use-case-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; cursor: pointer;" data-find="/cdn.oldsite.com/" data-replace="/cdn.newsite.com/">
-			<h4><span class="dashicons dashicons-cloud"></span> <?php esc_html_e( 'CDN Update', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Change CDN URLs after migration', 'wpshadow' ); ?></p>
-			<code style="display: block; margin-top: 5px; font-size: 11px;">/cdn.old.com/ → /cdn.new.com/</code>
+		<div class="wps-card wpshadow-use-case-card" data-find="/cdn.oldsite.com/" data-replace="/cdn.newsite.com/" style="cursor: pointer;">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><span class="dashicons dashicons-cloud"></span> <?php esc_html_e( 'CDN Update', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Change CDN URLs after migration', 'wpshadow' ); ?></p>
+				<code style="display: block; margin-top: 10px; font-size: 11px;">/cdn.old.com/ → /cdn.new.com/</code>
+			</div>
 		</div>
 		
-		<div class="use-case-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; cursor: pointer;" data-find="company-name-old" data-replace="company-name-new">
-			<h4><span class="dashicons dashicons-edit"></span> <?php esc_html_e( 'Content Update', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Update company names or terms', 'wpshadow' ); ?></p>
-			<code style="display: block; margin-top: 5px; font-size: 11px;">Old Name → New Name</code>
+		<div class="wps-card wpshadow-use-case-card" data-find="company-name-old" data-replace="company-name-new" style="cursor: pointer;">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><span class="dashicons dashicons-edit"></span> <?php esc_html_e( 'Content Update', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Update company names or terms', 'wpshadow' ); ?></p>
+				<code style="display: block; margin-top: 10px; font-size: 11px;">Old Name → New Name</code>
+			</div>
 		</div>
 	</div>
 </div>
@@ -178,18 +186,22 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 						<input type="checkbox" name="whole_word" value="1" />
 						<?php esc_html_e( 'Match whole words only', 'wpshadow' ); ?>
 					</label>
+					<br />
+					<label>
+						<input type="checkbox" id="dry_run_checkbox" name="dry_run" value="1" checked />
+						<?php esc_html_e( 'Dry Run (Preview Only - No Changes)', 'wpshadow' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'Enable to preview changes without modifying the database', 'wpshadow' ); ?>
+					</p>
 				</td>
 			</tr>
 		</table>
 		
 		<p class="submit">
-			<button type="button" class="button button-secondary button-large" id="dry-run-button">
-				<span class="dashicons dashicons-visibility" style="margin-top: 4px;"></span>
-				<?php esc_html_e( 'Dry Run (Preview)', 'wpshadow' ); ?>
-			</button>
-			<button type="submit" class="button button-primary button-large" id="execute-button" style="margin-left: 10px;">
+			<button type="submit" class="button button-primary button-large" id="execute-button">
 				<span class="dashicons dashicons-yes" style="margin-top: 4px;"></span>
-				<?php esc_html_e( 'Execute Replace', 'wpshadow' ); ?>
+				<?php esc_html_e( 'Execute', 'wpshadow' ); ?>
 			</button>
 		</p>
 	</form>
@@ -310,6 +322,77 @@ jQuery(document).ready(function($) {
 			}
 		});
 	}
+});
+
+// Handle dry-run checkbox warning modal
+jQuery(document).ready(function($) {
+	const $dryRunCheckbox = $('#dry_run_checkbox');
+	
+	$dryRunCheckbox.on('change', function() {
+		// If checkbox is being unchecked, show warning modal
+		if (!this.checked) {
+			// Create modal
+			const modalHTML = `
+				<div id="wpshadow-dry-run-warning-modal" style="
+					display: none;
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.5);
+					z-index: 9999;
+					align-items: center;
+					justify-content: center;
+				">
+					<div style="
+						background: white;
+						padding: 30px;
+						border-radius: 8px;
+						box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+						max-width: 500px;
+						text-align: center;
+						animation: slideDown 0.3s ease-out;
+					">
+						<h2 style="margin-top: 0; color: #d63638;">
+							<span class="dashicons dashicons-warning" style="font-size: 32px; width: 32px; height: 32px; vertical-align: middle; margin-right: 10px;"></span>
+							<?php echo esc_js( __( 'Important: Database Backup Required', 'wpshadow' ) ); ?>
+						</h2>
+						<p style="font-size: 16px; line-height: 1.6; color: #333;">
+							<?php echo esc_js( __( 'You are about to make permanent changes to your database without previewing them first.', 'wpshadow' ) ); ?>
+						</p>
+						<p style="font-size: 14px; color: #666;">
+							<?php echo esc_js( __( 'We strongly recommend backing up your database before continuing. This operation cannot be easily undone.', 'wpshadow' ) ); ?>
+						</p>
+						<div style="margin-top: 30px; display: flex; gap: 10px; justify-content: center;">
+							<button type="button" id="cancel-dry-run-warning" class="button button-secondary" style="padding: 10px 20px;">
+								<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>
+							</button>
+							<button type="button" id="confirm-dry-run-warning" class="button button-primary" style="padding: 10px 20px;">
+								<?php echo esc_js( __( 'I have backed up my database, continue', 'wpshadow' ) ); ?>
+							</button>
+						</div>
+					</div>
+				</div>
+			`;
+			
+			// Append modal to body
+			$('body').append(modalHTML);
+			const $modal = $('#wpshadow-dry-run-warning-modal');
+			$modal.css('display', 'flex');
+			
+			// Handle cancel button
+			$('#cancel-dry-run-warning').on('click', function() {
+				$dryRunCheckbox.prop('checked', true);
+				$modal.fadeOut(300, function() { $modal.remove(); });
+			});
+			
+			// Handle confirm button
+			$('#confirm-dry-run-warning').on('click', function() {
+				$modal.fadeOut(300, function() { $modal.remove(); });
+			});
+		}
+	});
 });
 </script>
 

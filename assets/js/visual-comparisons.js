@@ -182,13 +182,22 @@
 			previewWrap.classList.add('wps-none');
 		}
 
-		let path = (urlInput && urlInput.value) ? urlInput.value.trim() : '/';
-		if (!path.startsWith('/')) {
-			path = '/' + path;
+		let url = (urlInput && urlInput.value) ? urlInput.value.trim() : settings.defaultUrl;
+		
+		// If just a path, prepend site URL
+		if (url.startsWith('/')) {
+			url = settings.defaultUrl.replace(/\/$/, '') + url;
+		}
+		
+		// Ensure it's a valid URL
+		try {
+			new URL(url);
+		} catch (e) {
+			showError(settings.i18nError || 'Invalid URL');
+			setLoading(false);
+			return;
 		}
 
-		// Reconstruct full URL
-		const url = settings.defaultUrl.replace(/\/$/, '') + path;
 		const label = labelInput ? labelInput.value.trim() : '';
 
 		const formData = new FormData();

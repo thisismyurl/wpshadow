@@ -66,14 +66,11 @@ $statistics  = Visual_Comparator::get_statistics();
 		<form id="wpshadow-visual-capture-form">
 			<div class="wps-form-group">
 				<label class="wps-label" for="wpshadow-visual-url">
-					<?php esc_html_e( 'Page URL', 'wpshadow' ); ?>
+					<?php esc_html_e( 'URL', 'wpshadow' ); ?>
 				</label>
-				<div class="wps-input-group">
-					<span class="wps-input-prefix"><?php echo esc_html( home_url() ); ?></span>
-					<input type="text" id="wpshadow-visual-url" name="url" class="wps-input" value="/" placeholder="/about" required aria-describedby="visual-url-help" />
-				</div>
+				<input type="text" id="wpshadow-visual-url" name="url" class="wps-input" value="<?php echo esc_url( trailingslashit( home_url() ) ); ?>" placeholder="<?php echo esc_url( trailingslashit( home_url() ) ); ?>about" required />
 				<span class="wps-help-text" id="visual-url-help">
-					<?php esc_html_e( 'Enter the page path (e.g., /about, /contact) or paste a full URL.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Enter a full URL or path.', 'wpshadow' ); ?>
 				</span>
 			</div>
 

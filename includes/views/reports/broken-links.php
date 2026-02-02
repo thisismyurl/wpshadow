@@ -36,15 +36,12 @@ Tool_View_Base::render_header( __( 'Broken Link Checker', 'wpshadow' ) );
 			<form id="wpshadow-link-form">
 				<div class="wps-settings-section">
 					<div class="wps-form-group">
-						<label class="wps-label" for="wpshadow-link-path">
-							<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
+						<label class="wps-label" for="wpshadow-link-url">
+							<?php esc_html_e( 'URL', 'wpshadow' ); ?>
 						</label>
-						<div class="wps-flex-gap-10-items-center">
-							<span class="wps-p-8-rounded-3" id="link-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-							<input type="text" id="wpshadow-link-path" name="path" class="wps-input" value="/" placeholder="/about" required />
-						</div>
+						<input type="text" id="wpshadow-link-url" name="url" class="wps-input" value="<?php echo esc_url( trailingslashit( home_url() ) ); ?>" placeholder="<?php echo esc_url( trailingslashit( home_url() ) ); ?>about" required />
 						<span class="wps-help-text">
-							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check all links.', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Enter a full URL or path. We fetch the page server-side to check all links.', 'wpshadow' ); ?>
 						</span>
 					</div>
 				</div>

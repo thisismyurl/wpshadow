@@ -225,14 +225,6 @@ function wpshadow_get_utilities_catalog() {
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Safe Mode', 'wpshadow' ),
-			'desc'    => __( 'Temporarily disable plugins and themes for your session only to isolate conflicts without affecting the live site.', 'wpshadow' ),
-			'tool'    => 'safe-mode',
-			'icon'    => 'dashicons-shield',
-			'family'  => 'site-management',
-			'enabled' => true,
-		),
-		array(
 			'title'   => __( 'Asset Impact Explorer', 'wpshadow' ),
 			'desc'    => __( 'Analyze scripts and stylesheets loading on your site to identify performance optimization opportunities.', 'wpshadow' ),
 			'tool'    => 'asset-impact',
@@ -461,7 +453,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 				<div class="wps-card-body">
 					<?php if ( ! empty( $item['enabled'] ) ) : ?>
 						<a href="<?php echo esc_url( $utility_url ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-external"></span>
+							<span class="dashicons dashicons-arrow-right-alt2"></span>
 							<?php esc_html_e( 'Open Utility', 'wpshadow' ); ?>
 						</a>
 					<?php else : ?>

@@ -107,7 +107,16 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 
 			<div class="timezone-selector">
 				<select id="wpshadow-timezone-select" name="wpshadow_timezone" class="wpshadow-timezone-select">
-					<?php echo Timezone_Manager::get_wordpress_timezone_list( $current_tz ); ?>
+					<?php
+					// Load timezone list using WordPress function
+					if ( function_exists( 'wp_timezone_choice' ) ) {
+						wp_timezone_choice( $current_tz );
+					} else {
+						// Fallback: load admin screens which includes timezone functions
+						require_once ABSPATH . 'wp-admin/includes/template.php';
+						wp_timezone_choice( $current_tz );
+					}
+					?>
 				</select>
 			</div>
 

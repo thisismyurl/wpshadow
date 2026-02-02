@@ -308,37 +308,53 @@ foreach ( $snippets as $snippet ) {
 	<h3><?php esc_html_e( 'Snippet Library', 'wpshadow' ); ?></h3>
 	<p><?php esc_html_e( 'Popular pre-built snippets you can use with one click:', 'wpshadow' ); ?></p>
 	
-	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
-		<div class="snippet-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #ddd;">
-			<h4><?php esc_html_e( 'Disable WordPress Emojis', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Remove emoji scripts for better performance', 'wpshadow' ); ?></p>
-			<button class="button button-small use-library-snippet" data-snippet="disable-emojis">
-				<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
-			</button>
+	<div class="wps-grid wps-grid-auto-320">
+		<div class="wps-card">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><?php esc_html_e( 'Disable WordPress Emojis', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Remove emoji scripts for better performance', 'wpshadow' ); ?></p>
+			</div>
+			<div class="wps-card-footer">
+				<button class="wps-btn wps-btn--secondary use-library-snippet" data-snippet="disable-emojis">
+					<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
+				</button>
+			</div>
 		</div>
 		
-		<div class="snippet-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #ddd;">
-			<h4><?php esc_html_e( 'Custom Login Logo', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Replace WordPress logo on login page', 'wpshadow' ); ?></p>
-			<button class="button button-small use-library-snippet" data-snippet="custom-login-logo">
-				<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
-			</button>
+		<div class="wps-card">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><?php esc_html_e( 'Custom Login Logo', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Replace WordPress logo on login page', 'wpshadow' ); ?></p>
+			</div>
+			<div class="wps-card-footer">
+				<button class="wps-btn wps-btn--secondary use-library-snippet" data-snippet="custom-login-logo">
+					<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
+				</button>
+			</div>
 		</div>
 		
-		<div class="snippet-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #ddd;">
-			<h4><?php esc_html_e( 'Increase Upload Limit', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Raise maximum file upload size', 'wpshadow' ); ?></p>
-			<button class="button button-small use-library-snippet" data-snippet="increase-upload">
-				<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
-			</button>
+		<div class="wps-card">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><?php esc_html_e( 'Increase Upload Limit', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Raise maximum file upload size', 'wpshadow' ); ?></p>
+			</div>
+			<div class="wps-card-footer">
+				<button class="wps-btn wps-btn--secondary use-library-snippet" data-snippet="increase-upload">
+					<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
+				</button>
+			</div>
 		</div>
 		
-		<div class="snippet-card" style="padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #ddd;">
-			<h4><?php esc_html_e( 'Disable XML-RPC', 'wpshadow' ); ?></h4>
-			<p style="font-size: 13px; color: #666;"><?php esc_html_e( 'Improve security by disabling XML-RPC', 'wpshadow' ); ?></p>
-			<button class="button button-small use-library-snippet" data-snippet="disable-xmlrpc">
-				<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
-			</button>
+		<div class="wps-card">
+			<div class="wps-card-body">
+				<h4 class="wps-card-title"><?php esc_html_e( 'Disable XML-RPC', 'wpshadow' ); ?></h4>
+				<p class="wps-text-muted"><?php esc_html_e( 'Improve security by disabling XML-RPC', 'wpshadow' ); ?></p>
+			</div>
+			<div class="wps-card-footer">
+				<button class="wps-btn wps-btn--secondary use-library-snippet" data-snippet="disable-xmlrpc">
+					<?php esc_html_e( 'Use This Snippet', 'wpshadow' ); ?>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

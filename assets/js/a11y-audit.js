@@ -12,7 +12,7 @@
 	const siteUrlObj = new URL(siteUrl);
 	const siteHost = siteUrlObj.hostname;
 
-	const pathInput = document.getElementById('wpshadow-a11y-path');
+	const urlInput = document.getElementById('wpshadow-a11y-url');
 	const submitBtn = document.getElementById('wpshadow-a11y-submit-btn');
 	const errorBox = document.getElementById('wpshadow-a11y-error');
 	const resultsWrap = document.getElementById('wpshadow-a11y-results');
@@ -123,20 +123,20 @@
 		}
 	}
 
-	// Auto-clean URLs pasted into path field
-	if (pathInput) {
-		pathInput.addEventListener('blur', function() {
+	// Auto-clean URLs pasted into URL field
+	if (urlInput) {
+		urlInput.addEventListener('blur', function() {
 			let value = this.value.trim();
 
-			// If it looks like a full URL, extract the path
+			// If it looks like a full URL, validate it's from the same site
 			if (value.match(/^https?:\/\//i)) {
 				try {
 					const urlObj = new URL(value);
 
 					// Validate same-site
 					if (urlObj.hostname !== siteHost) {
-						this.value = '/';
-						const message = 'You can only test your own site. Please enter a path from your domain.';
+						this.value = siteUrl;
+						const message = 'You can only test your own site. Please enter a URL from your domain.';
 						if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
 							window.WPShadowDesign.alert('Invalid URL', message, 'warning');
 						} else {
@@ -226,13 +226,21 @@
 			resultsWrap.classList.add('wps-none');
 		}
 
-		let path = (pathInput && pathInput.value) ? pathInput.value.trim() : '/';
-		if (!path.startsWith('/')) {
-			path = '/' + path;
+		let url = (urlInput && urlInput.value) ? urlInput.value.trim() : siteUrl;
+		
+		// If just a path, prepend site URL
+		if (url.startsWith('/')) {
+			url = siteUrl + url;
 		}
-
-		// Reconstruct full URL
-		const url = siteUrl + path;
+		
+		// Ensure it's a valid URL
+		try {
+			new URL(url);
+		} catch (e) {
+			showError(settings.i18nError || 'Invalid URL');
+			setLoading(false);
+			return;
+		}
 
 		const formData = new FormData();
 		formData.append('action', 'wpshadow_a11y_scan');
@@ -264,8 +272,8 @@
 			});
 	});
 
-	// Pre-fill path from settings or site origin.
-	if (pathInput && !pathInput.value) {
-		pathInput.value = '/';
+	// Pre-fill URL from settings
+	if (urlInput && !urlInput.value) {
+		urlInput.value = siteUrl;
 	}
 })();

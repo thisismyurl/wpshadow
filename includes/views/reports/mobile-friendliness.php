@@ -67,15 +67,12 @@ Tool_View_Base::render_header( __( 'Mobile Friendliness Checker', 'wpshadow' ) )
 			<form id="wpshadow-mobile-form">
 				<div class="wps-settings-section">
 					<div class="wps-form-group">
-						<label class="wps-label" for="wpshadow-mobile-path">
-							<?php esc_html_e( 'Page Path', 'wpshadow' ); ?>
-						</label>
-						<div class="wps-input-group">
-							<span class="wps-input-prefix" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
-							<input type="text" id="wpshadow-mobile-path" name="path" class="wps-input" value="/" placeholder="/about" required aria-describedby="mobile-site-domain" />
-						</div>
-						<span class="wps-help-text">
-							<?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check viewport and layout signals.', 'wpshadow' ); ?>
+					<label class="wps-label" for="wpshadow-mobile-url">
+						<?php esc_html_e( 'URL', 'wpshadow' ); ?>
+					</label>
+					<input type="text" id="wpshadow-mobile-url" name="url" class="wps-input" value="<?php echo esc_url( trailingslashit( home_url() ) ); ?>" placeholder="<?php echo esc_url( trailingslashit( home_url() ) ); ?>about" required />
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Enter a full URL or path. We fetch the page server-side to check viewport and layout signals.', 'wpshadow' ); ?>
 						</span>
 					</div>
 				</div>

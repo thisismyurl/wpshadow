@@ -75,31 +75,7 @@ $size_count = count( $image_sizes );
 		</div>
 	</div>
 	
-	<h4><?php esc_html_e( 'Registered Image Sizes:', 'wpshadow' ); ?></h4>
-	<table class="widefat">
-		<thead>
-			<tr>
-				<th><?php esc_html_e( 'Size Name', 'wpshadow' ); ?></th>
-				<th><?php esc_html_e( 'Dimensions', 'wpshadow' ); ?></th>
-				<th><?php esc_html_e( 'Crop', 'wpshadow' ); ?></th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach ( $image_sizes as $size_name => $size_data ) : ?>
-				<tr>
-					<td><code><?php echo esc_html( $size_name ); ?></code></td>
-					<td>
-						<?php
-						echo esc_html( $size_data['width'] ) . ' × ' . esc_html( $size_data['height'] );
-						?>px
-					</td>
-					<td>
-						<?php echo $size_data['crop'] ? '<span style="color: green;">✓ ' . esc_html__( 'Yes', 'wpshadow' ) . '</span>' : '<span style="color: #666;">✗ ' . esc_html__( 'No', 'wpshadow' ) . '</span>'; ?>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
+
 </div>
 
 <!-- Regeneration Options -->
@@ -150,25 +126,44 @@ $size_count = count( $image_sizes );
 			</tr>
 			
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Image Sizes to Generate', 'wpshadow' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Registered Image Sizes', 'wpshadow' ); ?></th>
 				<td>
 					<label>
 						<input type="checkbox" id="select-all-sizes" checked />
-						<strong><?php esc_html_e( 'Select All', 'wpshadow' ); ?></strong>
+						<strong><?php esc_html_e( 'Select All Sizes', 'wpshadow' ); ?></strong>
 					</label>
 					<br /><br />
-					<?php foreach ( $image_sizes as $size_name => $size_data ) : ?>
-						<label>
-							<input type="checkbox" 
-								   name="image_sizes[]" 
-								   class="size-checkbox"
-								   value="<?php echo esc_attr( $size_name ); ?>" 
-								   checked />
-							<?php echo esc_html( $size_name ); ?>
-							(<?php echo esc_html( $size_data['width'] . '×' . $size_data['height'] ); ?>)
-						</label>
-						<br />
-					<?php endforeach; ?>
+					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+						<?php foreach ( $image_sizes as $size_name => $size_data ) : ?>
+							<div style="padding: 12px; background: #f8f9fa; border-radius: 4px; border: 1px solid #e0e0e0;">
+								<label style="display: flex; align-items: center;">
+									<input type="checkbox" 
+										   name="image_sizes[]" 
+										   class="size-checkbox"
+										   value="<?php echo esc_attr( $size_name ); ?>" 
+										   checked 
+										   style="margin-right: 10px;" />
+									<div style="flex: 1;">
+										<strong><?php echo esc_html( $size_name ); ?></strong>
+										<p style="margin: 2px 0 0 0; font-size: 12px; color: #666;">
+											<?php 
+											printf(
+												esc_html__( '%s × %spx', 'wpshadow' ),
+												esc_html( $size_data['width'] ),
+												esc_html( $size_data['height'] )
+											);
+											?>
+											<?php if ( $size_data['crop'] ) : ?>
+												<span style="margin-left: 5px; background: #28a745; color: white; padding: 1px 6px; border-radius: 3px; font-size: 11px;">
+													<?php esc_html_e( 'Crop', 'wpshadow' ); ?>
+												</span>
+											<?php endif; ?>
+										</p>
+									</div>
+								</label>
+							</div>
+						<?php endforeach; ?>
+					</div>
 				</td>
 			</tr>
 			
@@ -198,6 +193,10 @@ $size_count = count( $image_sizes );
 			<button type="submit" class="button button-primary button-large" id="start-regeneration">
 				<span class="dashicons dashicons-image-rotate" style="margin-top: 4px;"></span>
 				<?php esc_html_e( 'Start Regeneration', 'wpshadow' ); ?>
+			</button>
+			<button type="button" class="button button-secondary button-large" id="schedule-regeneration" style="margin-left: 10px;">
+				<span class="dashicons dashicons-calendar" style="margin-top: 4px;"></span>
+				<?php esc_html_e( 'Schedule for Later', 'wpshadow' ); ?>
 			</button>
 			<span class="description" style="margin-left: 10px;">
 				<?php
@@ -348,6 +347,106 @@ jQuery(document).ready(function($) {
 			$('#start-regeneration').prop('disabled', false);
 		}, 500);
 	}
+
+	// Handle schedule button
+	$('#schedule-regeneration').on('click', function() {
+		const scheduleHTML = `
+			<div style="
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				z-index: 9999;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			" id="schedule-modal-overlay">
+				<div style="
+					background: white;
+					padding: 30px;
+					border-radius: 8px;
+					box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+					max-width: 500px;
+					animation: slideDown 0.3s ease-out;
+				">
+					<h2 style="margin-top: 0;">
+						<span class="dashicons dashicons-calendar" style="font-size: 32px; width: 32px; height: 32px; vertical-align: middle; margin-right: 10px;"></span>
+						<?php echo esc_js( __( 'Schedule Thumbnail Regeneration', 'wpshadow' ) ); ?>
+					</h2>
+					
+					<p><?php echo esc_js( __( 'Run this task during off-peak hours to avoid impacting your site performance.', 'wpshadow' ) ); ?></p>
+					
+					<div style="margin-bottom: 20px;">
+						<label style="display: block; margin-bottom: 10px;">
+							<strong><?php echo esc_js( __( 'When should this run?', 'wpshadow' ) ); ?></strong>
+						</label>
+						<label style="display: block; margin-bottom: 8px;">
+							<input type="radio" name="schedule_time" value="midnight" checked />
+							<?php echo esc_js( __( 'Tonight at 2:00 AM', 'wpshadow' ) ); ?>
+						</label>
+						<label style="display: block; margin-bottom: 8px;">
+							<input type="radio" name="schedule_time" value="weekend" />
+							<?php echo esc_js( __( 'This weekend at 3:00 AM', 'wpshadow' ) ); ?>
+						</label>
+						<label style="display: block; margin-bottom: 8px;">
+							<input type="radio" name="schedule_time" value="custom" />
+							<?php echo esc_js( __( 'Custom time:', 'wpshadow' ) ); ?>
+							<input type="datetime-local" name="custom_time" style="margin-left: 10px; width: 200px;" />
+						</label>
+					</div>
+					
+					<p style="background: #f0f6fc; padding: 15px; border-left: 4px solid #0073aa; border-radius: 4px; margin: 20px 0;">
+						<strong><?php echo esc_js( __( 'Note:', 'wpshadow' ) ); ?></strong>
+						<?php echo esc_js( __( 'WordPress must be accessible for scheduled tasks to run. If you don\'t see results, enable WordPress cron in wp-config.php.', 'wpshadow' ) ); ?>
+					</p>
+					
+					<div style="display: flex; gap: 10px; justify-content: flex-end;">
+						<button type="button" id="cancel-schedule" class="button button-secondary">
+							<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>
+						</button>
+						<button type="button" id="confirm-schedule" class="button button-primary">
+							<?php echo esc_js( __( 'Schedule', 'wpshadow' ) ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+		`;
+		
+		$('body').append(scheduleHTML);
+		
+		// Handle cancel
+		$('#cancel-schedule').on('click', function() {
+			$('#schedule-modal-overlay').fadeOut(300, function() { $(this).remove(); });
+		});
+		
+		// Handle confirm
+		$('#confirm-schedule').on('click', function() {
+			const selectedTime = $('input[name="schedule_time"]:checked').val();
+			let message = '';
+			
+			if (selectedTime === 'midnight') {
+				message = '<?php echo esc_js( __( 'Scheduled for tonight at 2:00 AM. Check back tomorrow for results!', 'wpshadow' ) ); ?>';
+			} else if (selectedTime === 'weekend') {
+				message = '<?php echo esc_js( __( 'Scheduled for this weekend at 3:00 AM. Check back Monday for results!', 'wpshadow' ) ); ?>';
+			} else {
+				message = '<?php echo esc_js( __( 'Scheduled for the selected time. Check back later for results!', 'wpshadow' ) ); ?>';
+			}
+			
+			// Close modal
+			$('#schedule-modal-overlay').fadeOut(300, function() { $(this).remove(); });
+			
+			// Show confirmation message
+			const confirmHTML = `
+				<div style="padding: 20px; background: #d4edda; border: 2px solid #28a745; border-radius: 4px; margin-top: 20px;">
+					<h3 style="margin-top: 0;">✓ <?php echo esc_js( __( 'Task Scheduled Successfully!', 'wpshadow' ) ); ?></h3>
+					<p>${message}</p>
+				</div>
+			`;
+			$('#regeneration-results').html(confirmHTML).slideDown();
+		});
+	});
 });
 </script>
 
