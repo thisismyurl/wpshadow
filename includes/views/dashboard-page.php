@@ -155,14 +155,9 @@ function wpshadow_render_dashboard() {
 			do_action( 'wpshadow_dashboard_activity', $category_filter );
 			?>
 
-			<!-- Recent Activity Section -->
-			<div style="margin-top: 40px;">
-				<?php
-				if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
-					wpshadow_render_recent_activity();
-				}
-				?>
-			</div>
+
+			<!-- Dashboard Activity Log -->
+			<?php wpshadow_render_activity_log( 'general', 10 ); ?>
 		</div>
 	</div>
 
@@ -296,5 +291,5 @@ function wpshadow_render_dashboard() {
 		}
 	});
 	</script>
-<!-- Dashboard Activity Log -->
-<?php wpshadow_render_activity_log( 'general', 10 ); ?>
+	<?php
+}
