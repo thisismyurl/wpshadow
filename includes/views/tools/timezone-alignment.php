@@ -106,22 +106,24 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			<p><?php esc_html_e( 'Or manually select your timezone (uses the same list as WordPress):', 'wpshadow' ); ?></p>
 
 			<div class="timezone-selector">
-				<select id="wpshadow-timezone-select" name="wpshadow_timezone" class="wpshadow-timezone-select">
-					<?php
-					// Load timezone list using WordPress function
-					if ( function_exists( 'wp_timezone_choice' ) ) {
-						wp_timezone_choice( $current_tz );
-					} else {
-						// Fallback: load admin screens which includes timezone functions
-						require_once ABSPATH . 'wp-admin/includes/template.php';
-						wp_timezone_choice( $current_tz );
-					}
-					?>
-				</select>
-			</div>
-
-			<button id="wpshadow-save-tz-btn" class="wps-btn wps-btn-primary" type="button" style="margin-top: 15px;">
-				<?php esc_html_e( 'Apply Selected Timezone', 'wpshadow' ); ?>
+			<label for="wpshadow-timezone-select" class="screen-reader-text">
+				<?php esc_html_e( 'Select your timezone', 'wpshadow' ); ?>
+			</label>
+			<select id="wpshadow-timezone-select" name="wpshadow_timezone" class="wpshadow-timezone-select" aria-describedby="timezone-help-text">
+				<?php
+				// Load timezone list using WordPress function
+				if ( function_exists( 'wp_timezone_choice' ) ) {
+					wp_timezone_choice( $current_tz );
+				} else {
+					// Fallback: load admin screens which includes timezone functions
+					require_once ABSPATH . 'wp-admin/includes/template.php';
+					wp_timezone_choice( $current_tz );
+				}
+				?>
+			</select>
+			<p id="timezone-help-text" class="description">
+				<?php esc_html_e( 'Choose the timezone that matches your location', 'wpshadow' ); ?>
+			</p>
 			</button>
 
 			<div id="wpshadow-save-status" class="wps-none">

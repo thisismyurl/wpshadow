@@ -28,11 +28,16 @@
 		 * Handle achievement category tabs
 		 */
 		achievementTabs: function() {
-			$('.tab-button').on('click', function() {
-				const category = $(this).data('category');
-
-				$('.tab-button').removeClass('active');
-				$(this).addClass('active');
+		$('.tab-button').on('click keydown', function(e) {
+			// Support both click and keyboard (Enter/Space) activation
+			if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') {
+				return;
+			}
+			
+			if (e.type === 'keydown') {
+				e.preventDefault();
+			}
+			
 
 				if (category === 'all') {
 					$('.achievement-card').show();

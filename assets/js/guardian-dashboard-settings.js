@@ -39,11 +39,8 @@
 			// Test Email Button
 			$(document).on('click', '.btn-test-email', this.handleTestEmail.bind(this));
 			
-			// Settings Tab Navigation
-			$(document).on('click', '.nav-tab', this.handleTabSwitch.bind(this));
-			
-			// Policy Checkboxes
-			$(document).on('change', '.policy-checkbox input', this.handlePolicyChange.bind(this));
+		// Settings Tab Navigation (keyboard accessible)
+		$(document).on('click keydown', '.nav-tab', this.handleTabSwitch.bind(this));
 			
 			// Email Modal Actions
 			$(document).on('click', '.btn-send-email', this.handleEmailSend.bind(this));

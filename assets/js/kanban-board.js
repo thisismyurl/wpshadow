@@ -122,10 +122,7 @@ jQuery(document).ready(function ($) {
 		let menuHtml = '<div class="wps-keyboard-move-menu" role="menu" aria-label="Move card to column">';
 		menuHtml += '<div class="wps-keyboard-move-menu-header">';
 		menuHtml += '<strong>Move to:</strong>';
-		menuHtml += '<button class="wps-keyboard-move-menu-close" aria-label="Close menu">×</button>';
-		menuHtml += '</div>';
-		menuHtml += '<div class="wps-keyboard-move-menu-options">';
-		
+	menuHtml += '<button type="button" class="wps-keyboard-move-menu-close" aria-label="Close move menu">×</button>';
 		columns.forEach((col, index) => {
 			if (col.status !== currentColumn) {
 				menuHtml += '<button class="wps-keyboard-move-option" data-target="' + col.status + '" data-index="' + index + '" role="menuitem">';
