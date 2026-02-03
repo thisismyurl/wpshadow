@@ -132,7 +132,7 @@ function wpshadow_render_dashboard() {
 			</div>
 		<?php endif; ?>
 
-		<div class="wpshadow-dashboard-content <?php echo $needs_refresh ? 'wps-loading' : ''; ?>">
+		<div class="wpshadow-dashboard-content <?php echo wp_json_encode( $needs_refresh ) ? 'wps-loading' : ''; ?>">
 			<?php
 			/**
 			 * Health Gauges Section
@@ -168,8 +168,8 @@ function wpshadow_render_dashboard() {
 
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
-		var needsRefresh = <?php echo $needs_refresh ? 'true' : 'false'; ?>;
-		var neverRun = <?php echo $never_run ? 'true' : 'false'; ?>;
+		var needsRefresh = <?php echo wp_json_encode( $needs_refresh ); ?>;
+		var neverRun = <?php echo wp_json_encode( $never_run ); ?>;
 
 		// Auto-run Quick Scan if data is stale
 		if (needsRefresh) {

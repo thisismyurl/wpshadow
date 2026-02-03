@@ -2,8 +2,25 @@
 /**
  * Query Timeout Risk Diagnostic
  *
- * Detects queries likely to timeout under load.
+ * Detects queries likely to timeout under high traffic or heavy load.
  *
+ * **What This Check Does:**
+ * 1. Identifies queries taking 2+ seconds
+ * 2. Flags queries with no LIMIT or excessive OFFSET
+ * 3. Detects queries scanning large tables without indexes
+ * 4. Analyzes timeout risk under traffic spikes
+ * 5. Measures query execution variability
+ * 6. Projects failure probability under load\n *
+ * **Why This Matters:**\n * A query taking 3 seconds is fine normally. Under traffic spike (10 simultaneous requests), that query
+ * now competes for database resources. 10 queries at 3 seconds each = 30 seconds waiting in queue.\n * New visitor's query hits timeout (30 second PHP limit). Page error. Query times out and hangs database\n * connection, consuming resources for no output.\n *
+ * **Real-World Scenario:**\n * Report page had query scanning entire 100GB table for matches (no index). Query took 8 seconds normally.
+ * During traffic spike (Black Friday), 50 concurrent users all ran report. Query queue: 50 × 8 seconds
+ * = 400 seconds (6+ minutes). New queries timed out. Report system completely unusable during peak.
+ * After adding index, query: 0.2 seconds. 50 concurrent: 10 seconds total. Always responsive.\n *
+ * **Business Impact:**\n * - Page timeouts during peak traffic\n * - Revenue-critical pages fail during spikes\n * - Users get 500 errors during busy times\n * - Frustrated customers leave (bounce)\n * - Revenue loss: $5,000-$100,000+ per traffic spike\n *
+ * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents timeout failures\n * - #9 Show Value: Enables traffic spikes without crashes\n * - #10 Talk-About-Worthy: "Site handles Black Friday traffic easily"\n *
+ * **Related Checks:**\n * - Slow Query Detection (specific slow queries)\n * - Database Index Efficiency (optimization)\n * - Database Connection Limits (resource exhaustion)\n * - Load Testing Results (failure thresholds)\n *
+ * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/query-timeout-prevention\n * - Video: https://wpshadow.com/training/load-testing-basics (7 min)\n * - Advanced: https://wpshadow.com/training/query-optimization-under-load (13 min)\n *
  * @since   1.4031.1939
  * @package WPShadow\Diagnostics
  */

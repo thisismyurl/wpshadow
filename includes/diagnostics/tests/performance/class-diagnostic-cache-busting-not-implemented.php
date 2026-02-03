@@ -3,6 +3,44 @@
  * Cache Busting Not Implemented Diagnostic
  *
  * Checks if cache busting is implemented.
+ * Cache busting = version parameter forces fresh file downloads.
+ * No version = users see old CSS/JS even after updates.
+ * With version (style.css?ver=1.2.3) = new CSS loads immediately.
+ *
+ * **What This Check Does:**
+ * - Checks enqueued scripts/styles for version parameters
+ * - Validates version changes on file modification
+ * - Tests cache headers for static assets
+ * - Checks file hash-based versioning
+ * - Validates cache expiration headers
+ * - Returns severity if cache busting missing
+ *
+ * **Why This Matters:**
+ * Update CSS. User's browser has cached version.
+ * Sees broken layout (old CSS + new HTML).
+ * Complains "site is broken". With version parameter:
+ * new file URL forces fresh download. Layout perfect.
+ *
+ * **Business Impact:**
+ * Deploy critical CSS fix for checkout button. No cache busting.
+ * Users see old CSS. Button remains broken. Checkout fails.
+ * Lost $20K in sales over 6 hours until cache expires.
+ * With cache busting: new CSS loads immediately for all users.
+ * Button works. Zero lost sales. 5 minutes to add versioning.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Updates deploy reliably
+ * - #9 Show Value: Zero deployment-related issues
+ * - #10 Beyond Pure: Professional deployment practices
+ *
+ * **Related Checks:**
+ * - Browser Caching Configuration (complementary)
+ * - Static Asset Optimization (related)
+ * - CDN Configuration (cache management)
+ *
+ * **Learn More:**
+ * Cache busting: https://wpshadow.com/kb/cache-busting
+ * Video: Versioning static assets (8min): https://wpshadow.com/training/cache-busting
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -23,6 +61,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Cache Busting Not Implemented Diagnostic Class
  *
  * Detects missing cache busting.
+ *
+ * **Detection Pattern:**
+ * 1. Get all enqueued scripts via wp_scripts global
+ * 2. Get all enqueued styles via wp_styles global
+ * 3. Check for version parameters
+ * 4. Validate version changes with file modification
+ * 5. Test cache headers on static assets
+ * 6. Return if versioning missing or static
+ *
+ * **Real-World Scenario:**
+ * All assets use filemtime() versioning: style.css?ver=1706889234.
+ * File changes. Version updates automatically. Browser sees new URL.
+ * Fetches fresh file. Zero cache issues. Deploys always work.
+ * Old method (static ver=1.0): required manual version bumps.
+ * Forgot to update = users saw old files for 7 days.
+ *
+ * **Implementation Notes:**
+ * - Checks wp_enqueue_script/style version parameters
+ * - Validates dynamic versioning (filemtime, hash)
+ * - Tests cache headers
+ * - Severity: medium (deployment reliability issue)
+ * - Treatment: add filemtime()-based versioning to enqueues
  *
  * @since 1.2601.2352
  */

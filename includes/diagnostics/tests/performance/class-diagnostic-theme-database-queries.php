@@ -4,6 +4,21 @@
  *
  * Detects excessive or inefficient database queries in theme templates.
  *
+ * **What This Check Does:**
+ * 1. Measures database queries on each page type (home, single, archive)\n * 2. Identifies N+1 patterns in theme loops
+ * 3. Detects queries in template loops (worst performance)\n * 4. Flags missing query optimization (no caching in theme)\n * 5. Analyzes cumulative query impact\n * 6. Projects optimization potential\n *
+ * **Why This Matters:**\n * Poorly-written theme template loops execute database queries in loops (N+1). Product archive page
+ * with 20 products generates 20+ queries (1 for loop, 1 per product detail). Homepage generates 30+
+ * queries just in theme. With 10 plugins adding queries, you have 100+ queries per page. Database
+ * server can't keep up.\n *
+ * **Real-World Scenario:**\n * Custom theme fetched related posts inside loop (query per post in main loop = N+1). Homepage
+ * with 10 featured posts = 10 queries. Plus related posts for each = 10 × 5 = 50 queries just for
+ * related fetching. After moving to single query with JOIN, 50 queries → 1 query. Homepage queries:
+ * 60 → 11. Page load: 4.5 seconds → 1.2 seconds (4x faster).\n *
+ * **Business Impact:**\n * - Database queries 50-100+ per page (inefficient)\n * - Database server overloaded\n * - Page load 3-10+ seconds slower\n * - Cannot scale without database upgrade ($50k+)\n * - User experience poor and unpredictable\n *
+ * **Philosophy Alignment:**\n * - #9 Show Value: Massive page speed improvement (4-10x)\n * - #8 Inspire Confidence: Prevents database overload\n * - #10 Talk-About-Worthy: "Database barely works anymore"\n *
+ * **Related Checks:**\n * - Theme Database Query Optimization (optimization patterns)\n * - Database Index Efficiency (query optimization)\n * - Plugin Database Query Volume (plugin contribution)\n * - Slow Query Detection (specific slow queries)\n *
+ * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-database-optimization\n * - Video: https://wpshadow.com/training/wp-query-best-practices (7 min)\n * - Advanced: https://wpshadow.com/training/theme-refactoring-patterns (14 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
  * @since      1.5049.1200

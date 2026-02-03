@@ -4,6 +4,43 @@
  *
  * Validates that user profile fields are properly sanitized to prevent
  * XSS and other injection attacks through profile data.
+ * Profile fields unsanitized = attacker injects script in bio.
+ * Other users view profile. Script executes (stored XSS).
+ *
+ * **What This Check Does:**
+ * - Checks profile field sanitization on save
+ * - Validates output escaping on profile display
+ * - Tests for script injection in bio/description
+ * - Checks custom profile fields sanitization
+ * - Validates HTML tag stripping
+ * - Returns severity if sanitization missing
+ *
+ * **Why This Matters:**
+ * Profile bio allows HTML. Attacker injects:
+ * <script>steal_cookies()</script>. Profile saved.
+ * Other users view profile. Script executes. Sessions stolen.
+ * With sanitization: script tags stripped. Profile safe.
+ *
+ * **Business Impact:**
+ * Forum allows user profiles. Profile bio not sanitized.
+ * Attacker's profile has XSS payload in bio. 500+ users view profile
+ * (popular topic). All get session cookies stolen. Attacker hijacks
+ * 500 accounts. Cost: $200K+ (notification, recovery). With sanitization:
+ * script tags removed. Bio displays safely. Attack impossible.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: User data safe
+ * - #9 Show Value: Prevents stored XSS attacks
+ * - #10 Beyond Pure: Input/output validation
+ *
+ * **Related Checks:**
+ * - XSS Protection Overall (broader)
+ * - Theme Data Validation (related)
+ * - Content Sanitization (complementary)
+ *
+ * **Learn More:**
+ * Profile field security: https://wpshadow.com/kb/profile-sanitization
+ * Video: Sanitizing user input (10min): https://wpshadow.com/training/sanitization
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +61,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  * User Profile Field Sanitization Diagnostic Class
  *
  * Checks user profile field security and sanitization.
+ *
+ * **Detection Pattern:**
+ * 1. Get list of profile fields
+ * 2. Check sanitization functions on save
+ * 3. Test output escaping on display
+ * 4. Validate HTML tag filtering
+ * 5. Test custom fields sanitization
+ * 6. Return if sanitization missing
+ *
+ * **Real-World Scenario:**
+ * User updates bio field with:
+ * <img src=x onerror="fetch('/admin?delete_all')">.
+ * Profile saved without sanitization. Admin views profile.
+ * Image loads. onerror fires. Request sent. Admin actions executed.
+ * With sanitization: img tag or onerror stripped. Profile displays
+ * safely.
+ *
+ * **Implementation Notes:**
+ * - Checks profile field handling
+ * - Validates sanitization functions
+ * - Tests output escaping
+ * - Severity: critical (no sanitization)
+ * - Treatment: add sanitization on save, escaping on display
  *
  * @since 1.6032.1335
  */

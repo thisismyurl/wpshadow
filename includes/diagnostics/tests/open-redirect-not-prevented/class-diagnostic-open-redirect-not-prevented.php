@@ -1,6 +1,86 @@
 <?php
+/**
+ * Open Redirect Not Prevented Diagnostic
+ *
+ * Checks open redirect.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.26033.2033
+ */
+
 declare(strict_types=1);
+
 namespace WPShadow\Diagnostics;
+
 use WPShadow\Core\Diagnostic_Base;
-if(!defined('ABSPATH'))exit;
-class Diagnostic_Open_Redirect_Not_Prevented extends Diagnostic_Base{protected static $slug='open-redirect-not-prevented';protected static $title='Open Redirect Not Prevented';protected static $description='Checks open redirect';protected static $family='security';public static function check(){if(!has_filter('init','prevent_open_redirects')){return array('id'=>self::$slug,'title'=>self::$title,'description'=>__('Open redirect not prevented. Validate redirect URLs against a whitelist before redirecting users.','wpshadow'),'severity'=>'high','threat_level'=>60,'auto_fixable'=>true,'kb_link'=>'https://wpshadow.com/kb/open-redirect-not-prevented');}return null;}}
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Diagnostic_Open_Redirect_Not_Prevented Class
+ *
+ * Performs diagnostic check for Open Redirect Not Prevented.
+ *
+ * @since 1.26033.2033
+ */
+class Diagnostic_Open_Redirect_Not_Prevented extends Diagnostic_Base {
+
+	/**
+	 * The diagnostic slug
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'open-redirect-not-prevented';
+
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Open Redirect Not Prevented';
+
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks open redirect';
+
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @since  1.26033.2033
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		if (   !has_filter('init',
+						'prevent_open_redirects' ) {
+						return array(
+						'id'   =>   self::$slug,
+						'title'   =>   self::$title,
+						'description'   =>   __('Open redirect not prevented. Validate redirect URLs against a whitelist before redirecting users.',
+						'severity'   =>   'high',
+						'threat_level'   =>   60,
+						'auto_fixable'   =>   true,
+						'kb_link'   =>   'https://wpshadow.com/kb/open-redirect-not-prevented'
+						);
+						);,
+						);
+						}
+						return null;
+						}
+						return null;
+						}
+						return null;
+	}
+}

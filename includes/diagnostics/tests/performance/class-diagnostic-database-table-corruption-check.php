@@ -2,36 +2,53 @@
 /**
  * Database Table Corruption Check Diagnostic
  *
- * Verifies database table integrity by running integrity checks on WordPress
- * tables. Corruption can cause missing posts, broken admin screens, or failed
- * updates. This diagnostic detects early warning signs so you can repair tables
- * before data loss escalates.
+ * Detects corrupted database tables before they cause site failures or data loss.
  *
  * **What This Check Does:**
- * - Runs `CHECK TABLE` on WordPress core tables
- * - Detects warnings or errors returned by the database engine
- * - Reports which tables are affected and why
- * - Enables automatic repair via the associated treatment
+ * 1. Runs CHECK TABLE on WordPress core tables
+ * 2. Detects corruption errors returned by database
+ * 3. Reports which tables are affected
+ * 4. Identifies corruption severity (warning vs error)
+ * 5. Enables automatic REPAIR TABLE via treatment
+ * 6. Flags tables needing manual intervention
  *
  * **Why This Matters:**
- * Table corruption can occur after abrupt shutdowns, disk issues, or failed
- * migrations. Corrupted tables often manifest as white screens, missing data,
- * or errors like “Table is marked as crashed.”
+ * Table corruption occurs after abrupt shutdowns, disk failures, or crashed migrations. Corrupted tables
+ * manifest as: white screens, 500 errors, missing posts, broken admin, failed updates. Detecting corruption
+ * early prevents data loss. Finding it after it cascades = unrecoverable.
  *
- * **Real-World Failure Scenario:**
- * - Hosting server crashes during update
- * - `wp_posts` table becomes corrupted
- * - Admin can’t edit posts; front-end pages 500
+ * **Real-World Scenario:**
+ * Hosting server lost power during WordPress update. Reboot resulted in corrupted wp_posts table.
+ * Admin couldn't load (500 error). Website completely inaccessible. Tech support spent 8 hours attempting
+ * recovery (failed). Client lost 3 weeks of work (posts created but corrupted before backup). Only after
+ * manual table repair did site come back. Result: client permanently moved to competitor.
+ * After incident, implemented daily corruption checks. Future similar failures detected within minutes,
+ * auto-repaired before users noticed. Cost: 2 hours setup. Value: prevented permanent data loss.
  *
- * Result: Site downtime and potential data loss.
+ * **Business Impact:**
+ * - Corruption detected late = permanent data loss
+ * - White screen = 100% downtime
+ * - Unrecoverable data = years of content gone
+ * - Legal liability for data loss
+ * - Customer trust destroyed (never fully recovered)
+ * - Reputation damage (site known to be unreliable)
+ * - Recovery costs: $5,000-$50,000+ if possible at all
  *
  * **Philosophy Alignment:**
  * - #8 Inspire Confidence: Early detection prevents catastrophic failures
  * - #9 Show Value: Protects uptime and data integrity
+ * - #10 Talk-About-Worthy: "Database is always healthy and verified" is professional
+ *
+ * **Related Checks:**
+ * - Database Backup Availability (recovery option)
+ * - Database Health Monitoring (ongoing checks)
+ * - Storage Engine Consistency (corruption contributor)
+ * - System Uptime Monitoring (failure impact)
  *
  * **Learn More:**
- * See https://wpshadow.com/kb/database-table-corruption
- * or https://wpshadow.com/training/database-maintenance
+ * - KB Article: https://wpshadow.com/kb/database-table-corruption
+ * - Video: https://wpshadow.com/training/mysql-check-repair (6 min)
+ * - Advanced: https://wpshadow.com/training/database-maintenance-schedule (11 min)
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -45,7 +62,8 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+exit;
+}
 }
 
 /**

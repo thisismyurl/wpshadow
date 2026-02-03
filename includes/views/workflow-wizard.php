@@ -41,15 +41,15 @@ if ( $action === 'edit' && $workflow_id ) {
 
 	<!-- Progress Steps -->
 	<div class="wizard-progress">
-		<div class="progress-step <?php echo $step === 'trigger' ? 'active' : ( $step === 'action' || $step === 'review' ? 'completed' : '' ); ?>">
+		<div class="progress-step <?php echo ( 'trigger' === $step ? 'active' : ( 'action' === $step || 'review' === $step ? 'completed' : '' ) ); ?>">
 			<span class="step-number">1</span>
 			<span class="step-label"><?php esc_html_e( 'Choose Trigger', 'wpshadow' ); ?></span>
 		</div>
-		<div class="progress-step <?php echo $step === 'action' ? 'active' : ( $step === 'review' ? 'completed' : '' ); ?>">
+		<div class="progress-step <?php echo ( 'action' === $step ? 'active' : ( 'review' === $step ? 'completed' : '' ) ); ?>">
 			<span class="step-number">2</span>
 			<span class="step-label"><?php esc_html_e( 'Choose Action', 'wpshadow' ); ?></span>
 		</div>
-		<div class="progress-step <?php echo $step === 'review' ? 'active' : ''; ?>">
+		<div class="progress-step <?php echo ( 'review' === $step ? 'active' : '' ); ?>">
 			<span class="step-number">3</span>
 			<span class="step-label"><?php esc_html_e( 'Review & Save', 'wpshadow' ); ?></span>
 		</div>

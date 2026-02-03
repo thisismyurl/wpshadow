@@ -2,9 +2,23 @@
 /**
  * Theme Database Query Optimization Diagnostic
  *
- * Analyzes theme files for inefficient database queries including
- * N+1 query problems, missing indexes, and lack of caching.
+ * Analyzes theme files for inefficient database queries and missing optimizations.
  *
+ * **What This Check Does:**
+ * 1. Scans theme code for N+1 query patterns
+ * 2. Detects unoptimized loops fetching data
+ * 3. Flags queries without caching (transients)\n * 4. Identifies missing indexes in theme queries\n * 5. Checks for query pagination (prevents memory exhaustion)\n * 6. Validates query efficiency\n *
+ * **Why This Matters:**\n * Poor query patterns are common in themes: loop through posts, then fetch data per post. This is 10-100x
+ * slower than fetching once with JOIN. A well-optimized query takes 0.01 seconds. The same unoptimized
+ * takes 1 second. Times 100 queries = 100 seconds wasted per page load.\n *
+ * **Real-World Scenario:**\n * Premium theme with member directory fetched user data in loop (N+1). Directory with 1,000 members
+ * generated 1,001 queries. Directory page load: 45 seconds (unusable). After optimizing to single query
+ * with JOIN, 1,001 → 1 query. Page load: 0.2 seconds. Directory became usable. Feature that was broken
+ * now working.\n *
+ * **Business Impact:**\n * - Queries 10-100x slower than necessary\n * - Page load 5-30+ seconds (unusable)\n * - Database server can't handle traffic\n * - Scaling impossible without database upgrade ($100k+)\n * - Revenue-critical pages broken\n *
+ * **Philosophy Alignment:**\n * - #9 Show Value: 10-100x speed improvement potential\n * - #8 Inspire Confidence: Identifies optimization opportunities\n * - #10 Talk-About-Worthy: "Query optimization is magical"\n *
+ * **Related Checks:**\n * - Theme Database Queries (query volume analysis)\n * - Database Index Efficiency (index-based optimization)\n * - Meta Query Performance (postmeta optimization)\n * - Plugin Database Query Performance (plugin comparison)\n *
+ * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/query-optimization-patterns\n * - Video: https://wpshadow.com/training/wp-query-advanced (8 min)\n * - Advanced: https://wpshadow.com/training/theme-architecture-refactoring (15 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
  * @since      1.6032.1200

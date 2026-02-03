@@ -2,8 +2,28 @@
 /**
  * Plugin Coding Standards Compliance Diagnostic
  *
- * Checks if plugins follow WordPress coding standards.
+ * Detects plugins violating WordPress standards, indicating poor quality and security risks.
  *
+ * **What This Check Does:**
+ * 1. Analyzes plugin code for WordPress standard violations
+ * 2. Checks for SQL injection vulnerabilities (unescaped queries)
+ * 3. Detects missing nonce verification (CSRF vulnerabilities)
+ * 4. Flags insufficient user capability checks
+ * 5. Identifies output escaping violations
+ * 6. Measures code quality and maturity level\n *
+ * **Why This Matters:**\n * Poor coding standards often hide security vulnerabilities. Plugins that don't verify nonces are
+ * CSRF exploitable. Plugins with unescaped output have XSS vulnerabilities. Plugins without capability
+ * checks can be manipulated by low-privilege users. These aren't edge cases—they're common in low-quality
+ * plugins. A single vulnerability exposes your entire site.\n *
+ * **Real-World Scenario:**\n * Popular plugin didn't verify nonces on AJAX endpoints. Hacker embedded attack script on attacker's
+ * website. When admin visited attacker's website in browser tab, the script made requests to WordPress
+ * admin (CSRF). Plugin executed attacker's commands as the admin. Site became completely compromised.
+ * Plugin had 50,000 active installs. Exploit affected all 50,000 sites simultaneously. Security company\n * released advisory. 40,000 sites still vulnerable 6 months later (admins didn't remove plugin).
+ * Cost to affected sites: $50,000-$500,000 recovery.\n *
+ * **Business Impact:**\n * - SQL injection vulnerabilities (database compromise)\n * - XSS vulnerabilities (visitor malware distribution)\n * - CSRF vulnerabilities (admin account takeover)\n * - Privilege escalation (low-privilege user becomes admin)\n * - Data theft ($100k-$1M liability)\n * - Site compromise ($1,000-$50,000 recovery)\n *
+ * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Identifies dangerous plugins early\n * - #9 Show Value: Prevents exploitation before damage\n * - #10 Talk-About-Worthy: "Every plugin passes security review"\n *
+ * **Related Checks:**\n * - Plugin Security Vulnerabilities (known CVEs)\n * - User Role Security (privilege escalation detection)\n * - Database Security (SQL injection prevention)\n * - Nonce Verification (CSRF protection)\n *
+ * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-coding-standards\n * - Video: https://wpshadow.com/training/wordpress-security-standards (7 min)\n * - Advanced: https://wpshadow.com/training/plugin-vetting-process (13 min)\n *
  * @since   1.4031.1939
  * @package WPShadow\Diagnostics
  */

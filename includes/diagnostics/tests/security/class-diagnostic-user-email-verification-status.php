@@ -4,6 +4,43 @@
  *
  * Validates that user email addresses are verified and that email-based
  * security features like password resets are functioning properly.
+ * Unverified email = attacker registers with fake email. Or: user account
+ * created with spam email. No verification = security gap.
+ *
+ * **What This Check Does:**
+ * - Checks if email verification required for registration
+ * - Validates email confirmation link functionality
+ * - Tests if verification tokens expire
+ * - Checks for spam email detection
+ * - Validates password reset email delivery
+ * - Returns severity if email verification disabled
+ *
+ * **Why This Matters:**
+ * Without email verification: attacker registers with fake email.
+ * Or: registers with stolen email, hijacks account.
+ * Verification = proves email actually works.
+ * Prevents fake account registration.
+ *
+ * **Business Impact:**
+ * Forum allows registration without email verification.
+ * Attacker registers 1000 bot accounts with fake emails.
+ * Bots spam forum. Site reputation damaged. Real users leave.
+ * Revenue from ads drops 60%. With verification: fake emails rejected.
+ * Only legitimate users register. Community quality maintained.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Email verified, accounts legitimate
+ * - #9 Show Value: Prevents spam account registration
+ * - #10 Beyond Pure: Identity verification required
+ *
+ * **Related Checks:**
+ * - User Account Registration Validation (related)
+ * - Password Reset Process Security (related)
+ * - Account Takeover Prevention (related)
+ *
+ * **Learn More:**
+ * Email verification setup: https://wpshadow.com/kb/email-verification
+ * Video: Email verification workflow (10min): https://wpshadow.com/training/email-verify
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +61,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * User Email Verification Status Diagnostic Class
  *
  * Checks user email verification and status.
+ *
+ * **Detection Pattern:**
+ * 1. Check if email verification enabled for registrations
+ * 2. Get list of users with unverified emails
+ * 3. Test email verification link functionality
+ * 4. Validate token expiration times
+ * 5. Check password reset email delivery
+ * 6. Return list of unverified users
+ *
+ * **Real-World Scenario:**
+ * Email verification enabled. New user registers with attacker's email.
+ * Attacker doesn't confirm email. Account remains unverified. Real owner
+ * of email later registers. System prompts: account exists. Forces email
+ * verification. Attacker's registration prevented (email already claimed).
+ * With verification: real owner retains email. Attacker can't hijack.
+ *
+ * **Implementation Notes:**
+ * - Checks email verification requirements
+ * - Validates token expiration
+ * - Tests email delivery
+ * - Severity: high (no verification), medium (weak verification)
+ * - Treatment: enable and enforce email verification
  *
  * @since 1.6032.1340
  */

@@ -4,6 +4,42 @@
  *
  * Validates that user registration has adequate spam prevention
  * measures including CAPTCHA and bot detection.
+ * No spam prevention = bots register 10K accounts.
+ * With CAPTCHA/honeypot = bot registrations blocked.
+ *
+ * **What This Check Does:**
+ * - Checks if CAPTCHA enabled (reCAPTCHA, hCaptcha)
+ * - Validates honeypot fields present
+ * - Tests time-based registration limits
+ * - Checks IP-based rate limiting
+ * - Validates email domain blacklists
+ * - Returns severity if spam prevention missing
+ *
+ * **Why This Matters:**
+ * Without spam prevention: bot registers accounts automatically.
+ * 1000s of spam accounts created. Forum/comments flooded.
+ * With CAPTCHA: bot can't solve. Registration blocked.
+ *
+ * **Business Impact:**
+ * Membership site with no spam prevention. Bot network registers
+ * 50K accounts in 24 hours. Sends spam to all members. Inbox flooded.
+ * Users mark as spam. Domain blacklisted. Email deliverability destroyed.
+ * Cost: $100K+ (reputation recovery). With CAPTCHA: bot attempts fail.
+ * Only real humans register. Community stays clean.
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Registration protected from abuse
+ * - #9 Show Value: Prevents spam account floods
+ * - #10 Beyond Pure: Bot detection by design
+ *
+ * **Related Checks:**
+ * - User Registration Moderation (complementary)
+ * - Bot Detection Overall (broader)
+ * - Comment Spam Prevention (related)
+ *
+ * **Learn More:**
+ * Spam prevention setup: https://wpshadow.com/kb/registration-spam
+ * Video: CAPTCHA configuration (10min): https://wpshadow.com/training/captcha
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -24,6 +60,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * User Registration Spam Prevention Diagnostic Class
  *
  * Checks user registration spam protection.
+ *
+ * **Detection Pattern:**
+ * 1. Check if CAPTCHA plugin installed
+ * 2. Validate honeypot fields in registration form
+ * 3. Test time-based limits
+ * 4. Check IP rate limiting
+ * 5. Validate email domain filtering
+ * 6. Return if spam prevention disabled
+ *
+ * **Real-World Scenario:**
+ * reCAPTCHA enabled on registration. Bot attempts 1000 registrations.
+ * All fail (can't solve CAPTCHA). Bot gives up. Zero spam accounts
+ * created. With no CAPTCHA: bot succeeds. 1000 spam accounts in database.
+ *
+ * **Implementation Notes:**
+ * - Checks spam prevention configuration
+ * - Validates CAPTCHA/honeypot presence
+ * - Tests rate limiting
+ * - Severity: high (no spam prevention on public sites)
+ * - Treatment: enable CAPTCHA and honeypot fields
  *
  * @since 1.6032.1335
  */
