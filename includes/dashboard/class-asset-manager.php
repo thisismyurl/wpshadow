@@ -29,9 +29,34 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 
 	// Workflow list scripts
 	if ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-automations' ) !== false ) {
+		// Enqueue workflow list CSS
+		wp_enqueue_style(
+			'wpshadow-workflow-list',
+			WPSHADOW_URL . 'assets/css/workflow-list.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		// Enqueue workflow wizard steps CSS
+		wp_enqueue_style(
+			'wpshadow-workflow-wizard-steps',
+			WPSHADOW_URL . 'assets/css/workflow-wizard-steps.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
 		wp_enqueue_script(
 			'wpshadow-workflow-list',
 			WPSHADOW_URL . 'assets/js/workflow-list.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		// Enqueue workflow wizard steps JS
+		wp_enqueue_script(
+			'wpshadow-workflow-wizard-steps',
+			WPSHADOW_URL . 'assets/js/workflow-wizard-steps.js',
 			array( 'jquery' ),
 			WPSHADOW_VERSION,
 			true

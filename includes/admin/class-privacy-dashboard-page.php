@@ -72,16 +72,43 @@ class Privacy_Dashboard_Page {
 		}
 
 		wp_enqueue_style( 'wpshadow-admin' );
-		wp_enqueue_script( 'wpshadow-admin' );
+		wp_enqueue_style(
+			'wpshadow-privacy-dashboard',
+			WPSHADOW_URL . 'assets/css/privacy-dashboard.css',
+			array( 'wpshadow-admin' ),
+			WPSHADOW_VERSION
+		);
 
-		wp_localize_script( 'wpshadow-admin', 'wpshadowPrivacy', array(
-			'nonce'   => wp_create_nonce( 'wpshadow_privacy_actions' ),
-			'strings' => array(
-				'confirm_delete' => __( 'Are you sure you want to delete all your WPShadow data? This action cannot be undone.', 'wpshadow' ),
-				'export_started' => __( 'Preparing your data export...', 'wpshadow' ),
-				'consent_saved'  => __( 'Privacy preferences updated successfully', 'wpshadow' ),
-			),
-		) );
+		wp_enqueue_script( 'wpshadow-admin' );
+		wp_enqueue_script(
+			'wpshadow-privacy-dashboard',
+			WPSHADOW_URL . 'assets/js/privacy-dashboard.js',
+			array( 'jquery', 'wpshadow-admin' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-privacy-dashboard',
+			'wpshadowPrivacy',
+			array(
+				'nonce'   => wp_create_nonce( 'wpshadow_privacy_actions' ),
+				'strings' => array(
+					'confirm_delete' => __( 'Are you sure you want to delete all your WPShadow data? This action cannot be undone.', 'wpshadow' ),
+					'export_started' => __( 'Preparing your data export...', 'wpshadow' ),
+					'consent_saved'  => __( 'Privacy preferences updated successfully', 'wpshadow' ),
+					'consent_error'  => __( 'Failed to save preferences. Please try again.', 'wpshadow' ),
+					'exporting'      => __( 'Exporting...', 'wpshadow' ),
+					'export_data'    => __( 'Export My Data', 'wpshadow' ),
+					'export_error'   => __( 'Export failed. Please try again.', 'wpshadow' ),
+					'deleting'       => __( 'Deleting...', 'wpshadow' ),
+					'delete_confirm' => __( 'Are you sure? This will permanently delete all WPShadow data. This action cannot be undone.', 'wpshadow' ),
+					'delete_success' => __( 'All data deleted successfully.', 'wpshadow' ),
+					'delete_error'   => __( 'Deletion failed. Please try again.', 'wpshadow' ),
+					'delete_data'    => __( 'Delete All Data', 'wpshadow' ),
+				),
+			)
+		);
 	}
 
 	/**
@@ -191,17 +218,17 @@ class Privacy_Dashboard_Page {
 		$color = $score === 100 ? '#22c55e' : '#6366F1';
 
 		?>
-		<div style="display: flex; align-items: center; gap: 30px;">
-			<div style="text-align: center;">
-				<div style="width: 120px; height: 120px; border-radius: 50%; background: <?php echo esc_attr( $color ); ?>; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-					<span style="font-size: 48px; font-weight: 700; color: white;"><?php echo esc_html( $score ); ?></span>
+		<div class="wps-privacy-score-container">
+			<div class="wps-privacy-score-badge">
+				<div class="wps-privacy-score-circle" style="background: <?php echo esc_attr( $color ); ?>;">
+					<span class="wps-privacy-score-number"><?php echo esc_html( $score ); ?></span>
 				</div>
-				<p style="margin-top: 10px; font-weight: 600; color: #3c434a;">
+				<p class="wps-privacy-score-label">
 					<?php esc_html_e( 'Privacy Score', 'wpshadow' ); ?>
 				</p>
 			</div>
-			<div>
-				<h3 style="margin-top: 0; color: #1e1e1e;">
+			<div class="wps-privacy-score-details">
+				<h3>
 					<?php
 					if ( 100 === $score ) {
 						esc_html_e( 'Maximum Privacy Protection', 'wpshadow' );
@@ -210,7 +237,7 @@ class Privacy_Dashboard_Page {
 					}
 					?>
 				</h3>
-				<ul style="margin: 12px 0; padding-left: 20px; list-style: disc; color: #3c434a;">
+				<ul class="wps-privacy-score-list">
 					<li><?php esc_html_e( 'No personal information collected', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'All data stored locally on your server', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'No tracking cookies or external beacons', 'wpshadow' ); ?></li>
@@ -221,7 +248,7 @@ class Privacy_Dashboard_Page {
 					<?php endif; ?>
 				</ul>
 				<?php if ( $prefs['consented_at'] ) : ?>
-					<p style="margin: 8px 0; font-size: 13px; color: #6b7280;">
+					<p class="wps-privacy-score-note">
 						<?php
 						printf(
 							/* translators: %s: formatted date */
@@ -245,24 +272,24 @@ class Privacy_Dashboard_Page {
 	 */
 	private static function render_consent_controls( $prefs ) {
 		?>
-		<form id="wpshadow-consent-form" style="max-width: 800px;">
+		<form id="wpshadow-consent-form" class="wps-consent-form">
 			<?php wp_nonce_field( 'wpshadow_privacy_actions', 'wpshadow_consent_nonce' ); ?>
 
 			<!-- Essential (Always On) -->
-			<div class="wps-form-group" style="padding: 20px; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 8px; margin-bottom: 20px;">
-				<div style="display: flex; align-items: start; gap: 12px;">
-					<input type="checkbox" checked disabled style="margin-top: 4px;" />
-					<div style="flex: 1;">
-						<strong style="font-size: 16px; color: #1e1e1e;">
+			<div class="wps-form-group wps-consent-required">
+				<div class="wps-consent-group">
+					<input type="checkbox" checked disabled class="wps-consent-checkbox" />
+					<div class="wps-consent-content">
+						<strong class="wps-consent-title">
 							<?php esc_html_e( 'Essential Functions', 'wpshadow' ); ?>
 						</strong>
-						<span style="display: inline-block; padding: 2px 8px; background: #0ea5e9; color: white; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 8px;">
+						<span class="wps-consent-badge-required">
 							<?php esc_html_e( 'Required', 'wpshadow' ); ?>
 						</span>
-						<p style="margin: 8px 0 0; color: #6b7280; font-size: 14px;">
+						<p class="wps-consent-description">
 							<?php esc_html_e( 'Required for basic plugin functionality. Cannot be disabled.', 'wpshadow' ); ?>
 						</p>
-						<ul style="margin: 8px 0 0 20px; font-size: 13px; color: #6b7280; list-style: disc;">
+						<ul class="wps-consent-feature-list">
 							<li><?php esc_html_e( 'Settings and preferences storage', 'wpshadow' ); ?></li>
 							<li><?php esc_html_e( 'Diagnostic scan results (local database)', 'wpshadow' ); ?></li>
 							<li><?php esc_html_e( 'Activity and audit logging (local only)', 'wpshadow' ); ?></li>
@@ -272,39 +299,39 @@ class Privacy_Dashboard_Page {
 			</div>
 
 			<!-- Anonymous Telemetry (Opt-In) -->
-			<div class="wps-form-group" style="padding: 20px; background: #fafafa; border: 2px solid #e0e0e0; border-radius: 8px;">
-				<div style="display: flex; align-items: start; gap: 12px;">
+			<div class="wps-form-group wps-consent-optional">
+				<div class="wps-consent-group">
 					<input
 						type="checkbox"
 						name="anonymized_telemetry"
 						id="consent-telemetry"
 						value="1"
 						<?php checked( $prefs['anonymized_telemetry'] ); ?>
-						style="margin-top: 4px;"
+						class="wps-consent-checkbox"
 					/>
-					<div style="flex: 1;">
-						<label for="consent-telemetry" style="cursor: pointer;">
-							<strong style="font-size: 16px; color: #1e1e1e;">
+					<div class="wps-consent-content">
+						<label for="consent-telemetry" class="wps-consent-label">
+							<strong class="wps-consent-title">
 								<?php esc_html_e( 'Anonymous Usage Data', 'wpshadow' ); ?>
 							</strong>
-							<span style="display: inline-block; padding: 2px 8px; background: #d1d5db; color: #4b5563; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 8px;">
+							<span class="wps-consent-badge-optional">
 								<?php esc_html_e( 'Optional', 'wpshadow' ); ?>
 							</span>
 						</label>
-						<p style="margin: 8px 0 0; color: #6b7280; font-size: 14px;">
+						<p class="wps-consent-description">
 							<?php esc_html_e( 'Help us improve WPShadow by sharing anonymous usage data.', 'wpshadow' ); ?>
 						</p>
-						<ul style="margin: 8px 0 0 20px; font-size: 13px; color: #6b7280; list-style: disc;">
+						<ul class="wps-consent-feature-list">
 							<li><?php esc_html_e( 'Which features you use (no personal info)', 'wpshadow' ); ?></li>
 							<li><?php esc_html_e( 'Diagnostic scan frequency and results', 'wpshadow' ); ?></li>
 							<li><?php esc_html_e( 'Treatment success/failure rates', 'wpshadow' ); ?></li>
 							<li><?php esc_html_e( 'WordPress and PHP versions (for compatibility)', 'wpshadow' ); ?></li>
 						</ul>
-						<div style="margin-top: 12px; padding: 12px; background: white; border-radius: 6px; border-left: 3px solid #22c55e;">
-							<strong style="display: block; margin-bottom: 6px; color: #1e1e1e; font-size: 14px;">
+						<div class="wps-consent-benefit-box">
+							<strong class="wps-consent-benefit-title">
 								<?php esc_html_e( 'We never collect:', 'wpshadow' ); ?>
 							</strong>
-							<ul style="margin: 4px 0 0 20px; font-size: 13px; color: #6b7280; list-style: disc;">
+							<ul class="wps-consent-benefit-list">
 								<li><?php esc_html_e( 'Your name, email, or personal information', 'wpshadow' ); ?></li>
 								<li><?php esc_html_e( 'Your site URL, domain name, or content', 'wpshadow' ); ?></li>
 								<li><?php esc_html_e( 'User data, post content, or comments', 'wpshadow' ); ?></li>
@@ -315,44 +342,15 @@ class Privacy_Dashboard_Page {
 				</div>
 			</div>
 
-			<div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e0e0e0;">
+			<div class="wps-consent-footer">
 				<button type="submit" class="button button-primary button-large">
 					<?php esc_html_e( 'Save Privacy Preferences', 'wpshadow' ); ?>
 				</button>
-				<p style="margin-top: 12px; font-size: 13px; color: #6b7280;">
+				<p class="wps-consent-footer-note">
 					<?php esc_html_e( 'Changes take effect immediately. You can update these preferences anytime.', 'wpshadow' ); ?>
 				</p>
 			</div>
 		</form>
-
-		<script>
-		jQuery(document).ready(function($) {
-			$('#wpshadow-consent-form').on('submit', function(e) {
-				e.preventDefault();
-
-				var telemetry = $('#consent-telemetry').is(':checked');
-
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_update_consent',
-						nonce: $('#wpshadow_consent_nonce').val(),
-						anonymized_telemetry: telemetry ? '1' : '0'
-					},
-					success: function(response) {
-						if (response.success) {
-							// Show success message
-							$('<div class="notice notice-success is-dismissible"><p>' + wpshadowPrivacy.strings.consent_saved + '</p></div>')
-								.insertAfter('.wps-page-header')
-								.delay(3000)
-								.fadeOut();
-						}
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 
@@ -364,47 +362,47 @@ class Privacy_Dashboard_Page {
 	 */
 	private static function render_data_collection_info() {
 		?>
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+		<div class="wps-data-collection-grid">
 			<!-- Settings Data -->
-			<div style="padding: 16px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #6366F1;">
-				<h4 style="margin: 0 0 8px; color: #1e1e1e;">
-					<span class="dashicons dashicons-admin-settings" style="color: #6366F1;"></span>
+			<div class="wps-data-collection-card wps-data-collection-card-config">
+				<h4>
+					<span class="dashicons dashicons-admin-settings"></span>
 					<?php esc_html_e( 'Settings & Preferences', 'wpshadow' ); ?>
 				</h4>
-				<p style="margin: 0; font-size: 13px; color: #6b7280;">
+				<p>
 					<?php esc_html_e( 'Plugin configuration, user preferences, and consent choices. Stored in your WordPress database.', 'wpshadow' ); ?>
 				</p>
 			</div>
 
 			<!-- Diagnostic Results -->
-			<div style="padding: 16px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #8B5CF6;">
-				<h4 style="margin: 0 0 8px; color: #1e1e1e;">
-					<span class="dashicons dashicons-search" style="color: #8B5CF6;"></span>
+			<div class="wps-data-collection-card wps-data-collection-card-diagnostic">
+				<h4>
+					<span class="dashicons dashicons-search"></span>
 					<?php esc_html_e( 'Diagnostic Scan Results', 'wpshadow' ); ?>
 				</h4>
-				<p style="margin: 0; font-size: 13px; color: #6b7280;">
+				<p>
 					<?php esc_html_e( 'Security, performance, and SEO findings. Cached locally for faster dashboard loading.', 'wpshadow' ); ?>
 				</p>
 			</div>
 
 			<!-- Activity Logs -->
-			<div style="padding: 16px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #EC4899;">
-				<h4 style="margin: 0 0 8px; color: #1e1e1e;">
-					<span class="dashicons dashicons-list-view" style="color: #EC4899;"></span>
+			<div class="wps-data-collection-card wps-data-collection-card-activity">
+				<h4>
+					<span class="dashicons dashicons-list-view"></span>
 					<?php esc_html_e( 'Activity Logs', 'wpshadow' ); ?>
 				</h4>
-				<p style="margin: 0; font-size: 13px; color: #6b7280;">
+				<p>
 					<?php esc_html_e( 'Audit trail of treatments applied and settings changed. Never leaves your server.', 'wpshadow' ); ?>
 				</p>
 			</div>
 		</div>
 
-		<div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: 8px; border: 1px solid #22c55e;">
-			<h4 style="margin: 0 0 8px; color: #1e1e1e;">
-				<span class="dashicons dashicons-shield" style="color: #22c55e;"></span>
+		<div class="wps-privacy-commitment">
+			<h4>
+				<span class="dashicons dashicons-shield"></span>
 				<?php esc_html_e( 'Data Storage', 'wpshadow' ); ?>
 			</h4>
-			<p style="margin: 0; font-size: 14px; color: #6b7280;">
+			<p>
 				<?php esc_html_e( 'All data is stored locally in your WordPress database. No external servers, no cloud storage, no third-party services (unless you enable optional telemetry).', 'wpshadow' ); ?>
 			</p>
 		</div>
@@ -458,24 +456,24 @@ class Privacy_Dashboard_Page {
 		}
 
 		?>
-		<div style="max-width: 600px;">
-			<p style="margin: 0 0 16px; color: #3c434a;">
+		<div class="wps-data-management-container">
+			<p class="wps-data-management-intro">
 				<?php esc_html_e( 'Here\'s what WPShadow has stored about you:', 'wpshadow' ); ?>
 			</p>
 
 			<?php if ( ! empty( $data_points ) ) : ?>
-				<ul style="margin: 0; padding-left: 20px; list-style: disc; color: #3c434a;">
+				<ul class="wps-data-management-list">
 					<?php foreach ( $data_points as $point ) : ?>
 						<li><?php echo esc_html( $point ); ?></li>
 					<?php endforeach; ?>
 				</ul>
 			<?php else : ?>
-				<p style="margin: 16px 0; color: #6b7280; font-style: italic;">
+				<p class="wps-data-management-note">
 					<?php esc_html_e( 'No data stored yet. Start using WPShadow to see your data summary.', 'wpshadow' ); ?>
 				</p>
 			<?php endif; ?>
 
-			<p style="margin: 16px 0 0; font-size: 13px; color: #6b7280;">
+			<p class="wps-data-management-footer">
 				<?php esc_html_e( 'This is everything WPShadow knows about you. No hidden data, no secrets.', 'wpshadow' ); ?>
 			</p>
 		</div>
@@ -490,73 +488,35 @@ class Privacy_Dashboard_Page {
 	 */
 	private static function render_data_actions() {
 		?>
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+		<div class="wps-data-actions-grid">
 			<!-- Export Data -->
-			<div style="padding: 24px; background: #f9fafb; border-radius: 8px; border: 2px solid #e0e0e0;">
-				<h3 style="margin: 0 0 12px; color: #1e1e1e; font-size: 18px;">
-					<span class="dashicons dashicons-download" style="color: #6366F1;"></span>
+			<div class="wps-data-action-card wps-data-action-card-export">
+				<h3>
+					<span class="dashicons dashicons-download"></span>
 					<?php esc_html_e( 'Export Your Data', 'wpshadow' ); ?>
 				</h3>
-				<p style="margin: 0 0 16px; font-size: 14px; color: #6b7280;">
+				<p>
 					<?php esc_html_e( 'Download a complete copy of all your WPShadow data in JSON format.', 'wpshadow' ); ?>
 				</p>
-				<button type="button" class="button button-primary" id="wpshadow-export-data">
+				<button type="button" class="button button-primary" id="wpshadow-export-data-btn">
 					<?php esc_html_e( 'Export Data', 'wpshadow' ); ?>
 				</button>
 			</div>
 
 			<!-- Delete Data -->
-			<div style="padding: 24px; background: #fef2f2; border-radius: 8px; border: 2px solid #fca5a5;">
-				<h3 style="margin: 0 0 12px; color: #1e1e1e; font-size: 18px;">
-					<span class="dashicons dashicons-trash" style="color: #dc2626;"></span>
+			<div class="wps-data-action-card wps-data-action-card-delete">
+				<h3>
+					<span class="dashicons dashicons-trash"></span>
 					<?php esc_html_e( 'Delete Your Data', 'wpshadow' ); ?>
 				</h3>
-				<p style="margin: 0 0 16px; font-size: 14px; color: #6b7280;">
+				<p>
 					<?php esc_html_e( 'Permanently delete all your WPShadow data. This action cannot be undone.', 'wpshadow' ); ?>
 				</p>
-				<button type="button" class="button button-danger" id="wpshadow-delete-data">
+				<button type="button" class="button button-danger" id="wpshadow-delete-data-btn">
 					<?php esc_html_e( 'Delete All Data', 'wpshadow' ); ?>
 				</button>
 			</div>
 		</div>
-
-		<script>
-		jQuery(document).ready(function($) {
-			$('#wpshadow-export-data').on('click', function() {
-				var button = $(this);
-				button.prop('disabled', true).text(wpshadowPrivacy.strings.export_started);
-
-				window.location.href = ajaxurl + '?action=wpshadow_export_data&nonce=' + wpshadowPrivacy.nonce;
-
-				setTimeout(function() {
-					button.prop('disabled', false).text('<?php echo esc_js( __( 'Export Data', 'wpshadow' ) ); ?>');
-				}, 2000);
-			});
-
-			$('#wpshadow-delete-data').on('click', function() {
-				if (!confirm(wpshadowPrivacy.strings.confirm_delete)) {
-					return;
-				}
-
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_delete_data',
-						nonce: wpshadowPrivacy.nonce
-					},
-					success: function(response) {
-						if (response.success) {
-							alert(response.data.message);
-							location.reload();
-						} else {
-							alert(response.data.message);
-						}
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 
@@ -602,9 +562,9 @@ class Privacy_Dashboard_Page {
 							<td><?php echo esc_html( ucfirst( $entry['action'] ) ); ?></td>
 							<td>
 								<?php if ( $entry['telemetry'] ) : ?>
-									<span style="color: #6366F1;">✓ <?php esc_html_e( 'Enabled', 'wpshadow' ); ?></span>
+									<span class="wps-activity-status-enabled">✓ <?php esc_html_e( 'Enabled', 'wpshadow' ); ?></span>
 								<?php else : ?>
-									<span style="color: #6b7280;">○ <?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
+									<span class="wps-activity-status-disabled">○ <?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
 								<?php endif; ?>
 							</td>
 						</tr>
@@ -612,7 +572,7 @@ class Privacy_Dashboard_Page {
 				</tbody>
 			</table>
 		<?php else : ?>
-			<p style="margin: 0; color: #6b7280; font-style: italic;">
+			<p class="wps-activity-log-empty">
 				<?php esc_html_e( 'No consent history available yet.', 'wpshadow' ); ?>
 			</p>
 		<?php endif; ?>
@@ -627,28 +587,28 @@ class Privacy_Dashboard_Page {
 	 */
 	private static function render_third_party_services() {
 		?>
-		<p style="margin: 0 0 16px; color: #3c434a;">
+		<p class="wps-external-services-intro">
 			<?php esc_html_e( 'WPShadow may contact these external services:', 'wpshadow' ); ?>
 		</p>
 
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
-			<div style="padding: 16px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #6366F1;">
-				<strong style="display: block; margin-bottom: 4px; color: #1e1e1e;">wpshadow.com</strong>
-				<p style="margin: 0; font-size: 13px; color: #6b7280;">
+		<div class="wps-external-services-grid">
+			<div class="wps-external-service-card">
+				<strong>wpshadow.com</strong>
+				<p>
 					<?php esc_html_e( 'Knowledge base articles and training videos (when you click links)', 'wpshadow' ); ?>
 				</p>
 			</div>
 
-			<div style="padding: 16px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #8B5CF6;">
-				<strong style="display: block; margin-bottom: 4px; color: #1e1e1e;"><?php esc_html_e( 'WordPress.org', 'wpshadow' ); ?></strong>
-				<p style="margin: 0; font-size: 13px; color: #6b7280;">
+			<div class="wps-external-service-card">
+				<strong><?php esc_html_e( 'WordPress.org', 'wpshadow' ); ?></strong>
+				<p>
 					<?php esc_html_e( 'Plugin updates and version checks (standard WordPress functionality)', 'wpshadow' ); ?>
 				</p>
 			</div>
 		</div>
 
-		<div style="margin-top: 16px; padding: 16px; background: #fffbeb; border-radius: 8px; border: 1px solid #fbbf24;">
-			<p style="margin: 0; font-size: 14px; color: #3c434a;">
+		<div class="wps-external-services-note">
+			<p>
 				<strong><?php esc_html_e( 'Future Pro Features:', 'wpshadow' ); ?></strong>
 				<?php esc_html_e( 'If you enable optional Pro features in the future, some may use external services (cloud scanning, email notifications). We\'ll always ask for your consent first and explain exactly what data is shared.', 'wpshadow' ); ?>
 			</p>

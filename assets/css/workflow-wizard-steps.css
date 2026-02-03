@@ -1,0 +1,151 @@
+/**
+ * Workflow Wizard Steps Styles
+ *
+ * Extracted from includes/views/workflow-wizard-steps/*.php
+ *
+ * @package WPShadow
+ */
+
+/* Summary Sections */
+.summary-section {
+	margin-bottom: var(--wps-space-6);
+	padding: var(--wps-space-5);
+	border-bottom: 1px solid var(--wps-border-color);
+}
+
+.summary-section:last-child {
+	margin-bottom: 0;
+	border-bottom: none;
+}
+
+.summary-section h3 {
+	margin: 0 0 var(--wps-space-3) 0;
+	font-size: var(--wps-text-sm);
+	text-transform: uppercase;
+	color: var(--wps-gray-600);
+	font-weight: 600;
+	letter-spacing: 0.05em;
+}
+
+.summary-content {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--wps-space-4);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-md);
+}
+
+.summary-icon {
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--wps-primary);
+	border-radius: var(--wps-radius-md);
+	color: #fff;
+}
+
+.summary-icon .dashicons {
+	width: 24px;
+	height: 24px;
+	font-size: 24px;
+}
+
+.summary-text {
+	flex: 1;
+}
+
+.summary-title {
+	font-weight: 600;
+	font-size: var(--wps-text-base);
+	margin-bottom: var(--wps-space-1);
+	color: var(--wps-gray-900);
+}
+
+.summary-description {
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
+}
+
+.summary-config {
+	margin-top: var(--wps-space-2);
+	padding: var(--wps-space-2);
+	background: #fff;
+	border-radius: var(--wps-radius-sm);
+	font-size: var(--wps-text-xs);
+	font-family: monospace;
+	color: var(--wps-gray-700);
+}
+
+.action-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wps-space-3);
+}
+
+.action-item {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--wps-space-3);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-md);
+	border-left: 3px solid var(--wps-success-dark);
+}
+
+.action-number {
+	flex-shrink: 0;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--wps-success-dark);
+	color: #fff;
+	border-radius: 50%;
+	font-weight: 600;
+	font-size: var(--wps-text-sm);
+}
+
+/* Save Result Messages */
+.save-result.success {
+	display: block !important;
+	padding: var(--wps-space-4);
+	background: var(--wps-success-lightest);
+	border: 1px solid var(--wps-success-dark);
+	border-radius: var(--wps-radius-md);
+	margin-top: var(--wps-space-4);
+	color: var(--wps-success-dark);
+	font-weight: 600;
+}
+
+.save-result.error {
+	display: block !important;
+	padding: var(--wps-space-4);
+	background: var(--wps-danger-lightest);
+	border: 1px solid var(--wps-danger-dark);
+	border-radius: var(--wps-radius-md);
+	margin-top: var(--wps-space-4);
+	color: var(--wps-danger-dark);
+	font-weight: 600;
+}
+
+/* Spacing utilities for workflow cards */
+.wps-form-actions {
+	margin-top: var(--wps-space-6);
+	padding-top: var(--wps-space-4);
+	border-top: 1px solid var(--wps-border-color);
+	display: flex;
+	gap: var(--wps-space-3);
+}
+
+.wps-card {
+	margin-top: var(--wps-space-6);
+}
+
+.wps-card-body {
+	margin-top: var(--wps-space-6);
+}

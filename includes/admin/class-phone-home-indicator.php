@@ -192,8 +192,8 @@ class Phone_Home_Indicator {
 
 		?>
 		<div class="notice notice-info is-dismissible wpshadow-phone-home-indicator">
-			<p style="display: flex; align-items: center; gap: 10px; margin: 0.5em 0;">
-				<span class="dashicons dashicons-admin-site-alt3" style="color: #6366F1; font-size: 20px; animation: wpshadowPulse 2s infinite;"></span>
+			<p class="wps-phone-home-indicator">
+				<span class="dashicons dashicons-admin-site-alt3 wps-phone-home-icon"></span>
 				<strong><?php esc_html_e( 'Network Activity:', 'wpshadow' ); ?></strong>
 				<?php
 				printf(
@@ -202,22 +202,15 @@ class Phone_Home_Indicator {
 					esc_html( $recent_count )
 				);
 				?>
-				<button type="button" class="button button-small" id="wpshadow-view-connections" style="margin-left: auto;">
+				<button type="button" class="button button-small wps-phone-home-view-btn" id="wpshadow-view-connections">
 					<?php esc_html_e( 'View Details', 'wpshadow' ); ?>
 				</button>
 			</p>
 		</div>
 
-		<div id="wpshadow-connections-modal" style="display: none;">
+		<div id="wpshadow-connections-modal" class="wps-phone-home-modal">
 			<!-- Modal rendered via JavaScript -->
 		</div>
-
-		<style>
-		@keyframes wpshadowPulse {
-			0%, 100% { opacity: 1; }
-			50% { opacity: 0.5; }
-		}
-		</style>
 		<?php
 	}
 
@@ -234,127 +227,34 @@ class Phone_Home_Indicator {
 			return;
 		}
 
-		wp_add_inline_script( 'jquery', self::get_indicator_js() );
+		wp_enqueue_style(
+			'wpshadow-phone-home',
+			WPSHADOW_URL . 'assets/css/phone-home-indicator.css',
+			array(),
+			WPSHADOW_VERSION
+		);
 
-		wp_localize_script( 'jquery', 'wpshadowPhoneHome', array(
-			'nonce'    => wp_create_nonce( 'wpshadow_phone_home' ),
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'strings'  => array(
-				'loading'     => __( 'Loading connection details...', 'wpshadow' ),
-				'no_data'     => __( 'No recent connections found.', 'wpshadow' ),
-				'modal_title' => __( 'Recent Network Activity', 'wpshadow' ),
-			),
-		) );
-	}
+		wp_enqueue_script(
+			'wpshadow-phone-home',
+			WPSHADOW_URL . 'assets/js/phone-home-indicator.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
 
-	/**
-	 * Get indicator JavaScript.
-	 *
-	 * @since  1.2604.0200
-	 * @return string JavaScript code.
-	 */
-	private static function get_indicator_js() {
-		return <<<JS
-jQuery(document).ready(function($) {
-	$('#wpshadow-view-connections').on('click', function(e) {
-		e.preventDefault();
-
-		// Show loading modal
-		var modal = $('<div>', {
-			id: 'wpshadow-connections-modal-overlay',
-			css: {
-				position: 'fixed',
-				top: 0,
-				left: 0,
-				right: 0,
-				bottom: 0,
-				background: 'rgba(0,0,0,0.7)',
-				zIndex: 999999,
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center'
-			}
-		});
-
-		var container = $('<div>', {
-			css: {
-				background: 'white',
-				borderRadius: '8px',
-				padding: '24px',
-				maxWidth: '700px',
-				maxHeight: '80vh',
-				overflow: 'auto',
-				boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
-			}
-		});
-
-		container.append('<h2>' + wpshadowPhoneHome.strings.modal_title + '</h2>');
-		container.append('<p>' + wpshadowPhoneHome.strings.loading + '</p>');
-
-		modal.append(container);
-		$('body').append(modal);
-
-		// Close on overlay click
-		modal.on('click', function(e) {
-			if (e.target === this) {
-				$(this).fadeOut(200, function() { $(this).remove(); });
-			}
-		});
-
-		// Fetch connections
-		$.ajax({
-			url: wpshadowPhoneHome.ajax_url,
-			type: 'POST',
-			data: {
-				action: 'wpshadow_get_recent_connections',
-				nonce: wpshadowPhoneHome.nonce
-			},
-			success: function(response) {
-				if (response.success && response.data.connections) {
-					var html = '<div style="margin-top: 16px;">';
-
-					if (response.data.connections.length === 0) {
-						html += '<p style="color: #6b7280; font-style: italic;">' + wpshadowPhoneHome.strings.no_data + '</p>';
-					} else {
-						html += '<table class="wp-list-table widefat fixed striped" style="margin-top: 16px;">';
-						html += '<thead><tr>';
-						html += '<th>' + 'Time' + '</th>';
-						html += '<th>' + 'Domain' + '</th>';
-						html += '<th>' + 'Purpose' + '</th>';
-						html += '</tr></thead><tbody>';
-
-						$.each(response.data.connections, function(i, conn) {
-							var timeAgo = new Date(conn.timestamp).toLocaleTimeString();
-							html += '<tr>';
-							html += '<td>' + timeAgo + '</td>';
-							html += '<td><code>' + conn.domain + '</code></td>';
-							html += '<td>' + conn.purpose + '</td>';
-							html += '</tr>';
-						});
-
-						html += '</tbody></table>';
-					}
-
-					html += '<div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e0e0e0;">';
-					html += '<p style="font-size: 13px; color: #6b7280;">';
-					html += 'WPShadow is committed to transparency. All outbound connections are logged and visible to you. ';
-					html += 'Visit <strong>WPShadow → Privacy</strong> to manage your data collection preferences.';
-					html += '</p>';
-					html += '<button type="button" class="button button-primary" id="wpshadow-close-modal">Close</button>';
-					html += '</div>';
-					html += '</div>';
-
-					container.html('<h2>' + wpshadowPhoneHome.strings.modal_title + '</h2>' + html);
-
-					$('#wpshadow-close-modal').on('click', function() {
-						modal.fadeOut(200, function() { $(this).remove(); });
-					});
-				}
-			}
-		});
-	});
-});
-JS;
+		wp_localize_script(
+			'wpshadow-phone-home',
+			'wpshadowPhoneHome',
+			array(
+				'nonce'    => wp_create_nonce( 'wpshadow_phone_home' ),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'strings'  => array(
+					'loading'     => __( 'Loading connection details...', 'wpshadow' ),
+					'no_data'     => __( 'No recent connections found.', 'wpshadow' ),
+					'modal_title' => __( 'Recent Network Activity', 'wpshadow' ),
+				),
+			)
+		);
 	}
 
 	/**

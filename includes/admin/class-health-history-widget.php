@@ -34,6 +34,28 @@ class Health_History_Widget {
 	 */
 	public static function init() {
 		add_action( 'wpshadow_dashboard_widgets', array( __CLASS__, 'render_widget' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+	}
+
+	/**
+	 * Enqueue widget assets.
+	 *
+	 * @since  1.2604.0300
+	 * @param  string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_assets( $hook ) {
+		// Only on WPShadow main dashboard.
+		if ( 'toplevel_page_wpshadow' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wpshadow-health-widget',
+			WPSHADOW_URL . 'assets/css/health-history-widget.css',
+			array( 'wpshadow-admin' ),
+			WPSHADOW_VERSION
+		);
 	}
 
 	/**
@@ -103,73 +125,6 @@ class Health_History_Widget {
 				</div>
 			</div>
 		</div>
-
-		<style>
-		.wpshadow-health-widget {
-			background: #fff;
-			border: 1px solid #ddd;
-			border-radius: 8px;
-			padding: 20px;
-			margin-bottom: 20px;
-		}
-
-		.wpshadow-health-widget .widget-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 15px;
-		}
-
-		.wpshadow-health-widget h3 {
-			margin: 0;
-			font-size: 1.1em;
-		}
-
-		.health-change {
-			font-weight: bold;
-			font-size: 1.2em;
-		}
-
-		.health-change.positive {
-			color: #00a32a;
-		}
-
-		.health-change.negative {
-			color: #d63638;
-		}
-
-		.health-change.neutral {
-			color: #666;
-		}
-
-		.health-score-large {
-			font-size: 3em;
-			font-weight: bold;
-			color: #2271b1;
-			text-align: center;
-			margin: 15px 0;
-		}
-
-		.score-label {
-			font-size: 0.5em;
-			color: #666;
-		}
-
-		.health-sparkline {
-			text-align: center;
-			margin: 15px 0;
-		}
-
-		.health-sparkline svg {
-			max-width: 100%;
-			height: auto;
-		}
-
-		.wpshadow-health-widget .widget-footer {
-			text-align: center;
-			margin-top: 15px;
-		}
-		</style>
 		<?php
 	}
 }

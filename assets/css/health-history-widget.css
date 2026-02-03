@@ -1,0 +1,89 @@
+/**
+ * Health History Widget Styles
+ *
+ * @package WPShadow
+ * @since   1.2604.0300
+ */
+
+.wpshadow-health-widget {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.wpshadow-health-widget .widget-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.wpshadow-health-widget h3 {
+	margin: 0;
+	font-size: 1.1em;
+}
+
+.health-change {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.health-change.positive {
+	color: #00a32a;
+}
+
+.health-change.negative {
+	color: #d63638;
+}
+
+.health-change.neutral {
+	color: #999;
+}
+
+.health-trend-container {
+	margin: 15px 0;
+	position: relative;
+	height: 120px;
+}
+
+.health-sparkline {
+	width: 100%;
+	height: 100%;
+}
+
+.health-stats-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+	margin-top: 15px;
+}
+
+.health-stat {
+	text-align: center;
+	padding: 10px;
+	background: #f9f9f9;
+	border-radius: 4px;
+}
+
+.health-stat-label {
+	display: block;
+	font-size: 0.85em;
+	color: #666;
+	margin-bottom: 5px;
+}
+
+.health-stat-value {
+	display: block;
+	font-size: 1.3em;
+	font-weight: bold;
+	color: #333;
+}
+
+.widget-actions {
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid #eee;
+	text-align: center;
+}
