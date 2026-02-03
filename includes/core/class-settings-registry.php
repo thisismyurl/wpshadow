@@ -937,4 +937,30 @@ class Settings_Registry {
 		// De-duplicate
 		return array_values( array_unique( $sanitized ) );
 	}
+
+	// =================================================================
+	// POST TYPES SETTINGS
+	// =================================================================
+
+	/**
+	 * Get active post types.
+	 *
+	 * @since  1.26033.1530
+	 * @return array Active post type keys.
+	 */
+	public static function get_active_post_types(): array {
+		return get_option( 'wpshadow_active_post_types', array() );
+	}
+
+	/**
+	 * Set active post types.
+	 *
+	 * @since  1.26033.1530
+	 * @param  array $post_types Active post type keys.
+	 * @return bool Whether the update succeeded.
+	 */
+	public static function set_active_post_types( array $post_types ): bool {
+		return update_option( 'wpshadow_active_post_types', $post_types, false );
+	}
 }
+

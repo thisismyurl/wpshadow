@@ -1,0 +1,1105 @@
+/**
+ * WPShadow Blocks Styles
+ *
+ * Frontend and editor styles for all custom blocks.
+ *
+ * @package WPShadow
+ * @since   1.6034.1500
+ */
+
+/* ==========================================================================
+   Pricing Table Block
+   ========================================================================== */
+.wpshadow-pricing-table {
+	display: grid;
+	gap: 2rem;
+	margin: 2rem 0;
+}
+
+.wpshadow-pricing-2-col { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.wpshadow-pricing-3-col { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.wpshadow-pricing-4-col { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+.wpshadow-pricing-plan {
+	position: relative;
+	background: #fff;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 2rem;
+	text-align: center;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wpshadow-pricing-plan:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.wpshadow-pricing-plan.wpshadow-featured {
+	border-color: #1e40af;
+	border-width: 3px;
+	transform: scale(1.05);
+}
+
+.wpshadow-featured-badge {
+	position: absolute;
+	top: -12px;
+	right: 20px;
+	background: #1e40af;
+	color: #fff;
+	padding: 4px 16px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.wpshadow-plan-title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 0 0 1rem;
+	color: #1f2937;
+}
+
+.wpshadow-plan-price {
+	margin: 1.5rem 0;
+	font-size: 3rem;
+	font-weight: 800;
+	color: #1e40af;
+	line-height: 1;
+}
+
+.wpshadow-currency {
+	font-size: 1.5rem;
+	vertical-align: super;
+}
+
+.wpshadow-period {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 400;
+	color: #6b7280;
+	margin-top: 0.5rem;
+}
+
+.wpshadow-plan-features {
+	list-style: none;
+	padding: 0;
+	margin: 2rem 0;
+	text-align: left;
+}
+
+.wpshadow-plan-features li {
+	padding: 0.75rem 0;
+	border-bottom: 1px solid #f3f4f6;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.wpshadow-plan-features li:last-child {
+	border-bottom: none;
+}
+
+.wpshadow-plan-features .dashicons {
+	color: #10b981;
+	flex-shrink: 0;
+}
+
+.wpshadow-plan-button {
+	display: inline-block;
+	background: #1e40af;
+	color: #fff;
+	padding: 1rem 2rem;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: background 0.2s ease;
+}
+
+.wpshadow-plan-button:hover,
+.wpshadow-plan-button:focus {
+	background: #1e3a8a;
+	color: #fff;
+	text-decoration: none;
+}
+
+.wpshadow-featured .wpshadow-plan-button {
+	background: #1e40af;
+	box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+}
+
+/* ==========================================================================
+   FAQ Accordion Block
+   ========================================================================== */
+.wpshadow-faq-accordion {
+	margin: 2rem 0;
+}
+
+.wpshadow-faq-item {
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	margin-bottom: 1rem;
+	overflow: hidden;
+}
+
+.wpshadow-faq-question {
+	width: 100%;
+	background: #f9fafb;
+	border: none;
+	padding: 1.25rem 1.5rem;
+	text-align: left;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: #1f2937;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	transition: background 0.2s ease;
+}
+
+.wpshadow-faq-question:hover {
+	background: #f3f4f6;
+}
+
+.wpshadow-faq-question:focus {
+	outline: 2px solid #1e40af;
+	outline-offset: -2px;
+}
+
+.wpshadow-faq-icon {
+	transition: transform 0.3s ease;
+	flex-shrink: 0;
+}
+
+.wpshadow-open .wpshadow-faq-icon {
+	transform: rotate(180deg);
+}
+
+.wpshadow-icon-plus .wpshadow-open .wpshadow-faq-icon {
+	transform: rotate(45deg);
+}
+
+.wpshadow-faq-answer {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease;
+}
+
+.wpshadow-faq-item.wpshadow-open .wpshadow-faq-answer {
+	max-height: 1000px;
+}
+
+.wpshadow-faq-answer-content {
+	padding: 1.5rem;
+	color: #4b5563;
+	line-height: 1.6;
+}
+
+/* ==========================================================================
+   CTA Block
+   ========================================================================== */
+.wpshadow-cta-block {
+	padding: 4rem 2rem;
+	border-radius: 16px;
+	margin: 2rem 0;
+	text-align: center;
+}
+
+.wpshadow-cta-centered {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wpshadow-cta-title {
+	font-size: 2.5rem;
+	font-weight: 800;
+	margin: 0 0 1rem;
+}
+
+.wpshadow-cta-description {
+	font-size: 1.25rem;
+	margin: 0 0 2rem;
+	opacity: 0.9;
+}
+
+.wpshadow-cta-buttons {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.wpshadow-cta-button {
+	display: inline-block;
+	padding: 1rem 2.5rem;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 1.125rem;
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.wpshadow-cta-button.wpshadow-primary {
+	background: #fff;
+	color: #1e40af;
+}
+
+.wpshadow-cta-button.wpshadow-primary:hover {
+	background: #f3f4f6;
+	transform: translateY(-2px);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.wpshadow-cta-button.wpshadow-secondary {
+	background: transparent;
+	color: inherit;
+	border: 2px solid currentColor;
+}
+
+.wpshadow-cta-button.wpshadow-secondary:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Icon Box Block
+   ========================================================================== */
+.wpshadow-icon-box {
+	padding: 2rem;
+	margin: 1rem 0;
+}
+
+.wpshadow-icon-wrapper {
+	width: 80px;
+	height: 80px;
+	border-radius: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 0 1.5rem;
+	font-size: 2rem;
+}
+
+.wpshadow-align-center .wpshadow-icon-wrapper {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wpshadow-icon-left {
+	display: flex;
+	gap: 1.5rem;
+	align-items: flex-start;
+}
+
+.wpshadow-icon-left .wpshadow-icon-wrapper {
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.wpshadow-align-center {
+	text-align: center;
+}
+
+.wpshadow-icon-title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 0 0 1rem;
+	color: #1f2937;
+}
+
+.wpshadow-icon-description {
+	color: #6b7280;
+	line-height: 1.6;
+	margin: 0 0 1rem;
+}
+
+.wpshadow-icon-link {
+	color: #1e40af;
+	text-decoration: none;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	transition: gap 0.2s ease;
+}
+
+.wpshadow-icon-link:hover {
+	gap: 0.5rem;
+}
+
+/* ==========================================================================
+   Timeline Block
+   ========================================================================== */
+.wpshadow-timeline {
+	position: relative;
+	padding: 2rem 0;
+	margin: 2rem 0;
+}
+
+.wpshadow-timeline-vertical::before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: var(--timeline-color, #1e40af);
+	transform: translateX(-50%);
+}
+
+.wpshadow-timeline-item {
+	position: relative;
+	padding: 0 0 3rem 0;
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+}
+
+.wpshadow-timeline-marker {
+	width: 20px;
+	height: 20px;
+	background: var(--timeline-color, #1e40af);
+	border: 4px solid #fff;
+	border-radius: 50%;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1;
+	box-shadow: 0 0 0 4px var(--timeline-color, #1e40af);
+}
+
+.wpshadow-timeline-content {
+	flex: 0 0 45%;
+	background: #fff;
+	padding: 1.5rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.wpshadow-position-right .wpshadow-timeline-content {
+	margin-left: auto;
+}
+
+.wpshadow-timeline-date {
+	display: inline-block;
+	background: var(--timeline-color, #1e40af);
+	color: #fff;
+	padding: 0.25rem 0.75rem;
+	border-radius: 4px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+}
+
+.wpshadow-timeline-title {
+	font-size: 1.25rem;
+	font-weight: 700;
+	margin: 0 0 0.5rem;
+}
+
+.wpshadow-timeline-description {
+	color: #6b7280;
+	line-height: 1.6;
+	margin: 0;
+}
+
+/* ==========================================================================
+   Before/After Slider Block
+   ========================================================================== */
+.wpshadow-before-after {
+	position: relative;
+	margin: 2rem 0;
+	overflow: hidden;
+	border-radius: 8px;
+}
+
+.wpshadow-ba-container {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+}
+
+.wpshadow-ba-before,
+.wpshadow-ba-after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.wpshadow-ba-before img,
+.wpshadow-ba-after img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.wpshadow-ba-label {
+	position: absolute;
+	top: 1rem;
+	background: rgba(0, 0, 0, 0.7);
+	color: #fff;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	font-weight: 600;
+	font-size: 0.875rem;
+}
+
+.wpshadow-ba-label-before {
+	left: 1rem;
+}
+
+.wpshadow-ba-label-after {
+	right: 1rem;
+}
+
+.wpshadow-ba-slider {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+	background: #fff;
+	cursor: ew-resize;
+	z-index: 10;
+}
+
+.wpshadow-ba-slider-button {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 48px;
+	height: 48px;
+	background: #fff;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	color: #1e40af;
+	font-size: 24px;
+}
+
+/* ==========================================================================
+   Stats Counter Block
+   ========================================================================== */
+.wpshadow-stats-counter {
+	display: grid;
+	gap: 2rem;
+	margin: 2rem 0;
+	text-align: center;
+}
+
+.wpshadow-stats-2-col { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.wpshadow-stats-3-col { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.wpshadow-stats-4-col { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+.wpshadow-stat-item {
+	padding: 2rem;
+	background: #f9fafb;
+	border-radius: 8px;
+}
+
+.wpshadow-stat-icon {
+	font-size: 3rem;
+	color: var(--counter-color, #1e40af);
+	margin-bottom: 1rem;
+}
+
+.wpshadow-stat-number {
+	font-size: 3rem;
+	font-weight: 800;
+	color: var(--counter-color, #1e40af);
+	line-height: 1;
+	margin-bottom: 0.5rem;
+}
+
+.wpshadow-stat-label {
+	color: #6b7280;
+	font-weight: 600;
+}
+
+/* ==========================================================================
+   Logo Grid Block
+   ========================================================================== */
+.wpshadow-logo-grid {
+	margin: 2rem 0;
+}
+
+.wpshadow-logo-container {
+	display: grid;
+	gap: 2rem;
+	align-items: center;
+}
+
+.wpshadow-cols-3 .wpshadow-logo-container { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.wpshadow-cols-4 .wpshadow-logo-container { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.wpshadow-cols-5 .wpshadow-logo-container { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+
+.wpshadow-logo-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+}
+
+.wpshadow-logo-item img {
+	max-width: 100%;
+	height: auto;
+	transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.wpshadow-grayscale .wpshadow-logo-item img {
+	filter: grayscale(100%);
+	opacity: 0.6;
+}
+
+.wpshadow-grayscale .wpshadow-logo-item:hover img {
+	filter: grayscale(0%);
+	opacity: 1;
+}
+
+/* ==========================================================================
+   Countdown Timer Block
+   ========================================================================== */
+.wpshadow-countdown {
+	text-align: center;
+	margin: 2rem 0;
+	padding: 2rem;
+}
+
+.wpshadow-countdown-title {
+	font-size: 2rem;
+	font-weight: 700;
+	margin: 0 0 2rem;
+}
+
+.wpshadow-countdown-timer {
+	display: flex;
+	gap: 1.5rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.wpshadow-countdown-unit {
+	background: var(--accent-color, #1e40af);
+	color: #fff;
+	padding: 1.5rem;
+	border-radius: 8px;
+	min-width: 100px;
+}
+
+.wpshadow-style-boxes .wpshadow-countdown-unit {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.wpshadow-countdown-number {
+	display: block;
+	font-size: 3rem;
+	font-weight: 800;
+	line-height: 1;
+	margin-bottom: 0.5rem;
+}
+
+.wpshadow-countdown-label {
+	display: block;
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	opacity: 0.9;
+}
+
+/* ==========================================================================
+   Content Tabs Block
+   ========================================================================== */
+.wpshadow-content-tabs {
+	margin: 2rem 0;
+}
+
+.wpshadow-tab-list {
+	display: flex;
+	gap: 0.5rem;
+	border-bottom: 2px solid #e5e7eb;
+	margin-bottom: 2rem;
+	flex-wrap: wrap;
+}
+
+.wpshadow-tab-button {
+	background: transparent;
+	border: none;
+	padding: 1rem 1.5rem;
+	font-size: 1rem;
+	font-weight: 600;
+	color: #6b7280;
+	cursor: pointer;
+	border-bottom: 3px solid transparent;
+	transition: all 0.2s ease;
+	margin-bottom: -2px;
+}
+
+.wpshadow-tab-button:hover {
+	color: #1f2937;
+}
+
+.wpshadow-tab-button.wpshadow-active {
+	color: var(--tab-accent-color, #1e40af);
+	border-bottom-color: var(--tab-accent-color, #1e40af);
+}
+
+.wpshadow-tab-button:focus {
+	outline: 2px solid var(--tab-accent-color, #1e40af);
+	outline-offset: 2px;
+}
+
+.wpshadow-tab-panel {
+	padding: 1.5rem 0;
+	line-height: 1.6;
+}
+
+/* ==========================================================================
+   Alert Notice Block
+   ========================================================================== */
+.wpshadow-alert {
+	display: flex;
+	gap: 1rem;
+	padding: 1rem 1.5rem;
+	border-radius: 8px;
+	margin: 1rem 0;
+	position: relative;
+}
+
+.wpshadow-alert-info {
+	background: #eff6ff;
+	border-left: 4px solid #3b82f6;
+	color: #1e40af;
+}
+
+.wpshadow-alert-success {
+	background: #f0fdf4;
+	border-left: 4px solid #10b981;
+	color: #047857;
+}
+
+.wpshadow-alert-warning {
+	background: #fffbeb;
+	border-left: 4px solid #f59e0b;
+	color: #92400e;
+}
+
+.wpshadow-alert-error {
+	background: #fef2f2;
+	border-left: 4px solid #ef4444;
+	color: #991b1b;
+}
+
+.wpshadow-alert-icon {
+	flex-shrink: 0;
+	font-size: 24px;
+}
+
+.wpshadow-alert-content {
+	flex: 1;
+}
+
+.wpshadow-alert-title {
+	display: block;
+	margin-bottom: 0.25rem;
+}
+
+.wpshadow-alert-message {
+	opacity: 0.9;
+}
+
+.wpshadow-alert-dismiss {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	color: inherit;
+	opacity: 0.6;
+	transition: opacity 0.2s ease;
+}
+
+.wpshadow-alert-dismiss:hover {
+	opacity: 1;
+}
+
+/* ==========================================================================
+   Progress Bar Block
+   ========================================================================== */
+.wpshadow-progress-bars {
+	margin: 2rem 0;
+}
+
+.wpshadow-progress-item {
+	margin-bottom: 1.5rem;
+}
+
+.wpshadow-progress-header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+}
+
+.wpshadow-progress-label {
+	color: #1f2937;
+}
+
+.wpshadow-progress-percentage {
+	color: #6b7280;
+}
+
+.wpshadow-progress-track {
+	background: #e5e7eb;
+	border-radius: 999px;
+	overflow: hidden;
+	height: var(--bar-height, 20px);
+}
+
+.wpshadow-progress-fill {
+	background: var(--bar-color, #1e40af);
+	height: 100%;
+	border-radius: 999px;
+	transition: width 1s ease;
+}
+
+.wpshadow-style-striped .wpshadow-progress-fill {
+	background-image: linear-gradient(
+		45deg,
+		rgba(255, 255, 255, 0.15) 25%,
+		transparent 25%,
+		transparent 50%,
+		rgba(255, 255, 255, 0.15) 50%,
+		rgba(255, 255, 255, 0.15) 75%,
+		transparent 75%,
+		transparent
+	);
+	background-size: 1rem 1rem;
+}
+
+.wpshadow-style-animated .wpshadow-progress-fill {
+	animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+	from { background-position: 0 0; }
+	to { background-position: 1rem 0; }
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+@media (max-width: 768px) {
+	.wpshadow-pricing-table,
+	.wpshadow-stats-counter,
+	.wpshadow-logo-container {
+		grid-template-columns: 1fr;
+	}
+	
+	.wpshadow-cta-title {
+		font-size: 2rem;
+	}
+	
+	.wpshadow-cta-buttons {
+		flex-direction: column;
+	}
+	
+	.wpshadow-timeline-vertical::before {
+		left: 20px;
+	}
+	
+	.wpshadow-timeline-marker {
+		left: 20px;
+	}
+	
+	.wpshadow-timeline-content {
+		flex: 1;
+		margin-left: 60px !important;
+	}
+	
+	.wpshadow-countdown-timer {
+		gap: 1rem;
+	}
+	
+	.wpshadow-countdown-unit {
+		min-width: 80px;
+		padding: 1rem;
+	}
+	
+	.wpshadow-countdown-number {
+		font-size: 2rem;
+	}
+}
+
+/* ==========================================================================
+   Advanced Features & Animations
+   ========================================================================== */
+
+/* Pricing Table Toggle */
+.wpshadow-pricing-toggle {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	margin: 2rem 0;
+	padding: 0.5rem;
+	background: #f3f4f6;
+	border-radius: 50px;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wpshadow-pricing-toggle__option {
+	padding: 0.75rem 2rem;
+	border: none;
+	background: transparent;
+	border-radius: 50px;
+	cursor: pointer;
+	font-weight: 600;
+	transition: all 0.3s ease;
+	color: #6b7280;
+}
+
+.wpshadow-pricing-toggle__option.is-active {
+	background: #fff;
+	color: #1e40af;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wpshadow-plan-price {
+	transition: opacity 0.15s ease;
+}
+
+/* FAQ Search */
+.wpshadow-faq-search {
+	width: 100%;
+	padding: 1rem 1.5rem;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	font-size: 1rem;
+	margin-bottom: 2rem;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wpshadow-faq-search:focus {
+	outline: none;
+	border-color: #1e40af;
+	box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+.wpshadow-faq-no-results {
+	text-align: center;
+	padding: 3rem;
+	color: #6b7280;
+	font-style: italic;
+}
+
+/* Before/After Zoom */
+.wpshadow-before-after.is-zoomed {
+	transform: scale(1.5);
+	cursor: zoom-out;
+	z-index: 999;
+	position: relative;
+	transition: transform 0.3s ease;
+}
+
+.wpshadow-before-after {
+	cursor: zoom-in;
+}
+
+/* Stats Counter Milestone */
+.wpshadow-stat.milestone-reached {
+	animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.1); }
+}
+
+/* Logo Tooltips */
+.wpshadow-logo-item {
+	position: relative;
+}
+
+.wpshadow-logo-tooltip {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-10px);
+	background: #1f2937;
+	color: #fff;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	font-size: 0.875rem;
+	white-space: nowrap;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	z-index: 100;
+	max-width: 200px;
+	white-space: normal;
+}
+
+.wpshadow-logo-tooltip::after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 6px solid transparent;
+	border-top-color: #1f2937;
+}
+
+.wpshadow-logo-tooltip.is-visible {
+	opacity: 1;
+	transform: translateX(-50%) translateY(0);
+}
+
+/* Countdown Milestone Alert */
+.wpshadow-countdown.milestone-alert {
+	animation: glow 0.5s ease-in-out 4;
+}
+
+@keyframes glow {
+	0%, 100% { box-shadow: 0 0 0 rgba(30, 64, 175, 0); }
+	50% { box-shadow: 0 0 20px rgba(30, 64, 175, 0.6); }
+}
+
+/* Alert Progress Bar */
+.wpshadow-alert {
+	position: relative;
+	overflow: hidden;
+}
+
+.wpshadow-alert__progress {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 3px;
+	width: 100%;
+	background: currentColor;
+	opacity: 0.3;
+	transition: width linear;
+}
+
+/* Progress Bar Confetti */
+.wpshadow-progress-bar {
+	position: relative;
+	overflow: visible;
+}
+
+.wpshadow-progress-bar.completed .wpshadow-progress-fill {
+	animation: celebrate 0.6s ease-in-out;
+}
+
+@keyframes celebrate {
+	0%, 100% { transform: scaleY(1); }
+	50% { transform: scaleY(1.2); }
+}
+
+.wpshadow-confetti {
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	bottom: 100%;
+	animation: confetti-fall 2s ease-out forwards;
+	pointer-events: none;
+}
+
+@keyframes confetti-fall {
+	0% {
+		transform: translateY(0) rotate(0deg);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(100px) rotate(360deg);
+		opacity: 0;
+	}
+}
+
+/* Animated Gradient Backgrounds */
+.wpshadow-cta.wpshadow-layout-banner {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background-size: 200% 200%;
+	animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+	0%, 100% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+}
+
+/* Hover Effects Enhancement */
+.wpshadow-icon-box {
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wpshadow-icon-box:hover {
+	transform: translateY(-10px) scale(1.02);
+}
+
+.wpshadow-icon-box .dashicons {
+	transition: transform 0.4s ease;
+}
+
+.wpshadow-icon-box:hover .dashicons {
+	transform: rotate(360deg) scale(1.2);
+}
+
+/* Timeline Scroll Animation */
+.wpshadow-timeline-item {
+	opacity: 0;
+	transform: translateY(30px);
+	animation: fade-in-up 0.6s ease forwards;
+}
+
+.wpshadow-timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.wpshadow-timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.wpshadow-timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.wpshadow-timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.wpshadow-timeline-item:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fade-in-up {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Smooth Transitions */
+* {
+	scroll-behavior: smooth;
+}
+
+/* Loading States */
+.wpshadow-block-loading {
+	position: relative;
+	pointer-events: none;
+	opacity: 0.6;
+}
+
+.wpshadow-block-loading::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 40px;
+	height: 40px;
+	margin: -20px 0 0 -20px;
+	border: 4px solid #e5e7eb;
+	border-top-color: #1e40af;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}

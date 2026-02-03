@@ -112,6 +112,16 @@ class Menu_Manager {
 			'wpshadow_render_settings'
 		);
 
+		// Post Types (Custom Post Type Management)
+		add_submenu_page(
+			'wpshadow',
+			__( 'Post Types', 'wpshadow' ),
+			__( 'Post Types', 'wpshadow' ),
+			'manage_options',
+			'wpshadow-post-types',
+			array( 'WPShadow\Admin\Post_Types_Page', 'render_page' )
+		);
+
 		// Scan Settings is now a tab on Settings page, not a separate menu
 		// Legacy redirect handled in handle_legacy_redirects()
 

@@ -116,6 +116,64 @@ require_once WPSHADOW_PATH . 'includes/privacy/class-first-run-consent.php';
 // Load AJAX handlers (requires privacy classes to be loaded first)
 require_once WPSHADOW_PATH . 'includes/admin/ajax/ajax-handlers-loader.php';
 
+// Load Post Types Manager
+require_once WPSHADOW_PATH . 'includes/content/class-post-types-manager.php';
+require_once WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+require_once WPSHADOW_PATH . 'includes/admin/ajax/class-ajax-toggle-post-type.php';
+require_once WPSHADOW_PATH . 'includes/content/class-post-types-blocks.php';
+require_once WPSHADOW_PATH . 'includes/content/block-category.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-custom-fields.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-schema-markup.php';
+require_once WPSHADOW_PATH . 'includes/content/class-sample-content-generator.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-block-patterns.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-drag-drop-ordering.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-live-preview.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-conditional-display.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-analytics-dashboard.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-inline-editing.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-block-presets.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-ai-content.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-multi-language.php';
+require_once WPSHADOW_PATH . 'includes/content/class-cpt-version-history.php';
+\WPShadow\Content\Post_Types_Manager::init();
+\WPShadow\Admin\Post_Types_Page::init();
+\WPShadow\Content\Post_Types_Blocks::init();
+\WPShadow\Content\CPT_Custom_Fields::init();
+\WPShadow\Content\CPT_Schema_Markup::init();
+\WPShadow\Content\Sample_Content_Generator::init();
+\WPShadow\Content\CPT_Block_Patterns::init();
+\WPShadow\Content\CPT_Drag_Drop_Ordering::init();
+\WPShadow\Content\CPT_Live_Preview::init();
+\WPShadow\Content\CPT_Conditional_Display::init();
+\WPShadow\Content\CPT_Analytics_Dashboard::init();
+\WPShadow\Content\CPT_Inline_Editing::init();
+\WPShadow\Content\CPT_Block_Presets::init();
+\WPShadow\Content\CPT_AI_Content::init();
+\WPShadow\Content\CPT_Multi_Language::init();
+\WPShadow\Content\CPT_Version_History::init();
+
+// Load Modal System (CPT + Block + Rules Engine)
+require_once WPSHADOW_PATH . 'includes/content/class-modal-post-type.php';
+require_once WPSHADOW_PATH . 'includes/content/class-modal-block.php';
+\WPShadow\Content\Modal_Post_Type::init();
+\WPShadow\Content\Modal_Block::init();
+
+// Load custom Gutenberg blocks
+require_once WPSHADOW_PATH . 'includes/blocks/class-block-registry.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-pricing-table-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-faq-accordion-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-cta-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-icon-box-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-timeline-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-before-after-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-stats-counter-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-logo-grid-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-countdown-timer-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-content-tabs-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-alert-notice-block.php';
+require_once WPSHADOW_PATH . 'includes/blocks/class-progress-bar-block.php';
+\WPShadow\Blocks\Block_Registry::init();
+
 // Load Magic Link Manager (for expiry notifications)
 require_once WPSHADOW_PATH . 'includes/utils/class-magic-link-manager.php';
 \WPShadow\Utils\Magic_Link_Manager::init();
