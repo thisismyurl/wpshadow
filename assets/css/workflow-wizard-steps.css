@@ -149,3 +149,9 @@
 .wps-card-body {
 	margin-top: var(--wps-space-6);
 }
+
+/* Icon compact styling */
+.wpshadow-icon-compact {
+	font-size: 16px;
+	margin-right: var(--wps-space-1);
+}

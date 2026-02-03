@@ -107,14 +107,13 @@ Tool_View_Base::render_header( __( 'Site DNA Report', 'wpshadow' ) );
 			</p>
 
 			<!-- Progress Bar -->
-			<div id="wpshadow-dna-progress" class="wps-none" style="margin-top: 20px;">
-				<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
-					<div id="wpshadow-dna-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
-						<span id="wpshadow-dna-progress-text">0%</span>
-					</div>
+		<div id="wpshadow-dna-progress" class="wps-none wpshadow-dna-progress">
+			<div class="wpshadow-dna-progress-container">
+				<div id="wpshadow-dna-progress-bar" class="wpshadow-dna-progress-bar">
+					<span id="wpshadow-dna-progress-text">0%</span>
 				</div>
-				<div id="wpshadow-dna-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
 			</div>
+			<div id="wpshadow-dna-progress-status" class="wpshadow-dna-progress-status"></div>
 
 			<div id="wpshadow-dna-error" class="notice notice-error wps-none" role="alert" aria-live="assertive"></div>
 		</div>
@@ -123,7 +122,7 @@ Tool_View_Base::render_header( __( 'Site DNA Report', 'wpshadow' ) );
 		<div class="wpshadow-dna-panel wps-card" role="region" aria-labelledby="wpshadow-dna-info-heading">
 			<h3 id="wpshadow-dna-info-heading"><?php esc_html_e( 'What is Site DNA?', 'wpshadow' ); ?></h3>
 			<p><?php esc_html_e( 'Your Site DNA Report creates a unique health signature by analyzing:', 'wpshadow' ); ?></p>
-			<ul style="list-style: disc; margin-left: 18px;">
+			<ul class="wpshadow-report-list">
 				<li><strong><?php esc_html_e( 'Design Maturity', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Visual consistency, accessibility, and modern design patterns', 'wpshadow' ); ?></li>
 				<li><strong><?php esc_html_e( 'Performance Grade', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Speed, optimization, and resource efficiency', 'wpshadow' ); ?></li>
 				<li><strong><?php esc_html_e( 'Security Posture', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Vulnerabilities, hardening, and threat protection', 'wpshadow' ); ?></li>
@@ -185,119 +184,6 @@ Tool_View_Base::render_header( __( 'Site DNA Report', 'wpshadow' ) );
 		</div>
 	</div>
 </div>
-
-<style>
-.wpshadow-dna-grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 20px;
-	margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-	.wpshadow-dna-grid {
-		grid-template-columns: 1fr;
-	}
-}
-
-.wpshadow-dna-viz-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 400px;
-	background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
-	border-radius: 8px;
-	padding: 20px;
-	margin: 20px 0;
-}
-
-.wpshadow-dna-score-display {
-	text-align: center;
-	padding: 30px;
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.wpshadow-dna-overall-score {
-	font-size: 72px;
-	font-weight: 700;
-	color: #0073aa;
-	margin: 0;
-	line-height: 1;
-}
-
-.wpshadow-dna-categories-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	gap: 15px;
-	margin-top: 15px;
-}
-
-.wpshadow-dna-category {
-	background: #f5f7fa;
-	padding: 20px;
-	border-radius: 8px;
-	text-align: center;
-	border: 2px solid #e0e5ea;
-	transition: all 0.3s ease;
-}
-
-.wpshadow-dna-category:hover {
-	border-color: #0073aa;
-	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(0,115,170,0.1);
-}
-
-.wpshadow-dna-category-score {
-	font-size: 42px;
-	font-weight: 700;
-	margin: 10px 0;
-}
-
-.wpshadow-dna-category-label {
-	font-size: 14px;
-	color: #50575e;
-	margin-top: 5px;
-}
-
-.wps-badge-new {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background: linear-gradient(135deg, #00a32a 0%, #008a20 100%);
-	color: white;
-	padding: 4px 12px;
-	border-radius: 12px;
-	font-size: 11px;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-.wps-card.has-badge {
-	position: relative;
-}
-
-.wps-button-link {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	color: #0073aa;
-	font-weight: 600;
-	transition: all 0.2s ease;
-}
-
-.wps-card-hover:hover .wps-button-link {
-	gap: 10px;
-	color: #005177;
-}
-
-.wps-card-hover:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-</style>
 
 <?php
 Tool_View_Base::render_footer();

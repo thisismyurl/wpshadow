@@ -84,7 +84,7 @@ class Error_Report_Handler extends AJAX_Handler_Base {
 		$file    = $error_data['file'] ?? '';
 		$line    = $error_data['line'] ?? '';
 
-		$suggestions = '<ul style="margin: 10px 0; padding-left: 20px;">';
+		$suggestions = '<ul class="wps-error-suggestions">';
 
 		// Parse error type and provide specific suggestions
 		if ( stripos( $message, 'fatal error' ) !== false || stripos( $message, 'uncaught error' ) !== false ) {

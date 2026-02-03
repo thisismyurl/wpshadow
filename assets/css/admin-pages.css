@@ -1023,3 +1023,22 @@
 		animation: none;
 	}
 }
+
+/* ============================================================================
+   AJAX Response Elements
+   ============================================================================ */
+
+.wps-report-download-section {
+	margin-bottom: 20px;
+}
+
+.wps-error-suggestions {
+	margin: 10px 0;
+	padding-left: 20px;
+	list-style: disc;
+}
+
+.wps-error-suggestions li {
+	margin-bottom: 8px;
+}
+

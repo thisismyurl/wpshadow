@@ -1,4 +1,31 @@
 <?php
+/**
+ * AJAX Handler: Execute Workflow Immediately
+ *
+ * Manually triggers a workflow on-demand without waiting for scheduled time.
+ * User has full control - can run anytime, see real-time progress.
+ *
+ * **Workflow Execution:**
+ * - Load workflow configuration by ID
+ * - Execute action sequence in order (scan, fix, notify, etc.)
+ * - Stream progress updates via AJAX
+ * - Return results with metrics and impact
+ *
+ * **User Scenarios:**
+ * - Test workflow before scheduling
+ * - Run immediately when urgent issue arises
+ * - Manual override for scheduled automation
+ * - Check if workflow still works correctly
+ *
+ * **Philosophy Alignment:**
+ * - #1 (Helpful Neighbor): Give user full control over automation
+ * - #8 (Inspire Confidence): Show progress in real-time
+ * - #9 (Show Value): Report impact metrics after execution
+ *
+ * @package WPShadow
+ * @since 1.2601.2148
+ */
+
 declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
@@ -6,13 +33,6 @@ namespace WPShadow\Admin\Ajax;
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Workflow\Workflow_Manager;
 use WPShadow\Workflow\Workflow_Executor;
-
-/**
- * AJAX Handler: Run Workflow
- *
- * Manually executes a workflow.
- * Action: wp_ajax_wpshadow_run_workflow
- * Nonce: wpshadow_workflow
  * Capability: manage_options
  */
 class Run_Workflow_Handler extends AJAX_Handler_Base {

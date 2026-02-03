@@ -1,6 +1,20 @@
 <?php
 /**
- * AJAX: Toggle Diagnostic (enable/disable)
+ * AJAX: Toggle Diagnostic Enable/Disable State
+ *
+ * Allows users to enable/disable specific diagnostics in scan without page reload.
+ * Disabled diagnostics won't run during automated scans or manual runs.
+ *
+ * **Use Case:**
+ * - User finds a diagnostic that doesn't apply to them → disable it
+ * - Reduces scan noise and time
+ * - Gets relevant results faster
+ * - Can re-enable anytime in settings
+ *
+ * **Philosophy Alignment:**
+ * - #1 (Helpful Neighbor): "Customize your scans to what matters to you"
+ * - #7 (Ridiculously Good): Instant toggle, no page reload
+ * - #8 (Inspire Confidence): Clear on/off state shown
  *
  * @since   1.2601.2148
  * @package WPShadow\Admin
@@ -18,6 +32,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Toggle Diagnostic Handler
+ *
+ * Updates diagnostic enabled/disabled state in user settings.
+ * Respected by scan engine - disabled diagnostics skipped.
+ *
+ * **Request:**
+ * - `diagnostic_id`: Diagnostic slug
+ * - `enabled`: Boolean true/false
+ *
+ * **Response:**
+ * - `success`: Boolean
+ * - `data.enabled`: New state
+ * - `data.total_enabled`: Count of enabled diagnostics
  */
 class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 	/**

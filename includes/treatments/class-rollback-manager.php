@@ -2,9 +2,29 @@
 /**
  * Rollback/Undo Manager for Treatments
  *
- * Manages rollback functionality for treatments, allowing users to undo
- * auto-fixes if they cause issues. Tracks rollback history, handles
- * safety checks, and provides UI for undo operations.
+ * Manages complete undo functionality for treatments. Users can safely apply
+ * auto-fixes knowing they can be instantly reversed if problems occur.
+ *
+ * **User Confidence Model:**
+ * - Backup created BEFORE every treatment application
+ * - One-click undo reverts site to pre-treatment state
+ * - Rollback available for 30 days after treatment
+ * - Full audit trail of all undos recorded
+ * - Users feel empowered to try fixes without fear
+ *
+ * **Workflow:**
+ * 1. User clicks "Apply Fix"
+ * 2. Treatment_Base::execute() creates backup
+ * 3. Treatment applied and option saved
+ * 4. User tests site
+ * 5. If problems: user clicks "Undo"
+ * 6. Rollback_Manager restores from backup
+ * 7. Activity logged: "User reversed treatment X due to Y"
+ *
+ * **Philosophy Alignment:**
+ * - #8 (Inspire Confidence): "You can always undo this"
+ * - #1 (Helpful Neighbor): Makes users feel safe experimenting
+ * - #9 (Show Value): Tracks rollback reasons for product analytics
  *
  * @since   1.26032.1015
  * @package WPShadow\Treatments
@@ -24,7 +44,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Rollback_Manager Class
  *
- * Handles undo operations and rollback for treatments.
+ * Orchestrates undo operations for treatments via backup restoration.
+ * Manages rollback availability, history, and safety checks.
+ *
+ * **Key Responsibilities:**
+ * - Load backup created at time of treatment application
+ * - Validate backup compatibility with current environment
+ * - Execute database restoration from backup
+ * - Verify restoration success and data integrity
+ * - Log rollback with reason for analytics
+ * - Track rollback history for audit purposes
+ *
+ * **Rollback Lifecycle:**
+ * - Available for 30 days after treatment application
+ * - Expires to prevent confusion about stale backups
+ * - Cannot rollback to different WordPress version
+ * - Prevents data loss from incompatible restoration
+ *
+ * **Related:**
+ * - {@link \WPShadow\Core\Backup_Manager} - Creates backups
+ * - {@link \WPShadow\Core\Activity_Logger} - Logs rollback events
+ * - {@link \WPShadow\Admin\AJAX_Handlers} - UI for undo button
  *
  * @since 1.26032.1015
  */

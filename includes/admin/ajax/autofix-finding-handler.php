@@ -2,7 +2,22 @@
 /**
  * Autofix Finding AJAX Handler
  *
+ * One-click automated fix trigger from dashboard. When user clicks "Fix Now" button,
+ * this handler executes the appropriate treatment and reports results.
+ *
+ * **User Flow:**
+ * 1. Dashboard shows finding with "Fix Now" button
+ * 2. User clicks button
+ * 3. This handler triggers treatment via AJAX
+ * 4. Optional: Show dry-run first (preview changes)
+ * 5. Result: Success message or error explanation
+ *
+ * **Philosophy Alignment:**
+ * - #8 (Inspire Confidence): Clear before/after feedback
+ * - #1 (Helpful Neighbor): Error messages explain why fix failed
+ *
  * @package WPShadow
+ * @since 1.2601.2148
  */
 
 declare(strict_types=1);

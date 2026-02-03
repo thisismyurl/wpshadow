@@ -1,4 +1,31 @@
 <?php
+/**
+ * AJAX Handler: Deep Scan (Comprehensive Health Check)
+ *
+ * Runs ALL registered diagnostics for complete site health analysis.
+ * Includes expensive checks like malware scanning, link validation, SEO audit.
+ * Designed to run when user has time (admin doesn't need instant results).
+ *
+ * **Scope:**
+ * - All 50+ registered diagnostics
+ * - Includes slow checks: malware, link validation, performance profiles
+ * - Excludes only manually-disabled diagnostics
+ * - Typically takes 5-15 minutes depending on site size
+ *
+ * **Server Awareness:**
+ * - Checks server capacity before heavy operations
+ * - Throttles if CPU/memory trending high
+ * - Can be interrupted by user (returns partial results)
+ * - Saves progress for resumption
+ *
+ * **Philosophy Alignment:**
+ * - #9 (Show Value): Comprehensive findings prove plugin value
+ * - #1 (Helpful Neighbor): "Here's EVERYTHING we found"
+ * - #8 (Inspire Confidence): Thoroughness builds trust
+ *
+ * @package WPShadow
+ * @since 1.2601.2148
+ */
 
 declare(strict_types=1);
 
@@ -9,15 +36,6 @@ use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 use WPShadow\Core\Activity_Logger;
 use WPShadow\Core\KPI_Tracker;
-
-/**
- * AJAX Handler: Deep Scan
- *
- * Action: wp_ajax_wpshadow_deep_scan
- * Nonce: wpshadow_scan_nonce
- * Capability: manage_options
- *
- * Philosophy: Show value (#9) - Comprehensive deep scan with server load awareness
  *
  * @package WPShadow
  */

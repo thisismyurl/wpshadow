@@ -89,8 +89,7 @@ class Generate_Report_Handler extends AJAX_Handler_Base {
 			);
 
 			$content = sprintf(
-				'<div style="margin-bottom: 20px;"><a href="%s" class="button button-primary">%s</a></div>%s',
-				esc_url( $download_url ),
+			'<div class="wps-report-download-section"><a href="%s" class="button button-primary">%s</a></div>%s',
 				esc_html__( 'Download Report', 'wpshadow' ),
 				$content
 			);

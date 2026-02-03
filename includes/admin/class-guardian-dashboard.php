@@ -246,10 +246,10 @@ class Guardian_Dashboard {
 		$html = '';
 		foreach ( $cards as $card ) {
 			$html .= sprintf(
-				'<div class="wps-kpi-card" role="article" aria-labelledby="kpi-%s">
+				'<div class="wps-kpi-card" role="article" aria-labelledby="kpi-%s" style="--kpi-color: %s;">
 					<div class="wps-kpi-card-header">
-						<div class="wps-kpi-icon-wrapper" style="background: %s20;">
-							<span class="dashicons %s wps-kpi-icon" style="color: %s;" aria-hidden="true"></span>
+						<div class="wps-kpi-icon-wrapper">
+							<span class="dashicons %s wps-kpi-icon" aria-hidden="true"></span>
 						</div>
 					</div>
 					<div class="wps-kpi-card-body">
@@ -261,7 +261,6 @@ class Guardian_Dashboard {
 				esc_attr( sanitize_title( $card['label'] ) ),
 				esc_attr( $card['color'] ),
 				esc_attr( $card['icon'] ),
-				esc_attr( $card['color'] ),
 				esc_attr( sanitize_title( $card['label'] ) ),
 				esc_html( $card['label'] ),
 				esc_html( (string) $card['value'] ),
@@ -324,9 +323,9 @@ class Guardian_Dashboard {
 			$time_text = human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago';
 
 			$html .= sprintf(
-				'<div class="wps-activity-item %s" role="article">
-					<div class="wps-activity-icon-wrapper" style="background: %s20; border-color: %s;">
-						<span class="dashicons %s" style="color: %s;" aria-hidden="true"></span>
+				'<div class="wps-activity-item %s" role="article" style="--activity-color: %s;">
+					<div class="wps-activity-icon-wrapper">
+						<span class="dashicons %s" aria-hidden="true"></span>
 					</div>
 					<div class="wps-activity-content">
 						<div class="wps-activity-text">%s</div>
@@ -335,9 +334,7 @@ class Guardian_Dashboard {
 				</div>',
 				$is_last ? 'wps-activity-last' : '',
 				esc_attr( $icon_color ),
-				esc_attr( $icon_color ),
 				esc_attr( $icon_class ),
-				esc_attr( $icon_color ),
 				esc_html( $action_text ),
 				esc_attr( ! empty( $activity['timestamp'] ) ? $activity['timestamp'] : '' ),
 				esc_html( $time_text )
@@ -699,17 +696,16 @@ class Guardian_Dashboard {
 		foreach ( $checks as $check ) {
 			$status_color = 'good' === $check['status'] ? '#10b981' : ( 'warning' === $check['status'] ? '#f59e0b' : '#ef4444' );
 			$html        .= sprintf(
-				'<div class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-md">
-					<span class="dashicons %s wps-icon-md wps-status-check-icon" style="color: %s;"></span>
+				'<div class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-md wps-status-check-item" style="--status-color: %s;">
+					<span class="dashicons %s wps-icon-md wps-status-check-icon"></span>
 					<div class="wps-flex-1">
 						<div class="wps-font-medium wps-text-gray-800">%s</div>
 					</div>
-					<div class="wps-text-xs wps-font-semibold" style="color: %s;">%s</div>
+					<div class="wps-text-xs wps-font-semibold wps-status-check-text">%s</div>
 				</div>',
+				esc_attr( $status_color ),
 				esc_attr( $check['icon'] ),
-				esc_attr( $status_color ),
 				esc_html( $check['name'] ),
-				esc_attr( $status_color ),
 				esc_html( ucfirst( $check['status'] ) )
 			);
 		}

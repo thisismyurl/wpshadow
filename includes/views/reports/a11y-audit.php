@@ -58,21 +58,20 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ) );
 			</p>
 
 			<!-- Progress Bar Container -->
-			<div id="wpshadow-a11y-progress" class="wps-none" style="margin-top: 20px;">
-				<div style="background: #f0f0f1; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
-					<div id="wpshadow-a11y-progress-bar" style="height: 24px; background: linear-gradient(90deg, #0073aa 0%, #005177 100%); width: 0%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
-						<span id="wpshadow-a11y-progress-text">0%</span>
-					</div>
+		<div id="wpshadow-a11y-progress" class="wps-none wpshadow-a11y-progress">
+			<div class="wpshadow-a11y-progress-container">
+				<div id="wpshadow-a11y-progress-bar" class="wpshadow-a11y-progress-bar">
+					<span id="wpshadow-a11y-progress-text">0%</span>
 				</div>
-				<div id="wpshadow-a11y-progress-status" style="font-size: 13px; color: #50575e; text-align: center;"></div>
 			</div>
+			<div id="wpshadow-a11y-progress-status" class="wpshadow-a11y-progress-status"></div>
 
 			<div id="wpshadow-a11y-error" class="notice notice-error wps-none" role="alert" aria-live="assertive"></div>
 		</div>
 
 		<div class="wpshadow-a11y-panel wps-card" role="region" aria-labelledby="wpshadow-a11y-checklist-heading">
 			<h3 id="wpshadow-a11y-checklist-heading"><?php esc_html_e( 'What we look for', 'wpshadow' ); ?></h3>
-			<ul style="list-style: disc; margin-left: 18px;">
+			<ul class="wpshadow-report-list">
 				<li><?php esc_html_e( 'Alt text on all images for screen readers', 'wpshadow' ); ?></li>
 				<li><?php esc_html_e( 'Proper heading hierarchy (H1, H2, H3)', 'wpshadow' ); ?></li>
 				<li><?php esc_html_e( 'ARIA labels on interactive elements', 'wpshadow' ); ?></li>
@@ -84,45 +83,28 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ) );
 	</div>
 
 	<!-- Results Section (Full Width) -->
-	<div class="wpshadow-a11y-results wps-none wps-card" id="wpshadow-a11y-results" role="region" aria-live="polite" aria-labelledby="wpshadow-a11y-results-heading" style="margin-top: 20px;">
+	<div class="wpshadow-a11y-results wps-none wps-card" id="wpshadow-a11y-results" role="region" aria-live="polite" aria-labelledby="wpshadow-a11y-results-heading">
 		<h3 id="wpshadow-a11y-results-heading"><?php esc_html_e( 'Scan Results', 'wpshadow' ); ?></h3>
 		<p style="margin-bottom: 15px;">
 			<strong><?php esc_html_e( 'Checked URL:', 'wpshadow' ); ?></strong>
-			<span style="display: inline-block; background: #f8f9fa; padding: 6px 10px; border-radius: 4px; font-family: monospace;">
+			<span class="wpshadow-url-display">
 				<span id="wpshadow-a11y-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span><span id="wpshadow-a11y-last-url"></span>
 			</span>
 		</p>
-		<div class="wpshadow-a11y-summary" style="display: flex; gap: 15px; margin: 20px 0;">
-			<span class="wpshadow-a11y-pill is-pass" data-a11y-summary="pass" style="padding: 8px 16px; border-radius: 4px; background: #f0f6f2; color: #28a745; font-weight: 600;">
+		<div class="wpshadow-a11y-summary">
+			<span class="wpshadow-a11y-pill is-pass" data-a11y-summary="pass">
 				<?php esc_html_e( 'Passes', 'wpshadow' ); ?>: <strong>0</strong>
 			</span>
-			<span class="wpshadow-a11y-pill is-warn" data-a11y-summary="warn" style="padding: 8px 16px; border-radius: 4px; background: #fffbf0; color: #d98300; font-weight: 600;">
+			<span class="wpshadow-a11y-pill is-warn" data-a11y-summary="warn">
 				<?php esc_html_e( 'Warnings', 'wpshadow' ); ?>: <strong>0</strong>
 			</span>
-			<span class="wpshadow-a11y-pill is-fail" data-a11y-summary="fail" style="padding: 8px 16px; border-radius: 4px; background: #fdf7f7; color: #dc3545; font-weight: 600;">
+			<span class="wpshadow-a11y-pill is-fail" data-a11y-summary="fail">
 				<?php esc_html_e( 'Fails', 'wpshadow' ); ?>: <strong>0</strong>
 			</span>
 		</div>
 		<div id="wpshadow-a11y-checks"></div>
 	</div>
 </div>
-
-<style>
-	@keyframes wps-spin {
-		from { transform: rotate(0deg); }
-		to { transform: rotate(360deg); }
-	}
-	.wps-spin {
-		animation: wps-spin 1s linear infinite;
-		display: inline-block;
-	}
-	.wpshadow-a11y-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 20px;
-		margin-bottom: 20px;
-	}
-</style>
 
 <?php
 // Load and render sales widget

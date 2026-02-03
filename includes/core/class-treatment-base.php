@@ -2,9 +2,39 @@
 /**
  * Treatment Base Class
  *
- * Abstract base class for treatments to eliminate code duplication.
+ * Abstract base class for automated fixes. All treatment implementations extend this class
+ * to inherit security, backup, multisite, and logging capabilities.
+ *
+ * **Architecture Pattern:**
+ * Treatment classes inherit:
+ * - `can_apply()` - Capability checks (single-site and multisite)
+ * - `backup_database()` - Automatic backup before changes
+ * - `execute()` - Wrapper with hooks and logging
+ * - `log_activity()` - KPI tracking for analytics
+ *
+ * **Philosophy Alignment:**
+ * - #1 (Helpful Neighbor): Abstraction layer handles complexity invisibly
+ * - #8 (Inspire Confidence): Built-in safety (backups, verification)
+ * - #9 (Show Value): Activity logging built-in, not added later
+ *
+ * **Extension Pattern:**
+ * When creating new treatments:
+ * 1. Extend Treatment_Base
+ * 2. Implement get_finding_id() - link to diagnostic
+ * 3. Implement apply() - the actual fix logic
+ * 4. Override can_apply() if custom permissions needed
+ * 5. Treatments automatically get: backups, logging, hooks, multisite support
+ *
+ * **Example:**
+ * ```php
+ * class Treatment_My_Fix extends Treatment_Base {
+ *     public static function get_finding_id() { return 'my-diagnostic'; }
+ *     public static function apply() { return [ 'success' => true ]; }
+ * }
+ * ```
  *
  * @package WPShadow
+ * @since 1.2601.2148
  */
 
 declare(strict_types=1);
@@ -18,8 +48,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Abstract Treatment Base Class
  *
- * Provides common functionality for all treatments, including
- * capability checking for multisite environments.
+ * Provides common functionality for all treatments including security checks,
+ * backup management, activity logging, and multisite support.
+ *
+ * **Built-in Features:**
+ * - Automatic database backup before changes (via backup_database method)
+ * - Single-site and multisite capability verification
+ * - WordPress hook system (before/after treatment events)
+ * - Activity logging for KPI tracking and audit trails
+ * - Dry-run simulation support (non-persistent testing)
+ * - Error recovery and rollback capability
+ *
+ * **Protected Methods Available to Subclasses:**
+ * - `backup_database()` - Creates restore point
+ * - `can_apply()` - Verifies user permissions
+ * - `log_activity()` - Records action for analytics
+ * - `execute()` - Wrapper with hooks
+ *
+ * **Multisite Support:**
+ * Treatment_Base handles the complexity:
+ * - Single-site: Always apply if admin
+ * - Multisite Site Admin: Apply to current blog
+ * - Multisite Network Admin: Apply to all blogs or specific blog
+ *
+ * @since 1.2601.2148
  */
 abstract class Treatment_Base implements Treatment_Interface {
 	/**

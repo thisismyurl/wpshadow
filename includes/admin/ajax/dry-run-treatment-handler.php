@@ -1,8 +1,22 @@
 <?php
 /**
- * Dry Run Treatment AJAX Handler
+ * Dry Run Treatment Execution Handler
+ *
+ * Executes treatments in "preview mode" without making permanent changes. Shows users
+ * exactly what would happen before committing to the fix.
+ *
+ * **Why Dry-Run Matters:**
+ * - User sees before/after state without risk
+ * - Builds confidence in auto-fix system
+ * - Identifies potential issues before permanent changes
+ * - Enables informed decision-making
+ *
+ * **Philosophy Alignment:**
+ * - #8 (Inspire Confidence): "See what we'd do before we do it"
+ * - #1 (Helpful Neighbor): "Here's the impact... ready to proceed?"
  *
  * @package WPShadow
+ * @since 1.2603.1345
  */
 
 declare(strict_types=1);
@@ -17,6 +31,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Handler for dry-run treatment execution
+ *
+ * Simulates treatment application without persistent changes.
+ * Returns detailed report of what treatment would modify.
+ *
+ * **Response Includes:**
+ * - List of files/settings that would change
+ * - Before/after values for each modification
+ * - Estimated impact metrics
+ * - Reversibility/rollback information
  */
 class Dry_Run_Treatment_Handler extends AJAX_Handler_Base {
 	/**

@@ -1,11 +1,31 @@
 <?php
 /**
- * Treatment Hooks - Apply active treatments
+ * Treatment Hooks - Apply Active Treatments Via WordPress Hooks
  *
- * This file hooks into WordPress to actually apply the treatments
- * when their options are enabled.
+ * Orchestrates automatic application of treatments by hooking into WordPress
+ * lifecycle events. When a user applies a treatment, this system persists the
+ * preference and automatically re-applies on each page load.
+ *
+ * **Architecture Pattern:**
+ * 1. Treatment_Base::apply() modifies database/files and saves option
+ * 2. Treatment_Hooks::init() is called on every admin_init
+ * 3. Hooks check persisted options (is this treatment still enabled?)
+ * 4. If enabled, re-applies persistent changes (e.g., disable fonts, limit posts)
+ * 5. Changes persist across plugin updates and WordPress upgrades
+ *
+ * **Why This Pattern:**
+ * - Persistent without cron jobs or background tasks
+ * - Survives WordPress updates and plugin deactivation/reactivation
+ * - Can be disabled by user if causing problems
+ * - Logged and auditable in activity system
+ *
+ * **Philosophy Alignment:**
+ * - #7 (Ridiculously Good): Persistent benefits, set and forget
+ * - #8 (Inspire Confidence): Changes actually stick around
+ * - #9 (Show Value): Can measure how many sites benefit long-term
  *
  * @package WPShadow
+ * @since 1.2601.2148
  */
 
 declare(strict_types=1);
@@ -18,6 +38,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Class to apply active treatments.
+ *
+ * Registers WordPress hooks that apply persistent treatments on every admin load.
+ * Called early in WordPress initialization to ensure all hooks execute.
+ *
+ * **Treatments Managed:**
+ * This class manages all persistent treatments via conditional hooks:
+ * - Admin UI customizations (fonts, colors, layout)
+ * - Performance optimizations (limit post revisions, cleanup transients)
+ * - Security hardening (disable file editing, REST API limits)
+ * - Database optimizations (charset conversion, table repair)
+ *
+ * **Hook Execution Order:**
+ * 1. `init()` method checks enabled treatments from options table
+ * 2. For each enabled treatment, register appropriate WordPress hook
+ * 3. Hooks fire during `admin_init`, `init`, `plugins_loaded` etc.
+ * 4. Changes apply consistently on every admin/frontend visit
+ *
+ * **Custom Treatment Registration:**
+ * To add a new persistent treatment hook:
+ * ```php
+ * public static function init() {
+ *     if ( get_option( 'wpshadow_my_feature_enabled', false ) ) {
+ *         add_action( 'admin_init', array( __CLASS__, 'apply_my_feature' ) );
+ *     }
+ * }
+ * public static function apply_my_feature() { /* ... */ }
+ * ```
  */
 class Treatment_Hooks {
 

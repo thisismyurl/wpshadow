@@ -434,7 +434,7 @@ class Auto_Deploy {
 					<li><?php esc_html_e( 'Webhook requests are restricted to GitHub IP addresses only', 'wpshadow' ); ?></li>
 				</ul>
 				<p>
-					<form method="post" action="" style="display: inline;">
+					<form method="post" action="">
 						<?php wp_nonce_field( 'wpshadow_update_github_ips' ); ?>
 						<button type="submit" name="wpshadow_update_github_ips" class="button button-secondary">
 							<?php esc_html_e( 'Update GitHub IP Whitelist', 'wpshadow' ); ?>

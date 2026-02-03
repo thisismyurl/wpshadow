@@ -1,5 +1,33 @@
 <?php
 
+<?php
+/**
+ * AJAX Handler: Quick Scan (Fast Health Check)
+ *
+ * Runs a subset of critical diagnostics for fast site health overview.
+ * Completes in seconds vs. minutes for full scan - designed for dashboard load.
+ *
+ * **Performance:**
+ * - Checks ~20 critical diagnostics (vs 50+ for full scan)
+ * - Completes in 2-5 seconds on most sites
+ * - Excludes slow scans: malware, performance profiling
+ * - Prioritizes: security, critical errors, health
+ *
+ * **User Experience:**
+ * - Dashboard shows health status immediately
+ * - User gets overview without waiting for full scan
+ * - "Full Scan" button available for comprehensive check
+ * - Quick results encourage frequent checks
+ *
+ * **Philosophy Alignment:**
+ * - #7 (Ridiculously Good): Snappy performance
+ * - #8 (Inspire Confidence): Shows key metrics instantly
+ * - #9 (Show Value): KPI tracking for frequent scans
+ *
+ * @package WPShadow
+ * @since 1.2601.2148
+ */
+
 declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
@@ -8,13 +36,6 @@ use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 use WPShadow\Core\Activity_Logger;
-
-/**
- * AJAX Handler: Quick Scan
- *
- *
- * @package WPShadow
- */
 class Quick_Scan_Handler extends AJAX_Handler_Base {
 
 

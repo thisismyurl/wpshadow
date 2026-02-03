@@ -1,6 +1,19 @@
 <?php
 /**
- * AJAX: List Diagnostics (paged, filtered)
+ * AJAX: Load Paginated Diagnostics List
+ *
+ * Retrieves paginated diagnostic data with filtering and sorting for dashboard.
+ * Similar to treatments list - implements pagination for performance.
+ *
+ * **Performance Features:**
+ * - Pagination (50 diagnostics per page) prevents DOM bloat
+ * - Lazy loading via AJAX keeps initial page responsive
+ * - Filter by family, severity, status
+ * - Sort by name, severity, last-run
+ *
+ * **Philosophy Alignment:**
+ * - #7 (Ridiculously Good): Snappy pagination
+ * - #8 (Inspire Confidence): Organized view of all checks
  *
  * @since   1.2601.2148
  * @package WPShadow\Admin
@@ -19,6 +32,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Diagnostics List Handler
+ *
+ * Loads paginated diagnostic list with optional filtering by family,
+ * severity, or auto-fixability status.
+ *
+ * **Parameters:**
+ * - `page`: Current page (1-based)
+ * - `per_page`: Results per page (default 50)
+ * - `family`: Filter by diagnostic family (security, performance, etc)
+ * - `severity`: Filter by finding severity (critical, high, medium)
+ * - `auto_fixable`: Filter by auto-fixability
+ *
+ * **Response:** Paginated array of diagnostics with metadata
  */
 class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 	/**

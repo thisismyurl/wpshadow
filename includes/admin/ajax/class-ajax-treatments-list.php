@@ -1,6 +1,19 @@
 <?php
 /**
- * AJAX: List Treatments (paged)
+ * AJAX: Load Paginated Treatments List
+ *
+ * Retrieves paginated treatment data for dashboard display with optional filtering
+ * and sorting. Implements pagination to keep UI responsive with large treatment lists.
+ *
+ * **Performance Features:**
+ * - Pagination (25 treatments per page) prevents slow DOM rendering
+ * - Lazy loading via AJAX reduces initial page load time
+ * - Optional filtering by status, category, or severity
+ * - Sorting by effectiveness, name, or last-applied date
+ *
+ * **Philosophy Alignment:**
+ * - #7 (Ridiculously Good): Snappy pagination with no wait time
+ * - #8 (Inspire Confidence): Clear treatment list organization
  *
  * @since   1.2601.2148
  * @package WPShadow\Admin
@@ -18,6 +31,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Treatments List Handler
+ *
+ * Loads paginated treatment list with filtering and sorting.
+ * Returns JSON with treatment data for admin dashboard display.
+ *
+ * **Request Parameters:**
+ * - `page` (optional, default 1): Page number for pagination
+ * - `per_page` (optional, default 25): Treatments per page
+ * - `nonce`: WordPress nonce for CSRF protection
+ *
+ * **Response:** Array of treatments with pagination metadata
  */
 class AJAX_Treatments_List extends AJAX_Handler_Base {
 	/**

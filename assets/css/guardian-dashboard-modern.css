@@ -60,12 +60,14 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
+	background: rgba(var(--kpi-color-rgb, 139, 92, 246), 0.1);
 }
 
 .wps-kpi-icon {
 	font-size: 24px;
 	width: 24px;
 	height: 24px;
+	color: var(--kpi-color, #8b5cf6);
 }
 
 .wps-kpi-trend {
@@ -181,16 +183,17 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	border: 2px solid;
+	border: 2px solid var(--activity-color, #8b5cf6);
 	position: relative;
 	z-index: 1;
-	background: #ffffff;
+	background: color-mix(in srgb, var(--activity-color, #8b5cf6) 10%, #ffffff);
 }
 
 .wps-activity-icon-wrapper .dashicons {
 	font-size: 20px;
 	width: 20px;
 	height: 20px;
+	color: var(--activity-color, #8b5cf6);
 }
 
 .wps-activity-content {
@@ -311,3 +314,27 @@
 		background: #000;
 	}
 }
+
+/* ============================================================================
+   Status Check Items
+   ============================================================================ */
+
+.wps-status-check-item {
+	display: flex;
+	gap: var(--wps-space-3, 0.75rem);
+	align-items: center;
+	padding: var(--wps-space-3, 0.75rem);
+	border-radius: var(--wps-radius-md, 8px);
+}
+
+.wps-status-check-icon {
+	color: var(--status-color, #10b981);
+	flex-shrink: 0;
+}
+
+.wps-status-check-text {
+	color: var(--status-color, #10b981);
+	font-size: var(--wps-text-xs, 0.75rem);
+	font-weight: var(--wps-font-semibold, 600);
+}
+
