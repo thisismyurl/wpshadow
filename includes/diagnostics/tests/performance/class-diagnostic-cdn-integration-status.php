@@ -15,6 +15,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -74,7 +75,7 @@ class Diagnostic_CDN_Integration_Status extends Diagnostic_Base {
 		$cdn_errors = 0;
 
 		$upload_dir = wp_upload_dir();
-		$base_host  = wp_parse_url( $upload_dir['baseurl'], PHP_URL_HOST );
+		$base_host  = Diagnostic_URL_And_Pattern_Helper::get_domain( $upload_dir['baseurl'] );
 
 		// Detect active CDN plugins.
 		$active_plugins = get_option( 'active_plugins', array() );
@@ -121,7 +122,7 @@ class Diagnostic_CDN_Integration_Status extends Diagnostic_Base {
 				continue;
 			}
 
-			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			$url_host = Diagnostic_URL_And_Pattern_Helper::get_domain( $url );
 			if ( ! empty( $url_host ) && $base_host !== $url_host ) {
 				$cdn_hits++;
 			}

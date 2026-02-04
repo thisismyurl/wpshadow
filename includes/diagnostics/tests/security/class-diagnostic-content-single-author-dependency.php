@@ -120,7 +120,7 @@ class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 		$author_data = get_userdata( (int) $author_stats[0]->post_author );
 		$author_name = $author_data ? $author_data->display_name : __( 'Unknown', 'wpshadow' );
 
-		return array(
+		$finding = array(
 			'id'          => self::$slug,
 			'title'       => self::$title,
 			'description' => sprintf(
@@ -138,6 +138,11 @@ class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/single-author-dependency',
+			'context'      => array(
+				'why'            => __( 'Single author dependency = bus factor 1 = business continuity broken. Author leaves/gets sick/dies. Content production stops. No backups in other minds. Business continuity risk: 100% reliance on one person. Business impact: if author injured/leaves, content stops, audience leaves, revenue drops 80%+. Mitigation: develop secondary author. Cross-train team. Document content process. Publish content approval workflow (multiple people involved).', 'wpshadow' ),
+				'recommendation' => __( '1. Audit author contributions (find over-reliant authors). 2. Create editorial calendar with multiple authors. 3. Implement content review process (min 2 people per post). 4. Cross-train team members on content production. 5. Document writing guidelines + content templates. 6. Set author contribution goals (no single author > 40% of posts). 7. Implement co-authoring on complex posts. 8. Create author backup for each category. 9. Log content changes in activity log (know who publishes what). 10. Quarterly author distribution review (ensure no single-author creep).', 'wpshadow' ),
+			),
 		);
+		return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'business-continuity', 'author-distribution' );
 	}
 }

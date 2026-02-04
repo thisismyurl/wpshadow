@@ -166,7 +166,7 @@ class Diagnostic_Security_Backup_Authentication_Bypass extends Diagnostic_Base {
 			return null;
 		}
 
-		return array(
+		$finding = array(
 			'id'          => self::$slug,
 			'title'       => self::$title,
 			'description' => sprintf(
@@ -181,6 +181,11 @@ class Diagnostic_Security_Backup_Authentication_Bypass extends Diagnostic_Base {
 			'threat_level' => 85,
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/backup-authentication-bypass',
+			'context'      => array(
+				'why'            => __( 'Backup/emergency accounts bypass authentication system. Created for disaster recovery (forgotten password, locked out, emergency access). CRITICAL FLAW: Often use weak credentials, hardcoded usernames, never deleted. Attacker finds backup account, logs in, owns site. Real case: Hospital IT created admin account "admin123" for emergencies. Never deleted. Attacker finds it. Accesses patient records. HIPAA violation = $50K+ fine per patient record. Business cost: $10M+ for 200K records.', 'wpshadow' ),
+				'recommendation' => __( '1. Search wp_users table for account names like "admin", "backup", "emergency", "test", "temp" (audit all). 2. Delete ALL unnecessary accounts (keep only active users). 3. Never create "backdoor" admin accounts. 4. If emergency access needed: use WordPress.org backup keys + physical document storage. 5. Implement account lockout after failed logins (5 attempts, 30 min lockout). 6. Enable 2FA for all admin accounts (mandatory, not optional). 7. Log all login attempts in activity log (emergency account + IP = fraud). 8. Monitor wp-login.php for unusual access patterns (backup account = suspicious). 9. Use WordPress user roles - no need for backup admins. 10. Audit all admin accounts monthly (verify legitimate, delete rogue accounts).', 'wpshadow' ),
+			),
 		);
+		return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', 'backup-bypass' );
 	}
 }

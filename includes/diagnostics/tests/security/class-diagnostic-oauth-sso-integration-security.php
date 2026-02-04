@@ -233,16 +233,21 @@ class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
 				'token_count'          => $token_check,
 			);
 
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => $description,
-				'severity'     => $severity,
-				'threat_level' => $threat_level,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/oauth-sso-integration-security',
-				'details'      => $details,
-			);
+		$finding = array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => $description,
+			'severity'     => $severity,
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/oauth-sso-integration-security',
+			'details'      => $details,
+			'context'      => array(
+				'why'            => __( 'Insecure OAuth/SSO implementation = centralized authentication failure = all accounts compromised simultaneously. Attacker compromises OAuth provider OR intercepts token. Gains access to ALL integrated accounts (email, cloud storage, CRM, WordPress). One attack = multiple services breached. Business impact: coordinated multi-service breach, massive compliance violations (GDPR fines per account). Secure implementation: token validation, state parameter, HTTPS enforcement, token refresh, logout propagation.', 'wpshadow' ),
+				'recommendation' => __( '1. Use only trusted OAuth providers (Google, Microsoft, GitHub - security audited). 2. Validate OAuth response state parameter (prevent CSRF attacks). 3. Always use HTTPS for OAuth callbacks (no http:// redirects). 4. Store OAuth tokens encrypted (AES-256 in database). 5. Validate token signature on every use (prevent token forgery). 6. Implement token expiration (1 hour access tokens). 7. Revoke tokens on logout (prevent reuse after logout). 8. Log OAuth login/logout in activity log (detect unauthorized access). 9. Implement fallback password auth if OAuth provider down. 10. Audit OAuth permissions quarterly (minimize requested scopes).', 'wpshadow' ),
+			),
+		);
+		return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', 'oauth-sso' );
 		}
 
 		return null;

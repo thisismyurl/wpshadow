@@ -62,6 +62,10 @@ class Diagnostic_Uptime_Monitoring extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		// Check for uptime monitoring plugins
 		$monitoring_plugins = array(
 			'jetpack/jetpack.php'                       => 'Jetpack Monitor',
@@ -93,6 +97,9 @@ class Diagnostic_Uptime_Monitoring extends Diagnostic_Base {
 		$cron_array = _get_cron_array();
 		$has_cron_jobs = ! empty( $cron_array );
 
+		$monitoring_interval = (int) get_option( 'wpshadow_uptime_check_interval', 0 );
+		$has_frequent_checks = ( $monitoring_interval > 0 && $monitoring_interval <= 5 );
+
 		// Estimate site importance based on activity
 		global $wpdb;
 		$post_count = wp_count_posts()->publish ?? 0;
@@ -114,6 +121,8 @@ class Diagnostic_Uptime_Monitoring extends Diagnostic_Base {
 					'has_external_monitor' => $has_external_monitor,
 					'is_production_site'   => $is_production_site,
 					'post_count'           => $post_count,
+					'has_cron_jobs'        => $has_cron_jobs,
+					'has_frequent_checks'  => $has_frequent_checks,
 					'recommendation'       => 'Configure UptimeRobot, Pingdom, or similar service',
 					'impact_estimate'      => 'Detect outages within 1-5 minutes vs hours/days',
 					'monitoring_services'  => array(

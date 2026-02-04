@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -66,7 +67,7 @@ class Diagnostic_Media_External_Media_URL_Handling extends Diagnostic_Base {
 	 */
 	public static function check() {
 		$issues = array();
-		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$site_host = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
 
 		$attachments = get_posts(
 			array(
@@ -86,7 +87,7 @@ class Diagnostic_Media_External_Media_URL_Handling extends Diagnostic_Base {
 				continue;
 			}
 
-			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			$url_host = Diagnostic_URL_And_Pattern_Helper::get_domain( $url );
 			if ( ! empty( $url_host ) && $url_host !== $site_host ) {
 				$external_count++;
 				$response = Diagnostic_Request_Helper::head_result(

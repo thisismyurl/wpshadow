@@ -196,7 +196,7 @@ class Diagnostic_Plugin_Authentication_Bypass_Risk extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $auth_risks ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -212,7 +212,12 @@ class Diagnostic_Plugin_Authentication_Bypass_Risk extends Diagnostic_Base {
 					'auth_risks' => $auth_risks,
 				),
 				'kb_link'      => 'https://wpshadow.com/kb/authentication-security',
+				'context'      => array(
+					'why'            => __( 'Authentication bypass = direct account takeover. Vulnerable plugin allows attacker to log in as admin WITHOUT password. Completely bypasses authentication system (nonces, passwords, 2FA). Game over. Attacker gets full site control instantly. Can modify all content, steal data, inject malware. Business impact: $1M+ breach + lawsuit + reputation destruction. Real scenario: WooCommerce authentication bypass affected 1M+ stores, losses exceeded $50M from combined fraud/recovery.', 'wpshadow' ),
+					'recommendation' => __( '1. Identify vulnerable plugins (check WPScan Database for known bypasses). 2. Disable vulnerable plugins immediately (don\'t delete yet - may need backup). 3. Update to patched version or remove plugin entirely. 4. Change all passwords (assume all credentials leaked). 5. Revoke all access tokens and sessions. 6. Audit user accounts (create fake accounts from bypasses). 7. Check activity logs for admin actions by unauthorized users (2+ weeks back). 8. Restore website from clean backup if compromise confirmed. 9. Implement file integrity monitoring (prevent plugin tampering). 10. Subscribe to security update notifications (enable automatic updates).', 'wpshadow' ),
+				),
 			);
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', 'plugin-bypass' );
 		}
 
 		return null;

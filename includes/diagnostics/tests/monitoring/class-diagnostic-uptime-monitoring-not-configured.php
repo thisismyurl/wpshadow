@@ -63,8 +63,9 @@ class Diagnostic_Uptime_Monitoring_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if uptime monitoring service is integrated
-		if ( ! has_option( 'uptime_monitoring_service_configured' ) ) {
+		// Check if uptime monitoring service is integrated.
+		$monitoring_configured = (bool) get_option( 'uptime_monitoring_service_configured', false );
+		if ( ! $monitoring_configured ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

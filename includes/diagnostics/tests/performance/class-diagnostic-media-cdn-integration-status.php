@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -87,7 +88,7 @@ class Diagnostic_Media_CDN_Integration_Status extends Diagnostic_Base {
 			}
 		}
 
-		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$site_host = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
 		$sample = get_posts(
 			array(
 				'post_type'      => 'attachment',
@@ -104,7 +105,7 @@ class Diagnostic_Media_CDN_Integration_Status extends Diagnostic_Base {
 			if ( empty( $url ) ) {
 				continue;
 			}
-			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			$url_host = Diagnostic_URL_And_Pattern_Helper::get_domain( $url );
 			if ( ! empty( $url_host ) && $url_host !== $site_host ) {
 				$cdn_rewrite_detected = true;
 				break;

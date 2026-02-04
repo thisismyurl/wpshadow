@@ -199,7 +199,7 @@ class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -216,11 +216,26 @@ class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 				'threat_level' => 65,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/media-ssl-https-enforcement',
+				'context'      => array(
+					'why'            => __( 'Serving media over HTTP on an HTTPS site creates mixed content that modern browsers block or warn about. This harms user trust, breaks page layouts, and reduces conversion rates. It also opens a man‑in‑the‑middle opportunity where attackers can replace images or scripts in transit, potentially injecting malicious content. OWASP Top 10 2021 lists Cryptographic Failures #2 and Security Misconfiguration #5; mixed content is a direct manifestation of both. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers often exploit weak transport security to harvest credentials or inject content. From a business standpoint, mixed content warnings reduce checkout confidence, lower SEO rankings, and can trigger ad platform disapproval. For media‑heavy sites, broken images make products appear unprofessional and reduce time on site, which directly impacts revenue. Ensuring HTTPS for all media URLs is a high‑impact, low‑cost fix that improves security, performance, and trust simultaneously. It also simplifies compliance and insurer questionnaires because it demonstrates consistent encryption in transit. Media is frequently cached or served via CDN, so enforcing HTTPS at the source and across all cached URLs prevents regressions during migrations or CDN changes.', 'wpshadow' ),
+					'recommendation' => __( '1. Update WordPress site and home URLs to HTTPS.
+2. Replace http:// media URLs in the database with https://.
+3. Configure CDN to enforce HTTPS and redirect HTTP to HTTPS.
+4. Enable HSTS to force secure connections.
+5. Scan posts/pages for hardcoded HTTP media links and update them.
+6. Ensure upload base URL uses HTTPS in wp_upload_dir().
+7. Validate SSL certificates for media domains and subdomains.
+8. Block mixed content via CSP upgrade‑insecure‑requests.
+9. Monitor browser console for mixed content errors after updates.
+10. Re‑audit after migrations, theme changes, or CDN updates.', 'wpshadow' ),
+				),
 				'details'      => array(
 					'issues'     => $issues,
 					'http_media' => $http_media,
 				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'https', self::$slug );
 		}
 
 		return null;

@@ -82,8 +82,8 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( $script && ! empty( $script->src ) ) {
-					$domain = parse_url( $script->src, PHP_URL_HOST );
-					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', parse_url( home_url(), PHP_URL_HOST ) ), true ) ) {
+					$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( $script->src );
+					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() ) ), true ) ) {
 						$external_domains[] = $domain;
 					}
 				}
@@ -94,8 +94,8 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 			foreach ( $wp_styles->queue as $handle ) {
 				$style = $wp_styles->registered[ $handle ] ?? null;
 				if ( $style && ! empty( $style->src ) ) {
-					$domain = parse_url( $style->src, PHP_URL_HOST );
-					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', parse_url( home_url(), PHP_URL_HOST ) ), true ) ) {
+					$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( $style->src );
+					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() ) ), true ) ) {
 						$external_domains[] = $domain;
 					}
 				}

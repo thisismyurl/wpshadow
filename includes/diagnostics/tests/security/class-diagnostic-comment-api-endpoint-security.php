@@ -99,7 +99,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			return null;
 		}
 
-		return array(
+		$finding = array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
@@ -111,6 +111,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'auto_fixable' => false,
 			'details'      => $issues,
 			'kb_link'      => 'https://wpshadow.com/kb/comment-api-endpoint-security',
+			'context'      => array(
+				'why'            => __( 'Unauthenticated REST comment endpoint = spam + private data leak. Attacker: submits spam comments programmatically (bulk attacks). Accesses comment data (email, IP, content) via public endpoint. Enumerates user accounts (test each with /wp-json/wp/v2/comments). Creates backdoor comments linking to malware. Business impact: moderation overload, spam liability, reputation damage, SEO penalties (malware links).', 'wpshadow' ),
+				'recommendation' => __( '1. Require authentication for comment endpoints (add capability check). 2. Disable comment REST endpoint if not needed. 3. Implement rate limiting on comment submission (max 5 per IP per hour). 4. Require CAPTCHA verification for unauthenticated comments. 5. Whitelist allowed comment properties (hide sensitive meta). 6. Add IP-based spam filtering (StopForumSpam integration). 7. Log all comment submissions in activity log. 8. Moderate first-time commenter posts (don\'t auto-approve). 9. Use Akismet or similar spam detection. 10. Monitor comment endpoint usage (detect abuse patterns).', 'wpshadow' ),
+			),
 		);
+		return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api', 'comment-endpoint' );
 	}
 }

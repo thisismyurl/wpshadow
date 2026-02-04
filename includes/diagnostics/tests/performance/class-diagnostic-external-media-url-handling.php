@@ -15,6 +15,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -75,7 +76,7 @@ class Diagnostic_External_Media_URL_Handling extends Diagnostic_Base {
 		$failed_count   = 0;
 
 		$upload_dir = wp_upload_dir();
-		$base_host  = wp_parse_url( $upload_dir['baseurl'], PHP_URL_HOST );
+		$base_host  = Diagnostic_URL_And_Pattern_Helper::get_domain( $upload_dir['baseurl'] );
 
 		global $wpdb;
 

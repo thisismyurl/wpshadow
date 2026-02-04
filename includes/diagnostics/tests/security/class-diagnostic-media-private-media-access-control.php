@@ -109,7 +109,7 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
 				'description'   => implode( '. ', $issues ),
@@ -117,7 +117,22 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
 				'kb_link'       => 'https://wpshadow.com/kb/media-private-media-access-control',
+				'context'       => array(
+					'why'            => __( 'Private media access control is essential for protecting sensitive assets such as customer invoices, course materials, internal documents, or client deliverables. If permission checks are missing or inconsistent, private attachments can be accessed via direct URLs or by enumerating attachment IDs. This is a classic access control failure. OWASP Top 10 2021 ranks Broken Access Control #1, highlighting that missing authorization checks are the most common and impactful web security issue. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers often exploit weak access controls after obtaining a low‑privilege account. The business impact includes exposure of confidential data, contract violations, and regulatory risk (GDPR/PCI/PHI) if private documents are accessed by unauthorized parties. For membership and education sites, leaked premium content undermines revenue and increases churn. For agencies, a single leaked client document can damage trust and trigger legal penalties. Access control around media must be explicit, consistent, and enforceable in every delivery path (direct file access, attachment pages, REST API, and CDN). When these checks are absent, logs may show normal downloads, making the leak hard to detect. Strengthening media access control is a high‑value, low‑friction control that prevents data leakage and provides clear evidence of compliance. It also reduces support load by eliminating accidental sharing and unauthorized access.', 'wpshadow' ),
+					'recommendation' => __( '1. Require authentication for private media URLs and attachment pages.
+2. Enforce capability checks (read_post/read_private_posts) on every media request.
+3. Store private files outside the public web root when possible.
+4. Use signed, expiring URLs for restricted downloads.
+5. Disable direct access to private attachments via .htaccess/Nginx rules.
+6. Limit REST API exposure of private attachments.
+7. Add role‑based filters to media library queries.
+8. Log access to private media and alert on anomalies.
+9. Review CDN settings to ensure private files are not cached publicly.
+10. Re‑audit access control after plugin/theme updates.', 'wpshadow' ),
+				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'media-access', self::$slug );
 		}
 
 		return null;

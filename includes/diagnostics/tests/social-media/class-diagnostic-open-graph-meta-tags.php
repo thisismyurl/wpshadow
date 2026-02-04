@@ -90,7 +90,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 		}
 
 		// Pattern 1: No Open Graph tags at all
-		if ( ! preg_match( '/<meta\s+property=["\']og:title/', $homepage_content ) ) {
+		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_OG_TITLE ) ) {
 			if ( ! $has_seo_plugin && ! $has_social_plugin ) {
 				return array(
 					'id'           => self::$slug,

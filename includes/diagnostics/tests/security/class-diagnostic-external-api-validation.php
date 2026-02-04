@@ -98,7 +98,7 @@ class Diagnostic_External_API_Validation extends Diagnostic_Base {
 		);
 
 		if ( $recent_api_errors > 5 ) {
-			return array(
+			$finding = array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
 				'description' => sprintf(
@@ -110,7 +110,12 @@ class Diagnostic_External_API_Validation extends Diagnostic_Base {
 				'threat_level' => 45,
 				'auto_fixable' => false,
 				'kb_link'     => 'https://wpshadow.com/kb/external-api-validation',
+				'context'      => array(
+					'why'            => __( 'Unvalidated external API responses = code injection + data corruption. Plugin calls PayPal API. Response contains malicious PHP code in discount field. Plugin displays response without validation. Code executes. Site compromised.', 'wpshadow' ),
+					'recommendation' => __( '1. Validate response structure: use json_schema_validate(). 2. Sanitize/escape all API values. 3. Cache responses but validate on retrieval. 4. Set response size limits (reject oversized = DoS). 5. Validate HTTP status + content-type headers.', 'wpshadow' ),
+				),
 			);
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api', 'external-validation' );
 		}
 
 		// Check for oversized API response cache

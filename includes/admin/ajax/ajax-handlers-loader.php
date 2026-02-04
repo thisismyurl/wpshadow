@@ -149,3 +149,6 @@ require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
 require_once $ajax_path . 'exit-followup-handlers.php';
 // Test handler (temporary)
 require_once $ajax_path . 'test-ajax-handler.php';
+
+// Content review wizard
+require_once $ajax_path . 'class-content-review-handlers.php';

@@ -245,7 +245,7 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 
 		// Issue: No rate limiting detected.
 		if ( ! $has_any_rate_limiting ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'REST API media endpoints have no rate limiting, making the site vulnerable to abuse and DDoS attacks', 'wpshadow' ),
@@ -253,6 +253,19 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 				'threat_level' => 50,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/media-api-rate-limiting',
+				'context'      => array(
+					'why'            => __( 'Media REST API endpoints are high-volume, predictable targets for abuse because they expose bulk lists of assets and are often cached in ways that hide malicious traffic. Without rate limiting, a single script can request thousands of media items per minute, forcing repeated authentication checks, database reads, and image metadata lookups. That load degrades performance for legitimate visitors, causes cache churn, and can trigger CDN or hosting overage fees. The business impact is not limited to bandwidth costs: media libraries often contain paid or proprietary assets, so aggressive scraping can erode competitive advantage, lead to copyright misuse, and increase takedown/legal costs. OWASP API Security Top 10 lists Unrestricted Resource Consumption as a key risk, and OWASP Top 10 2021 ranks Broken Access Control #1, which includes unauthenticated exposure of sensitive or paid resources. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers routinely blend credential stuffing with high‑rate API enumeration to map content and find weak endpoints. A media-heavy business (e‑commerce, photography, LMS) can see revenue drop if assets are copied or if site performance collapses during peak hours. Rate limiting changes attacker economics by stretching a scrape into days or weeks, increasing detection time and reducing the chance of successful exfiltration. It also provides a measurable control for compliance and insurer requirements, showing that abusive access is actively constrained.', 'wpshadow' ),
+					'recommendation' => __( '1. Enforce per‑IP rate limits for /wp/v2/media routes (e.g., 60 requests/minute anonymous, 300 authenticated).
+2. Add burst controls: allow short spikes but enforce hard caps per minute and per hour.
+3. Apply limits at the edge (CDN/WAF) and at the application layer to avoid bypass.
+4. Require authentication for bulk media listing or high page sizes.
+5. Reduce default per_page values and cap max per_page in REST responses.
+6. Log and alert on 429 responses and rapid media enumeration patterns.
+7. Cache media list responses for authenticated users with short TTL to reduce DB load.
+8. Block known bad user agents and automated scrape fingerprints.
+9. Implement IP reputation or geo‑blocking for repeated abuse.
+10. Test rate limits quarterly with scripted load to confirm headers and 429 behavior.', 'wpshadow' ),
+				),
 				'details'      => array(
 					'rest_enabled'             => $rest_enabled,
 					'has_rate_limit_filter'    => (bool) $has_rate_limit_filter,
@@ -280,6 +293,8 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 					),
 				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api', self::$slug );
 		}
 
 		return null;

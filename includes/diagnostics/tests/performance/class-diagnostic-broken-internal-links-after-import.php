@@ -66,7 +66,7 @@ class Diagnostic_Broken_Internal_Links_After_Import extends Diagnostic_Base {
 		$issues = array();
 
 		$home_url = home_url();
-		$home_domain = wp_parse_url( $home_url, PHP_URL_HOST );
+		$home_domain = Diagnostic_URL_And_Pattern_Helper::get_domain( $home_url );
 
 		// Sample recent posts for broken links.
 		$recent_posts = get_posts( array(
@@ -91,7 +91,7 @@ class Diagnostic_Broken_Internal_Links_After_Import extends Diagnostic_Base {
 			if ( preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>/i', $post->post_content, $matches ) ) {
 				foreach ( $matches[1] as $link_url ) {
 					// Check if it's an internal link to different domain.
-					$link_domain = wp_parse_url( $link_url, PHP_URL_HOST );
+					$link_domain = Diagnostic_URL_And_Pattern_Helper::get_domain( $link_url );
 
 					if ( ! empty( $link_domain ) && $link_domain !== $home_domain ) {
 						// Link points to different domain - might be old site.
@@ -111,13 +111,13 @@ class Diagnostic_Broken_Internal_Links_After_Import extends Diagnostic_Base {
 		}
 
 		// Check for protocol mismatches (http vs https).
-		$site_scheme = wp_parse_url( $home_url, PHP_URL_SCHEME );
+		$site_scheme = Diagnostic_URL_And_Pattern_Helper::get_scheme( $home_url );
 		$protocol_mismatches = 0;
 
 		foreach ( $recent_posts as $post ) {
 			if ( preg_match_all( '/href=["\']([^"\']+)["\']/', $post->post_content, $matches ) ) {
 				foreach ( $matches[1] as $link_url ) {
-					$link_scheme = wp_parse_url( $link_url, PHP_URL_SCHEME );
+					$link_scheme = Diagnostic_URL_And_Pattern_Helper::get_scheme( $link_url );
 					if ( ! empty( $link_scheme ) && $link_scheme !== $site_scheme ) {
 						$protocol_mismatches++;
 					}

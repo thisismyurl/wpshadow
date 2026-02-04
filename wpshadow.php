@@ -182,6 +182,11 @@ require_once WPSHADOW_PATH . 'includes/admin/class-health-history-page.php';
 require_once WPSHADOW_PATH . 'includes/admin/class-health-history-widget.php';
 require_once WPSHADOW_PATH . 'includes/admin/ajax/class-ajax-get-health-history.php';
 
+// Content review wizard system
+require_once WPSHADOW_PATH . 'includes/features/content-review/class-content-review-manager.php';
+require_once WPSHADOW_PATH . 'includes/features/content-review/class-content-review-reports.php';
+require_once WPSHADOW_PATH . 'includes/features/content-review/class-content-review-kb-integration.php';
+
 /**
  * Initialize auxiliary features on init hook (after translations are loaded).
  *

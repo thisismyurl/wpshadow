@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -177,7 +178,7 @@ class Diagnostic_Anonymous_User_Data_Collection extends Diagnostic_Base {
 							$issues[] = sprintf(
 								/* translators: %s: script domain */
 								__( 'Third-party script detected: %s', 'wpshadow' ),
-								parse_url( $script, PHP_URL_HOST )
+							Diagnostic_URL_And_Pattern_Helper::get_domain( $script )
 							);
 						}
 					}

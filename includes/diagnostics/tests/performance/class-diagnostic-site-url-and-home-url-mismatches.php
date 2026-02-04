@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,8 +91,8 @@ class Diagnostic_Site_URL_And_Home_URL_Mismatches extends Diagnostic_Base {
 
 		// Check for protocol mismatch (http vs https).
 		if ( ! empty( $site_url ) && ! empty( $home_url ) ) {
-			$site_protocol = parse_url( $site_url, PHP_URL_SCHEME );
-			$home_protocol = parse_url( $home_url, PHP_URL_SCHEME );
+			$site_protocol = Diagnostic_URL_And_Pattern_Helper::get_scheme( $site_url );
+			$home_protocol = Diagnostic_URL_And_Pattern_Helper::get_scheme( $home_url );
 
 			if ( $site_protocol !== $home_protocol ) {
 				$issues[] = sprintf(

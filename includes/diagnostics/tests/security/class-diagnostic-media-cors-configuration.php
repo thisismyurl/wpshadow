@@ -133,7 +133,7 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 		$issues = array();
 
 		$upload_dir = wp_upload_dir();
-		$base_host  = wp_parse_url( $upload_dir['baseurl'], PHP_URL_HOST );
+		$base_host  = Diagnostic_URL_And_Pattern_Helper::get_domain( $upload_dir['baseurl'] );
 
 		global $wpdb;
 		$attachment_id = (int) $wpdb->get_var(
@@ -188,7 +188,7 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -205,10 +205,25 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 				'threat_level' => 55,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/media-cors-configuration',
+				'context'      => array(
+					'why'            => __( 'CORS settings control which domains can read your media via browsers and scripts. When CORS is overly permissive (for example, Access‑Control‑Allow‑Origin: * with credentials), any site can embed or programmatically read your assets, enabling unauthorized reuse, content scraping, or leakage of private media URLs. This is not just a copyright issue: media URLs can reveal internal structure, user IDs, or private resources, and permissive CORS can be chained with client‑side vulnerabilities to exfiltrate data from authenticated sessions. OWASP Top 10 2021 ranks Broken Access Control #1, and misconfigured CORS is a common form of access control failure at the HTTP layer. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers routinely target misconfigurations that expose assets without direct authentication. For businesses that sell media, courses, or premium content, a permissive CORS policy can turn paid assets into free downloads, reducing revenue and increasing support burdens. It can also trigger CDN overages and reputational harm when your assets appear on unrelated or malicious sites. Tight CORS configuration is a low‑effort, high‑impact control that limits access to approved origins, reduces data leakage, and provides clear evidence of good security hygiene for auditors and insurers.', 'wpshadow' ),
+					'recommendation' => __( '1. Set Access‑Control‑Allow‑Origin to your exact domain(s), never * for protected media.
+2. Avoid Allow‑Credentials unless absolutely required; if used, ensure origins are strict.
+3. Configure CORS at CDN and origin consistently to avoid conflicting headers.
+4. Limit allowed methods to GET/HEAD for media endpoints.
+5. Deny cross‑origin requests to private or authenticated media URLs.
+6. Implement hotlink protection and signed URLs for premium assets.
+7. Review preflight responses and ensure they do not expose private headers.
+8. Log CORS violations or blocked origins for monitoring.
+9. Test CORS in staging with real browser requests and developer tools.
+10. Re‑audit CORS whenever CDN, domain, or media paths change.', 'wpshadow' ),
+				),
 				'details'      => array(
 					'issues' => $issues,
 				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'media-security', self::$slug );
 		}
 
 		return null;

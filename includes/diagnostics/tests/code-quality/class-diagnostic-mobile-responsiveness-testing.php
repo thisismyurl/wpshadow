@@ -74,7 +74,7 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
-			if ( preg_match( '/<meta[^>]*name=["\']viewport["\'][^>]*content=["\']([^"\']*)["\']/', $header_content, $matches ) ) {
+			if ( Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $header_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_VIEWPORT ) ) {
 				$has_viewport_meta = true;
 				$viewport_content = $matches[1];
 			}

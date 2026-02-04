@@ -283,7 +283,7 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -294,6 +294,19 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
+				'context'      => array(
+					'why'            => __( 'User profile fields are a common vector for stored XSS because they are user‑controlled, widely displayed, and often trusted by themes and plugins. If profile data is not sanitized on save and escaped on output, an attacker can inject JavaScript into the bio, display name, or custom fields. When other users view the profile, the script executes, enabling cookie theft, admin actions via CSRF, or silent redirection to malicious pages. OWASP Top 10 2021 ranks Injection #3 and Broken Access Control #1; stored XSS often leads to privilege escalation and account compromise. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element, with phishing and credential abuse as common entry points; stored XSS amplifies these by enabling session theft or token exfiltration without direct credential capture. The business impact includes account takeovers, data leakage, and reputational damage if visitors are redirected or shown malicious content. For communities and membership sites, one malicious profile can compromise hundreds of users. Remediation can require forced logouts, password resets, and regulatory notifications. Strong sanitization and contextual escaping are low‑cost controls that dramatically reduce this risk and improve code quality across themes and plugins. They also provide auditable evidence of secure input handling practices for insurers and compliance reviews.', 'wpshadow' ),
+					'recommendation' => __( '1. Sanitize all profile inputs on save (sanitize_text_field, sanitize_email, wp_kses).
+2. Escape all profile outputs (esc_html, esc_attr, esc_url) based on context.
+3. Block dangerous HTML tags and attributes (script, onerror, javascript:).
+4. Enforce nonce checks on all profile update handlers.
+5. Limit profile field length to prevent payload stuffing.
+6. Remove unfiltered_html capability from non‑admin users.
+7. Add automated tests for XSS payloads in profile fields.
+8. Audit themes/plugins for custom profile fields and fix unsafe output.
+9. Log and alert on suspicious profile updates or HTML patterns.
+10. Educate moderators/admins to report unexpected profile behavior.', 'wpshadow' ),
+				),
 				'details'      => array(
 					'issues'             => $issues,
 					'suspicious_meta'    => $suspicious_meta,
@@ -301,6 +314,8 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 					'recommendation'     => __( 'Sanitize all user profile field inputs using sanitize_text_field(), wp_kses(), and verify nonces on updates.', 'wpshadow' ),
 				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'xss-prevention', self::$slug );
 		}
 
 		return null;

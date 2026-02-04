@@ -179,9 +179,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	 * @return bool True if SPF configured, false otherwise.
 	 */
 	private static function check_spf_configuration() {
-		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
-
-		// Check if DNS functions available.
+		$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
 		if ( ! function_exists( 'dns_get_record' ) ) {
 			return apply_filters( 'wpshadow_spf_configured', false );
 		}
@@ -226,9 +224,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	 * @return bool True if DMARC configured, false otherwise.
 	 */
 	private static function check_dmarc_configuration() {
-		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
-
-		if ( ! function_exists( 'dns_get_record' ) ) {
+		$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
 			return apply_filters( 'wpshadow_dmarc_configured', false );
 		}
 

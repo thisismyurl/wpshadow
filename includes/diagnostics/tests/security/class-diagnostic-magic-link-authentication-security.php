@@ -224,7 +224,7 @@ class Diagnostic_Magic_Link_Authentication_Security extends Diagnostic_Base {
 				'issues'               => $issues,
 			);
 
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => $description,
@@ -233,7 +233,12 @@ class Diagnostic_Magic_Link_Authentication_Security extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/magic-link-authentication-security',
 				'details'      => $details,
+				'context'      => array(
+					'why'            => __( 'Weak magic link tokens enable account takeover. Scenario: Attacker predicts token format (md5(email+timestamp)). Guesses correct token. Gains account access without password. Passwordless auth only secure if tokens unpredictable + time-limited. Weak token generation = security theater (looks secure, isn\'t). Auth bypass via weak randomness = critical vuln. NIST mandates cryptographically secure random for authentication tokens.', 'wpshadow' ),
+					'recommendation' => __( '1. Generate tokens with random_bytes(32) minimum. 2. Encode as URL-safe base64 (bin2hex or base64_url_encode). 3. Store token hash in database (hash_equals() to prevent timing attacks). 4. Set token expiration to 15-30 minutes maximum. 5. Implement single-use enforcement (delete token after first use). 6. Never send tokens in query strings (email forwarding leaks tokens). 7. Use POST with hidden form field or link with fragment (#). 8. Validate user email matches token email (prevent reuse on wrong account). 9. Log magic link generation/usage in activity log. 10. Rate limit magic link generation (max 3 per 10 minutes per email).', 'wpshadow' ),
+				),
 			);
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', 'magic-links' );
 		}
 
 		return null;

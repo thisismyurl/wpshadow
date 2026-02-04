@@ -154,7 +154,7 @@ class Diagnostic_Theme_File_Include_Security extends Diagnostic_Base {
 			return null;
 		}
 
-		return array(
+		$finding = array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'Unsafe dynamic file includes detected in theme', 'wpshadow' ),
@@ -162,9 +162,24 @@ class Diagnostic_Theme_File_Include_Security extends Diagnostic_Base {
 			'threat_level' => 80,
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/theme-file-include-security',
+			'context'      => array(
+				'why'            => __( 'Dynamic file includes with user‑controlled input are a classic path to Local File Inclusion (LFI) or Remote File Inclusion (RFI). When a theme builds a path using $_GET or $_POST values without strict validation, attackers can traverse directories to read sensitive files (wp‑config.php, logs) or, in certain configurations, execute remote code. OWASP Top 10 2021 ranks Injection #3 and Broken Access Control #1, and file inclusion vulnerabilities often enable both by exposing configuration secrets or allowing code execution. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks are a leading pattern; attackers frequently chain simple path manipulation with leaked credentials or misconfigurations to escalate access. The business impact is severe: data leaks, database credential exposure, full site compromise, and reputational damage. For ecommerce sites, LFI can expose payment configuration, enabling fraud or skimming. Even in non‑commercial sites, inclusion attacks can deface content or distribute malware to visitors, triggering search engine warnings and long‑term traffic loss. Unlike some vulnerabilities, file inclusion is often easy to exploit once discovered, and automated scanners actively look for these patterns. Using whitelisted template maps and strict path validation is a low‑cost fix that eliminates the risk and makes your theme more maintainable. It also provides a clear audit trail for security reviews.', 'wpshadow' ),
+				'recommendation' => __( '1. Replace dynamic includes with a strict whitelist of allowed templates.
+2. Use sanitize_key() or sanitize_text_field() on template identifiers.
+3. Resolve paths with realpath() and verify they stay within the theme directory.
+4. Block directory traversal sequences (../, ..\) explicitly.
+5. Remove remote include options and disable allow_url_include at server level.
+6. Avoid including files based on query parameters; use routing maps instead.
+7. Use locate_template() with a fixed array of templates.
+8. Add automated tests for template selection logic.
+9. Review child themes and custom code for similar patterns.
+10. Log and alert on unexpected template requests or failures.', 'wpshadow' ),
+			),
 			'details'      => array(
 				'matches' => $matches,
 			),
 		);
+
+		return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-inclusion', self::$slug );
 	}
 }

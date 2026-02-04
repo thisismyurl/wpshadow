@@ -83,7 +83,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 		}
 
 		// Pattern 1: No Twitter Card tags at all
-		if ( ! preg_match( '/<meta\s+name=["\']twitter:card/', $homepage_content ) ) {
+		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_CARD ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -116,8 +116,8 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 		}
 
 		// Pattern 2: Missing Twitter handle/creator attribution
-		if ( ! preg_match( '/<meta\s+name=["\']twitter:creator/', $homepage_content ) && 
-			 ! preg_match( '/<meta\s+name=["\']twitter:site/', $homepage_content ) ) {
+		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_CREATOR ) && 
+			 ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_CREATOR ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -176,9 +176,9 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 		}
 
 		// Pattern 4: Image dimension issues
-		if ( preg_match( '/<meta\s+name=["\']twitter:image["\']/', $homepage_content ) ) {
+		if ( Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_IMAGE ) ) {
 			// Check for image width/height specifications
-			if ( ! preg_match( '/<meta\s+name=["\']twitter:image:width/', $homepage_content ) ) {
+				if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_IMAGE_DIMENSIONS ) ) {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
@@ -204,7 +204,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 		}
 
 		// Pattern 5: ALT text missing for accessibility
-		if ( ! preg_match( '/<meta\s+name=["\']twitter:image:alt/', $homepage_content ) ) {
+		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_IMAGE_ALT ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -226,7 +226,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 		}
 
 		// Pattern 6: Description mismatch or not optimized for Twitter
-		if ( ! preg_match( '/<meta\s+name=["\']twitter:description/', $homepage_content ) ) {
+		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_DESCRIPTION ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,

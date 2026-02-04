@@ -157,17 +157,32 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 
 		if ( empty( $admins ) ) {
 			$issues[] = __( 'No administrator accounts found (system error)', 'wpshadow' );
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'No administrators found.', 'wpshadow' ),
 				'severity'     => 'critical',
 				'threat_level' => 100,
 				'auto_fixable' => false,
+				'context'      => array(
+					'why'            => __( 'Administrator access is the root of trust for a WordPress site. If admin accounts are missing or unmanaged, it often signals misconfiguration, permission drift, or an incident in progress. The absence of a controlled admin layer also blocks recovery steps such as enabling 2FA, auditing users, or updating security settings. OWASP Top 10 2021 ranks Identification and Authentication Failures #7 and Broken Access Control #1, underscoring how account management failures lead to full compromise. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that credential abuse remains a primary initial access method; without stable admin oversight, attackers can persist unnoticed and alter user roles, install backdoors, or exfiltrate data. The business impact is severe: restoration costs, emergency developer time, and possible downtime while access is regained. In regulated contexts, lack of accountable admin control complicates incident response and can trigger compliance reporting obligations. 2FA does not help if there is no admin baseline to enforce it, and many automated recovery steps depend on the administrator role. Ensuring a controlled admin group with 2FA is therefore a foundational control that directly protects revenue, customer trust, and the ability to respond quickly during an incident.', 'wpshadow' ),
+					'recommendation' => __( '1. Immediately create a secure administrator account and document ownership.
+2. Enforce 2FA for all admin accounts before restoring normal operations.
+3. Audit user roles to ensure no unexpected admin or editor privileges exist.
+4. Reset passwords for all privileged users and require strong password policy.
+5. Enable login notifications and session timeout controls.
+6. Review recent plugin/theme changes for unauthorized modifications.
+7. Enable activity logging for user and role changes.
+8. Restrict admin access by IP or VPN where feasible.
+9. Add backup admin recovery methods (backup codes or hardware keys).
+10. Schedule quarterly access reviews and remove unused accounts.', 'wpshadow' ),
+				),
 				'details'      => array(
 					'recommendation' => __( 'Restore administrator accounts immediately.', 'wpshadow' ),
 				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', self::$slug );
 		}
 
 		// Check if 2FA is enabled for admins.
@@ -278,7 +293,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -289,6 +304,19 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
+				'context'      => array(
+					'why'            => __( 'Two‑factor authentication is the most effective control for stopping account takeover when passwords are phished, reused, or leaked. Without 2FA, a single compromised credential can grant administrative access, enabling malware injection, content defacement, or data exfiltration. OWASP Top 10 2021 ranks Identification and Authentication Failures #7 and Broken Access Control #1, emphasizing that weak authentication processes are a top contributor to real‑world breaches. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element, with stolen credentials and phishing repeatedly cited as primary initial access methods. In practical terms, that means a password‑only admin account is a predictable point of failure. The business impact includes outage time during incident response, emergency developer costs, reputational damage from compromised content, and potential legal exposure if customer data is accessed. For ecommerce or membership sites, attackers can change payment settings, refund policies, or customer emails, causing direct revenue loss and chargebacks. 2FA also improves compliance posture for insurers and auditors, who increasingly expect multi‑factor authentication for privileged accounts. By enforcing 2FA and monitoring enrollment, you reduce the likelihood of successful credential abuse and gain a clear, demonstrable control that can be tested and reported. It is a low‑friction change with high return on security investment.', 'wpshadow' ),
+					'recommendation' => __( '1. Require 2FA for all administrator and editor accounts.
+2. Prefer authenticator apps or hardware keys over SMS.
+3. Generate and store backup codes for every privileged user.
+4. Enforce 2FA during wp‑admin login and for REST/API authentication where possible.
+5. Enable login notifications for privileged accounts.
+6. Shorten session lifetimes and force re‑authentication for sensitive actions.
+7. Remove unused admin accounts and rotate credentials quarterly.
+8. Block login attempts from known bad IPs and add rate limits.
+9. Train staff on phishing recognition and require unique passwords.
+10. Audit 2FA enrollment monthly and alert on any missing devices.', 'wpshadow' ),
+				),
 				'details'      => array(
 					'issues'              => $issues,
 					'admin_count'         => count( $admins ),
@@ -297,6 +325,8 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 					'recommendation'      => __( 'Install 2FA plugin (Wordfence or Two Factor Authentication). Enable 2FA for all admin accounts. Enforce 2FA for admin role. Configure login notifications and session timeouts.', 'wpshadow' ),
 				),
 			);
+
+			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', self::$slug );
 		}
 
 		return null;
