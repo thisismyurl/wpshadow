@@ -133,7 +133,7 @@ class Diagnostic_WooCommerce_Security_Configuration extends Diagnostic_Base {
 		if ( 'yes' !== $force_ssl_checkout && ! $site_is_https ) {
 			$issues[] = array(
 				'type'        => 'ssl_not_forced',
-				'description' => __( 'SSL not enforced for checkout; customer payment data transmitted insecurely', 'wpshadow' ),
+				'description' => __( 'Adding SSL encryption to your checkout protects customer payment information (like using a sealed envelope instead of a postcard). This shows the padlock icon in browsers and keeps credit card details private.', 'wpshadow' ),
 			);
 		}
 

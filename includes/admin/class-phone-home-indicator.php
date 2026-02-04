@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -27,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0200
  */
-class Phone_Home_Indicator {
+class Phone_Home_Indicator extends Hook_Subscriber_Base {
 
 	/**
 	 * Recent connections storage.
@@ -37,17 +39,29 @@ class Phone_Home_Indicator {
 	private static $connections = array();
 
 	/**
-	 * Initialize phone home indicator.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6004.0200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'pre_http_request'                                => array( 'track_outbound_request', 10, 3 ),
+			'admin_notices'                                   => 'show_indicator',
+			'admin_enqueue_scripts'                           => 'enqueue_assets',
+			'wp_ajax_wpshadow_get_recent_connections'         => 'ajax_get_connections',
+		);
+	}
+
+	/**
+	 * Initialize phone home indicator (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Phone_Home_Indicator::subscribe() instead
+	 * @since      1.6004.0200
+	 * @return     void
 	 */
 	public static function init() {
-		// Hook into HTTP API to monitor outbound requests
-		add_filter( 'pre_http_request', array( __CLASS__, 'track_outbound_request' ), 10, 3 );
-		add_action( 'admin_notices', array( __CLASS__, 'show_indicator' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wpshadow_get_recent_connections', array( __CLASS__, 'ajax_get_connections' ) );
+		self::subscribe();
 	}
 
 	/**

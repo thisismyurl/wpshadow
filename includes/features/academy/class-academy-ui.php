@@ -15,6 +15,7 @@ namespace WPShadow\Academy;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,28 +28,35 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.1920
  */
-class Academy_UI extends AJAX_Handler_Base {
+class Academy_UI extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize UI
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.1920
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wp_dashboard_setup'                             => 'register_dashboard_widget',
+			'admin_enqueue_scripts'                          => 'enqueue_assets',
+			'wp_ajax_wpshadow_dismiss_learning_suggestion'   => 'dismiss_learning_suggestion',
+			'wp_ajax_wpshadow_track_article_view'            => 'track_article_view',
+			'wp_ajax_wpshadow_track_video_completion'        => 'track_video_completion',
+			'wp_ajax_wpshadow_get_learning_path'             => 'get_learning_path',
+		);
+	}
+
+	/**
+	 * Initialize UI (deprecated - use ::subscribe() instead)
+	 *
+	 * @deprecated 1.7035.1400 Use Academy_UI::subscribe() instead
+	 * @since      1.6030.1920
+	 * @return     void
 	 */
 	public static function init() {
-		// Dashboard widget.
-		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
-
-		// Admin menu is now registered by Menu_Manager to control menu order (Academy before Help).
-
-		// Enqueue assets.
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-
-		// AJAX handlers.
-		add_action( 'wp_ajax_wpshadow_dismiss_learning_suggestion', array( __CLASS__, 'dismiss_learning_suggestion' ) );
-		add_action( 'wp_ajax_wpshadow_track_article_view', array( __CLASS__, 'track_article_view' ) );
-		add_action( 'wp_ajax_wpshadow_track_video_completion', array( __CLASS__, 'track_video_completion' ) );
-		add_action( 'wp_ajax_wpshadow_get_learning_path', array( __CLASS__, 'get_learning_path' ) );
+		// Backwards compatibility: call subscribe()
+		self::subscribe();
 	}
 
 	/**
@@ -60,7 +68,7 @@ class Academy_UI extends AJAX_Handler_Base {
 	public static function register_dashboard_widget() {
 		wp_add_dashboard_widget(
 			'wpshadow_academy_widget',
-			__( '🎓 Your Learning Progress', 'wpshadow' ),
+			__( '🎓 What You\'ve Learned So Far', 'wpshadow' ),
 			array( __CLASS__, 'render_dashboard_widget' )
 		);
 	}
@@ -81,15 +89,15 @@ class Academy_UI extends AJAX_Handler_Base {
 			<div class="academy-stats">
 				<div class="stat">
 					<span class="stat-value"><?php echo esc_html( $progress['articles_viewed'] ); ?></span>
-					<span class="stat-label"><?php esc_html_e( 'Articles Read', 'wpshadow' ); ?></span>
+					<span class="stat-label"><?php esc_html_e( 'Guides You\'ve Read', 'wpshadow' ); ?></span>
 				</div>
 				<div class="stat">
 					<span class="stat-value"><?php echo esc_html( $progress['videos_completed'] ); ?></span>
-					<span class="stat-label"><?php esc_html_e( 'Videos Watched', 'wpshadow' ); ?></span>
+					<span class="stat-label"><?php esc_html_e( 'Videos You\'ve Finished', 'wpshadow' ); ?></span>
 				</div>
 				<div class="stat">
 					<span class="stat-value"><?php echo esc_html( $progress['courses_completed'] ); ?></span>
-					<span class="stat-label"><?php esc_html_e( 'Courses Completed', 'wpshadow' ); ?></span>
+					<span class="stat-label"><?php esc_html_e( 'Full Courses Finished', 'wpshadow' ); ?></span>
 				</div>
 			</div>
 
@@ -128,7 +136,7 @@ class Academy_UI extends AJAX_Handler_Base {
 				$suggestion = reset( $suggestions );
 				?>
 				<div class="learning-suggestion">
-					<h4><?php esc_html_e( '💡 Suggested Learning', 'wpshadow' ); ?></h4>
+					<h4><?php esc_html_e( '💡 Here\'s Something That Might Help', 'wpshadow' ); ?></h4>
 					<p><?php echo esc_html( $suggestion['message'] ); ?></p>
 					<?php if ( ! empty( $suggestion['article_id'] ) ) : ?>
 						<?php $article = KB_Article_Registry::get( $suggestion['article_id'] ); ?>
@@ -188,9 +196,8 @@ class Academy_UI extends AJAX_Handler_Base {
 				?>
 				<div class="wps-page-container">
 					<?php wpshadow_render_page_header(
-						__( 'My Learning Path', 'wpshadow' ),
-						__( 'Personalized recommendations based on your site\'s diagnostics.', 'wpshadow' ),
-						'dashicons-superhero'
+					__( 'Your Custom Study Plan', 'wpshadow' ),
+					__( 'Lessons we picked specifically for your site (based on what we found when checking it).', 'wpshadow' ),
 					); ?>
 
 					<div style="margin-top: -10px;">
@@ -216,8 +223,8 @@ class Academy_UI extends AJAX_Handler_Base {
 		?>
 		<div class="wps-page-container">
 			<?php wpshadow_render_page_header(
-				__( 'WPShadow Academy', 'wpshadow' ),
-				__( 'Learn WordPress security, performance, privacy, and best practices.', 'wpshadow' ),
+				__( 'Learning Center', 'wpshadow' ),
+				__( 'Learn how to keep your WordPress site fast, safe, and running smoothly. Everything explained in plain English.', 'wpshadow' ),
 				'dashicons-welcome-learn-more'
 			); ?>
 
@@ -235,7 +242,7 @@ class Academy_UI extends AJAX_Handler_Base {
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Structured learning paths with lessons and hands-on exercises.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Step-by-step classes that teach you everything (like taking a workshop).', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -274,11 +281,11 @@ class Academy_UI extends AJAX_Handler_Base {
 			</div>
 
 			<!-- KB Articles -->
-										<?php esc_html_e( 'KB Articles', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Quick Answer Guides', 'wpshadow' ); ?>
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Quick reference guides and documentation for common tasks.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Short articles that answer common questions (like having a cheat sheet handy).', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -299,11 +306,11 @@ class Academy_UI extends AJAX_Handler_Base {
 							<div>
 								<h3 class="wps-card-title wps-m-0">
 									<a href="https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Training Videos', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Video Lessons', 'wpshadow' ); ?>
 									</a>
 								</h3>
 								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Step-by-step video tutorials and screencasts.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Watch and learn how to do things (like having someone show you in person).', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -311,7 +318,7 @@ class Academy_UI extends AJAX_Handler_Base {
 					<div class="wps-card-body">
 						<a href="https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
 							<span class="dashicons dashicons-external"></span>
-							<?php esc_html_e( 'Watch Videos', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Start Watching', 'wpshadow' ); ?>
 						</a>
 					</div>
 				</div>
@@ -326,12 +333,12 @@ class Academy_UI extends AJAX_Handler_Base {
 			?>
 			<div style="margin-top: 40px;">
 				<h2 style="font-size: 20px; margin-bottom: 20px; color: #1d2327;">
-					<?php esc_html_e( 'Your Learning Path', 'wpshadow' ); ?>
+					<?php esc_html_e( 'What We Think You Should Learn Next', 'wpshadow' ); ?>
 				</h2>
 				<div class="wps-card">
 					<div class="wps-card-body">
 						<?php if ( ! empty( $learning_path ) ) : ?>
-							<p><?php esc_html_e( 'Based on your site diagnostics, we recommend focusing on:', 'wpshadow' ); ?></p>
+							<p><?php esc_html_e( 'After looking at your site, here\'s what would help you most right now:', 'wpshadow' ); ?></p>
 							<ul style="list-style: disc; margin-left: 20px;">
 								<?php 
 								foreach ( array_slice( $learning_path, 0, 5 ) as $item ) :
@@ -346,7 +353,7 @@ class Academy_UI extends AJAX_Handler_Base {
 								</a>
 							</div>
 						<?php else : ?>
-							<p><?php esc_html_e( 'Start exploring courses and articles to build your personalized learning path.', 'wpshadow' ); ?></p>
+							<p><?php esc_html_e( 'Your site looks good! Browse our courses and videos to learn even more ways to improve.', 'wpshadow' ); ?></p>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -443,11 +450,11 @@ class Academy_UI extends AJAX_Handler_Base {
 
 		?>
 		<div class="wpshadow-learning-path">
-			<h2><?php esc_html_e( 'Your Personalized Learning Path', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Based on your site\'s diagnostics, here\'s what we recommend you learn:', 'wpshadow' ); ?></p>
+			<h2><?php esc_html_e( 'Your Custom Study Plan', 'wpshadow' ); ?></h2>
+			<p><?php esc_html_e( 'After checking your site, here are the topics that would help you most:', 'wpshadow' ); ?></p>
 
 			<?php if ( ! empty( $learning_path['courses'] ) ) : ?>
-				<h3><?php esc_html_e( 'Recommended Courses', 'wpshadow' ); ?></h3>
+				<h3><?php esc_html_e( 'Courses That Would Help You', 'wpshadow' ); ?></h3>
 				<div class="recommended-courses">
 					<?php foreach ( $learning_path['courses'] as $course ) : ?>
 						<div class="course-recommendation">
@@ -461,11 +468,11 @@ class Academy_UI extends AJAX_Handler_Base {
 					<?php endforeach; ?>
 				</div>
 			<?php else : ?>
-				<p><?php esc_html_e( 'Great! Your site has no major issues. Browse our course catalog to continue learning.', 'wpshadow' ); ?></p>
+				<p><?php esc_html_e( 'Great news! Your site is in good shape. Check out our full course list to learn even more.', 'wpshadow' ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $learning_path['articles'] ) ) : ?>
-				<h3><?php esc_html_e( 'Quick Reads', 'wpshadow' ); ?></h3>
+				<h3><?php esc_html_e( 'Short Guides to Read', 'wpshadow' ); ?></h3>
 				<ul class="recommended-articles">
 					<?php foreach ( $learning_path['articles'] as $article ) : ?>
 						<li>
@@ -479,7 +486,7 @@ class Academy_UI extends AJAX_Handler_Base {
 			<?php endif; ?>
 
 			<?php if ( ! empty( $learning_path['videos'] ) ) : ?>
-				<h3><?php esc_html_e( 'Video Tutorials', 'wpshadow' ); ?></h3>
+				<h3><?php esc_html_e( 'Videos to Watch', 'wpshadow' ); ?></h3>
 				<div class="recommended-videos">
 					<?php foreach ( $learning_path['videos'] as $video ) : ?>
 						<div class="video-recommendation">

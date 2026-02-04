@@ -22,9 +22,13 @@ $summary_30 = Health_History::get_summary( 30 );
 $summary_90 = Health_History::get_summary( 90 );
 
 ?>
-<div class="wrap wpshadow-health-history">
-	<h1><?php esc_html_e( 'Health History', 'wpshadow' ); ?></h1>
-	
+<div class="wrap wps-page-container wpshadow-health-history">
+	<?php wpshadow_render_page_header(
+		__( 'Health History', 'wpshadow' ),
+		__( 'See how your site’s health score changes over time.', 'wpshadow' ),
+		'dashicons-chart-line'
+	); ?>
+
 	<div class="wpshadow-health-history-header">
 		<div class="wpshadow-metrics-grid">
 			<div class="wpshadow-metric-card">

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WPShadow\Guardian;
 
 use WPShadow\Core\KPI_Tracker;
+use WPShadow\Core\Hook_Subscriber_Base;
 use WPShadow\Cloud\Notification_Manager;
 use WPShadow\Cloud\Registration_Manager;
 
@@ -28,13 +29,29 @@ use WPShadow\Cloud\Registration_Manager;
  * - wpshadow_guardian_auto_fix_time: Scheduled time
  * - wpshadow_guardian_safe_fixes: Array of treatment IDs to auto-apply
  */
-class Guardian_Manager {
+class Guardian_Manager extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize Guardian system
+	 * Get hook subscriptions.
+	 *
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_guardian_health_check' => 'run_health_check',
+			'wpshadow_guardian_auto_fix'     => 'run_auto_fixes',
+		);
+	}
+
+	/**
+	 * Initialize Guardian system (deprecated)
 	 *
 	 * Called on plugins_loaded hook.
 	 * Sets up cron jobs if not already scheduled.
+	 *
+	 * @deprecated 1.7035.1400 Use Guardian_Manager::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
 		// Schedule health check (hourly)
@@ -47,9 +64,8 @@ class Guardian_Manager {
 			wp_schedule_event( time(), 'daily', 'wpshadow_guardian_auto_fix' );
 		}
 
-		// Hook cron jobs to action handlers
-		add_action( 'wpshadow_guardian_health_check', array( __CLASS__, 'run_health_check' ) );
-		add_action( 'wpshadow_guardian_auto_fix', array( __CLASS__, 'run_auto_fixes' ) );
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**

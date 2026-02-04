@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Vault;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,17 +27,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.1840
  */
-class Vault_Dashboard_Badge {
+class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize dashboard integration
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.1840
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_dashboard_widgets' => 'add_dashboard_widget',
+			'admin_enqueue_scripts'      => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize dashboard integration (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Vault_Dashboard_Badge::subscribe() instead
+	 * @since      1.6030.1840
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'wpshadow_dashboard_widgets', array( __CLASS__, 'add_dashboard_widget' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		self::subscribe();
 	}
 
 	/**

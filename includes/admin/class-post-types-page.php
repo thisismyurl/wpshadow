@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Content\Post_Types_Manager;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,16 +27,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6033.1530
  */
-class Post_Types_Page {
+class Post_Types_Page extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the post types page.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6033.1530
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_enqueue_scripts' => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize the post types page (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Post_Types_Page::subscribe() instead
+	 * @since      1.6033.1530
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		self::subscribe();
 	}
 
 	/**
@@ -98,15 +112,13 @@ class Post_Types_Page {
 
 		?>
 		<div class="wrap wpshadow-post-types wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-admin-post"></span>
-					<?php esc_html_e( 'Custom Post Types', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-description">
-					<?php esc_html_e( 'Activate and configure custom post types to enhance your WordPress content structure.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'Custom Post Types', 'wpshadow' ),
+				__( 'Activate and configure custom post types to enhance your WordPress content structure.', 'wpshadow' ),
+				'dashicons-admin-post'
+			);
+			?>
 
 			<!-- Overview Card -->
 			<div class="wps-card">

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Privacy\Consent_Preferences;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,19 +29,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0200
  */
-class First_Activation_Welcome {
+class First_Activation_Welcome extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the welcome modal system.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6004.0200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_init'                             => 'check_first_activation',
+			'admin_enqueue_scripts'                  => 'enqueue_assets',
+			'admin_footer'                           => 'render_modal',
+			'wp_ajax_wpshadow_complete_welcome'      => 'handle_complete_welcome',
+		);
+	}
+
+	/**
+	 * Initialize the welcome modal system (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use First_Activation_Welcome::subscribe() instead
+	 * @since      1.6004.0200
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_init', array( __CLASS__, 'check_first_activation' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'admin_footer', array( __CLASS__, 'render_modal' ) );
-		add_action( 'wp_ajax_wpshadow_complete_welcome', array( __CLASS__, 'handle_complete_welcome' ) );
+		self::subscribe();
 	}
 
 	/**

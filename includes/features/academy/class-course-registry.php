@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Academy;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -24,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.1915
  */
-class Course_Registry {
+class Course_Registry extends Hook_Subscriber_Base {
 
 	/**
 	 * Registered courses
@@ -34,10 +36,21 @@ class Course_Registry {
 	private static $courses = array();
 
 	/**
-	 * Initialize registry
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.1915
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(); // Configuration only, no hooks needed
+	}
+
+	/**
+	 * Initialize registry (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Course_Registry::subscribe() instead
+	 * @since      1.6030.1915
+	 * @return     void
 	 */
 	public static function init() {
 		self::register_courses();

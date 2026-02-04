@@ -1,15 +1,13 @@
 <?php
 /**
  * Privacy & Data Settings Page
- *
- * Controls data collection, telemetry, and privacy preferences.
- * Implements "Beyond Pure" philosophy with opt-in defaults.
- *
- * @package    WPShadow
- * @subpackage Settings
- * @since      1.6030.2148
- */
-
+			<?php
+			wpshadow_render_page_header(
+				__( 'Privacy & Data Settings', 'wpshadow' ),
+				__( 'Configure data collection and privacy preferences.', 'wpshadow' ),
+				'dashicons-admin-network'
+			);
+			?>
 declare(strict_types=1);
 
 namespace WPShadow\Admin\Pages;
@@ -38,15 +36,13 @@ class Privacy_Settings_Page {
 
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-lock"></span>
-					<?php esc_html_e( 'Privacy & Data', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Manage data collection, anonymous reporting, and privacy preferences.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'Privacy & Data', 'wpshadow' ),
+				__( 'Manage data collection, anonymous reporting, and privacy preferences.', 'wpshadow' ),
+				'dashicons-lock'
+			);
+			?>
 
 			<!-- Privacy Philosophy Notice -->
 			<div class="wps-card wps-card--info">

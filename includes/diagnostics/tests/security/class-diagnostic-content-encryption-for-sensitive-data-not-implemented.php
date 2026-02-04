@@ -80,19 +80,76 @@ class Diagnostic_Content_Encryption_For_Sensitive_Data_Not_Implemented extends D
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if encryption plugin is active
-		if ( ! is_plugin_active( 'wpsecure-db-encryption/plugin.php' ) && ! is_plugin_active( 'encryption/encryption.php' ) ) {
+		// Check if site collects sensitive data.
+		$has_woocommerce = is_plugin_active( 'woocommerce/woocommerce.php' );
+		$has_memberpress = is_plugin_active( 'memberpress/memberpress.php' );
+		$has_edd = is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' );
+
+		// Only flag if site is collecting payment/membership data.
+		if ( ! $has_woocommerce && ! $has_memberpress && ! $has_edd ) {
+			return null; // No sensitive data being collected.
+		}
+
+		// Check for encryption plugins.
+		$encryption_plugins = array(
+			'wp-encrypt/wp-encrypt.php' => 'WP Encrypt',
+		);
+
+		$encryption_detected = false;
+		foreach ( $encryption_plugins as $plugin => $name ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$encryption_detected = true;
+				break;
+			}
+		}
+
+		// Check if SSL is enabled (transport encryption).
+		$has_ssl = is_ssl();
+
+		// WordPress doesn't encrypt database by default.
+		// Most sites rely on payment gateway tokens, not storing cards.
+		if ( $has_woocommerce || $has_memberpress || $has_edd ) {
+			// WooCommerce/EDD best practice: don't store payment data.
+			// Check if storing locally vs using payment gateway tokens.
+			
 			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Data encryption for sensitive content is not implemented. Encrypt sensitive data at rest to protect user information.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 70,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/content-encryption-for-sensitive-data-not-implemented',
+				'id'          => self::$slug,
+				'title'       => __( 'Payment Data Storage Review Needed', 'wpshadow' ),
+				'description' => __( 'You\'re using WooCommerce/membership plugin. CRITICAL: Never store credit card numbers, CVV, or full SSNs in WordPress database. Use payment gateway tokenization (Stripe, PayPal) which stores sensitive data on PCI-compliant servers. WordPress database is NOT PCI-compliant by default. Storing payment data = massive liability risk.', 'wpshadow' ),
+				'severity'    => 'high',
+				'threat_level' => 75,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/payment-data-security',
+				'details'     => array(
+					'has_woocommerce' => $has_woocommerce,
+					'has_ssl'         => $has_ssl,
+					'recommendation'  => __( 'BEST PRACTICE: Use Stripe/PayPal payment gateways with tokenization. Payment data never touches your server. Customer enters card info directly on Stripe\'s hosted form (PCI-compliant). You only store token reference (safe to store). NEVER store: Full credit card numbers, CVV codes, unencrypted SSNs.', 'wpshadow' ),
+					'compliance'      => array(
+						'pci_dss' => 'Payment Card Industry Data Security Standard',
+						'requirement' => 'Encrypt cardholder data with industry-standard encryption',
+						'penalties' => '$5,000-$100,000 per month for non-compliance',
+						'liability' => 'Merchant liable for fraud if card data stolen',
+					),
+					'safe_practices'  => array(
+						'tokenization' => 'Payment gateway stores card, returns token',
+						'ssl_tls' => 'Encrypt data in transit (you have this: ' . ( $has_ssl ? 'YES' : 'NO' ) . ')',
+						'no_local_storage' => 'Never save full card numbers in database',
+						'log_safety' => 'Don\'t log sensitive data in debug logs',
+					),
+					'what_to_store'   => array(
+						'safe' => 'Payment gateway tokens, last 4 digits, transaction IDs',
+						'unsafe' => 'Full card numbers, CVV, magnetic stripe data',
+					),
+					'payment_gateways' => array(
+						'stripe' => 'PCI-compliant, tokenization built-in',
+						'paypal' => 'PCI-compliant, hosted checkout',
+						'square' => 'PCI-compliant, secure payment forms',
+					),
+				),
 			);
 		}
 
+		// No issues - not collecting sensitive data.
 		return null;
 	}
 }

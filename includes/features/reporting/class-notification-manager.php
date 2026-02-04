@@ -123,9 +123,16 @@ class Notification_Manager {
 		// Format for email
 		$html = Report_Generator::export_html( $report );
 
-		// Send email
+		// Send email with friendly subject
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-		$subject = 'WPShadow Report: ' . ucfirst( $frequency );
+		
+		$subject_map = array(
+			'daily'   => __( 'Your Daily Site Health Update from WPShadow', 'wpshadow' ),
+			'weekly'  => __( 'Your Weekly Site Summary from WPShadow', 'wpshadow' ),
+			'monthly' => __( 'Your Monthly Progress Report from WPShadow', 'wpshadow' ),
+		);
+		
+		$subject = $subject_map[ $frequency ] ?? __( 'Your Site Report from WPShadow', 'wpshadow' );
 
 		$sent = wp_mail( $email, $subject, $html, $headers );
 
@@ -168,9 +175,16 @@ class Notification_Manager {
 
 		$sent = false;
 		foreach ( $recipients as $email ) {
+			// Use friendly alert subject
+			$subject = sprintf(
+				/* translators: %s: alert type */
+				__( 'WPShadow Notice: Something needs your attention (%s)', 'wpshadow' ),
+				ucfirst( str_replace( '_', ' ', $alert_type ) )
+			);
+			
 			$result = wp_mail(
 				$email,
-				'WPShadow Alert: ' . ucfirst( $alert_type ),
+				$subject,
 				$message,
 				array( 'Content-Type: text/html; charset=UTF-8' )
 			);

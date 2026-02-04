@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WPShadow\FAQ;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,15 +18,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the FAQ post type, taxonomy, meta, and block.
  */
-class FAQ_Post_Type {
+class FAQ_Post_Type extends Hook_Subscriber_Base {
 	/**
-	 * Bootstrap hooks.
+	 * Get hooks to subscribe to.
+	 *
+	 * @since  1.6035.1200
+	 * @return array Hook subscriptions.
 	 */
-	public static function init(): void {
-		add_action( 'init', array( __CLASS__, 'register_post_type' ) );
-		add_action( 'init', array( __CLASS__, 'register_taxonomy' ) );
-		add_action( 'init', array( __CLASS__, 'register_meta' ) );
-		add_action( 'init', array( __CLASS__, 'register_block' ) );
+	protected static function get_hooks(): array {
+		return array(
+			'init' => array(
+				array( 'register_post_type', 10 ),
+				array( 'register_taxonomy', 10 ),
+				array( 'register_meta', 10 ),
+				array( 'register_block', 10 ),
+			),
+		);
 	}
 
 	/**

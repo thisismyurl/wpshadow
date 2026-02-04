@@ -68,7 +68,7 @@ class Diagnostic_Backup_Encryption_Not_Enabled extends Diagnostic_Base {
 			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Your backups are stored unencrypted. If your hosting account is compromised, sensitive customer data (emails, addresses, order information) could be exposed to attackers. This is especially critical for e-commerce sites handling payment information.', 'wpshadow' ),
+				'description'  => __( 'Adding encryption to your backups provides an extra layer of protection (like putting your backup files in a safe). If someone gains access to your backup files, they won\'t be able to read customer information like emails and addresses. This is especially helpful for stores handling customer orders.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,

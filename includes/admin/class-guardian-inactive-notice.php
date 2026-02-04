@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -23,17 +25,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.2148
  */
-class Guardian_Inactive_Notice {
+class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the notice
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6030.2148
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_notices'                                      => 'display_notice',
+			'wp_ajax_wpshadow_dismiss_guardian_notice'           => 'dismiss_notice',
+			'wp_ajax_wpshadow_activate_guardian_from_notice'     => 'activate_guardian',
+		);
+	}
+
+	/**
+	 * Initialize the notice (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Guardian_Inactive_Notice::subscribe() instead
+	 * @since      1.6030.2148
+	 * @return     void
 	 */
 	public static function init(): void {
-		add_action( 'admin_notices', array( __CLASS__, 'display_notice' ) );
-		add_action( 'wp_ajax_wpshadow_dismiss_guardian_notice', array( __CLASS__, 'dismiss_notice' ) );
-		add_action( 'wp_ajax_wpshadow_activate_guardian_from_notice', array( __CLASS__, 'activate_guardian' ) );
+		self::subscribe();
 	}
 
 	/**

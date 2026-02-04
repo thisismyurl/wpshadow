@@ -17,10 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Save_Tagline_Handler extends AJAX_Handler_Base {
-	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_save_tagline', array( __CLASS__, 'handle' ) );
-	}
-
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_save_tagline', 'manage_options', 'nonce' );
 

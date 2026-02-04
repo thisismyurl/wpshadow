@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Guardian;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 /**
  * Browser Compatibility Analyzer
  *
@@ -15,25 +17,36 @@ namespace WPShadow\Guardian;
  * @subpackage Guardian
  * @since 1.6030.2200
  */
-class Browser_Compatibility_Analyzer {
+class Browser_Compatibility_Analyzer extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize browser monitoring
+	 * Get hook subscriptions.
 	 *
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'init'                              => array( 'track_browser', 1 ),
+			'rest_api_init'                     => 'register_error_endpoint',
+			'wpshadow_analyze_browser_compat'   => 'analyze',
+		);
+	}
+
+	/**
+	 * Initialize browser monitoring (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Browser_Compatibility_Analyzer::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
-		// Track browser usage
-		add_action( 'init', array( __CLASS__, 'track_browser' ), 1 );
-
-		// Add JavaScript error tracking endpoint
-		add_action( 'rest_api_init', array( __CLASS__, 'register_error_endpoint' ) );
-
-		// Run hourly analysis
+		// Schedule cron
 		if ( ! wp_next_scheduled( 'wpshadow_analyze_browser_compat' ) ) {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_analyze_browser_compat' );
 		}
-		add_action( 'wpshadow_analyze_browser_compat', array( __CLASS__, 'analyze' ) );
+
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**

@@ -430,12 +430,16 @@ class Vault_Manager {
 	/**
 	 * Export database to SQL file
 	 *
+	 * MURPHY-SAFE: Uses streaming to prevent memory exhaustion on large databases.
+	 * Checks disk space before writing. Processes rows in chunks of 1000.
+	 *
 	 * @since  1.6030.1830
 	 * @return array {
 	 *     Export result.
 	 *
 	 *     @type bool   $success Whether export succeeded.
 	 *     @type string $file Path to SQL file.
+	 *     @type int    $size File size in bytes.
 	 * }
 	 */
 	private function export_database() {
@@ -444,39 +448,110 @@ class Vault_Manager {
 		$sql_file = $this->backup_dir . '/database_' . gmdate( 'Y-m-d_H-i-s' ) . '.sql';
 
 		try {
+			// MURPHY-SAFE: Check disk space before starting
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Database name from system.
+			$estimated_size = $wpdb->get_var( "SELECT SUM(data_length + index_length) FROM information_schema.TABLES WHERE table_schema = DATABASE()" );
+			$needed_space   = $estimated_size ? $estimated_size * 2 : 100 * 1024 * 1024; // Default 100MB if estimate fails
+			$free_space     = @disk_free_space( $this->backup_dir );
+
+			if ( false !== $free_space && $free_space < $needed_space ) {
+				Error_Handler::log_error(
+					'Insufficient disk space for database backup',
+					array(
+						'needed'    => $needed_space,
+						'available' => $free_space,
+					)
+				);
+
+				return array(
+					'success' => false,
+					'message' => sprintf(
+						/* translators: 1: needed space, 2: available space */
+						__( 'Insufficient disk space. Need %1$s, have %2$s available.', 'wpshadow' ),
+						size_format( $needed_space ),
+						size_format( $free_space )
+					),
+				);
+			}
+
+			// MURPHY-SAFE: Open file handle for streaming (not loading entire DB into memory)
+			$fp = @fopen( $sql_file, 'w' );
+			if ( ! $fp ) {
+				Error_Handler::log_error( 'Cannot create backup file', array( 'file' => $sql_file ) );
+
+				return array(
+					'success' => false,
+					'message' => __( 'Cannot create backup file. Check file permissions.', 'wpshadow' ),
+				);
+			}
+
+			// Write header
+			fwrite( $fp, "-- WPShadow Vault Database Backup\n" );
+			fwrite( $fp, '-- Created: ' . gmdate( 'Y-m-d H:i:s' ) . "\n\n" );
+
 			$tables = $wpdb->get_results( 'SHOW TABLES', ARRAY_N );
-			$output = "-- WPShadow Vault Database Backup\n";
-			$output .= '-- Created: ' . gmdate( 'Y-m-d H:i:s' ) . "\n\n";
 
 			foreach ( $tables as $table ) {
 				$table_name = $table[0];
 
+				// Write table structure
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Table name cannot be prepared.
 				$create_table = $wpdb->get_row( "SHOW CREATE TABLE `{$table_name}`", ARRAY_N );
-				$output      .= "\n\n-- Table: {$table_name}\n";
-				$output      .= "DROP TABLE IF EXISTS `{$table_name}`;\n";
-				$output      .= $create_table[1] . ";\n\n";
+				fwrite( $fp, "\n\n-- Table: {$table_name}\n" );
+				fwrite( $fp, "DROP TABLE IF EXISTS `{$table_name}`;\n" );
+				fwrite( $fp, $create_table[1] . ";\n\n" );
 
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Table name cannot be prepared.
-				$rows = $wpdb->get_results( "SELECT * FROM `{$table_name}`", ARRAY_A );
+				// MURPHY-SAFE: Stream rows in chunks (1000 at a time) to prevent memory exhaustion
+				$offset = 0;
+				$limit  = 1000;
 
-				foreach ( $rows as $row ) {
-					$values = array_map(
-						function ( $value ) use ( $wpdb ) {
-							return null === $value ? 'NULL' : "'" . $wpdb->_real_escape( $value ) . "'";
-						},
-						$row
+				while ( true ) {
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Table name cannot be prepared.
+					$rows = $wpdb->get_results(
+						$wpdb->prepare( "SELECT * FROM `{$table_name}` LIMIT %d OFFSET %d", $limit, $offset ),
+						ARRAY_A
 					);
 
-					$output .= "INSERT INTO `{$table_name}` VALUES (" . implode( ',', $values ) . ");\n";
+					if ( empty( $rows ) ) {
+						break;
+					}
+
+					foreach ( $rows as $row ) {
+						$values = array_map(
+							function ( $value ) use ( $wpdb ) {
+								return null === $value ? 'NULL' : "'" . $wpdb->_real_escape( $value ) . "'";
+							},
+							$row
+						);
+
+						fwrite( $fp, "INSERT INTO `{$table_name}` VALUES (" . implode( ',', $values ) . ");\n" );
+					}
+
+					$offset += $limit;
+
+					// MURPHY-SAFE: Reset time limit every 1000 rows
+					if ( function_exists( 'set_time_limit' ) ) {
+						@set_time_limit( 30 );
+					}
 				}
 			}
 
-			file_put_contents( $sql_file, $output );
+			fclose( $fp );
+
+			// MURPHY-SAFE: Verify file was created successfully
+			if ( ! file_exists( $sql_file ) || 0 === filesize( $sql_file ) ) {
+				Error_Handler::log_error( 'Backup file verification failed', array( 'file' => $sql_file ) );
+
+				return array(
+					'success' => false,
+					'message' => __( 'Backup file verification failed. File is empty or missing.', 'wpshadow' ),
+				);
+			}
 
 			return array(
 				'success' => true,
 				'file'    => $sql_file,
+				'size'    => filesize( $sql_file ),
 			);
 
 		} catch ( \Exception $e ) {
@@ -484,6 +559,7 @@ class Vault_Manager {
 
 			return array(
 				'success' => false,
+				'message' => $e->getMessage(),
 			);
 		}
 	}

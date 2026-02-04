@@ -79,11 +79,29 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	/**
 	 * Run deep scan immediately
 	 *
+	 * MURPHY-SAFE: Prevents concurrent scans that could overwhelm server.
+	 *
 	 * @return array Result data
 	 */
 	private static function run_deep_scan(): array {
-		// Record scan start time
-		update_option( 'wpshadow_last_deep_scan', time() );
+		// MURPHY-SAFE: Check if scan already running (prevent concurrent scans)
+		$scan_lock = get_transient( 'wpshadow_scan_running' );
+
+		if ( false !== $scan_lock ) {
+			return array(
+				'success'    => false,
+				'message'    => __( 'A scan is already running. Please wait for it to complete.', 'wpshadow' ),
+				'started_at' => $scan_lock,
+				'locked'     => true,
+			);
+		}
+
+		// Set lock (expires after 10 minutes as safety net)
+		set_transient( 'wpshadow_scan_running', time(), 10 * MINUTE_IN_SECONDS );
+
+		try {
+			// Record scan start time
+			update_option( 'wpshadow_last_deep_scan', time() );
 
 		// Run all deep scan checks (quick + deep diagnostics)
 		$findings = Diagnostic_Registry::run_deepscan_checks();
@@ -94,12 +112,12 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		$total       = $quick_count + count( $deep_extras );
 		$completed   = $total;
 
-		// Build progress by category and findings breakdown
-		$progress_by_category = array();
-		$findings_by_category = array();
-		$skipped              = 0;
+			// Build progress by category and findings breakdown
+			$progress_by_category = array();
+			$findings_by_category = array();
+			$skipped              = 0;
 
-		foreach ( $findings as $finding ) {
+			foreach ( $findings as $finding ) {
 			$category = isset( $finding['category'] ) ? $finding['category'] : 'other';
 
 			// Log individual diagnostic finding
@@ -195,6 +213,9 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			);
 		}
 
+		// MURPHY-SAFE: Clear scan lock on successful completion
+		delete_transient( 'wpshadow_scan_running' );
+
 		return array(
 			'mode'                 => 'now',
 			'completed'            => $completed,
@@ -210,6 +231,18 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 				count( $findings_by_category )
 			),
 		);
+
+		} catch ( \Exception $e ) {
+			// MURPHY-SAFE: Clear scan lock on error
+			delete_transient( 'wpshadow_scan_running' );
+
+			Error_Handler::log_error( 'Deep scan failed', $e );
+
+			return array(
+				'success' => false,
+				'message' => $e->getMessage(),
+			);
+		}
 	}
 
 	/**

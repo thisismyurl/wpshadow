@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Gamification;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0400
  */
-class Gamification_Manager {
+class Gamification_Manager extends Hook_Subscriber_Base {
 
 	/**
 	 * Instance of the manager.
@@ -56,10 +58,24 @@ class Gamification_Manager {
 	}
 
 	/**
-	 * Initialize gamification system.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0400
-	 * @return void
+	 * Note: Gamification_Manager uses instance methods, so hooks
+	 * are registered in the instance's setup_hooks() method.
+	 *
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(); // Instance-based, registered in setup_hooks()
+	}
+
+	/**
+	 * Initialize gamification system (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Gamification_Manager is singleton
+	 * @since      1.6004.0400
+	 * @return     void
 	 */
 	public static function init() {
 		$manager = self::get_instance();

@@ -92,31 +92,76 @@ class Report_Generator {
 	}
 
 	/**
-	 * Get KPI section
+	 * Get success metrics section (what we improved for your site)
 	 *
 	 * @param string $start_date Start date
 	 * @param string $end_date End date
 	 *
-	 * @return array KPI data
+	 * @return array Success metrics with novice-friendly labels and explanations
 	 */
 	private static function get_kpi_section( string $start_date, string $end_date ): array {
 		$kpis = KPI_Tracker::get_summary();
 
 		return array(
-			'performance_improvements' => array(
-				'avg_page_load_time'       => $kpis['avg_page_load_time'] ?? 'N/A',
-				'database_queries_reduced' => $kpis['db_queries_reduced'] ?? 0,
-				'memory_usage_reduced'     => $kpis['memory_reduced'] ?? 0,
+			'speed_improvements' => array(
+				'label'       => __( 'Your Site Got Faster', 'wpshadow' ),
+				'items'       => array(
+					array(
+						'value'       => $kpis['avg_page_load_time'] ?? 'N/A',
+						'label'       => __( 'Pages Load Quicker', 'wpshadow' ),
+						'explanation' => __( 'Like making your front door easier to open', 'wpshadow' ),
+					),
+					array(
+						'value'       => $kpis['db_queries_reduced'] ?? 0,
+						'label'       => __( 'Database Made Faster', 'wpshadow' ),
+						'explanation' => __( 'Your site finds information quicker (organized filing cabinet)', 'wpshadow' ),
+					),
+					array(
+						'value'       => $kpis['memory_reduced'] ?? 0,
+						'label'       => __( 'Memory Usage Reduced', 'wpshadow' ),
+						'explanation' => __( 'Uses less computer memory (like cleaning up RAM)', 'wpshadow' ),
+					),
+				),
 			),
-			'security_improvements'    => array(
-				'vulnerabilities_fixed'      => $kpis['vulnerabilities_fixed'] ?? 0,
-				'outdated_plugins_updated'   => $kpis['plugins_updated'] ?? 0,
-				'security_settings_hardened' => $kpis['security_settings'] ?? 0,
+			'security_improvements' => array(
+				'label'       => __( 'Your Site Got More Secure', 'wpshadow' ),
+				'items'       => array(
+					array(
+						'value'       => $kpis['vulnerabilities_fixed'] ?? 0,
+						'label'       => __( 'Security Holes Patched', 'wpshadow' ),
+						'explanation' => __( 'We fixed broken locks on your doors', 'wpshadow' ),
+					),
+					array(
+						'value'       => $kpis['plugins_updated'] ?? 0,
+						'label'       => __( 'Add-ons Updated', 'wpshadow' ),
+						'explanation' => __( 'Kept plugins current with latest security fixes', 'wpshadow' ),
+					),
+					array(
+						'value'       => $kpis['security_settings'] ?? 0,
+						'label'       => __( 'Security Settings Strengthened', 'wpshadow' ),
+						'explanation' => __( 'Made your security settings more protective', 'wpshadow' ),
+					),
+				),
 			),
-			'maintenance'              => array(
-				'cleanup_performed'    => $kpis['cleanup'] ?? 0,
-				'unused_items_removed' => $kpis['items_removed'] ?? 0,
-				'database_optimized'   => $kpis['db_optimized'] ?? false,
+			'maintenance' => array(
+				'label'       => __( 'Site Maintenance Performed', 'wpshadow' ),
+				'items'       => array(
+					array(
+						'value'       => $kpis['cleanup'] ?? 0,
+						'label'       => __( 'Cleanup Tasks Completed', 'wpshadow' ),
+						'explanation' => __( 'Removed unnecessary clutter (like spring cleaning)', 'wpshadow' ),
+					),
+					array(
+						'value'       => $kpis['items_removed'] ?? 0,
+						'label'       => __( 'Unused Items Removed', 'wpshadow' ),
+						'explanation' => __( 'Deleted things you no longer need', 'wpshadow' ),
+					),
+					array(
+						'value'       => $kpis['db_optimized'] ?? false,
+						'label'       => __( 'Database Optimized', 'wpshadow' ),
+						'explanation' => __( 'Organized your site data for better performance', 'wpshadow' ),
+					),
+				),
 			),
 		);
 	}

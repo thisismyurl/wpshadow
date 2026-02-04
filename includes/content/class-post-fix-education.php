@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Content;
 
 use WPShadow\Core\UTM_Link_Manager;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,16 +28,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0100
  */
-class Post_Fix_Education {
+class Post_Fix_Education extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize system
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0100
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_after_treatment_apply' => array( 'show_education', 10, 3 ),
+		);
+	}
+
+	/**
+	 * Initialize system (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Post_Fix_Education::subscribe() instead
+	 * @since      1.6004.0100
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'wpshadow_after_treatment_apply', array( __CLASS__, 'show_education' ), 10, 3 );
+		self::subscribe();
 	}
 
 	/**

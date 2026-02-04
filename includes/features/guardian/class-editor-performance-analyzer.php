@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Guardian;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 /**
  * Editor Performance Analyzer
  *
@@ -15,7 +17,7 @@ namespace WPShadow\Guardian;
  * @subpackage Guardian
  * @since 1.6030.2200
  */
-class Editor_Performance_Analyzer {
+class Editor_Performance_Analyzer extends Hook_Subscriber_Base {
 
 	/**
 	 * @var float Editor load start time
@@ -23,20 +25,33 @@ class Editor_Performance_Analyzer {
 	private static $editor_start_time = 0;
 
 	/**
-	 * Initialize editor monitoring
+	 * Get hook subscriptions.
 	 *
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_init'                           => 'start_editor_timer',
+			'admin_footer'                         => 'end_editor_timer',
+			'wpshadow_analyze_editor_performance' => 'analyze',
+		);
+	}
+
+	/**
+	 * Initialize editor monitoring (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Editor_Performance_Analyzer::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
-		// Track editor load time
-		add_action( 'admin_init', array( __CLASS__, 'start_editor_timer' ) );
-		add_action( 'admin_footer', array( __CLASS__, 'end_editor_timer' ) );
-
 		// Run hourly analysis
 		if ( ! wp_next_scheduled( 'wpshadow_analyze_editor_performance' ) ) {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_analyze_editor_performance' );
 		}
-		add_action( 'wpshadow_analyze_editor_performance', array( __CLASS__, 'analyze' ) );
+
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**

@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Content;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6034.1530
  */
-class Modal_Post_Type {
+class Modal_Post_Type extends Hook_Subscriber_Base {
 
 	/**
 	 * Post type slug
@@ -35,16 +37,18 @@ class Modal_Post_Type {
 	const POST_TYPE = 'wpshadow_modal';
 
 	/**
-	 * Initialize the modal post type.
+	 * Get hooks to subscribe to.
 	 *
-	 * @since 1.6034.1530
-	 * @return void
+	 * @since  1.6035.1200
+	 * @return array Hook subscriptions.
 	 */
-	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_post_type' ) );
-		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
-		add_action( 'save_post_' . self::POST_TYPE, array( __CLASS__, 'save_meta' ), 10, 2 );
-		add_filter( 'wp_footer', array( __CLASS__, 'render_active_modals' ) );
+	protected static function get_hooks(): array {
+		return array(
+			'init'                             => 'register_post_type',
+			'add_meta_boxes'                   => 'add_meta_boxes',
+			'save_post_' . self::POST_TYPE     => array( 'save_meta', 10, 2 ),
+			'wp_footer'                        => 'render_active_modals',
+		);
 	}
 
 	/**

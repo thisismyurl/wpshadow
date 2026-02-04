@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Gamification;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,17 +27,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0400
  */
-class Gamification_UI {
+class Gamification_UI extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize UI.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0400
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_menu'            => array( 'register_menu_pages', 10 ),
+			'admin_enqueue_scripts' => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize UI (deprecated - use ::subscribe() instead).
+	 *
+	 * @deprecated 1.7035.1400 Use Gamification_UI::subscribe() instead
+	 * @since      1.6004.0400
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'register_menu_pages' ), 10 );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		// Backwards compatibility
+		self::subscribe();
 	}
 
 	/**
@@ -221,8 +237,14 @@ class Gamification_UI {
 		$leaderboard = Leaderboard::get_global( $period );
 		$user_rank = Leaderboard::get_user_rank( $user_id, $period );
 		?>
-		<div class="wrap wpshadow-gamification-page">
-			<h1><?php esc_html_e( 'Leaderboard', 'wpshadow' ); ?></h1>
+		<div class="wrap wpshadow-gamification-page wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Leaderboard', 'wpshadow' ),
+				__( 'See how your achievements compare with other WPShadow users. Participation is optional and privacy-first.', 'wpshadow' ),
+				'dashicons-awards'
+			);
+			?>
 
 			<!-- Privacy notice -->
 			<div class="wpshadow-leaderboard-privacy">
@@ -316,8 +338,14 @@ class Gamification_UI {
 		$actions = Earn_Actions::get_actions();
 		$action_status = Earn_Actions::get_user_status( $user_id );
 		?>
-		<div class="wrap wpshadow-gamification-page">
-			<h1><?php esc_html_e( 'Rewards', 'wpshadow' ); ?></h1>
+		<div class="wrap wpshadow-gamification-page wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Rewards', 'wpshadow' ),
+				__( 'Use your points for rewards and find optional ways to earn more.', 'wpshadow' ),
+				'dashicons-gift'
+			);
+			?>
 
 			<!-- Points balance -->
 			<div class="wpshadow-points-balance-card">

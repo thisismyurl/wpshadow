@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Features\ContentReview;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,17 +27,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6034.0000
  */
-class Content_Review_Reports {
+class Content_Review_Reports extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize hooks
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6034.0000
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_reports_submenu_items'            => 'register_report_menu',
+			'wp_ajax_wpshadow_get_post_review_data'     => 'handle_get_review_data',
+		);
+	}
+
+	/**
+	 * Initialize hooks (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Content_Review_Reports::subscribe() instead
+	 * @since      1.6034.0000
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'wpshadow_reports_submenu_items', array( __CLASS__, 'register_report_menu' ) );
-		add_action( 'wp_ajax_wpshadow_get_post_review_data', array( __CLASS__, 'handle_get_review_data' ) );
+		self::subscribe();
 	}
 
 	/**

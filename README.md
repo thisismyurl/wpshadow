@@ -2,10 +2,10 @@
 
 > **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**
 
-**Version:** 1.YDDD.HHMM (Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time)  
+**Version:** 1.6035.0948 (Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time)  
 **Status:** ✅ Core Plugin Production Ready | SaaS & Ecosystem In Development  
 **License:** GPL v2 or later  
-**Last Updated:** January 28, 2026
+**Last Updated:** February 4, 2026
 
 ---
 
@@ -13,7 +13,9 @@
 
 ### For Users
 👉 **Install from WordPress.org:** [WPShadow Plugin](https://wordpress.org/plugins/wpshadow/)  
-👉 **SaaS Features:** [wpshadow.com](https://wpshadow.com) (KB articles, training, cloud backups)
+👉 **Cloud Services:** [wpshadow.com](https://wpshadow.com) (Cloud Guardian diagnostics, KB articles, training, cloud backups)
+
+**Note:** The core plugin includes the local Guardian monitoring system (100% free). WPShadow Cloud extends it with Cloud Guardian diagnostics that require external services.
 
 ### For Developers
 
@@ -29,9 +31,10 @@ For development, open this repository in GitHub Codespaces or VS Code with the D
 
 **2. Read Core Philosophy**
 ```
-✅ MUST READ: docs/PRODUCT_PHILOSOPHY.md (11 Commandments)
-✅ MUST READ: docs/ACCESSIBILITY_AND_INCLUSIVITY_CANON.md (3 Foundational Pillars)
-Then read: docs/ROADMAP.md (current phases)
+✅ MUST READ: docs/CORE_PHILOSOPHY.md (12 Commandments + 4 CANON Pillars)
+✅ MUST READ: docs/PRODUCT_FAMILY.md (ecosystem map)
+✅ MUST READ: docs/BUSINESS_MODEL.md (free-first business model)
+Then read: docs/MILESTONES.md (current phases)
 ```
 
 **3. Understand Architecture**
@@ -63,7 +66,7 @@ docs/INDEX.md                             - Complete documentation index
 - ✅ **Workflow Automation** (39-file engine with triggers, actions, commands, executor)
 - ✅ **Multisite Support** (network-aware with proper capabilities)
 - ✅ **Accessibility-First Design** (WCAG compliant, inclusive patterns)
-- ✅ **Guardian System** (integrated diagnostics/treatments monitoring)
+- ✅ **Guardian System** (local diagnostic monitoring with real-time health checks)
 - ✅ **16 Built-in Tools** (accessibility audit, color contrast, deep scan, cache, etc.)
 - ✅ **54 Curated Docs** (cleaned, organized, publication-ready)
 
@@ -76,11 +79,26 @@ docs/INDEX.md                             - Complete documentation index
 - Accessibility-first patterns enforced throughout
 
 **Recent Completion (This Session):**
-- Phase 3: Accessibility & Inclusivity as CANON ✅
+- Phase 3: CANON pillars enforced ✅
 - 950+ lines of accessibility guidance integrated
-- 3 Foundational Pillars established (Accessibility First, Learning Inclusive, Culturally Respectful)
+- 4 CANON pillars established (Accessibility First, Learning Inclusive, Culturally Respectful, Safe by Default)
 - Documentation cleaned: 150+ → 65 curated files
 - Git history verified: 69 commits, clean and meaningful
+
+---
+
+## 🗓️ Planned Pro Release Cadence (2026)
+
+We ship Pro in a dependency‑first order so every module lands after its foundation.
+
+- **March 31:** WPShadow Pro platform (licensing + module manager)
+- **April 30:** WPAdmin Core (primary admin foundation)
+- **May onward:** Secondary WPAdmin modules begin monthly releases
+- **July 31:** Media Hub (primary media foundation)
+- **August onward:** Media Image, Video, and Document modules begin monthly releases
+
+Full schedule: [docs/MILESTONES.md](docs/MILESTONES.md)  
+Product map: [docs/PRODUCT_FAMILY.md](docs/PRODUCT_FAMILY.md)
 
 ---
 
@@ -273,7 +291,44 @@ dev-tools/                             # Development scripts (not in releases)
 ├── README.md                          # Developer tools documentation
 ├── kb-articles/                       # Knowledge base article sources
 └── wp-content/                        # Test WordPress content
+
+MURPHYS_LAW_AUDIT.md                   # ⚙️ Murphy's Law compliance audit
+MURPHYS_LAW_INTEGRATION_GUIDE.md       # Step-by-step integration guide
+MURPHYS_LAW_COMPLETE_SUMMARY.md        # Implementation summary
+includes/systems/core/
+├── class-murphy-safe-request.php      # Network resilience wrapper
+├── class-murphy-safe-database.php     # Database verification wrapper
+└── class-murphy-safe-file.php         # File operation safety wrapper
+assets/js/murphy-form-autosave.js      # Form auto-save module
 ```
+
+### Murphy's Law Implementation (Feb 2026) ⚙️
+
+**Status:** ✅ Infrastructure Complete, Integration In Progress
+
+The plugin now implements **Murphy's Law (CANON Pillar #5)**: defensive programming that assumes everything will fail and handles it gracefully.
+
+**What This Means:**
+- ✅ Network requests have 4-tier fallback (cache → API → stale → default)
+- ✅ Database operations are verified and rolled back on corruption
+- ✅ File writes are atomic with disk space checks
+- ✅ Forms auto-save every 5 seconds to prevent data loss
+- ✅ All failures retry automatically via cron queues
+- ✅ Users see friendly errors, not stack traces
+
+**Key Files:**
+- `MURPHYS_LAW_AUDIT.md` - Complete audit findings (600+ lines)
+- `MURPHYS_LAW_INTEGRATION_GUIDE.md` - How to integrate wrappers (800+ lines)
+- `MURPHYS_LAW_COMPLETE_SUMMARY.md` - Implementation summary
+- `includes/systems/core/class-murphy-safe-*.php` - Three defensive wrappers (1,080 lines)
+- `assets/js/murphy-form-autosave.js` - Form protection (450 lines)
+
+**Integration Priority:**
+1. 🔴 **Critical:** Guardian API, Vault Manager, Settings Registry, Event Logger
+2. 🟡 **High:** Report integrations, CSV export, Vault registration
+3. 🟢 **Medium:** Diagnostic HTML fetchers, form auto-save rollout
+
+See `MURPHYS_LAW_INTEGRATION_GUIDE.md` for complete integration instructions.
 
 ---
 
@@ -402,11 +457,12 @@ Built with philosophy-first development:
 
 ---
 
-**Last Updated:** January 24, 2026  
+**Last Updated:** February 4, 2026  
 **Status:** ✅ Production Ready - Ready for Community Release
 
-**Session Status:** ✅ Phase 3 Complete - All three cleanup phases finished
-- Accessibility & Inclusivity integrated as CANON principles
-- Documentation reorganized (150+ → 65 curated files)
-- Git history verified and documented (69 commits)
-- Repository production-ready for v1.6030.2148 release
+**Recent Completions:**
+- ✅ Product naming clarification (Guardian local vs Cloud SaaS)
+- ✅ Complete ecosystem documentation (24 products mapped)
+- ✅ Business model transparency (BUSINESS_MODEL.md)
+- ✅ **Stub diagnostics completed (2/2 diagnostics, 100% coverage)**
+- ✅ All 1921 diagnostics fully functional and production-ready

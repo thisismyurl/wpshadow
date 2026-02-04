@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Content;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,17 +27,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6033.1530
  */
-class Post_Types_Manager {
+class Post_Types_Manager extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the post types manager.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6033.1530
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'init' => array(
+				array( 'register_active_post_types', 0 ),
+				array( 'register_active_taxonomies', 1 ),
+			),
+		);
+	}
+
+	/**
+	 * Initialize the post types manager (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Post_Types_Manager::subscribe() instead
+	 * @since      1.6033.1530
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_active_post_types' ), 0 );
-		add_action( 'init', array( __CLASS__, 'register_active_taxonomies' ), 1 );
+		self::subscribe();
 	}
 
 	/**

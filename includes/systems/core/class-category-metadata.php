@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get category metadata for all health gauges
  *
- * Returns configuration for all 10 health categories:
- * - 8 standard WPShadow categories
+ * Returns configuration for all 11 health categories:
+ * - 9 standard WPShadow categories (including Accessibility)
  * - 1 WordPress native Site Health
  * - 1 Overall site health (calculated from all)
  *
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_get_category_metadata(): array {
 	return array(
-		// Standard WPShadow Categories (8)
+		// Standard WPShadow Categories (9)
 		'security'         => array(
 			'label'       => __( 'Security', 'wpshadow' ),
 			'icon'        => 'dashicons-shield',
@@ -63,7 +63,14 @@ function wpshadow_get_category_metadata(): array {
 			'icon'        => 'dashicons-admin-appearance',
 			'color'       => '#8e44ad', // Purple-Pink
 			'background'  => 'rgba(142, 68, 173, 0.1)',
-			'description' => __( 'Visual design, UX, and accessibility', 'wpshadow' ),
+			'description' => __( 'Visual design and user experience', 'wpshadow' ),
+		),
+		'accessibility'    => array(
+			'label'       => __( 'Accessibility', 'wpshadow' ),
+			'icon'        => 'dashicons-universal-access',
+			'color'       => '#16a34a', // Green (WCAG-compliant)
+			'background'  => 'rgba(22, 163, 74, 0.1)',
+			'description' => __( 'WCAG compliance, keyboard navigation, screen reader support, and inclusive design', 'wpshadow' ),
 		),
 		'settings'         => array(
 			'label'       => __( 'Settings', 'wpshadow' ),
@@ -87,7 +94,7 @@ function wpshadow_get_category_metadata(): array {
 			'description' => __( 'Automation, scheduled tasks, and workflows', 'wpshadow' ),
 		),
 
-		// WordPress Native Site Health (9th gauge)
+		// WordPress Native Site Health (10th gauge)
 		'wordpress-health' => array(
 			'label'       => __( 'WordPress Health', 'wpshadow' ),
 			'icon'        => 'dashicons-wordpress',
@@ -96,7 +103,7 @@ function wpshadow_get_category_metadata(): array {
 			'description' => __( 'WordPress native site health checks', 'wpshadow' ),
 		),
 
-		// Overall Site Health (10th gauge - calculated)
+		// Overall Site Health (11th gauge - calculated)
 		'overall'          => array(
 			'label'       => __( 'Overall Health', 'wpshadow' ),
 			'icon'        => 'dashicons-heart',

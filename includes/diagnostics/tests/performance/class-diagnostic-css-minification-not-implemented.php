@@ -124,19 +124,119 @@ class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for CSS minification
-		if ( ! has_filter( 'style_loader_tag', 'minify_css' ) ) {
+		global $wp_styles;
+
+		// Check for minification plugins that handle CSS.
+		$minification_plugins = array(
+			'autoptimize/autoptimize.php'         => 'Autoptimize',
+			'wp-rocket/wp-rocket.php'             => 'WP Rocket',
+			'w3-total-cache/w3-total-cache.php'   => 'W3 Total Cache',
+			'fast-velocity-minify/fvm.php'        => 'Fast Velocity Minify',
+			'asset-cleanup/wpacu.php'             => 'Asset CleanUp',
+		);
+
+		$plugin_detected = false;
+		$plugin_name     = '';
+
+		foreach ( $minification_plugins as $plugin => $name ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$plugin_detected = true;
+				$plugin_name     = $name;
+				break;
+			}
+		}
+
+		// Count minified vs unminified CSS files.
+		$total_styles    = 0;
+		$minified_styles = 0;
+		$total_size      = 0;
+
+		if ( ! empty( $wp_styles->registered ) ) {
+			foreach ( $wp_styles->registered as $handle => $style ) {
+				if ( ! empty( $style->src ) && ! strpos( $style->src, '/wp-includes/' ) ) {
+					// Skip WordPress core styles (already minified).
+					$total_styles++;
+
+					if ( strpos( $style->src, '.min.css' ) !== false ) {
+						$minified_styles++;
+					}
+
+					// Estimate file size if local.
+					$file_path = str_replace( content_url(), WP_CONTENT_DIR, $style->src );
+					if ( file_exists( $file_path ) ) {
+						$total_size += filesize( $file_path );
+					}
+				}
+			}
+		}
+
+		// Calculate minification rate.
+		$minification_rate = $total_styles > 0 ? ( $minified_styles / $total_styles ) * 100 : 0;
+
+		// Critical: No minification plugin and most CSS unminified.
+		if ( ! $plugin_detected && $minification_rate < 40 ) {
 			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'CSS minification is not implemented. Minify CSS files to reduce file size and improve page load speed.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 30,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/css-minification-not-implemented',
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => sprintf(
+					/* translators: 1: number of unminified styles, 2: total styles, 3: percentage */
+					__( 'CSS minification not implemented. %1$d of %2$d stylesheets (%3$d%%) are unminified, containing unnecessary whitespace and comments. Install Autoptimize or WP Rocket to automatically minify CSS.', 'wpshadow' ),
+					$total_styles - $minified_styles,
+					$total_styles,
+					round( 100 - $minification_rate )
+				),
+				'severity'    => 'medium',
+				'threat_level' => 50,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/css-minification',
+				'details'     => array(
+					'total_styles'       => $total_styles,
+					'minified_styles'    => $minified_styles,
+					'unminified_styles'  => $total_styles - $minified_styles,
+					'minification_rate'  => round( $minification_rate, 2 ),
+					'estimated_total_size' => $total_size > 0 ? size_format( $total_size ) : 'unknown',
+					'plugin_detected'    => false,
+					'recommendation'     => __( 'Install Autoptimize (free) for automatic CSS minification. Expected reduction: 30-50% smaller files. Also enables CSS combining for fewer HTTP requests.', 'wpshadow' ),
+					'performance_impact' => array(
+						'typical_reduction' => '30-50% file size reduction',
+						'combined_with_gzip' => '70-80% total reduction',
+						'mobile_improvement' => '1-3 seconds faster on 3G',
+					),
+				),
 			);
 		}
 
+		// Medium: Plugin exists but minification rate low.
+		if ( $plugin_detected && $minification_rate < 60 ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => __( 'CSS Minification Incomplete', 'wpshadow' ),
+				'description' => sprintf(
+					/* translators: 1: plugin name, 2: minification percentage */
+					__( '%1$s is active but only %2$d%% of CSS files are minified. Check plugin settings to ensure CSS minification is enabled for all stylesheets.', 'wpshadow' ),
+					$plugin_name,
+					round( $minification_rate )
+				),
+				'severity'    => 'low',
+				'threat_level' => 25,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/css-minification',
+				'details'     => array(
+					'plugin_detected'    => true,
+					'plugin_name'        => $plugin_name,
+					'total_styles'       => $total_styles,
+					'minified_styles'    => $minified_styles,
+					'minification_rate'  => round( $minification_rate, 2 ),
+					'recommendation'     => sprintf(
+						/* translators: %s: plugin name */
+						__( 'Review %s settings to enable minification for all CSS files. Some files may be excluded or ignored.', 'wpshadow' ),
+						$plugin_name
+					),
+				),
+			);
+		}
+
+		// No issues - CSS minification working well.
 		return null;
 	}
 }

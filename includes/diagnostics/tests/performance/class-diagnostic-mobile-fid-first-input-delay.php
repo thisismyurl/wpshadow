@@ -102,7 +102,7 @@ class Diagnostic_Mobile_FID_First_Input_Delay extends Diagnostic_Base {
 		// Check for code splitting and lazy loading
 		$code_splitting_enabled = apply_filters( 'wpshadow_code_splitting_lazy_loading_enabled', false );
 		if ( ! $code_splitting_enabled ) {
-			$issues[] = __( 'Code splitting/lazy loading not detected; unnecessary JavaScript loaded on init', 'wpshadow' );
+			$issues[] = __( 'Code splitting helps load only the JavaScript you need for each page (like a cafeteria where you pick what you want, instead of getting everything at once). This makes your site respond faster to clicks and taps.', 'wpshadow' );
 		}
 
 		// Check for Core Web Vitals monitoring

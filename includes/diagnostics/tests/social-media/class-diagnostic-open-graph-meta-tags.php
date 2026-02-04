@@ -95,7 +95,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'No Open Graph meta tags detected', 'wpshadow' ),
+					'description'  => __( 'Your site could display better previews when shared on social media (Facebook, LinkedIn, Twitter). Open Graph tags are like instructions that tell social networks which image and text to show. Think of it like the thumbnail and title on a YouTube video.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 65,
 					'auto_fixable' => false,

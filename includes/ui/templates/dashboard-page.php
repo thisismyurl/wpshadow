@@ -60,19 +60,20 @@ function wpshadow_render_dashboard() {
 	?>
 	<div class="wrap wpshadow-dashboard wps-page-container">
 		<?php if ( $is_drilldown && $current_category ) : ?>
-			<!-- Category Drill-Down Header -->
-			<div class="wps-page-header wps-drilldown-header">
+			<div class="wps-page-header-actions">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button wps-btn wps-btn--secondary wps-mr-3" aria-label="<?php esc_attr_e( 'Return to main dashboard', 'wpshadow' ); ?>">
 					&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
 				</a>
-				<h1 class="wps-page-title">
-					<span class="dashicons <?php echo esc_attr( $current_category['icon'] ); ?>" style="color: <?php echo esc_attr( $current_category['color'] ); ?>;" aria-hidden="true"></span>
-					<?php echo esc_html( $current_category['label'] ); ?> <?php esc_html_e( 'Health', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php echo esc_html( $current_category['description'] ); ?>
-				</p>
 			</div>
+			<?php wpshadow_render_page_header(
+				sprintf(
+					__( '%s Health', 'wpshadow' ),
+					$current_category['label']
+				),
+				$current_category['description'],
+				$current_category['icon'],
+				$current_category['color']
+			); ?>
 		<?php else : ?>
 			<?php wpshadow_render_page_header(
 				__( 'WPShadow Dashboard', 'wpshadow' ),

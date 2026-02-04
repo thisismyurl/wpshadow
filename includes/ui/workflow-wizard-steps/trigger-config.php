@@ -42,18 +42,17 @@ $has_config    = ! empty( $config_fields );
 ?>
 
 <div class="wps-page-container">
-	<div class="wps-page-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
-			<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
-			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
-		</a>
-		<div>
-			<h1 class="wps-page-title"><?php echo esc_html( $trigger_data['label'] ); ?></h1>
-			<p class="wps-page-description" style="margin-top: var(--wps-space-2);">
-				<?php echo esc_html( $trigger_data['description'] ); ?>
-			</p>
-		</div>
-	</div>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
+		<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
+		<?php esc_html_e( 'Back', 'wpshadow' ); ?>
+	</a>
+	<?php
+	wpshadow_render_page_header(
+		__( 'Configure Trigger', 'wpshadow' ),
+		__( 'Set the conditions for when this workflow should run.', 'wpshadow' ),
+		'dashicons-admin-generic'
+	);
+	?>
 
 	<?php if ( $has_config ) : ?>
 		<div class="wps-card" style="margin-top: var(--wps-space-6);">

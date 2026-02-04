@@ -38,14 +38,17 @@ foreach ( $trigger_categories as $category ) {
 ?>
 
 <div class="wps-page-container">
-	<div class="wps-page-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" class="wps-action-back-button">
-			<span class="dashicons dashicons-arrow-left-alt2" class="wps-action-back-icon"></span>
-			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
-		</a>
-		<div>
-			<h1 class="wps-page-title"><?php esc_html_e( 'Choose Actions', 'wpshadow' ); ?></h1>		</div>
-	</div>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost wps-action-back-button">
+		<span class="dashicons dashicons-arrow-left-alt2 wps-action-back-icon"></span>
+		<?php esc_html_e( 'Back', 'wpshadow' ); ?>
+	</a>
+	<?php
+	wpshadow_render_page_header(
+		__( 'Choose Actions', 'wpshadow' ),
+		__( 'Select one action to run when this trigger fires. WPShadow Pro unlocks multiple actions per trigger.', 'wpshadow' ),
+		'dashicons-admin-tools'
+	);
+	?>
 
 	<!-- Trigger Context Display -->
 	<?php if ( ! empty( $trigger_label ) ) : ?>
@@ -59,10 +62,6 @@ foreach ( $trigger_categories as $category ) {
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
-
-	<p class="wps-page-description" class="wps-action-trigger-info">
-		<?php esc_html_e( 'Select one action to run when this trigger fires. WPShadow Pro unlocks multiple actions per trigger.', 'wpshadow' ); ?>
-	</p>
 
 	<!-- Selected Actions -->
 	<div id="selected-actions" class="wps-card wps-card-primary" class="wps-action-selected-container">

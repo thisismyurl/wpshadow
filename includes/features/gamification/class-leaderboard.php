@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Gamification;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,16 +27,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0400
  */
-class Leaderboard {
+class Leaderboard extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize leaderboard system.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0400
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'init' => 'schedule_leaderboard_refresh',
+		);
+	}
+
+	/**
+	 * Initialize leaderboard system (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Use Leaderboard::subscribe() instead
+	 * @since      1.6004.0400
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'schedule_leaderboard_refresh' ) );
+		self::subscribe();
 	}
 
 	/**

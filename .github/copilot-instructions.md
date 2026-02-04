@@ -442,6 +442,74 @@ echo 'Click here';
 echo "The plugin found $count issues";
 ```
 
+### Communication Standards (CRITICAL)
+
+**"Write like you're explaining to your grandmother, but respect her intelligence."**
+
+All user-facing text must follow these non-negotiable communication principles:
+
+**Novice-First Language:**
+- ❌ DON'T assume technical knowledge (PHP, SQL, REST API, DNS, SSL)
+- ❌ DON'T use jargon without explanation (cache, CDN, JWT, schema)
+- ❌ DON'T use acronyms without spelling them out
+- ✅ DO explain technical concepts in everyday terms
+- ✅ DO use analogies and real-world examples
+- ✅ DO provide context before technical details
+
+**Positive Framing:**
+- ❌ DON'T focus on what's wrong or missing ("Your site is insecure")
+- ❌ DON'T use intimidating language ("critical", "must", "failure")
+- ❌ DON'T use negative framing ("You don't have X")
+- ✅ DO focus on what users CAN do ("Let's make your site more secure")
+- ✅ DO use comfortable language ("Here's something we can help with")
+- ✅ DO emphasize benefits and improvements
+
+**Examples:**
+
+Bad (Technical, Negative, Intimidating):
+```php
+'description' => __( 'JWT token validation not implemented. Critical security vulnerability.', 'wpshadow' )
+'description' => __( 'Your images are not optimized. This will hurt performance.', 'wpshadow' )
+'description' => __( 'You must enable SSL immediately.', 'wpshadow' )
+```
+
+Good (Novice-Friendly, Positive, Comfortable):
+```php
+'description' => __( 'Your site could be more secure with a token checking system (like checking IDs at a door). This helps verify that API requests are legitimate.', 'wpshadow' )
+'description' => __( 'Your images could load faster for visitors. We can help optimize them so pages load 2-3x quicker.', 'wpshadow' )
+'description' => __( 'Adding a security certificate (SSL) will protect your visitors\' information. It shows the padlock icon in browsers.', 'wpshadow' )
+```
+
+**Diagnostic Description Template:**
+```
+[What we found] + [Why it matters in human terms] + [What can be done] + [Link to learn more]
+
+Example:
+"Your site isn't using image lazy loading yet. This means visitors' browsers 
+download all images immediately, even ones they never see. Lazy loading waits 
+to load images until visitors scroll to them—like only turning on lights in 
+rooms you enter. This can make your site load 2-3x faster. [Learn more]"
+```
+
+**Content Checklist:**
+```
+✅ MUST HAVE:
+- Explains WHY in human terms
+- Uses positive framing ("can improve" not "is missing")
+- Assumes zero technical knowledge
+- Makes user feel capable
+- Offers help, not commands
+- Links to learning resources
+
+❌ MUST AVOID:
+- Jargon without explanation
+- Acronyms without spelling out
+- Negative framing
+- Intimidating language
+- Sales pressure
+- Technical assumptions
+```
+
 ### Error Handling
 ```php
 // ✅ Use Error_Handler for exceptions
@@ -1275,8 +1343,8 @@ apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 ## Resources
 
 **Documentation:**
-- [Product Philosophy](../docs/PRODUCT_PHILOSOPHY.md) - The 11 Commandments
-- [Accessibility Canon](../docs/ACCESSIBILITY_AND_INCLUSIVITY_CANON.md) - The 3 Pillars
+- [Core Philosophy](../docs/CORE_PHILOSOPHY.md) - The 12 Commandments & 3 CANON Pillars
+- [Product Family](../docs/PRODUCT_FAMILY.md) - Ecosystem, pricing, product alignment
 - [Coding Standards](../docs/CODING_STANDARDS.md) - Naming conventions
 - [Architecture](../docs/ARCHITECTURE.md) - System design
 - [Feature Matrix](../docs/FEATURE_MATRIX_DIAGNOSTICS.md) - All diagnostics

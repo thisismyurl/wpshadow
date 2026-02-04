@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class = '', $icon_color = 'var(--wps-primary)' ) {
 	// Load the header template (variables are available as local scope)
-	include WPSHADOW_PATH . 'includes/views/page-header.php';
+	include WPSHADOW_PATH . 'includes/ui/templates/page-header.php';
 }
 
 /**
@@ -43,7 +43,7 @@ function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class =
  * @return void
  */
 function wpshadow_render_page_footer() {
-	include WPSHADOW_PATH . 'includes/views/page-footer.php';
+	include WPSHADOW_PATH . 'includes/ui/templates/page-footer.php';
 }
 
 /**

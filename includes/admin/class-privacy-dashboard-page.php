@@ -17,6 +17,7 @@ namespace WPShadow\Admin;
 
 use WPShadow\Privacy\Consent_Preferences;
 use WPShadow\Privacy\Privacy_Policy_Manager;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,21 +31,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0200
  */
-class Privacy_Dashboard_Page {
+class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the privacy dashboard.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6004.0200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_enqueue_scripts'                 => 'enqueue_assets',
+			'wp_ajax_wpshadow_export_data'          => 'handle_export_data',
+			'wp_ajax_wpshadow_delete_data'          => 'handle_delete_data',
+			'wp_ajax_wpshadow_update_consent'       => 'handle_update_consent',
+		);
+	}
+
+	/**
+	 * Initialize the privacy dashboard (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Privacy_Dashboard_Page::subscribe() instead
+	 * @since      1.6004.0200
+	 * @return     void
 	 */
 	public static function init() {
-		// Note: Menu registration moved to Gamification_UI::register_menu_pages()
-		// to place Privacy under Achievements submenu
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wpshadow_export_data', array( __CLASS__, 'handle_export_data' ) );
-		add_action( 'wp_ajax_wpshadow_delete_data', array( __CLASS__, 'handle_delete_data' ) );
-		add_action( 'wp_ajax_wpshadow_update_consent', array( __CLASS__, 'handle_update_consent' ) );
+		self::subscribe();
 	}
 
 	/**
@@ -123,15 +135,13 @@ class Privacy_Dashboard_Page {
 
 		?>
 		<div class="wrap wpshadow-privacy wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-shield-alt"></span>
-					<?php esc_html_e( 'Privacy Dashboard', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-description">
-					<?php esc_html_e( 'Complete transparency and control over your data. Your privacy, your rules.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'Privacy Dashboard', 'wpshadow' ),
+				__( 'Complete transparency and control over your data. Your privacy, your rules.', 'wpshadow' ),
+				'dashicons-shield-alt'
+			);
+			?>
 
 			<!-- Privacy Score Card -->
 			<div class="wps-card">

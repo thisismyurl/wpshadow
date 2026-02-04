@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Content;
 
 use WPShadow\Core\UTM_Link_Manager;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,18 +27,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0100
  */
-class Training_Widget {
+class Training_Widget extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize widget
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0100
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_enqueue_scripts'                         => 'enqueue_assets',
+			'wp_ajax_wpshadow_dismiss_training_widget'      => 'ajax_dismiss_widget',
+			'wp_ajax_wpshadow_track_training_click'         => 'ajax_track_click',
+		);
+	}
+
+	/**
+	 * Initialize widget (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Training_Widget::subscribe() instead
+	 * @since      1.6004.0100
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wpshadow_dismiss_training_widget', array( __CLASS__, 'ajax_dismiss_widget' ) );
-		add_action( 'wp_ajax_wpshadow_track_training_click', array( __CLASS__, 'ajax_track_click' ) );
+		self::subscribe();
 	}
 
 	/**

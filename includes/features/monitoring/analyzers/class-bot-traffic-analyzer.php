@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Guardian;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 /**
  * Bot Traffic Analyzer
  *
@@ -15,7 +17,7 @@ namespace WPShadow\Guardian;
  * @subpackage Guardian
  * @since 1.6030.2200
  */
-class Bot_Traffic_Analyzer {
+class Bot_Traffic_Analyzer extends Hook_Subscriber_Base {
 
 	/**
 	 * Known good bot patterns
@@ -59,15 +61,33 @@ class Bot_Traffic_Analyzer {
 	);
 
 	/**
-	 * Initialize bot traffic monitoring
+	 * Get hook subscriptions.
 	 *
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'init'                          => array( 'track_request', 1 ),
+			'wpshadow_analyze_bot_traffic'  => 'analyze',
+		);
+	}
+
+	/**
+	 * Initialize bot traffic monitoring (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Bot_Traffic_Analyzer::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
-		// Track all page requests
-		add_action( 'init', array( __CLASS__, 'track_request' ), 1 );
+		// Schedule cron
+		if ( ! wp_next_scheduled( 'wpshadow_analyze_bot_traffic' ) ) {
+			wp_schedule_event( time(), 'hourly', 'wpshadow_analyze_bot_traffic' );
+		}
 
-		// Run hourly analysis
+		// Subscribe to hooks
+		self::subscribe();
+	}
 		if ( ! wp_next_scheduled( 'wpshadow_analyze_bot_traffic' ) ) {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_analyze_bot_traffic' );
 		}

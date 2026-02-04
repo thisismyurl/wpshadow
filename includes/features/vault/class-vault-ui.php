@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Vault;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,22 +27,33 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.1845
  */
-class Vault_UI extends AJAX_Handler_Base {
+class Vault_UI extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize UI hooks
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.1845
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_menu'                           => 'register_menu_pages',
+			'admin_enqueue_scripts'                => 'enqueue_assets',
+			'wp_ajax_wpshadow_vault_create_backup' => 'handle_create_backup',
+			'wp_ajax_wpshadow_vault_delete_backup' => 'handle_delete_backup',
+			'wp_ajax_wpshadow_vault_restore_backup' => 'handle_restore_backup',
+		);
+	}
+
+	/**
+	 * Initialize UI hooks (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Vault_UI::subscribe() instead
+	 * @since      1.6030.1845
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'register_menu_pages' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-
-		// AJAX handlers.
-		add_action( 'wp_ajax_wpshadow_vault_create_backup', array( __CLASS__, 'handle_create_backup' ) );
-		add_action( 'wp_ajax_wpshadow_vault_delete_backup', array( __CLASS__, 'handle_delete_backup' ) );
-		add_action( 'wp_ajax_wpshadow_vault_restore_backup', array( __CLASS__, 'handle_restore_backup' ) );
+		self::subscribe();
 	}
 
 	/**

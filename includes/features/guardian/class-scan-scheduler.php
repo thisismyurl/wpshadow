@@ -17,6 +17,7 @@ namespace WPShadow\Guardian;
 use WPShadow\Core\Activity_Logger;
 use WPShadow\Core\Settings_Registry;
 use WPShadow\Core\Diagnostic_Registry;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6032.1010
  */
-class Scan_Scheduler {
+class Scan_Scheduler extends Hook_Subscriber_Base {
 
 	/**
 	 * Settings prefix
@@ -46,27 +47,34 @@ class Scan_Scheduler {
 	private static $cron_hook = 'wpshadow_scheduled_scan';
 
 	/**
-	 * Initialize scheduled scans system
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6032.1010
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_register_settings'                        => 'register_settings',
+			'wpshadow_scheduled_scan'                           => 'execute_scheduled_scan',
+			'admin_notices'                                     => 'check_cron_health',
+			'wp_ajax_wpshadow_dismiss_cron_disabled_notice' => 'dismiss_cron_disabled_notice',
+		);
+	}
+
+	/**
+	 * Initialize scheduled scans system (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Scan_Scheduler::subscribe() instead
+	 * @since      1.6032.1010
+	 * @return     void
 	 */
 	public static function init() {
-		// Register settings
-		add_action( 'wpshadow_register_settings', array( __CLASS__, 'register_settings' ) );
-
-		// Register cron hook
-		add_action( self::$cron_hook, array( __CLASS__, 'execute_scheduled_scan' ) );
-
 		// Setup/clear cron on activation/deactivation
 		register_activation_hook( \WPSHADOW_FILE, array( __CLASS__, 'schedule_cron' ) );
 		register_deactivation_hook( \WPSHADOW_FILE, array( __CLASS__, 'unschedule_cron' ) );
 
-		// Check cron status
-		add_action( 'admin_notices', array( __CLASS__, 'check_cron_health' ) );
-
-		// AJAX handler for dismissing cron disabled notice
-		add_action( 'wp_ajax_wpshadow_dismiss_cron_disabled_notice', array( __CLASS__, 'dismiss_cron_disabled_notice' ) );
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**
@@ -245,17 +253,35 @@ class Scan_Scheduler {
 		$max_time = get_option( self::$settings_prefix . '_max_time', 300 );
 
 		// Set max execution time
-		set_time_limit( $max_time );
+		if ( function_exists( 'set_time_limit' ) ) {
+			@set_time_limit( $max_time );
+		}
 
 		$findings = array();
 		$skipped = array();
+
+		// MURPHY-SAFE: Track elapsed time (bug fix - was comparing microtime() against $max_time)
+		$start_time = microtime( true );
+		$time_limit = $max_time - 30; // 30-second buffer for cleanup
 
 		// Get diagnostics to run based on depth
 		$diagnostics = self::get_diagnostics_by_depth( $depth );
 
 		foreach ( $diagnostics as $slug => $class ) {
-			// Check time limit
-			if ( function_exists( 'get_time_limit' ) && microtime( true ) > $max_time ) {
+			// MURPHY-SAFE: Check ELAPSED time (not absolute time)
+			$elapsed = microtime( true ) - $start_time;
+
+			if ( $elapsed > $time_limit ) {
+				// Time limit reached, skip remaining diagnostics
+				Error_Handler::log_warning(
+					'Scan time limit reached',
+					array(
+						'elapsed'  => $elapsed,
+						'skipped'  => $slug,
+						'limit'    => $time_limit,
+					)
+				);
+
 				$skipped[] = $slug;
 				continue;
 			}

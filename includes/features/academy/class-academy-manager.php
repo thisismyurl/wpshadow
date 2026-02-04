@@ -16,6 +16,7 @@ namespace WPShadow\Academy;
 
 use WPShadow\Core\Activity_Logger;
 use WPShadow\Core\Settings_Registry;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.1900
  */
-class Academy_Manager {
+class Academy_Manager extends Hook_Subscriber_Base {
 
 	/**
 	 * Singleton instance
@@ -61,7 +62,22 @@ class Academy_Manager {
 	}
 
 	/**
-	 * Setup WordPress hooks
+	 * Get hook subscriptions.
+	 *
+	 * Note: Academy_Manager uses instance methods, not static methods,
+	 * so we override get_hooks() to return instance-based subscriptions.
+	 *
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		// Note: This is called statically but Academy_Manager uses
+		// instance methods. The instance is created in init().
+		return array(); // Hooks registered in setup_hooks() instead
+	}
+
+	/**
+	 * Setup WordPress hooks (instance method)
 	 *
 	 * @since  1.6030.1900
 	 * @return void
@@ -87,10 +103,11 @@ class Academy_Manager {
 	}
 
 	/**
-	 * Initialize Academy system
+	 * Initialize Academy system (deprecated)
 	 *
-	 * @since  1.6030.1900
-	 * @return void
+	 * @deprecated 1.7035.1400 Academy_Manager is singleton with instance hooks
+	 * @since      1.6030.1900
+	 * @return     void
 	 */
 	public static function init() {
 		self::get_instance();
@@ -126,7 +143,7 @@ class Academy_Manager {
 			$this->store_learning_suggestion(
 				array(
 					'type'        => 'kb_article',
-					'title'       => __( 'Want to understand what this checks?', 'wpshadow' ),
+					'title'       => __( 'Want to understand what we just checked?', 'wpshadow' ),
 					'description' => $kb_article['title'],
 					'url'         => $kb_article['url'],
 					'context'     => 'post_diagnostic',
@@ -164,7 +181,7 @@ class Academy_Manager {
 			$this->store_learning_suggestion(
 				array(
 					'type'        => 'video',
-					'title'       => __( 'See how this fix works', 'wpshadow' ),
+					'title'       => __( 'Want to see what we just fixed?', 'wpshadow' ),
 					'description' => $video['title'],
 					'url'         => $video['url'],
 					'duration'    => $video['duration'],
@@ -209,7 +226,7 @@ class Academy_Manager {
 					'type'        => 'course',
 					'title'       => sprintf(
 						/* translators: %d: occurrence count */
-						__( 'Fixed this %d times? Master it with a course!', 'wpshadow' ),
+						__( 'You\'ve fixed this %d times. Want to learn how to prevent it?', 'wpshadow' ),
 						$this->get_issue_occurrence_count( $issue_slug )
 					),
 					'description' => $course['title'],

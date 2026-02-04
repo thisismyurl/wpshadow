@@ -56,37 +56,44 @@ class Report_Renderer {
 				$metrics = $report['metrics'];
 				$cards   = array(
 					array(
-						'icon'  => '⏱️',
-						'label' => __( 'Time Saved', 'wpshadow' ),
-						'value' => sprintf( '%.1f hrs', $metrics['time_saved_hours'] ),
-						'color' => '#1e73be',
+						'icon'        => '⏱️',
+						'label'       => __( 'Time Saved', 'wpshadow' ),
+						'value'       => sprintf( '%.1f hrs', $metrics['time_saved_hours'] ),
+						'explanation' => __( 'Hours you didn\'t have to spend fixing things manually', 'wpshadow' ),
+						'color'       => '#1e73be',
 					),
 					array(
-						'icon'  => '✅',
-						'label' => __( 'Issues Fixed', 'wpshadow' ),
-						'value' => $metrics['issues_fixed'],
-						'color' => '#27ae60',
+						'icon'        => '✅',
+						'label'       => __( 'Problems Fixed', 'wpshadow' ),
+						'value'       => $metrics['issues_fixed'],
+						'explanation' => __( 'Site issues we automatically repaired for you', 'wpshadow' ),
+						'color'       => '#27ae60',
 					),
 					array(
-						'icon'  => '⚙️',
-						'label' => __( 'Workflows Created', 'wpshadow' ),
-						'value' => $metrics['workflows_created'],
-						'color' => '#8e44ad',
+						'icon'        => '⚙️',
+						'label'       => __( 'Automations Created', 'wpshadow' ),
+						'value'       => $metrics['workflows_created'],
+						'explanation' => __( 'Automatic fixes that run without you having to do anything', 'wpshadow' ),
+						'color'       => '#8e44ad',
 					),
 					array(
-						'icon'  => '📊',
-						'label' => __( 'Success Rate', 'wpshadow' ),
-						'value' => sprintf( '%.1f%%', $metrics['success_rate'] ),
-						'color' => '#e67e22',
+						'icon'        => '📊',
+						'label'       => __( 'Success Rate', 'wpshadow' ),
+						'value'       => sprintf( '%.1f%%', $metrics['success_rate'] ),
+						'explanation' => __( 'How often our fixes worked perfectly the first time', 'wpshadow' ),
+						'color'       => '#e67e22',
 					),
 				);
 				?>
 				
 				<?php foreach ( $cards as $card ) : ?>
 					<div style="background: linear-gradient(135deg, <?php echo esc_attr( $card['color'] ); ?> 0%, <?php echo esc_attr( $card['color'] ); ?>dd 100%); color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-						<div class="wps-report-metric-icon"><?php echo esc_html( $card['icon'] ); ?></div>
-						<div class="wps-report-metric-label"><?php echo esc_html( $card['label'] ); ?></div>
-						<div class="wps-report-metric-value"><?php echo esc_html( $card['value'] ); ?></div>
+						<div class="wps-report-metric-icon" style="font-size: 24px; margin-bottom: 8px;"><?php echo esc_html( $card['icon'] ); ?></div>
+						<div class="wps-report-metric-label" style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;"><?php echo esc_html( $card['label'] ); ?></div>
+						<div class="wps-report-metric-value" style="font-size: 28px; font-weight: bold; margin-bottom: 8px;"><?php echo esc_html( $card['value'] ); ?></div>
+						<?php if ( isset( $card['explanation'] ) ) : ?>
+							<div class="wps-report-metric-explanation" style="font-size: 12px; opacity: 0.85; line-height: 1.4;"><?php echo esc_html( $card['explanation'] ); ?></div>
+						<?php endif; ?>
 					</div>
 				<?php endforeach; ?>
 			</div>

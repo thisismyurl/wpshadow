@@ -125,19 +125,132 @@ class Diagnostic_Caching_Strategy_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for caching plugin
-		if ( ! is_plugin_active( 'w3-total-cache/w3-total-cache.php' ) && ! is_plugin_active( 'wp-super-cache/wp-cache.php' ) ) {
+		$issues = array();
+		$caching_layers = array();
+
+		// Check for page caching plugins.
+		$page_cache_plugins = array(
+			'wp-rocket/wp-rocket.php'               => 'WP Rocket',
+			'w3-total-cache/w3-total-cache.php'     => 'W3 Total Cache',
+			'wp-super-cache/wp-cache.php'           => 'WP Super Cache',
+			'wp-fastest-cache/wpFastestCache.php'   => 'WP Fastest Cache',
+			'cache-enabler/cache-enabler.php'       => 'Cache Enabler',
+			'litespeed-cache/litespeed-cache.php'   => 'LiteSpeed Cache',
+			'autoptimize/autoptimize.php'           => 'Autoptimize',
+		);
+
+		$page_cache_detected = false;
+		$page_cache_plugin   = '';
+
+		foreach ( $page_cache_plugins as $plugin => $name ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$page_cache_detected = true;
+				$page_cache_plugin   = $name;
+				$caching_layers[]    = 'page_cache';
+				break;
+			}
+		}
+
+		// Check for object cache (Redis, Memcached).
+		$object_cache_active = wp_using_ext_object_cache();
+		if ( $object_cache_active ) {
+			$caching_layers[] = 'object_cache';
+		}
+
+		// Check for browser caching headers.
+		$home_url = home_url( '/' );
+		$response = wp_remote_head( $home_url, array( 'timeout' => 10 ) );
+
+		$browser_cache_configured = false;
+		if ( ! is_wp_error( $response ) ) {
+			$headers = wp_remote_retrieve_headers( $response );
+			if ( isset( $headers['cache-control'] ) || isset( $headers['expires'] ) ) {
+				$browser_cache_configured = true;
+				$caching_layers[]         = 'browser_cache';
+			}
+		}
+
+		// Check for CDN integration (common headers).
+		$cdn_detected = false;
+		if ( ! is_wp_error( $response ) ) {
+			$headers = wp_remote_retrieve_headers( $response );
+			$cdn_headers = array( 'cf-ray', 'x-cache', 'x-cdn', 'x-edge-location', 'server' );
+
+			foreach ( $cdn_headers as $header ) {
+				if ( isset( $headers[ $header ] ) ) {
+					$cdn_detected = true;
+					$caching_layers[] = 'cdn';
+					break;
+				}
+			}
+		}
+
+		// Critical: No page cache at all.
+		if ( ! $page_cache_detected ) {
 			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Caching strategy is not implemented. Enable page caching, browser caching, and server-level caching for optimal performance.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 60,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/caching-strategy-not-implemented',
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'No page caching detected. Every page load hits the database repeatedly, causing slow load times and high server load. Install a caching plugin like WP Rocket or W3 Total Cache.', 'wpshadow' ),
+				'severity'    => 'critical',
+				'threat_level' => 85,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/caching-strategy',
+				'details'     => array(
+					'caching_layers'           => $caching_layers,
+					'object_cache'             => $object_cache_active,
+					'browser_cache'            => $browser_cache_configured,
+					'cdn_detected'             => $cdn_detected,
+					'recommendation'           => __( 'Install WP Rocket (premium, easiest) or W3 Total Cache (free, advanced) for page caching. Add Redis/Memcached for object caching. Configure browser caching headers.', 'wpshadow' ),
+					'performance_impact'       => array(
+						'without_cache' => '100% of page loads hit database (slow)',
+						'with_page_cache' => '95%+ cache hit rate (8-10x faster)',
+						'with_object_cache' => 'Additional 2-3x speedup on dynamic content',
+					),
+				),
 			);
 		}
 
+		// Medium: Page cache but missing other layers.
+		if ( ! $object_cache_active ) {
+			$issues[] = __( 'No object cache detected (Redis/Memcached). Database queries repeat unnecessarily.', 'wpshadow' );
+		}
+
+		if ( ! $browser_cache_configured ) {
+			$issues[] = __( 'Browser caching headers not configured. Static assets re-download on every visit.', 'wpshadow' );
+		}
+
+		if ( ! $cdn_detected ) {
+			$issues[] = __( 'No CDN detected. Consider Cloudflare or similar for global content delivery.', 'wpshadow' );
+		}
+
+		// Return medium-severity if some caching exists but incomplete.
+		if ( ! empty( $issues ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => __( 'Caching Strategy Incomplete', 'wpshadow' ),
+				'description' => sprintf(
+					/* translators: %s: list of missing caching layers */
+					__( 'Page caching active (%s) but missing other caching layers: %s', 'wpshadow' ),
+					$page_cache_plugin,
+					implode( ', ', $issues )
+				),
+				'severity'    => 'medium',
+				'threat_level' => 45,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/caching-strategy',
+				'details'     => array(
+					'caching_layers'     => $caching_layers,
+					'page_cache_plugin'  => $page_cache_plugin,
+					'object_cache'       => $object_cache_active,
+					'browser_cache'      => $browser_cache_configured,
+					'cdn_detected'       => $cdn_detected,
+					'missing_layers'     => $issues,
+					'recommendation'     => __( 'Implement multi-layer caching: page cache (active), object cache (Redis), browser cache (headers), CDN (Cloudflare).', 'wpshadow' ),
+				),
+			);
+		}
+
+		// No issues - all caching layers present.
 		return null;
 	}
 }

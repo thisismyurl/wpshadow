@@ -13,12 +13,13 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 ?>
 
 <div class="wps-page-container">
-	<div class="wps-page-header">
-		<h1 class="wps-page-title"><?php esc_html_e( 'Choose a Trigger', 'wpshadow' ); ?></h1>
-		<p class="wps-page-description">
-			<?php esc_html_e( 'Choose what triggers your workflow. When this event occurs, your chosen actions will run automatically.', 'wpshadow' ); ?>
-		</p>
-	</div>
+	<?php
+	wpshadow_render_page_header(
+		__( 'Choose a Trigger', 'wpshadow' ),
+		__( 'Choose what triggers your workflow. When this event occurs, your chosen actions will run automatically.', 'wpshadow' ),
+		'dashicons-controls-play'
+	);
+	?>
 
 	<?php
 	// Store current trigger info for display at bottom

@@ -40,15 +40,13 @@ class General_Settings_Page {
 
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-admin-generic"></span>
-					<?php esc_html_e( 'General Settings', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Configure general plugin behavior and preferences.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'General Settings', 'wpshadow' ),
+				__( 'Configure general plugin behavior and preferences.', 'wpshadow' ),
+				'dashicons-admin-generic'
+			);
+			?>
 
 			<form method="post" action="options.php" class="wps-settings-form">
 				<?php settings_fields( 'wpshadow_settings' ); ?>

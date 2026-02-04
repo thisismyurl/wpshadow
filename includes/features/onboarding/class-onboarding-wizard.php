@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace WPShadow\Onboarding;
 
 use WPShadow\Core\Form_Param_Helper;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,14 +32,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages the display and flow of the onboarding wizard to help users
  * transition from other platforms (Word, Wix, Moodle, etc.) to WordPress.
  */
-class Onboarding_Wizard {
+class Onboarding_Wizard extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize onboarding wizard
+	 * Get hook subscriptions.
+	 *
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_init'    => 'maybe_redirect_to_onboarding',
+			'admin_notices' => array( 'render_wizard', 1 ),
+			'admin_footer'  => 'enqueue_wizard_assets',
+		);
+	}
+
+	/**
+	 * Initialize onboarding wizard (deprecated - use ::subscribe() instead).
 	 *
 	 * Sets up hooks to display the wizard when needed.
 	 *
-	 * @return void
+	 * @deprecated 1.7035.1400 Use Onboarding_Wizard::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
 		// Load manager and translator
@@ -48,10 +64,8 @@ class Onboarding_Wizard {
 		// Initialize manager hooks
 		Onboarding_Manager::init();
 
-		// Add admin hooks for wizard display
-		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_onboarding' ) );
-		add_action( 'admin_notices', array( __CLASS__, 'render_wizard' ), 1 );
-		add_action( 'admin_footer', array( __CLASS__, 'enqueue_wizard_assets' ) );
+		// Subscribe to hooks (backwards compatibility)
+		self::subscribe();
 	}
 
 	/**

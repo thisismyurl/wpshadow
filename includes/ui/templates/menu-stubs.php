@@ -22,7 +22,17 @@ if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 		if ( file_exists( WPSHADOW_PATH . 'includes/views/kanban-board.php' ) ) {
 			require_once WPSHADOW_PATH . 'includes/views/kanban-board.php';
 		} else {
-			echo '<div class="wrap"><h1>Findings</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Loading findings...</p></div>';
+			?>
+			<div class="wrap wps-page-container">
+				<?php
+				wpshadow_render_page_header(
+					__( 'Findings', 'wpshadow' ),
+					__( 'Loading your findings...', 'wpshadow' ),
+					'dashicons-grid-view'
+				);
+				?>
+			</div>
+			<?php
 		}
 	}
 }
@@ -69,7 +79,17 @@ if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 		if ( class_exists( '\WPShadow\Admin\Guardian_Dashboard' ) ) {
 			echo \WPShadow\Admin\Guardian_Dashboard::render();
 		} else {
-			echo '<div class="wrap"><h1>Guardian</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Diagnostics and treatments system.</p></div>';
+			?>
+			<div class="wrap wps-page-container">
+				<?php
+				wpshadow_render_page_header(
+					__( 'WPShadow Guardian', 'wpshadow' ),
+					__( 'Diagnostics and treatments system.', 'wpshadow' ),
+					'dashicons-shield-alt'
+				);
+				?>
+			</div>
+			<?php
 		}
 	}
 }
@@ -90,7 +110,17 @@ if ( ! function_exists( 'wpshadow_render_reports' ) ) {
 			return;
 		}
 
-		echo '<div class="wrap"><h1>Reports</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Site health reports and analytics.</p></div>';
+		?>
+		<div class="wrap wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Reports', 'wpshadow' ),
+				__( 'Site health reports and analytics.', 'wpshadow' ),
+				'dashicons-chart-line'
+			);
+			?>
+		</div>
+		<?php
 	}
 }
 
@@ -117,6 +147,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				'general'       => 'WPShadow\\Admin\\Pages\\General_Settings_Page',
 				'privacy'       => 'WPShadow\\Admin\\Pages\\Privacy_Settings_Page',
 				'notifications' => 'WPShadow\\Admin\\Pages\\Notifications_Settings_Page',
+				'import-export' => 'WPShadow\\Admin\\Pages\\Import_Export_Settings_Page',
 				'advanced'      => 'WPShadow\\Admin\\Pages\\Advanced_Settings_Page',
 			);
 
@@ -138,23 +169,17 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			// Fallback for unknown tabs
 			?>
 			<div class="wps-page-container">
-				<div class="wps-page-header">
-					<h1 class="wps-page-title">
-						<span class="dashicons dashicons-admin-settings"></span>
-						<?php
-						echo esc_html(
-							sprintf(
-								/* translators: %s: settings tab name */
-								__( '%s Settings', 'wpshadow' ),
-								ucwords( str_replace( array( '_', '-' ), ' ', $tab ) )
-							)
-						);
-						?>
-					</h1>
-					<p class="wps-page-subtitle">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ); ?>">&larr; <?php esc_html_e( 'Back to Settings', 'wpshadow' ); ?></a>
-					</p>
-				</div>
+				<?php
+				wpshadow_render_page_header(
+					sprintf(
+						/* translators: %s: settings tab name */
+						__( '%s Settings', 'wpshadow' ),
+						ucwords( str_replace( array( '_', '-' ), ' ', $tab ) )
+					),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ) . '">&larr; ' . esc_html__( 'Back to Settings', 'wpshadow' ) . '</a>',
+					'dashicons-admin-settings'
+				);
+				?>
 
 				<div class="wps-card wps-card--warning">
 					<div class="wps-card-body">
@@ -169,15 +194,13 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 		// Show settings overview grid
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-admin-settings"></span>
-					<?php esc_html_e( 'WPShadow Settings', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Configure WPShadow plugin settings and preferences.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'WPShadow Settings', 'wpshadow' ),
+				__( 'Configure WPShadow plugin settings and preferences.', 'wpshadow' ),
+				'dashicons-admin-settings'
+			);
+			?>
 
 			<!-- Settings Grid -->
 			<div class="wps-grid wps-grid-auto-320">
@@ -305,7 +328,30 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 						</a>
 					</div>
 				</div>
-
+			<!-- Import/Export Settings -->
+			<div class="wps-card">
+				<div class="wps-card-header wps-pb-3 wps-border-bottom">
+					<div class="wps-flex wps-gap-3 wps-items-start">
+						<span class="dashicons dashicons-upload wps-text-3xl wps-text-primary"></span>
+						<div>
+							<h3 class="wps-card-title wps-m-0">
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=import-export' ) ); ?>" style="color: inherit; text-decoration: none;">
+									<?php esc_html_e( 'Import / Export', 'wpshadow' ); ?>
+								</a>
+							</h3>
+							<p class="wps-card-description wps-m-0">
+								<?php esc_html_e( 'Backup, restore, or sync your configuration.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="wps-card-body">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=import-export' ) ); ?>" class="wps-btn wps-btn--secondary">
+						<span class="dashicons dashicons-arrow-right-alt"></span>
+						<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
+					</a>
+				</div>
+			</div>
 			<!-- Advanced Settings -->
 				<div class="wps-card">
 					<div class="wps-card-header wps-pb-3 wps-border-bottom">
@@ -357,7 +403,17 @@ if ( ! function_exists( 'wpshadow_render_scan_settings' ) ) {
 			}
 		}
 
-		echo '<div class="wrap"><h1>' . esc_html__( 'Scan Settings', 'wpshadow' ) . '</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>' . esc_html__( 'Loading scan settings...', 'wpshadow' ) . '</p></div>';
+		?>
+		<div class="wrap wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Scan Settings', 'wpshadow' ),
+				__( 'Loading scan settings...', 'wpshadow' ),
+				'dashicons-search'
+			);
+			?>
+		</div>
+		<?php
 	}
 }
 
@@ -403,7 +459,17 @@ if ( ! function_exists( 'wpshadow_render_visual_comparisons' ) ) {
 	 * Render Visual Comparisons page
 	 */
 	function wpshadow_render_visual_comparisons() {
-		echo '<div class="wrap"><h1>Visual Comparisons</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>Visual regression testing coming soon.</p></div>';
+		?>
+		<div class="wrap wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Visual Comparisons', 'wpshadow' ),
+				__( 'Visual regression testing coming soon.', 'wpshadow' ),
+				'dashicons-images-alt2'
+			);
+			?>
+		</div>
+		<?php
 	}
 }
 

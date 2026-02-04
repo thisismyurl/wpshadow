@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Content;
 
 use WPShadow\Core\UTM_Link_Manager;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,17 +27,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0100
  */
-class Weekly_Tips_Widget {
+class Weekly_Tips_Widget extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize widget
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0100
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wp_dashboard_setup'                        => 'register_dashboard_widget',
+			'wp_ajax_wpshadow_mark_tip_helpful'         => 'ajax_mark_helpful',
+		);
+	}
+
+	/**
+	 * Initialize widget (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Weekly_Tips_Widget::subscribe() instead
+	 * @since      1.6004.0100
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
-		add_action( 'wp_ajax_wpshadow_mark_tip_helpful', array( __CLASS__, 'ajax_mark_helpful' ) );
+		self::subscribe();
 	}
 
 	/**

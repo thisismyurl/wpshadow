@@ -144,7 +144,7 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 		if ( ! $has_dir_protection ) {
 			$issues[] = array(
 				'type'        => 'no_dir_protection',
-				'description' => __( 'Uploads directory is not protected; directory listing could expose file structure', 'wpshadow' ),
+				'description' => __( 'Adding a protection file to your uploads folder helps prevent visitors from browsing your files (like having blinds on your windows). This makes it harder for people to discover and download files they shouldn\'t see.', 'wpshadow' ),
 			);
 		}
 
@@ -152,7 +152,7 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 		if ( $allows_dangerous ) {
 			$issues[] = array(
 				'type'        => 'dangerous_mimes',
-				'description' => __( 'Dangerous file types (PHP, EXE, etc.) are allowed for upload', 'wpshadow' ),
+				'description' => __( 'Restricting certain file types (like executable programs) from being uploaded helps keep your site safe. Think of it like airport security screening bags—some items just shouldn\'t come through.', 'wpshadow' ),
 			);
 		}
 

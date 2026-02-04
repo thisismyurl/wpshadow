@@ -1,15 +1,13 @@
 <?php
 /**
  * WPShadow Vault Light Settings Page
- *
- * Controls lightweight backup behavior, scheduled snapshots, and retention policies.
- *
- * @package    WPShadow
- * @subpackage Settings
- * @since      1.6030.0232
- */
-
-declare(strict_types=1);
+			<?php
+			wpshadow_render_page_header(
+				__( 'Vault Light', 'wpshadow' ),
+				__( 'Basic backup and restore functionality for your WordPress site.', 'wpshadow' ),
+				'dashicons-backup'
+			);
+			?>
 
 namespace WPShadow\Admin\Pages;
 
@@ -37,15 +35,13 @@ class Vault_Light_Settings_Page {
 
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-backup"></span>
-					<?php esc_html_e( 'WPShadow Vault Light', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Configure WPShadow Vault Light snapshots before treatments.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'WPShadow Vault Light', 'wpshadow' ),
+				__( 'Configure WPShadow Vault Light snapshots before treatments.', 'wpshadow' ),
+				'dashicons-backup'
+			);
+			?>
 
 			<!-- Safety Notice -->
 			<div class="wps-card wps-card--success">

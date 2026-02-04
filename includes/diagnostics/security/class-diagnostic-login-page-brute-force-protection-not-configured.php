@@ -85,7 +85,7 @@ class Diagnostic_Login_Page_Brute_Force_Protection_Not_Configured extends Diagno
 			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Login page brute force protection is not configured. Enable login attempt limits to prevent credential-based attacks.', 'wpshadow' ),
+\t\t\t\t'description'  => __( 'Your login page could use protection against automated password guessing (like locking your door after too many wrong key attempts). This helps stop bots from trying thousands of passwords to break into your site.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,

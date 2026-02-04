@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Gamification;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0400
  */
-class Achievement_Registry {
+class Achievement_Registry extends Hook_Subscriber_Base {
 
 	/**
 	 * Achievement definitions.
@@ -35,10 +37,21 @@ class Achievement_Registry {
 	private static $achievements = array();
 
 	/**
-	 * Initialize achievement registry.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0400
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(); // Configuration only, no hooks needed
+	}
+
+	/**
+	 * Initialize achievement registry (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Achievement_Registry::subscribe() instead
+	 * @since      1.6004.0400
+	 * @return     void
 	 */
 	public static function init() {
 		self::register_achievements();

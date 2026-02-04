@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Analytics\Health_History;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,17 +25,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.602.0200
  */
-class Health_History_Page {
+class Health_History_Page extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the page.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.602.0200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_menu'            => 'register_menu',
+			'admin_enqueue_scripts' => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize the page (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Health_History_Page::subscribe() instead
+	 * @since      1.602.0200
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		self::subscribe();
 	}
 
 	/**
@@ -65,7 +79,7 @@ class Health_History_Page {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 		}
 
-		require_once WPSHADOW_PATH . 'includes/views/health-history.php';
+		require_once WPSHADOW_PATH . 'includes/ui/templates/health-history.php';
 	}
 
 	/**

@@ -28,16 +28,15 @@ if ( $action === 'edit' && $workflow_id ) {
 }
 ?>
 
-<div class="wrap wpshadow-workflow-wizard">
-	<h1>
-		<?php
-		if ( $action === 'edit' ) {
-			esc_html_e( 'Edit Workflow', 'wpshadow' );
-		} else {
-			esc_html_e( 'Create Workflow', 'wpshadow' );
-		}
-		?>
-	</h1>
+<div class="wrap wpshadow-workflow-wizard wps-page-container">
+	<?php
+	$title = ( 'edit' === $action ) ? __( 'Edit Workflow', 'wpshadow' ) : __( 'Create Workflow', 'wpshadow' );
+	wpshadow_render_page_header(
+		$title,
+		__( 'Build a workflow that automatically keeps your site healthy.', 'wpshadow' ),
+		'dashicons-update'
+	);
+	?>
 
 	<!-- Progress Steps -->
 	<div class="wizard-progress">

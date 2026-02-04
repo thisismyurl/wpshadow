@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Gamification;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0400
  */
-class Badge_System {
+class Badge_System extends Hook_Subscriber_Base {
 
 	/**
 	 * Badge definitions.
@@ -35,10 +37,21 @@ class Badge_System {
 	private static $badges = array();
 
 	/**
-	 * Initialize badge system.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6004.0400
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(); // Badges registered in register_badges(), no hooks needed
+	}
+
+	/**
+	 * Initialize badge system (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Use Badge_System::subscribe() instead
+	 * @since      1.6004.0400
+	 * @return     void
 	 */
 	public static function init() {
 		self::register_badges();

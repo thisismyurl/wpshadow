@@ -61,6 +61,7 @@ require_once $ajax_path . 'update-report-schedule-handler.php';
 require_once $ajax_path . 'update-privacy-settings-handler.php';
 require_once $ajax_path . 'update-data-retention-handler.php';
 require_once $ajax_path . 'update-scan-frequency-handler.php';
+require_once $ajax_path . 'class-import-export-handler.php';
 
 // Workflow operations
 require_once $ajax_path . 'save-workflow-handler.php';

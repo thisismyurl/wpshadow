@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Guardian;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,18 +28,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0300
  */
-class Guardian_Scan_Interface extends AJAX_Handler_Base {
+class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the interface.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6004.0300
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_enqueue_scripts'            => 'enqueue_assets',
+			'wp_ajax_wpshadow_guardian_scan'   => 'handle_scan_request',
+			'wp_ajax_wpshadow_guardian_check_scan' => 'handle_check_scan',
+		);
+	}
+
+	/**
+	 * Initialize the interface (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Use Guardian_Scan_Interface::subscribe() instead
+	 * @since      1.6004.0300
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wpshadow_guardian_scan', array( __CLASS__, 'handle_scan_request' ) );
-		add_action( 'wp_ajax_wpshadow_guardian_check_scan', array( __CLASS__, 'handle_check_scan' ) );
+		self::subscribe();
 	}
 
 	/**

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Guardian;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 /**
  * Failed Login Analyzer
  *
@@ -15,21 +17,31 @@ namespace WPShadow\Guardian;
  * @subpackage Guardian
  * @since 1.6030.2200
  */
-class Failed_Login_Analyzer {
+class Failed_Login_Analyzer extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize failed login tracking
+	 * Get hook subscriptions.
+	 *
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wp_login_failed'   => 'record_failed_login',
+			'wp_login'          => array( 'record_successful_login', 10, 2 ),
+		);
+	}
+
+	/**
+	 * Initialize failed login tracking (deprecated)
 	 *
 	 * Hooks into WordPress authentication events
 	 *
-	 * @return void
+	 * @deprecated 1.7035.1400 Use Failed_Login_Analyzer::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
-		// Track failed login attempts
-		add_action( 'wp_login_failed', array( __CLASS__, 'record_failed_login' ) );
-
-		// Track successful logins (for context)
-		add_action( 'wp_login', array( __CLASS__, 'record_successful_login' ), 10, 2 );
+		self::subscribe();
 	}
 
 	/**

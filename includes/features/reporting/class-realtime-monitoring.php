@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace WPShadow\Reports;
 
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.2200
  */
-class Realtime_Monitoring {
+class Realtime_Monitoring extends Hook_Subscriber_Base {
 
 	/**
 	 * Monitoring interval in seconds
@@ -40,10 +41,24 @@ class Realtime_Monitoring {
 	const MONITOR_INTERVAL = 300; // 5 minutes
 
 	/**
-	 * Initialize monitoring
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.2200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_realtime_monitor'  => 'run_monitoring_cycle',
+			'cron_schedules'             => 'add_cron_interval',
+		);
+	}
+
+	/**
+	 * Initialize monitoring (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Realtime_Monitoring::subscribe() instead
+	 * @since      1.6030.2200
+	 * @return     void
 	 */
 	public static function init(): void {
 		// Schedule recurring monitoring
@@ -51,10 +66,8 @@ class Realtime_Monitoring {
 			wp_schedule_event( time(), 'wpshadow_5min', 'wpshadow_realtime_monitor' );
 		}
 
-		add_action( 'wpshadow_realtime_monitor', array( __CLASS__, 'run_monitoring_cycle' ) );
-		
-		// Add custom cron schedule
-		add_filter( 'cron_schedules', array( __CLASS__, 'add_cron_interval' ) );
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**

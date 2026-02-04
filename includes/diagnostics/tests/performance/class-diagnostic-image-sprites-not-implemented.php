@@ -125,6 +125,110 @@ class Diagnostic_Image_Sprites_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
+		// Image sprites are less critical with HTTP/2.
+		// Check if server supports HTTP/2.
+		$server_protocol = isset( $_SERVER['SERVER_PROTOCOL'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_PROTOCOL'] ) ) : '';
+		$has_http2 = strpos( $server_protocol, 'HTTP/2' ) !== false;
+
+		// If HTTP/2, sprites less important (multiplexing handles many requests).
+		if ( $has_http2 ) {
+			return null;
+		}
+
+		// Count enqueued small images (icons, logos).
+		global $wp_styles;
+		$small_image_count = 0;
+
+		if ( isset( $wp_styles->registered ) ) {
+			foreach ( $wp_styles->registered as $style ) {
+				// Check for background image usage in CSS.
+				if ( ! empty( $style->src ) && ( strpos( $style->src, 'icon' ) !== false || strpos( $style->src, 'sprite' ) !== false ) ) {
+					$small_image_count++;
+				}
+			}
+		}
+
+		// Check for icon fonts (modern alternative).
+		$icon_fonts = array(
+			'font-awesome/font-awesome.php' => 'Font Awesome',
+			'dashicons'                     => 'Dashicons (WordPress core)',
+		);
+
+		$has_icon_fonts = false;
+		foreach ( $icon_fonts as $font => $name ) {
+			if ( wp_style_is( $font, 'enqueued' ) || wp_style_is( 'dashicons', 'enqueued' ) ) {
+				$has_icon_fonts = true;
+				break;
+			}
+		}
+
+		// If using icon fonts, sprites not needed.
+		if ( $has_icon_fonts ) {
+			return null;
+		}
+
+		// Low priority issue - HTTP/1.1 site without icon optimization.
+		if ( ! $has_http2 && ! $has_icon_fonts ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Image sprites not implemented. Your server uses HTTP/1.1, which limits parallel requests. Multiple small icons (social media, UI elements) load slowly. Combine icons into sprite sheet (1 file) or use icon font. Reduces requests by 80-90%, improves load time 20-40%.', 'wpshadow' ),
+				'severity'    => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/image-sprites',
+				'details'     => array(
+					'server_protocol' => $server_protocol,
+					'has_http2'       => false,
+					'has_icon_fonts'  => false,
+					'recommendation'  => __( 'BEST: Upgrade to HTTP/2 hosting (most modern hosts support it). GOOD: Implement icon font (Font Awesome, free). ALTERNATIVE: Create image sprite sheet (combine icons into one file with CSS positioning).', 'wpshadow' ),
+					'modern_alternatives' => array(
+						'http2' => 'Multiplexing allows many parallel requests (sprites less important)',
+						'icon_fonts' => 'Single font file, scalable, color-customizable',
+						'svg_sprites' => 'Vector sprites (scalable, smaller file size)',
+						'inline_svg' => 'Embed SVG in HTML (no HTTP request)',
+					),
+					'sprite_technique' => array(
+						'combine' => 'All icons in one image (grid layout)',
+						'css' => 'background-image: url(sprite.png); background-position: -32px -64px;',
+						'benefit' => '20 icon files → 1 sprite file = 95% fewer requests',
+					),
+				),
+			);
+		}
+
+		// No issues - HTTP/2 or icon fonts in use.
+		return null;
+	}
+
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Image Sprites Not Implemented';
+
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks if image sprites are implemented';
+
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'performance';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @since  1.6030.2352
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
 		// Check if sprite CSS is used
 		if ( ! has_filter( 'wp_enqueue_scripts', 'load_sprite_css' ) ) {
 			return array(

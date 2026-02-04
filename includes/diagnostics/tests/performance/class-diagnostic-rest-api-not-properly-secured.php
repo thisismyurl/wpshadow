@@ -101,7 +101,7 @@ class Diagnostic_REST_API_Not_Properly_Secured extends Diagnostic_Base {
 		$rate_limit = get_option( '_wpshadow_rest_rate_limit' );
 
 		if ( empty( $rate_limit ) ) {
-			$issues[] = __( 'No REST API rate limiting - vulnerable to abuse', 'wpshadow' );
+			$issues[] = __( 'Adding rate limiting to your API helps prevent anyone from overwhelming it with too many requests (like limiting how many grocery bags one person can take from a pile). This keeps your site responsive for everyone.', 'wpshadow' );
 		}
 
 		if ( ! empty( $issues ) ) {

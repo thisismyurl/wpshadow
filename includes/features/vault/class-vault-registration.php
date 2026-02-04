@@ -17,6 +17,7 @@ namespace WPShadow\Vault;
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Settings_Registry;
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.1835
  */
-class Vault_Registration extends AJAX_Handler_Base {
+class Vault_Registration extends Hook_Subscriber_Base {
 
 	/**
 	 * Vault API base URL
@@ -39,16 +40,29 @@ class Vault_Registration extends AJAX_Handler_Base {
 	const API_BASE_URL = 'https://vault.wpshadow.com/api/v1';
 
 	/**
-	 * Initialize registration hooks
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.1835
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wp_ajax_wpshadow_vault_register'      => 'handle_register',
+			'wp_ajax_wpshadow_vault_connect'       => 'handle_connect',
+			'wp_ajax_wpshadow_vault_disconnect'    => 'handle_disconnect',
+			'wp_ajax_wpshadow_vault_check_status'  => 'handle_check_status',
+		);
+	}
+
+	/**
+	 * Initialize registration hooks (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Vault_Registration::subscribe() instead
+	 * @since      1.6030.1835
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'wp_ajax_wpshadow_vault_register', array( __CLASS__, 'handle_register' ) );
-		add_action( 'wp_ajax_wpshadow_vault_connect', array( __CLASS__, 'handle_connect' ) );
-		add_action( 'wp_ajax_wpshadow_vault_disconnect', array( __CLASS__, 'handle_disconnect' ) );
-		add_action( 'wp_ajax_wpshadow_vault_check_status', array( __CLASS__, 'handle_check_status' ) );
+		self::subscribe();
 	}
 
 	/**

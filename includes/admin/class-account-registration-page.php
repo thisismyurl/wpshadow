@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Core\WPShadow_Account_API;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,17 +33,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6032.0000
  */
-class Account_Registration_Page {
+class Account_Registration_Page extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the registration page.
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6032.0000
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_menu'            => array( 'register_menu', 5 ),
+			'admin_enqueue_scripts' => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize the registration page (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Account_Registration_Page::subscribe() instead
+	 * @since      1.6032.0000
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ), 5 );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		self::subscribe();
 	}
 
 	/**
@@ -126,10 +140,14 @@ class Account_Registration_Page {
 		$services      = $is_registered ? WPShadow_Account_API::get_services_status() : WPShadow_Account_API::get_default_service_limits();
 
 		?>
-		<div class="wrap wpshadow-account-page">
-			<h1 class="wp-heading-inline">
-				<?php esc_html_e( 'WPShadow Account', 'wpshadow' ); ?>
-			</h1>
+		<div class="wrap wpshadow-account-page wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'WPShadow Account', 'wpshadow' ),
+				__( 'Manage your WPShadow account and connected services in one place.', 'wpshadow' ),
+				'dashicons-admin-users'
+			);
+			?>
 
 			<div id="wpshadow-account-notices"></div>
 

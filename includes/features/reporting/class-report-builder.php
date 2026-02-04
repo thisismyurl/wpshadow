@@ -31,15 +31,13 @@ class Report_Builder {
 	public static function render(): void {
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-analytics" style="color: var(--wps-primary);"></span>
-					<?php esc_html_e( 'Report Builder', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Assemble custom reports, compare periods, and export in one place.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'Report Builder', 'wpshadow' ),
+				__( 'Assemble custom reports, compare periods, and export in one place.', 'wpshadow' ),
+				'dashicons-analytics'
+			);
+			?>
 
 			<div class="wps-grid wps-gap-4" class="wps-grid-cols-320-1fr">
 				<!-- Left Sidebar: Report Builder Form -->
@@ -109,31 +107,28 @@ class Report_Builder {
 							<!-- Report Type -->
 							<div class="wps-form-group">
 								<label for="report_type" class="wps-form-label">
-									<?php esc_html_e( 'Report Type', 'wpshadow' ); ?>
-								</label>
-								<select id="report_type" name="type" class="wps-select">
-									<option value="summary"><?php esc_html_e( 'Summary', 'wpshadow' ); ?></option>
-									<option value="detailed"><?php esc_html_e( 'Detailed', 'wpshadow' ); ?></option>
-									<option value="executive"><?php esc_html_e( 'Executive', 'wpshadow' ); ?></option>
-								</select>
-								<p class="wps-form-help">
-									<?php esc_html_e( 'Summary: Overview. Detailed: All events. Executive: Board-level KPIs.', 'wpshadow' ); ?>
-								</p>
-							</div>
-
+					<?php esc_html_e( 'What level of detail do you want?', 'wpshadow' ); ?>
+				</label>
+				<select id="report_type" name="type" class="wps-select">
+					<option value="summary"><?php esc_html_e( 'Quick Summary (2-page highlights of what matters most)', 'wpshadow' ); ?></option>
+					<option value="detailed"><?php esc_html_e( 'Complete Details (full list of everything we found)', 'wpshadow' ); ?></option>
+					<option value="executive"><?php esc_html_e( 'Boss-Friendly Report (simple charts showing time and money saved)', 'wpshadow' ); ?></option>
+				</select>
+				<p class="wps-form-help">
+					<?php esc_html_e( 'Not sure? Start with Quick Summary to see the highlights.', 'wpshadow' ); ?>
 							<!-- Export Format -->
 							<div class="wps-form-group">
 								<label for="report_format" class="wps-form-label">
-									<?php esc_html_e( 'Export Format', 'wpshadow' ); ?>
-								</label>
-								<select id="report_format" name="format" class="wps-select">
-									<option value="html"><?php esc_html_e( 'HTML (View)', 'wpshadow' ); ?></option>
-									<option value="csv"><?php esc_html_e( 'CSV (Excel)', 'wpshadow' ); ?></option>
-									<option value="json"><?php esc_html_e( 'JSON (API)', 'wpshadow' ); ?></option>
-								</select>
-							</div>
-
-							<!-- Action Buttons -->
+					<?php esc_html_e( 'How do you want to view it?', 'wpshadow' ); ?>
+				</label>
+				<select id="report_format" name="format" class="wps-select">
+					<option value="html"><?php esc_html_e( 'Web Page (view in browser, print, or share link)', 'wpshadow' ); ?></option>
+					<option value="csv"><?php esc_html_e( 'Spreadsheet (open in Excel, Google Sheets, or Numbers)', 'wpshadow' ); ?></option>
+					<option value="json"><?php esc_html_e( 'Raw Data (for developers connecting to other tools)', 'wpshadow' ); ?></option>
+				</select>
+				<p class="wps-form-help">
+					<?php esc_html_e( 'Most people choose Web Page. Pick Spreadsheet if you want to analyze numbers.', 'wpshadow' ); ?>
+				</p>
 							<div class="wps-grid wps-grid-auto-200 wps-gap-2 wps-mt-4">
 								<button type="submit" class="wps-btn wps-btn-primary wps-w-full">
 									<?php esc_html_e( 'Generate', 'wpshadow' ); ?>

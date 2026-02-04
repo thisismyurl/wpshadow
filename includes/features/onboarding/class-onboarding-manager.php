@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Onboarding;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 /**
  * Onboarding Manager
  *
@@ -16,7 +18,7 @@ namespace WPShadow\Onboarding;
  * @since 1.6030.2201
  * @package WPShadow
  */
-class Onboarding_Manager {
+class Onboarding_Manager extends Hook_Subscriber_Base {
 
 	/**
 	 * User meta key for onboarding completion
@@ -49,22 +51,29 @@ class Onboarding_Manager {
 	const META_UI_SIMPLIFIED = 'wpshadow_onboarding_ui_simplified';
 
 	/**
-	 * Initialize onboarding system
+	 * Get hook subscriptions.
 	 *
-	 * NOTE: AJAX handlers now registered via AJAX_Router in class-ajax-router.php
-	 * See: includes/admin/ajax/class-*-onboarding-handler.php
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'save_post'                   => 'track_action',
+			'updated_option'              => 'track_action',
+			'wp_insert_comment'           => 'track_action',
+			'admin_notices'               => 'maybe_show_graduation',
+			'wpshadow_settings_sections'  => 'add_settings_section',
+		);
+	}
+
+	/**
+	 * Initialize onboarding system (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Use Onboarding_Manager::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
-		// Track user actions for graduation
-		add_action( 'save_post', array( __CLASS__, 'track_action' ) );
-		add_action( 'updated_option', array( __CLASS__, 'track_action' ) );
-		add_action( 'wp_insert_comment', array( __CLASS__, 'track_action' ) );
-
-		// Check if should show graduation
-		add_action( 'admin_notices', array( __CLASS__, 'maybe_show_graduation' ) );
-
-		// Add settings page integration
-		add_action( 'wpshadow_settings_sections', array( __CLASS__, 'add_settings_section' ) );
+		self::subscribe();
 	}
 
 	/**

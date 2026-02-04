@@ -19,10 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Dismiss_Finding_Handler extends AJAX_Handler_Base {
 
-	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_dismiss_finding', array( __CLASS__, 'handle' ) );
-	}
-
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_dismiss_finding', 'manage_options', 'nonce' );
 

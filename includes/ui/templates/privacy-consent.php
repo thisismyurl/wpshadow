@@ -20,16 +20,13 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 ?>
 
 <div class="wrap wps-page-container">
-	<div class="wps-page-header">
-		<h1 class="wps-page-title">
-			<span class="dashicons dashicons-shield" style="color: var(--wps-primary);"></span>
-			<?php esc_html_e( 'Privacy & Consent', 'wpshadow' ); ?>
-		</h1>
-		<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
-		<p class="wps-page-subtitle">
-			<?php esc_html_e( 'Control how WPShadow collects anonymized analytics. Essential functions and error reporting are always on to keep the plugin working reliably.', 'wpshadow' ); ?>
-		</p>
-	</div>
+	<?php
+	wpshadow_render_page_header(
+		__( 'Privacy & Consent', 'wpshadow' ),
+		__( 'Control how WPShadow collects anonymized analytics. Essential functions and error reporting are always on to keep the plugin working reliably.', 'wpshadow' ),
+		'dashicons-shield'
+	);
+	?>
 
 		<div class="wps-grid wps-grid-auto-260 wps-gap-4 wps-mt-4 wps-max-w-900">
 		<div class="wps-card wps-mb-0">

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -22,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Listens for GitHub webhooks and executes git pull when code is pushed.
  */
-class Auto_Deploy {
+class Auto_Deploy extends Hook_Subscriber_Base {
 
 	/**
 	 * GitHub IP ranges for webhook validation
@@ -41,9 +43,24 @@ class Auto_Deploy {
 	);
 
 	/**
-	 * Initialize auto-deploy if enabled
+	 * Get hook subscriptions.
 	 *
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'init'          => 'register_webhook_endpoint',
+			'parse_request' => 'handle_webhook_request',
+			'admin_menu'    => array( 'add_settings_page', 99 ),
+		);
+	}
+
+	/**
+	 * Initialize auto-deploy if enabled (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Auto_Deploy::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
 		// Only enable if constant is set to true
@@ -51,12 +68,8 @@ class Auto_Deploy {
 			return;
 		}
 
-		// Add webhook endpoint
-		add_action( 'init', array( __CLASS__, 'register_webhook_endpoint' ) );
-		add_action( 'parse_request', array( __CLASS__, 'handle_webhook_request' ) );
-
-		// Add settings page
-		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ), 99 );
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**

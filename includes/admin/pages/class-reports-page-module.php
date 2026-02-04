@@ -26,7 +26,7 @@ function wpshadow_get_reports_catalog() {
 		// Analysis & Insights Reports
 		array(
 			'title'   => __( 'Site DNA Report', 'wpshadow' ),
-			'desc'    => __( 'Comprehensive visual analysis showing your site\'s unique health profile, performance scores, and benchmarks against industry standards.', 'wpshadow' ),
+			'desc'    => __( 'Your site\'s unique health fingerprint showing what\'s working well and what needs attention (like a doctor\'s complete blood panel). See how your site compares to others in your industry.', 'wpshadow' ),
 			'report'  => 'site-dna',
 			'icon'    => 'dashicons-chart-line',
 			'family'  => 'analysis',
@@ -34,7 +34,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Deep Scan Report', 'wpshadow' ),
-			'desc'    => __( 'Comprehensive site analysis covering security, performance, accessibility, and SEO across all diagnostics.', 'wpshadow' ),
+			'desc'    => __( 'Complete checkup of your entire site (like a doctor\'s annual physical exam). We\'ll check security, speed, accessibility, and search visibility—everything that keeps your site healthy.', 'wpshadow' ),
 			'report'  => 'deep-scan',
 			'icon'    => 'dashicons-search',
 			'family'  => 'analysis',
@@ -42,7 +42,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Quick Scan Report', 'wpshadow' ),
-			'desc'    => __( 'Rapid overview of critical issues that need immediate attention across your site.', 'wpshadow' ),
+			'desc'    => __( '5-minute health check showing the most important things to fix first (like taking your temperature and blood pressure). Perfect when you need a fast overview.', 'wpshadow' ),
 			'report'  => 'quick-scan',
 			'icon'    => 'dashicons-performance',
 			'family'  => 'analysis',
@@ -52,7 +52,7 @@ function wpshadow_get_reports_catalog() {
 		// Security Reports
 		array(
 			'title'   => __( 'Security Report', 'wpshadow' ),
-			'desc'    => __( 'Comprehensive security audit covering vulnerabilities, hardening, authentication, and threat analysis.', 'wpshadow' ),
+			'desc'    => __( 'Check all your site\'s locks and alarms to keep intruders out (like a home security inspection). We\'ll find security holes, check your passwords, and suggest ways to protect your site better.', 'wpshadow' ),
 			'report'  => 'security-report',
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'security',
@@ -62,7 +62,7 @@ function wpshadow_get_reports_catalog() {
 		// Performance Reports
 		array(
 			'title'   => __( 'Performance Report', 'wpshadow' ),
-			'desc'    => __( 'In-depth performance analysis covering load times, database queries, caching, and mobile optimization.', 'wpshadow' ),
+			'desc'    => __( 'Find out why your site might feel slow and how to speed it up (like tuning up a car engine). We\'ll check page load times, memory usage, and how fast things work on phones.', 'wpshadow' ),
 			'report'  => 'performance-report',
 			'icon'    => 'dashicons-performance',
 			'family'  => 'performance',
@@ -72,7 +72,7 @@ function wpshadow_get_reports_catalog() {
 		// SEO Reports
 		array(
 			'title'   => __( 'SEO Report', 'wpshadow' ),
-			'desc'    => __( 'Complete SEO audit analyzing search visibility, meta tags, mobile-first indexing, and Core Web Vitals.', 'wpshadow' ),
+			'desc'    => __( 'Help more people find your site on Google (like putting up better signs so customers can find your store). We\'ll check if search engines can read your site properly and suggest improvements.', 'wpshadow' ),
 			'report'  => 'seo-report',
 			'icon'    => 'dashicons-search',
 			'family'  => 'seo',
@@ -82,7 +82,7 @@ function wpshadow_get_reports_catalog() {
 		// Optimization Reports
 		array(
 			'title'   => __( 'Database Optimization Report', 'wpshadow' ),
-			'desc'    => __( 'Comprehensive database health analysis covering query performance, bloat detection, integrity checks, and optimization recommendations.', 'wpshadow' ),
+			'desc'    => __( 'Speed up your site by organizing its memory better (like cleaning out a messy filing cabinet so you can find things faster). We\'ll remove unnecessary clutter and make everything run smoother.', 'wpshadow' ),
 			'report'  => 'database-report',
 			'icon'    => 'dashicons-database',
 			'family'  => 'optimization',
@@ -90,7 +90,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Plugin Audit Report', 'wpshadow' ),
-			'desc'    => __( 'Plugin health analysis covering security vulnerabilities, performance impact, conflicts, updates, and configuration issues.', 'wpshadow' ),
+			'desc'    => __( 'Check your add-ons for problems (like checking the apps on your phone for updates and security issues). We\'ll find plugins that slow your site down or need updating.', 'wpshadow' ),
 			'report'  => 'plugins-report',
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'optimization',
@@ -100,7 +100,7 @@ function wpshadow_get_reports_catalog() {
 		// Commerce Reports
 		array(
 			'title'   => __( 'E-Commerce Health Report', 'wpshadow' ),
-			'desc'    => __( 'WooCommerce store analysis covering payment gateways, checkout optimization, cart abandonment, inventory, and revenue impact.', 'wpshadow' ),
+			'desc'    => __( 'Make sure your online store checkouts work smoothly (like ensuring your cash register works properly and customers can pay easily). We\'ll check payment processing and find where customers might be giving up.', 'wpshadow' ),
 			'report'  => 'ecommerce-report',
 			'icon'    => 'dashicons-cart',
 			'family'  => 'commerce',
@@ -110,7 +110,7 @@ function wpshadow_get_reports_catalog() {
 		// Compliance & Operations Reports
 		array(
 			'title'   => __( 'Compliance & Privacy Report', 'wpshadow' ),
-			'desc'    => __( 'GDPR, CCPA, and PIPEDA compliance audit covering data protection, privacy policies, cookie consent, and regulatory requirements.', 'wpshadow' ),
+			'desc'    => __( 'Verify you\'re handling customer information responsibly and following privacy laws (like making sure you\'re not sharing people\'s secrets without permission). We\'ll check your privacy policy and consent forms.', 'wpshadow' ),
 			'report'  => 'compliance-report',
 			'icon'    => 'dashicons-privacy',
 			'family'  => 'operations',
@@ -118,7 +118,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Email Deliverability Report', 'wpshadow' ),
-			'desc'    => __( 'Email configuration analysis covering SMTP settings, domain authentication, blacklist status, and deliverability best practices.', 'wpshadow' ),
+			'desc'    => __( 'Check if your emails are actually reaching people (like making sure your letters don\'t end up in the junk drawer). We\'ll verify your email setup and make sure your messages get delivered reliably.', 'wpshadow' ),
 			'report'  => 'email-report',
 			'icon'    => 'dashicons-email-alt',
 			'family'  => 'operations',
@@ -126,7 +126,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Backup Readiness Report', 'wpshadow' ),
-			'desc'    => __( 'Backup configuration analysis covering backup frequency, storage locations, restore testing, and disaster recovery preparedness.', 'wpshadow' ),
+			'desc'    => __( 'Make sure you have copies of your site in case something goes wrong (like keeping spare house keys with a neighbor). We\'ll check how often backups run and where they\'re stored.', 'wpshadow' ),
 			'report'  => 'backup-report',
 			'icon'    => 'dashicons-backup',
 			'family'  => 'operations',
@@ -134,7 +134,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Multisite Network Report', 'wpshadow' ),
-			'desc'    => __( 'Multisite network analysis covering site health, plugin conflicts, user synchronization, disk usage, and network-wide configuration.', 'wpshadow' ),
+			'desc'    => __( 'Check all the sites in your WordPress network (like inspecting all the apartments in a building you manage). We\'ll find sites with problems and check if they\'re sharing resources fairly.', 'wpshadow' ),
 			'report'  => 'multisite-report',
 			'icon'    => 'dashicons-admin-multisite',
 			'family'  => 'operations',
@@ -144,7 +144,7 @@ function wpshadow_get_reports_catalog() {
 		// Page-Specific Reports
 		array(
 			'title'   => __( 'Mobile Friendliness Report', 'wpshadow' ),
-			'desc'    => __( 'Test specific pages for mobile compatibility, responsive design, and mobile UX issues.', 'wpshadow' ),
+			'desc'    => __( 'Check if your pages work well on phones and tablets (like making sure your front door is wide enough for wheelchairs). We\'ll test how pages look on different screen sizes.', 'wpshadow' ),
 			'report'  => 'mobile-friendliness',
 			'icon'    => 'dashicons-smartphone',
 			'family'  => 'page-analysis',
@@ -152,7 +152,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Accessibility Audit Report', 'wpshadow' ),
-			'desc'    => __( 'WCAG compliance check for specific pages including color contrast, ARIA labels, and keyboard navigation.', 'wpshadow' ),
+			'desc'    => __( 'Make sure everyone can use your site, including people with disabilities (like adding wheelchair ramps and braille signs to a building). We\'ll check color contrast, keyboard controls, and screen reader compatibility.', 'wpshadow' ),
 			'report'  => 'a11y-audit',
 			'icon'    => 'dashicons-universal-access',
 			'family'  => 'page-analysis',
@@ -160,7 +160,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Broken Links Report', 'wpshadow' ),
-			'desc'    => __( 'Scan pages for broken internal and external links that need fixing.', 'wpshadow' ),
+			'desc'    => __( 'Find links that don\'t work anymore (like finding broken bridges on a road map). We\'ll scan your pages and show you which links need fixing or updating.', 'wpshadow' ),
 			'report'  => 'broken-links',
 			'icon'    => 'dashicons-admin-links',
 			'family'  => 'page-analysis',
@@ -170,7 +170,7 @@ function wpshadow_get_reports_catalog() {
 		// Comparison & Historical Reports
 		array(
 			'title'   => __( 'Visual Comparison Report', 'wpshadow' ),
-			'desc'    => __( 'Side-by-side visual comparison of pages before and after changes with screenshot diff analysis.', 'wpshadow' ),
+			'desc'    => __( 'See before-and-after pictures of your pages (like comparing photos from a home renovation). Perfect for reviewing design changes or tracking how your site evolves over time.', 'wpshadow' ),
 			'report'  => 'visual-comparisons',
 			'icon'    => 'dashicons-images-alt2',
 			'family'  => 'comparison',
@@ -178,7 +178,7 @@ function wpshadow_get_reports_catalog() {
 		),
 		array(
 			'title'   => __( 'Customization Audit Report', 'wpshadow' ),
-			'desc'    => __( 'Review all theme and plugin customizations, tracking changes and potential conflicts.', 'wpshadow' ),
+			'desc'    => __( 'Review all the custom changes you\'ve made to your site (like documenting home improvements so you remember what you changed). Helps track modifications and find where things might conflict.', 'wpshadow' ),
 			'report'  => 'customization-audit',
 			'icon'    => 'dashicons-admin-customizer',
 			'family'  => 'comparison',
@@ -188,7 +188,7 @@ function wpshadow_get_reports_catalog() {
 		// Activity & History Reports
 		array(
 			'title'   => __( 'Activity History Report', 'wpshadow' ),
-			'desc'    => __( 'Complete timeline of all WPShadow actions, treatments applied, and system changes.', 'wpshadow' ),
+			'desc'    => __( 'See a complete timeline of everything WPShadow has done for your site (like a maintenance log for your car showing all the oil changes and repairs). Great for tracking improvements over time.', 'wpshadow' ),
 			'report'  => 'activity-history',
 			'icon'    => 'dashicons-backup',
 			'family'  => 'history',

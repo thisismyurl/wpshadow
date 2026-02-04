@@ -4,7 +4,7 @@ Tags: diagnostics, health, backup, recovery, emergency, documentation, maintenan
 Requires at least: 6.4
 Requires PHP: 8.1.29
 Tested up to: 6.6
-Stable tag: 1.6029.1906
+Stable tag: 1.6035.0948
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Comprehensive WordPress health diagnostics, emergency recovery, and documentatio
 
 == Description ==
 
-WPShadow is a philosophy-first WordPress plugin that provides comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Built on principles of accessibility, inclusivity, and education, it features intelligent real-time diagnostics and visual regression protection to help keep your WordPress site running smoothly, securely, and equitably.
+WPShadow is a philosophy-first WordPress plugin that provides comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Built on principles of accessibility, inclusivity, and education, it features intelligent real-time diagnostics and visual regression protection to help keep your WordPress site running smoothly, securely, and equitably. The local Guardian monitor runs on your server (free). Optional WPShadow Cloud services add external diagnostics that cannot run locally.
 
 = Key Features =
 
@@ -53,7 +53,7 @@ No. WPShadow is optimized for performance and uses intelligent caching to minimi
 
 = Is my data secure? =
 
-Yes. WPShadow follows WordPress security best practices and does not transmit your data to external servers.
+Yes. WPShadow follows WordPress security best practices. The core plugin runs locally and does not transmit your data to external servers unless you opt in to WPShadow Cloud services.
 
 = Can I use this on multisite? =
 
@@ -65,23 +65,31 @@ WPShadow requires PHP 8.1.29 or higher.
 
 == Key Principles ==
 
-WPShadow follows 11 core commandments:
+WPShadow follows 12 core commandments:
 
 1. **Helpful Neighbor** - Guide users, don't manipulate
 2. **Free as Possible** - All local features free forever
-3. **Advice Not Sales** - Educational, never pushy
-4. **Accessibility First** - Inclusive design for all abilities
-5. **Learning Inclusive** - Clear documentation at all levels
-6. **Culturally Respectful** - Honor diverse contexts and perspectives
+3. **Register, Don't Pay** - Generous free tiers before paid upgrades
+4. **Advice Not Sales** - Educational, never pushy
+5. **Drive to Knowledge Base** - Teach the “why,” not just the “what”
+6. **Drive to Free Training** - Learn with free guides and videos
 7. **Ridiculously Good** - Better than premium alternatives
-8. **Show Value** - Track and display KPI improvements
-9. **Privacy Focused** - Consent-first data handling
-10. **Transparent** - Clear communication always
-11. **Talk-Worthy** - So good users recommend it
+8. **Inspire Confidence** - Safe changes with clear feedback
+9. **Everything Has a KPI** - Track and show real impact
+10. **Beyond Pure (Privacy First)** - Consent-first data handling
+11. **Talk-About-Worthy** - So good users recommend it
+12. **Expandable** - Open to extensions by other developers
+
+== The 4 CANON Pillars ==
+
+1. **Accessibility First** - Works for all abilities
+2. **Learning Inclusive** - Clear guidance for all skill levels
+3. **Culturally Respectful** - Global, translation-ready design
+4. **Safe by Default** - Protects users from mistakes and abuse
 
 == Changelog ==
 
-= 1.6030.2148 =
+= 1.6035.0948 =
 * **Phase 3 Complete**: Accessibility & Inclusivity as CANON principles
 * **Phase 2 Complete**: Documentation cleanup and reorganization (150+ → 65 curated files)
 * **Phase 1 Complete**: 57 diagnostic tests across 10 categories
@@ -89,7 +97,7 @@ WPShadow follows 11 core commandments:
 * Comprehensive git history documented and verified
 * Production-ready for community release
 
-= 1.6030.75000 =
+= 1.6030.0750 =
 * Initial development release
 
 == Support ==

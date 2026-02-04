@@ -38,15 +38,13 @@ class Advanced_Settings_Page {
 
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-admin-tools"></span>
-					<?php esc_html_e( 'Advanced Settings', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Advanced configuration options for power users.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'Advanced Settings', 'wpshadow' ),
+				__( 'Advanced configuration options for power users.', 'wpshadow' ),
+				'dashicons-admin-tools'
+			);
+			?>
 
 			<!-- Warning Notice -->
 			<div class="wps-card wps-card--warning">

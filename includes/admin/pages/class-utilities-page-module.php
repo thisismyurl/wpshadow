@@ -31,8 +31,8 @@ function wpshadow_get_utilities_catalog() {
 	return array(
 		// Site Management Tools
 		array(
-			'title'   => __( 'WPShadow Cache', 'wpshadow' ),
-			'desc'    => __( 'Manage site caching and clear cache when needed.', 'wpshadow' ),
+			'title'   => __( 'Clear Site Memory', 'wpshadow' ),
+			'desc'    => __( 'Clear stored copies of pages to force fresh versions (like refreshing your browser when things look wrong).', 'wpshadow' ),
 			'tool'    => 'simple-cache',
 			'icon'    => 'dashicons-database',
 			'family'  => 'site-management',
@@ -41,8 +41,8 @@ function wpshadow_get_utilities_catalog() {
 
 		// Cloud-Powered Utilities (Require WPShadow Cloud Registration)
 		array(
-			'title'   => __( 'Uptime Monitor', 'wpshadow' ),
-			'desc'    => __( 'External monitoring pings your site every 5 minutes to detect downtime before your customers do. Free: 1 site.', 'wpshadow' ),
+			'title'   => __( 'Site Availability Checker', 'wpshadow' ),
+			'desc'    => __( 'Checks if your site is online every 5 minutes, so you know before customers notice (like a neighbor watching your house). Free: 1 site.', 'wpshadow' ),
 			'tool'    => 'uptime-monitor',
 			'icon'    => 'dashicons-visibility',
 			'family'  => 'cloud-tools',
@@ -50,8 +50,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'SSL Certificate Monitor', 'wpshadow' ),
-			'desc'    => __( 'Monitor SSL certificate expiration and validity from external validators. Free: 1 site, daily checks.', 'wpshadow' ),
+			'title'   => __( 'Security Certificate Watcher', 'wpshadow' ),
+			'desc'    => __( 'Makes sure your site\'s security certificate doesn\'t expire (like renewing your driver\'s license before it expires). Free: 1 site, daily checks.', 'wpshadow' ),
 			'tool'    => 'ssl-monitor',
 			'icon'    => 'dashicons-lock',
 			'family'  => 'cloud-tools',
@@ -59,8 +59,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'Domain Expiration Monitor', 'wpshadow' ),
-			'desc'    => __( 'Track domain registration expiration with WHOIS monitoring and alerts. Free: 3 domains.', 'wpshadow' ),
+			'title'   => __( 'Domain Name Expiration Reminder', 'wpshadow' ),
+			'desc'    => __( 'Warns you before your domain name expires so your site doesn\'t disappear (like a bill payment reminder). Free: 3 domains.', 'wpshadow' ),
 			'tool'    => 'domain-monitor',
 			'icon'    => 'dashicons-admin-site',
 			'family'  => 'cloud-tools',
@@ -68,8 +68,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'AI Content Optimizer', 'wpshadow' ),
-			'desc'    => __( 'AI-powered content analysis for readability, SEO, and accessibility. Auto-generate meta descriptions. Free: 1,000 credits per month.', 'wpshadow' ),
+			'title'   => __( 'Writing Helper', 'wpshadow' ),
+			'desc'    => __( 'Checks your writing for readability and suggests improvements (like having an editor review your work). Free: 1,000 checks per month.', 'wpshadow' ),
 			'tool'    => 'ai-content-optimizer',
 			'icon'    => 'dashicons-welcome-write-blog',
 			'family'  => 'cloud-tools',
@@ -77,8 +77,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'AI Image Alt Text Generator', 'wpshadow' ),
-			'desc'    => __( 'Automatically generate WCAG-compliant alt text for images using computer vision AI. Free: 1,000 credits per month.', 'wpshadow' ),
+			'title'   => __( 'Image Description Writer', 'wpshadow' ),
+			'desc'    => __( 'Automatically writes descriptions for your images so screen readers can describe them to blind visitors. Free: 1,000 images per month.', 'wpshadow' ),
 			'tool'    => 'ai-image-alt',
 			'icon'    => 'dashicons-format-image',
 			'family'  => 'cloud-tools',
@@ -86,8 +86,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'AI Spam Detection', 'wpshadow' ),
-			'desc'    => __( 'Advanced ML-powered spam and malicious comment detection beyond basic filters. Free: 1,000 credits per month.', 'wpshadow' ),
+			'title'   => __( 'Smart Spam Blocker', 'wpshadow' ),
+			'desc'    => __( 'Catches spam comments that basic filters miss (like having a bouncer who recognizes troublemakers). Free: 1,000 checks per month.', 'wpshadow' ),
 			'tool'    => 'ai-spam-detection',
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'cloud-tools',
@@ -95,8 +95,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'External Malware Scanner', 'wpshadow' ),
-			'desc'    => __( 'Independent security audit from external servers to detect malware, backdoors, and suspicious code. Free: Weekly scans.', 'wpshadow' ),
+			'title'   => __( 'Outside Security Check', 'wpshadow' ),
+			'desc'    => __( 'Scans your site from the outside to find hidden malware (like getting a second opinion from another doctor). Free: Weekly scans.', 'wpshadow' ),
 			'tool'    => 'external-malware-scanner',
 			'icon'    => 'dashicons-warning',
 			'family'  => 'cloud-tools',
@@ -104,8 +104,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'Blacklist Monitor', 'wpshadow' ),
-			'desc'    => __( 'Monitor if your site or IP appears on spam blacklists (Google Safe Browsing, Spamhaus, etc.). Free: 1 site, weekly checks.', 'wpshadow' ),
+			'title'   => __( 'Spam List Checker', 'wpshadow' ),
+			'desc'    => __( 'Checks if your site is on any spam blacklists that could block your emails (like checking your credit report). Free: 1 site, weekly checks.', 'wpshadow' ),
 			'tool'    => 'blacklist-monitor',
 			'icon'    => 'dashicons-shield',
 			'family'  => 'cloud-tools',
@@ -113,8 +113,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'DDoS Detection', 'wpshadow' ),
-			'desc'    => __( 'Analyze traffic patterns to detect DDoS attacks and unusual traffic spikes. Free: Basic monitoring.', 'wpshadow' ),
+			'title'   => __( 'Traffic Attack Detector', 'wpshadow' ),
+			'desc'    => __( 'Watches for sudden traffic spikes that could be attacks trying to overwhelm your site (like spotting a flash mob at your store). Free: Basic monitoring.', 'wpshadow' ),
 			'tool'    => 'ddos-detection',
 			'icon'    => 'dashicons-shield',
 			'family'  => 'cloud-tools',
@@ -122,8 +122,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'Global Performance Monitor', 'wpshadow' ),
-			'desc'    => __( 'Test site load times from multiple continents (NA, EU, Asia, AU, SA). Free: 5 locations, 3 tests/day.', 'wpshadow' ),
+			'title'   => __( 'Worldwide Speed Test', 'wpshadow' ),
+			'desc'    => __( 'Tests how fast your site loads from different countries (like having friends around the world test it for you). Free: 5 locations, 3 tests per day.', 'wpshadow' ),
 			'tool'    => 'global-performance',
 			'icon'    => 'dashicons-performance',
 			'family'  => 'cloud-tools',
@@ -131,8 +131,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'Keyword Rank Tracker', 'wpshadow' ),
-			'desc'    => __( 'Track Google rankings for target keywords with weekly position updates. Free: 10 keywords.', 'wpshadow' ),
+			'title'   => __( 'Search Position Tracker', 'wpshadow' ),
+			'desc'    => __( 'Tracks where your site appears in Google search results for important words (like checking your store\'s ranking on Yelp). Free: 10 keywords.', 'wpshadow' ),
 			'tool'    => 'keyword-tracker',
 			'icon'    => 'dashicons-chart-line',
 			'family'  => 'cloud-tools',
@@ -140,8 +140,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'External Broken Link Checker', 'wpshadow' ),
-			'desc'    => __( 'Check external links as search engines see them, validate redirects. Free: 500 URLs/month.', 'wpshadow' ),
+			'title'   => __( 'Outside Link Tester', 'wpshadow' ),
+			'desc'    => __( 'Checks if your links work from the outside (like Google sees them), catches redirects and broken pages. Free: 500 links per month.', 'wpshadow' ),
 			'tool'    => 'external-link-checker',
 			'icon'    => 'dashicons-admin-links',
 			'family'  => 'cloud-tools',
@@ -335,7 +335,10 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 			// If utility not found or not enabled, show error
 			if ( ! $found_utility || empty( $found_utility['enabled'] ) ) {
 				?>
-			<div class="wrap wps-page-container">
+				<div class="wrap wps-page-container">
+					<?php wpshadow_render_page_header(
+						__( 'WPShadow Utilities', 'wpshadow' ),
+						__( 'Additional utilities for site analysis and optimization.', 'wpshadow' ),
 						'dashicons-admin-tools'
 					); ?>
 
@@ -410,8 +413,8 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 	<div class="wrap wps-page-container">
 		<!-- Page Header -->
 		<?php wpshadow_render_page_header(
-			__( 'WPShadow Utilities', 'wpshadow' ),
-			__( 'Additional utilities for site analysis and optimization.', 'wpshadow' ),
+			__( 'Helpful Tools', 'wpshadow' ),
+			__( 'Extra tools to help you manage, test, and improve your site.', 'wpshadow' ),
 			'dashicons-admin-tools'
 		); ?>
 

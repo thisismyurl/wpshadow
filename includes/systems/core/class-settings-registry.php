@@ -680,6 +680,390 @@ class Settings_Registry {
 				'description'       => __( 'Automatically send followup emails (requires email service)', 'wpshadow' ),
 			)
 		);
+
+		// =================================================================
+		// ACCESSIBILITY SETTINGS (Philosophy: Pillar 🌍 Accessibility First)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_keyboard_nav_hints',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Show keyboard navigation hints and shortcuts (helps users who navigate without a mouse)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_screen_reader_optimization',
+			array(
+				'type'              => 'boolean',
+				'default'           => false, // Auto-detect preferred
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Optimize interface for screen readers with enhanced labels (for blind and low-vision users)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_high_contrast_mode',
+			array(
+				'type'              => 'boolean',
+				'default'           => false, // Respect OS preference
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Force high contrast colors for better visibility (WCAG AAA compliance)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_reduce_motion',
+			array(
+				'type'              => 'boolean',
+				'default'           => false, // Respect prefers-reduced-motion
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Disable animations and transitions (helps with motion sensitivity and focus)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_font_size_multiplier',
+			array(
+				'type'              => 'number',
+				'default'           => 1.0,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_font_multiplier' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Text size adjustment (0.8 to 2.0, where 1.0 is standard size)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_simplified_ui',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Use simplified interface with fewer options (helps with cognitive load and focus)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
+			'wpshadow_focus_indicators',
+			array(
+				'type'              => 'string',
+				'default'           => 'enhanced', // Always visible
+				'sanitize_callback' => array( __CLASS__, 'sanitize_focus_style' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Focus indicator visibility (standard/enhanced/maximum)', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
+		// DEVELOPER SETTINGS (Philosophy: Commandment #12 Expandable)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_developer_settings',
+			'wpshadow_developer_mode',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Enable developer mode (shows extension points, hooks, and API documentation)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_developer_settings',
+			'wpshadow_show_hooks',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Display available hooks and filters in admin interface', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_developer_settings',
+			'wpshadow_api_documentation_inline',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Show inline API documentation for extension development', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_developer_settings',
+			'wpshadow_extension_sandbox',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Enable extension testing sandbox (safe testing environment)', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
+		// CULTURAL SETTINGS (Philosophy: Pillar 🌐 Culturally Respectful)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_cultural_settings',
+			'wpshadow_date_format_preference',
+			array(
+				'type'              => 'string',
+				'default'           => 'wordpress', // Use WordPress site setting
+				'sanitize_callback' => array( __CLASS__, 'sanitize_date_format' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Date format preference (wordpress/iso8601/us/eu/custom)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_cultural_settings',
+			'wpshadow_time_format_preference',
+			array(
+				'type'              => 'string',
+				'default'           => 'wordpress', // Use WordPress site setting
+				'sanitize_callback' => array( __CLASS__, 'sanitize_time_format' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Time format preference (12h/24h/wordpress)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_cultural_settings',
+			'wpshadow_number_format_preference',
+			array(
+				'type'              => 'string',
+				'default'           => 'locale', // Auto-detect from locale
+				'sanitize_callback' => array( __CLASS__, 'sanitize_number_format' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Number format (1,000.50 vs 1.000,50)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_cultural_settings',
+			'wpshadow_rtl_interface',
+			array(
+				'type'              => 'string',
+				'default'           => 'auto', // Auto-detect from language
+				'sanitize_callback' => array( __CLASS__, 'sanitize_rtl_preference' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'RTL interface direction (auto/force_ltr/force_rtl)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_cultural_settings',
+			'wpshadow_avoid_idioms',
+			array(
+				'type'              => 'boolean',
+				'default'           => true, // Default to simple language
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Avoid idioms and culturally-specific phrases', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
+		// LEARNING SETTINGS (Philosophy: Pillar 🎓 Learning Inclusive)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_learning_settings',
+			'wpshadow_preferred_learning_style',
+			array(
+				'type'              => 'string',
+				'default'           => 'mixed', // Offer all formats
+				'sanitize_callback' => array( __CLASS__, 'sanitize_learning_style' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Preferred learning format (text/video/interactive/mixed)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_learning_settings',
+			'wpshadow_step_by_step_mode',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Break complex operations into step-by-step guides', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_learning_settings',
+			'wpshadow_show_examples',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Show real-world examples with explanations', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_learning_settings',
+			'wpshadow_adhd_friendly_mode',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'ADHD-friendly UI (clear priorities, progress bars, auto-save)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_learning_settings',
+			'wpshadow_dyslexia_friendly_font',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Use dyslexia-friendly font (OpenDyslexic)', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
+		// KPI TRACKING SETTINGS (Philosophy: Commandment #9 Everything Has KPI)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_kpi_settings',
+			'wpshadow_track_feature_usage',
+			array(
+				'type'              => 'boolean',
+				'default'           => true, // Default to tracking (anonymized)
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Track which features help you most (anonymous, helps us improve)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_kpi_settings',
+			'wpshadow_show_impact_metrics',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Show impact metrics (time saved, performance gains)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_kpi_settings',
+			'wpshadow_enable_value_tracking',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Track value delivered (money saved, issues prevented)', 'wpshadow' ),
+			)
+		);
+
+		// =================================================================
+		// DEFENSIVE ENGINEERING SETTINGS (Philosophy: Pillar ⚙️ Murphy\'s Law)
+		// =================================================================
+
+		register_setting(
+			'wpshadow_defensive_settings',
+			'wpshadow_autosave_frequency',
+			array(
+				'type'              => 'integer',
+				'default'           => 30, // 30 seconds
+				'sanitize_callback' => array( __CLASS__, 'sanitize_autosave_frequency' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Auto-save frequency in seconds (10-300)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_defensive_settings',
+			'wpshadow_retry_failed_operations',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Automatically retry failed operations (network, database)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_defensive_settings',
+			'wpshadow_use_stale_cache',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Use stale cache when fresh data unavailable (graceful degradation)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_defensive_settings',
+			'wpshadow_enable_offline_mode',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Work offline when network unavailable (queue operations)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_defensive_settings',
+			'wpshadow_graceful_error_display',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Show user-friendly errors (hide technical details)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_defensive_settings',
+			'wpshadow_operation_timeout',
+			array(
+				'type'              => 'integer',
+				'default'           => 30, // 30 seconds
+				'sanitize_callback' => array( __CLASS__, 'sanitize_operation_timeout' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Operation timeout in seconds (5-300)', 'wpshadow' ),
+			)
+		);
 	}
 
 	/**
@@ -938,6 +1322,326 @@ class Settings_Registry {
 		return array_values( array_unique( $sanitized ) );
 	}
 
+	/**
+	 * Sanitize font size multiplier (Accessibility)
+	 *
+	 * @since  1.6035.1200
+	 * @param  mixed $value Input value
+	 * @return float Sanitized value (0.8-2.0)
+	 */
+	public static function sanitize_font_multiplier( $value ): float {
+		$float = (float) $value;
+		return min( max( $float, 0.8 ), 2.0 ); // Clamp between 0.8-2.0
+	}
+
+	/**
+	 * Sanitize focus indicator style (Accessibility)
+	 *
+	 * @since  1.6035.1200
+	 * @param  mixed $value Input value
+	 * @return string Sanitized style
+	 */
+	public static function sanitize_focus_style( $value ): string {
+		$valid = array( 'standard', 'enhanced', 'maximum' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'enhanced';
+	}
+
+	/**
+	 * Sanitize date format preference (Cultural)
+	 *
+	 * @since  1.6035.1400
+	 * @param  mixed $value Input value
+	 * @return string Sanitized format
+	 */
+	public static function sanitize_date_format( $value ): string {
+		$valid = array( 'wordpress', 'iso8601', 'us', 'eu', 'custom' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'wordpress';
+	}
+
+	/**
+	 * Sanitize time format preference (Cultural)
+	 *
+	 * @since  1.6035.1400
+	 * @param  mixed $value Input value
+	 * @return string Sanitized format
+	 */
+	public static function sanitize_time_format( $value ): string {
+		$valid = array( 'wordpress', '12h', '24h' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'wordpress';
+	}
+
+	/**
+	 * Sanitize number format preference (Cultural)
+	 *
+	 * @since  1.6035.1400
+	 * @param  mixed $value Input value
+	 * @return string Sanitized format
+	 */
+	public static function sanitize_number_format( $value ): string {
+		$valid = array( 'locale', 'us', 'eu', 'custom' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'locale';
+	}
+
+	/**
+	 * Sanitize RTL preference (Cultural)
+	 *
+	 * @since  1.6035.1400
+	 * @param  mixed $value Input value
+	 * @return string Sanitized preference
+	 */
+	public static function sanitize_rtl_preference( $value ): string {
+		$valid = array( 'auto', 'force_ltr', 'force_rtl' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'auto';
+	}
+
+	/**
+	 * Sanitize learning style preference (Learning)
+	 *
+	 * @since  1.6035.1400
+	 * @param  mixed $value Input value
+	 * @return string Sanitized style
+	 */
+	public static function sanitize_learning_style( $value ): string {
+		$valid = array( 'text', 'video', 'interactive', 'mixed' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'mixed';
+	}
+
+	/**
+	 * Sanitize auto-save frequency (Defensive)
+	 *
+	 * @since  1.6035.1500
+	 * @param  mixed $value Input value
+	 * @return int Sanitized frequency in seconds
+	 */
+	public static function sanitize_autosave_frequency( $value ): int {
+		$value = absint( $value );
+		return max( 10, min( 300, $value ) ); // Clamp between 10s and 5min
+	}
+
+	/**
+	 * Sanitize operation timeout (Defensive)
+	 *
+	 * @since  1.6035.1500
+	 * @param  mixed $value Input value
+	 * @return int Sanitized timeout in seconds
+	 */
+	public static function sanitize_operation_timeout( $value ): int {
+		$value = absint( $value );
+		return max( 5, min( 300, $value ) ); // Clamp between 5s and 5min
+	}
+
+	// =================================================================
+	// CULTURAL SETTINGS HELPERS (Philosophy: Pillar 🌐)
+	// =================================================================
+
+	/**
+	 * Get date format preference
+	 *
+	 * @since  1.6035.1400
+	 * @return string Date format preference
+	 */
+	public static function get_date_format_preference(): string {
+		return (string) get_option( 'wpshadow_date_format_preference', 'wordpress' );
+	}
+
+	/**
+	 * Get time format preference
+	 *
+	 * @since  1.6035.1400
+	 * @return string Time format preference
+	 */
+	public static function get_time_format_preference(): string {
+		return (string) get_option( 'wpshadow_time_format_preference', 'wordpress' );
+	}
+
+	/**
+	 * Get number format preference
+	 *
+	 * @since  1.6035.1400
+	 * @return string Number format preference
+	 */
+	public static function get_number_format_preference(): string {
+		return (string) get_option( 'wpshadow_number_format_preference', 'locale' );
+	}
+
+	/**
+	 * Get RTL interface preference
+	 *
+	 * @since  1.6035.1400
+	 * @return string RTL preference (auto/force_ltr/force_rtl)
+	 */
+	public static function get_rtl_preference(): string {
+		return (string) get_option( 'wpshadow_rtl_interface', 'auto' );
+	}
+
+	/**
+	 * Check if interface should avoid idioms
+	 *
+	 * @since  1.6035.1400
+	 * @return bool True if should avoid cultural idioms
+	 */
+	public static function should_avoid_idioms(): bool {
+		return (bool) get_option( 'wpshadow_avoid_idioms', true );
+	}
+
+	// =================================================================
+	// LEARNING SETTINGS HELPERS (Philosophy: Pillar 🎓)
+	// =================================================================
+
+	/**
+	 * Get preferred learning style
+	 *
+	 * @since  1.6035.1400
+	 * @return string Learning style (text/video/interactive/mixed)
+	 */
+	public static function get_learning_style(): string {
+		return (string) get_option( 'wpshadow_preferred_learning_style', 'mixed' );
+	}
+
+	/**
+	 * Check if step-by-step mode is enabled
+	 *
+	 * @since  1.6035.1400
+	 * @return bool True if step-by-step mode enabled
+	 */
+	public static function is_step_by_step_mode(): bool {
+		return (bool) get_option( 'wpshadow_step_by_step_mode', false );
+	}
+
+	/**
+	 * Check if examples should be shown
+	 *
+	 * @since  1.6035.1400
+	 * @return bool True if examples enabled
+	 */
+	public static function show_examples(): bool {
+		return (bool) get_option( 'wpshadow_show_examples', true );
+	}
+
+	/**
+	 * Check if ADHD-friendly mode is enabled
+	 *
+	 * @since  1.6035.1400
+	 * @return bool True if ADHD support enabled
+	 */
+	public static function is_adhd_friendly_mode(): bool {
+		return (bool) get_option( 'wpshadow_adhd_friendly_mode', false );
+	}
+
+	/**
+	 * Check if dyslexia-friendly font is enabled
+	 *
+	 * @since  1.6035.1400
+	 * @return bool True if dyslexia font enabled
+	 */
+	public static function use_dyslexia_font(): bool {
+		return (bool) get_option( 'wpshadow_dyslexia_friendly_font', false );
+	}
+
+	// =================================================================
+	// KPI TRACKING SETTINGS HELPERS (Philosophy: Commandment #9)
+	// =================================================================
+
+	/**
+	 * Check if feature usage tracking is enabled
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if tracking enabled
+	 */
+	public static function track_feature_usage(): bool {
+		return (bool) get_option( 'wpshadow_track_feature_usage', true );
+	}
+
+	/**
+	 * Check if impact metrics should be shown
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if metrics should be shown
+	 */
+	public static function show_impact_metrics(): bool {
+		return (bool) get_option( 'wpshadow_show_impact_metrics', true );
+	}
+
+	/**
+	 * Check if value tracking is enabled
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if value tracking enabled
+	 */
+	public static function enable_value_tracking(): bool {
+		return (bool) get_option( 'wpshadow_enable_value_tracking', true );
+	}
+
+	// =================================================================
+	// DEFENSIVE ENGINEERING SETTINGS HELPERS (Philosophy: Pillar ⚙️)
+	// =================================================================
+
+	/**
+	 * Get auto-save frequency in seconds
+	 *
+	 * @since  1.6035.1500
+	 * @return int Auto-save frequency (10-300 seconds)
+	 */
+	public static function get_autosave_frequency(): int {
+		return (int) get_option( 'wpshadow_autosave_frequency', 30 );
+	}
+
+	/**
+	 * Check if retry logic is enabled
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if should retry failed operations
+	 */
+	public static function should_retry_failed_operations(): bool {
+		return (bool) get_option( 'wpshadow_retry_failed_operations', true );
+	}
+
+	/**
+	 * Check if stale cache should be used
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if stale cache acceptable
+	 */
+	public static function use_stale_cache(): bool {
+		return (bool) get_option( 'wpshadow_use_stale_cache', true );
+	}
+
+	/**
+	 * Check if offline mode is enabled
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if offline mode enabled
+	 */
+	public static function enable_offline_mode(): bool {
+		return (bool) get_option( 'wpshadow_enable_offline_mode', true );
+	}
+
+	/**
+	 * Check if graceful error display is enabled
+	 *
+	 * @since  1.6035.1500
+	 * @return bool True if should show user-friendly errors
+	 */
+	public static function graceful_error_display(): bool {
+		return (bool) get_option( 'wpshadow_graceful_error_display', true );
+	}
+
+	/**
+	 * Get operation timeout in seconds
+	 *
+	 * @since  1.6035.1500
+	 * @return int Operation timeout (5-300 seconds)
+	 */
+	public static function get_operation_timeout(): int {
+		return (int) get_option( 'wpshadow_operation_timeout', 30 );
+	}
+
 	// =================================================================
 	// POST TYPES SETTINGS
 	// =================================================================
@@ -961,6 +1665,124 @@ class Settings_Registry {
 	 */
 	public static function set_active_post_types( array $post_types ): bool {
 		return update_option( 'wpshadow_active_post_types', $post_types, false );
+	}
+
+	// =================================================================
+	// ACCESSIBILITY HELPERS (Philosophy: Pillar 🌍)
+	// =================================================================
+
+	/**
+	 * Check if keyboard navigation hints are enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether keyboard hints are enabled
+	 */
+	public static function is_keyboard_hints_enabled(): bool {
+		return (bool) get_option( 'wpshadow_keyboard_nav_hints', true );
+	}
+
+	/**
+	 * Check if screen reader optimization is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether screen reader optimization is enabled
+	 */
+	public static function is_screen_reader_optimized(): bool {
+		return (bool) get_option( 'wpshadow_screen_reader_optimization', false );
+	}
+
+	/**
+	 * Get font size multiplier
+	 *
+	 * @since  1.6035.1200
+	 * @return float Font size multiplier (0.8-2.0)
+	 */
+	public static function get_font_multiplier(): float {
+		return (float) get_option( 'wpshadow_font_size_multiplier', 1.0 );
+	}
+
+	/**
+	 * Check if simplified UI is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether simplified UI is enabled
+	 */
+	public static function is_simplified_ui(): bool {
+		return (bool) get_option( 'wpshadow_simplified_ui', false );
+	}
+
+	/**
+	 * Check if high contrast mode is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether high contrast is enabled
+	 */
+	public static function is_high_contrast(): bool {
+		return (bool) get_option( 'wpshadow_high_contrast_mode', false );
+	}
+
+	/**
+	 * Check if motion reduction is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether reduced motion is enabled
+	 */
+	public static function is_motion_reduced(): bool {
+		return (bool) get_option( 'wpshadow_reduce_motion', false );
+	}
+
+	/**
+	 * Get focus indicator style
+	 *
+	 * @since  1.6035.1200
+	 * @return string Focus style (standard/enhanced/maximum)
+	 */
+	public static function get_focus_style(): string {
+		return get_option( 'wpshadow_focus_indicators', 'enhanced' );
+	}
+
+	// =================================================================
+	// DEVELOPER MODE HELPERS (Philosophy: Commandment #12)
+	// =================================================================
+
+	/**
+	 * Check if developer mode is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether developer mode is enabled
+	 */
+	public static function is_developer_mode(): bool {
+		return (bool) get_option( 'wpshadow_developer_mode', false );
+	}
+
+	/**
+	 * Check if hooks should be displayed
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether hooks should be shown
+	 */
+	public static function should_show_hooks(): bool {
+		return self::is_developer_mode() && (bool) get_option( 'wpshadow_show_hooks', false );
+	}
+
+	/**
+	 * Check if inline API documentation is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether inline docs are enabled
+	 */
+	public static function is_inline_docs_enabled(): bool {
+		return self::is_developer_mode() && (bool) get_option( 'wpshadow_api_documentation_inline', false );
+	}
+
+	/**
+	 * Check if extension sandbox is enabled
+	 *
+	 * @since  1.6035.1200
+	 * @return bool Whether sandbox is enabled
+	 */
+	public static function is_sandbox_enabled(): bool {
+		return self::is_developer_mode() && (bool) get_option( 'wpshadow_extension_sandbox', false );
 	}
 }
 

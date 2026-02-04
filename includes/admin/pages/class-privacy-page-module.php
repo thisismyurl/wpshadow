@@ -25,9 +25,14 @@ function wpshadow_render_privacy_page() {
 	}
 
 	?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'WPShadow Privacy', 'wpshadow' ); ?></h1>
-		<p><?php esc_html_e( 'Privacy and data handling information.', 'wpshadow' ); ?></p>
+	<div class="wrap wps-page-container">
+		<?php
+		wpshadow_render_page_header(
+			__( 'WPShadow Privacy', 'wpshadow' ),
+			__( 'Privacy and data handling information.', 'wpshadow' ),
+			'dashicons-privacy'
+		);
+		?>
 	</div>
 	<?php
 }

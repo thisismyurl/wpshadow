@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Guardian;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 /**
  * API Latency Analyzer
  *
@@ -15,7 +17,7 @@ namespace WPShadow\Guardian;
  * @subpackage Guardian
  * @since 1.6030.2200
  */
-class API_Latency_Analyzer {
+class API_Latency_Analyzer extends Hook_Subscriber_Base {
 
 	/**
 	 * @var array API call timing data
@@ -23,22 +25,33 @@ class API_Latency_Analyzer {
 	private static $api_calls = array();
 
 	/**
-	 * Initialize API monitoring
+	 * Get hook subscriptions.
 	 *
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'http_api_debug'                    => array( 'track_http_request', 10, 5 ),
+			'shutdown'                          => 'save_api_data',
+			'wpshadow_analyze_api_latency'      => 'analyze',
+		);
+	}
+
+	/**
+	 * Initialize API monitoring (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use API_Latency_Analyzer::subscribe() instead
+	 * @return     void
 	 */
 	public static function init(): void {
-		// Hook into HTTP API requests
-		add_action( 'http_api_debug', array( __CLASS__, 'track_http_request' ), 10, 5 );
-
-		// Save data on shutdown
-		add_action( 'shutdown', array( __CLASS__, 'save_api_data' ) );
-
-		// Run hourly analysis
+		// Schedule cron
 		if ( ! wp_next_scheduled( 'wpshadow_analyze_api_latency' ) ) {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_analyze_api_latency' );
 		}
-		add_action( 'wpshadow_analyze_api_latency', array( __CLASS__, 'analyze' ) );
+
+		// Subscribe to hooks
+		self::subscribe();
 	}
 
 	/**

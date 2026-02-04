@@ -89,7 +89,7 @@ class Diagnostic_Object_Cache_Configuration extends Diagnostic_Base {
 			return array(
 				'id'           => 'persistent-cache-not-enabled',
 				'title'        => __( 'Persistent Object Cache Not Enabled', 'wpshadow' ),
-				'description'  => __( 'WordPress is using the default non-persistent object cache. All cached data is lost between requests. Install Redis or Memcached with a WordPress object cache plugin (Redis Object Cache, Memcached Object Cache) for significant performance improvement.', 'wpshadow' ),
+				'description'  => __( 'Adding a persistent cache system helps your site remember things between page loads (like keeping food in a refrigerator instead of buying it fresh each time). This can reduce database queries by 30-70%. Popular options include Redis or Memcached with a WordPress plugin.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,

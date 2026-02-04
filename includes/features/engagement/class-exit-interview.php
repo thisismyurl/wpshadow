@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace WPShadow\Engagement;
 
 use WPShadow\Core\Error_Handler;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,20 +30,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles exit interviews for plugin deactivation and uninstall.
  */
-class Exit_Interview {
+class Exit_Interview extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the exit interview system
+	 * Get hook subscriptions.
 	 *
-	 * @since  1.6030.2148
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_footer-plugins.php' => 'render_deactivation_modal',
+			'admin_enqueue_scripts'    => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize the exit interview system (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Exit_Interview::subscribe() instead
+	 * @since      1.6030.2148
+	 * @return     void
 	 */
 	public static function init() {
-		// Hook into admin_footer for deactivation modal
-		add_action( 'admin_footer-plugins.php', array( __CLASS__, 'render_deactivation_modal' ) );
-
-		// Enqueue scripts and styles on plugins page
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		self::subscribe();
 	}
 
 	/**

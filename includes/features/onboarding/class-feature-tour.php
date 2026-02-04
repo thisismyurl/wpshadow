@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Onboarding;
 
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,20 +28,33 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6030.2200
  */
-class Feature_Tour {
+class Feature_Tour extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the feature tour system.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6030.2200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_enqueue_scripts'             => 'enqueue_assets',
+			'admin_notices'                     => 'show_tour_prompt',
+			'wp_ajax_wpshadow_start_tour'       => 'ajax_start_tour',
+			'wp_ajax_wpshadow_complete_tour_step' => 'ajax_complete_step',
+			'wp_ajax_wpshadow_dismiss_tour'     => 'ajax_dismiss_tour',
+		);
+	}
+
+	/**
+	 * Initialize the feature tour system (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Use Feature_Tour::subscribe() instead
+	 * @since      1.6030.2200
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'admin_notices', array( __CLASS__, 'show_tour_prompt' ) );
-		add_action( 'wp_ajax_wpshadow_start_tour', array( __CLASS__, 'ajax_start_tour' ) );
-		add_action( 'wp_ajax_wpshadow_complete_tour_step', array( __CLASS__, 'ajax_complete_step' ) );
-		add_action( 'wp_ajax_wpshadow_dismiss_tour', array( __CLASS__, 'ajax_dismiss_tour' ) );
+		self::subscribe();
 	}
 
 	/**

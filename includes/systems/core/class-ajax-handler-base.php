@@ -26,13 +26,32 @@ abstract class AJAX_Handler_Base {
 	 * Verify AJAX request with nonce and capability check.
 	 *
 	 * Sends JSON error and dies if verification fails.
+	 * Now includes rate limiting for protection against brute force attacks.
 	 *
+	 * @since  1.6035.0948 Added rate limiting.
 	 * @param string $nonce_action The nonce action to verify.
 	 * @param string $capability   The capability required (default: manage_options).
 	 * @param string $nonce_field  The nonce field name (default: nonce).
 	 * @return void Dies on failure, returns on success.
 	 */
 	protected static function verify_request( $nonce_action, $capability = 'manage_options', $nonce_field = 'nonce' ) {
+		// Rate limit check (if enabled)
+		if ( class_exists( 'WPShadow\Core\Rate_Limiter' ) ) {
+			$user_id    = get_current_user_id();
+			$ip_address = self::get_client_ip();
+			$action     = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
+
+			if ( ! Rate_Limiter::check_rate_limit( $action, $user_id, $ip_address ) ) {
+				wp_send_json_error(
+					array(
+						'message'      => Rate_Limiter::get_rate_limit_message( $action, $user_id, $ip_address ),
+						'rate_limited' => true,
+					),
+					429 // HTTP 429 Too Many Requests
+				);
+			}
+		}
+
 		// Verify nonce
 		check_ajax_referer( $nonce_action, $nonce_field );
 
@@ -178,5 +197,78 @@ abstract class AJAX_Handler_Base {
 	protected static function send_error( $message, $data = array() ) {
 		$data['message'] = $message;
 		wp_send_json_error( $data );
+	}
+
+	/**
+	 * Get client IP address.
+	 *
+	 * Handles proxies and CloudFlare properly.
+	 *
+	 * @since  1.6035.0948
+	 * @return string IP address.
+	 */
+	protected static function get_client_ip(): string {
+		$ip_keys = array(
+			'HTTP_CF_CONNECTING_IP', // CloudFlare
+			'HTTP_X_FORWARDED_FOR',  // Proxy
+			'HTTP_X_REAL_IP',        // Nginx proxy
+			'REMOTE_ADDR',           // Direct connection
+		);
+
+		foreach ( $ip_keys as $key ) {
+			if ( ! empty( $_SERVER[ $key ] ) ) {
+				$ip = sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) );
+				
+				// X-Forwarded-For can contain multiple IPs
+				if ( false !== strpos( $ip, ',' ) ) {
+					$ips = explode( ',', $ip );
+					$ip  = trim( $ips[0] );
+				}
+				
+				if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+					return $ip;
+				}
+			}
+		}
+
+		return '0.0.0.0'; // Fallback
+	}
+
+	/**
+	 * Get the WordPress AJAX action name from the class name.
+	 *
+	 * Convention: Dismiss_Finding_Handler -> wpshadow_dismiss_finding
+	 *
+	 * @since  1.7035.1200
+	 * @return string AJAX action name.
+	 */
+	protected static function get_action() {
+		$class_name = get_called_class();
+		
+		// Get just the class name (remove namespace).
+		$parts      = explode( '\\', $class_name );
+		$short_name = end( $parts );
+		
+		// Remove _Handler suffix if present.
+		$short_name = preg_replace( '/_Handler$/i', '', $short_name );
+		
+		// Convert from PascalCase/Snake_Case to snake_case.
+		$action = strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $short_name ) );
+		
+		// Add wpshadow prefix.
+		return 'wpshadow_' . $action;
+	}
+
+	/**
+	 * Auto-register this handler with WordPress AJAX hooks.
+	 *
+	 * Uses convention-based naming to derive the action from the class name.
+	 *
+	 * @since 1.7035.1200
+	 * @return void
+	 */
+	public static function register() {
+		$action = static::get_action();
+		add_action( 'wp_ajax_' . $action, array( get_called_class(), 'handle' ) );
 	}
 }

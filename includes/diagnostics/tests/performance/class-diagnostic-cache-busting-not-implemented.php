@@ -123,6 +123,133 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
+		// Check enqueued scripts for versioning.
+		global $wp_scripts, $wp_styles;
+
+		$scripts_without_version = array();
+		$styles_without_version  = array();
+		$static_versions         = array();
+
+		// Check scripts.
+		if ( isset( $wp_scripts->registered ) ) {
+			foreach ( $wp_scripts->registered as $handle => $script ) {
+				// Skip WordPress core scripts (they're managed properly).
+				if ( strpos( $script->src, WPINC ) !== false ) {
+					continue;
+				}
+
+				if ( empty( $script->ver ) || false === $script->ver ) {
+					$scripts_without_version[] = $handle;
+				} elseif ( is_string( $script->ver ) && in_array( $script->ver, array( '1.0', '1.0.0', '1' ), true ) ) {
+					// Static version numbers are problematic.
+					$static_versions[] = $handle;
+				}
+			}
+		}
+
+		// Check styles.
+		if ( isset( $wp_styles->registered ) ) {
+			foreach ( $wp_styles->registered as $handle => $style ) {
+				// Skip WordPress core styles.
+				if ( strpos( $style->src, WPINC ) !== false ) {
+					continue;
+				}
+
+				if ( empty( $style->ver ) || false === $style->ver ) {
+					$styles_without_version[] = $handle;
+				} elseif ( is_string( $style->ver ) && in_array( $style->ver, array( '1.0', '1.0.0', '1' ), true ) ) {
+					$static_versions[] = $handle;
+				}
+			}
+		}
+
+		$total_unversioned = count( $scripts_without_version ) + count( $styles_without_version );
+		$total_static      = count( $static_versions );
+
+		// Critical: Many assets without versioning.
+		if ( $total_unversioned > 5 ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => sprintf(
+					/* translators: %d: number of unversioned assets */
+					__( 'Cache busting not implemented. %d CSS/JS files lack version parameters. When you update files, users see old cached versions, causing broken layouts and functionality. Add version parameters to force fresh downloads: wp_enqueue_style("handle", "file.css", array(), filemtime("path/file.css")).', 'wpshadow' ),
+					$total_unversioned
+				),
+				'severity'    => 'medium',
+				'threat_level' => 45,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/cache-busting',
+				'details'     => array(
+					'scripts_without_version' => $scripts_without_version,
+					'styles_without_version'  => $styles_without_version,
+					'total_unversioned'       => $total_unversioned,
+					'static_versions'         => $static_versions,
+					'recommendation'          => __( 'Add version parameters to all enqueued assets. BEST: Use filemtime() for automatic versioning based on file modification time. GOOD: Use plugin/theme version. AVOID: Static "1.0" versions (require manual updates).', 'wpshadow' ),
+					'versioning_strategies'   => array(
+						'filemtime' => 'Auto-updates on file change: filemtime(get_template_directory() . "/style.css")',
+						'plugin_version' => 'Synced with releases: MY_PLUGIN_VERSION constant',
+						'file_hash' => 'Content-based: md5_file() for precise cache control',
+						'static' => 'Manual version bumps: "1.0" (requires discipline)',
+					),
+					'real_world_scenario'     => array(
+						'problem' => 'Updated checkout.js, forgot version bump. Users kept old JS. Checkout broken for 6 hours. Lost $20K sales.',
+						'solution' => 'Added filemtime() versioning. File changes = new URL. Users always get fresh files.',
+					),
+					'code_example'            => 'wp_enqueue_style("my-style", get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . "/style.css"));',
+				),
+			);
+		}
+
+		// Medium: Assets with static versions.
+		if ( $total_static > 3 ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => __( 'Static Version Numbers Detected', 'wpshadow' ),
+				'description' => sprintf(
+					/* translators: %d: number of static versions */
+					__( '%d assets use static version numbers ("1.0"). When files change, version stays same. Users see old cached files. Use dynamic versioning (filemtime or plugin version constant) for automatic cache busting.', 'wpshadow' ),
+					$total_static
+				),
+				'severity'    => 'low',
+				'threat_level' => 25,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/cache-busting',
+				'details'     => array(
+					'static_versions' => $static_versions,
+					'recommendation'  => __( 'Replace static "1.0" with filemtime() or plugin version constant for automatic updates.', 'wpshadow' ),
+				),
+			);
+		}
+
+		// No issues - proper cache busting implemented.
+		return null;
+	}
+	 * @var string
+	 */
+	protected static $title = 'Cache Busting Not Implemented';
+
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks if cache busting is implemented';
+
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'performance';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @since  1.6030.2352
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
 		// Check for cache busting in asset versioning
 		if ( ! has_filter( 'script_loader_tag', 'add_cache_buster' ) ) {
 			return array(

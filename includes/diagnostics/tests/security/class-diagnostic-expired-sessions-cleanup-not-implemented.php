@@ -80,24 +80,114 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if session cleanup is scheduled
-		if ( ! wp_next_scheduled( 'wp_session_cleanup' ) ) {
-			$finding = array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Expired sessions cleanup is not implemented. Schedule session cleanup to remove old session data and improve security.', 'wpshadow' ),
-				'severity'     => 'low',
+		// WordPress handles sessions via transients and user meta.
+		// Check for stale user sessions.
+		global $wpdb;
+
+		// Count user sessions (stored in usermeta as session_tokens).
+		$session_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE meta_key = %s",
+				'session_tokens'
+			)
+		);
+
+		// Count expired transients (common source of bloat).
+		$expired_transients = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->options}
+				 WHERE option_name LIKE %s
+				 AND option_value < %d",
+				$wpdb->esc_like( '_transient_timeout_' ) . '%',
+				time()
+			)
+		);
+
+		// Check if cleanup is scheduled.
+		$has_cleanup_cron = wp_next_scheduled( 'delete_expired_transients' ) !== false;
+
+		// WordPress has native session cleanup, but transients can accumulate.
+		// Check for transient cleanup plugins.
+		$cleanup_plugins = array(
+			'delete-expired-transients/delete-expired-transients.php' => 'Delete Expired Transients',
+			'transients-manager/transients-manager.php'               => 'Transients Manager',
+			'wp-optimize/wp-optimize.php'                             => 'WP-Optimize',
+		);
+
+		$cleanup_plugin_detected = false;
+		$cleanup_plugin_name     = '';
+
+		foreach ( $cleanup_plugins as $plugin => $name ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$cleanup_plugin_detected = true;
+				$cleanup_plugin_name     = $name;
+				break;
+			}
+		}
+
+		// Critical: Many expired transients and no cleanup.
+		if ( $expired_transients > 500 && ! $cleanup_plugin_detected ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => sprintf(
+					/* translators: %d: number of expired transients */
+					__( 'Expired sessions cleanup not implemented. %d expired transients found in database (never deleted). Old session data and cached values accumulate, bloating wp_options table and slowing queries. Install WP-Optimize or Delete Expired Transients plugin for automatic cleanup.', 'wpshadow' ),
+					$expired_transients
+				),
+				'severity'    => 'medium',
+				'threat_level' => 50,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/session-cleanup',
+				'details'     => array(
+					'session_count'       => $session_count,
+					'expired_transients'  => $expired_transients,
+					'cleanup_cron'        => $has_cleanup_cron,
+					'cleanup_plugin'      => false,
+					'recommendation'      => __( 'Install WP-Optimize (free, 1M+ installs) for automatic database cleanup. Enable "Clean expired transients" in settings. Runs weekly by default. Alternative: Delete Expired Transients plugin (lightweight, focused solution).', 'wpshadow' ),
+					'what_are_transients' => array(
+						'definition' => 'Temporary cached data stored in wp_options',
+						'use_cases' => 'API responses, widget output, computed data',
+						'expiration' => 'Set to expire after X seconds',
+						'problem' => 'WordPress deletes on access, not automatically',
+					),
+					'performance_impact'  => array(
+						'database_size' => 'Expired transients can add 10-50MB to database',
+						'query_speed' => 'Larger wp_options table = slower queries',
+						'backup_size' => 'Inflated database backups',
+					),
+					'security_consideration' => array(
+						'session_reuse' => 'Old session tokens remain in database',
+						'data_exposure' => 'Cached sensitive data not removed promptly',
+					),
+				),
+			);
+		}
+
+		// Medium: Some expired transients but not critical.
+		if ( $expired_transients > 100 && $expired_transients <= 500 ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => __( 'Expired Transients Accumulating', 'wpshadow' ),
+				'description' => sprintf(
+					/* translators: %d: number of expired transients */
+					__( '%d expired transients in database. Not critical yet, but consider scheduled cleanup to prevent bloat. Install WP-Optimize for automatic weekly cleanup.', 'wpshadow' ),
+					$expired_transients
+				),
+				'severity'    => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/expired-sessions-cleanup-not-implemented',
-				'context'      => array(
-					'why'            => __(
-						'Expired sessions that never get cleaned up increase the chance of session reuse and inflate database size. Stale session tokens can remain accessible in backups, logs, or compromised plugins, expanding the attack surface. Regular cleanup reduces risk and keeps the database lean, improving performance and reliability.',
-						'wpshadow'
-					),
-					'recommendation' => __(
-						'1. Schedule a cleanup cron to purge expired sessions daily.
-2. Ensure sessions expire according to your auth cookie lifetime.
+				'kb_link'     => 'https://wpshadow.com/kb/session-cleanup',
+				'details'     => array(
+					'expired_transients' => $expired_transients,
+					'recommendation'     => __( 'Monitor and clean periodically. WP-Optimize or WP-CLI can clean: wp transient delete --expired', 'wpshadow' ),
+				),
+			);
+		}
+
+		// No issues - sessions/transients managed properly.
+		return null;
+	}
 3. Remove abandoned sessions when users log out or reset passwords.
 4. Audit session tables periodically for growth and anomalies.
 5. Use session storage with built-in expiration (Redis/Memcached) when possible.',

@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Guardian;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,19 +27,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.6004.0300
  */
-class Token_Balance_Widget {
+class Token_Balance_Widget extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the widget.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.6004.0300
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'admin_bar_menu'        => array( 'add_admin_bar_item', 999 ),
+			'admin_enqueue_scripts' => array( 'enqueue_styles' ),
+			'admin_enqueue_scripts' => array( 'enqueue_scripts' ),
+			'wp_dashboard_setup'    => 'add_dashboard_widget',
+		);
+	}
+
+	/**
+	 * Initialize the widget (deprecated).
+	 *
+	 * @deprecated 1.7035.1400 Use Token_Balance_Widget::subscribe() instead
+	 * @since      1.6004.0300
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_item' ), 999 );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
-		add_action( 'wp_dashboard_setup', array( __CLASS__, 'add_dashboard_widget' ) );
+		self::subscribe();
 	}
 
 	/**

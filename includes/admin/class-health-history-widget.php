@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Analytics\Health_History;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,17 +25,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.602.0200
  */
-class Health_History_Widget {
+class Health_History_Widget extends Hook_Subscriber_Base {
 
 	/**
-	 * Initialize the widget.
+	 * Get hook subscriptions.
 	 *
-	 * @since 1.602.0200
-	 * @return void
+	 * @since  1.7035.1400
+	 * @return array Hook subscriptions.
+	 */
+	protected static function get_hooks(): array {
+		return array(
+			'wpshadow_dashboard_widgets' => 'render_widget',
+			'admin_enqueue_scripts'      => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Initialize the widget (deprecated)
+	 *
+	 * @deprecated 1.7035.1400 Use Health_History_Widget::subscribe() instead
+	 * @since      1.602.0200
+	 * @return     void
 	 */
 	public static function init() {
-		add_action( 'wpshadow_dashboard_widgets', array( __CLASS__, 'render_widget' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		self::subscribe();
 	}
 
 	/**

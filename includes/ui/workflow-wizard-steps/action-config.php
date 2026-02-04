@@ -26,15 +26,17 @@ if ( empty( $trigger_id ) ) {
 ?>
 
 <div class="wps-page-container">
-	<div class="wps-page-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
-			<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
-			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
-		</a>
-		<div>
-			<h1 class="wps-page-title" id="action-title"><?php esc_html_e( 'Configure Action', 'wpshadow' ); ?></h1>
-		</div>
-	</div>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
+		<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
+		<?php esc_html_e( 'Back', 'wpshadow' ); ?>
+	</a>
+	<?php
+	wpshadow_render_page_header(
+		__( 'Configure Action', 'wpshadow' ),
+		__( 'Set the options for how this action should run.', 'wpshadow' ),
+		'dashicons-admin-tools'
+	);
+	?>
 
 	<div class="wps-card" style="margin-top: var(--wps-space-6);">
 		<div class="wps-card-body" id="action-config-content"></div>
@@ -61,7 +63,7 @@ jQuery(document).ready(function($) {
 	const currentAction = actions[actionIndex];
 	
 	// Update title
-	$('#action-title').text('Configure: ' + currentAction.label);
+	$('.wps-page-title').text('Configure: ' + currentAction.label);
 	
 	// Get action config fields via AJAX
 	$.post(ajaxurl, {

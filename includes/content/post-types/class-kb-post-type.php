@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WPShadow\KB;
 
+use WPShadow\Core\Hook_Subscriber_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,15 +18,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the KB post type, taxonomies, and meta fields.
  */
-class KB_Post_Type {
+class KB_Post_Type extends Hook_Subscriber_Base {
 	/**
-	 * Bootstrap hooks.
+	 * Get hooks to subscribe to.
+	 *
+	 * @since  1.6035.1200
+	 * @return array Hook subscriptions.
 	 */
-	public static function init(): void {
-		add_action( 'init', array( __CLASS__, 'register_post_type' ) );
-		add_action( 'init', array( __CLASS__, 'register_taxonomies' ) );
-		add_action( 'init', array( __CLASS__, 'register_meta' ) );
-		add_action( 'rest_api_init', array( __CLASS__, 'register_rest_fields' ) );
+	protected static function get_hooks(): array {
+		return array(
+			'init'          => array(
+				array( 'register_post_type', 10 ),
+				array( 'register_taxonomies', 10 ),
+				array( 'register_meta', 10 ),
+			),
+			'rest_api_init' => 'register_rest_fields',
+		);
 	}
 
 	/**

@@ -37,15 +37,13 @@ class Notifications_Settings_Page {
 
 		?>
 		<div class="wps-page-container">
-			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-email"></span>
-					<?php esc_html_e( 'Notifications', 'wpshadow' ); ?>
-				</h1>
-				<p class="wps-page-subtitle">
-					<?php esc_html_e( 'Configure email alerts and notification preferences.', 'wpshadow' ); ?>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_page_header(
+				__( 'Notifications', 'wpshadow' ),
+				__( 'Configure email alerts and notification preferences.', 'wpshadow' ),
+				'dashicons-email'
+			);
+			?>
 
 			<form method="post" action="options.php" class="wps-settings-form">
 				<?php settings_fields( 'wpshadow_settings' ); ?>
