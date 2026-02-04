@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2054
+ * @since      1.6033.2054
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors affecting TTI. TTI is when the page becomes
  * fully interactive and responsive to user input.
  *
- * @since 1.26033.2054
+ * @since 1.6033.2054
  */
 class Diagnostic_Time_To_Interactive extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Time_To_Interactive extends Diagnostic_Base {
 	 * - Needs Improvement: 3.8-7.3s
 	 * - Poor: >7.3s
 	 *
-	 * @since  1.26033.2054
+	 * @since  1.6033.2054
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

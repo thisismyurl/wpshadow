@@ -508,7 +508,7 @@ class Treatment_Example extends \WPShadow\Core\Treatment_Base {
 
 **Global Plugin Constants (in wpshadow.php):**
 ```php
-define('WPSHADOW_VERSION', '1.2601.2148');
+define('WPSHADOW_VERSION', '1.6030.2148');
 define('WPSHADOW_BASENAME', plugin_basename(__FILE__));
 define('WPSHADOW_PATH', plugin_dir_path(__FILE__));
 define('WPSHADOW_URL', plugin_dir_url(__FILE__));

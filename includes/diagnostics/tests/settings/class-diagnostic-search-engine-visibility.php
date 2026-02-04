@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures site is not hidden from search engines.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Search_Engine_Visibility extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Search_Engine_Visibility extends Diagnostic_Base {
 	 * - robots.txt is not blocking crawlers
 	 * - No noindex is set globally
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -44,14 +44,16 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (wildcard origin), medium (overly permissive)
  * - Treatment: restrict CORS to your domain only
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 
@@ -124,7 +126,7 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 	 * - CDN host differences
 	 * - send_headers filters
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -148,7 +150,7 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 		if ( 0 < $attachment_id ) {
 			$url = wp_get_attachment_url( $attachment_id );
 			if ( ! empty( $url ) ) {
-				$response = wp_remote_head(
+				$response = Diagnostic_Request_Helper::head_result(
 					$url,
 					array(
 						'timeout'     => 5,
@@ -156,10 +158,10 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 					)
 				);
 
-				if ( is_wp_error( $response ) ) {
+				if ( ! $response['success'] ) {
 					$issues[] = __( 'Could not fetch media headers to verify CORS configuration', 'wpshadow' );
 				} else {
-					$headers = wp_remote_retrieve_headers( $response );
+					$headers = wp_remote_retrieve_headers( $response['response'] );
 					$cors = $headers['access-control-allow-origin'] ?? '';
 
 					if ( empty( $cors ) ) {
@@ -174,7 +176,7 @@ class Diagnostic_Media_CORS_Configuration extends Diagnostic_Base {
 		// Check for CDN host differences (CORS often needed for CDN).
 		$media_url = wp_get_attachment_url( $attachment_id );
 		if ( ! empty( $media_url ) ) {
-			$media_host = wp_parse_url( $media_url, PHP_URL_HOST );
+			$media_host = Diagnostic_URL_And_Pattern_Helper::get_domain( $media_url );
 			if ( ! empty( $media_host ) && $media_host !== $base_host ) {
 				$issues[] = __( 'Media host differs from upload base host - ensure CORS headers are configured on CDN', 'wpshadow' );
 			}

@@ -4,7 +4,7 @@
  *
  * Analyzes error logging configuration and recent errors.
  *
- * @since   1.26033.2140
+ * @since   1.6033.2140
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates error logging and identifies recent critical errors.
  *
- * @since 1.26033.2140
+ * @since 1.6033.2140
  */
 class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2140
+	 * @since  1.6033.2140
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -203,7 +203,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check if environment is local development.
 	 *
-	 * @since  1.26033.2140
+	 * @since  1.6033.2140
 	 * @return bool True if local environment.
 	 */
 	private function is_local_environment() {

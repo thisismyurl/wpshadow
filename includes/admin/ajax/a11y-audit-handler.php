@@ -4,7 +4,7 @@
  *
  * Uses diagnostic system for accessibility checks.
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow
  */
 
@@ -25,13 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Refactored to use existing diagnostic system.
  * Provides WCAG 2.1 Level AA compliance checking.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class A11y_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX handler.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_a11y_scan', array( __CLASS__, 'handle' ) );
@@ -40,7 +40,7 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle accessibility audit request using diagnostic system.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_a11y_scan', 'read', 'nonce' );
@@ -144,7 +144,7 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map diagnostic severity to tool status.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @param  string $severity Diagnostic severity level.
 	 * @return string Tool status (pass, warn, fail).
 	 */

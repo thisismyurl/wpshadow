@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1000
+ * @since      1.6032.1000
  */
 
 declare(strict_types=1);
@@ -51,6 +51,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no whitelist on production)
  * - Treatment: configure IP whitelist with GitHub ranges
  *
- * @since 1.26032.1000
+ * @since 1.6032.1000
  */
 class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 
@@ -117,7 +118,7 @@ class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @return array|null Finding if webhook whitelist is not properly configured.
 	 */
 	public static function check() {

@@ -5,7 +5,7 @@
  * Evaluates theme performance and checks for optimization opportunities
  * including asset loading, bloat, and modern best practices.
  *
- * @since   1.26033.2084
+ * @since   1.6033.2084
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Block theme vs classic theme
  * - Theme optimization
  *
- * @since 1.26033.2084
+ * @since 1.6033.2084
  */
 class Diagnostic_Theme_Performance_Analysis extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Theme_Performance_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2084
+	 * @since  1.6033.2084
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

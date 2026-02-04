@@ -3,7 +3,7 @@
  * Tests for Image Size Consistency Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.2602.1352
+ * @since   1.602.1352
  */
 
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound

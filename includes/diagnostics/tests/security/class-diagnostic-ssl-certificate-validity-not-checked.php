@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -54,6 +54,8 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (expired), high (expiring soon)
  * - Treatment: renew certificate or enable auto-renewal
  *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_SSL_Certificate_Validity_Not_Checked extends Diagnostic_Base {
 
@@ -121,12 +123,12 @@ class Diagnostic_SSL_Certificate_Validity_Not_Checked extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check if site is using HTTPS
-		if ( 'https' !== parse_url( home_url(), PHP_URL_SCHEME ) ) {
+		if ( 'https' !== Diagnostic_URL_And_Pattern_Helper::get_scheme( home_url() ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

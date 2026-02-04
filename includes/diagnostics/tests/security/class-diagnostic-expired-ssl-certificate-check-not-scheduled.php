@@ -17,7 +17,7 @@
  * SSL certificate management: https://wpshadow.com/kb/ssl-certificate-management\n * Video: Automating certificate renewal (7min): https://wpshadow.com/training/ssl-monitoring\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site using Let's Encrypt (auto-renewal capable). Admin manually\n * renewed certificate once per year (didn't enable auto-renewal). Year 2: admin\n * forgets renewal date. Certificate expires on scheduled expiration. No monitoring\n * to warn. Site goes down. Customer calls Monday: \"Site showing security error\".\n * Emergency renewal: 2 hours downtime, $200 expedited cost.\n *
  * **Implementation Notes:**
  * - Uses openssl_x509_parse() for certificate inspection\n * - Calculates days until expiration\n * - Checks WordPress cron for monitoring\n * - Severity: critical (expired), high (< 7 days)\n * - Treatment: enable SSL monitoring, auto-renewal\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_Expired_SSL_Certificate_Check_Not_Scheduled extends Diagnostic_Base {
 
@@ -75,7 +76,7 @@ class Diagnostic_Expired_SSL_Certificate_Check_Not_Scheduled extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

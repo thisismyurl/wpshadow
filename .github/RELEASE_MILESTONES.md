@@ -5,18 +5,18 @@ Format: `Release 1.YYmm.dd`
 
 ## 2026
 
-- [ ] Release 1.2601.31 (January 31, 2026)
-- [ ] Release 1.2602.28 (February 28, 2026)
-- [ ] Release 1.2603.31 (March 31, 2026)
-- [ ] Release 1.2604.30 (April 30, 2026)
-- [ ] Release 1.2605.31 (May 31, 2026)
-- [ ] Release 1.2606.30 (June 30, 2026)
-- [ ] Release 1.2607.31 (July 31, 2026)
-- [ ] Release 1.2608.31 (August 31, 2026)
-- [ ] Release 1.2609.30 (September 30, 2026)
-- [ ] Release 1.2610.31 (October 31, 2026)
-- [ ] Release 1.2611.30 (November 30, 2026)
-- [ ] Release 1.2612.31 (December 31, 2026)
+- [ ] Release 1.6030.31 (January 31, 2026)
+- [ ] Release 1.602.28 (February 28, 2026)
+- [ ] Release 1.603.31 (March 31, 2026)
+- [ ] Release 1.6004.30 (April 30, 2026)
+- [ ] Release 1.605.31 (May 31, 2026)
+- [ ] Release 1.606.30 (June 30, 2026)
+- [ ] Release 1.607.31 (July 31, 2026)
+- [ ] Release 1.608.31 (August 31, 2026)
+- [ ] Release 1.609.30 (September 30, 2026)
+- [ ] Release 1.610.31 (October 31, 2026)
+- [ ] Release 1.611.30 (November 30, 2026)
+- [ ] Release 1.612.31 (December 31, 2026)
 
 ## 2027
 

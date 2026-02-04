@@ -8,7 +8,7 @@
  * - CANON: Accessibility First - Keyboard nav, screen reader support
  *
  * @package WPShadow
- * @since   1.2601.2148
+ * @since   1.6030.2148
  */
 
 (function($) {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.26033.1600
+ * @since      1.6033.1600
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles registration and rendering of Gutenberg blocks for CPTs.
  *
- * @since 1.26033.1600
+ * @since 1.6033.1600
  */
 class Post_Types_Blocks {
 
 	/**
 	 * Initialize the blocks manager.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class Post_Types_Blocks {
 	/**
 	 * Register all custom post type blocks.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @return void
 	 */
 	public static function register_blocks() {
@@ -55,7 +55,7 @@ class Post_Types_Blocks {
 	/**
 	 * Register block for a specific post type.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  string $post_type Post type key.
 	 * @return void
 	 */
@@ -80,7 +80,7 @@ class Post_Types_Blocks {
 	/**
 	 * Get block configurations for all post types.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @return array Block configurations.
 	 */
 	private static function get_block_configurations() {
@@ -193,7 +193,7 @@ class Post_Types_Blocks {
 	/**
 	 * Enqueue block editor assets.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @return void
 	 */
 	public static function enqueue_editor_assets() {
@@ -234,7 +234,7 @@ class Post_Types_Blocks {
 	/**
 	 * Enqueue frontend assets for blocks.
 	 *
-	 * @since  1.26034.1200
+	 * @since  1.6034.1200
 	 * @return void
 	 */
 	public static function enqueue_frontend_assets() {
@@ -253,7 +253,7 @@ class Post_Types_Blocks {
 	/**
 	 * Get taxonomy data for localization.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @return array Taxonomy data.
 	 */
 	private static function get_taxonomy_data() {
@@ -297,7 +297,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render testimonials block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -393,7 +393,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render team members block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -490,7 +490,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render portfolio block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -595,7 +595,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render events block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -694,7 +694,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render resources block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -789,7 +789,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render case studies block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -894,7 +894,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render services block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -977,7 +977,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render locations block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -1045,7 +1045,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render documentation block.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -1140,7 +1140,7 @@ class Post_Types_Blocks {
 	/**
 	 * Get rating display for a testimonial.
 	 *
-	 * @since  1.26033.1600
+	 * @since  1.6033.1600
 	 * @param  int $post_id Post ID.
 	 * @return string Rating display.
 	 */

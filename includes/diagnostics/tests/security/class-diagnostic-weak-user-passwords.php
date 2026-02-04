@@ -50,6 +50,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -226,7 +227,7 @@ class Diagnostic_Weak_User_Passwords extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -237,14 +238,40 @@ class Diagnostic_Weak_User_Passwords extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/weak-user-passwords',
 				'details'      => array(
 					'issues'            => $issues,
 					'weak_usernames'    => $weak_users,
 					'stale_passwords'   => count( $stale_passwords ),
 					'compromised_users' => count( $compromised_users ),
-					'recommendation'    => __( 'Enable strong password enforcement, require 2FA for admins, and enforce periodic password resets.', 'wpshadow' ),
+				),
+				'context'      => array(
+					'why'            => __(
+						'Weak passwords are the leading cause of website compromise. Over 99% of brute force attacks succeed due to weak or reused credentials. NIST guidelines recommend minimum 12 characters with complexity. OWASP Top 10 2023 lists #04:05-Broken Access Control as a critical risk. Compromised passwords (available in public breach databases) enable instant account takeover. Password reuse across sites multiplies breach impact. Stale passwords (unchanged >1 year) increase compromise risk. Dictionary attacks against common usernames ("admin", "test") have 90%+ success rates on weak passwords. For sensitive sites (healthcare/finance), weak passwords violate HIPAA, PCI-DSS, GLBA compliance requirements.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Install password strength plugin: WP Force Strong Passwords, Wordfence, or Password Policy Manager to enforce 12+ character minimum with complexity (uppercase, lowercase, numbers, symbols).
+2. Enable two-factor authentication (2FA) for all administrators: Use Google Authenticator, Authy, or similar via WP 2FA plugin (prevents compromise even if password stolen).
+3. Force password change for weak accounts: Use wp-cli command `wp user list --format=json | jq \'.[] | .ID\' | xargs -I {} wp user update {} --prompt=user_pass` to reset weak passwords.
+4. Implement password reset policy: Require users to change passwords every 90 days using Password Policy Manager plugin.
+5. Check for compromised passwords: If using Wordfence, enable password breach detection (compares against 100M+ breached passwords database).
+6. Avoid weak usernames: Rename "admin" user to something unique. Block common usernames (test, demo, administrator) at registration.
+7. Monitor failed login attempts: Use Wordfence or Limit Login Attempts plugin to block brute force (5+ failures = 24hr block).
+8. Educate users: Share NIST password guidelines, warn against password reuse, recommend password managers (Bitwarden, 1Password).',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'password-enforcement',
+				'enforce_strong_passwords'
+			);
+
+			return $finding;
 		}
 
 		return null;

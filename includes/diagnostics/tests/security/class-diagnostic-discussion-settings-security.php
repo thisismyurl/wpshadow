@@ -18,7 +18,7 @@
  * Discussion security setup: https://wpshadow.com/kb/wordpress-discussion-security\n * Video: Configuring comment moderation (7min): https://wpshadow.com/training/comment-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.1531
+ * @since      1.6030.1531
  */
 
 declare(strict_types=1);
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Default WordPress discussion settings. Comments allowed, no moderation,\n * doesn't require email. Spam bot auto-discovers via WPScan. Posts 10 comments/min.\n * 500 comments/hour with casino/pharma links. Moderator drowning in notifications.\n * Admin manually deletes comments for 3 hours, gives up. Site full of spam.\n *
  * **Implementation Notes:**
  * - Uses get_option() for all discussion settings\n * - Checks: comment_moderation, require_name_email, close_comments_for_old_posts\n * - Validates notification settings\n * - Severity: high (no moderation), medium (weak moderation)\n * - Treatment: enable moderation, require email, disable old comments\n *
- * @since 1.2601.1531
+ * @since 1.6030.1531
  */
 class Diagnostic_Discussion_Settings_Security extends Diagnostic_Base {
 
@@ -83,7 +84,7 @@ class Diagnostic_Discussion_Settings_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.1531
+	 * @since  1.6030.1531
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.2604.0200
+ * @since      1.6004.0200
  */
 
 declare(strict_types=1);
@@ -28,14 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides complete transparency about data collection, storage, and usage.
  * Users can view, export, and delete their data.
  *
- * @since 1.2604.0200
+ * @since 1.6004.0200
  */
 class Privacy_Dashboard_Page {
 
 	/**
 	 * Initialize the privacy dashboard.
 	 *
-	 * @since 1.2604.0200
+	 * @since 1.6004.0200
 	 * @return void
 	 */
 	public static function init() {
@@ -50,7 +50,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Add privacy dashboard menu page (now called by Gamification_UI).
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @deprecated Menu registration moved to Gamification_UI::register_menu_pages()
 	 * @return void
 	 */
@@ -62,7 +62,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Enqueue dashboard assets.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -114,7 +114,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render privacy dashboard page.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -209,7 +209,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render privacy score section.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  array $prefs User consent preferences.
 	 * @return void
 	 */
@@ -266,7 +266,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render consent controls.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  array $prefs User consent preferences.
 	 * @return void
 	 */
@@ -357,7 +357,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render data collection information.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	private static function render_data_collection_info() {
@@ -412,7 +412,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render user data summary.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  int $user_id User ID.
 	 * @return void
 	 */
@@ -483,7 +483,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render data management actions.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	private static function render_data_actions() {
@@ -523,7 +523,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render consent history.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  int $user_id User ID.
 	 * @return void
 	 */
@@ -582,7 +582,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Render third-party services disclosure.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	private static function render_third_party_services() {
@@ -619,7 +619,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Handle data export AJAX request.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void Dies after sending file.
 	 */
 	public static function handle_export_data() {
@@ -667,7 +667,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Handle data deletion AJAX request.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_delete_data() {
@@ -700,7 +700,7 @@ class Privacy_Dashboard_Page {
 	/**
 	 * Handle consent update AJAX request.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_update_consent() {

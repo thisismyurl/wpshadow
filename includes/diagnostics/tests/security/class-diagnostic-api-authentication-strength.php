@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API authentication configuration and security.
  *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_API_Authentication_Strength extends Diagnostic_Base {
 
@@ -59,7 +60,7 @@ class Diagnostic_API_Authentication_Strength extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -167,19 +168,25 @@ class Diagnostic_API_Authentication_Strength extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'REST API has potential authentication security issues', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/api-authentication-strength',
-				'details'      => array(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'REST API has potential authentication security issues', 'wpshadow' ),
+				'severity'      => 'high',
+				'threat_level'  => 75,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/api-authentication-strength',
+				'context'       => array(
+					'why'            => __( 'Weak API auth = easy compromise. Real scenario: API uses basic auth over HTTP. Attacker sniffs network. Captures credentials. Impersonates user. Deletes all posts, steals data. Cost: $4M+ incident. With strong auth: OAuth 2.0 + HTTPS. Credentials never transmitted. Attack impossible.', 'wpshadow' ),
+					'recommendation' => __( '1. Implement OAuth 2.0 or JWT authentication. 2. Use strong secret keys: 32+ characters, random. 3. Enforce HTTPS (TLS 1.3) for all API requests. 4. Disable basic authentication over HTTP. 5. Implement token expiration: 15min access, 7day refresh. 6. Validate CORS: whitelist specific origins (not *). 7. Check JWT secret is strong (not default). 8. Implement rate limiting on auth endpoints. 9. Log authentication failures. 10. Rotate keys regularly (60-day cycle).', 'wpshadow' ),
+				),
+				'details'       => array(
 					'issues'          => $issues,
 					'recommendations' => $recommendations,
 				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api-auth', 'authentication-strength' );
+			return $finding;
 		}
 
 		return null;

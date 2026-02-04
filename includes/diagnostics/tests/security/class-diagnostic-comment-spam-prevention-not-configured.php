@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing spam prevention.
  *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_Comment_Spam_Prevention_Not_Configured extends Diagnostic_Base {
 
@@ -59,7 +60,7 @@ class Diagnostic_Comment_Spam_Prevention_Not_Configured extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -18,14 +18,16 @@
  * Custom login form security: https://wpshadow.com/kb/custom-login-form-security\n * Video: Building secure login forms (11min): https://wpshadow.com/training/custom-login-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer creates custom login template. Copies from tutorial. Tutorial didn't\n * include nonce field (written before WordPress nonce best practices). Custom form\n * works fine. Attacker crafts CSRF payload. Tricks admin into visiting. Form\n * silently submitted to create new admin user. Attacker now has permanent access.\n *
  * **Implementation Notes:**
  * - Checks for custom login template usage\n * - Scans form for nonce field\n * - Validates redirect parameter\n * - Severity: high (missing nonce), medium (weak validation)\n * - Treatment: add CSRF tokens, validate redirects\n *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_Login_Page_Customization_Security extends Diagnostic_Base {
 
@@ -76,7 +78,7 @@ class Diagnostic_Login_Page_Customization_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +136,8 @@ class Diagnostic_Login_Page_Customization_Security extends Diagnostic_Base {
 			// Check if hidden login exposes wp-admin
 			if ( $has_hidden_login ) {
 				$admin_exposed = false;
-				if ( wp_remote_head( admin_url() )['response']['code'] !== 403 ) {
+				$admin_response = Diagnostic_Request_Helper::head_result( admin_url() );
+				if ( $admin_response['success'] && 403 !== (int) $admin_response['code'] ) {
 					$admin_exposed = true;
 				}
 
@@ -189,7 +192,7 @@ class Diagnostic_Login_Page_Customization_Security extends Diagnostic_Base {
 		);
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'Login page customization has security implications', 'wpshadow' ),
@@ -198,11 +201,35 @@ class Diagnostic_Login_Page_Customization_Security extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/login-page-customization-security',
 				'details'      => array(
-					'issues'            => $issues,
-					'customizations'    => $customizations,
-					'recommendations'   => $recommendations,
+					'issues'          => $issues,
+					'customizations'  => $customizations,
+					'recommendations' => $recommendations,
+				),
+				'context'      => array(
+					'why'            => __(
+						'Custom login pages often remove or bypass built-in WordPress protections (nonces, HTTPS enforcement, safe redirects). This can introduce CSRF, XSS, or open redirect vulnerabilities that lead to account takeover. Attackers also abuse verbose error messages to enumerate usernames. Security needs to be preserved during customization, otherwise the login page becomes the weakest link in authentication.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Ensure custom login forms include `wp_nonce_field()` and verify with `check_admin_referer()`.
+2. Use `wp_safe_redirect()` for all login redirects.
+3. Always serve login over HTTPS and enforce HSTS.
+4. Avoid detailed error messages (use generic "Invalid credentials").
+5. Validate all custom scripts and styles to prevent XSS.
+6. Test login flows after every customization change.',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'login-hardening',
+				'custom_login_security'
+			);
+
+			return $finding;
 		}
 
 		return null;

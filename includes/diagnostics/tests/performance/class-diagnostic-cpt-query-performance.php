@@ -27,9 +27,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents cascade failures on high-traffic CPT pages\n * - #9 Show Value: Delivers 10-50x speedup for CPT archives\n * - #10 Talk-About-Worthy: \"Our product pages load instantly\" is huge for e-commerce\n *
  * **Related Checks:**\n * - Meta Query Performance (CPT metadata optimization)\n * - Missing Query Indexes (CPT-specific indexes)\n * - N+1 Query Detection (related pattern)\n * - Taxonomy Query Performance (CPT filtering)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/cpt-query-performance\n * - Video: https://wpshadow.com/training/custom-post-type-queries (7 min)\n * - Advanced: https://wpshadow.com/training/n-plus-one-elimination (12 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.2601.2148\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CPT Query Performance Class\n *\n * Analyzes custom post type query patterns for N+1 queries and missing indexes.
+ * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6030.2148\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CPT Query Performance Class\n *\n * Analyzes custom post type query patterns for N+1 queries and missing indexes.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 	 * Tests query performance for CPTs and identifies slow queries
 	 * or missing database indexes.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if performance issues found, null otherwise.
 	 */
 	public static function check() {

@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Settings\Data_Retention_Manager;
+use WPShadow\Admin\Pages\Data_Retention_Manager;
 
 /**
  * AJAX Handler: Update Data Retention Settings
  *
  * Updates data retention policies and cleanup configuration.
  *
- * @since 1.2601
+ * @since 1.6030
  * @package WPShadow
  */
 class Update_Data_Retention_Handler extends AJAX_Handler_Base {

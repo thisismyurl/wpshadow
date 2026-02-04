@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1600
+ * @since      1.602.1600
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies external scripts (analytics, ads, widgets) and estimates
  * their performance impact on mobile loading.
  *
- * @since 1.2602.1600
+ * @since 1.602.1600
  */
 class Diagnostic_Mobile_Third_Party_Script_Impact extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Third_Party_Script_Impact extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_Mobile_Third_Party_Script_Impact extends Diagnostic_Base {
 	/**
 	 * Analyze third-party script impact.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array Script analysis.
 	 */
 	private static function analyze_third_party_scripts(): array {

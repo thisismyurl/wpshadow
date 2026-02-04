@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Settings\Email_Template_Manager;
+use WPShadow\Admin\Pages\Email_Template_Manager;
 
 /**
  * AJAX Handler: Save Email Template
  *
  * Saves customized email templates with sanitization.
  *
- * @since 1.2601
+ * @since 1.6030
  * @package WPShadow
  */
 class Save_Email_Template_Handler extends AJAX_Handler_Base {

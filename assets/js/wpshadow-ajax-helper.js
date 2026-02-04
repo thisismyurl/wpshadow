@@ -5,7 +5,7 @@
  * Provides consistent error handling, loading states, and nonce management.
  *
  * @package WPShadow
- * @since   1.26031.1500
+ * @since   1.6031.1500
  */
 
 (function($, window) {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures week start day is properly configured.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Week_Starts_On_Setting extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Week_Starts_On_Setting extends Diagnostic_Base {
 	 * - Week start day is set to a valid day (0-6)
 	 * - Week start day matches regional conventions
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no expiration), medium (weak token generation)
  * - Treatment: add expiration + rate limiting to reset flow
  *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_Password_Reset_Process_Security extends Diagnostic_Base {
 
@@ -120,7 +121,7 @@ class Diagnostic_Password_Reset_Process_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -235,7 +236,7 @@ class Diagnostic_Password_Reset_Process_Security extends Diagnostic_Base {
 
 		// Report findings
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'Password reset process has security issues', 'wpshadow' ),
@@ -247,7 +248,35 @@ class Diagnostic_Password_Reset_Process_Security extends Diagnostic_Base {
 					'issues'      => $issues,
 					'protections' => $protections,
 				),
+				'context'      => array(
+					'why'            => __(
+						'Password reset is the "backdoor" to account takeover via email compromise. Attack vector: attacker gains email access (phishing, malware, credential stuffing), requests password reset, uses reset link to change WordPress password, gains full site access. Microsoft reports 4.7% of their users have MFA, but 99.9% of attacks blocked by MFA - showing how effective security at account recovery is. OWASP Top 10 lists broken authentication (which includes weak reset flows) as #07. PCI-DSS 3.6.2 requires secure password reset. HIPAA requires account lockout after failed reset attempts (prevents brute force on reset tokens). Reset tokens should: (1) Be cryptographically random (not predictable), (2) Expire in 15-30 minutes (not 24 hours = too long), (3) Be single-use (can\'t replay same token), (4) Require email confirmation (attacker without email access can\'t complete), (5) Have rate limiting (prevent testing thousands of tokens), (6) Require 2FA for admin resets (extra protection). Long-lived or guessable tokens convert email compromise → instant site compromise.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Verify token expiration: Check WordPress settings for reset token lifetime. Should be 15-30 minutes maximum. If not configured, tokens may be valid for 24+ hours (too long).
+2. Implement token rotation: After reset email sent, require user to click link within 20 minutes. Token expires after 1 use. User must verify email (unlikely attacker has email access).
+3. Add email confirmation: Require user to confirm reset request via secondary email verification or security question. Prevents resetting password of someone else.
+4. Enable 2FA for admin password resets: When admin requests password reset, require 2FA token before allowing reset completion (even with valid reset link).
+5. Log all reset attempts: Create audit trail: who requested reset, when, from which IP. Alert admin on unusual patterns (10 reset requests in 1 hour = account under attack).
+6. Implement rate limiting: Allow maximum 3 reset requests per email per hour (prevents token brute force). After 5 attempts, lock account for 1 hour.
+7. Use strong token generation: Ensure tokens use cryptographically strong randomness (WordPress uses wp_generate_password() which is sufficient if using CSPRNG backend).
+8. Verify token isn\'t legged in URLs: Check that reset URLs don\'t log to access logs, error logs, or referrer headers. Use POST method where possible.
+9. Test token replay: Attempt to use same reset token twice. Should fail second time (single-use enforcement).
+10. Communicate reset timing: Tell users reset link expires in 20 minutes. "Click immediately, link will not work after 20 minutes for security". Sets expectations.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'account-recovery-hardening',
+				'password_reset_security'
+			);
+
+			return $finding;
 		}
 
 		return null;

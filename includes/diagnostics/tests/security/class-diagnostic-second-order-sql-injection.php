@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -159,7 +160,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 				)
 			);
 
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -196,6 +197,16 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 					),
 				),
 			);
+
+			// Add upgrade path for WPShadow Pro Security (when available).
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'code-analysis',
+				'second-order-sql-injection-fix'
+			);
+
+			return $finding;
 		}
 
 		return null;

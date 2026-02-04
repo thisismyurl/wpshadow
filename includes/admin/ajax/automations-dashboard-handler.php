@@ -4,7 +4,7 @@
  *
  * Retrieves activity history for a specific automation/workflow.
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Admin\AJAX
  */
 
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Handle AJAX request to get automation activity
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  * @return void Dies with JSON response.
  */
 function wpshadow_get_automation_activity_handler() {
@@ -73,7 +73,7 @@ add_action( 'wp_ajax_wpshadow_get_automation_activity', 'wpshadow_get_automation
 /**
  * Handle AJAX request to run automation
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  * @return void Dies with JSON response.
  */
 function wpshadow_run_automation_handler() {
@@ -137,7 +137,7 @@ add_action( 'wp_ajax_wpshadow_run_automation', 'wpshadow_run_automation_handler'
 /**
  * Handle AJAX request to delete automation
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  * @return void Dies with JSON response.
  */
 function wpshadow_delete_automation_handler() {
@@ -192,7 +192,7 @@ add_action( 'wp_ajax_wpshadow_delete_automation', 'wpshadow_delete_automation_ha
 /**
  * Handle AJAX request to toggle automation enabled/disabled
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  * @return void Dies with JSON response.
  */
 function wpshadow_toggle_automation_handler() {

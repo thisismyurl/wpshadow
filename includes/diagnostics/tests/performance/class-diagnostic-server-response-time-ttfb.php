@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2048
+ * @since      1.6033.2048
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures server response time from request start to identify performance bottlenecks.
  * TTFB (Time To First Byte) is critical for overall page load performance.
  *
- * @since 1.26033.2048
+ * @since 1.6033.2048
  */
 class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 	 * - Slow: 600-1000ms
 	 * - Critical: >1000ms
 	 *
-	 * @since  1.26033.2048
+	 * @since  1.6033.2048
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

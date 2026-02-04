@@ -3,7 +3,7 @@
  * Mobile Check AJAX Handler
  *
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Refactored to use existing diagnostic system.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Mobile_Check_Handler extends AJAX_Handler_Base {
 	/**
@@ -34,7 +34,7 @@ class Mobile_Check_Handler extends AJAX_Handler_Base {
 	 * AJAX dispatch system. Any POST request to `admin-ajax.php?action=wpshadow_mobile_check`
 	 * will be routed here.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_mobile_check', array( __CLASS__, 'handle' ) );
@@ -60,7 +60,7 @@ class Mobile_Check_Handler extends AJAX_Handler_Base {
 	 * If a check throws exception, it's caught and marked as "error".
 	 * Report still shows other checks' results.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_mobile_check', 'read', 'nonce' );
@@ -140,7 +140,7 @@ class Mobile_Check_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map diagnostic severity to tool status.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @param  string $severity Diagnostic severity level.
 	 * @return string Tool status (pass, warn, fail).
 	 */

@@ -16,7 +16,7 @@
  * - #1 (Helpful Neighbor): "Here's the impact... ready to proceed?"
  *
  * @package WPShadow
- * @since 1.2603.1345
+ * @since 1.603.1345
  */
 
 declare(strict_types=1);

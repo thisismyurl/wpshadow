@@ -5,7 +5,7 @@
  * Checks if critical CSS is inlined in the document head to improve
  * First Contentful Paint and reduce render-blocking resources.
  *
- * @since   1.26033.2080
+ * @since   1.6033.2080
  * @package WPShadow\Diagnostics
  */
 
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Defer non-critical CSS
  * - Proper head tag optimization
  *
- * @since 1.26033.2080
+ * @since 1.6033.2080
  */
 class Diagnostic_Critical_Css_Inline extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Critical_Css_Inline extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2080
+	 * @since  1.6033.2080
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

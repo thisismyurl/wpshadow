@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -146,7 +147,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 
 		// If we found issues, return finding.
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -189,6 +190,16 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 					),
 				),
 			);
+
+			// Add upgrade path for WPShadow Pro Security (when available).
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'session-timeout-management',
+				'session-timeout-best-practices'
+			);
+
+			return $finding;
 		}
 
 		return null;

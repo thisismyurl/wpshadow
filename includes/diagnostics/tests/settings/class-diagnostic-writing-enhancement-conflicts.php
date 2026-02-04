@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects writing-related conflicts and settings issues.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Writing_Enhancement_Conflicts extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Writing_Enhancement_Conflicts extends Diagnostic_Base {
 	 * - No conflicting editor plugins
 	 * - Post/draft auto-save is configured
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

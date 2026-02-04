@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.2602.0200
+ * @since      1.602.0200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Health History Widget Class
  *
- * @since 1.2602.0200
+ * @since 1.602.0200
  */
 class Health_History_Widget {
 
 	/**
 	 * Initialize the widget.
 	 *
-	 * @since 1.2602.0200
+	 * @since 1.602.0200
 	 * @return void
 	 */
 	public static function init() {
@@ -40,7 +40,7 @@ class Health_History_Widget {
 	/**
 	 * Enqueue widget assets.
 	 *
-	 * @since  1.2604.0300
+	 * @since  1.6004.0300
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -61,7 +61,7 @@ class Health_History_Widget {
 	/**
 	 * Render the widget.
 	 *
-	 * @since 1.2602.0200
+	 * @since 1.602.0200
 	 * @return void
 	 */
 	public static function render_widget() {

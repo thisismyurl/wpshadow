@@ -139,7 +139,7 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 				 * - #1 (Helpful Neighbor): "Here's how we can help"
 				 *
 				 * @package WPShadow
-				 * @since 1.2601.2148
+				 * @since 1.6030.2148
 				 */
 			error_log( 'Stack trace: ' . $e->getTraceAsString() );
 			self::send_error(

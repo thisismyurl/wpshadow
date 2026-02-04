@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.26031.0000
+ * @since      1.6031.0000
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ require_once WPSHADOW_PATH . 'includes/integration/cloud/class-cloud-service-con
 /**
  * Cloud Registration Handler
  *
- * @since 1.26031.0000
+ * @since 1.6031.0000
  */
 class Cloud_Registration_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle cloud registration.
 	 *
-	 * @since 1.26031.0000
+	 * @since 1.6031.0000
 	 * @return void
 	 */
 	public static function handle() {
@@ -53,14 +53,14 @@ class Cloud_Registration_Handler extends AJAX_Handler_Base {
 /**
  * Cloud Deregistration Handler
  *
- * @since 1.26031.0000
+ * @since 1.6031.0000
  */
 class Cloud_Deregistration_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle cloud deregistration.
 	 *
-	 * @since 1.26031.0000
+	 * @since 1.6031.0000
 	 * @return void
 	 */
 	public static function handle() {

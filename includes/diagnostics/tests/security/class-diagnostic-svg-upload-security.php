@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -52,6 +52,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (scripts not removed), high (SVG uploads allowed)
  * - Treatment: sanitize SVG uploads or disable entirely
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
@@ -127,7 +128,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 	 * - Existing SVG files for malicious code
 	 * - User capability restrictions
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -349,10 +350,10 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
 		// Return finding if issues detected.
 		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => sprintf(
 					/* translators: %d: number of issues */
 					_n(
 						'%d security issue detected with SVG uploads',
@@ -362,19 +363,25 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 					),
 					count( $issues )
 				),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/svg-upload-security',
-				'details'      => array(
-					'issues'            => $issues,
-					'svg_allowed'       => $svg_allowed,
-					'svg_count'         => $svg_count,
-					'has_svg_plugin'    => $has_svg_plugin,
-					'has_sanitization'  => (bool) $has_sanitization,
-					'suspicious_files'  => $suspicious_files ?? array(),
+				'severity'      => 'high',
+				'threat_level'  => 75,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/svg-upload-security',
+				'context'       => array(
+					'why'            => __( 'SVG = XML vector format. Can contain <script> tags and event handlers. Real scenario: SVG upload allowed. Attacker uploads: <svg onload="fetch(\'/admin?delete=all\')"/>. Visitor loads SVG. Script executes via visitor\'s session. Posts deleted. With sanitization: onload removed. SVG safe. 95% of SVG XSS prevented by sanitization.', 'wpshadow' ),
+					'recommendation' => __( '1. Disable SVG uploads entirely if not needed. 2. If needed: install Safe SVG plugin for automatic sanitization. 3. Restrict SVG uploads to admin only. 4. Validate MIME type: image/svg+xml. 5. Scan SVG files for <script>, onload, onerror, etc. 6. Sanitize before storage using DOMPurify. 7. Add Content-Security-Policy: script-src \'none\'. 8. Use wp_check_filetype() for extension validation. 9. Store uploads outside web root. 10. Regularly scan existing SVG files for malicious patterns.', 'wpshadow' ),
+				),
+				'details'       => array(
+					'issues'           => $issues,
+					'svg_allowed'      => $svg_allowed,
+					'svg_count'        => $svg_count,
+					'has_svg_plugin'   => $has_svg_plugin,
+					'has_sanitization' => (bool) $has_sanitization,
+					'suspicious_files' => $suspicious_files ?? array(),
 				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-upload', 'svg-upload-security' );
+			return $finding;
 		}
 
 		return null;

@@ -5,7 +5,7 @@
  * Checks if DNS prefetch and preconnect headers are configured to optimize
  * connection establishment with third-party domains.
  *
- * @since   1.26033.2078
+ * @since   1.6033.2078
  * @package WPShadow\Diagnostics
  */
 
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - preconnect for critical domains
  * - Implementation via wp_resource_hints filter
  *
- * @since 1.26033.2078
+ * @since 1.6033.2078
  */
 class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2078
+	 * @since  1.6033.2078
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

@@ -5,7 +5,7 @@
  * Checks if required plugin dependencies are satisfied to ensure plugins work
  * correctly and don't cause silent failures.
  *
- * @since   1.26033.2102
+ * @since   1.6033.2102
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - WordPress version compatibility
  * - Extension availability
  *
- * @since 1.26033.2102
+ * @since 1.6033.2102
  */
 class Diagnostic_Plugin_Dependency_Resolution extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Plugin_Dependency_Resolution extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2102
+	 * @since  1.6033.2102
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

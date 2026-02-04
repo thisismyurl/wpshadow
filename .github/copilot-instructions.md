@@ -354,7 +354,7 @@ $wp_filesystem->put_contents( $file_path, $content, FS_CHMOD_FILE );
  * Longer description providing context and usage examples.
  * Explain the purpose, when to use it, and key patterns.
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Diagnostics
  */
 class Example_Diagnostic extends Diagnostic_Base {
@@ -368,7 +368,7 @@ class Example_Diagnostic extends Diagnostic_Base {
  * Longer description explaining the behavior, side effects,
  * and any important implementation details.
  *
- * @since  1.2601.2148
+ * @since  1.6030.2148
  * @param  string $param1 Description of parameter.
  * @param  int    $param2 Optional. Description. Default 0.
  * @return array {
@@ -387,7 +387,7 @@ public function example_method( $param1, $param2 = 0 ) {
 /**
  * Fires after a diagnostic check completes.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  *
  * @param string     $class   Diagnostic class name.
  * @param string     $slug    Diagnostic slug/identifier.
@@ -398,7 +398,7 @@ do_action( 'wpshadow_after_diagnostic_check', $class, $slug, $finding );
 /**
  * Filters the list of registered diagnostics.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  *
  * @param array $diagnostics Array of diagnostic class names keyed by slug.
  */
@@ -863,7 +863,7 @@ if ( function_exists( 'wpshadow_pro_backup_enabled' ) ) {
  *
  * Checks for a specific WordPress configuration issue.
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Diagnostics
  */
 
@@ -915,7 +915,7 @@ class Diagnostic_Example_Check extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
-     * @since  1.2601.2148
+     * @since  1.6030.2148
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
@@ -956,7 +956,7 @@ self::register( 'example-check', Diagnostic_Example_Check::class );
  *
  * Fixes the example setting configuration issue.
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Treatments
  */
 
@@ -978,7 +978,7 @@ class Treatment_Example_Check extends Treatment_Base {
     /**
      * Get the finding ID this treatment addresses.
      *
-     * @since  1.2601.2148
+     * @since  1.6030.2148
      * @return string Finding ID.
      */
     public static function get_finding_id() {
@@ -988,7 +988,7 @@ class Treatment_Example_Check extends Treatment_Base {
     /**
      * Apply the treatment.
      *
-     * @since  1.2601.2148
+     * @since  1.6030.2148
      * @return array {
      *     Result array.
      *
@@ -1025,7 +1025,7 @@ class Treatment_Example_Check extends Treatment_Base {
 /**
  * AJAX Handler for Example Action
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Admin
  */
 
@@ -1047,7 +1047,7 @@ class AJAX_Example_Action extends AJAX_Handler_Base {
     /**
      * Handle the AJAX request.
      *
-     * @since 1.2601.2148
+     * @since 1.6030.2148
      * @return void Dies after sending JSON response.
      */
     public static function handle() {
@@ -1074,7 +1074,7 @@ class AJAX_Example_Action extends AJAX_Handler_Base {
     /**
      * Perform the actual operation.
      *
-     * @since  1.2601.2148
+     * @since  1.6030.2148
      * @param  string $param1 First parameter.
      * @param  int    $param2 Second parameter.
      * @return mixed Result of operation.
@@ -1096,7 +1096,7 @@ add_action( 'wp_ajax_wpshadow_example_action', array( 'WPShadow\Admin\AJAX_Examp
 /**
  * Example Workflow Action
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Workflow
  */
 
@@ -1116,7 +1116,7 @@ class Action_Example {
     /**
      * Execute the action.
      *
-     * @since  1.2601.2148
+     * @since  1.6030.2148
      * @param  array $config Action configuration.
      * @return array {
      *     Execution result.

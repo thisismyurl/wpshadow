@@ -4,7 +4,7 @@ Tags: diagnostics, health, backup, recovery, emergency, documentation, maintenan
 Requires at least: 6.4
 Requires PHP: 8.1.29
 Tested up to: 6.6
-Stable tag: 1.26029.1906
+Stable tag: 1.6029.1906
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,7 +81,7 @@ WPShadow follows 11 core commandments:
 
 == Changelog ==
 
-= 1.2601.2148 =
+= 1.6030.2148 =
 * **Phase 3 Complete**: Accessibility & Inclusivity as CANON principles
 * **Phase 2 Complete**: Documentation cleanup and reorganization (150+ → 65 curated files)
 * **Phase 1 Complete**: 57 diagnostic tests across 10 categories
@@ -89,7 +89,7 @@ WPShadow follows 11 core commandments:
 * Comprehensive git history documented and verified
 * Production-ready for community release
 
-= 1.2601.75000 =
+= 1.6030.75000 =
 * Initial development release
 
 == Support ==

@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26031.1400
+ * @since      1.6031.1400
  */
 
 declare(strict_types=1);
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * News site with comments enabled, no flood protection configured. July 2024: attacker\n * runs comment spam bot targeting pharmaceutical links. Bot submits 300 comments/minute.\n * Within 5 minutes: 1,500 comments queued. Moderation system breaks, legitimate comments\n * lost in spam noise. Editor spends entire day cleaning up. Post-attack: implements flood\n * protection, subsequent attack attempts blocked automatically.\n *
  * **Implementation Notes:**
  * - Queries recent comments efficiently (last 1000, filters by date)\n * - Groups by IP address (primary indicator)\n * - Configurable threshold (3 comments per 15 sec is default)\n * - Returns severity: critical (active flooding detected), medium (threshold too high)\n * - Auto-fixable treatment: adjust flood protection thresholds\n *
- * @since 1.26031.1400
+ * @since 1.6031.1400
  */\nclass Diagnostic_Comment_Flood_Protection extends Diagnostic_Base {
 	protected static $slug = 'comment-flood-protection';
 	protected static $title = 'Comment Flood Protection';

@@ -24,7 +24,7 @@ use WPShadow\Reporting\Event_Logger;
  * - Recovery points widget
  * - System health status
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Guardian_Dashboard {
 
@@ -32,7 +32,7 @@ class Guardian_Dashboard {
 	/**
 	 * Render the dashboard
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return string HTML output
 	 */
 	public static function render(): string {

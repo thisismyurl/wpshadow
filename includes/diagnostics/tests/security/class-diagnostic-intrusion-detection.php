@@ -4,7 +4,7 @@
  *
  * Analyzes file integrity and malware detection systems.
  *
- * @since   1.26033.2145
+ * @since   1.6033.2145
  * @package WPShadow\Diagnostics
  */
 
@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates file integrity monitoring and malware scanning.
  *
- * @since 1.26033.2145
+ * @since 1.6033.2145
  */
 class Diagnostic_Intrusion_Detection extends Diagnostic_Base {
 
@@ -58,7 +59,7 @@ class Diagnostic_Intrusion_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2145
+	 * @since  1.6033.2145
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

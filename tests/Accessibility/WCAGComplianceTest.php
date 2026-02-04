@@ -5,7 +5,7 @@
  * Tests for WCAG 2.1 Level AA compliance.
  *
  * @package WPShadow\Tests\Accessibility
- * @since   1.2601.2148
+ * @since   1.6030.2148
  */
 
 declare(strict_types=1);

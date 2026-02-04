@@ -51,6 +51,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -237,15 +238,19 @@ class Diagnostic_REST_API_Media_Endpoint_Security extends Diagnostic_Base {
 
 		// Issue: Security vulnerabilities detected.
 		if ( ! empty( $security_issues ) || ( ! $has_custom_auth && ! $has_security_plugin ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'REST API media endpoints may have weak authentication, allowing unauthorized access to media files', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-media-endpoint-security',
-				'details'      => array(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'REST API media endpoints may have weak authentication, allowing unauthorized access to media files', 'wpshadow' ),
+				'severity'      => 'high',
+				'threat_level'  => 75,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/rest-api-media-endpoint-security',
+				'context'       => array(
+					'why'            => __( 'Unauth media uploads = instant RCE. Real scenario: /wp-json/wp/v2/media POST endpoint allows unauthenticated upload. Attacker uploads shell.php, visits it, gets shell access. Database compromised. Cost: $4.29M. With auth: Endpoint requires token + edit_posts. Unauthenticated: 401 Unauthorized. Attack blocked.', 'wpshadow' ),
+					'recommendation' => __( '1. Add permission_callback to media endpoints. 2. Check current_user_can(\'upload_files\'). 3. Require valid nonce. 4. Use Application Passwords for API auth. 5. Validate file type/MIME. 6. Implement rate limiting on uploads. 7. Store uploads outside web root. 8. Disable execution in upload dir (.htaccess). 9. Scan uploads with malware detector. 10. Log all upload attempts.', 'wpshadow' ),
+				),
+				'details'       => array(
 					'rest_enabled'        => $rest_enabled,
 					'has_wp_v2'           => $has_wp_v2,
 					'has_basic_auth'      => $has_basic_auth,
@@ -254,22 +259,10 @@ class Diagnostic_REST_API_Media_Endpoint_Security extends Diagnostic_Base {
 					'active_security'     => $active_security,
 					'security_issues'     => $security_issues,
 					'tested_endpoints'    => $test_endpoints,
-					'security_risk'       => __( 'Weak REST API authentication allows attackers to upload, modify, or delete media files', 'wpshadow' ),
-					'recommendation'      => __( 'Implement proper authentication (OAuth, Application Passwords) and install a security plugin', 'wpshadow' ),
-					'authentication_methods' => array(
-						'application_passwords' => __( 'WordPress 5.6+ supports Application Passwords for REST API', 'wpshadow' ),
-						'oauth'                 => __( 'OAuth 1.0a or 2.0 for third-party applications', 'wpshadow' ),
-						'jwt'                   => __( 'JSON Web Tokens for stateless authentication', 'wpshadow' ),
-					),
-					'hardening_steps'     => array(
-						__( '1. Disable REST API for unauthenticated users if not needed', 'wpshadow' ),
-						__( '2. Implement Application Passwords (WP 5.6+)', 'wpshadow' ),
-						__( '3. Add custom capability checks to media endpoints', 'wpshadow' ),
-						__( '4. Install a security plugin with REST API protection', 'wpshadow' ),
-						__( '5. Monitor REST API access logs', 'wpshadow' ),
-					),
 				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api-media', 'media-endpoint-security' );
+			return $finding;
 		}
 
 		return null;

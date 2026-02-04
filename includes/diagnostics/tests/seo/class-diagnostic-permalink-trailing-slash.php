@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.0903
+ * @since      1.6032.0903
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Broken canonical URLs
  * - Poor user experience with unnecessary redirects
  *
- * @since 1.26032.0903
+ * @since 1.6032.0903
  */
 class Diagnostic_Permalink_Trailing_Slash extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Permalink_Trailing_Slash extends Diagnostic_Base {
 	 * 2. Potential redirect loops from slash mismatches
 	 * 3. Conflicting permalink and category base configurations
 	 *
-	 * @since  1.26032.0903
+	 * @since  1.6032.0903
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Permalink_Trailing_Slash extends Diagnostic_Base {
 	/**
 	 * Detect potential redirect loop risks from trailing slash inconsistencies.
 	 *
-	 * @since  1.26032.0903
+	 * @since  1.6032.0903
 	 * @param  string $permalink_structure Permalink structure.
 	 * @param  string $category_base       Category base.
 	 * @param  string $tag_base            Tag base.

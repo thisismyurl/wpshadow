@@ -26,9 +26,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible responsiveness problems\n * - #9 Show Value: Delivers immediate snappiness improvement\n * - #10 Talk-About-Worthy: "Site feels fast now" is immediately noticed\n *
  * **Related Checks:**\n * - Plugin Load Performance (identifies problematic plugins)\n * - Database Query Optimization (slow queries block AJAX)\n * - Third-Party API Integration (external calls blocking)\n * - Server Response Time Too Slow (overall TTFB)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/admin-ajax-performance\n * - Video: https://wpshadow.com/training/ajax-optimization-101 (6 min)\n * - Advanced: https://wpshadow.com/training/async-patterns-wordpress (11 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.26033.2065\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Admin-Ajax Performance Diagnostic Class\n *\n * Measures admin-ajax.php endpoint performance and identifies slow handlers.
+ * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6033.2065\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Diagnostics\\Helpers\\Diagnostic_Request_Helper;\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Admin-Ajax Performance Diagnostic Class\n *\n * Measures admin-ajax.php endpoint performance and identifies slow handlers.
  *
- * @since 1.26033.2065
+ * @since 1.6033.2065
  */
 class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 	 * Tests admin-ajax.php with a simple action.
 	 * Threshold: <300ms good, >1000ms slow
 	 *
-	 * @since  1.26033.2065
+	 * @since  1.6033.2065
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 		// Test with heartbeat action (always available)
 		$start_time = microtime( true );
 		
-		$response = wp_remote_post(
+		$response = Diagnostic_Request_Helper::post_result(
 			$ajax_url,
 			array(
 				'timeout' => 5,
@@ -96,28 +96,28 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 		$elapsed_ms   = round( $elapsed_time * 1000 );
 		
 		// Check for errors
-		if ( is_wp_error( $response ) ) {
+		if ( ! $response['success'] ) {
 			return array(
 				'id'           => 'admin-ajax-error',
 				'title'        => __( 'Admin-Ajax Error', 'wpshadow' ),
 				'description'  => sprintf(
 					/* translators: %s: error message */
 					__( 'admin-ajax.php request failed: %s', 'wpshadow' ),
-					$response->get_error_message()
+					$response['error_message']
 				),
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/admin-ajax-troubleshooting',
 				'meta'         => array(
-					'error_code'    => $response->get_error_code(),
-					'error_message' => $response->get_error_message(),
+					'error_code'    => $response['error_code'],
+					'error_message' => $response['error_message'],
 				),
 			);
 		}
 		
 		// Check response code
-		$http_code = wp_remote_retrieve_response_code( $response );
+		$http_code = (int) $response['code'];
 		if ( 200 !== $http_code ) {
 			return array(
 				'id'           => 'admin-ajax-http-error',

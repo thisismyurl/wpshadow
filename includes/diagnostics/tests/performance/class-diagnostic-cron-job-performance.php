@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2072
+ * @since      1.6033.2072
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes WP-Cron for performance issues. Excessive or stuck
  * cron jobs can cause page load delays.
  *
- * @since 1.26033.2072
+ * @since 1.6033.2072
  */
 class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 	 * Analyzes cron events for excessive jobs or missed schedules.
 	 * WP-Cron runs on page load, impacting performance.
 	 *
-	 * @since  1.26033.2072
+	 * @since  1.6033.2072
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -17,7 +17,7 @@
  * WordPress session security: https://wpshadow.com/kb/wordpress-sessions\n * Video: Session management best practices (8min): https://wpshadow.com/training/session-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site with custom session storage (Sessions plugin). Site admin\n * stops using the plugin (switches to default). Sessions never cleanup. After\n * 2 years: 50,000 expired sessions in wp_options. Admin notices: \"Why is my\n * database so large?\" Discovers old sessions. Manually deletes via MySQL.\n * If automated cleanup was enabled, would never have been an issue.\n *
  * **Implementation Notes:**
  * - Queries wp_options for session keys\n * - Validates session expiration times\n * - Checks for cleanup hooks in wp-cron\n * - Severity: medium (stale sessions), high (many stale)\n * - Treatment: enable session cleanup, setup cron\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Base {
 
@@ -75,21 +76,44 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check if session cleanup is scheduled
 		if ( ! wp_next_scheduled( 'wp_session_cleanup' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Expired sessions cleanup is not implemented. Schedule session cleanup to remove old session data and improve security.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 20,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/expired-sessions-cleanup-not-implemented',
+			$finding = array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Expired sessions cleanup is not implemented. Schedule session cleanup to remove old session data and improve security.', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 20,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/expired-sessions-cleanup-not-implemented',
+				'context'      => array(
+					'why'            => __(
+						'Expired sessions that never get cleaned up increase the chance of session reuse and inflate database size. Stale session tokens can remain accessible in backups, logs, or compromised plugins, expanding the attack surface. Regular cleanup reduces risk and keeps the database lean, improving performance and reliability.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Schedule a cleanup cron to purge expired sessions daily.
+2. Ensure sessions expire according to your auth cookie lifetime.
+3. Remove abandoned sessions when users log out or reset passwords.
+4. Audit session tables periodically for growth and anomalies.
+5. Use session storage with built-in expiration (Redis/Memcached) when possible.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'session-hardening',
+				'expired_session_cleanup'
+			);
+
+			return $finding;
 		}
 
 		return null;

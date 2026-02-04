@@ -50,6 +50,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -282,7 +283,7 @@ class Diagnostic_User_Session_Security extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -293,13 +294,38 @@ class Diagnostic_User_Session_Security extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/session-security',
 				'details'      => array(
 					'issues'         => $issues,
 					'is_https'       => $is_https,
 					'secure_cookies' => $secure_cookies,
-					'recommendation' => __( 'Enable HTTPS, configure FORCE_SSL_ADMIN, set ADMIN_SESSION_TIMEOUT to 2-8 hours, implement Content-Security-Policy header, and limit concurrent sessions.', 'wpshadow' ),
+				),
+				'context'      => array(
+					'why'            => __(
+						'Weak session security enables account takeover without the password. Missing HTTPS allows cookie interception, missing Secure/HttpOnly/SameSite flags allow theft and cross-site reuse, and long session lifetimes increase exposure. Attackers commonly target admin sessions because they grant full site control. These gaps also make XSS far more dangerous because stolen cookies can be reused to bypass authentication entirely.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Enforce HTTPS site-wide and set FORCE_SSL_ADMIN to true.
+2. Set Secure, HttpOnly, and SameSite=Lax/Strict on auth cookies.
+3. Configure ADMIN_SESSION_TIMEOUT to 2-8 hours.
+4. Limit concurrent sessions per user (1-3).
+5. Enable Content-Security-Policy to reduce XSS risk.
+6. Rotate session tokens on login and privilege changes.
+7. Review and revoke suspicious sessions regularly.',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'session-hardening',
+				'user_session_security'
+			);
+
+			return $finding;
 		}
 
 		return null;

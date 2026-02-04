@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2060
+ * @since      1.6033.2060
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors causing CLS (Cumulative Layout Shift).
  * CLS measures visual stability during page load.
  *
- * @since 1.26033.2060
+ * @since 1.6033.2060
  */
 class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 	 * - Needs Improvement: 0.1-0.25
 	 * - Poor: >0.25
 	 *
-	 * @since  1.26033.2060
+	 * @since  1.6033.2060
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

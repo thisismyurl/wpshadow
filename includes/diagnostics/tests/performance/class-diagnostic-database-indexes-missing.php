@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2062
+ * @since      1.6033.2062
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects missing indexes on frequently queried columns.
  * Missing indexes cause slow queries and poor performance at scale.
  *
- * @since 1.26033.2062
+ * @since 1.6033.2062
  */
 class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 	 * Verifies critical indexes exist on WordPress tables.
 	 * Missing indexes severely impact query performance as data grows.
 	 *
-	 * @since  1.26033.2062
+	 * @since  1.6033.2062
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

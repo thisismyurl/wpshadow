@@ -8,7 +8,7 @@
  * CANON Accessibility: WCAG AA compliant, keyboard navigable, screen reader compatible
  *
  * @package WPShadow
- * @since 1.2601.210200
+ * @since 1.6030.210200
  */
 
 (function($) {

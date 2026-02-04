@@ -4,7 +4,7 @@
  * Renders interactive charts for health history visualization using Chart.js.
  *
  * @package WPShadow
- * @since   1.2602.0200
+ * @since   1.602.0200
  */
 
 (function($) {

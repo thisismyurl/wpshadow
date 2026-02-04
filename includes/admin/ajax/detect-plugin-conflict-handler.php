@@ -2,7 +2,7 @@
 /**
  * AJAX: Detect Plugin Conflict
  *
- * @since   1.2601.2200
+ * @since   1.6030.2200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Detect_Plugin_Conflict extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.2601.2200
+	 * @since 1.6030.2200
 	 * @return void
 	 */
 	public static function handle() {
@@ -96,7 +96,7 @@ class AJAX_Detect_Plugin_Conflict extends AJAX_Handler_Base {
 	/**
 	 * Binary search for conflicting plugin.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  array  $plugins        Active plugins.
 	 * @param  string $issue_location Issue location.
 	 * @param  string $test_url       Test URL.
@@ -153,7 +153,7 @@ class AJAX_Detect_Plugin_Conflict extends AJAX_Handler_Base {
 	/**
 	 * Sequential search for conflicting plugin.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  array  $plugins        Active plugins.
 	 * @param  string $issue_location Issue location.
 	 * @param  string $test_url       Test URL.
@@ -184,7 +184,7 @@ class AJAX_Detect_Plugin_Conflict extends AJAX_Handler_Base {
 	/**
 	 * Test site with specific plugins active.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  array  $plugins        Plugins to test with.
 	 * @param  string $issue_location Issue location.
 	 * @param  string $test_url       Test URL.
@@ -213,7 +213,7 @@ class AJAX_Detect_Plugin_Conflict extends AJAX_Handler_Base {
 	/**
 	 * Get plugin name from file path.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $plugin_file Plugin file path.
 	 * @return string Plugin name.
 	 */
@@ -234,7 +234,7 @@ class AJAX_Detect_Plugin_Conflict extends AJAX_Handler_Base {
 	/**
 	 * Get recommendation for conflicting plugin.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $plugin_file Plugin file path.
 	 * @return string Recommendation.
 	 */

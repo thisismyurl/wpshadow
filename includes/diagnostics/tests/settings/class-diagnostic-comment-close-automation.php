@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.1531
+ * @since      1.6030.1531
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that comments are automatically closed on old posts.
  *
- * @since 1.2601.1531
+ * @since 1.6030.1531
  */
 class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.1531
+	 * @since  1.6030.1531
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

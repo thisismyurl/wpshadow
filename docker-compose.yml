@@ -1,4 +1,66 @@
-version: '3'
+version: '3.8'
+
 services:
-  placeholder:
-    image: placeholder
+  db:
+    image: mysql:8.0
+    container_name: wpshadow-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wpshadow-network
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    container_name: wpshadow-wordpress
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      # Use CODESPACE_NAME environment variable for proper URL
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', getenv('CODESPACE_NAME') ? 'https://' . getenv('CODESPACE_NAME') . '-8080.app.github.dev' : 'http://localhost:8080');
+        define('WP_SITEURL', getenv('CODESPACE_NAME') ? 'https://' . getenv('CODESPACE_NAME') . '-8080.app.github.dev' : 'http://localhost:8080');
+        define('WP_DEBUG', true);
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+        @ini_set('display_errors', 0);
+    volumes:
+      - wordpress_data:/var/www/html
+      # Mount the plugin directly into WordPress
+      - ./:/var/www/html/wp-content/plugins/wpshadow
+    networks:
+      - wpshadow-network
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin:latest
+    container_name: wpshadow-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: wordpress
+    networks:
+      - wpshadow-network
+
+volumes:
+  db_data:
+  wordpress_data:
+
+networks:
+  wpshadow-network:
+    driver: bridge

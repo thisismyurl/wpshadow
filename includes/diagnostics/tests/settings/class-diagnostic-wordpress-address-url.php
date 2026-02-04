@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1745
+ * @since      1.6032.1745
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks that the WordPress Address URL setting (siteurl) is properly configured.
  *
- * @since 1.26032.1745
+ * @since 1.6032.1745
  */
 class Diagnostic_WordPress_Address_URL extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_WordPress_Address_URL extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26032.1745
+	 * @since  1.6032.1745
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

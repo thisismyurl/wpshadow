@@ -5,7 +5,7 @@
  * Checks if post revision limits are properly configured to prevent
  * excessive database bloat from storing too many post versions.
  *
- * @since   1.26033.2077
+ * @since   1.6033.2077
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Revision database size
  * - Autosave frequency configuration
  *
- * @since 1.26033.2077
+ * @since 1.6033.2077
  */
 class Diagnostic_Revision_Limits extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Revision_Limits extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2077
+	 * @since  1.6033.2077
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

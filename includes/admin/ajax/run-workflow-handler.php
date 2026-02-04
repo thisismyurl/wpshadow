@@ -23,7 +23,7 @@
  * - #9 (Show Value): Report impact metrics after execution
  *
  * @package WPShadow
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 
 declare(strict_types=1);

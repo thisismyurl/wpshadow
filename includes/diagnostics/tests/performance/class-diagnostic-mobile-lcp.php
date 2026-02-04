@@ -52,7 +52,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1430
+ * @since      1.602.1430
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures render time of the largest visible content element, directly impacting bounce rates.
  *
- * @since 1.2602.1430
+ * @since 1.602.1430
  */
 class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 
@@ -110,7 +110,7 @@ class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 	 * - Needs Improvement: 2.5-4.0s
 	 * - Poor: >4.0s
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -164,7 +164,7 @@ class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 	/**
 	 * Identify common LCP bottlenecks.
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return array Issues identified.
 	 */
 	private static function identify_lcp_issues(): array {
@@ -225,7 +225,7 @@ class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 	/**
 	 * Estimate LCP time based on identified issues.
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @param  array $issues Issues identified.
 	 * @return float Estimated LCP in seconds.
 	 */

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.2604.0200
+ * @since      1.6004.0200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors and displays all outbound HTTP requests made by WPShadow.
  * Shows users exactly when and why we contact external services.
  *
- * @since 1.2604.0200
+ * @since 1.6004.0200
  */
 class Phone_Home_Indicator {
 
@@ -39,7 +39,7 @@ class Phone_Home_Indicator {
 	/**
 	 * Initialize phone home indicator.
 	 *
-	 * @since 1.2604.0200
+	 * @since 1.6004.0200
 	 * @return void
 	 */
 	public static function init() {
@@ -53,7 +53,7 @@ class Phone_Home_Indicator {
 	/**
 	 * Track outbound HTTP requests.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  false|array|WP_Error $preempt Response to short-circuit with.
 	 * @param  array                $args Request arguments.
 	 * @param  string               $url Request URL.
@@ -121,7 +121,7 @@ class Phone_Home_Indicator {
 	/**
 	 * Determine the purpose of an outbound request.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  string $url Request URL.
 	 * @param  array  $args Request arguments.
 	 * @return string Purpose description.
@@ -160,7 +160,7 @@ class Phone_Home_Indicator {
 	/**
 	 * Show phone home indicator notice.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	public static function show_indicator() {
@@ -217,7 +217,7 @@ class Phone_Home_Indicator {
 	/**
 	 * Enqueue indicator assets.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -260,7 +260,7 @@ class Phone_Home_Indicator {
 	/**
 	 * AJAX handler to get recent connections.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_get_connections() {
@@ -291,7 +291,7 @@ class Phone_Home_Indicator {
 	 *
 	 * Public method for other components to check phone-home status.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  int $minutes Time window in minutes. Default 5.
 	 * @return bool True if connections were made.
 	 */
@@ -315,7 +315,7 @@ class Phone_Home_Indicator {
 	/**
 	 * Get recent connections for display.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  int $limit Number of connections to return. Default 10.
 	 * @return array Recent connections.
 	 */

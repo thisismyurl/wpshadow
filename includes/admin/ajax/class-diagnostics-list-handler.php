@@ -2,7 +2,7 @@
 /**
  * AJAX: List Diagnostics (paged, filtered)
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Admin
  */
 
@@ -24,7 +24,7 @@ class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 * @return void
 	 */
 	public static function handle() {

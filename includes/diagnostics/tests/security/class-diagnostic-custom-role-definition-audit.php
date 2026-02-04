@@ -49,6 +49,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -214,7 +215,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -226,13 +227,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'details'      => array(
+				'kb_link'      => 'https://wpshadow.com/kb/custom-role-security',
+				'context'      => array(
 					'issues'       => $issues,
 					'risky_roles'  => $risky_roles,
 					'total_custom' => count( $custom_roles ),
-					'recommendation' => __( 'Review custom roles and remove dangerous capabilities. Delete orphaned roles with no users.', 'wpshadow' ),
+					'why'          => __(
+						'Misconfigured custom roles are a prime privilege escalation vector. According to OWASP, 75% of WordPress ' .
+						'compromises exploit incorrect capability assignments. Common scenarios: plugins defining roles with manage_options ' .
+						'by accident, copy-paste errors granting admin capabilities to contributor roles, typos creating unintended capabilities. ' .
+						'An attacker with low-privilege account (subscriber, contributor) can elevate to admin if a custom role has ' .
+						'manage_options due to a bug. This happens silently - no code execution needed, no alert triggered. Insider threats ' .
+						'are even more dangerous: employee with author role exploits configuration bug to gain admin access.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'Review all custom roles and remove dangerous capabilities (manage_options, unfiltered_html, edit_users). ' .
+						'Never grant manage_options to non-admin roles. Delete orphaned roles with no users. Document why each custom role exists ' .
+						'and what capabilities it needs. Implement the principle of least privilege: grant only the minimum capabilities needed. ' .
+						'Periodically audit which users have which roles. Use role testing: log in as each role and verify they can\'t access ' .
+						'what they shouldn\'t (admin panel, settings, etc.). Consider consolidating roles to reduce complexity.',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'access-control',
+				'role-security-guide'
+			);
+
+			return $finding;
 		}
 
 		return null;

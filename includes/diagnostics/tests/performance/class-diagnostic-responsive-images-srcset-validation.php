@@ -5,7 +5,7 @@
  * Verifies that images use srcset attribute with multiple resolutions to ensure
  * optimal image delivery across different screen sizes and devices.
  *
- * @since   1.26033.2096
+ * @since   1.6033.2096
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Sizes attribute presence
  * - Picture element usage
  *
- * @since 1.26033.2096
+ * @since 1.6033.2096
  */
 class Diagnostic_Responsive_Images_Srcset_Validation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Responsive_Images_Srcset_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2096
+	 * @since  1.6033.2096
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

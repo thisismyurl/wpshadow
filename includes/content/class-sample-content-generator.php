@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.26034.1300
+ * @since      1.6034.1300
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates sample posts for each Custom Post Type with realistic data.
  *
- * @since 1.26034.1300
+ * @since 1.6034.1300
  */
 class Sample_Content_Generator {
 
 	/**
 	 * Initialize the generator.
 	 *
-	 * @since 1.26034.1300
+	 * @since 1.6034.1300
 	 * @return void
 	 */
 	public static function init() {
@@ -39,7 +39,7 @@ class Sample_Content_Generator {
 	/**
 	 * Handle AJAX request to generate sample content.
 	 *
-	 * @since 1.26034.1300
+	 * @since 1.6034.1300
 	 * @return void
 	 */
 	public static function handle_ajax() {
@@ -76,7 +76,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate sample content for a post type.
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  string $post_type Post type to generate.
 	 * @param  int    $count     Number of items to generate.
 	 * @return int|\WP_Error Number of items generated or error.
@@ -113,7 +113,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate sample testimonials.
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  int $count Number to generate.
 	 * @return int Number generated.
 	 */
@@ -169,7 +169,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate sample team members.
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  int $count Number to generate.
 	 * @return int Number generated.
 	 */
@@ -211,7 +211,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate sample portfolio items.
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  int $count Number to generate.
 	 * @return int Number generated.
 	 */
@@ -251,7 +251,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate sample events.
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  int $count Number to generate.
 	 * @return int Number generated.
 	 */
@@ -300,7 +300,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate sample resources.
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  int $count Number to generate.
 	 * @return int Number generated.
 	 */
@@ -340,7 +340,7 @@ class Sample_Content_Generator {
 	/**
 	 * Generate remaining CPT types (truncated for space).
 	 *
-	 * @since  1.26034.1300
+	 * @since  1.6034.1300
 	 * @param  int $count Number to generate.
 	 * @return int Number generated.
 	 */

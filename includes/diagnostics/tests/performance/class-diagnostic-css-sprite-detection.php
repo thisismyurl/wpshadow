@@ -4,7 +4,7 @@
  *
  * Detects CSS sprite usage opportunities for icon optimization.
  *
- * @since   1.26033.2125
+ * @since   1.6033.2125
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies opportunities to use CSS sprites or SVG sprites for icons.
  *
- * @since 1.26033.2125
+ * @since 1.6033.2125
  */
 class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2125
+	 * @since  1.6033.2125
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

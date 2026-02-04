@@ -18,7 +18,7 @@
  * Video: Implementing rate limiting (9min): https://wpshadow.com/training/rate-limiting\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Blog with no rate limiting. Attacker starts password attack. Tries 10 passwords\n * per second (HTTP/2 concurrent requests). After 100 seconds: 1,000 attempts.\n * Admin password guessed within 1 hour. Attacker posts malware links. Site\n * blacklisted. With rate limiting (5 attempts/minute): 5th attempt triggers\n * lockout. Attack blocked immediately.\n *
  * **Implementation Notes:**
  * - Checks for rate limiting on /wp-login.php\n * - Validates limit thresholds\n * - Tests lockout mechanism\n * - Severity: critical (no limits), high (too generous)\n * - Treatment: implement rate limiting (5 failures = 15 min lockout)\n *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_Login_Page_Rate_Limiting extends Diagnostic_Base {
 
@@ -76,7 +77,7 @@ class Diagnostic_Login_Page_Rate_Limiting extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +141,7 @@ class Diagnostic_Login_Page_Rate_Limiting extends Diagnostic_Base {
 			$issues[] = __( 'No login page rate limiting protection detected', 'wpshadow' );
 			$issues[] = __( 'Site is vulnerable to brute force attacks on login page', 'wpshadow' );
 
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'Login page lacks rate limiting protection', 'wpshadow' ),
@@ -156,7 +157,35 @@ class Diagnostic_Login_Page_Rate_Limiting extends Diagnostic_Base {
 						__( 'Enable server-level rate limiting (ModSecurity, Cloudflare)', 'wpshadow' ),
 					),
 				),
+				'context'      => array(
+					'why'            => __(
+						'Rate limiting turns brute force from a minutes-long attack into a multi-day or multi-year effort. Without limits, attackers can attempt thousands of passwords per minute and eventually guess weak or reused credentials. Credential stuffing attacks reuse breached credentials across sites and succeed at scale when no throttling exists. OWASP Top 10 2023 flags authentication failures as a critical risk, and PCI-DSS requires controls against automated login attacks. Excessive login attempts can also cause performance degradation, turning brute force into a denial-of-service risk.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Install rate limiting: Use "Limit Login Attempts Reloaded" or Wordfence. Target 5-10 attempts per 10 minutes per IP.
+2. Apply per-username and per-IP limits: Block attempts even if attacker rotates IPs or usernames.
+3. Set lockout duration: 30 minutes for first lockout, 24 hours for repeat attempts.
+4. Enable CAPTCHA after failures: Add CAPTCHA after 3 failed attempts.
+5. Add login alerts: Email admin after X failed attempts to detect attacks early.
+6. Enforce 2FA for admins: Even if brute force succeeds, 2FA blocks access.
+7. Limit password reset requests: Cap reset requests to 3 per hour per email.
+8. Track failures in logs: Keep IP, username, time, user-agent for incident response.
+9. Use server-level protections: Enable ModSecurity or Cloudflare WAF rules for /wp-login.php.
+10. Test with safe tooling: Simulate login failures to confirm lockouts trigger correctly.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'brute-force-protection',
+				'login_rate_limiting'
+			);
+
+			return $finding;
 		}
 
 		// If protection found, check configuration
@@ -185,7 +214,7 @@ class Diagnostic_Login_Page_Rate_Limiting extends Diagnostic_Base {
 
 		// Report if issues found despite protection
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'Login rate limiting has configuration issues', 'wpshadow' ),
@@ -197,7 +226,35 @@ class Diagnostic_Login_Page_Rate_Limiting extends Diagnostic_Base {
 					'active_protections' => $protections,
 					'issues'             => $issues,
 				),
+				'context'      => array(
+					'why'            => __(
+						'Rate limiting only works if configured correctly. If lockout duration is too short, bots resume immediately. If lockout duration is too long, legitimate users risk being locked out (denial-of-service). If limits apply only per IP, attackers can rotate IPs. If limits apply only per username, attackers can brute force different usernames. Correct configuration is required to balance security and usability.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Review plugin settings: Ensure rate limiting is enabled and applied to /wp-login.php and /wp-admin.
+2. Set lockout duration: 30 minutes for first lockout, 24 hours for repeat.
+3. Use both IP and username limits to prevent IP rotation attacks.
+4. Enable "notify on lockout": Admin should receive email on brute force attempts.
+5. Verify CAPTCHA threshold: Enable after 3-5 failed attempts.
+6. Whitelist trusted IPs cautiously to avoid bypassing protections.
+7. Test login failures: Simulate 6 failed attempts to confirm lockout occurs.
+8. Monitor logs: Look for high volume attempts despite protection (indicates misconfiguration).
+9. Update security plugins regularly: Ensure fixes for bypasses are applied.
+10. Add 2FA for admins to provide layered protection.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'brute-force-protection',
+				'login_rate_limiting_config'
+			);
+
+			return $finding;
 		}
 
 		return null;

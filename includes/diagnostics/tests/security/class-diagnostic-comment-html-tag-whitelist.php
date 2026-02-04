@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26031.1300
+ * @since      1.6031.1300
  */
 
 declare(strict_types=1);
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site with old custom theme. Theme developer added <script> to $allowedtags\n * \"so comments could have embedded videos.\" 18 months later: attacker discovers this,\n * posts comment with JavaScript that steals admin session cookies. Within 2 hours: site\n * compromised, malware installed. Root cause: overly permissive comment HTML filter.\n *
  * **Implementation Notes:**
  * - Uses global $allowedtags (built-in WordPress variable)\n * - Checks both old $allowedtags and wp_kses_allowed_html filters\n * - Returns severity: critical (dangerous tag allowed), high (event handlers present)\n * - Non-fixable diagnostic (requires theme/plugin fix to correct whitelist)\n *
- * @since 1.26031.1300
+ * @since 1.6031.1300
  */\nclass Diagnostic_Comment_HTML_Tag_Whitelist extends Diagnostic_Base {
 
 	protected static $slug = 'comment-html-tag-whitelist';
@@ -52,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26031.1300
+	 * @since  1.6031.1300
 	 * @return array|null
 	 */
 	public static function check() {

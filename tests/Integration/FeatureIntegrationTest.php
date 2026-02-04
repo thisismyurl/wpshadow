@@ -5,7 +5,7 @@
  * Tests the interaction between different components.
  *
  * @package WPShadow\Tests\Integration
- * @since   1.2601.2148
+ * @since   1.6030.2148
  */
 
 declare(strict_types=1);

@@ -12,7 +12,7 @@
  * - Commandment #1 (Helpful Neighbor) - Listen to user feedback
  * - Commandment #10 (Beyond Pure) - Privacy first, consent required
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Admin\Ajax
  */
 
@@ -35,7 +35,7 @@ class Submit_Exit_Interview_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hook
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return void
 	 */
 	public static function register(): void {
@@ -45,7 +45,7 @@ class Submit_Exit_Interview_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {

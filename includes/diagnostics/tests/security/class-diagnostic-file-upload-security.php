@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -184,15 +185,19 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'File upload functionality has security vulnerabilities that could allow unauthorized file uploads or execution', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-upload-security',
-				'details'      => array(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'File upload functionality has security vulnerabilities that could allow unauthorized file uploads or execution', 'wpshadow' ),
+				'severity'      => 'high',
+				'threat_level'  => 75,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/file-upload-security',
+				'context'       => array(
+					'why'            => __( 'Unprotected uploads = RCE. Real scenario: Upload dir allows PHP. Attacker uploads shell.php. Visits /wp-content/uploads/shell.php. PHP executes. Full site compromise. Cost: $4.29M. With protection: PHP blocked by .htaccess. Upload rejected. Shell never executes. Attack stopped.', 'wpshadow' ),
+					'recommendation' => __( '1. Add .htaccess to disable PHP: "php_flag engine off". 2. Whitelist extensions: JPG, PNG, PDF only. 3. Validate MIME type before saving. 4. Store uploads outside web root if possible. 5. Generate random filenames (prevent guessing). 6. Limit upload size: 5-10MB typical. 7. Scan with malware detector (ClamAV). 8. Protect with nonce on forms. 9. Log upload attempts. 10. Test: Upload shell.php (should fail).', 'wpshadow' ),
+				),
+				'details'       => array(
 					'uploads_path'             => $uploads_path,
 					'has_htaccess_protection'  => $has_htaccess,
 					'has_webconfig_protection' => $has_webconfig,
@@ -208,23 +213,10 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 					'nonce_protection'         => $nonce_protection,
 					'mime_types_in_use'        => $mime_types_used,
 					'issues_detected'          => $issues,
-					'recommendation'           => __( 'Protect uploads with .htaccess, restrict file types, install malware scanner', 'wpshadow' ),
-					'security_measures'        => array(
-						'MIME type validation'    => 'Whitelist allowed file types',
-						'File size limits'        => 'Set reasonable maximum file size',
-						'Directory protection'    => 'Prevent directory listing with .htaccess',
-						'Disable PHP execution'   => 'Prevent PHP execution in uploads directory',
-						'Malware scanning'        => 'Scan uploaded files for threats',
-						'Nonce verification'      => 'Verify upload request is authorized',
-						'Access logging'          => 'Log all file uploads',
-					),
-					'htaccess_rules'           => array(
-						'SetHandler application/x-httpd-php-source', // Prevent PHP execution
-						'<FilesMatch "\\.php">', // Block PHP files
-						'deny from all',
-					),
 				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-upload', 'comprehensive-security' );
+			return $finding;
 		}
 
 		return null;

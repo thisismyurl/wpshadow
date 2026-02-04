@@ -42,7 +42,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -50,6 +50,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (PHP allowed), high (dangerous types)
  * - Treatment: remove dangerous types from allowed list
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Upload_File_Type_Restrictions extends Diagnostic_Base {
 
@@ -121,7 +122,7 @@ class Diagnostic_Upload_File_Type_Restrictions extends Diagnostic_Base {
 	 * Validates MIME type configuration and checks for security risks
 	 * or overly restrictive settings.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if file type issues found, null otherwise.
 	 */
 	public static function check() {
@@ -290,14 +291,18 @@ class Diagnostic_Upload_File_Type_Restrictions extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'          => self::$slug,
-			'title'       => self::$title,
-			'description' => implode( '. ', $issues ),
-			'severity'    => 'medium',
-			'threat_level' => 60,
-			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/upload-file-type-restrictions',
-			'details'     => $details,
+			'id'            => self::$slug,
+			'title'         => self::$title,
+			'description'   => implode( '. ', $issues ),
+			'severity'      => 'medium',
+			'threat_level'  => 60,
+			'auto_fixable'  => false,
+			'kb_link'       => 'https://wpshadow.com/kb/upload-file-type-restrictions',
+			'context'       => array(
+				'why'            => __( 'No file type whitelist = attacker uploads PHP. Real scenario: Contributor uploads photo.php. ALLOW_UNFILTERED_UPLOADS enabled. PHP executes. Attacker has shell. Cost: $4.29M breach. With whitelist: Only JPG, PNG allowed. PHP rejected. Attack stopped.', 'wpshadow' ),
+				'recommendation' => __( '1. Disable ALLOW_UNFILTERED_UPLOADS. 2. Whitelist extensions: JPG, PNG, GIF, PDF, DOCX. 3. Block: PHP, EXE, BAT, SH, COM, VBS, ASP. 4. Check MIME type (not extension). 5. Validate file signature (magic bytes). 6. Check wp_check_filetype_and_ext filter. 7. Verify SVG sanitization. 8. Scan for executable types. 9. Multisite: set network restrictions. 10. Test: Upload shell.php (should fail).', 'wpshadow' ),
+			),
+			'details'       => $details,
 		);
 	}
 }

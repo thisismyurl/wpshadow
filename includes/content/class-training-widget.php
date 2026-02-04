@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.2604.0100
+ * @since      1.6004.0100
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides training recommendations and progress tracking.
  *
- * @since 1.2604.0100
+ * @since 1.6004.0100
  */
 class Training_Widget {
 
 	/**
 	 * Initialize widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function init() {
@@ -43,7 +43,7 @@ class Training_Widget {
 	/**
 	 * Enqueue widget assets
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function enqueue_assets() {
@@ -54,7 +54,7 @@ class Training_Widget {
 	/**
 	 * Render training widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  array $args Widget configuration.
 	 * @return void
 	 */
@@ -108,7 +108,7 @@ class Training_Widget {
 	/**
 	 * Render card-style widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  array $args Widget arguments.
 	 * @return void
 	 */
@@ -177,7 +177,7 @@ class Training_Widget {
 	/**
 	 * Render sidebar-style widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  array $args Widget arguments.
 	 * @return void
 	 */
@@ -206,7 +206,7 @@ class Training_Widget {
 	/**
 	 * Render inline-style widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  array $args Widget arguments.
 	 * @return void
 	 */
@@ -235,7 +235,7 @@ class Training_Widget {
 	/**
 	 * Get recommended courses based on context
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  string $context Context identifier.
 	 * @return array Array of course data.
 	 */
@@ -264,7 +264,7 @@ class Training_Widget {
 		/**
 		 * Filter recommended courses
 		 *
-		 * @since 1.2604.0100
+		 * @since 1.6004.0100
 		 *
 		 * @param array  $courses Recommended courses.
 		 * @param string $context Context identifier.
@@ -275,7 +275,7 @@ class Training_Widget {
 	/**
 	 * Get full course catalog
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return array Course catalog indexed by slug.
 	 */
 	private static function get_course_catalog(): array {
@@ -346,7 +346,7 @@ class Training_Widget {
 	/**
 	 * Get widget styles
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return string CSS styles.
 	 */
 	private static function get_widget_styles(): string {
@@ -467,7 +467,7 @@ class Training_Widget {
 	/**
 	 * Get widget scripts
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return string JavaScript code.
 	 */
 	private static function get_widget_scripts(): string {
@@ -504,7 +504,7 @@ class Training_Widget {
 	/**
 	 * Handle AJAX dismiss widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function ajax_dismiss_widget() {
@@ -521,7 +521,7 @@ class Training_Widget {
 	/**
 	 * Handle AJAX track training click
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function ajax_track_click() {

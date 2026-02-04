@@ -5,7 +5,7 @@
  * Monitors sidebar implementation for performance issues including
  * unnecessary rendering and complex queries.
  *
- * @since   1.26033.2086
+ * @since   1.6033.2086
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Sidebar on single posts vs archives
  * - Sidebar conditional loading
  *
- * @since 1.26033.2086
+ * @since 1.6033.2086
  */
 class Diagnostic_Sidebar_Performance extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Sidebar_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2086
+	 * @since  1.6033.2086
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

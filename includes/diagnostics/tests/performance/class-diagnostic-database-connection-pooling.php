@@ -4,7 +4,7 @@
  *
  * Analyzes database connection management and pooling opportunities.
  *
- * @since   1.26033.2130
+ * @since   1.6033.2130
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates database connection handling and persistent connections.
  *
- * @since 1.26033.2130
+ * @since 1.6033.2130
  */
 class Diagnostic_Database_Connection_Pooling extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Database_Connection_Pooling extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2130
+	 * @since  1.6033.2130
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

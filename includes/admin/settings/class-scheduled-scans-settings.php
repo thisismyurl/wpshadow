@@ -4,7 +4,7 @@
  *
  * Admin page for configuring automated scan scheduling
  *
- * @since   1.26032.1021
+ * @since   1.6032.1021
  * @package WPShadow\Admin
  */
 
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Renders the scheduled scans settings page
  *
- * @since 1.26032.1021
+ * @since 1.6032.1021
  */
 class Scheduled_Scans_Settings {
 
 	/**
 	 * Initialize settings page
 	 *
-	 * @since 1.26032.1021
+	 * @since 1.6032.1021
 	 * @return void
 	 */
 	public static function init() {
@@ -38,7 +38,7 @@ class Scheduled_Scans_Settings {
 	/**
 	 * Render scheduled scans settings form
 	 *
-	 * @since 1.26032.1021
+	 * @since 1.6032.1021
 	 * @return void
 	 */
 	public static function render_form() {

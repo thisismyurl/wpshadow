@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies database user has only necessary permissions for WordPress operation.
  * Flags dangerous permissions like SUPER, FILE, PROCESS, SHUTDOWN, etc.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 
@@ -99,7 +100,7 @@ class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 	 * Analyzes database user permissions using SHOW GRANTS and compares
 	 * against WordPress requirements and security best practices.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if permission issues found, null otherwise.
 	 */
 	public static function check() {
@@ -245,7 +246,7 @@ class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 			return null;
 		}
 
-		return array(
+		$finding = array(
 			'id'          => self::$slug,
 			'title'       => self::$title,
 			'description' => implode( ' ', $issues ),
@@ -253,6 +254,29 @@ class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 			'threat_level' => 75,
 			'auto_fixable' => false,
 			'kb_link'     => 'https://wpshadow.com/kb/database-user-permissions',
+			'context'     => array(
+				'issues'                => $issues,
+				'current_user'          => DB_USER,
+				'current_host'          => $current_user_host ?? 'unknown',
+				'dangerous_permissions' => $dangerous_found,
+				'missing_permissions'  => $missing_permissions,
+				'why'                   => __(
+					'Over-privileged database users are a critical security liability. WordPress requires only: SELECT, INSERT, UPDATE, DELETE, ' .
+					'CREATE, DROP, ALTER, INDEX, CREATE TEMPORARY TABLES, LOCK TABLES. Any additional privilege is an attack surface. SUPER privilege ' .
+					'allows killing queries and changing server settings. FILE privilege enables reading system files (LOAD_FILE()) and writing webshells (INTO OUTFILE). ' .
+					'GRANT OPTION allows creating backdoor users. Wildcard database access (*.*) means if WordPress is compromised, attacker can access all databases ' .
+					'on the server (other hosted sites). Remote host access (not localhost) multiplies the risk by allowing direct database connections.',
+					'wpshadow'
+				),
+				'recommendation'        => __(
+					'Restrict database user to localhost connection only (host should be localhost or 127.0.0.1). Remove all dangerous permissions ' .
+					'(SUPER, FILE, PROCESS, GRANT OPTION). Grant only essential permissions for WordPress operation. Use command: ' .
+					'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, INDEX, CREATE TEMPORARY TABLES, LOCK TABLES ON database_name.* TO wp_user@localhost. ' .
+					'Never use wildcard database access. Create separate read-only user for backups if needed. Regularly audit user permissions. ' .
+					'Work with hosting provider to enforce least-privilege by default.',
+					'wpshadow'
+				),
+			),
 			'details'     => array(
 				'current_user'         => DB_USER,
 				'current_host'         => $current_user_host ?? 'unknown',
@@ -263,5 +287,14 @@ class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 				'raw_grants'           => array_column( $grants, 0 ),
 			),
 		);
+
+		$finding = Upgrade_Path_Helper::add_upgrade_path(
+			$finding,
+			'security',
+			'database-hardening',
+			'database-permissions-guide'
+		);
+
+		return $finding;
 	}
 }

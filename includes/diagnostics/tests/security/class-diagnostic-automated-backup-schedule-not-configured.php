@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -42,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Small SaaS company, no backup plugin installed. October 2024: ransomware attack locks\n * all databases (zero-day vulnerability). Company pays $30K ransom, gets decryption key.\n * Key corrupts data during decryption. No backup = complete data loss, customers sue. Final\n * cost: $500K+ settlements. Prevention: install automated backup plugin, 15 minutes setup,\n * $10/month cost. Actual cost prevented: $500K.\n *
  * **Implementation Notes:**
  * - Detects multiple backup solutions (plugin-agnostic)\n * - Checks for cloud backups (Amazon S3, Google Drive, etc)\n * - Returns severity: critical (no backups), high (backups not recent)\n * - Auto-fixable treatment: recommend backup plugins, provide setup guide\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */\nclass Diagnostic_Automated_Backup_Schedule_Not_Configured extends Diagnostic_Base {
 
 	/**
@@ -76,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

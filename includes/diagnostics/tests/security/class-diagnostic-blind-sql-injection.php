@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -143,7 +144,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 		if ( ! empty( $issues ) ) {
 			$total_violations = array_sum( array_map( fn( $issue ) => count( $issue['violations'] ), $issues ) );
 
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -165,19 +166,34 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 					'issues'        => $issues,
 					'files_scanned' => $files_scanned,
 					'why'           => __(
-						'Blind SQL injection allows attackers to extract your entire database one character at a time, ' .
-						'even when the application doesn\'t display errors. ' .
-						'Attackers use time-based techniques (SLEEP() function) or boolean logic to infer database contents. ' .
-						'This can lead to full database compromise, including user passwords, personal data, and admin credentials.',
+						'Blind SQL injection is highly stealthy because it does not trigger visible errors. Attackers infer data using time-based delays (SLEEP, BENCHMARK) or boolean conditions (1=1 vs 1=2), extracting the database one character at a time. This still leads to full data loss: user credentials, personal data, order history, API keys, and admin accounts. OWASP Top 10 2023 lists Injection as #03 and considers SQLi a critical risk. PCI-DSS requires protection against injection (Requirement 6.5.1). GDPR considers database exfiltration a reportable breach. A single blind SQLi can result in complete site takeover and long-term persistence because attackers can create new admin users, plant backdoors, or alter payment settings without immediate detection.',
 						'wpshadow'
 					),
 					'recommendation' => __(
-						'Always use $wpdb->prepare() for SQL queries with user input. Never concatenate variables directly into SQL strings. ' .
-						'Use parameterized queries and validate/sanitize all user input before database operations.',
+						'1. Always use $wpdb->prepare(): Never concatenate user input into SQL. Example: `$wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE post_author = %d", $author_id ) );`
+2. Validate input types: Use `absint()` for IDs, `sanitize_text_field()` for text, `sanitize_key()` for slugs, and `esc_sql()` only when absolutely required.
+3. Use parameterized queries for LIKE: `$wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE post_title LIKE %s", '%' . $wpdb->esc_like( $keyword ) . '%' );`
+4. Avoid direct `mysqli_query()` calls: Use $wpdb so WordPress can manage escaping and prepared statements.
+5. Enforce least-privilege DB user: Limit DB permissions to SELECT/INSERT/UPDATE/DELETE (no FILE, SUPER, GRANT, CREATE, DROP).
+6. Add application-level WAF rules: Use Wordfence, Cloudflare, or Sucuri to block SQLi patterns in requests.
+7. Log and monitor queries: Enable slow query logging and audit unusual delays or excessive errors.
+8. Review plugin/theme code: Search for `$wpdb->query(` without prepare and for direct use of `$_GET`, `$_POST` in SQL strings.
+9. Test with security scanners: Run WPScan or Burp Suite to detect time-based SQLi patterns.
+10. Implement code reviews: Require security review for any database access changes.',
 						'wpshadow'
 					),
 				),
 			);
+
+			// Add upgrade path for WPShadow Pro Security (when available).
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'code-analysis',
+				'sql-injection-prevention'
+			);
+
+			return $finding;
 		}
 
 		return null;

@@ -52,6 +52,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -270,7 +271,7 @@ class Diagnostic_User_Login_Notification_System extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -281,14 +282,37 @@ class Diagnostic_User_Login_Notification_System extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/login-monitoring',
 				'details'      => array(
-					'issues'               => $issues,
-					'active_security'      => $active_security,
-					'has_login_limit'      => $has_login_limit,
-					'has_2fa'              => isset( $has_2fa ) ? $has_2fa : false,
-					'recommendation'       => __( 'Install a security plugin with login monitoring, enable 2FA for admins, and configure login attempt limits.', 'wpshadow' ),
+					'issues'          => $issues,
+					'active_security' => $active_security,
+					'has_login_limit' => $has_login_limit,
+					'has_2fa'         => isset( $has_2fa ) ? $has_2fa : false,
+				),
+				'context'      => array(
+					'why'            => __(
+						'Login monitoring is the early-warning system for account compromise. Without notifications, attackers can access admin accounts for days or weeks before being detected. Alerts for failed logins, new locations, and admin logins allow rapid response (password reset, session revocation, IP blocking). Monitoring also helps detect brute force attacks and credential stuffing, which are common in automated campaigns.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Enable login monitoring in a security plugin (Wordfence, Sucuri, iThemes).
+2. Send admin alerts for failed logins and successful admin logins.
+3. Enable detection of new device/location logins.
+4. Retain login logs for at least 90 days for incident response.
+5. Combine with rate limiting and 2FA for layered protection.',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'login-monitoring',
+				'login_notifications'
+			);
+
+			return $finding;
 		}
 
 		return null;

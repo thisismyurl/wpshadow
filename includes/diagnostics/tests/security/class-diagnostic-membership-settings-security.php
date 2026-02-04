@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (admin default), high (editor default)
  * - Treatment: change default role to subscriber
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 
@@ -122,7 +123,7 @@ class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 	 *
 	 * Tests membership security configuration.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -184,7 +185,7 @@ class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 	/**
 	 * Check for registration security.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if security implemented.
 	 */
 	private static function has_registration_security() {
@@ -211,7 +212,7 @@ class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 	/**
 	 * Check for new user approval.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if approval required.
 	 */
 	private static function has_new_user_approval() {
@@ -239,7 +240,7 @@ class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 	/**
 	 * Check for email verification.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if verification enforced.
 	 */
 	private static function enforces_email_verification() {
@@ -266,7 +267,7 @@ class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 	/**
 	 * Check for spam protection.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if protection implemented.
 	 */
 	private static function has_spam_protection() {
@@ -294,7 +295,7 @@ class Diagnostic_Membership_Settings_Security extends Diagnostic_Base {
 	/**
 	 * Check for password requirements.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if requirements set.
 	 */
 	private static function has_strong_password_requirements() {

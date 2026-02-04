@@ -6,13 +6,14 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1600
+ * @since      1.602.1600
  */
 
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates font-display strategy and preload hints for optimal
  * web font loading on mobile.
  *
- * @since 1.2602.1600
+ * @since 1.602.1600
  */
 class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 
@@ -60,7 +61,7 @@ class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +98,7 @@ class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 	/**
 	 * Find font performance issues.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array Issues found.
 	 */
 	private static function find_font_issues(): array {
@@ -162,22 +163,15 @@ class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {
-		$response = wp_remote_get(
-			home_url( '/' ),
+		return Diagnostic_HTML_Helper::fetch_homepage_html(
 			array(
 				'timeout'   => 5,
 				'sslverify' => false,
 			)
 		);
-
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-
-		return wp_remote_retrieve_body( $response );
 	}
 }

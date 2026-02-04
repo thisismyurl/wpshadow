@@ -5,7 +5,7 @@
  * Checks if JPEG images are encoded as progressive JPEGs for better perceived
  * performance and faster initial display.
  *
- * @since   1.26033.2100
+ * @since   1.6033.2100
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Plugin configuration
  * - Encoding settings
  *
- * @since 1.26033.2100
+ * @since 1.6033.2100
  */
 class Diagnostic_Progressive_Jpeg_Encoding extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Progressive_Jpeg_Encoding extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2100
+	 * @since  1.6033.2100
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

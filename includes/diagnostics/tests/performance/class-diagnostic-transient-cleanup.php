@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2066
+ * @since      1.6033.2066
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects excessive expired transients. Old transients bloat
  * the options table and slow queries.
  *
- * @since 1.26033.2066
+ * @since 1.6033.2066
  */
 class Diagnostic_Transient_Cleanup extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Transient_Cleanup extends Diagnostic_Base {
 	 * Counts expired transients in options table.
 	 * Threshold: >500 expired transients
 	 *
-	 * @since  1.26033.2066
+	 * @since  1.6033.2066
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

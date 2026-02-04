@@ -4,7 +4,7 @@
  *
  * Validates proper Open Graph implementation for social media content preview.
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Diagnostics
  */
 
@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if Open Graph meta tags are properly implemented for social media sharing.
  * These tags control how content appears when shared on Facebook, LinkedIn, and other platforms.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 
@@ -59,7 +60,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,9 +71,9 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 		$has_social_plugin = self::has_social_plugin();
 
 		// Get home page content
-		$homepage_response = wp_remote_get( home_url() );
+		$homepage_content = Diagnostic_HTML_Helper::fetch_html( home_url() );
 
-		if ( is_wp_error( $homepage_response ) ) {
+		if ( null === $homepage_content ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -87,8 +88,6 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 				),
 			);
 		}
-
-		$homepage_content = wp_remote_retrieve_body( $homepage_response );
 
 		// Pattern 1: No Open Graph tags at all
 		if ( ! preg_match( '/<meta\s+property=["\']og:title/', $homepage_content ) ) {
@@ -274,7 +273,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if SEO plugin is active.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if SEO plugin active.
 	 */
 	private static function has_seo_plugin() {
@@ -298,7 +297,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if social media plugin is active.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if social plugin active.
 	 */
 	private static function has_social_plugin() {
@@ -321,7 +320,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if site is multilingual.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return bool True if multilingual plugins detected.
 	 */
 	private static function is_multilingual_site() {

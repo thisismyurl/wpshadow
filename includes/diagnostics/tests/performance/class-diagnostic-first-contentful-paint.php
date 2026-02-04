@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2053
+ * @since      1.6033.2053
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures FCP (First Contentful Paint) timing. FCP is a Core Web Vital
  * that affects Google rankings and user experience.
  *
- * @since 1.26033.2053
+ * @since 1.6033.2053
  */
 class Diagnostic_First_Contentful_Paint extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_First_Contentful_Paint extends Diagnostic_Base {
 	 * - Needs Improvement: 1.8-3.0s
 	 * - Poor: >3.0s
 	 *
-	 * @since  1.26033.2053
+	 * @since  1.6033.2053
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

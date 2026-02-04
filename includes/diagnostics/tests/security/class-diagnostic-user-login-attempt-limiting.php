@@ -52,6 +52,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -243,7 +244,7 @@ class Diagnostic_User_Login_Attempt_Limiting extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -254,13 +255,41 @@ class Diagnostic_User_Login_Attempt_Limiting extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/login-rate-limiting',
 				'details'      => array(
 					'issues'              => $issues,
 					'active_limiting'     => $active_limiting,
 					'has_failure_tracking' => $has_failed_login_data,
-					'recommendation'      => __( 'Install "Limit Login Attempts Reloaded" plugin and configure lockout duration, maximum attempts, and admin notifications.', 'wpshadow' ),
+				),
+				'context'      => array(
+					'why'            => __(
+						'Without login rate limiting, attackers perform unlimited brute force attempts. A dictionary attack with 100,000 common passwords takes only 2-4 hours at 30 attempts/second without protection. With rate limiting (5 failures = 30-minute lockout), the same attack would require 100,000+ different IPs and take years to complete, making it economically infeasible. OWASP Top 10 2023 lists brute force as a top authentication risk (#07-Identification and Authentication Failures). NIST guidelines recommend account lockouts after 10-15 consecutive failed attempts within 5 minutes. Over 50% of web breaches involve compromised credentials, many obtained through brute force against weak protections. Wordfence data shows 86% of login attacks are automated dictionary/brute force attempts.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Install rate limiting plugin: Use "Limit Login Attempts Reloaded" (free) or Wordfence (paid). Alternate: "All In One WP Security" includes rate limiting.
+2. Configure lockout settings: Set to 5-10 failed attempts = 30-minute lockout. Increase lockout duration after repeated offenses (exponential backoff).
+3. Enable IP-based blocking: After 30 failed attempts within 24 hours, block IP address for 24 hours or longer.
+4. Configure CAPTCHA: Require CAPTCHA after 3 failed attempts to prevent automated attacks while allowing legitimate users to recover.
+5. Set up admin notifications: Email admin on each brute force attack (from IP X at time Y, Y attempts failed). Monitor patterns.
+6. Enable failed login tracking: Log all failed attempts with timestamp, IP, username, user-agent. Enables forensic analysis.
+7. Whitelist trusted IPs: If you access from static IP, whitelist it to bypass some protections. Prevents accidental lockout.
+8. Monitor login patterns: Review logs for suspicious patterns (100 attempts/hour from single IP = brute force). Investigate.
+9. Implement 2FA: Even with rate limiting, 2FA prevents compromise if password stolen. Combines protections.
+10. Use WordPress security headers: Add "X-Robots-Tag: noindex" to prevent login page indexing (reduces automated scanning).',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'brute-force-protection',
+				'limit_login_attempts'
+			);
+
+			return $finding;
 		}
 
 		return null;

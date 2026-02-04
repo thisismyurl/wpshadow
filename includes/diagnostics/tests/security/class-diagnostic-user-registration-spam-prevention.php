@@ -51,6 +51,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -273,7 +274,7 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -284,15 +285,39 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/registration-spam',
 				'details'      => array(
 					'issues'             => $issues,
 					'has_captcha'        => $has_captcha,
 					'recent_users'       => $recent_users,
 					'suspicious_emails'  => $suspicious_emails,
 					'inactive_new_users' => $inactive_new_users,
-					'recommendation'     => __( 'Install CAPTCHA plugin (reCAPTCHA), enable email verification, and monitor registration patterns for spam.', 'wpshadow' ),
+				),
+				'context'      => array(
+					'why'            => __(
+						Automated registrations enable spam, phishing, and resource abuse. Bots create fake accounts to post spam links, scrape data, or abuse member features. This can damage deliverability (email blacklisting), inflate database size, and degrade community trust. CAPTCHA and email verification reduce automated signups, while rate limiting and domain filtering block known spam sources.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Enable CAPTCHA (reCAPTCHA or hCaptcha) on registration.
+2. Add a honeypot field and time-based form validation.
+3. Require email verification before account activation.
+4. Rate-limit registration attempts per IP.
+5. Block disposable email domains.
+6. Monitor registration spikes and review suspicious users.',
+						'wpshadow'
+					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'anti-spam',
+				'registration_spam_prevention'
+			);
+
+			return $finding;
 		}
 
 		return null;

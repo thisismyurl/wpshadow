@@ -9,7 +9,7 @@
  * Capability: read
  *
  * @package WPShadow
- * @since   1.2604.0400
+ * @since   1.6004.0400
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ class Redeem_Reward_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hook
 	 *
-	 * @since 1.2604.0400
+	 * @since 1.6004.0400
 	 * @return void
 	 */
 	public static function register(): void {
@@ -41,7 +41,7 @@ class Redeem_Reward_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request
 	 *
-	 * @since 1.2604.0400
+	 * @since 1.6004.0400
 	 * @return void Dies with JSON response.
 	 */
 	public static function handle(): void {

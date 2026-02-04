@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (critical user experience metric)
  * - Treatment: comprehensive speed optimization
  *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_Page_Load_Time_Not_Optimized_Below_3_Seconds extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Page_Load_Time_Not_Optimized_Below_3_Seconds extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

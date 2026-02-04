@@ -4,7 +4,7 @@
  *
  * Detects unused CSS selectors and optimization opportunities.
  *
- * @since   1.26033.2120
+ * @since   1.6033.2120
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies unused CSS that can be removed to reduce file size.
  *
- * @since 1.26033.2120
+ * @since 1.6033.2120
  */
 class Diagnostic_Unused_CSS_Selectors extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Unused_CSS_Selectors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2120
+	 * @since  1.6033.2120
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

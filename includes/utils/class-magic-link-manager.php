@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Utils
- * @since      1.2601.2330
+ * @since      1.6030.2330
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handles magic link lifecycle events including expiration notifications
  * and permanent user creation.
  *
- * @since 1.2601.2330
+ * @since 1.6030.2330
  */
 class Magic_Link_Manager {
 
@@ -43,7 +43,7 @@ class Magic_Link_Manager {
 	/**
 	 * Initialize the manager
 	 *
-	 * @since 1.2601.2330
+	 * @since 1.6030.2330
 	 * @return void
 	 */
 	public static function init(): void {
@@ -60,7 +60,7 @@ class Magic_Link_Manager {
 	/**
 	 * Maybe schedule the cron job
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @return void
 	 */
 	public static function maybe_schedule_cron(): void {
@@ -72,7 +72,7 @@ class Magic_Link_Manager {
 	/**
 	 * Unschedule the cron job
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @return void
 	 */
 	public static function unschedule_cron(): void {
@@ -85,7 +85,7 @@ class Magic_Link_Manager {
 	/**
 	 * Check for expired magic links and send notifications
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @return void
 	 */
 	public static function check_expired_links(): void {
@@ -124,7 +124,7 @@ class Magic_Link_Manager {
 	/**
 	 * Send expiry notifications to admin
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @param  array $expired_links Array of expired links.
 	 * @return void
 	 */
@@ -170,7 +170,7 @@ class Magic_Link_Manager {
 	/**
 	 * Get email template
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @param  array $data Template data.
 	 * @return string HTML email content.
 	 */
@@ -243,7 +243,7 @@ class Magic_Link_Manager {
 	/**
 	 * Validate magic link token and return link data
 	 *
-	 * @since  1.2602.0200
+	 * @since  1.602.0200
 	 * @param  string $token Plaintext token from URL.
 	 * @return array|null Link data if valid, null otherwise.
 	 */
@@ -263,7 +263,7 @@ class Magic_Link_Manager {
 	/**
 	 * Create permanent user from expired magic link
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @param  string $token Magic link token.
 	 * @return array Result array with success status and message.
 	 */

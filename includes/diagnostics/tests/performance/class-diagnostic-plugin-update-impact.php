@@ -5,7 +5,7 @@
  * Checks for outdated plugins and their potential impact on performance
  * and security, recommending updates.
  *
- * @since   1.26033.2083
+ * @since   1.6033.2083
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Security plugin status
  * - Plugin dependency resolution
  *
- * @since 1.26033.2083
+ * @since 1.6033.2083
  */
 class Diagnostic_Plugin_Update_Impact extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Plugin_Update_Impact extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2083
+	 * @since  1.6033.2083
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

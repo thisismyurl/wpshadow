@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1600
+ * @since      1.602.1600
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors total JavaScript size and identifies unused code that
  * should be split or removed for faster mobile loading.
  *
- * @since 1.2602.1600
+ * @since 1.602.1600
  */
 class Diagnostic_Mobile_JS_Bundle_Size extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_JS_Bundle_Size extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_Mobile_JS_Bundle_Size extends Diagnostic_Base {
 	/**
 	 * Analyze JavaScript bundle size.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array Bundle information.
 	 */
 	private static function analyze_js_bundle(): array {

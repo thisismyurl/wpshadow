@@ -5,7 +5,7 @@
  * Analyzes WordPress menu implementation for performance optimization
  * including menu depth, item count, and rendering efficiency.
  *
- * @since   1.26033.2087
+ * @since   1.6033.2087
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Custom menu walkers
  * - Menu caching
  *
- * @since 1.26033.2087
+ * @since 1.6033.2087
  */
 class Diagnostic_Menu_Performance extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Menu_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2087
+	 * @since  1.6033.2087
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

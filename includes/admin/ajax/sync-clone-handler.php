@@ -2,7 +2,7 @@
 /**
  * AJAX: Sync Site Clone
  *
- * @since   1.2601.2200
+ * @since   1.6030.2200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.2601.2200
+	 * @since 1.6030.2200
 	 * @return void
 	 */
 	public static function handle() {
@@ -95,7 +95,7 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 	/**
 	 * Create Vault Light snapshot.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @return array Result array.
 	 */
 	private static function create_vault_snapshot() {
@@ -126,7 +126,7 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 	/**
 	 * Sync clone files.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  array $clone_data Clone configuration.
 	 * @return array Result array.
 	 */
@@ -160,7 +160,7 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 	/**
 	 * Sync clone database.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $clone_name Clone identifier.
 	 * @param  string $clone_url  Clone URL.
 	 * @return array Result array.

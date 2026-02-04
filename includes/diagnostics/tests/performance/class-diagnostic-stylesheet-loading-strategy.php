@@ -5,7 +5,7 @@
  * Analyzes CSS loading strategy for optimal rendering performance including
  * media query optimization and critical CSS extraction.
  *
- * @since   1.26033.2091
+ * @since   1.6033.2091
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Print stylesheets
  * - Render-blocking CSS
  *
- * @since 1.26033.2091
+ * @since 1.6033.2091
  */
 class Diagnostic_Stylesheet_Loading_Strategy extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Stylesheet_Loading_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2091
+	 * @since  1.6033.2091
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

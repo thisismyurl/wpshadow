@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -51,6 +51,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Returns severity: critical (no throttling on public endpoints), medium (high threshold)
  * - Auto-fixable treatment: enables built-in WP rate limiting or plugin
  *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_API_Throttling_Not_Configured extends Diagnostic_Base {
 
@@ -119,13 +120,13 @@ class Diagnostic_API_Throttling_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for REST API rate limiting
 		if ( ! has_filter( 'rest_authentication_errors', 'check_api_rate_limit' ) ) {
-			return array(
+			$finding = array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
 				'description'   => __( 'API throttling is not configured. Limit REST API requests to 60 per minute per IP to prevent brute force attacks and ensure fair resource usage.', 'wpshadow' ),
@@ -133,7 +134,13 @@ class Diagnostic_API_Throttling_Not_Configured extends Diagnostic_Base {
 				'threat_level'  => 55,
 				'auto_fixable'  => true,
 				'kb_link'       => 'https://wpshadow.com/kb/api-throttling-not-configured',
+				'context'       => array(
+					'why'            => __( 'Throttling = per-connection rate limit. Real scenario: Attacker creates 1,000 threads, each makes 1 request/second. Total 1,000 requests/sec. No throttling = overwhelms server. With throttling: Each connection limited to 60 requests/min. Attacker gets 1,000 total requests/hour (effective). Legitimate users (100-200/hour) unaffected. Protects against credential stuffing, API abuse, DDoS.', 'wpshadow' ),
+					'recommendation' => __( '1. Implement per-connection throttling: 60 requests/minute per IP. 2. Track requests via IP address or auth token. 3. Return HTTP 429 when throttled. 4. Include Retry-After header. 5. Use Redis for distributed throttling. 6. Whitelist internal IPs (staging, monitoring). 7. Different limits: auth=100/min, anon=60/min. 8. Lower limits on POST/DELETE: 10 requests/minute. 9. Implement gradual backoff for repeat violators. 10. Log throttled requests to security event log.', 'wpshadow' ),
+				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api-throttling', 'connection-throttling' );
+			return $finding;
 		}
 
 		return null;

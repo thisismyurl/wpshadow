@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2200
+ * @since      1.6030.2200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when servers allow outdated TLS versions (1.0, 1.1) that are
  * vulnerable to POODLE, BEAST, and other downgrade attacks.
  *
- * @since 1.2601.2200
+ * @since 1.6030.2200
  */
 class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -119,7 +119,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 	/**
 	 * Detect TLS configuration from server environment.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @return array TLS configuration details.
 	 */
 	private static function detect_tls_configuration() {

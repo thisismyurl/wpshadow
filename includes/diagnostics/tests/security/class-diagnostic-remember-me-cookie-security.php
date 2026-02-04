@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -54,6 +54,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no security flags), medium (weak expiration)
  * - Treatment: set HttpOnly + Secure + SameSite=Lax, 2-4 week expiration
  *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_Remember_Me_Cookie_Security extends Diagnostic_Base {
 
@@ -121,7 +122,7 @@ class Diagnostic_Remember_Me_Cookie_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -222,7 +223,7 @@ class Diagnostic_Remember_Me_Cookie_Security extends Diagnostic_Base {
 
 		// Report findings
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'Remember Me cookie has security issues', 'wpshadow' ),
@@ -236,7 +237,31 @@ class Diagnostic_Remember_Me_Cookie_Security extends Diagnostic_Base {
 					'timeout_seconds' => $remember_me_timeout,
 					'timeout_days'    => (int) ( $remember_me_timeout / DAY_IN_SECONDS ),
 				),
+				'context'      => array(
+					'why'            => __(
+						'Persistent login cookies extend the window of opportunity for attackers. If a remember-me cookie is stolen (via malware, XSS, or unencrypted HTTP), the attacker can log in without the password and may retain access even after a password change. Long-lived cookies and missing Secure/HttpOnly/SameSite flags amplify this risk. This is especially dangerous for administrators or users with elevated privileges.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Reduce remember-me cookie lifetime to 14 days or less.
+2. Enforce Secure and HttpOnly flags for all auth cookies.
+3. Set SameSite=Lax or Strict to prevent cross-site cookie usage.
+4. Rotate persistent tokens on each login and invalidate on password change.
+5. Require 2FA for admin accounts to reduce impact if a cookie is stolen.
+6. Monitor active sessions and allow users to revoke sessions.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'session-hardening',
+				'remember_me_cookie_security'
+			);
+
+			return $finding;
 		}
 
 		return null;

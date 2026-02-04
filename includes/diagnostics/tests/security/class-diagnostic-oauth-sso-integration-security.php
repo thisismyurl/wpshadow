@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (exposed secrets), high (weak token handling)
  * - Treatment: use secure token storage + encryption
  *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
 
@@ -121,7 +122,7 @@ class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

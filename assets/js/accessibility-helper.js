@@ -12,7 +12,7 @@
  * - Screen reader and keyboard accessible
  *
  * @package WPShadow
- * @since   1.2601.2148
+ * @since   1.6030.2148
  */
 
 (function() {

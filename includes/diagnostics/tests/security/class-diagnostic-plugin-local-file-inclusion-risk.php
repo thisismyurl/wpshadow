@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -188,23 +189,29 @@ class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $lfi_concerns ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => sprintf(
 					/* translators: %d: count, %s: details */
 					__( '%d local file inclusion risks detected: %s', 'wpshadow' ),
 					count( $lfi_concerns ),
 					implode( ' | ', array_slice( $lfi_concerns, 0, 2 ) )
 				),
-				'severity'     => 'critical',
-				'threat_level' => 90,
-				'auto_fixable' => false,
-				'details'      => array(
+				'severity'      => 'critical',
+				'threat_level'  => 90,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/lfi-prevention',
+				'context'       => array(
+					'why'            => __( 'LFI = read any file on server. Real scenario: Plugin includes file based on GET parameter: include($_GET[\'file\']). Attacker passes: /etc/passwd%00. Server reads /etc/passwd. Password hashes exposed. Cost: Identity theft. With sanitization: Path validated against whitelist. Attack blocked.', 'wpshadow' ),
+					'recommendation' => __( '1. Never use user input in include/require directly. 2. Validate filenames against whitelist. 3. Use realpath() to prevent ../ traversal. 4. Check result is within expected directory. 5. Disable stream wrappers: allow_url_include=off. 6. Use constant paths: include PLUGIN_DIR . \'/templates/\' . $template. 7. Remove null byte: str_replace(chr(0), \'\', $input). 8. Test: Try ../../../etc/passwd (should fail). 9. Scan plugins for $_ in include. 10. Disable file editing in wp-config.', 'wpshadow' ),
+				),
+				'details'       => array(
 					'lfi_concerns' => $lfi_concerns,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/lfi-prevention',
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'lfi-prevention', 'local-file-inclusion' );
+			return $finding;
 		}
 
 		return null;

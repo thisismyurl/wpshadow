@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -56,6 +56,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Returns severity: critical (over-privileged), warning (wildcard scope)
  * - Non-fixable diagnostic (requires host support to reconfigure database)
  *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_Database_User_Privileges_Not_Minimized extends Diagnostic_Base {
 
@@ -127,13 +128,13 @@ class Diagnostic_Database_User_Privileges_Not_Minimized extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check if database privilege audit exists
 		if ( ! get_option( 'db_privilege_audit_date' ) ) {
-			return array(
+			$finding = array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
 				'description'   => __( 'Database user privileges are not minimized. Grant only SELECT, INSERT, UPDATE, DELETE privileges - avoid GRANT or CREATE privileges for WordPress database users.', 'wpshadow' ),
@@ -141,7 +142,32 @@ class Diagnostic_Database_User_Privileges_Not_Minimized extends Diagnostic_Base 
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
 				'kb_link'       => 'https://wpshadow.com/kb/database-user-privileges-not-minimized',
+				'context'       => array(
+					'why'            => __(
+						'Over-privileged database users enable lateral movement attacks. If WordPress is compromised via SQL injection, ' .
+						'an attacker with ALL PRIVILEGES can: read other databases (LOAD_FILE), write files (INTO OUTFILE), execute system commands (SUPER), ' .
+						'and create backdoor users (GRANT). On shared hosting with 50 sites, one compromise = all sites compromised. Recovery time: 2-3 days. ' .
+						'Principle of least privilege requires WordPress database user have ONLY: SELECT, INSERT, UPDATE, DELETE on its own database. ' .
+						'Any additional privilege is an unnecessary attack surface.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'Contact hosting provider to reconfigure database user with minimal privileges: SELECT, INSERT, UPDATE, DELETE on ' .
+						'WordPress database only. Verify no GRANT, CREATE, DROP, FILE, PROCESS, SUPER privileges. Test by attempting to CREATE TABLE ' .
+						'(should fail). Implement separate read-only user for backups if supported. Monitor for unauthorized privilege grants.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'database-hardening',
+				'database-privilege-guide'
+			);
+
+			return $finding;
 		}
 
 		return null;

@@ -4,7 +4,7 @@
  * Dynamically loads WPShadow dashboard widgets via AJAX after page render.
  * Improves initial dashboard load time by deferring widget rendering.
  *
- * @since 1.2602.0100
+ * @since 1.602.0100
  */
 
 (function( $ ) {
@@ -21,7 +21,7 @@
 		/**
 		 * Initialize lazy widget loading
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 */
 		init: function() {
 			// Wait for page to render, then start loading widgets
@@ -35,7 +35,7 @@
 		/**
 		 * Setup lazy loading
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 */
 		setup: function() {
 			// Add placeholders for all widgets
@@ -50,7 +50,7 @@
 		/**
 		 * Add placeholder for widget
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 * @param {Object} widget Widget configuration
 		 */
 		addPlaceholder: function( widget ) {
@@ -78,7 +78,7 @@
 		/**
 		 * Start loading widgets in priority order
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 */
 		startLoadingWidgets: function() {
 			// Sort by priority
@@ -93,7 +93,7 @@
 		/**
 		 * Load next widget in queue
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 */
 		loadNextWidget: function() {
 			if ( this.queue.length === 0 ) {
@@ -108,7 +108,7 @@
 		/**
 		 * Load individual widget via AJAX
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 * @param {Object} widget Widget configuration
 		 */
 		loadWidget: function( widget ) {
@@ -139,7 +139,7 @@
 		/**
 		 * Render widget HTML
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 * @param {string} widgetId Widget ID
 		 * @param {string} html Widget HTML
 		 * @param {boolean} cached Whether from cache
@@ -168,7 +168,7 @@
 		/**
 		 * Called when all widgets finished loading
 		 *
-		 * @since 1.2602.0100
+		 * @since 1.602.0100
 		 */
 		onAllWidgetsLoaded: function() {
 			// Trigger event

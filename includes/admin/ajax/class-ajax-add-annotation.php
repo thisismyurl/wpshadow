@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.2603.0200
+ * @since      1.603.0200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * AJAX_Add_Annotation Class
  *
- * @since 1.2603.0200
+ * @since 1.603.0200
  */
 class AJAX_Add_Annotation extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request
 	 *
-	 * @since  1.2603.0200
+	 * @since  1.603.0200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {

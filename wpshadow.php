@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.26033.0900
+ * Version: 1.6033.0900
  * Author: thisismyurl
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.26033.0900' );
+define( 'WPSHADOW_VERSION', '1.6033.0902' );
 define( 'WPSHADOW_FILE', __FILE__ );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
@@ -73,24 +73,23 @@ require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-backup-schedule
 \WPShadow\Core\Error_Handler::init();
 
 /**
- * Load translations as early as possible after plugins load.
+ * Load translations and register settings on init.
  *
- * Prevents just-in-time translation loading warnings.
- */
-add_action(
-	'plugins_loaded',
-	function () {
-		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
-	},
-	0
-);
-
-/**
- * Register settings on init.
+ * WordPress 6.7.0+ requires translations to be loaded on init or later.
  */
 add_action(
 	'init',
 	function () {
+		// Load translations first (priority 1)
+		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
+	},
+	1
+);
+
+add_action(
+	'init',
+	function () {
+		// Register settings after translations (priority 5)
 		\WPShadow\Core\Settings_Registry::register();
 	},
 	5
@@ -174,26 +173,34 @@ require_once WPSHADOW_PATH . 'includes/blocks/class-alert-notice-block.php';
 require_once WPSHADOW_PATH . 'includes/blocks/class-progress-bar-block.php';
 \WPShadow\Blocks\Block_Registry::init();
 
-// Load Magic Link Manager (for expiry notifications)
+// Load classes that will be initialized on init hook
 require_once WPSHADOW_PATH . 'includes/utils/class-magic-link-manager.php';
-\WPShadow\Utils\Magic_Link_Manager::init();
-
-// Load auto-deploy feature (only active if WPSHADOW_AUTO_DEPLOY is true)
 require_once WPSHADOW_PATH . 'includes/admin/class-auto-deploy.php';
-\WPShadow\Admin\Auto_Deploy::init();
-
-// Load Guardian inactive notice
 require_once WPSHADOW_PATH . 'includes/admin/class-guardian-inactive-notice.php';
-\WPShadow\Admin\Guardian_Inactive_Notice::init();
-
-// Load Health History Analytics
 require_once WPSHADOW_PATH . 'includes/analytics/class-health-history.php';
 require_once WPSHADOW_PATH . 'includes/admin/class-health-history-page.php';
 require_once WPSHADOW_PATH . 'includes/admin/class-health-history-widget.php';
 require_once WPSHADOW_PATH . 'includes/admin/ajax/class-ajax-get-health-history.php';
-\WPShadow\Analytics\Health_History::init();
-\WPShadow\Admin\Health_History_Page::init();
-\WPShadow\Admin\Health_History_Widget::init();
+
+/**
+ * Initialize auxiliary features on init hook (after translations are loaded).
+ *
+ * These systems may use translation functions, so they must initialize
+ * after the textdomain is loaded.
+ */
+add_action(
+	'init',
+	function () {
+		// Initialize features that may use translations
+		\WPShadow\Utils\Magic_Link_Manager::init();
+		\WPShadow\Admin\Auto_Deploy::init();
+		\WPShadow\Admin\Guardian_Inactive_Notice::init();
+		\WPShadow\Analytics\Health_History::init();
+		\WPShadow\Admin\Health_History_Page::init();
+		\WPShadow\Admin\Health_History_Widget::init();
+	},
+	10
+);
 
 add_action(
 	'init',

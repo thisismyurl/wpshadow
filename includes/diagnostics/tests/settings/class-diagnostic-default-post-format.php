@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures post format support is properly configured.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Default_Post_Format extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Default_Post_Format extends Diagnostic_Base {
 	 * - Post format taxonomy is properly registered
 	 * - Format choice makes sense for site type
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -174,7 +175,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 				)
 			);
 
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -210,6 +211,16 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 					),
 				),
 			);
+
+			// Add upgrade path for WPShadow Pro Security (when available).
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'code-analysis',
+				'xss-prevention'
+			);
+
+			return $finding;
 		}
 
 		return null;

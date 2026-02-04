@@ -5,7 +5,7 @@
  * Checks if JavaScript is split into smaller chunks to improve performance
  * and enable faster incremental loading.
  *
- * @since   1.26033.2093
+ * @since   1.6033.2093
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Webpack/bundler usage detection
  * - Chunk optimization
  *
- * @since 1.26033.2093
+ * @since 1.6033.2093
  */
 class Diagnostic_Code_Splitting_Detection extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Code_Splitting_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2093
+	 * @since  1.6033.2093
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

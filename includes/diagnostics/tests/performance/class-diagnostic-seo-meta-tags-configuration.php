@@ -5,7 +5,7 @@
  * Checks for proper SEO meta tags (title, description, canonical) that help
  * search engines understand and rank page content.
  *
- * @since   1.26033.2107
+ * @since   1.6033.2107
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Open Graph tags
  * - Title tag optimization
  *
- * @since 1.26033.2107
+ * @since 1.6033.2107
  */
 class Diagnostic_Seo_Meta_Tags_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Seo_Meta_Tags_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2107
+	 * @since  1.6033.2107
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

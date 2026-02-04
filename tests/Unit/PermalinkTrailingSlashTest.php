@@ -3,7 +3,7 @@
  * Tests for Permalink Trailing Slash Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.26032.0903
+ * @since   1.6032.0903
  */
 
 declare(strict_types=1);

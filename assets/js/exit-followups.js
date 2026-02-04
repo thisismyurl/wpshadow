@@ -3,7 +3,7 @@
  *
  * Handles the admin interface for viewing and managing exit interview followups.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 
 (function($) {

@@ -18,7 +18,7 @@
  * File permissions guide: https://wpshadow.com/kb/wordpress-file-permissions\n * Video: Securing WordPress file permissions (10min): https://wpshadow.com/training/permissions-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer deploys WordPress to shared hosting. Hosting support says:\n * \"Set permissions to 777 for uploads to work\". Developer follows advice.\n * Later: site compromised. Attacker uploaded PHP shell via comment form.\n * PHP executed = full compromise. Database + files accessed. Attacker demands\n * ransom. Site down for 1 week during recovery.\n *
  * **Implementation Notes:**
  * - Uses fileperms() and decoct() for permission checking\n * - Validates 755 (rwxr-xr-x) or more restrictive\n * - Checks for 777 (rwxrwxrwx) or world-writable\n * - Severity: critical (world-writable), high (too open)\n * - Treatment: chmod uploads to 755, files to 644\n *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_File_Permission_Security extends Diagnostic_Base {
 
@@ -81,7 +82,7 @@ class Diagnostic_File_Permission_Security extends Diagnostic_Base {
 	 * - World-writable files
 	 * - WordPress file permission constants
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -191,10 +192,10 @@ class Diagnostic_File_Permission_Security extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => sprintf(
 					/* translators: %d: number of issues */
 					_n(
 						'%d file permission issue detected',
@@ -204,15 +205,21 @@ class Diagnostic_File_Permission_Security extends Diagnostic_Base {
 					),
 					count( $issues )
 				),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-permission-security',
-				'details'      => array(
+				'severity'      => 'high',
+				'threat_level'  => 75,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/file-permission-security',
+				'context'       => array(
+					'why'            => __( 'World-writable files = privilege escalation. Real scenario: wp-config.php is 777 (anyone can read/write). Attacker modifies wp-config to add admin user. Logs in as admin. Full compromise. With proper permissions: wp-config is 644 (only owner reads). Attacker cannot modify. Attack blocked.', 'wpshadow' ),
+					'recommendation' => __( '1. Set directories: 755 (rwxr-xr-x). 2. Set files: 644 (rw-r--r--). 3. wp-config.php: 600 (rw-------). 4. wp-content: 755. 5. Plugins: 755. 6. Uploads: 755. 7. Add constants: define(\'FS_CHMOD_FILE\', 0644); 8. Add constants: define(\'FS_CHMOD_DIR\', 0755); 9. Scan for 777/world-writable: find /path -perm 777. 10. Fix with: chmod -R 755 /wp-content.', 'wpshadow' ),
+				),
+				'details'       => array(
 					'issues'         => $issues,
 					'world_writable' => $world_writable,
 				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-permissions', 'permission-hardening' );
+			return $finding;
 		}
 
 		return null;

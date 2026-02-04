@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SaaS company selling WordPress sites to clients. January 2024: host announces\n * PHP 7.4 deprecated on Feb 1. Company must support 50 customer sites. Many use\n * plugins incompatible with PHP 8.0. Emergency compatibility work costs $20K.\n * Prevention: upgrade cycle monitoring 12 months before EOL.\n *
  * **Implementation Notes:**
  * - Uses phpversion() function (requires PHP access)\n * - Checks against official PHP support timeline\n * - Returns severity: high (EOL version), medium (version nearing EOL)\n * - Non-fixable diagnostic (requires hosting provider support)\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */\nclass Diagnostic_Legacy_PHP_Version_Not_Upgraded extends Diagnostic_Base {
 
 	/**
@@ -75,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -2,7 +2,7 @@
 /**
  * AJAX: Regenerate Thumbnails
  *
- * @since   1.2601.2200
+ * @since   1.6030.2200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.2601.2200
+	 * @since 1.6030.2200
 	 * @return void
 	 */
 	public static function handle() {
@@ -138,7 +138,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Get attachments to process.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $method        Method (all/missing/range).
 	 * @param  int    $start_id      Start ID (for range).
 	 * @param  int    $end_id        End ID (for range).
@@ -182,7 +182,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Get total images count.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $method        Method (all/missing/range).
 	 * @param  int    $start_id      Start ID (for range).
 	 * @param  int    $end_id        End ID (for range).
@@ -219,7 +219,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Regenerate thumbnails for attachment.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  int   $attachment_id Attachment ID.
 	 * @param  array $image_sizes   Image sizes to regenerate.
 	 * @param  bool  $delete_old    Delete old thumbnails.

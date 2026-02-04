@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26031.1300
+ * @since      1.6031.1300
  */
 
 declare(strict_types=1);
@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (direct bypass), medium (partial bypass)
  * - Treatment: enforce strict email validation
  *
- * @since 1.26031.1300
+ * @since 1.6031.1300
  */
 class Diagnostic_Comment_Whitelist_Bypass extends Diagnostic_Base {
 
@@ -121,7 +122,7 @@ class Diagnostic_Comment_Whitelist_Bypass extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26031.1300
+	 * @since  1.6031.1300
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

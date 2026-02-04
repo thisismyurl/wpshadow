@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -52,6 +52,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -87,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (DB queries), high (output), medium (variables)
  * - Treatment: use sanitize_* for input, esc_* for output
  *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */
 class Diagnostic_Theme_Data_Validation extends Diagnostic_Base {
 
@@ -122,7 +123,7 @@ class Diagnostic_Theme_Data_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

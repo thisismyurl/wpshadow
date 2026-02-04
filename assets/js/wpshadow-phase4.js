@@ -3,7 +3,7 @@
  *
  * Handles advanced reporting features: export, snapshots, trends, annotations, integrations.
  *
- * @since 1.2603.0200
+ * @since 1.603.0200
  */
 
 (function($) {

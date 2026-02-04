@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.2604.0100
+ * @since      1.6004.0100
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides learning opportunities after fixes are applied.
  *
- * @since 1.2604.0100
+ * @since 1.6004.0100
  */
 class Post_Fix_Education {
 
 	/**
 	 * Initialize system
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class Post_Fix_Education {
 	/**
 	 * Show post-fix education
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  string $class      Treatment class name.
 	 * @param  string $finding_id Finding ID.
 	 * @param  array  $result     Treatment result.
@@ -73,7 +73,7 @@ class Post_Fix_Education {
 	 *
 	 * Call this after treatment success message
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function render_education_notice() {
@@ -265,7 +265,7 @@ class Post_Fix_Education {
 	/**
 	 * Get education content for finding
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @param  string $finding_id Finding ID.
 	 * @return array|null Education content or null if not available.
 	 */
@@ -334,7 +334,7 @@ class Post_Fix_Education {
 		/**
 		 * Filter post-fix education content
 		 *
-		 * @since 1.2604.0100
+		 * @since 1.6004.0100
 		 *
 		 * @param array|null $content    Education content.
 		 * @param string     $finding_id Finding ID.

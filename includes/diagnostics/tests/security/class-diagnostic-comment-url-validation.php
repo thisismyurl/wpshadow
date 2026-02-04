@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26031.1400
+ * @since      1.6031.1400
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * News site with comment section. June 2024: attacker discovers comment\n * URL field has no sanitization. Posts 100 comments with bit.ly URLs\n * (shortened links to exploit kits). Site visitors click profiles, 5% infected.\n * Site reputation destroyed as unwitting malware distributor. Cleanup: remove\n * all malicious comments, security audit, notify users.\n *
  * **Implementation Notes:**
  * - Detects common URL shortener services\n * - Checks free domain registrars (known for malware)\n * - Flags raw IPs (lack of domain = obfuscation attempt)\n * - Returns severity: critical (malicious URL present), high (shorteners detected)\n * - Auto-fixable treatment: sanitize existing URLs, enforce validation\n *
- * @since 1.26031.1400
+ * @since 1.6031.1400
  */\nclass Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 	protected static $slug = 'comment-url-validation';
 	protected static $title = 'Comment URL Validation';

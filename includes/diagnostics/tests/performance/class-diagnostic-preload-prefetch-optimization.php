@@ -4,7 +4,7 @@
  *
  * Detects resource preload and prefetch implementation optimization.
  *
- * @since   1.26033.2110
+ * @since   1.6033.2110
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes resource hint implementation for optimization opportunities.
  *
- * @since 1.26033.2110
+ * @since 1.6033.2110
  */
 class Diagnostic_Preload_Prefetch_Optimization extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Preload_Prefetch_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2110
+	 * @since  1.6033.2110
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -23,9 +23,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents silent data corruption issues\n * - #9 Show Value: Preserves international character data integrity\n * - #10 Talk-About-Worthy: "Works perfectly with emoji and international characters" is modern\n *
  * **Related Checks:**\n * - Database Table Optimization (related health check)\n * - Transients Not Cleaned (similar data integrity)\n * - Database Backup Availability (backup before fixing)\n * - Data Integrity Verification (related data checks)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/database-charset-collation-consistency\n * - Video: https://wpshadow.com/training/utf8mb4-migration (7 min)\n * - Advanced: https://wpshadow.com/training/international-wordpress-setup (13 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.2601.2148\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Database Charset/Collation Consistency Class\n *\n * Ensures database UTF-8mb4 consistency to support emoji and international characters.
+ * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6030.2148\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Database Charset/Collation Consistency Class\n *\n * Ensures database UTF-8mb4 consistency to support emoji and international characters.
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 	 * Checks database, table, and column charset/collation settings.
 	 * Identifies inconsistencies that may prevent emoji from displaying.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if charset issues found, null otherwise.
 	 */
 	public static function check() {

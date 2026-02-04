@@ -53,7 +53,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1430
+ * @since      1.602.1430
  */
 
 declare(strict_types=1);
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures responsiveness delay for mobile user interactions during page load.
  *
- * @since 1.2602.1430
+ * @since 1.602.1430
  */
 class Diagnostic_Mobile_Fid extends Diagnostic_Base {
 
@@ -111,7 +111,7 @@ class Diagnostic_Mobile_Fid extends Diagnostic_Base {
 	 * - Needs Improvement: 100-300ms
 	 * - Poor: >300ms
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,7 +160,7 @@ class Diagnostic_Mobile_Fid extends Diagnostic_Base {
 	/**
 	 * Find scripts that block the main thread.
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return array {
 	 *     Blocking scripts found.
 	 *

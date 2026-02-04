@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks reading settings for performance optimization.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Reading_Settings_Performance_Impact extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Reading_Settings_Performance_Impact extends Diagnostic_Base {
 	 * - RSS feed posts count is appropriate
 	 * - Feed excerpt settings are configured
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

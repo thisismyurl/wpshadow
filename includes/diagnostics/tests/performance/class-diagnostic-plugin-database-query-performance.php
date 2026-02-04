@@ -25,7 +25,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-query-performance\n * - Video: https://wpshadow.com/training/wordpress-database-profiling (7 min)\n * - Advanced: https://wpshadow.com/training/query-optimization-patterns (14 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2200
+ * @since      1.6030.2200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects plugins with inefficient database query patterns, missing indexes, and N+1 queries.
  *
- * @since 1.2601.2200
+ * @since 1.6030.2200
  */
 class Diagnostic_Plugin_Database_Query_Performance extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Plugin_Database_Query_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

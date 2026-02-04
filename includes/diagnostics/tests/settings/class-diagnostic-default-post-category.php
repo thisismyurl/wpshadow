@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures default post category is set appropriately.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Default_Post_Category extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Default_Post_Category extends Diagnostic_Base {
 	 * - Default category is set to a valid category
 	 * - Category is not the generic "Uncategorized"
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

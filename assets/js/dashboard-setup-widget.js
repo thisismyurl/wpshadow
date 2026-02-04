@@ -5,7 +5,7 @@
  * Issue #1669: Replace JavaScript dialog with accessible modal
  *
  * @package WPShadow
- * @since 1.2601.210200
+ * @since 1.6030.210200
  */
 
 (function($) {

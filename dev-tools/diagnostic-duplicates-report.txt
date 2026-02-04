@@ -1,0 +1,125 @@
+# Diagnostic Duplicates Report
+
+Found 17 duplicate diagnostic names
+
+================================================================================
+
+
+## csrf-vulnerabilities-in-tool-actions
+Duplicates: 2
+
+  - monitoring/class-diagnostic-csrf-vulnerabilities-in-tool-actions.php
+  - workflows/class-diagnostic-csrf-vulnerabilities-in-tool-actions.php
+
+
+## feed-caching-performance
+Duplicates: 2
+
+  - content/class-diagnostic-feed-caching-performance.php
+  - performance/class-diagnostic-feed-caching-performance.php
+
+
+## feed-content-encoding
+Duplicates: 2
+
+  - performance/class-diagnostic-feed-content-encoding.php
+  - settings/class-diagnostic-feed-content-encoding.php
+
+
+## feed-custom-endpoints
+Duplicates: 2
+
+  - performance/class-diagnostic-feed-custom-endpoints.php
+  - settings/class-diagnostic-feed-custom-endpoints.php
+
+
+## feed-namespace-configuration
+Duplicates: 2
+
+  - performance/class-diagnostic-feed-namespace-configuration.php
+  - settings/class-diagnostic-feed-namespace-configuration.php
+
+
+## feed-summary-vs-full
+Duplicates: 2
+
+  - performance/class-diagnostic-feed-summary-vs-full.php
+  - settings/class-diagnostic-feed-summary-vs-full.php
+
+
+## gutenberg-media-block-integration
+Duplicates: 2
+
+  - performance/class-diagnostic-gutenberg-media-block-integration.php
+  - settings/class-diagnostic-gutenberg-media-block-integration.php
+
+
+## headless-cms-media-serving
+Duplicates: 2
+
+  - performance/class-diagnostic-headless-cms-media-serving.php
+  - settings/class-diagnostic-headless-cms-media-serving.php
+
+
+## import-files-readable-by-other-users
+Duplicates: 2
+
+  - monitoring/class-diagnostic-import-files-readable-by-other-users.php
+  - workflows/class-diagnostic-import-files-readable-by-other-users.php
+
+
+## media-api-rate-limiting
+Duplicates: 2
+
+  - security/class-diagnostic-media-api-rate-limiting.php
+  - settings/class-diagnostic-media-api-rate-limiting.php
+
+
+## multisite-network-admin-tool-boundaries
+Duplicates: 2
+
+  - monitoring/class-diagnostic-multisite-network-admin-tool-boundaries.php
+  - workflows/class-diagnostic-multisite-network-admin-tool-boundaries.php
+
+
+## no-encryption-for-sensitive-exports
+Duplicates: 2
+
+  - settings/class-diagnostic-no-encryption-for-sensitive-exports.php
+  - workflows/class-diagnostic-no-encryption-for-sensitive-exports.php
+
+
+## open-graph-meta-tags
+Duplicates: 2
+
+  - performance/class-diagnostic-open-graph-meta-tags.php
+  - social-media/class-diagnostic-open-graph-meta-tags.php
+
+
+## plugin-conflict-detection
+Duplicates: 2
+
+  - performance/class-diagnostic-plugin-conflict-detection.php
+  - settings/class-diagnostic-plugin-conflict-detection.php
+
+
+## rest-api-media-endpoint-security
+Duplicates: 2
+
+  - code-quality/class-diagnostic-rest-api-media-endpoint-security.php
+  - security/class-diagnostic-rest-api-media-endpoint-security.php
+
+
+## rest-api-media-upload
+Duplicates: 2
+
+  - performance/class-diagnostic-rest-api-media-upload.php
+  - settings/class-diagnostic-rest-api-media-upload.php
+
+
+## tool-nonce-validation-failures
+Duplicates: 2
+
+  - monitoring/class-diagnostic-tool-nonce-validation-failures.php
+  - workflows/class-diagnostic-tool-nonce-validation-failures.php
+

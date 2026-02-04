@@ -5,7 +5,7 @@
  * Checks if plugins are compatible with the Gutenberg block editor and
  * don't disable or degrade block editor functionality.
  *
- * @since   1.26033.2104
+ * @since   1.6033.2104
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Editor disable filters
  * - Plugin compatibility
  *
- * @since 1.26033.2104
+ * @since 1.6033.2104
  */
 class Diagnostic_Plugin_Compatibility_Block_Editor extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Plugin_Compatibility_Block_Editor extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2104
+	 * @since  1.6033.2104
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

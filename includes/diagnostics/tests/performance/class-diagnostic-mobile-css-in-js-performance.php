@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1600
+ * @since      1.602.1600
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies CSS-in-JS library usage and measures runtime
  * CSS generation overhead.
  *
- * @since 1.2602.1600
+ * @since 1.602.1600
  */
 class Diagnostic_Mobile_CSS_In_JS_Performance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_CSS_In_JS_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_Mobile_CSS_In_JS_Performance extends Diagnostic_Base {
 	/**
 	 * Analyze CSS-in-JS usage.
 	 *
-	 * @since  1.2602.1600
+	 * @since  1.602.1600
 	 * @return array Analysis results.
 	 */
 	private static function analyze_css_in_js(): array {

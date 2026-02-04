@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Settings\Privacy_Settings_Manager;
+use WPShadow\Admin\Pages\Privacy_Settings_Manager;
 
 /**
  * AJAX Handler: Update Privacy Settings
  *
  * Updates GDPR compliance and privacy configuration.
  *
- * @since 1.2601
+ * @since 1.6030
  * @package WPShadow
  */
 class Update_Privacy_Settings_Handler extends AJAX_Handler_Base {

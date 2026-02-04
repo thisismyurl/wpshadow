@@ -5,7 +5,7 @@
  * Provides common functionality for all test cases.
  *
  * @package WPShadow\Tests
- * @since   1.2601.2148
+ * @since   1.6030.2148
  */
 
 declare(strict_types=1);
@@ -156,7 +156,7 @@ abstract class TestCase extends PHPUnit_TestCase {
 		if ( defined( 'WPSHADOW_VERSION' ) ) {
 			return WPSHADOW_VERSION;
 		}
-		return '1.2601.2148';
+		return '1.6030.2148';
 	}
 
 	/**

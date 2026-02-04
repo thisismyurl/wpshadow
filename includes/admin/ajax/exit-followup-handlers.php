@@ -8,7 +8,7 @@
  * phpcs:disable WordPress.Files.FileName.InvalidClassFileName
  * phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound
  *
- * @since   1.2601.2148
+ * @since   1.6030.2148
  * @package WPShadow\Admin\AJAX
  */
 
@@ -31,7 +31,7 @@ class Get_Exit_Followups_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request to get exit followups.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
@@ -65,7 +65,7 @@ class Get_Exit_Followups_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get all followups with optional status filter.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @param  string $status Status filter.
 	 * @param  int    $limit  Maximum number of results.
 	 * @return array Array of followup records.
@@ -116,7 +116,7 @@ class Update_Exit_Followup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request to update a followup.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
@@ -157,7 +157,7 @@ class Cancel_Exit_Followups_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request to cancel followups for an interview.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {

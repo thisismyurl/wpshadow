@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.0903
+ * @since      1.6032.0903
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that custom taxonomy permalink structures are properly configured
  * and URL rewriting is working correctly.
  *
- * @since 1.26032.0903
+ * @since 1.6032.0903
  */
 class Diagnostic_Taxonomy_Permalink_Structure extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Taxonomy_Permalink_Structure extends Diagnostic_Base {
 	 *
 	 * Checks if permalinks are enabled and validates custom taxonomy URL rewriting.
 	 *
-	 * @since  1.26032.0903
+	 * @since  1.6032.0903
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

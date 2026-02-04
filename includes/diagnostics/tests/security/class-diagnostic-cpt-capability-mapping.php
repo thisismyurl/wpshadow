@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -51,6 +51,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (unrestricted permissions), medium (overly permissive)
  * - Treatment: implement proper capability mapping
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_CPT_Capability_Mapping extends Diagnostic_Base {
 
@@ -121,7 +122,7 @@ class Diagnostic_CPT_Capability_Mapping extends Diagnostic_Base {
 	 * Validates CPT capability configuration and checks if user roles
 	 * have appropriate permissions.
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if capability issues found, null otherwise.
 	 */
 	public static function check() {

@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -176,7 +177,7 @@ class Diagnostic_Plugin_SQL_Injection_Risk extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $sql_risks ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -192,7 +193,13 @@ class Diagnostic_Plugin_SQL_Injection_Risk extends Diagnostic_Base {
 					'sql_risks' => $sql_risks,
 				),
 				'kb_link'      => 'https://wpshadow.com/kb/sql-injection-prevention',
+				'context'      => array(
+					'why'            => __( 'SQL injection = database access. OWASP Top 10 #1. Verizon DBIR: SQL injection in 20% of breaches. Attacker modifies SQL query to extract all data (users, posts, passwords). Real scenario: Search plugin concatenates user input into query: SELECT * FROM posts WHERE title LIKE \'' . $_GET[\'search\'] . '\'. Attacker enters: \' OR \'1\'=\'1 → query returns entire database. With $wpdb->prepare(): injection impossible (user input treated as literal value, not SQL code). PCI-DSS: Parameterized queries mandatory. GDPR breach = $250K-$4M fines. Cost of remediation: $4.29M average per incident.', 'wpshadow' ),
+					'recommendation' => __( '1. Never concatenate user input into SQL: WRONG - SELECT * FROM posts WHERE id=\' . $_GET[\'id\'] . \'.\n2. Always use $wpdb->prepare(): $wpdb->prepare( \'SELECT * FROM posts WHERE id = %d\', $id ).\n3. Placeholders: Use %d (integer), %s (string), %f (float).\n4. Example: $wpdb->query( $wpdb->prepare( \'UPDATE users SET status = %s WHERE id = %d\', $status, $user_id ) ).\n5. Never use sprintf(): WRONG - sprintf( \'SELECT * FROM users WHERE id=%d\', $_GET[\'id\'] ).\n6. Audit all plugins: Search for $wpdb->query without prepare().\n7. Security plugins: Wordfence, Sucuri detect SQL injection attempts.\n8. Test injections: Try adding quotes, OR clauses to form inputs.\n9. Update plugins: Outdated plugins are common SQL injection vectors.\n10. Database user: Restrict permissions to minimum needed (no DROP, ALTER).', 'wpshadow' ),
+				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'sql-injection-prevention', 'plugin-sql-injection-detection' );
+			return $finding;
 		}
 
 		return null;

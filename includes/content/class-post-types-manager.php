@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.26033.1530
+ * @since      1.6033.1530
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles registration and management of WPShadow custom post types.
  *
- * @since 1.26033.1530
+ * @since 1.6033.1530
  */
 class Post_Types_Manager {
 
 	/**
 	 * Initialize the post types manager.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class Post_Types_Manager {
 	/**
 	 * Get available post type definitions.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return array Post type definitions.
 	 */
 	public static function get_available_post_types() {
@@ -182,7 +182,7 @@ class Post_Types_Manager {
 	/**
 	 * Get available taxonomy definitions.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return array Taxonomy definitions.
 	 */
 	public static function get_available_taxonomies() {
@@ -331,7 +331,7 @@ class Post_Types_Manager {
 	/**
 	 * Register active post types.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return void
 	 */
 	public static function register_active_post_types() {
@@ -351,7 +351,7 @@ class Post_Types_Manager {
 	/**
 	 * Register a single post type.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $post_type Post type key.
 	 * @param  array  $config    Post type configuration.
 	 * @return void
@@ -406,7 +406,7 @@ class Post_Types_Manager {
 	/**
 	 * Register active taxonomies.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return void
 	 */
 	public static function register_active_taxonomies() {
@@ -437,7 +437,7 @@ class Post_Types_Manager {
 	/**
 	 * Register a single taxonomy.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $taxonomy Taxonomy key.
 	 * @param  array  $config   Taxonomy configuration.
 	 * @return void
@@ -481,7 +481,7 @@ class Post_Types_Manager {
 	/**
 	 * Get settings for a specific post type.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $post_type Post type key.
 	 * @return array Post type settings.
 	 */
@@ -501,7 +501,7 @@ class Post_Types_Manager {
 	/**
 	 * Save settings for a specific post type.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $post_type Post type key.
 	 * @param  array  $settings  Settings to save.
 	 * @return bool Whether save was successful.
@@ -513,7 +513,7 @@ class Post_Types_Manager {
 	/**
 	 * Activate a post type.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $post_type Post type key.
 	 * @return bool Whether activation was successful.
 	 */
@@ -533,7 +533,7 @@ class Post_Types_Manager {
 	/**
 	 * Deactivate a post type.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $post_type Post type key.
 	 * @return bool Whether deactivation was successful.
 	 */

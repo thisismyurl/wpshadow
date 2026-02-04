@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.2604.0200
+ * @since      1.6004.0200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shows a beautiful, informative welcome screen to new users with transparent
  * privacy choices. No dark patterns, no tricks - just honest conversation.
  *
- * @since 1.2604.0200
+ * @since 1.6004.0200
  */
 class First_Activation_Welcome {
 
 	/**
 	 * Initialize the welcome modal system.
 	 *
-	 * @since 1.2604.0200
+	 * @since 1.6004.0200
 	 * @return void
 	 */
 	public static function init() {
@@ -46,7 +46,7 @@ class First_Activation_Welcome {
 	/**
 	 * Check if this is first activation for this user.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return bool True if should show welcome.
 	 */
 	public static function should_show_welcome() {
@@ -79,7 +79,7 @@ class First_Activation_Welcome {
 	 *
 	 * Called from plugin bootstrap during activation.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	public static function mark_first_activation() {
@@ -97,7 +97,7 @@ class First_Activation_Welcome {
 	/**
 	 * Check first activation status.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	public static function check_first_activation() {
@@ -114,7 +114,7 @@ class First_Activation_Welcome {
 	/**
 	 * Enqueue modal assets.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -144,7 +144,7 @@ class First_Activation_Welcome {
 	/**
 	 * Render the welcome modal HTML.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void
 	 */
 	public static function render_modal() {
@@ -302,7 +302,7 @@ class First_Activation_Welcome {
 	/**
 	 * Get modal CSS.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return string CSS code.
 	 */
 	private static function get_modal_css() {
@@ -541,7 +541,7 @@ CSS;
 	/**
 	 * Get modal JavaScript.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return string JavaScript code.
 	 */
 	private static function get_modal_js() {
@@ -594,7 +594,7 @@ JS;
 	/**
 	 * Handle welcome completion AJAX.
 	 *
-	 * @since  1.2604.0200
+	 * @since  1.6004.0200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_complete_welcome() {

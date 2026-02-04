@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2200
+ * @since      1.6030.2200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * activity patterns like SQL injection attempts, file manipulation, or
  * privilege escalation attacks.
  *
- * @since 1.2601.2200
+ * @since 1.6030.2200
  */
 class Diagnostic_Intrusion_Detection_Not_Configured extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Intrusion_Detection_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

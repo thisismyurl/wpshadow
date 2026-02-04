@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2051
+ * @since      1.6033.2051
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if server supports HTTP/2 protocol. HTTP/2 significantly
  * improves performance through multiplexing and header compression.
  *
- * @since 1.26033.2051
+ * @since 1.6033.2051
  */
 class Diagnostic_HTTP2_Support extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_HTTP2_Support extends Diagnostic_Base {
 	 * Checks SERVER_PROTOCOL for HTTP/2 support.
 	 * HTTP/2 can reduce load time by 15-50%.
 	 *
-	 * @since  1.26033.2051
+	 * @since  1.6033.2051
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

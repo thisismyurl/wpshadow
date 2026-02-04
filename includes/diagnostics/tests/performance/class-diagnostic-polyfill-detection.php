@@ -4,7 +4,7 @@
  *
  * Detects unnecessary polyfills for modern browsers.
  *
- * @since   1.26033.2115
+ * @since   1.6033.2115
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies unnecessary JavaScript polyfills for modern browsers.
  *
- * @since 1.26033.2115
+ * @since 1.6033.2115
  */
 class Diagnostic_Polyfill_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Polyfill_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2115
+	 * @since  1.6033.2115
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

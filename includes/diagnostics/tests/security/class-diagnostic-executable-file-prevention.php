@@ -18,7 +18,7 @@
  * Secure file uploads: https://wpshadow.com/kb/wordpress-file-upload-security\n * Video: Configuring upload restrictions (9min): https://wpshadow.com/training/upload-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme upload feature (for developers) misconfigured to allow .zip uploads.\n * Plugin also allows .js uploads. Attacker uploads PHP within ZIP. Extracts via\n * FTP. Executes. Admin later discovers PHP files in uploads folder (suspicious).\n *
  * **Implementation Notes:**
  * - Uses get_allowed_mime_types()\n * - Checks for dangerous MIME patterns\n * - Validates .htaccess in uploads folder\n * - Severity: critical (executables allowed), high (single filter)\n * - Treatment: whitelist only safe file types\n *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Executable_File_Prevention extends Diagnostic_Base {
 
@@ -81,7 +82,7 @@ class Diagnostic_Executable_File_Prevention extends Diagnostic_Base {
 	 * - Unfiltered uploads
 	 * - Existing executable files in uploads
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,10 +161,10 @@ class Diagnostic_Executable_File_Prevention extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
+			$finding = array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => sprintf(
 					/* translators: %d: number of issues */
 					_n(
 						'%d executable upload issue detected',
@@ -173,15 +174,21 @@ class Diagnostic_Executable_File_Prevention extends Diagnostic_Base {
 					),
 					count( $issues )
 				),
-				'severity'     => 'high',
-				'threat_level' => 85,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/executable-file-prevention',
-				'details'      => array(
+				'severity'      => 'high',
+				'threat_level'  => 85,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/executable-file-prevention',
+				'context'       => array(
+					'why'            => __( 'Executable uploads = instant RCE. Real scenario: Attacker uploads shell.exe or shell.php to uploads dir. Visits URL. Executes with web server permissions. Site compromised. With prevention: PHP execution disabled via .htaccess. Shell uploads rejected by extension whitelist. Neither can execute. Attack blocked.', 'wpshadow' ),
+					'recommendation' => __( '1. Disable ALLOW_UNFILTERED_UPLOADS in wp-config. 2. Whitelist only: JPG, PNG, GIF, PDF, DOCX. 3. Block all: PHP, EXE, BAT, CMD, COM, SH. 4. Check wp_check_filetype_and_ext filter works. 5. Add .htaccess: php_flag engine off. 6. Disable script handlers: SetHandler text/plain. 7. Scan uploads for existing executables. 8. Remove any .php, .exe, .sh files. 9. Set 755 on dirs, 644 on files. 10. Test: Try upload shell.php (should fail).', 'wpshadow' ),
+				),
+				'details'       => array(
 					'issues'     => $issues,
 					'exec_files' => $exec_files,
 				),
 			);
+			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-upload', 'executable-prevention' );
+			return $finding;
 		}
 
 		return null;

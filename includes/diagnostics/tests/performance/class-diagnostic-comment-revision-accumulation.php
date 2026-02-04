@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26031.1500
+ * @since      1.6031.1500
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (gradual performance degradation)
  * - Treatment: clean old revisions, set retention policy
  *
- * @since 1.26031.1500
+ * @since 1.6031.1500
  */
 class Diagnostic_Comment_Revision_Accumulation extends Diagnostic_Base {
 	protected static $slug = 'comment-revision-accumulation';

@@ -17,7 +17,7 @@
  * Access control patterns: https://wpshadow.com/kb/access-control-implementation\n * Video: Implementing access checks (12min): https://wpshadow.com/training/access-control\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer builds WordPress site with client data portal. Uses password-protected\n * posts for each client. Forgot to add capability checks before displaying content.\n * Any user with account sees all client portfolios/pricing. Client A employee views\n * Client B portfolio. Contracts Client B directly (competitor discovery).\n *
  * **Implementation Notes:**
  * - Checks current_user_can() usage in templates\n * - Validates private post visibility\n * - CPT capability mapping verification\n * - Severity: critical (data exposed), medium (partial)\n * - Treatment: add capability checks to templates\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base {
 
@@ -75,13 +76,13 @@ class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for membership/content access plugin
 		if ( ! is_plugin_active( 'memberpress/memberpress.php' ) && ! is_plugin_active( 'restrict-content-pro/restrict-content-pro.php' ) ) {
-			return array(
+			$finding = array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
 				'description'   => __( 'Content access control is not implemented. Use membership or content restriction plugins to gate premium content by user roles.', 'wpshadow' ),
@@ -89,7 +90,34 @@ class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base 
 				'threat_level'  => 15,
 				'auto_fixable'  => false,
 				'kb_link'       => 'https://wpshadow.com/kb/content-access-control-not-implemented',
+				'context'       => array(
+					'why'            => __(
+						'Without access control, all authenticated users can access all protected content. B2B SaaS platforms, membership sites, ' .
+						'and customer portals are particularly vulnerable. Missing checks allow: viewing competitor data, accessing other customer ' .
+						'information, downloading intellectual property, accessing salary/performance reviews. GDPR requires data access segregation ' .
+						'by role. PCI-DSS requires limiting access to payment card data. Unauthorized data exposure results in fines, breach notification ' .
+						'costs, and loss of customer trust.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'Implement access control checks before displaying content: use current_user_can() to verify capabilities. ' .
+						'For membership sites, use plugins like MemberPress or Restrict Content Pro. For custom access patterns, implement ' .
+						'post_type capability mapping. Create custom roles with granular permissions. Test access by logging in as different roles ' .
+						'and verifying content visibility. Add audit logging to track who accessed what data. Use private post types for sensitive content. ' .
+						'Implement front-end redirects for unauthorized access attempts (vs showing 404).',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'access-control',
+				'content-access-guide'
+			);
+
+			return $finding;
 		}
 
 		return null;

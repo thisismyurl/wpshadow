@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1800
+ * @since      1.6032.1800
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures time format is properly configured.
  *
- * @since 1.26032.1800
+ * @since 1.6032.1800
  */
 class Diagnostic_Time_Format_Consistency extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Time_Format_Consistency extends Diagnostic_Base {
 	 * - Time format is valid PHP time format
 	 * - Time format is reasonable (12 or 24 hour)
 	 *
-	 * @since  1.26032.1800
+	 * @since  1.6032.1800
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

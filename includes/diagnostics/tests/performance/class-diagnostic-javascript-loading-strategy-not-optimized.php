@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (major rendering blocker)
  * - Treatment: add async/defer attributes appropriately
  *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_JavaScript_Loading_Strategy_Not_Optimized extends Diagnostic_Base {
 
@@ -124,7 +124,7 @@ class Diagnostic_JavaScript_Loading_Strategy_Not_Optimized extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

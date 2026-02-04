@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Admin
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 
 declare(strict_types=1);
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Guardian Inactive Admin Notice Class
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Guardian_Inactive_Notice {
 
 	/**
 	 * Initialize the notice
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function init(): void {
 		add_action( 'admin_notices', array( __CLASS__, 'display_notice' ) );
@@ -39,7 +39,7 @@ class Guardian_Inactive_Notice {
 	/**
 	 * Display the admin notice if Guardian is inactive
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function display_notice(): void {
 		// Check if another notice has already been shown (only one at a time)
@@ -154,7 +154,7 @@ class Guardian_Inactive_Notice {
 	/**
 	 * Handle AJAX dismiss request
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function dismiss_notice(): void {
 		// Use Security_Validator for consistent security checks
@@ -176,7 +176,7 @@ class Guardian_Inactive_Notice {
 	 *
 	 * Directly enables Guardian without requiring navigation to Guardian page.
 	 *
-	 * @since 1.2601.2148
+	 * @since 1.6030.2148
 	 */
 	public static function activate_guardian(): void {
 		// Use Security_Validator for consistent security checks

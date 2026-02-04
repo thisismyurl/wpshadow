@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.26032.1352
+ * @since      1.6032.1352
  */
 
 declare(strict_types=1);
@@ -21,14 +21,14 @@ use WPShadow\Diagnostics\Diagnostic_Large_Size_Configuration;
 /**
  * Large Size Configuration Test Class
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  */
 class LargeSizeConfigurationTest extends TestCase {
 
 /**
  * Test diagnostic passes with properly configured large size
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_passes_with_proper_configuration(): void {
@@ -44,7 +44,7 @@ $this->assertNull( $result );
 /**
  * Test diagnostic detects when large size is completely disabled
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_flags_disabled_large_size(): void {
@@ -66,7 +66,7 @@ $this->assertEquals( 0, $result['meta']['current_height'] );
 /**
  * Test diagnostic detects excessively large dimensions
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_flags_excessive_dimensions(): void {
@@ -88,7 +88,7 @@ $this->assertEquals( 4000, $result['meta']['max_recommended'] );
 /**
  * Test diagnostic detects when height is excessively large
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_flags_excessive_height(): void {
@@ -106,7 +106,7 @@ $this->assertEquals( 6000, $result['meta']['current_height'] );
 /**
  * Test diagnostic detects dimensions that are too small
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_flags_too_small_dimensions(): void {
@@ -128,7 +128,7 @@ $this->assertEquals( 512, $result['meta']['min_recommended'] );
 /**
  * Test diagnostic detects when height is too small
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_flags_too_small_height(): void {
@@ -145,7 +145,7 @@ $this->assertEquals( 400, $result['meta']['current_height'] );
 /**
  * Test finding structure is valid
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_finding_structure_valid(): void {
@@ -164,7 +164,7 @@ $this->assertEquals( 40, $result['threat_level'] );
 /**
  * Test meta includes current dimensions
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_meta_includes_current_dimensions(): void {
@@ -183,7 +183,7 @@ $this->assertArrayHasKey( 'issue_type', $result['meta'] );
 /**
  * Test diagnostic passes with width at boundary (512px)
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_passes_with_minimum_width(): void {
@@ -198,7 +198,7 @@ $this->assertNull( $result );
 /**
  * Test diagnostic passes with height at boundary (512px)
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_passes_with_minimum_height(): void {
@@ -213,7 +213,7 @@ $this->assertNull( $result );
 /**
  * Test diagnostic passes at maximum boundary (4000px)
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_passes_at_maximum_boundary(): void {
@@ -228,7 +228,7 @@ $this->assertNull( $result );
 /**
  * Test diagnostic flags when width exceeds maximum by 1px
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_flags_width_over_maximum(): void {
@@ -244,7 +244,7 @@ $this->assertEquals( 'excessive', $result['meta']['issue_type'] );
 /**
  * Test diagnostic with realistic typical configuration
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_passes_with_typical_configuration(): void {
@@ -260,7 +260,7 @@ $this->assertNull( $result );
 /**
  * Test threat level is consistent
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_threat_level_consistent(): void {
@@ -277,7 +277,7 @@ $this->assertEquals( 40, $result['threat_level'] );
 /**
  * Test auto_fixable flag is set correctly
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_auto_fixable_flag(): void {
@@ -293,7 +293,7 @@ $this->assertTrue( $result['auto_fixable'] );
 /**
  * Test with one dimension at 0 and other valid (should pass)
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_passes_with_one_dimension_zero(): void {
@@ -309,7 +309,7 @@ $this->assertNull( $result );
 /**
  * Test KB link is included
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  * @return void
  */
 public function test_kb_link_included(): void {

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -231,7 +232,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 
 		// If we found any issues, return a finding.
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -267,6 +268,15 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'vault',
+				'data-encryption',
+				'encryption-guide'
+			);
+
+			return $finding;
 		}
 
 		return null;

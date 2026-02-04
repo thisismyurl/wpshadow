@@ -2,7 +2,7 @@
 /**
  * AJAX: Save Code Snippet
  *
- * @since   1.2601.2200
+ * @since   1.6030.2200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Save_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.2601.2200
+	 * @since 1.6030.2200
 	 * @return void
 	 */
 	public static function handle() {

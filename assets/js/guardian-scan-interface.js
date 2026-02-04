@@ -4,7 +4,7 @@
  * Handles Guardian scan UI interactions for Phase 7.
  *
  * @package WPShadow
- * @since   1.2604.0300
+ * @since   1.6004.0300
  */
 
 (function($) {

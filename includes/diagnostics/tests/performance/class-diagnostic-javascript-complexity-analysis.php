@@ -4,7 +4,7 @@
  *
  * Analyzes JavaScript code complexity and maintainability.
  *
- * @since   1.26033.2115
+ * @since   1.6033.2115
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates JavaScript code complexity and identifies optimization opportunities.
  *
- * @since 1.26033.2115
+ * @since 1.6033.2115
  */
 class Diagnostic_Javascript_Complexity_Analysis extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Javascript_Complexity_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2115
+	 * @since  1.6033.2115
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

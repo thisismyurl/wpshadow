@@ -11,7 +11,7 @@
  * - Clear documentation of all AJAX handlers
  *
  * @package WPShadow
- * @since 1.2601.21
+ * @since 1.6030.21
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

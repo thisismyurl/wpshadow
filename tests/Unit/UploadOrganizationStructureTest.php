@@ -3,7 +3,7 @@
  * Tests for Upload Organization Structure Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.26032.1352
+ * @since   1.6032.1352
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ require_once WPSHADOW_PLUGIN_DIR . '/includes/diagnostics/tests/functionality/cl
  * Tests the diagnostic that validates WordPress upload folder
  * organization and year/month folder structure.
  *
- * @since 1.26032.1352
+ * @since 1.6032.1352
  */
 class UploadOrganizationStructureTest extends TestCase {
 

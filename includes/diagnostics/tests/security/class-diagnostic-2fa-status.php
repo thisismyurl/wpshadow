@@ -5,7 +5,7 @@
  * Checks if two-factor authentication is enabled for admin accounts.
  * Encourages adoption of 2FA for improved security.
  *
- * @since   1.26032.1020
+ * @since   1.6032.1020
  * @package WPShadow\Diagnostics
  */
 
@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates two-factor authentication enablement.
  *
- * @since 1.26032.1020
+ * @since 1.6032.1020
  */
 class Diagnostic_2FA_Status extends Diagnostic_Base {
 
@@ -59,7 +60,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.26032.1020
+	 * @since  1.6032.1020
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +92,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 
 		// If 2FA plugin is not installed
 		if ( ! $has_2fa_plugin ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -110,11 +111,35 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 					'has_2fa_plugin'         => $has_2fa_plugin,
 					'recommended_plugin'     => 'Wordfence',
 				),
+				'context'      => array(
+					'why'            => __(
+						'Administrator accounts are the highest-value targets. With password-only login, phishing, credential stuffing, and brute force succeed frequently. 2FA reduces account takeover by 99.9% according to Microsoft telemetry. OWASP lists weak authentication as a top risk. Without 2FA, any leaked or reused password can lead to full site compromise, malware injection, data exfiltration, and compliance incidents (GDPR, HIPAA, PCI-DSS).',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Install a 2FA plugin: WP 2FA, Wordfence, or Two Factor.
+2. Require 2FA for all administrators (not optional).
+3. Use TOTP (authenticator apps) instead of SMS for stronger security.
+4. Provide backup codes for account recovery.
+5. Notify admins with a deadline for 2FA enrollment.
+6. Audit 2FA adoption monthly and disable unused admin accounts.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'multi-factor-authentication',
+				'enable_admin_2fa'
+			);
+
+			return $finding;
 		}
 
 		// If 2FA plugin is installed but not all admins enabled it
-		return array(
+		$finding = array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
@@ -132,13 +157,36 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 				'admins_without_2fa' => count( $admins ) - $users_with_2fa,
 				'has_2fa_plugin'     => $has_2fa_plugin,
 			),
+			'context'      => array(
+				'why'            => __(
+					'Having a 2FA plugin installed is not enough—each admin must enroll. Partial adoption leaves high-privilege accounts vulnerable and attackers will target the weakest admin account. A single admin compromise gives full site control. 2FA is most effective when enforced for all privileged roles.',
+					'wpshadow'
+				),
+				'recommendation' => __(
+					'1. Require 2FA for all administrators and editors.
+2. Configure mandatory enrollment with a short grace period.
+3. Send reminders to admins without 2FA.
+4. Disable or downgrade accounts that do not enroll by the deadline.
+5. Verify enrollment and test login flows for all admins.',
+					'wpshadow'
+				),
+			),
 		);
+
+		$finding = Upgrade_Path_Helper::add_upgrade_path(
+			$finding,
+			'security',
+			'multi-factor-authentication',
+			'enforce_admin_2fa'
+		);
+
+		return $finding;
 	}
 
 	/**
 	 * Check if a 2FA plugin is available
 	 *
-	 * @since  1.26032.1020
+	 * @since  1.6032.1020
 	 * @return bool
 	 */
 	private static function has_2fa_plugin(): bool {
@@ -164,7 +212,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Check if user has 2FA enabled
 	 *
-	 * @since  1.26032.1020
+	 * @since  1.6032.1020
 	 * @param  int $user_id User ID.
 	 * @return bool
 	 */

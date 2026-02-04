@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26033.2049
+ * @since      1.6033.2049
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if PHP OPcache is installed and enabled. OPcache dramatically
  * improves PHP performance by caching compiled bytecode.
  *
- * @since 1.26033.2049
+ * @since 1.6033.2049
  */
 class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 	 * Checks for OPcache availability and enabled status.
 	 * OPcache can improve performance by 30-50%.
 	 *
-	 * @since  1.26033.2049
+	 * @since  1.6033.2049
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

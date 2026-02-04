@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.2602.0200
+ * @since      1.602.0200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Health History Page Class
  *
- * @since 1.2602.0200
+ * @since 1.602.0200
  */
 class Health_History_Page {
 
 	/**
 	 * Initialize the page.
 	 *
-	 * @since 1.2602.0200
+	 * @since 1.602.0200
 	 * @return void
 	 */
 	public static function init() {
@@ -40,7 +40,7 @@ class Health_History_Page {
 	/**
 	 * Register admin menu page.
 	 *
-	 * @since 1.2602.0200
+	 * @since 1.602.0200
 	 * @return void
 	 */
 	public static function register_menu() {
@@ -57,7 +57,7 @@ class Health_History_Page {
 	/**
 	 * Render the page.
 	 *
-	 * @since 1.2602.0200
+	 * @since 1.602.0200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -71,7 +71,7 @@ class Health_History_Page {
 	/**
 	 * Enqueue assets for the page.
 	 *
-	 * @since  1.2602.0200
+	 * @since  1.602.0200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */

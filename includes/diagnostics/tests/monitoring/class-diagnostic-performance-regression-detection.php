@@ -4,7 +4,7 @@
  *
  * Analyzes performance trends and detects regressions.
  *
- * @since   1.26033.2140
+ * @since   1.6033.2140
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks performance metrics over time and identifies regressions.
  *
- * @since 1.26033.2140
+ * @since 1.6033.2140
  */
 class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2140
+	 * @since  1.6033.2140
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

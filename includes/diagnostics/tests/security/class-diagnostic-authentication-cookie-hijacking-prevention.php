@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2240
+ * @since      1.6030.2240
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -42,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Business site behind corporate proxy with SSL inspection. Developer left COOKIEHTTPONLY\n * = false for \"debugging.\" Attacker on same corporate network uses packet sniffer, captures\n * authentication cookie. Attacker injects malware via admin panel. By the time company\n * detected it, malware infected 10,000 client machines. Impact: $500K+ liability, contract\n * terminations, criminal investigation.\n *
  * **Implementation Notes:**
  * - Reads wp-config.php constants or uses get_option fallbacks\n * - Makes real HTTP test to verify header presence\n * - Returns severity: critical (no security flags), high (partial protection)\n * - Non-fixable diagnostic (requires wp-config.php modification)\n *
- * @since 1.2601.2240
+ * @since 1.6030.2240
  */\nclass Diagnostic_Authentication_Cookie_Hijacking_Prevention extends Diagnostic_Base {
 
 	/**
@@ -76,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2240
+	 * @since  1.6030.2240
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -187,7 +188,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		// Report findings
 		if ( ! empty( $issues ) ) {
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => __( 'Authentication cookie hijacking prevention issues found', 'wpshadow' ),
@@ -199,7 +200,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'issues'      => $issues,
 					'protections' => $protections,
 				),
+				'context'      => array(
+					'why'            => __(
+						'Authentication cookies are equivalent to passwords. If an attacker steals a cookie, they can log in without the password or 2FA. Common vectors include XSS, unencrypted HTTP traffic, and malware. Missing Secure/HttpOnly/SameSite flags increases the likelihood of theft or cross-site misuse. Long-lived cookies extend the window of opportunity for hijacking. These weaknesses are often invisible to users and can lead to silent account compromise.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'1. Enforce HTTPS site-wide and set FORCE_SSL_ADMIN true.
+2. Ensure authentication cookies include Secure, HttpOnly, and SameSite=Lax or Strict.
+3. Reduce cookie lifetime (especially for "remember me").
+4. Add HSTS to prevent SSL stripping.
+5. Mitigate XSS across the site to prevent JS cookie theft.
+6. Use session invalidation on password change and admin role changes.
+7. Consider IP/device binding for admin sessions if acceptable.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'session-hardening',
+				'cookie_hijacking_prevention'
+			);
+
+			return $finding;
 		}
 
 		return null;

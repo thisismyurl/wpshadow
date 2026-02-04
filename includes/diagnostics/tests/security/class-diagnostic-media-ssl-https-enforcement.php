@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (major mixed content), medium (minor issues)
  * - Treatment: update media URLs to HTTPS
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 
@@ -124,7 +125,7 @@ class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 	 * - Media URLs protocol
 	 * - Mixed content in posts
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

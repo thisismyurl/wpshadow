@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.26032.1745
+ * @since      1.6032.1745
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks that the Site Address URL setting (home) is properly configured.
  *
- * @since 1.26032.1745
+ * @since 1.6032.1745
  */
 class Diagnostic_Site_Address_URL extends Diagnostic_Base {
 
@@ -60,7 +61,7 @@ class Diagnostic_Site_Address_URL extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26032.1745
+	 * @since  1.6032.1745
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,8 +92,8 @@ class Diagnostic_Site_Address_URL extends Diagnostic_Base {
 
 			// Check consistency with WordPress Address.
 			if ( ! empty( $site_url ) ) {
-				$home_protocol = wp_parse_url( $home_url, PHP_URL_SCHEME );
-				$site_protocol = wp_parse_url( $site_url, PHP_URL_SCHEME );
+				$home_protocol = Diagnostic_URL_And_Pattern_Helper::get_scheme( $home_url );
+				$site_protocol = Diagnostic_URL_And_Pattern_Helper::get_scheme( $site_url );
 
 				if ( $home_protocol !== $site_protocol ) {
 					$issues[] = sprintf(

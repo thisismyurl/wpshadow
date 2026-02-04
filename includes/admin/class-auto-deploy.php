@@ -6,7 +6,7 @@
  * Only enabled when WPSHADOW_AUTO_DEPLOY constant is true.
  *
  * @package WPShadow\Admin
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 
 declare(strict_types=1);
@@ -452,7 +452,7 @@ class Auto_Deploy {
 	 *
 	 * Ensures paths don't escape the plugin directory using ../ sequences.
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @param  string $path Path to validate.
 	 * @param  string $allowed_base Base directory path that $path must be within.
 	 * @return bool True if path is safe.
@@ -476,7 +476,7 @@ class Auto_Deploy {
 	 * Validates that webhook request comes from GitHub's IP ranges.
 	 * Applies allowlist with override for development environments.
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @return bool True if IP is valid GitHub IP.
 	 */
 	private static function is_github_ip(): bool {
@@ -504,7 +504,7 @@ class Auto_Deploy {
 	/**
 	 * Check if IP is within CIDR range
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @param  string $ip IP address to check.
 	 * @param  string $cidr CIDR range (e.g., "192.168.0.0/24").
 	 * @return bool True if IP is in range.
@@ -529,7 +529,7 @@ class Auto_Deploy {
 	 * GitHub provides its IP ranges via API.
 	 * This should be called periodically to keep whitelist current.
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @return bool True if update successful.
 	 */
 	public static function update_github_ips(): bool {
@@ -568,7 +568,7 @@ class Auto_Deploy {
 	 *
 	 * Prevents abuse by limiting deployments to 10 per hour.
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @return bool True if within rate limit, false if exceeded.
 	 */
 	private static function check_rate_limit(): bool {
@@ -593,7 +593,7 @@ class Auto_Deploy {
 	/**
 	 * Log webhook attempt for security auditing
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @param  string $status Webhook status (success|signature_invalid|rate_limit_exceeded|etc).
 	 * @param  array  $data   Optional additional data to log.
 	 * @return void
@@ -619,7 +619,7 @@ class Auto_Deploy {
 	/**
 	 * Get client IP address
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @return string Client IP address.
 	 */
 	private static function get_client_ip(): string {
@@ -654,7 +654,7 @@ class Auto_Deploy {
 	/**
 	 * Validate IP address format
 	 *
-	 * @since  1.26032.1000
+	 * @since  1.6032.1000
 	 * @param  string $ip IP address to validate.
 	 * @return bool True if valid IPv4 or IPv6.
 	 */

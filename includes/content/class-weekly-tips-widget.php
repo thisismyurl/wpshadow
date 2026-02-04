@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.2604.0100
+ * @since      1.6004.0100
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides rotating weekly tips and learning recommendations.
  *
- * @since 1.2604.0100
+ * @since 1.6004.0100
  */
 class Weekly_Tips_Widget {
 
 	/**
 	 * Initialize widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class Weekly_Tips_Widget {
 	/**
 	 * Register dashboard widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function register_dashboard_widget() {
@@ -56,7 +56,7 @@ class Weekly_Tips_Widget {
 	/**
 	 * Render dashboard widget
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function render_widget() {
@@ -223,7 +223,7 @@ class Weekly_Tips_Widget {
 	/**
 	 * Get current week's tip
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return array|null Tip data or null if no tip available.
 	 */
 	private static function get_current_week_tip(): ?array {
@@ -239,7 +239,7 @@ class Weekly_Tips_Widget {
 	/**
 	 * Get current week number (1-52)
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return int Week number.
 	 */
 	private static function get_current_week_number(): int {
@@ -249,7 +249,7 @@ class Weekly_Tips_Widget {
 	/**
 	 * Get all available tips
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return array Array of tip data.
 	 */
 	private static function get_all_tips(): array {
@@ -331,7 +331,7 @@ class Weekly_Tips_Widget {
 		/**
 		 * Filter weekly tips
 		 *
-		 * @since 1.2604.0100
+		 * @since 1.6004.0100
 		 *
 		 * @param array $tips Array of tip data.
 		 */
@@ -341,7 +341,7 @@ class Weekly_Tips_Widget {
 	/**
 	 * Handle AJAX mark tip as helpful
 	 *
-	 * @since  1.2604.0100
+	 * @since  1.6004.0100
 	 * @return void
 	 */
 	public static function ajax_mark_helpful() {

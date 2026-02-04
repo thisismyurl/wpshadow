@@ -2,7 +2,7 @@
 /**
  * AJAX: Validate Code Snippet
  *
- * @since   1.2601.2200
+ * @since   1.6030.2200
  * @package WPShadow\Admin
  */
 
@@ -24,7 +24,7 @@ class AJAX_Validate_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.2601.2200
+	 * @since 1.6030.2200
 	 * @return void
 	 */
 	public static function handle() {
@@ -58,7 +58,7 @@ class AJAX_Validate_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Validate code syntax.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $code Code to validate.
 	 * @param  string $type Code type (php/js/css).
 	 * @return array Validation result.
@@ -82,7 +82,7 @@ class AJAX_Validate_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Validate PHP code.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $code PHP code to validate.
 	 * @return array Validation result.
 	 */
@@ -143,7 +143,7 @@ class AJAX_Validate_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Validate JavaScript code.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $code JavaScript code to validate.
 	 * @return array Validation result.
 	 */
@@ -185,7 +185,7 @@ class AJAX_Validate_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Validate CSS code.
 	 *
-	 * @since  1.2601.2200
+	 * @since  1.6030.2200
 	 * @param  string $code CSS code to validate.
 	 * @return array Validation result.
 	 */

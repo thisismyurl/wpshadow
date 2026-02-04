@@ -25,9 +25,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible bandwidth waste\n * - #9 Show Value: Delivers 70-90% bandwidth savings for repeat visitors\n * - #10 Talk-About-Worthy: "Second visits load from cache instantly" is impressive\n *
  * **Related Checks:**\n * - Asset Caching Not Configured (related caching strategy)\n * - HTTP/2 Server Push Not Configured (complementary speed optimization)\n * - CDN Configuration Missing (geographic caching layer)\n * - Server Response Time Too Slow (overall speed metric)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/browser-caching-headers\n * - Video: https://wpshadow.com/training/http-caching-101 (6 min)\n * - Advanced: https://wpshadow.com/training/cache-strategy (12 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.26033.2070\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Browser Caching Headers Diagnostic Class\n *\n * Validates Cache-Control and Expires headers for browser caching optimization.
+ * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6033.2070\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Diagnostics\\Helpers\\Diagnostic_Request_Helper;\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Browser Caching Headers Diagnostic Class\n *\n * Validates Cache-Control and Expires headers for browser caching optimization.
  *
- * @since 1.26033.2070
+ * @since 1.6033.2070
  */
 class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 	 * Tests static asset caching headers.
 	 * Proper caching reduces server load and improves repeat visits.
 	 *
-	 * @since  1.26033.2070
+	 * @since  1.6033.2070
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -102,16 +102,16 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 				$url = site_url( $url );
 			}
 			
-			$response = wp_remote_head(
+			$response = Diagnostic_Request_Helper::head_result(
 				$url,
 				array( 'timeout' => 3 )
 			);
-			
-			if ( is_wp_error( $response ) ) {
+            
+			if ( ! $response['success'] ) {
 				continue;
 			}
 			
-			$headers = wp_remote_retrieve_headers( $response );
+			$headers = wp_remote_retrieve_headers( $response['response'] );
 			
 			$cache_control = isset( $headers['cache-control'] ) ? $headers['cache-control'] : '';
 			$expires       = isset( $headers['expires'] ) ? $headers['expires'] : '';
@@ -144,13 +144,13 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 		}
 		
 		// Check HTML caching
-		$html_response = wp_remote_head(
+		$html_response = Diagnostic_Request_Helper::head_result(
 			home_url(),
 			array( 'timeout' => 3 )
 		);
-		
-		if ( ! is_wp_error( $html_response ) ) {
-			$html_headers = wp_remote_retrieve_headers( $html_response );
+        
+		if ( $html_response['success'] ) {
+			$html_headers = wp_remote_retrieve_headers( $html_response['response'] );
 			$html_cache   = isset( $html_headers['cache-control'] ) ? $html_headers['cache-control'] : '';
 			
 			// HTML should have validation caching but not long caching

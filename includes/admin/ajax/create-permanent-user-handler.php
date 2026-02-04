@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Ajax
- * @since      1.2601.2330
+ * @since      1.6030.2330
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Create Permanent User Handler
  *
- * @since 1.2601.2330
+ * @since 1.6030.2330
  */
 class Create_Permanent_User_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX hook
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @return void
 	 */
 	public static function register(): void {
@@ -43,7 +43,7 @@ class Create_Permanent_User_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @return void
 	 */
 	public static function handle(): void {
@@ -63,7 +63,7 @@ class Create_Permanent_User_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle URL-based request (from email link)
 	 *
-	 * @since  1.2601.2330
+	 * @since  1.6030.2330
 	 * @return void
 	 */
 	public static function handle_url_request(): void {

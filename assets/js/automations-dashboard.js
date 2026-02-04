@@ -8,7 +8,7 @@
  * - Delete automation functionality
  * - Toggle automation enabled/disabled status
  *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 
 jQuery( function( $ ) {

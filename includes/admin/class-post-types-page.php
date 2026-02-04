@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.26033.1530
+ * @since      1.6033.1530
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides admin interface for managing custom post types.
  *
- * @since 1.26033.1530
+ * @since 1.6033.1530
  */
 class Post_Types_Page {
 
 	/**
 	 * Initialize the post types page.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class Post_Types_Page {
 	/**
 	 * Enqueue page assets.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -89,7 +89,7 @@ class Post_Types_Page {
 	/**
 	 * Render post types page.
 	 *
-	 * @since  1.26033.1530
+	 * @since  1.6033.1530
 	 * @return void
 	 */
 	public static function render_page() {

@@ -5,7 +5,7 @@
  * Checks if structured data (JSON-LD, Schema.org) is properly implemented
  * to help search engines understand page content.
  *
- * @since   1.26033.2105
+ * @since   1.6033.2105
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Product schema
  * - Article schema
  *
- * @since 1.26033.2105
+ * @since 1.6033.2105
  */
 class Diagnostic_Structured_Data_Schema_Markup extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Structured_Data_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2105
+	 * @since  1.6033.2105
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

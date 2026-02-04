@@ -17,7 +17,7 @@
  * CORS security guide: https://wpshadow.com/kb/wordpress-cors-configuration\n * Video: Configuring CORS safely (10min): https://wpshadow.com/training/cors-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer builds WordPress API for mobile app. Needs CORS for frontend calls.\n * Sets header: \"Access-Control-Allow-Origin: *\" (simplest solution). Forgot\n * to restrict origins. Attacker finds API documentation, creates webpage that\n * calls API (CORS allows any domain). Redirects users via social media link.\n * API accessed from attacker.com with user credentials. User data exfiltrated.\n *
  * **Implementation Notes:**
  * - Tests actual header response\n * - Validates allowed origins whitelist\n * - Checks credentials handling\n * - Severity: critical (wildcard origin), high (unvalidated)\n * - Treatment: restrict CORS to known domains\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */
 class Diagnostic_CORS_Headers_Not_Configured extends Diagnostic_Base {
 
@@ -75,13 +76,13 @@ class Diagnostic_CORS_Headers_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for CORS header handling
 		if ( ! has_action( 'rest_api_init', 'set_cors_headers' ) ) {
-			return array(
+			$finding = array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
 				'description'   => __( 'CORS headers are not configured. Configure CORS headers to control which cross-origin requests are allowed to your API.', 'wpshadow' ),
@@ -89,7 +90,33 @@ class Diagnostic_CORS_Headers_Not_Configured extends Diagnostic_Base {
 				'threat_level'  => 35,
 				'auto_fixable'  => false,
 				'kb_link'       => 'https://wpshadow.com/kb/cors-headers-not-configured',
+				'context'       => array(
+					'why'            => __(
+						'Misconfigured CORS headers can expose your REST API to unauthorized cross-origin access. Attackers can create ' .
+						'webpages that call your WordPress API from any domain. If credentials are allowed via Access-Control-Allow-Credentials, ' .
+						'the browser automatically includes user session cookies, enabling data exfiltration. According to OWASP, CORS misconfigurations ' .
+						'are among the top 10 web security risks. Even seemingly harmless endpoints can leak sensitive information when accessed ' .
+						'from malicious domains.',
+						'wpshadow'
+					),
+					'recommendation' => __(
+						'Implement CORS headers that whitelist only known, trusted domains. Never use wildcard (*) origin with credentials. ' .
+						'Use appropriate CORS methods (GET, POST) and headers based on your API needs. Test CORS preflight requests with curl: ' .
+						'curl -i -X OPTIONS -H "Origin: https://trusted-domain.com" https://yoursite.com/wp-json/. Document allowed origins. ' .
+						'Regularly audit CORS configuration as new integrations are added.',
+						'wpshadow'
+					),
+				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'api-security',
+				'cors-configuration-guide'
+			);
+
+			return $finding;
 		}
 
 		return null;

@@ -53,13 +53,14 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.2602.1430
+ * @since      1.602.1430
  */
 
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -71,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures cumulative layout shifts that cause mobile usability problems and form abandonment.
  *
- * @since 1.2602.1430
+ * @since 1.602.1430
  */
 class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 
@@ -111,7 +112,7 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	 * - Needs Improvement: 0.1-0.25
 	 * - Poor: >0.25
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +159,7 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	/**
 	 * Identify sources of layout shifts.
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return array {
 	 *     Shift sources found.
 	 *
@@ -226,24 +227,17 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.2602.1430
+	 * @since  1.602.1430
 	 * @return string|null Page HTML or null.
 	 */
 	private static function get_page_html(): ?string {
-		// Try to get cached page HTML
-		$html = get_transient( 'wpshadow_page_html_cache' );
-
-		if ( ! $html ) {
-			// Capture current admin page
-			ob_start();
-			wp_head();
-			wp_footer();
-			$html = ob_get_clean();
-
-			// Cache for 1 hour
-			set_transient( 'wpshadow_page_html_cache', $html, HOUR_IN_SECONDS );
-		}
-
-		return $html ?: null;
+		return Diagnostic_HTML_Helper::fetch_homepage_html_cached(
+			'wpshadow_page_html_cache',
+			HOUR_IN_SECONDS,
+			array(
+				'timeout'   => 5,
+				'sslverify' => false,
+			)
+		);
 	}
 }

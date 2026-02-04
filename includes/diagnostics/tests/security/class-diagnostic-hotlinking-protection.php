@@ -18,14 +18,16 @@
  * Hotlink protection setup: https://wpshadow.com/kb/hotlinking-protection-wordpress\n * Video: Bandwidth optimization via hotlink blocking (8min): https://wpshadow.com/training/hotlink-protection\n *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.2601.2148
+ * @since      1.6030.2148
  */
 
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer uploads high-quality product images (5MB each). No hotlink\n * protection. Third-party comparison shopping site embeds images directly.\n * Site gets 1M visitors/month. Your images loaded for each visit (no caching\n * by third party). Bandwidth explosion. ISP throttles due to overuse.\n * Sites takes 30 seconds to load (legitimate traffic suffers).\n *
  * **Implementation Notes:**
  * - Checks .htaccess for RewriteCond rules\n * - Validates HTTP_REFERER blocking\n * - Tests placeholder image setup\n * - Severity: medium (no protection), high (major bandwidth waste)\n * - Treatment: enable hotlink blocking via .htaccess\n *
- * @since 1.2601.2148
+ * @since 1.6030.2148
  */
 class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 
@@ -81,7 +83,7 @@ class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 	 * - Response difference for external referrers
 	 * - Hotlink protection plugins
 	 *
-	 * @since  1.2601.2148
+	 * @since  1.6030.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -117,7 +119,7 @@ class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 		if ( 0 < $attachment_id ) {
 			$url = wp_get_attachment_url( $attachment_id );
 			if ( ! empty( $url ) ) {
-				$internal = wp_remote_head(
+				$internal = Diagnostic_Request_Helper::head_result(
 					$url,
 					array(
 						'timeout' => 5,
@@ -127,7 +129,7 @@ class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 					)
 				);
 
-				$external = wp_remote_head(
+				$external = Diagnostic_Request_Helper::head_result(
 					$url,
 					array(
 						'timeout' => 5,
@@ -137,9 +139,9 @@ class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 					)
 				);
 
-				if ( ! is_wp_error( $internal ) && ! is_wp_error( $external ) ) {
-					$internal_code = (int) wp_remote_retrieve_response_code( $internal );
-					$external_code = (int) wp_remote_retrieve_response_code( $external );
+				if ( $internal['success'] && $external['success'] ) {
+					$internal_code = (int) $internal['code'];
+					$external_code = (int) $external['code'];
 					if ( 200 <= $internal_code && 200 <= $external_code && $external_code >= 400 ) {
 						$referrer_block = true;
 					}

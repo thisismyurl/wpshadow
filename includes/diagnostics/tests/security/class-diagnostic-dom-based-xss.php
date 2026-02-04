@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -156,7 +157,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 				)
 			);
 
-			return array(
+			$finding = array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
 				'description'  => sprintf(
@@ -194,6 +195,15 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 					),
 				),
 			);
+
+			$finding = Upgrade_Path_Helper::add_upgrade_path(
+				$finding,
+				'security',
+				'code-analysis',
+				'dom-xss-guide'
+			);
+
+			return $finding;
 		}
 
 		return null;

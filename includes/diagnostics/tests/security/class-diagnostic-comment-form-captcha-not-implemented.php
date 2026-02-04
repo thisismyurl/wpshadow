@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2601.2352
+ * @since      1.6030.2352
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Blog owner installed reCAPTCHA plugin but never configured it. Comment form\n * renders without CAPTCHA. Bot discovers endpoint, submits 1,000 spam comments/day.\n * Owner realizes CAPTCHA never activated (plugin installed = assumption it works).\n *
  * **Implementation Notes:**
  * - Detects multiple CAPTCHA solutions (plugin-agnostic)\n * - Checks for both reCAPTCHA v2 and v3\n * - Returns severity: high (no CAPTCHA), medium (CAPTCHA but accessibility concerns)\n * - Auto-fixable treatment: recommend CAPTCHA plugin, provide setup steps\n *
- * @since 1.2601.2352
+ * @since 1.6030.2352
  */\nclass Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
 
 	/**
@@ -75,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2601.2352
+	 * @since  1.6030.2352
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

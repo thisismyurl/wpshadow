@@ -24,9 +24,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible international user experience problems\n * - #9 Show Value: Delivers 5-10x latency reduction for 90% of global users\n * - #10 Talk-About-Worthy: "Our site is fast everywhere now" unlocks growth\n *
  * **Related Checks:**\n * - Image Optimization (complements CDN for images)\n * - Browser Caching Headers (works with CDN caching)\n * - Server Response Time (measures CDN effectiveness)\n * - Global Analytics (reveals geographic performance disparities)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/cdn-configuration\n * - Video: https://wpshadow.com/training/cdn-setup-guide (6 min)\n * - Advanced: https://wpshadow.com/training/global-performance-strategy (14 min)\n *
- * @since   1.26033.2076\n * @package WPShadow\\Diagnostics\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CDN Configuration Diagnostic Class\n *\n * Validates CDN setup for geographic performance optimization.
+ * @since   1.6033.2076\n * @package WPShadow\\Diagnostics\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CDN Configuration Diagnostic Class\n *\n * Validates CDN setup for geographic performance optimization.
  *
- * @since 1.26033.2076
+ * @since 1.6033.2076
  */
 class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2076
+	 * @since  1.6033.2076
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

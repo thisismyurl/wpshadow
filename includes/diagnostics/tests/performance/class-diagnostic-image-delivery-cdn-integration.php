@@ -5,7 +5,7 @@
  * Verifies that images are being delivered through a CDN service for
  * optimal performance and global distribution.
  *
- * @since   1.26033.2099
+ * @since   1.6033.2099
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - CloudFlare or similar service
  * - Global distribution
  *
- * @since 1.26033.2099
+ * @since 1.6033.2099
  */
 class Diagnostic_Image_Delivery_Cdn_Integration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Image_Delivery_Cdn_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.26033.2099
+	 * @since  1.6033.2099
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

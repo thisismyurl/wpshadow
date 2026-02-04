@@ -23,9 +23,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible database bloat\n * - #9 Show Value: Delivers 30-60% reduction in autoload size through cleanup\n * - #10 Talk-About-Worthy: "We found 10MB of garbage options" is satisfying\n *
  * **Related Checks:**\n * - Transients Not Cleaned Up (related autoload bloat)\n * - Database Table Optimization (similar cleanup)\n * - Inactive Plugins/Themes (major autoload bloat source)\n * - Database Query Optimization (overall speed)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/autoloaded-data-size\n * - Video: https://wpshadow.com/training/wordpress-database-cleanup (5 min)\n * - Advanced: https://wpshadow.com/training/autoload-strategy (10 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.26033.2063\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Autoloaded Data Size Diagnostic Class\n *\n * Measures autoloaded WordPress options that load on every page request.
+ * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6033.2063\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Autoloaded Data Size Diagnostic Class\n *\n * Measures autoloaded WordPress options that load on every page request.
  *
- * @since 1.26033.2063
+ * @since 1.6033.2063
  */
 class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 	 * Warning: >1MB
 	 * Critical: >2MB
 	 *
-	 * @since  1.26033.2063
+	 * @since  1.6033.2063
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
