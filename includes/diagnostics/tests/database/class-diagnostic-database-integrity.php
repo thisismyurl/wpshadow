@@ -82,39 +82,18 @@ class Diagnostic_Database_Integrity extends Diagnostic_Base {
 
 		$corrupted = array();
 		$errors = array();
+		$checked_count = 0;
 
-		// Check core WordPress tables.
-		$core_tables = array(
-			$wpdb->posts,
-			$wpdb->postmeta,
-			$wpdb->users,
-			$wpdb->usermeta,
-			$wpdb->options,
-			$wpdb->terms,
-			$wpdb->term_taxonomy,
-			$wpdb->term_relationships,
-		);
+		// Check ALL tables in database (core + plugins + themes + custom).
+		// Per Phase 1 spec: must check all tables, not just WordPress core tables.
+		foreach ( $tables as $table_array ) {
+			$table = $table_array[0];
+			$checked_count++;
 
-		foreach ( $core_tables as $table ) {
-			// Check if table exists.
-			$table_exists = $wpdb->get_var(
-				$wpdb->prepare(
-					'SHOW TABLES LIKE %s',
-					$table
-				)
-			);
-
-			if ( ! $table_exists ) {
-				$corrupted[] = $table;
-				continue;
-			}
-
-			// Run CHECK TABLE.
+			// Run CHECK TABLE on each table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$check_result = $wpdb->get_row(
-				$wpdb->prepare(
-					'CHECK TABLE %i',
-					$table
-				),
+				"CHECK TABLE `{$table}`",
 				ARRAY_A
 			);
 
@@ -179,6 +158,7 @@ class Diagnostic_Database_Integrity extends Diagnostic_Base {
 				'kb_link'      => 'https://wpshadow.com/kb/database-integrity',
 				'context'      => array(
 					'corrupted_tables' => $corrupted,
+					'tables_checked'   => $checked_count,
 					'errors'           => $errors,
 				),
 			);
@@ -198,7 +178,8 @@ class Diagnostic_Database_Integrity extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/database-integrity',
 				'context'      => array(
-					'issues' => $errors,
+					'issues'         => $errors,
+					'tables_checked' => $checked_count,
 				),
 			);
 		}

@@ -64,24 +64,4 @@ class Diagnostic_Session_Fixation_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'regenerate_session_id' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Session fixation not prevented. Regenerate session IDs on login and use secure,
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/session-fixation-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

@@ -64,24 +64,4 @@ class Diagnostic_Path_Traversal_Attack_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_file_paths' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Path traversal attack not prevented. Use realpath() and restrict file operations to allowed directories.',
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/path-traversal-attack-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

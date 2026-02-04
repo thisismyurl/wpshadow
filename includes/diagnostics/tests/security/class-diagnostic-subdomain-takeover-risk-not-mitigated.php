@@ -64,24 +64,4 @@ class Diagnostic_Subdomain_Takeover_Risk_Not_Mitigated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'mitigate_subdomain_takeover' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Subdomain takeover risk not mitigated. Remove unused DNS records and document all subdomains with owners.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/subdomain-takeover-risk-not-mitigated'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

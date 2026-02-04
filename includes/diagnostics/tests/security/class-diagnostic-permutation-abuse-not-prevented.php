@@ -64,24 +64,48 @@ class Diagnostic_Permutation_Abuse_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_permutation_abuse' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Permutation abuse not prevented. Implement account lockout after failed login attempts to prevent credential stuffing.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/permutation-abuse-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		// Check for account lockout after failed login attempts.
+		// Permutation/brute force attacks try many password combinations.
+		// Account lockout prevents unlimited attempts.
+
+		$lockout_plugins = array(
+			'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php',
+			'wordfence/wordfence.php',
+			'jetpack/jetpack.php',
+			'iThemes-security/iThemesSecurityPlugin.php',
+		);
+
+		$has_lockout = false;
+		foreach ( $lockout_plugins as $plugin ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$has_lockout = true;
+				break;
+			}
+		}
+
+		// Check if a custom filter exists for login attempt rate limiting.
+		if ( ! $has_lockout && has_filter( 'authenticate' ) ) {
+			// Might have custom implementation.
+			$has_lockout = true;
+		}
+
+		if ( ! $has_lockout ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Your site allows unlimited login attempts (like leaving your door unlocked with no limit on how many times someone can try your passwords). Attackers use automated tools to try thousands of password combinations. Account lockout limits login attempts to a few per minute, making brute force attacks impossible. Install a security plugin like Limit Login Attempts Reloaded to enable this protection.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 70,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/permutation-abuse-not-prevented',
+				'context'      => array(
+					'login_lockout_enabled' => false,
+					'recommended_plugin'    => 'Limit Login Attempts Reloaded',
+				),
+			);
+		}
+
+		// Lockout protection is in place.
+		return null;
 	}
 }

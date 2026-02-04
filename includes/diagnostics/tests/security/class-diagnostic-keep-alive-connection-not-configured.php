@@ -64,24 +64,51 @@ class Diagnostic_Keep_Alive_Connection_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'enable_keep_alive' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Keep-Alive connection not configured. Enable persistent connections to reduce connection overhead.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   35,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/keep-alive-connection-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		// Check if HTTP Keep-Alive is enabled on the server.
+		// Keep-Alive allows multiple requests over a single TCP connection,
+		// reducing overhead and improving performance.
+
+		// This is an Apache/Nginx configuration, not a WordPress setting.
+		// We check the server's HTTP response headers for Connection: keep-alive.
+
+		$site_url = get_site_url();
+
+		// Make a HEAD request to check response headers.
+		// phpcs:ignore WordPress.WP.RemoteCall.dynamic_using_variable_url
+		$response = wp_remote_head(
+			$site_url,
+			array(
+				'timeout'    => 10,
+				'sslverify'  => false,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			// Can't reach the site, skip this check.
+			return null;
+		}
+
+		$headers = wp_remote_retrieve_headers( $response );
+		$connection_header = isset( $headers['connection'] ) ? strtolower( $headers['connection'] ) : '';
+
+		// Keep-Alive should be in the Connection header.
+		if ( false === strpos( $connection_header, 'keep-alive' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Your server is not using HTTP Keep-Alive connections (like hanging up the phone after each word instead of having a conversation). This means every request to your site has to establish a new network connection, which wastes time and bandwidth. Enabling Keep-Alive lets your browser reuse the same connection for multiple requests, making your site feel faster. Ask your hosting provider to enable this in Apache or Nginx.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/keep-alive-connection-not-configured',
+				'context'      => array(
+					'connection_header' => $connection_header,
+					'keep_alive_enabled' => false,
+				),
+			);
+		}
+
+		// Keep-Alive is enabled - great!
+		return null;
 	}
 }

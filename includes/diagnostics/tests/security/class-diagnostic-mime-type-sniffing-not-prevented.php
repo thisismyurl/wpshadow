@@ -64,24 +64,4 @@ class Diagnostic_MIME_Type_Sniffing_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_mime_sniffing' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('MIME type sniffing not prevented. Set X-Content-Type-Options: nosniff header to prevent browser MIME sniffing.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   50,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/mime-type-sniffing-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

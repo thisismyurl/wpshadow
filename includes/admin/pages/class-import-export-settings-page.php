@@ -348,6 +348,9 @@ class Import_Export_Settings_Page {
 					'restoreError'     => __( 'Failed to restore settings from cloud.', 'wpshadow' ),
 					'confirmImport'    => __( 'This will overwrite your current settings. A backup will be created automatically. Continue?', 'wpshadow' ),
 					'confirmRestore'   => __( 'This will replace your current settings with your cloud backup. Continue?', 'wpshadow' ),
+					'retrying'         => __( 'Upload failed. Trying again (%1$d of %2$d)...', 'wpshadow' ),
+					'retryingShort'    => __( 'Retrying upload...', 'wpshadow' ),
+					'retryFailed'      => __( 'Upload failed after a few tries. Please check your connection and try again.', 'wpshadow' ),
 				),
 			)
 		);

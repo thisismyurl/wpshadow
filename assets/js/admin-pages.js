@@ -23,6 +23,8 @@
             this.initAjaxHandlers();
             this.initToggles();
             this.initToolLinks();
+            this.initProgressOverlay();
+            this.initGlobalAjaxProgress();
         },
 
         /**
@@ -357,6 +359,206 @@
                     }
                 }
             });
+        },
+
+        /**
+         * Progress Overlay
+         */
+        initProgressOverlay: function() {
+            if ($('#wpshadow-progress-overlay').length) {
+                return;
+            }
+
+            const titleText = (wpshadowAdmin.i18n && wpshadowAdmin.i18n.working) ? wpshadowAdmin.i18n.working : 'Working on it...';
+            const detailText = (wpshadowAdmin.i18n && wpshadowAdmin.i18n.workingDetails) ? wpshadowAdmin.i18n.workingDetails : 'This can take a few minutes.';
+            const cancelText = (wpshadowAdmin.i18n && wpshadowAdmin.i18n.cancel) ? wpshadowAdmin.i18n.cancel : 'Cancel';
+
+            const overlay = $(
+                '<div id="wpshadow-progress-overlay" class="wps-scan-overlay" aria-busy="false" role="status" aria-live="polite">' +
+                    '<div class="wps-scan-overlay-content">' +
+                        '<h2 class="wps-progress-title">' + titleText + '</h2>' +
+                        '<div class="wps-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">' +
+                            '<div class="wps-progress-fill is-indeterminate"></div>' +
+                        '</div>' +
+                        '<div class="wps-progress-text">' + titleText + '</div>' +
+                        '<div class="wps-progress-details">' + detailText + '</div>' +
+                        '<button type="button" class="wps-btn-primary wps-progress-cancel" style="display:none;">' + cancelText + '</button>' +
+                    '</div>' +
+                '</div>'
+            );
+
+            $('body').append(overlay);
+        },
+
+        showProgress: function(options) {
+            const overlay = $('#wpshadow-progress-overlay');
+            if (!overlay.length) {
+                return;
+            }
+
+            const titleText = options && options.title ? options.title : (wpshadowAdmin.i18n && wpshadowAdmin.i18n.working ? wpshadowAdmin.i18n.working : 'Working on it...');
+            const detailText = options && options.details ? options.details : (wpshadowAdmin.i18n && wpshadowAdmin.i18n.workingDetails ? wpshadowAdmin.i18n.workingDetails : 'This can take a few minutes.');
+
+            overlay.find('.wps-progress-title').text(titleText);
+            overlay.find('.wps-progress-text').text(titleText);
+            overlay.find('.wps-progress-details').text(detailText);
+
+            const progressFill = overlay.find('.wps-progress-fill');
+            progressFill.addClass('is-indeterminate').css('width', '30%');
+            overlay.find('.wps-progress-bar').attr('aria-valuenow', '0');
+
+            const cancelButton = overlay.find('.wps-progress-cancel');
+            if (options && typeof options.onCancel === 'function') {
+                cancelButton.show().off('click').on('click', function(e) {
+                    e.preventDefault();
+                    options.onCancel();
+                });
+            } else {
+                cancelButton.hide().off('click');
+            }
+
+            overlay.attr('aria-busy', 'true');
+        },
+
+        updateProgress: function(percent, message, details) {
+            const overlay = $('#wpshadow-progress-overlay');
+            if (!overlay.length) {
+                return;
+            }
+
+            const progressFill = overlay.find('.wps-progress-fill');
+            progressFill.removeClass('is-indeterminate').css('width', percent + '%');
+            overlay.find('.wps-progress-bar').attr('aria-valuenow', percent);
+
+            if (message) {
+                overlay.find('.wps-progress-text').text(message);
+            }
+
+            if (details) {
+                overlay.find('.wps-progress-details').text(details);
+            }
+        },
+
+        hideProgress: function() {
+            const overlay = $('#wpshadow-progress-overlay');
+            if (!overlay.length) {
+                return;
+            }
+
+            overlay.attr('aria-busy', 'false');
+            overlay.find('.wps-progress-cancel').hide().off('click');
+        },
+
+        initGlobalAjaxProgress: function() {
+            const self = this;
+            this.longAjaxCount = 0;
+            this.longAjaxTimer = null;
+
+            $(document).ajaxSend(function(event, xhr, settings) {
+                const action = self.getAjaxAction(settings);
+                if (!action || !self.isLongOperation(action)) {
+                    return;
+                }
+
+                self.longAjaxCount++;
+                if (self.longAjaxTimer) {
+                    clearTimeout(self.longAjaxTimer);
+                }
+
+                self.longAjaxTimer = setTimeout(function() {
+                    if (self.longAjaxCount > 0) {
+                        self.showProgress(self.getLongOperationMessage(action));
+                    }
+                }, 800);
+            });
+
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                const action = self.getAjaxAction(settings);
+                if (!action || !self.isLongOperation(action)) {
+                    return;
+                }
+
+                self.longAjaxCount = Math.max(0, self.longAjaxCount - 1);
+                if (self.longAjaxCount === 0) {
+                    if (self.longAjaxTimer) {
+                        clearTimeout(self.longAjaxTimer);
+                        self.longAjaxTimer = null;
+                    }
+                    self.hideProgress();
+                }
+            });
+        },
+
+        getAjaxAction: function(settings) {
+            if (!settings || !settings.data) {
+                return '';
+            }
+
+            if (typeof settings.data.get === 'function') {
+                return settings.data.get('action') || '';
+            }
+
+            if (typeof settings.data === 'string') {
+                try {
+                    const params = new URLSearchParams(settings.data);
+                    return params.get('action') || '';
+                } catch (e) {
+                    return '';
+                }
+            }
+
+            if (typeof settings.data === 'object' && settings.data.action) {
+                return settings.data.action;
+            }
+
+            return '';
+        },
+
+        isLongOperation: function(action) {
+            const longOperations = this.getLongOperationMessages();
+            return Object.prototype.hasOwnProperty.call(longOperations, action);
+        },
+
+        getLongOperationMessage: function(action) {
+            const longOperations = this.getLongOperationMessages();
+            return longOperations[action] || {};
+        },
+
+        getLongOperationMessages: function() {
+            return {
+                wpshadow_vault_create_backup: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.creatingBackup ? wpshadowAdmin.i18n.creatingBackup : 'Creating backup...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.backupDetails ? wpshadowAdmin.i18n.backupDetails : 'This can take a few minutes.'
+                },
+                wpshadow_vault_restore_backup: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.restoringBackup ? wpshadowAdmin.i18n.restoringBackup : 'Restoring backup...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.restoreDetails ? wpshadowAdmin.i18n.restoreDetails : 'Please keep this tab open while we restore your site.'
+                },
+                wpshadow_vault_delete_backup: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.deletingBackup ? wpshadowAdmin.i18n.deletingBackup : 'Deleting backup...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.deleteDetails ? wpshadowAdmin.i18n.deleteDetails : 'This should only take a moment.'
+                },
+                wpshadow_bulk_find_replace: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.findReplaceRunning ? wpshadowAdmin.i18n.findReplaceRunning : 'Running find and replace...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.findReplaceDetails ? wpshadowAdmin.i18n.findReplaceDetails : 'We are updating your content safely.'
+                },
+                wpshadow_run_family_diagnostics: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.runningDiagnostics ? wpshadowAdmin.i18n.runningDiagnostics : 'Running diagnostics...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.diagnosticsDetails ? wpshadowAdmin.i18n.diagnosticsDetails : 'This can take a few minutes.'
+                },
+                wpshadow_guardian_scan: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.runningScan ? wpshadowAdmin.i18n.runningScan : 'Running a scan...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.scanDetails ? wpshadowAdmin.i18n.scanDetails : 'We will update you when the scan is done.'
+                },
+                wpshadow_generate_dna: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.generatingDna ? wpshadowAdmin.i18n.generatingDna : 'Generating site DNA...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.dnaDetails ? wpshadowAdmin.i18n.dnaDetails : 'We are gathering site details.'
+                },
+                wpshadow_download_report: {
+                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.preparingReport ? wpshadowAdmin.i18n.preparingReport : 'Preparing report...',
+                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.reportDetails ? wpshadowAdmin.i18n.reportDetails : 'This can take a few minutes.'
+                }
+            };
         },
 
         /**

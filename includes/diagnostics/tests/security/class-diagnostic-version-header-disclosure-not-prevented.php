@@ -64,24 +64,4 @@ class Diagnostic_Version_Header_Disclosure_Not_Prevented extends Diagnostic_Base
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'remove_version_headers' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Version header disclosure not prevented. Remove X-Powered-By and Server version headers to reduce information exposure.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   25,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/version-header-disclosure-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

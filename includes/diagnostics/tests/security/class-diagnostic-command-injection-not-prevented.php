@@ -64,24 +64,4 @@ class Diagnostic_Command_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'escape_shell_commands' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Command injection not prevented. Use escapeshellarg/escapeshellcmd and avoid system() calls with user input. Use safer alternatives like WordPress hooks.',
-						'severity'   =>   'high',
-						'threat_level'   =>   80,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/command-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

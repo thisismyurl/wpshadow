@@ -145,32 +145,53 @@
 			reader.onload = (event) => {
 				const settings = event.target.result;
 
-				// Make AJAX request
-				$.ajax({
-					url: wpShadowImportExport.ajaxUrl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_import_settings',
-						nonce: nonce,
-						settings: settings,
-					},
-					success: (response) => {
-						if (response.success) {
-							this.showMessage('success', wpShadowImportExport.i18n.importSuccess);
-							// Reload page after 2 seconds
-							setTimeout(() => {
-								location.reload();
-							}, 2000);
-						} else {
-							this.showMessage('error', response.data.message || wpShadowImportExport.i18n.importError);
+				const maxRetries = 2;
+				const attemptImport = (attempt) => {
+					$.ajax({
+						url: wpShadowImportExport.ajaxUrl,
+						type: 'POST',
+						data: {
+							action: 'wpshadow_import_settings',
+							nonce: nonce,
+							settings: settings,
+						},
+						success: (response) => {
+							if (response.success) {
+								this.showMessage('success', wpShadowImportExport.i18n.importSuccess);
+								// Reload page after 2 seconds
+								setTimeout(() => {
+									location.reload();
+								}, 2000);
+							} else {
+								this.showMessage('error', response.data.message || wpShadowImportExport.i18n.importError);
+								$button.prop('disabled', false).html(originalText);
+							}
+						},
+						error: () => {
+							if (attempt < maxRetries) {
+								const nextAttempt = attempt + 1;
+								const delay = Math.pow(2, attempt) * 1000;
+								const retryMessage = wpShadowImportExport.i18n.retrying
+									.replace('%1$d', nextAttempt)
+									.replace('%2$d', maxRetries + 1);
+								this.showMessage('info', retryMessage);
+								$button.html(
+									'<span class="dashicons dashicons-update-alt dashicons-spin"></span> ' +
+										wpShadowImportExport.i18n.retryingShort
+								);
+								setTimeout(() => {
+									attemptImport(nextAttempt);
+								}, delay);
+								return;
+							}
+
+							this.showMessage('error', wpShadowImportExport.i18n.retryFailed);
 							$button.prop('disabled', false).html(originalText);
-						}
-					},
-					error: () => {
-						this.showMessage('error', wpShadowImportExport.i18n.importError);
-						$button.prop('disabled', false).html(originalText);
-					},
-				});
+						},
+					});
+				};
+
+				attemptImport(0);
 			};
 
 			reader.onerror = () => {

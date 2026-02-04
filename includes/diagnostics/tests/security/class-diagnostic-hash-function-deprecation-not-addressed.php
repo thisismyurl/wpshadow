@@ -64,24 +64,4 @@ class Diagnostic_Hash_Function_Deprecation_Not_Addressed extends Diagnostic_Base
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'use_argon2_hashing' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Hash function deprecation not addressed. Use password_hash() with argon2 instead of MD5/SHA1 for secure password hashing.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/hash-function-deprecation-not-addressed'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

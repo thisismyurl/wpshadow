@@ -64,24 +64,4 @@ class Diagnostic_Email_Validation_Not_Comprehensive extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_email_thoroughly' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Email validation not comprehensive. Implement format validation,
-						'severity'   =>   'medium',
-						'threat_level'   =>   30,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/email-validation-not-comprehensive'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

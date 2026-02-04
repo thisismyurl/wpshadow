@@ -64,24 +64,4 @@ class Diagnostic_Weak_SSL_TLS_Configuration extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_ssl_tls_strength' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Weak SSL/TLS configuration detected. Use TLS 1.2+ and disable deprecated ciphers and protocols.',
-						'severity'   =>   'high',
-						'threat_level'   =>   80,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/weak-ssl-tls-configuration'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

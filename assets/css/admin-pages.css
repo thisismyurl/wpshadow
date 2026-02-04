@@ -839,6 +839,23 @@
 	border-radius: var(--wps-radius-full);
 }
 
+.wps-progress-fill.is-indeterminate {
+	width: 30%;
+	animation: wps-progress-indeterminate 1.5s ease-in-out infinite;
+}
+
+@keyframes wps-progress-indeterminate {
+	0% {
+		transform: translateX(-120%);
+	}
+	50% {
+		transform: translateX(120%);
+	}
+	100% {
+		transform: translateX(240%);
+	}
+}
+
 .wps-progress-text {
 	font-size: var(--wps-text-base);
 	font-weight: var(--wps-font-semibold);

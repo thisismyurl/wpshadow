@@ -64,24 +64,4 @@ class Diagnostic_YAML_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'sanitize_yaml_input' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('YAML injection not prevented. Use safe_load() instead of load() and avoid parsing untrusted YAML.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/yaml-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

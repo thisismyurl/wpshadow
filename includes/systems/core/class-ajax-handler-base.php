@@ -190,13 +190,87 @@ abstract class AJAX_Handler_Base {
 	/**
 	 * Send standardized error response.
 	 *
-	 * @param string $message Error message.
-	 * @param array  $data    Additional data to include in response.
+	 * Ensures user-facing messages are friendly and do not expose technical
+	 * details. Technical errors are logged server-side for debugging.
+	 *
+	 * @since  1.8035.1200
+	 * @param string|\WP_Error $message Error message or WP_Error instance.
+	 * @param array           $data    Additional data to include in response.
 	 * @return void Dies after sending response.
 	 */
 	protected static function send_error( $message, $data = array() ) {
-		$data['message'] = $message;
+		$raw_message = $message;
+		$friendly_message = self::format_error_message( $message );
+
+		if ( $friendly_message !== $raw_message && class_exists( 'WPShadow\Core\Error_Handler' ) ) {
+			$action = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
+			Error_Handler::log_error(
+				'AJAX error message sanitized',
+				array(
+					'action'  => $action,
+					'message' => is_wp_error( $raw_message ) ? $raw_message->get_error_message() : (string) $raw_message,
+				)
+			);
+		}
+
+		$data['message'] = $friendly_message;
 		wp_send_json_error( $data );
+	}
+
+	/**
+	 * Format error message for user-friendly display.
+	 *
+	 * Converts technical errors into plain-language guidance.
+	 *
+	 * @since  1.8035.1200
+	 * @param  string|\WP_Error $message Error message or WP_Error instance.
+	 * @return string User-friendly message.
+	 */
+	protected static function format_error_message( $message ) : string {
+		if ( is_wp_error( $message ) ) {
+			$message = $message->get_error_message();
+		}
+
+		$message = wp_strip_all_tags( (string) $message );
+		$message = trim( $message );
+
+		if ( '' === $message ) {
+			return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'wpshadow' );
+		}
+
+		$technical_patterns = array(
+			'/\bSQL\b/i',
+			'/\bwpdb\b/i',
+			'/\bmysqli?\b/i',
+			'/\bFatal error\b/i',
+			'/\bWarning\b/i',
+			'/\bNotice\b/i',
+			'/\bException\b/i',
+			'/\bStack trace\b/i',
+			'/\bon line\b/i',
+			'/\.php\b/i',
+			'/\bUndefined\b/i',
+			'/\bCall to\b/i',
+			'/\bbacktrace\b/i',
+			'/\bREST\b/i',
+			'/\bcURL\b/i',
+			'/\bHTTP \d{3}\b/i',
+			'/\bpermission denied\b/i',
+			'/\bfile not found\b/i',
+		);
+
+		foreach ( $technical_patterns as $pattern ) {
+			if ( preg_match( $pattern, $message ) ) {
+				return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'wpshadow' );
+			}
+		}
+
+		// Keep friendly short messages as-is.
+		if ( strlen( $message ) > 180 ) {
+			return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'wpshadow' );
+		}
+
+		return $message;
 	}
 
 	/**

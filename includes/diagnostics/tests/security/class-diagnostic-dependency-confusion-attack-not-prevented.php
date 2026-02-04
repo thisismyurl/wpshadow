@@ -64,24 +64,4 @@ class Diagnostic_Dependency_Confusion_Attack_Not_Prevented extends Diagnostic_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_dependency_confusion' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Dependency confusion attack not prevented. Use composer repository config and verify package integrity.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/dependency-confusion-attack-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

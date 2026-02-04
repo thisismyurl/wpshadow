@@ -148,6 +148,8 @@ class Diagnostic_Request_Helper {
 	 * @param  string $url    URL to request.
 	 * @param  array  $args   Request args.
 	 * @return array Result array.
+	 *     @type bool        $fallback      Optional. True when cached fallback used.
+	 *     @type string|null $warning       Optional. Friendly fallback notice.
 	 */
 	private static function request_result( string $method, string $url, array $args = array() ): array {
 		if ( ! function_exists( 'wp_remote_request' ) ) {
@@ -159,6 +161,12 @@ class Diagnostic_Request_Helper {
 				'response'      => null,
 			);
 		}
+
+		$cache_key     = 'wpshadow_http_' . md5( $method . '|' . $url );
+		$cache_ttl     = isset( $args['cache_ttl'] ) ? absint( $args['cache_ttl'] ) : 3600;
+		$allow_fallback = isset( $args['fallback'] ) ? (bool) $args['fallback'] : true;
+
+		unset( $args['cache_ttl'], $args['fallback'] );
 
 		$defaults = array(
 			'timeout'   => 5,
@@ -180,6 +188,21 @@ class Diagnostic_Request_Helper {
 		}
 
 		if ( is_wp_error( $response ) ) {
+			if ( $allow_fallback ) {
+				$cached = get_transient( $cache_key );
+				if ( is_array( $cached ) ) {
+					return array(
+						'success'       => true,
+						'code'          => wp_remote_retrieve_response_code( $cached ),
+						'error_message' => null,
+						'error_code'    => null,
+						'response'      => $cached,
+						'fallback'      => true,
+						'warning'       => __( 'Using cached response because the service is temporarily unavailable.', 'wpshadow' ),
+					);
+				}
+			}
+
 			return array(
 				'success'       => false,
 				'code'          => null,
@@ -188,6 +211,8 @@ class Diagnostic_Request_Helper {
 				'response'      => null,
 			);
 		}
+
+		set_transient( $cache_key, $response, $cache_ttl );
 
 		return array(
 			'success'       => true,

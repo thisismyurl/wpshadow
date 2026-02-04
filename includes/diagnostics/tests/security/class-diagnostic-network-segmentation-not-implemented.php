@@ -64,24 +64,47 @@ class Diagnostic_Network_Segmentation_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'implement_network_segmentation' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Network segmentation not implemented. Isolate database servers,
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/network-segmentation-not-implemented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		// Check if network segmentation is implemented.
+		// Network segmentation isolates database servers and application servers
+		// on separate network segments, limiting damage if one is compromised.
+
+		// This is an infrastructure-level configuration, not a WordPress setting.
+		// We check for common practices and warn if not observed.
+
+		// Check if database is on same server as WordPress (less secure).
+		global $wpdb;
+
+		$db_host = DB_HOST;
+		$site_url = get_site_url();
+
+		// Extract domain/IP from site URL.
+		$app_server = wp_parse_url( $site_url, PHP_URL_HOST );
+
+		// If DB host and app server are localhost or same, segmentation not implemented.
+		$same_server = (
+			strtolower( $db_host ) === 'localhost' ||
+			strtolower( $db_host ) === '127.0.0.1' ||
+			strtolower( $db_host ) === $app_server
+		);
+
+		if ( $same_server ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Your database and web server are on the same machine (like storing your safe in the bedroom instead of a separate vault). If one is compromised, both are at risk. Production sites should use separate servers for database and web application. This is done at the hosting level - contact your provider about moving the database to a dedicated server.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 70,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/network-segmentation-not-implemented',
+				'context'      => array(
+					'db_host'     => $db_host,
+					'app_server'  => $app_server,
+					'same_server' => $same_server,
+				),
+			);
+		}
+
+		// Database and app server are separated - good!
+		return null;
 	}
 }

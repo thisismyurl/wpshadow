@@ -64,24 +64,4 @@ class Diagnostic_Privilege_Escalation_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_privilege_escalation' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Privilege escalation not prevented. Strictly validate user roles and never trust user input for capability checks.',
-						'severity'   =>   'high',
-						'threat_level'   =>   90,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/privilege-escalation-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;

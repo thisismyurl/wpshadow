@@ -67,9 +67,28 @@ class Murphy_Safe_Request {
 			'redirection' => 2,
 			'user-agent'  => 'WPShadow/' . WPSHADOW_VERSION,
 		);
+
+		$max_tries   = isset( $args['max_tries'] ) ? absint( $args['max_tries'] ) : 2;
+		$retry_delay = isset( $args['retry_delay'] ) ? absint( $args['retry_delay'] ) : 1;
+
+		unset( $args['max_tries'], $args['retry_delay'] );
+
 		$args = wp_parse_args( $args, $defaults );
 
-		$response = wp_remote_get( $url, $args );
+		$response = null;
+		$attempt  = 0;
+		while ( $attempt < max( 1, $max_tries ) ) {
+			$attempt++;
+			$response = wp_remote_get( $url, $args );
+
+			if ( ! self::is_retryable_response( $response ) ) {
+				break;
+			}
+
+			// Wait before retry (exponential backoff).
+			sleep( max( 1, $retry_delay ) );
+			$retry_delay *= 2;
+		}
 
 		// Handle failure gracefully.
 		if ( is_wp_error( $response ) ) {
@@ -79,6 +98,7 @@ class Murphy_Safe_Request {
 				array(
 					'url'   => $url,
 					'error' => $response->get_error_message(),
+					'attempts' => $attempt,
 				)
 			);
 
@@ -211,6 +231,32 @@ class Murphy_Safe_Request {
 			// Success!
 			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 				return $response;
+			}
+
+			/**
+			 * Determine if a response should be retried.
+			 *
+			 * Retries on network errors and transient HTTP status codes.
+			 *
+			 * @since  1.8035.1200
+			 * @param  mixed $response Response from wp_remote_get.
+			 * @return bool True if retryable.
+			 */
+			private static function is_retryable_response( $response ) : bool {
+				if ( is_wp_error( $response ) ) {
+					return true;
+				}
+
+				$code = wp_remote_retrieve_response_code( $response );
+				if ( in_array( $code, array( 408, 429 ), true ) ) {
+					return true;
+				}
+
+				if ( $code >= 500 && $code <= 599 ) {
+					return true;
+				}
+
+				return false;
 			}
 
 			// Last attempt failed.

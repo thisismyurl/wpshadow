@@ -64,24 +64,4 @@ class Diagnostic_Endpoint_Rate_Limiting_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'apply_endpoint_rate_limiting' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Endpoint rate limiting not configured. Implement per-endpoint rate limits based on IP and user.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/endpoint-rate-limiting-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
-	}
-}
+		return null;
