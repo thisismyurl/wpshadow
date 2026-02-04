@@ -263,25 +263,25 @@ if (!is_ssl() && !in_array(\$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')))
 						),
 						'permission_callback_rules' => array(
 							'GET requests' => 'Can be public if data is non-sensitive',
-							'POST/PUT/DELETE' => 'MUST require authentication',
-							'Admin endpoints' => 'MUST require manage_options',
-							'User data' => 'MUST require appropriate capability',
+							'POST/PUT/DELETE' => 'Should require authentication',
+							'Admin endpoints' => 'Should require manage_options',
+							'User data' => 'Should require appropriate capability',
 						),
-						'secure_permission_examples' => "// WRONG - Anyone can modify
+						'secure_permission_examples' => "// Not recommended - anyone can modify
 register_rest_route('my-plugin/v1', '/posts', array(
 	'methods' => 'POST',
 	'callback' => 'create_post',
-	'permission_callback' => '__return_true', // ❌ INSECURE
+	'permission_callback' => '__return_true', // ❌ Not recommended
 ));
 
-// RIGHT - Only logged-in users
+// Better - only logged-in users
 register_rest_route('my-plugin/v1', '/posts', array(
 	'methods' => 'POST',
 	'callback' => 'create_post',
 	'permission_callback' => 'is_user_logged_in', // ✓ Better
 ));
 
-// BEST - Only administrators
+// Strongest - only administrators
 register_rest_route('my-plugin/v1', '/posts', array(
 	'methods' => 'POST',
 	'callback' => 'create_post',

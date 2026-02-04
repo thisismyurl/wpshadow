@@ -41,8 +41,8 @@ class Email_Template_Manager {
 				'text'        => self::get_default_text_detailed(),
 			),
 			'alert_critical'        => array(
-				'label'       => __( 'Critical Alert Email', 'wpshadow' ),
-				'description' => __( 'Urgent notification for critical issues', 'wpshadow' ),
+				'label'       => __( 'Urgent Alert Email', 'wpshadow' ),
+				'description' => __( 'Friendly heads-up for items that need attention soon', 'wpshadow' ),
 				'html'        => self::get_default_html_alert(),
 				'text'        => self::get_default_text_alert(),
 			),
@@ -556,15 +556,15 @@ HTML;
 	 */
 	private static function get_default_text_alert() {
 		return <<<'TEXT'
-CRITICAL ALERT: {title}
+IMPORTANT UPDATE: {title}
 
-⚠️ Your WordPress site requires immediate attention.
+⚠️ Your WordPress site needs attention.
 
 {content}
 
-ACTION REQUIRED: This issue poses a security or stability risk.
+Here's what this means: This could affect your site's security or stability.
 
-Review this issue now:
+Take a look when you can:
 {dashboard_url}
 
 {footer}

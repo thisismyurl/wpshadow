@@ -172,7 +172,7 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 		// Update baseline for anomaly detection
 		Baseline_Manager::update_baseline( $findings );
 
-		// Send notification if critical findings
+		// Send notification when top-severity findings are present.
 		if ( $critical_count > 0 && get_option( 'wpshadow_guardian_notification_enabled' ) ) {
 			Notification_Manager::send_notification(
 				'critical',
@@ -225,7 +225,7 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 				continue; // Treatment not available
 			}
 
-			// Create backup before fix (CRITICAL for safety)
+			// Create a backup before the fix (important for safety).
 			$backup_id = Backup_Manager::create_automated_backup(
 				'auto_fix_' . $treatment_id
 			);

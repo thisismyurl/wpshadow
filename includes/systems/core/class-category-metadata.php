@@ -156,7 +156,7 @@ function wpshadow_calculate_overall_health( array $findings_by_category, array $
 		);
 	}
 
-	// Weighted scoring: Critical = 30pts, High = 15pts, Medium = 5pts
+	// Weighted scoring: High-priority = 30pts, Medium = 15pts, Low = 5pts
 	$weighted_score = 100 - ( ( $critical_count * 30 + $high_count * 15 + $medium_count * 5 ) / $total_findings );
 	$weighted_score = max( 0, min( 100, $weighted_score ) );
 

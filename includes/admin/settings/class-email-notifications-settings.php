@@ -61,7 +61,7 @@ class Email_Notifications_Settings {
 		?>
 		<div class="wpshadow-settings-section">
 			<h2><?php esc_html_e( 'Email Notifications', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Receive email alerts when critical issues are detected on your site.', 'wpshadow' ); ?></p>
+			<p><?php esc_html_e( 'Receive email alerts when urgent items are detected on your site.', 'wpshadow' ); ?></p>
 
 			<form method="post" action="">
 				<?php wp_nonce_field( 'wpshadow_email_notifications_nonce' ); ?>
@@ -122,10 +122,10 @@ class Email_Notifications_Settings {
 								aria-describedby="email-notifications-threshold-description"
 							>
 								<option value="critical" <?php selected( $threshold, 'critical' ); ?>>
-									<?php esc_html_e( 'Critical Only', 'wpshadow' ); ?>
-								</option>
-								<option value="high" <?php selected( $threshold, 'high' ); ?>>
-									<?php esc_html_e( 'High & Critical', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Most Urgent Items Only', 'wpshadow' ); ?>
+						</option>
+						<option value="high" <?php selected( $threshold, 'high' ); ?>>
+							<?php esc_html_e( 'High Priority & Urgent Items', 'wpshadow' ); ?>
 								</option>
 								<option value="medium" <?php selected( $threshold, 'medium' ); ?>>
 									<?php esc_html_e( 'Medium & Above', 'wpshadow' ); ?>

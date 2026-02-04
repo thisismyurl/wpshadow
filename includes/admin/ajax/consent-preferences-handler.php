@@ -48,7 +48,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You must be logged in to save preferences.', 'wpshadow' ),
+					'message' => __( 'Please log in to save your preferences.', 'wpshadow' ),
 				)
 			);
 		}
@@ -90,7 +90,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You must be logged in to dismiss this prompt.', 'wpshadow' ),
+					'message' => __( 'Please log in to dismiss this prompt.', 'wpshadow' ),
 				)
 			);
 		}

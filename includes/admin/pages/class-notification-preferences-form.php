@@ -137,12 +137,12 @@ class Notification_Preferences_Form {
 
 		$alert_types = array(
 			'critical_issue'   => array(
-				'label'       => __( 'Critical Issues', 'wpshadow' ),
-				'description' => __( 'Severe problems requiring immediate attention', 'wpshadow' ),
+				'label'       => __( 'Most Urgent Items (like smoke alarms)', 'wpshadow' ),
+				'description' => __( 'Important things that need attention soon', 'wpshadow' ),
 			),
 			'auto_fix_failed'  => array(
-				'label'       => __( 'Auto-Fix Failures', 'wpshadow' ),
-				'description' => __( 'Notifications when automated fixes fail', 'wpshadow' ),
+				'label'       => __( 'Auto-Fix Attempts', 'wpshadow' ),
+				'description' => __( 'When automatic fixes need manual review', 'wpshadow' ),
 			),
 			'anomaly_detected' => array(
 				'label'       => __( 'Anomalies Detected', 'wpshadow' ),

@@ -149,8 +149,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'AI Writing Assistant', 'wpshadow' ),
-			'desc'    => __( 'In-editor AI suggestions to expand, summarize, rewrite, and improve content tone. Free: 10 requests/day.', 'wpshadow' ),
+			'title'   => __( 'Writing Suggestions', 'wpshadow' ),
+			'desc'    => __( 'Get suggestions to improve your writing while you type (like having a helpful editor looking over your shoulder). Free: 10 suggestions per day.', 'wpshadow' ),
 			'tool'    => 'ai-writing-assistant',
 			'icon'    => 'dashicons-edit',
 			'family'  => 'cloud-tools',
@@ -158,8 +158,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'AI Translation', 'wpshadow' ),
-			'desc'    => __( 'Neural machine translation with context awareness, better than Google Translate. Free: 10,000 words/month.', 'wpshadow' ),
+			'title'   => __( 'Language Translator', 'wpshadow' ),
+			'desc'    => __( 'Translates your content into other languages accurately (better than basic online translators). Free: 10,000 words per month.', 'wpshadow' ),
 			'tool'    => 'ai-translation',
 			'icon'    => 'dashicons-translation',
 			'family'  => 'cloud-tools',
@@ -167,8 +167,8 @@ function wpshadow_get_utilities_catalog() {
 			'requires_cloud' => true,
 		),
 		array(
-			'title'   => __( 'AI Chatbot Support', 'wpshadow' ),
-			'desc'    => __( 'AI chatbot trained on your site content to answer visitor questions. Free: 100 conversations/month.', 'wpshadow' ),
+			'title'   => __( 'Visitor Help Chat', 'wpshadow' ),
+			'desc'    => __( 'Answers visitor questions automatically using your site\'s content (like having a helpful assistant available 24/7). Free: 100 conversations per month.', 'wpshadow' ),
 			'tool'    => 'ai-chatbot',
 			'icon'    => 'dashicons-format-chat',
 			'family'  => 'cloud-tools',
@@ -177,8 +177,8 @@ function wpshadow_get_utilities_catalog() {
 		),
 
 		array(
-			'title'   => __( 'WPShadow Vault Light', 'wpshadow' ),
-			'desc'    => __( 'Schedule Vault Light snapshots, manage retention, and upgrade seamlessly to Vault.', 'wpshadow' ),
+			'title'   => __( 'Quick Backup Manager', 'wpshadow' ),
+			'desc'    => __( 'Schedule automatic backups and manage saved copies of your site (like keeping spare copies of important files).', 'wpshadow' ),
 			'tool'    => 'vault-light',
 			'icon'    => 'dashicons-backup',
 			'family'  => 'site-management',
@@ -186,63 +186,63 @@ function wpshadow_get_utilities_catalog() {
 		),
 		array(
 			'title'   => __( 'Dark Mode', 'wpshadow' ),
-			'desc'    => __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ),
+			'desc'    => __( 'Switch to dark colors for easier nighttime viewing (easier on your eyes in low light).', 'wpshadow' ),
 			'tool'    => 'dark-mode',
 			'icon'    => 'dashicons-visibility',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Email Test & Configuration', 'wpshadow' ),
-			'desc'    => __( 'Test email delivery and configure From Name/Email to ensure emails are sent properly.', 'wpshadow' ),
+			'title'   => __( 'Email Delivery Checker', 'wpshadow' ),
+			'desc'    => __( 'Test if your site can send emails properly and fix the sender name/address (like making sure your mail goes through).', 'wpshadow' ),
 			'tool'    => 'email-test',
 			'icon'    => 'dashicons-email',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Magic Link Support', 'wpshadow' ),
-			'desc'    => __( 'Generate secure one-time access links for support staff.', 'wpshadow' ),
+			'title'   => __( 'Temporary Support Access', 'wpshadow' ),
+			'desc'    => __( 'Create one-time access links for support staff (like giving someone a key that only works once).', 'wpshadow' ),
 			'tool'    => 'magic-link-support',
 			'icon'    => 'dashicons-admin-users',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Tips & Guidance', 'wpshadow' ),
-			'desc'    => __( 'Friendly tooltips across wp-admin with opt-out controls and helpful guidance for beginners.', 'wpshadow' ),
+			'title'   => __( 'Helpful Hints', 'wpshadow' ),
+			'desc'    => __( 'Shows friendly tips throughout WordPress to help you understand what things do (like having a guide point things out).', 'wpshadow' ),
 			'tool'    => 'tips-coach',
 			'icon'    => 'dashicons-lightbulb',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Timezone Alignment', 'wpshadow' ),
-			'desc'    => __( 'Verify and align your server, browser, and WordPress timezone settings.', 'wpshadow' ),
+			'title'   => __( 'Time Zone Fixer', 'wpshadow' ),
+			'desc'    => __( 'Makes sure your site shows the correct time everywhere (like setting all clocks to match).', 'wpshadow' ),
 			'tool'    => 'timezone-alignment',
 			'icon'    => 'dashicons-clock',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Asset Impact Explorer', 'wpshadow' ),
-			'desc'    => __( 'Analyze scripts and stylesheets loading on your site to identify performance optimization opportunities.', 'wpshadow' ),
+			'title'   => __( 'Script Speed Analyzer', 'wpshadow' ),
+			'desc'    => __( 'Shows which code files are slowing down your site (like finding which apps drain your phone battery).', 'wpshadow' ),
 			'tool'    => 'asset-impact',
 			'icon'    => 'dashicons-performance',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( '404 Monitor', 'wpshadow' ),
-			'desc'    => __( 'Track 404 errors and identify broken links. Set up redirects to fix broken URLs and improve SEO.', 'wpshadow' ),
+			'title'   => __( 'Broken Page Tracker', 'wpshadow' ),
+			'desc'    => __( 'Finds pages that don\'t exist anymore and helps you redirect visitors to the right place (like fixing broken road signs).', 'wpshadow' ),
 			'tool'    => '404-monitor',
 			'icon'    => 'dashicons-warning',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Update Safety Check', 'wpshadow' ),
-			'desc'    => __( 'Pre-update safety verification and Vault Light snapshot creation before WordPress updates.', 'wpshadow' ),
+			'title'   => __( 'Safe Update Checker', 'wpshadow' ),
+			'desc'    => __( 'Checks if it\'s safe to update WordPress and makes a backup first (like testing the water before jumping in).', 'wpshadow' ),
 			'tool'    => 'update-safety',
 			'icon'    => 'dashicons-update',
 			'family'  => 'site-management',
@@ -251,48 +251,48 @@ function wpshadow_get_utilities_catalog() {
 
 		// Killer Utilities (Added 1.6030.2200)
 		array(
-			'title'   => __( 'Site Cloner', 'wpshadow' ),
-			'desc'    => __( 'One-click site cloning to subdomain or subdirectory. Perfect for staging, testing, and development. Free: 2 clones.', 'wpshadow' ),
+			'title'   => __( 'Site Duplicator', 'wpshadow' ),
+			'desc'    => __( 'Makes an exact copy of your site for testing changes safely (like having a practice version before making real changes). Free: 2 copies.', 'wpshadow' ),
 			'tool'    => 'site-cloner',
 			'icon'    => 'dashicons-admin-site-alt3',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Smart Code Snippets', 'wpshadow' ),
-			'desc'    => __( 'Add PHP, JavaScript, and CSS snippets safely without editing theme files. Syntax validation and sandboxed testing. Free: 10 snippets.', 'wpshadow' ),
+			'title'   => __( 'Code Addition Tool', 'wpshadow' ),
+			'desc'    => __( 'Add custom code safely without editing theme files (like adding notes that won\'t break anything). Free: 10 code snippets.', 'wpshadow' ),
 			'tool'    => 'code-snippets',
 			'icon'    => 'dashicons-editor-code',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Plugin Conflict Detector', 'wpshadow' ),
-			'desc'    => __( 'Automatically identify which plugin is causing an issue using binary search. Finds conflicts in minutes, not hours.', 'wpshadow' ),
+			'title'   => __( 'Plugin Problem Finder', 'wpshadow' ),
+			'desc'    => __( 'Finds which plugin is causing problems by testing them one at a time (like finding which bulb is making the lights flicker).', 'wpshadow' ),
 			'tool'    => 'plugin-conflict',
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Bulk Find & Replace', 'wpshadow' ),
-			'desc'    => __( 'Search and replace across posts, pages, custom fields, and options. Perfect for domain changes and bulk updates.', 'wpshadow' ),
+			'title'   => __( 'Text Search & Replace', 'wpshadow' ),
+			'desc'    => __( 'Find and replace text across your entire site at once (like using "Find & Replace" in a word processor but for everything).', 'wpshadow' ),
 			'tool'    => 'bulk-find-replace',
 			'icon'    => 'dashicons-search',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Regenerate Thumbnails', 'wpshadow' ),
-			'desc'    => __( 'Batch regenerate image thumbnails for all registered sizes. Perfect after theme changes or adding custom image sizes.', 'wpshadow' ),
+			'title'   => __( 'Image Size Regenerator', 'wpshadow' ),
+			'desc'    => __( 'Recreates all your image sizes when needed (like reprinting photos in new sizes after changing frames).', 'wpshadow' ),
 			'tool'    => 'regenerate-thumbnails',
 			'icon'    => 'dashicons-image-rotate',
 			'family'  => 'site-management',
 			'enabled' => true,
 		),
 		array(
-			'title'   => __( 'Privacy Dashboard', 'wpshadow' ),
-			'desc'    => __( 'Manage data exports, deletion requests, and privacy preferences for your users.', 'wpshadow' ),
+			'title'   => __( 'Privacy Manager', 'wpshadow' ),
+			'desc'    => __( 'Handle user data requests like downloads and deletions (helps you follow privacy laws).', 'wpshadow' ),
 			'tool'    => 'privacy-dashboard',
 			'icon'    => 'dashicons-lock',
 			'family'  => 'site-management',
@@ -332,20 +332,20 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 				}
 			}
 
-			// If utility not found or not enabled, show error
+			// If the utility is not found or disabled, show a message.
 			if ( ! $found_utility || empty( $found_utility['enabled'] ) ) {
 				?>
 				<div class="wrap wps-page-container">
 					<?php wpshadow_render_page_header(
-						__( 'WPShadow Utilities', 'wpshadow' ),
-						__( 'Additional utilities for site analysis and optimization.', 'wpshadow' ),
+						__( 'Helpful Tools', 'wpshadow' ),
+						__( 'Extra tools to help you manage, test, and improve your site.', 'wpshadow' ),
 						'dashicons-admin-tools'
 					); ?>
 
 					<div class="wps-card wps-card--warning">
 						<div class="wps-card-body">
 							<p>
-								<?php esc_html_e( 'This utility is not available. Please check the URL or select a different utility.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'That tool isn\'t available right now. You might have clicked an old link.', 'wpshadow' ); ?>
 							</p>
 							<p>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
@@ -378,7 +378,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 				<div class="wps-card wps-card--error">
 					<div class="wps-card-body">
 						<p>
-							<?php esc_html_e( 'This utility could not be loaded. The utility file may be missing.', 'wpshadow' ); ?>
+							<?php esc_html_e( 'We couldn\'t load this tool. The file might be missing or moved.', 'wpshadow' ); ?>
 						</p>
 						<p>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
@@ -457,12 +457,12 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 					<?php if ( ! empty( $item['enabled'] ) ) : ?>
 						<a href="<?php echo esc_url( $utility_url ); ?>" class="wps-btn wps-btn--secondary">
 							<span class="dashicons dashicons-arrow-right-alt2"></span>
-							<?php esc_html_e( 'Open Utility', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Open This Tool', 'wpshadow' ); ?>
 						</a>
 					<?php else : ?>
 						<button class="wps-btn wps-btn--secondary" disabled>
 							<span class="dashicons dashicons-hourglass"></span>
-							<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Available Soon', 'wpshadow' ); ?>
 						</button>
 					<?php endif; ?>
 				</div>

@@ -153,7 +153,7 @@ class Import_Export_Settings_Page {
 					<div class="wps-alert wps-alert--warning wps-mt-4">
 						<span class="dashicons dashicons-warning"></span>
 						<div>
-							<strong><?php esc_html_e( 'Warning:', 'wpshadow' ); ?></strong>
+							<strong><?php esc_html_e( 'Heads up:', 'wpshadow' ); ?></strong>
 							<?php esc_html_e( 'Importing will overwrite your current settings. Your existing configuration will be backed up automatically.', 'wpshadow' ); ?>
 						</div>
 					</div>

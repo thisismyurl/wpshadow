@@ -13,6 +13,7 @@
 WPShadow follows a **monthly release cycle** with the last release of each month. Each release is tied to specific development phases that build upon previous work while maintaining backward compatibility and our core philosophy.
 
 **Version Format:** `1.YDDD.HHMM` (Year digit + Julian day + Hour/Minute in Toronto time)  
+**In Plain English:** Our version numbers tell you exactly when we released it. For example, 1.6035.1400 means it was released on the 35th day of 2026 at 2:00 PM Toronto time.  
 **Total Planned Milestones:** 23 in 2026 + 12 in 2027 = 35 milestones
 
 ---
@@ -24,9 +25,9 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Period:** January 2026  
 
 **Focus:**
-- DRY refactoring and duplicate code elimination
-- Base class migrations
-- 31% duplicate code reduction achieved
+- DRY refactoring ("Don't Repeat Yourself" - removing duplicate code, like cleaning out extra copies of files)
+- Base class migrations (organizing code into better structures)
+- 31% duplicate code reduction achieved (we removed almost a third of repeated code!)
 - Code quality audit completion
 
 ---
@@ -51,10 +52,10 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 - ✅ Dashboard customization options
 
 **Success Criteria:**
-- Dashboard load time <1 second
-- All gauges update in real-time
-- User satisfaction increase by 20%
-- WCAG AA compliance maintained
+- Dashboard load time <1 second (page appears almost instantly)
+- All gauges update in real-time (numbers change as soon as something happens)
+- User satisfaction increase by 20% (measured through feedback)
+- WCAG AA compliance maintained (accessible to people with disabilities)
 
 **Dependencies:**
 - Complete DRY refactoring from Phase 3.5
@@ -86,9 +87,9 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 - ✅ Interactive tutorial system
 
 **Success Criteria:**
-- 100% diagnostic coverage with KB articles
-- Video tutorials for top 20 diagnostics
-- Multi-modal support (text, video, interactive)
+- 100% diagnostic coverage with KB articles (every problem has an explanation)
+- Video tutorials for top 20 diagnostics (videos showing how to fix common issues)
+- Multi-modal support (text, video, interactive - different ways to learn)
 - Completion of Phase 4 dashboard components
 
 **Dependencies:**
@@ -109,9 +110,9 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 #### **Milestone: Release 1.6120.HHMM (April 30, 2026)**
 
 **Primary Goals:**
-- GDPR compliance framework
-- Consent management system
-- Privacy transparency features
+- GDPR compliance framework (following European privacy laws)
+- Consent management system (asking permission before collecting data)
+- Privacy transparency features (showing exactly what we track)
 
 **Key Deliverables:**
 - ✅ GDPR consent banner

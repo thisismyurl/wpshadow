@@ -75,6 +75,13 @@ WPShadow is a family of interconnected products, each serving specific needs whi
            └─ Agency
 ```
 
+**In Plain English:** WPShadow Core is like the foundation of a house (free and solid). On top of it, you can add optional rooms:
+- **Cloud** = External services that check your site from the outside (like a home security company)
+- **Vault** = Secure backup storage (like a safety deposit box)
+- **Academy** = Learning resources (like free online classes)
+- **Pro Platform** = Advanced features and tools (like professional contractor equipment)
+- **Theme** = Beautiful exterior design (like custom paint and landscaping)
+
 ---
 
 ## Current Repository Status
@@ -119,10 +126,10 @@ WPShadow is a family of interconnected products, each serving specific needs whi
 - 🚀 wpshadow-pro-vault (Enterprise backup system)
 
 **Repository Rollout Strategy:**
-1. ✅ Phase 1: WPShadow Core (released, free, public)
-2. 🚀 Phase 2: Cloud platform + theme (2026)
-3. 🚀 Phase 3: Pro platform + licensing (2026)
-4. 🚀 Phase 4: Pro modules by category (H2 2026+)
+1. ✅ Phase 1: WPShadow Core (released, free, public) — **available now**
+2. 🚀 Phase 2: Cloud platform + theme (2026) — **coming soon**
+3. 🚀 Phase 3: Pro platform + licensing (2026) — **advanced features**
+4. 🚀 Phase 4: Pro modules by category (H2 2026+) — **specialized tools**
 
 ---
 
@@ -134,10 +141,10 @@ To maintain consistency across all documentation, code, and communications, use 
 
 | Product | Type | Always Referred To As | Never Called | Location |
 |---------|------|---------------------|--------------|----------|
-| **WPShadow Core** | Free WordPress Plugin | "WPShadow Core", "the core plugin", or "WPShadow" | "WPShadow Guardian" (that's a feature) | User's server |
-| **WPShadow Guardian** | Feature within Core (100% free) | "WPShadow Guardian", "Guardian system", "local Guardian" | Just "Guardian" alone | User's server |
-| **WPShadow Cloud** | SaaS Platform | "WPShadow Cloud", "the cloud service", "cloud platform" | "WPShadow Guardian" (that's local) | wpshadow.com |
-| **Cloud Guardian** | Diagnostics within Cloud | "Cloud Guardian diagnostics", "cloud diagnostics" | Just "Guardian" (confusing) | wpshadow.com |
+| **WPShadow Core** | Free WordPress Plugin | "WPShadow Core", "the core plugin", or "WPShadow" | "WPShadow Guardian" (that's a feature inside Core) | Your server |
+| **WPShadow Guardian** | Feature within Core (100% free) | "WPShadow Guardian", "Guardian system", "local Guardian" | Just "Guardian" alone (too vague) | Your server |
+| **WPShadow Cloud** | SaaS Platform (online service) | "WPShadow Cloud", "the cloud service", "cloud platform" | "WPShadow Guardian" (that's the local one) | wpshadow.com |
+| **Cloud Guardian** | Diagnostics within Cloud | "Cloud Guardian diagnostics", "cloud diagnostics" | Just "Guardian" (confusing which one) | wpshadow.com |
 
 ### Quick Reference: What Requires What?
 

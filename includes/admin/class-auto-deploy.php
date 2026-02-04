@@ -442,7 +442,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 					<li><?php esc_html_e( 'Only enable auto-deploy on TEST/STAGING servers', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'NEVER enable on production servers', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'Ensure your server has git installed and configured', 'wpshadow' ); ?></li>
-					<li><?php esc_html_e( 'The web server user must have git pull permissions', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'The web server user needs git pull permissions', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'Always use a strong webhook secret', 'wpshadow' ); ?></li>
 					<li><?php esc_html_e( 'Webhook requests are restricted to GitHub IP addresses only', 'wpshadow' ); ?></li>
 				</ul>
@@ -464,10 +464,11 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 * Validate file path to prevent directory traversal
 	 *
 	 * Ensures paths don't escape the plugin directory using ../ sequences.
+	 * Fun fact: "../" walks into a bar... wait, wrong directory!
 	 *
 	 * @since  1.6032.1000
 	 * @param  string $path Path to validate.
-	 * @param  string $allowed_base Base directory path that $path must be within.
+	 * @param  string $allowed_base Base directory path that $path should stay within.
 	 * @return bool True if path is safe.
 	 */
 	private static function validate_file_path( string $path, string $allowed_base ): bool {

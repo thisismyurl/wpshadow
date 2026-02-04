@@ -35,7 +35,7 @@ class Plugin_Bootstrap {
 		// 1. Load core base classes (required before everything else)
 		self::load_core_classes();
 
-		// 2. Register hooks (must be early, before other systems)
+		// 2. Register hooks (should run early, before other systems)
 		Hooks_Initializer::init();
 
 		// 3. Initialize menu system
@@ -1010,7 +1010,7 @@ class Plugin_Bootstrap {
 	private static function load_philosophy_settings() {
 		$settings_path = WPSHADOW_PATH . 'includes/admin/settings/';
 
-		// Phase 1: Critical Foundation (Accessibility + Developer)
+		// Phase 1: Core Foundation (Accessibility + Developer)
 		// Load Accessibility Settings
 		if ( file_exists( $settings_path . 'class-accessibility-settings.php' ) ) {
 			require_once $settings_path . 'class-accessibility-settings.php';

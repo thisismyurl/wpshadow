@@ -47,18 +47,11 @@ class Vault_Manager {
 	private $backup_dir;
 
 	/**
-	 * Maximum backups for free tier
+	 * Local backups are UNLIMITED in Core (stored on user's server, no cost to us)
+	 * Cloud storage tiers are managed in wpshadow-cloud repository
 	 *
-	 * @var int
+	 * @since 1.6030.1830
 	 */
-	const FREE_TIER_MAX_BACKUPS = 3;
-
-	/**
-	 * Retention days for free tier
-	 *
-	 * @var int
-	 */
-	const FREE_TIER_RETENTION_DAYS = 7;
 
 	/**
 	 * Get singleton instance
@@ -213,39 +206,31 @@ class Vault_Manager {
 	/**
 	 * Get maximum allowed backups for current tier
 	 *
+	 * Local backups in Core are unlimited (stored on user's server).
+	 * Cloud storage limits are managed in wpshadow-cloud repository.
+	 *
 	 * @since  1.6030.1830
-	 * @return int|string Number of backups or 'unlimited'.
+	 * @return string Always 'unlimited' for local backups in Core.
 	 */
 	public function get_max_backups() {
-		$tier = $this->get_tier();
-
-		$limits = array(
-			'free'         => self::FREE_TIER_MAX_BACKUPS,
-			'starter'      => 10,
-			'professional' => 100,
-			'agency'       => 'unlimited',
-		);
-
-		return $limits[ $tier ] ?? self::FREE_TIER_MAX_BACKUPS;
+		// Local backups are unlimited - they're stored on user's server, not our infrastructure
+		// Cloud storage tiers are managed separately in wpshadow-cloud repository
+		return 'unlimited';
 	}
 
 	/**
 	 * Get retention days for current tier
 	 *
+	 * Local backups in Core have unlimited retention (user's disk space).
+	 * Cloud storage retention policies are managed in wpshadow-cloud repository.
+	 *
 	 * @since  1.6030.1830
-	 * @return int Days to retain backups.
+	 * @return int Days to retain backups (0 = unlimited).
 	 */
 	public function get_retention_days() {
-		$tier = $this->get_tier();
-
-		$retention = array(
-			'free'         => self::FREE_TIER_RETENTION_DAYS,
-			'starter'      => 30,
-			'professional' => 90,
-			'agency'       => 365,
-		);
-
-		return $retention[ $tier ] ?? self::FREE_TIER_RETENTION_DAYS;
+		// Local backups are retained indefinitely (user's disk space)
+		// Cloud storage retention policies are managed separately in wpshadow-cloud repository
+		return 0; // 0 = unlimited retention
 	}
 
 	/**
@@ -379,7 +364,7 @@ class Vault_Manager {
 			// Include wp-content (themes, plugins, uploads).
 			$files_to_backup[] = WP_CONTENT_DIR;
 
-			// Include wp-config.php (critical for restore).
+			// Include wp-config.php (helps with a complete restore).
 			if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 				$files_to_backup[] = ABSPATH . 'wp-config.php';
 			}
@@ -676,7 +661,7 @@ class Vault_Manager {
 			return;
 		}
 
-		// Only auto-backup for critical or high-severity treatments.
+		// Only auto-backup for the highest-severity treatments.
 		$severity = $this->get_treatment_severity( $finding_id );
 		if ( ! in_array( $severity, array( 'critical', 'high' ), true ) ) {
 			return;

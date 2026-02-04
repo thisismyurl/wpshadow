@@ -73,11 +73,7 @@ class Notifications_Settings_Page {
 								<?php esc_html_e( 'Enable Email Notifications', 'wpshadow' ); ?>
 							</label>
 							<p class="wps-form-description">
-								<?php esc_html_e( 'Receive email alerts when WPShadow finds critical issues or completes scheduled scans.', 'wpshadow' ); ?>
-							</p>
-						</div>
-
-						<div class="wps-form-group wps-mt-4">
+							<?php esc_html_e( 'Get email alerts when WPShadow finds urgent items or completes scheduled checks.', 'wpshadow' ); ?>
 							<label for="wpshadow_notification_severity" class="wps-form-label">
 								<?php esc_html_e( 'Email Me For', 'wpshadow' ); ?>
 							</label>
@@ -87,10 +83,10 @@ class Notifications_Settings_Page {
 								class="wps-input"
 							>
 								<option value="critical" <?php selected( get_option( 'wpshadow_notification_severity', 'critical' ), 'critical' ); ?>>
-									<?php esc_html_e( 'Critical issues only 🔴', 'wpshadow' ); ?>
-								</option>
-								<option value="high" <?php selected( get_option( 'wpshadow_notification_severity', 'critical' ), 'high' ); ?>>
-									<?php esc_html_e( 'High & Critical issues 🟠', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Most urgent items only 🚨 (like smoke alarms)', 'wpshadow' ); ?>
+							</option>
+							<option value="high" <?php selected( get_option( 'wpshadow_notification_severity', 'critical' ), 'high' ); ?>>
+								<?php esc_html_e( 'High priority & urgent items 🟠', 'wpshadow' ); ?>
 								</option>
 								<option value="medium" <?php selected( get_option( 'wpshadow_notification_severity', 'critical' ), 'medium' ); ?>>
 									<?php esc_html_e( 'Medium & above 🟡', 'wpshadow' ); ?>

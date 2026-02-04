@@ -179,7 +179,7 @@ class Visual_Health_Journey {
 			);
 		}
 
-		// 30 days no critical issues
+		// Milestone: 30 days without top-severity issues.
 		$last_critical = self::get_last_critical_issue_date();
 		if ( $last_critical && ( time() - $last_critical ) > ( 30 * 86400 ) ) {
 			$milestones[] = array(
@@ -477,7 +477,7 @@ class Visual_Health_Journey {
 	}
 
 	/**
-	 * Get last critical issue date
+	 * Get last top-severity issue date.
 	 *
 	 * @since  1.6030.2200
 	 * @return int|null Timestamp or null.

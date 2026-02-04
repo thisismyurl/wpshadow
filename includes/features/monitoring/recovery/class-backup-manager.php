@@ -29,7 +29,7 @@ class Backup_Manager {
 	public static function create_automated_backup( string $reason = 'auto_fix', int $retention_days = 28 ): string {
 		$backup_id = 'backup_' . time() . '_' . wp_generate_password( 8, false );
 
-		// Capture critical options
+		// Capture important options for a safe restore.
 		$backup = array(
 			'id'        => $backup_id,
 			'timestamp' => current_time( 'mysql' ),

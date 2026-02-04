@@ -1226,7 +1226,8 @@ class Settings_Registry {
 				// Frontend can be 'default', 'disabled', or integer
 				$sanitized[ $key ] = 'disabled' === $value[ $key ] ? 'disabled' : ( is_numeric( $value[ $key ] ) ? absint( $value[ $key ] ) : 'default' );
 			} else {
-				// Dashboard and editor must be integers (15-120)
+				// Dashboard and editor should be integers (15-120)
+				// Developer confession: I have a constant fear of integers. It's just a variable mood.
 				$int               = absint( $value[ $key ] ?? $default );
 				$sanitized[ $key ] = min( max( $int, 15 ), 120 );
 			}

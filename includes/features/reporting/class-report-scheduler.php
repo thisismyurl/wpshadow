@@ -131,7 +131,7 @@ class Report_Scheduler {
 			return false;
 		}
 
-		// Validate recipients (must be array of valid emails)
+		// Validate recipients (array of valid emails).
 		if ( ! is_array( $config['recipients'] ) ) {
 			return false;
 		}

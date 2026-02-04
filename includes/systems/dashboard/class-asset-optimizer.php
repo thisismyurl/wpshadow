@@ -30,10 +30,10 @@ class Asset_Optimizer {
 	 * Initialize optimizer
 	 */
 	public static function init(): void {
-		// Add defer/async to non-critical scripts
+		// Add defer/async to scripts that can load later
 		add_filter( 'script_loader_tag', array( __CLASS__, 'optimize_script_loading' ), 10, 3 );
 
-		// Preload critical assets
+		// Preload essential assets
 		add_action( 'admin_head', array( __CLASS__, 'preload_critical_assets' ), 1 );
 
 		// Remove WordPress bloat from admin
@@ -54,13 +54,13 @@ class Asset_Optimizer {
 			return $tag;
 		}
 
-		// Critical scripts that need immediate execution (in header)
+		// Immediate-load scripts that need to execute right away (in header)
 		$critical_scripts = array(
 			'wpshadow-design-system',
 			'wpshadow-dashboard-realtime',
 		);
 
-		// Scripts that can be deferred (non-critical)
+		// Scripts that can be deferred (load after main content)
 		$defer_scripts = array(
 			'wpshadow-tooltips',
 			'wpshadow-kanban-board',
@@ -91,10 +91,10 @@ class Asset_Optimizer {
 			return;
 		}
 
-		// Preload critical CSS
+		// Preload essential CSS
 		echo '<link rel="preload" href="' . esc_url( WPSHADOW_URL . 'assets/css/design-system.css' ) . '" as="style">' . "\n";
 
-		// Preload critical JS
+		// Preload essential JS
 		echo '<link rel="preload" href="' . esc_url( WPSHADOW_URL . 'assets/js/design-system.js' ) . '" as="script">' . "\n";
 
 		// DNS prefetch for external resources (if any)

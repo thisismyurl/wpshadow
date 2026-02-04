@@ -181,7 +181,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 
 		// Check if user is registered
 		if ( ! WPShadow_Account_API::is_registered() ) {
-			self::send_error( __( 'You must register for a WPShadow account to use cloud sync', 'wpshadow' ) );
+			self::send_error( __( 'Cloud sync requires a free WPShadow account. Please register to get started.', 'wpshadow' ) );
 		}
 
 		try {
@@ -247,7 +247,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 
 		// Check if user is registered
 		if ( ! WPShadow_Account_API::is_registered() ) {
-			self::send_error( __( 'You must register for a WPShadow account to use cloud sync', 'wpshadow' ) );
+			self::send_error( __( 'Cloud sync requires a free WPShadow account. Please register to get started.', 'wpshadow' ) );
 		}
 
 		try {
@@ -315,7 +315,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 
 		// Check if user is registered
 		if ( ! WPShadow_Account_API::is_registered() ) {
-			self::send_error( __( 'You must register for a WPShadow account to use cloud sync', 'wpshadow' ) );
+			self::send_error( __( 'Cloud sync requires a free WPShadow account. Please register to get started.', 'wpshadow' ) );
 		}
 
 		try {

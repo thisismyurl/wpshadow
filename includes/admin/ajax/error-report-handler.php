@@ -27,7 +27,7 @@ class Error_Report_Handler extends AJAX_Handler_Base {
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_send_error_report', array( __CLASS__, 'handle' ) );
-		// Allow non-logged-in users for fatal error scenarios
+		// Allow non-logged-in users for severe error scenarios.
 		add_action( 'wp_ajax_nopriv_wpshadow_send_error_report', array( __CLASS__, 'handle' ) );
 	}
 

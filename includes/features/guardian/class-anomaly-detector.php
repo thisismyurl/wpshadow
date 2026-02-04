@@ -82,7 +82,7 @@ class Anomaly_Detector {
 	/**
 	 * Check if should pause auto-fixes
 	 *
-	 * Returns true if any critical anomalies detected.
+	 * Returns true if any top-severity anomalies are detected.
 	 * Auto-fixes should not run when this returns true.
 	 *
 	 * @return bool Should pause auto-fixes
@@ -90,7 +90,7 @@ class Anomaly_Detector {
 	public static function should_pause_auto_fixes(): bool {
 		$anomalies = self::detect();
 
-		// Pause if any critical anomalies
+		// Pause if any top-severity anomalies are present.
 		foreach ( $anomalies as $anomaly ) {
 			if ( $anomaly['severity'] === 'critical' ) {
 				return true;

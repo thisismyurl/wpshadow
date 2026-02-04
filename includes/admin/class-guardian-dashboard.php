@@ -412,7 +412,7 @@ class Guardian_Dashboard {
 				$findings = isset( $activity['findings_total'] ) ? (int) $activity['findings_total'] : 0;
 				$critical = isset( $activity['critical_count'] ) ? (int) $activity['critical_count'] : 0;
 				if ( $critical > 0 ) {
-					return sprintf( __( 'Health check: %1$d findings (%2$d critical)', 'wpshadow' ), $findings, $critical );
+					return sprintf( __( 'Health check: %1$d findings (%2$d need attention soon)', 'wpshadow' ), $findings, $critical );
 				}
 				return sprintf( __( 'Health check: %d findings', 'wpshadow' ), $findings );
 
@@ -422,7 +422,7 @@ class Guardian_Dashboard {
 				if ( $success ) {
 					return sprintf( __( 'Auto-fixed: %s ✓', 'wpshadow' ), $treatment );
 				}
-				return sprintf( __( 'Auto-fix failed: %s', 'wpshadow' ), $treatment );
+				return sprintf( __( 'Couldn\'t auto-fix %s (may need manual review)', 'wpshadow' ), $treatment );
 
 			case 'anomaly_detected':
 				$count = isset( $activity['anomalies_count'] ) ? (int) $activity['anomalies_count'] : 0;

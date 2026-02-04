@@ -92,7 +92,7 @@ class Auto_Fix_Executor {
 				++$results['failed'];
 
 				if ( ! $continue_on_error ) {
-					break; // Stop on first error
+					break; // Stop after the first failed fix.
 				}
 			}
 
@@ -236,7 +236,7 @@ class Auto_Fix_Executor {
 					'would_apply' => true,
 				);
 			} catch ( \Exception $e ) {
-				// Skip on error
+				// Skip if something goes wrong.
 			}
 		}
 

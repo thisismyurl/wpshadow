@@ -166,17 +166,17 @@ add_action(
 			)
 		);
 
-		// Example 2: Send email to site admin if critical issues found
+		// Example 2: Send email to site admin if top-priority issues found
 		if ( $report['severity_counts']['critical'] > 0 ) {
 			$admin_email = get_option( 'admin_email' );
 			wp_mail(
 				$admin_email,
 				sprintf(
-					'Critical issues found in post: %s',
+					'Top-priority issues found in post: %s',
 					$report['post']['title']
 				),
 				sprintf(
-					"Post URL: %s\nCritical Issues: %d\nTotal Issues: %d",
+					"Post URL: %s\nTop-Priority Issues: %d\nTotal Issues: %d",
 					$report['post']['url'],
 					$report['severity_counts']['critical'],
 					$report['total_issues']
@@ -191,7 +191,7 @@ add_action(
 		//     [
 		//         'post_id' => $post_id,
 		//         'total_issues' => $report['total_issues'],
-		//         'critical_count' => $report['severity_counts']['critical'],
+		//         'high_priority_count' => $report['severity_counts']['critical'],
 		//         'generated_at' => current_time( 'mysql' ),
 		//     ]
 		// );

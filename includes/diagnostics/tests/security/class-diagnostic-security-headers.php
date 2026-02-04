@@ -63,7 +63,7 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for critical security headers
+		// Check for important security headers.
 		$headers_to_check = array(
 			'X-Frame-Options'        => false,
 			'X-Content-Type-Options' => false,
@@ -91,7 +91,7 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 
 		$missing_count = count( $missing_headers );
 
-		// Generate findings if critical headers missing
+		// Generate findings when several key headers are missing.
 		if ( $missing_count >= 3 ) {
 			return array(
 				'id'           => self::$slug,

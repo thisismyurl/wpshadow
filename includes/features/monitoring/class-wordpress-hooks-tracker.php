@@ -50,7 +50,7 @@ class WordPress_Hooks_Tracker {
 		add_action( 'profile_update', array( self::class, 'log_user_updated' ), 10, 2 );
 		add_action( 'delete_user', array( self::class, 'log_user_deleted' ), 10, 1 );
 
-		// Role changes (must run before deletion)
+		// Role changes (needs to run before deletion).
 		add_action( 'set_user_role', array( self::class, 'log_user_role_changed' ), 10, 3 );
 
 		// Post, page, and custom post type hooks

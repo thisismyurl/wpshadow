@@ -19,9 +19,11 @@ class Error_Handler {
 
 	/**
 	 * Initialize error handling
+	 *
+	 * Why do programmers prefer dark mode? Because light attracts bugs!
 	 */
 	public static function init(): void {
-		// Hook into WordPress fatal error handler
+		// Hook into WordPress PHP error handler
 		add_filter( 'wp_php_error_message', array( __CLASS__, 'enhance_error_message' ), 10, 2 );
 		add_filter( 'wp_php_error_args', array( __CLASS__, 'enhance_error_args' ), 10, 2 );
 		// Only add error modal script when there's an actual error

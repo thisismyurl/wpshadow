@@ -37,7 +37,7 @@ class Notification_Manager {
 	 */
 	private static function get_default_preferences(): array {
 		return array(
-			'email_on_critical' => true,   // FREE: Always on - security/critical findings
+			'email_on_critical' => true,   // FREE: Always on - top-severity findings
 			'email_on_findings' => false,  // PRO: All new findings
 			'daily_digest'      => false,  // PRO: Daily summary email
 			'weekly_summary'    => true,   // FREE: Weekly site health digest
@@ -70,7 +70,7 @@ class Notification_Manager {
 
 		// Enforce tier constraints
 		if ( $tier === 'free' ) {
-			// Free tier: only critical, weekly summary, scan completion
+			// Free tier: only top-severity, weekly summary, scan completion
 			$updated['email_on_findings'] = false;
 			$updated['daily_digest']      = false;
 			$updated['anomaly_alerts']    = false;

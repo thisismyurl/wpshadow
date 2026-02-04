@@ -3,7 +3,7 @@
  * Real-Time Monitoring & Alerting
  *
  * Continuously monitors site health and triggers intelligent alerts
- * for anomalies and critical issues. Proactive incident detection.
+ * for anomalies and higher-severity issues. Proactive incident detection.
  *
  * Philosophy:
  * - #8 Inspire Confidence: Know what's happening in real-time
@@ -231,7 +231,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 			}
 		}
 
-		// Brute force attack detection
+		// Check for unusual login activity (possible brute force).
 		if ( $current_metrics['failed_logins'] > 10 ) {
 			$anomalies[] = array(
 				'type'        => 'security_threat',
@@ -248,7 +248,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 			);
 		}
 
-		// Error spike
+		// Check for a sudden rise in errors.
 		if ( $current_metrics['error_count'] > 5 ) {
 			$anomalies[] = array(
 				'type'        => 'error_spike',
@@ -549,8 +549,8 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	 * @return int Number of recent errors.
 	 */
 	private static function get_recent_error_count(): int {
-		// Would integrate with error logging
-		// For now, return 0
+		// Placeholder: integrate with error logging.
+		// Return 0 until a log source is wired in.
 		return 0;
 	}
 

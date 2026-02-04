@@ -144,7 +144,7 @@ class Diagnostic_Theme_Configuration extends Diagnostic_Base {
 <head>
 	<meta charset=\"<?php bloginfo( 'charset' ); ?>\">
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-	<?php wp_head(); // CRITICAL - loads all CSS/JS/meta ?>
+	<?php wp_head(); // Required to load CSS, JS, and meta tags ?>
 </head>
 <body <?php body_class(); ?>>
 	<?php wp_body_open(); // Added in WordPress 5.2 ?>",
@@ -157,7 +157,7 @@ class Diagnostic_Theme_Configuration extends Diagnostic_Base {
 	<footer>
 		<!-- Footer content -->
 	</footer>
-	<?php wp_footer(); // CRITICAL - closes all tags ?>
+	<?php wp_footer(); // Required to load footer scripts and clean up ?>
 </body>
 </html>",
 					'adding_tags' => array(

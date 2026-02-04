@@ -191,7 +191,7 @@ class Report_Analytics_Engine {
 				$categories[ $category ]++;
 			}
 			
-			// Priority actions (critical and high severity)
+			// Priority actions (highest severity).
 			if ( isset( $finding['severity'] ) && in_array( $finding['severity'], array( 'critical', 'high' ), true ) ) {
 				$summary['priority_actions'][] = array(
 					'id'       => isset( $finding['id'] ) ? $finding['id'] : '',

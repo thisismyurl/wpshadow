@@ -647,7 +647,7 @@ class Guardian_Settings {
 				<div class="wps-checkbox-group">
 					<label>
 						<input type="checkbox" name="notify_critical_issues" value="1" checked />
-						' . esc_html__( 'Critical Issues', 'wpshadow' ) . '
+						' . esc_html__( 'Most Urgent Items (like smoke alarms)', 'wpshadow' ) . '
 					</label>
 					<label>
 						<input type="checkbox" name="notify_auto_fix_failed" value="1" checked />
@@ -690,7 +690,7 @@ class Guardian_Settings {
 					array(
 						'id'      => 'notify-critical-issues',
 						'name'    => 'notify_critical_issues',
-						'label'   => __( 'Critical Issues', 'wpshadow' ),
+						'label'   => __( 'Most Urgent Items (like smoke alarms)', 'wpshadow' ),
 						'checked' => true,
 					)
 				);
@@ -700,7 +700,7 @@ class Guardian_Settings {
 					array(
 						'id'      => 'notify-auto-fix-failed',
 						'name'    => 'notify_auto_fix_failed',
-						'label'   => __( 'Auto-Fix Failures', 'wpshadow' ),
+						'label'   => __( 'Auto-Fix Attempts (when manual review needed)', 'wpshadow' ),
 						'checked' => true,
 					)
 				);

@@ -22,9 +22,9 @@ If a feature can run on your own server without ongoing costs, it stays free.
 - KPI tracking
 
 ### 2) Register, Don’t Pay
-We ask for registration only when we pay real, ongoing costs to provide a service.
+We ask for registration only when we pay real, ongoing costs to provide a service. Think of it like a library card—free to sign up, but required so we know how many resources to maintain.
 
-**Example:** Cloud diagnostics require servers and third‑party APIs, so they use a free tier + paid upgrades.
+**Example:** Cloud diagnostics require servers and third‑party APIs (like renting office space and hiring security guards), so they use a free tier + paid upgrades for heavier use.
 
 ### 3) Advice, Not Sales
 We teach first. We never use scare tactics or hidden limits.
@@ -50,8 +50,8 @@ Your data stays on your server unless you opt in.
 |---------|------|-----|
 | WPShadow Core | Free | Runs locally with no server costs |
 | WPShadow Guardian (Local) | Free | Runs on your server |
-| WPShadow Cloud | Freemium | Cloud servers + third‑party APIs |
-| Cloud Guardian Diagnostics | Freemium | External scanning costs |
+| WPShadow Cloud | Freemium (free to start, pay for more) | Cloud servers + third‑party APIs |
+| Cloud Guardian Diagnostics | Freemium (free to start, pay for more) | External scanning costs |
 | WPShadow Vault | Freemium | Cloud storage costs |
 | WPShadow Academy | Free + Premium | Education production costs |
 | WPShadow Pro Modules | Paid | Advanced features + support + ongoing dev |
@@ -60,7 +60,7 @@ Your data stays on your server unless you opt in.
 
 ## Release Cadence for Paid Products (2026)
 
-We release paid products in a **dependency‑first** order so customers never buy a tool that lacks its foundation.
+We release paid products in a **foundation‑first order** (like building a house—foundation before walls) so you never buy a tool that lacks what it needs to work properly.
 
 **Planned cadence (monthly, end‑of‑month):**
 - **March 31:** WPShadow Pro platform (licensing + module manager)
@@ -74,10 +74,10 @@ This schedule keeps upgrades predictable and ensures every module lands after th
 ## Why We Charge (Only When Needed)
 
 We only charge when there are ongoing, real costs. Examples include:
-- Cloud servers and storage
-- Third‑party scanning services
-- Email delivery and monitoring services
-- Priority support (human time)
+- Cloud servers and storage (like renting warehouse space to store your backups)
+- Third‑party scanning services (like hiring external security guards to patrol)
+- Email delivery and monitoring services (like paying for a phone line)
+- Priority support (human time—our team personally helping you)
 
 We do **not** charge for:
 - Basic plugin features
@@ -102,10 +102,12 @@ All risky actions have clear warnings, backups, and undo options.
 
 ## The 4 CANON Pillars (Non‑Negotiable)
 
-1. **Accessibility First** — Works for people with disabilities
-2. **Learning Inclusive** — Clear, friendly explanations for all skill levels
-3. **Culturally Respectful** — Global‑ready and translation‑friendly
-4. **Safe by Default** — Protects users from mistakes and abuse
+These are the foundations we never compromise on:
+
+1. **Accessibility First** — Works for people with disabilities (screen readers, keyboards, etc.)
+2. **Learning Inclusive** — Clear, friendly explanations for all skill levels (everyone can learn)
+3. **Culturally Respectful** — Works worldwide in any language (respects all cultures)
+4. **Safe by Default** — Protects you from mistakes and malicious attacks (always has your back)
 
 ---
 

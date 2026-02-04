@@ -57,7 +57,8 @@ class Treatment_Theme_Performance extends Treatment_Base {
 		$deferred_styles  = 0;
 		$deferred_scripts = 0;
 
-		// Get non-critical styles (fonts, icons, etc.)
+		// Get optional styles (fonts, icons, etc.) that can load later
+		// Q: Why did the CSS file break up with the HTML file? A: It had too many issues with classes!
 		if ( isset( $wp_styles ) && is_object( $wp_styles ) ) {
 			$non_critical = array(
 				'google-fonts',
@@ -75,7 +76,7 @@ class Treatment_Theme_Performance extends Treatment_Base {
 			}
 		}
 
-		// Get non-critical scripts (animations, tracking, etc.)
+		// Get optional scripts (animations, tracking, etc.) that can load later
 		if ( isset( $wp_scripts ) && is_object( $wp_scripts ) ) {
 			$non_critical = array(
 				'popper',

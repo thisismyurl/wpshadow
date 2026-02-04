@@ -73,10 +73,10 @@ class Persona_Dashboard_Generator {
                 </div>
             </div>
 
-            <!-- Critical Issues -->
+            <!-- Top Priority -->
             <div class="persona-dashboard-section critical-issues">
                 <div class="section-header">
-                    <h2><?php esc_html_e( '🔴 Critical Issues', 'wpshadow' ); ?></h2>
+                    <h2><?php esc_html_e( '⭐ Top Priority Items', 'wpshadow' ); ?></h2>
                     <span class="issue-count badge-critical">
                         <?php echo (int) count( $action_plan['critical_issues'] ?? array() ); ?>
                     </span>
@@ -101,7 +101,7 @@ class Persona_Dashboard_Generator {
                     </p>
                 <?php else : ?>
                     <p class="no-issues">
-                        <?php esc_html_e( '✓ No critical issues found!', 'wpshadow' ); ?>
+                        <?php esc_html_e( '✨ Everything looks great! No urgent items need attention.', 'wpshadow' ); ?>
                     </p>
                 <?php endif; ?>
             </div>
@@ -139,7 +139,7 @@ class Persona_Dashboard_Generator {
 
                 <?php if ( ! empty( $action_plan['nice_to_have'] ) ) : ?>
                     <p class="section-description">
-                        <?php esc_html_e( 'These optimizations would be nice but are not critical for your use case:', 'wpshadow' ); ?>
+                        <?php esc_html_e( 'These optimizations would be helpful but are optional for your use case:', 'wpshadow' ); ?>
                     </p>
                     <div class="issues-list">
                         <?php foreach ( $action_plan['nice_to_have'] as $issue ) : ?>
@@ -179,11 +179,11 @@ class Persona_Dashboard_Generator {
                                     $persona_slug
                                 );
                                 if ( $priority >= 80 ) {
-                                    echo '<span class="priority-high">🔴 Critical</span>';
+                                    echo '<span class="priority-high">� Handle First</span>';
                                 } elseif ( $priority >= 50 ) {
-                                    echo '<span class="priority-medium">🟠 High</span>';
+                                    echo '<span class="priority-medium">🟠 High Priority</span>';
                                 } else {
-                                    echo '<span class="priority-low">🟡 Medium</span>';
+                                    echo '<span class="priority-low">🟡 Medium Priority</span>';
                                 }
                                 ?>
                             </span>
@@ -208,12 +208,12 @@ class Persona_Dashboard_Generator {
                 <ol class="action-steps">
                     <?php if ( ! empty( $action_plan['critical_issues'] ) ) : ?>
                         <li>
-                            <strong><?php esc_html_e( 'Fix Critical Issues (Priority 1)', 'wpshadow' ); ?></strong>
+                            <strong><?php esc_html_e( 'Handle These First (Priority 1)', 'wpshadow' ); ?></strong>
                             <p>
                                 <?php
                                 printf(
-                                    /* translators: %d: number of critical issues */
-                                    esc_html__( 'Address %d critical issues affecting your %s', 'wpshadow' ),
+                                    /* translators: %d: number of urgent items */
+                                    esc_html__( 'Let\'s handle %d urgent items for your %s (like checking smoke alarms)', 'wpshadow' ),
                                     count( $action_plan['critical_issues'] ),
                                     strtolower( $persona['label'] )
                                 );
@@ -224,9 +224,9 @@ class Persona_Dashboard_Generator {
 
                     <?php if ( ! empty( $action_plan['recommended_fixes'] ) ) : ?>
                         <li>
-                            <strong><?php esc_html_e( 'Implement Recommended Improvements (Priority 2)', 'wpshadow' ); ?></strong>
+                            <strong><?php esc_html_e( 'Make These Improvements Next (Priority 2)', 'wpshadow' ); ?></strong>
                             <p>
-                                <?php esc_html_e( 'Once critical issues are resolved, implement recommended improvements', 'wpshadow' ); ?>
+                                <?php esc_html_e( 'After handling urgent items, these improvements will make your site even better', 'wpshadow' ); ?>
                             </p>
                         </li>
                     <?php endif; ?>
@@ -408,12 +408,12 @@ class Persona_Dashboard_Generator {
      *
      * @since  1.6030.2148
      * @param  array  $issue        Issue data.
-     * @param  string $severity     Severity level ('critical', 'medium', 'low').
+     * @param  string $severity     Severity level ('high', 'medium', 'low').
      * @param  string $persona_slug Current persona.
      * @return void Outputs HTML.
      */
     private static function render_issue_card( $issue, $severity, $persona_slug ) {
-        $icon = 'critical' === $severity ? '🔴' : ( 'medium' === $severity ? '🟠' : '🟡' );
+        $icon = 'high' === $severity ? '🔴' : ( 'medium' === $severity ? '🟠' : '🟡' );
         ?>
         <div class="issue-card issue-<?php echo esc_attr( $severity ); ?>">
             <div class="issue-header">

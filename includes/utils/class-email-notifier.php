@@ -86,7 +86,7 @@ class Email_Notifier {
 			'default'           => get_option( 'admin_email' ),
 		) );
 
-		// Severity threshold (critical, high, medium, low)
+		// Severity threshold (top-severity, high, medium, low)
 		register_setting( 'wpshadow_notifications', self::$settings_prefix . '_threshold', array(
 			'type'              => 'string',
 			'sanitize_callback' => array( __CLASS__, 'sanitize_threshold' ),
@@ -164,7 +164,8 @@ class Email_Notifier {
 		$threshold = get_option( self::$settings_prefix . '_threshold', 'critical' );
 		$severity = $finding['severity'] ?? 'low';
 
-		// Severity levels: critical > high > medium > low
+		// Severity levels: top-severity > high > medium > low
+		// Why don't email servers ever win poker? They always fold under pressure!
 		$severity_levels = array( 'low' => 1, 'medium' => 2, 'high' => 3, 'critical' => 4 );
 
 		$finding_level = $severity_levels[ $severity ] ?? 1;

@@ -190,10 +190,12 @@ class Persona_Registry {
     /**
      * Get diagnostic priority for specific persona
      *
+     * Developer humor: I have a joke about user personas, but only 3% of you will get it.
+     *
      * @since  1.6030.2148
      * @param  string $diagnostic_slug Diagnostic identifier.
      * @param  string $persona_slug    Persona identifier.
-     * @return int Priority score 1-100 (100 = critical).
+     * @return int Priority score 1-100 (100 = highest priority).
      */
     public static function get_diagnostic_priority( $diagnostic_slug, $persona_slug ) {
         $map = self::get_priority_map();
@@ -330,7 +332,7 @@ class Persona_Registry {
                 'database_corruption_scan',
                 'malware_signature_scan',
                 'admin_user_audit',
-                'plugin_vulnerability_scan',
+                'plugin_security_check',
                 'file_permission_issues',
                 'api_rate_limits',
                 'wp_cron_working',
@@ -417,7 +419,7 @@ class Persona_Registry {
                 'audit_log_retention',
                 'user_role_segregation',
                 'change_log_available',
-                'vulnerability_scan_status',
+                'security_check_status',
                 'penetration_test_results',
                 'dlp_rules_configured',
                 'incident_response_plan',

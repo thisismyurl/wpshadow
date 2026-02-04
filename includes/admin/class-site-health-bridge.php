@@ -231,11 +231,11 @@ function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $findi
 	$title       = isset( $finding_data['title'] ) ? $finding_data['title'] : $diagnostic_id;
 	$description = isset( $finding_data['description'] ) ? $finding_data['description'] : __( 'WPShadow has detected an issue.', 'wpshadow' );
 
-	// Get severity - can be string (critical/high/medium/low) or numeric (0-100)
+	// Get severity - can be string (high/medium/low) or numeric (0-100)
 	$severity = isset( $finding_data['severity'] ) ? $finding_data['severity'] : 'medium';
 
 	// Map severity to Site Health status
-	// String format: 'critical', 'high', 'medium', 'low'
+	// String format: 'high', 'medium', 'low'
 	// Numeric format: 0-100 (from threat_level)
 	$site_health_status = 'recommended';
 

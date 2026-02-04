@@ -35,7 +35,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** Findings
 - **URL:** `/wp-admin/admin.php?page=wpshadow-findings`
 - **Access Level:** `read` (all logged-in users)
-- **Purpose:** Interactive Kanban board for managing all site issues and action items
+- **Purpose:** Interactive task board for organizing your site's to-do list (like a digital sticky note board). Manage all site issues and action items in one place
 - **Features:**
   - Drag-and-drop issue management
   - Status columns: To Do, In Progress, Done
@@ -49,7 +49,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** WPShadow Guardian
 - **URL:** `/wp-admin/admin.php?page=wpshadow-guardian`
 - **Access Level:** `read` (all logged-in users)
-- **Purpose:** Local diagnostic monitoring system that runs health checks, security scans, and performance diagnostics on your WordPress installation
+- **Purpose:** Your site's health monitoring system (like a fitness tracker for your website). Runs health checks, security scans, and performance diagnostics right on your WordPress site
 - **What It Does:**
   - Real-time monitoring of site health
   - Automated diagnostic checks (all run locally)
@@ -74,7 +74,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** Automations
 - **URL:** `/wp-admin/admin.php?page=wpshadow-automations`
 - **Access Level:** `read` (all logged-in users)
-- **Purpose:** Visual workflow builder for automating site maintenance tasks
+- **Purpose:** Build automatic helpers for your site (like setting your coffee maker to start every morning). Create workflows that handle routine maintenance tasks without you lifting a finger
 - **Features:**
   - Drag-and-drop workflow creation
   - Trigger conditions (schedule, event-based)
@@ -89,7 +89,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** Reports
 - **URL:** `/wp-admin/admin.php?page=wpshadow-reports`
 - **Access Level:** `manage_options` (administrators only)
-- **Purpose:** Comprehensive reporting and analytics dashboard
+- **Purpose:** See how your site is doing over time (like a health report card). Track improvements, spot patterns, and share progress with your team
 - **Features:**
   - Executive summary reports
   - Performance metrics over time
@@ -105,7 +105,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** Settings
 - **URL:** `/wp-admin/admin.php?page=wpshadow-settings`
 - **Access Level:** `manage_options` (administrators only)
-- **Purpose:** Plugin configuration and preferences
+- **Purpose:** Adjust how WPShadow works for your needs (like customizing your phone's settings)
 
 #### Settings Tabs:
 
@@ -162,7 +162,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** Post Types
 - **URL:** `/wp-admin/admin.php?page=wpshadow-post-types`
 - **Access Level:** `manage_options` (administrators only)
-- **Purpose:** Manage custom post types created by WPShadow
+- **Purpose:** Manage your site's specialized content (like organizing different file types on your computer). Handle FAQs, knowledge base articles, glossary terms, and learning materials
 - **Features:**
   - FAQ management
   - Knowledge Base articles
@@ -176,7 +176,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Page Name:** Utilities
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities`
 - **Access Level:** `read` (all logged-in users)
-- **Purpose:** Collection of site management and maintenance tools
+- **Purpose:** Your site's toolbox (like the utility drawer in your kitchen). Handy tools for managing backups, testing speed, checking security, and more
 
 #### Utility Tools (by Category):
 

@@ -205,9 +205,10 @@ class Executive_ROI_Widget {
 		$downtime_value = $downtime_avoided_hours * 500;
 
 		// Calculate security breach cost avoided ($50,000 per incident average)
+		// Math joke: Why was the equal sign so humble? Because it knew it wasn't greater than or less than anyone else.
 		$security_issues_fixed = $kpi_data['security_issues_fixed'] ?? 0;
-		$critical_security = floor( $security_issues_fixed * 0.2 ); // 20% are critical
-		$security_value = $critical_security * 50000;
+		$high_severity_security = floor( $security_issues_fixed * 0.2 ); // 20% are high-severity
+		$security_value = $high_severity_security * 50000;
 
 		// Calculate performance improvement revenue ($200/month per % improvement)
 		$performance_improvement = $kpi_data['performance_improvement_percent'] ?? 0;

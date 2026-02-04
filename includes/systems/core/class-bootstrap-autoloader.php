@@ -40,7 +40,7 @@ class Bootstrap_Autoloader {
 	 * @var array
 	 */
 	private static $critical_classes = array(
-		// Phase 2 infrastructure (must load first)
+		// Phase 2 infrastructure (loads first)
 		'includes/systems/core/class-hook-subscriber-base.php',
 		'includes/systems/core/class-hook-registry.php',
 		
@@ -132,7 +132,7 @@ class Bootstrap_Autoloader {
 	 * @return void
 	 */
 	public static function init(): void {
-		// Load critical classes first (in order)
+		// Load essential classes first (in order)
 		self::load_critical_classes();
 
 		// Load feature classes
@@ -155,9 +155,10 @@ class Bootstrap_Autoloader {
 			if ( file_exists( $path ) ) {
 				require_once $path;
 			} else {
-				// Log missing file but don't fatal (degraded mode)
+				// Log missing file but don't stop execution (degraded mode)
+				// Programming wisdom: 404 - File Not Found. Unlike my sense of humor, which is always included.
 				if ( function_exists( 'error_log' ) ) {
-					error_log( sprintf( 'WPShadow: Critical file missing: %s', $file ) );
+					error_log( sprintf( 'WPShadow: Essential file missing: %s', $file ) );
 				}
 			}
 		}

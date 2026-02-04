@@ -102,7 +102,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 			);
 		}
 
-		// Check for hooks with fatal errors in callbacks.
+		// Check for hooks with runtime errors in callbacks.
 		$problematic_hooks = array();
 		
 		foreach ( $wp_filter as $hook_name => $hook_callbacks ) {

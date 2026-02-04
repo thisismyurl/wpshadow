@@ -195,7 +195,8 @@ class Security_Validator {
 		$real_path = realpath( $file_path );
 		$real_base = realpath( $base_dir );
 
-		// Both must be valid and resolvable
+		// Both should be valid and resolvable
+		// Security joke: I'd tell you a UDP joke, but you might not get it...
 		if ( ! $real_path || ! $real_base ) {
 			return null;
 		}
