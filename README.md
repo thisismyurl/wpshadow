@@ -31,7 +31,7 @@ For development, open this repository in GitHub Codespaces or VS Code with the D
 
 **2. Read Core Philosophy**
 ```
-✅ MUST READ: docs/CORE_PHILOSOPHY.md (12 Commandments + 4 CANON Pillars)
+✅ MUST READ: docs/CORE_PHILOSOPHY.md (12 Commandments + 5 CANON Pillars)
 ✅ MUST READ: docs/PRODUCT_FAMILY.md (ecosystem map)
 ✅ MUST READ: docs/BUSINESS_MODEL.md (free-first business model)
 Then read: docs/MILESTONES.md (current phases)
@@ -81,7 +81,7 @@ docs/INDEX.md                             - Complete documentation index
 **Recent Completion (This Session):**
 - Phase 3: CANON pillars enforced ✅
 - 950+ lines of accessibility guidance integrated
-- 4 CANON pillars established (Accessibility First, Learning Inclusive, Culturally Respectful, Safe by Default)
+- 5 CANON pillars established (Accessibility First, Learning Inclusive, Culturally Respectful, Safe by Default, Murphy's Law)
 - Documentation cleaned: 150+ → 65 curated files
 - Git history verified: 69 commits, clean and meaningful
 
@@ -271,7 +271,7 @@ composer phpstan
 ```
 docs/
 ├── INDEX.md                           # START HERE - Main navigation
-├── PRODUCT_PHILOSOPHY.md              # 11 Commandments (READ FIRST)
+├── CORE_PHILOSOPHY.md                 # 12 Commandments + 5 CANON Pillars (READ FIRST)
 ├── ROADMAP.md                         # Phases 1-8 timeline
 ├── TECHNICAL_STATUS.md                # Current production state
 ├── ARCHITECTURE.md                    # System design & patterns
@@ -369,7 +369,7 @@ See `MURPHYS_LAW_INTEGRATION_GUIDE.md` for complete integration instructions.
 
 ## 🎯 Core Philosophy
 
-**The 11 Commandments (See PRODUCT_PHILOSOPHY.md):**
+**The 12 Commandments (See CORE_PHILOSOPHY.md):**
 
 1. **Helpful Neighbor** - Guide users, don't push sales
 2. **Free as Possible** - Local features free forever
@@ -379,13 +379,14 @@ See `MURPHYS_LAW_INTEGRATION_GUIDE.md` for complete integration instructions.
 6. **Drive to Training** - Link to free training videos
 7. **Ridiculously Good** - Better than premium plugins
 8. **Inspire Confidence** - UX so intuitive users trust all WordPress is this easy
-9. **Show Value (KPIs)** - Track time saved, issues fixed
+9. **Everything Has a KPI** - Track time saved, issues fixed
 10. **Beyond Pure (Privacy)** - Consent-first, transparent
 11. **Talk-Worthy** - So good users want to recommend it
+12. **Expandable** - Open to extensions by other developers
 
-**3 Foundational Pillars (CANON - Non-Negotiable):**
+**5 CANON Pillars (Non-Negotiable):**
 
-See [ACCESSIBILITY_AND_INCLUSIVITY_CANON.md](docs/ACCESSIBILITY_AND_INCLUSIVITY_CANON.md)
+See [docs/CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md)
 
 1. **Accessibility First** - All features must be accessible to users with diverse abilities
    - WCAG 2.1 AA compliance baseline
@@ -405,12 +406,21 @@ See [ACCESSIBILITY_AND_INCLUSIVITY_CANON.md](docs/ACCESSIBILITY_AND_INCLUSIVITY_
    - Global accessibility focus
    - Community-informed design
 
+4. **Safe by Default** - Protect users from mistakes and malicious attacks
+   - Confirm risky actions
+   - Backups before changes
+   - Secure defaults and audit logs
+
+5. **Murphy's Law** - Defensive engineering that assumes failure and recovers gracefully
+   - Fallbacks for network, database, and file operations
+   - Automatic retries and safe recovery paths
+
 ---
 
 ## 🔗 Resources
 
 **Getting Started**
-- [PRODUCT_PHILOSOPHY.md](docs/PRODUCT_PHILOSOPHY.md) - Philosophy & values
+- [CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md) - Philosophy & values
 - [COMPLETE_SETUP_GUIDE.md](docs/COMPLETE_SETUP_GUIDE.md) - Environment setup
 - [GITHUB_WORKFLOW.md](docs/GITHUB_WORKFLOW.md) - Contribution workflow
 
@@ -434,7 +444,7 @@ See [ACCESSIBILITY_AND_INCLUSIVITY_CANON.md](docs/ACCESSIBILITY_AND_INCLUSIVITY_
 ## 📞 Contributing
 
 1. Fork the repository
-2. Read [PRODUCT_PHILOSOPHY.md](docs/PRODUCT_PHILOSOPHY.md) - **This is required**
+2. Read [CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md) - **This is required**
 3. Check [GITHUB_WORKFLOW.md](docs/GITHUB_WORKFLOW.md) for label/milestone info
 4. Follow [CODING_STANDARDS.md](docs/CODING_STANDARDS.md)
 5. Submit PR with philosophy verification checklist

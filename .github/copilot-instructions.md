@@ -102,7 +102,34 @@ class [Class_Name] extends [Base_Class] {
 }
 ```
 
-### Pattern 7: Diagnostic Implementation Checklist
+### Pattern 7: Script and Utility Placement
+**Always place scripts in version-controlled directories, never in `/tmp/`.**
+
+```bash
+# ❌ DON'T: Create scripts in /tmp
+cat > /tmp/my-script.sh << 'EOF'
+# Script content...
+EOF
+
+# ✅ DO: Use appropriate project directories
+cat > scripts/my-utility.sh << 'EOF'
+# Script content...
+EOF
+```
+
+**Directory Guidelines:**
+- **`scripts/`** - Utility/helper scripts for development workflow (checking status, running tasks, etc.)
+- **`dev-tools/`** - Development/maintenance tools (GitHub automation, diagnostic generators, analyzers)
+- **Root level** - Deployment/Docker scripts that users run directly (`deploy-ftp.sh`, `watch-and-deploy.sh`, etc.)
+- **❌ Never `/tmp/`** - Scripts disappear on restart; terrible for collaboration and troubleshooting
+
+**When to use which:**
+- One-off automation during development? → `scripts/`
+- GitHub issue creation or diagnostic generation? → `dev-tools/`
+- User-facing deployment/Docker management? → Root level
+- Temporary scratch work that will never be reused? → `/tmp/` (but reconsider if it's actually useful)
+
+### Pattern 8: Diagnostic Implementation Checklist
 When creating a new diagnostic:
 1. ✅ Check if WordPress has an API for what you're checking
 2. ✅ Extend `Diagnostic_Base`
@@ -532,7 +559,7 @@ Error_Handler::log_info( 'Treatment applied successfully', array(
 ) );
 ```
 
-## WPShadow Philosophy (The 11 Commandments)
+## WPShadow Philosophy (The 12 Commandments)
 
 When suggesting features or code, align with these principles:
 
@@ -672,7 +699,14 @@ Shareable features users want to recommend.
 - Social proof and testimonials encouraged
 - Success stories highlighted
 
-## CANON Pillars (Accessibility, Learning, Culture)
+### 12. **Expandable**
+The architecture is open to extension by other developers with clear, documented entry points.
+
+- Extension points are public and easy to discover
+- Developer tools and APIs remain free
+- Examples exist for each extension pattern
+
+## CANON Pillars (Accessibility, Learning, Culture, Safety, Murphy's Law)
 
 ### 🌍 Accessibility First
 **"No feature complete until accessible"**
@@ -860,6 +894,26 @@ $formatted_time = date_i18n( get_option( 'time_format' ), $timestamp );
 $timezone_string = get_option( 'timezone_string' );
 $datetime = new DateTime( 'now', new DateTimeZone( $timezone_string ) );
 ```
+
+### 🛡️ Safe by Default
+**"Protect users from mistakes and malicious actions."**
+
+**Requirements:**
+- Confirm risky actions
+- Backups or undo for destructive changes
+- Secure defaults (least privilege)
+- Clear audit logging for changes
+- Rate limiting on sensitive operations
+
+### ⚙️ Murphy's Law
+**"Assume failures will happen and make them safe."**
+
+**Requirements:**
+- Fallbacks for network, database, and file operations
+- Graceful errors with recovery paths
+- Automatic retries with safe limits
+- Atomic writes or rollback when possible
+- Autosave for user input
 
 ## Cross-Repository Relationships
 
@@ -1343,7 +1397,7 @@ apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 ## Resources
 
 **Documentation:**
-- [Core Philosophy](../docs/CORE_PHILOSOPHY.md) - The 12 Commandments & 3 CANON Pillars
+- [Core Philosophy](../docs/CORE_PHILOSOPHY.md) - The 12 Commandments & 5 CANON Pillars
 - [Product Family](../docs/PRODUCT_FAMILY.md) - Ecosystem, pricing, product alignment
 - [Coding Standards](../docs/CODING_STANDARDS.md) - Naming conventions
 - [Architecture](../docs/ARCHITECTURE.md) - System design

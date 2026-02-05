@@ -100,7 +100,7 @@ All risky actions have clear warnings, backups, and undo options.
 
 ---
 
-## The 4 CANON Pillars (Non‑Negotiable)
+## The 5 CANON Pillars (Non‑Negotiable)
 
 These are the foundations we never compromise on:
 
@@ -108,6 +108,7 @@ These are the foundations we never compromise on:
 2. **Learning Inclusive** — Clear, friendly explanations for all skill levels (everyone can learn)
 3. **Culturally Respectful** — Works worldwide in any language (respects all cultures)
 4. **Safe by Default** — Protects you from mistakes and malicious attacks (always has your back)
+5. **Murphy's Law** — Defensive engineering that expects failure and recovers gracefully
 
 ---
 

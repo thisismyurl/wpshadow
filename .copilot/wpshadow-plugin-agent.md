@@ -11,7 +11,7 @@
 ## 🎯 Agent Mission
 
 This agent is designed to guide development of WPShadow with deep understanding of:
-- Core product philosophy and values (11 Commandments)
+- Core product philosophy and values (12 Commandments)
 - WordPress.org plugin standards and requirements
 - WPShadow-specific coding standards and patterns
 - Quality assurance and release procedures
@@ -25,7 +25,7 @@ This agent is designed to guide development of WPShadow with deep understanding 
 
 ### WPShadow's Core Principles (Product Philosophy)
 
-#### THE 3 FOUNDATIONAL PILLARS (Non-Negotiable)
+#### THE 5 FOUNDATIONAL PILLARS (Non-Negotiable)
 
 **These are CANON. Code conflicts with these = mandatory review/redesign.**
 
@@ -125,9 +125,33 @@ This agent is designed to guide development of WPShadow with deep understanding 
   - Their language/timezone/preferences supported?
   - Any assumptions about their location/background?
 
+#### 🛡️ **Safe by Default** - Protect Users from Mistakes and Attacks
+**"Users should be safe even when they are unsure."**
+
+**Safety Standards:**
+- Confirmations for risky actions
+- Backups or undo for destructive changes
+- Secure defaults (least privilege, safest option)
+- Clear audit logging for changes
+- Rate limiting on sensitive operations
+
+**Implementation Check:** Would a mistake here cause harm? If yes, add guardrails.
+
+#### ⚙️ **Murphy's Law** - Defensive Engineering by Default
+**"Assume failures will happen and make them safe."**
+
+**Resilience Standards:**
+- Fallbacks for network, database, and file operations
+- Automatic retries with safe limits
+- Graceful error handling with recovery paths
+- Atomic writes and rollback when possible
+- Autosave for user input
+
+**Implementation Check:** If this fails, does the user stay safe and informed?
+
 ---
 
-### WPShadow's 11 Commandments (Product Philosophy)
+### WPShadow's 12 Commandments (Product Philosophy)
 
 #### 1. **Helpful Neighbor** 🤝
 - Anticipate user needs before they ask
@@ -178,7 +202,7 @@ This agent is designed to guide development of WPShadow with deep understanding 
 - Show exactly what's being checked and why
 - **Implementation Check:** Could a non-technical user understand this?
 
-#### 9. **Show Value Through KPIs** 📊
+#### 9. **Everything Has a KPI** 📊
 - Track and display measurable impact
 - Prove results with data
 - Connect features to business outcomes
@@ -195,6 +219,12 @@ This agent is designed to guide development of WPShadow with deep understanding 
 - Creates "how did I live without this?" moments
 - Generates organic word-of-mouth marketing
 - **Implementation Check:** Would users recommend this feature?
+
+#### 12. **Expandable** 🧩
+- Architecture is open to extension by other developers
+- Extension points are documented and easy to discover
+- Developer tools and APIs remain free
+- **Implementation Check:** Can others build on this cleanly?
 
 ---
 
@@ -624,7 +654,7 @@ $can_user = apply_filters('wpshadow_user_can_manage', current_user_can('manage_o
 
 **When Code Conflicts with Core Principles**
 
-The agent is designed to identify conflicts between proposed code/features and the 3 Foundational Pillars (Accessibility First, Learning Inclusive, Culturally Respectful). Here's how this works:
+The agent is designed to identify conflicts between proposed code/features and the 5 Foundational Pillars (Accessibility First, Learning Inclusive, Culturally Respectful, Safe by Default, Murphy's Law). Here's how this works:
 
 ### 1️⃣ **Agent Identifies Conflict**
 When a proposed feature conflicts with a core principle:
@@ -814,7 +844,7 @@ See [PRERELEASE_HANDOFF.md](/workspaces/wpshadow/docs/PRERELEASE_HANDOFF.md) for
 
 ### Starting New Feature
 
-1. **Check Philosophy:** Does this align with the 11 Commandments?
+1. **Check Philosophy:** Does this align with the 12 Commandments?
 2. **Validate Approach:** Does this follow WordPress.org standards?
 3. **Design Thoroughly:** Plan before coding
 4. **Code with Standards:** Follow patterns above
@@ -839,7 +869,7 @@ Type: Feature | Fix | Refactor | Docs | Test | Chore
 
 ```
 Philosophy:
-- [ ] Aligns with 11 Commandments
+- [ ] Aligns with 12 Commandments
 - [ ] Improves user experience
 - [ ] No unnecessary features
 

@@ -276,8 +276,8 @@ The entire plugin architecture is open to extension by other developers, for fre
 **Developer Requirements:**
 
 ✅ **All developers must follow:**
-- All 11 Commandments (helpful, free-first, advice-not-sales, etc)
-- All 4 CANON Pillars (🌍 accessibility, 🎓 learning, 🌐 culture, 🛡️ safety)
+- All 12 Commandments (helpful, free-first, advice-not-sales, etc)
+- All 5 CANON Pillars (🌍 accessibility, 🎓 learning, 🌐 culture, 🛡️ safety, ⚙️ Murphy's Law)
 - Security standards (nonce verification, capability checks, sanitization)
 - Documentation standards (code examples, real-world usage)
 - Coding standards (PHPCS compliance, proper namespacing)
@@ -496,8 +496,8 @@ The entire plugin architecture is open to extension by other developers, for fre
 **Developer Requirements:**
 
 ✅ **All developers must follow:**
-- All 11 Commandments (helpful, free-first, advice-not-sales, etc)
-- All 3 CANON Pillars (🌍 accessibility, 🎓 learning, 🌐 culture)
+- All 12 Commandments (helpful, free-first, advice-not-sales, etc)
+- All 5 CANON Pillars (🌍 accessibility, 🎓 learning, 🌐 culture, 🛡️ safety, ⚙️ Murphy's Law)
 - Security standards (nonce verification, capability checks, sanitization)
 - Documentation standards (code examples, real-world usage)
 - Coding standards (PHPCS compliance, proper namespacing)
@@ -539,7 +539,7 @@ Use this section to understand which principles apply to your work.
 
 ### **Dashboard & UI**
 **Primary Commandments:** #7 (ridiculously good), #8 (inspire confidence), #11 (talk-about-worthy), #12 (expandable)
-**Primary Pillars:** All 3 Pillars (🌍 🎓 🌐)
+**Primary Pillars:** All 5 Pillars (🌍 🎓 🌐 🛡️ ⚙️)
 
 **Why:**
 - Dashboard is the first impression (Ridiculously Good)

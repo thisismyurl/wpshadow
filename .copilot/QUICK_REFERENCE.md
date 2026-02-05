@@ -5,7 +5,7 @@
 
 ---
 
-## � THE 3 FOUNDATIONAL PILLARS (CANON)
+## � THE 5 FOUNDATIONAL PILLARS (CANON)
 
 ### Quick Reference: Core Principles
 
@@ -14,6 +14,8 @@
 | **🌍 Accessibility First** | Can someone with disabilities use this? | Mouse-only, color-only, no captions, hardcoded fonts | Keyboard nav, screen reader, high contrast, 44px targets |
 | **🎓 Learning Inclusive** | Do all learning styles work? | Only video OR only text, no examples, assumes prior knowledge | Video + article, interactive demo, real-world example |
 | **🌐 Culturally Respectful** | Is this welcoming globally? | Idioms, hardcoded dates, gendered language, no translations | RTL support, flexible formats, inclusive imagery |
+| **🛡️ Safe by Default** | Is the user protected from mistakes? | Destructive actions without confirmation or undo | Backups, confirmations, secure defaults |
+| **⚙️ Murphy's Law** | Does failure stay safe and recoverable? | No fallback path, hard failures, lost input | Retries, fallbacks, autosave, graceful recovery |
 
 ### Accessibility First: Quick Check
 
@@ -77,7 +79,7 @@
 
 ---
 
-## �🎯 The 11 Commandments (Quick Check)
+## �🎯 The 12 Commandments (Quick Check)
 
 | # | Commandment | Check | Example |
 |---|-------------|-------|---------|
@@ -89,9 +91,10 @@
 | 6 | **Drive to Training** | Are training videos available? | Links to video tutorials |
 | 7 | **Ridiculously Good** | Would paying customers feel premium? | UX exceeds paid plugin quality |
 | 8 | **Inspire Confidence** | Is this intuitive for non-technical users? | Clear explanations in plain language |
-| 9 | **Show Value (KPIs)** | Can users see the measurable impact? | Displays business value metrics |
+| 9 | **Everything Has a KPI** | Can users see the measurable impact? | Displays business value metrics |
 | 10 | **Beyond Pure Privacy** | Is this consent-first and transparent? | Users control all data collection |
 | 11 | **Talk-Worthy** | Would users share this feature? | Features create "wow" moments |
+| 12 | **Expandable** | Can others build on this cleanly? | Extension points are documented |
 
 ---
 
@@ -370,7 +373,7 @@ docs/PHASE_[N]_COMPLETION_SUMMARY.md
 ## 🔗 One-Minute Links
 
 **Core Philosophy:**
-- 11 Commandments: `/docs/archive/KILLER_TESTS_50_MUST_HAVES.md`
+- 12 Commandments: `/docs/archive/KILLER_TESTS_50_MUST_HAVES.md`
 - Agent Preferences: `/docs/WPSHADOW_AGENT_PREFERENCES.md`
 
 **Coding Standards:**

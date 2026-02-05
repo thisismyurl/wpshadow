@@ -982,10 +982,12 @@ Every milestone must embody:
 11. ✅ Talk-About-Worthy
 12. ✅ Expandable
 
-### **The 3 CANON Pillars**
+### **The 5 CANON Pillars**
 - 🌍 **Accessibility First:** No feature complete until accessible
 - 🎓 **Learning Inclusive:** Support all learning styles
 - 🌐 **Culturally Respectful:** Design for global communities
+- 🛡️ **Safe by Default:** Protect users from mistakes and attacks
+- ⚙️ **Murphy's Law:** Defensive engineering with resilient fallbacks
 
 ---
 

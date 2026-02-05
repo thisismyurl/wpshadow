@@ -16,7 +16,6 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 ERROR_COUNT=0
-RECOVERY_NEEDED=false
 
 # ============================================================================
 # 1. ENVIRONMENT CHECK
@@ -25,125 +24,114 @@ echo -e "${BLUE}[1/8] Environment check...${NC}"
 echo -e "${GREEN}✓ Codespace environment ready${NC}"
 
 # ============================================================================
-# 2. VERIFY MYSQL SERVICE
+# 2. ENSURE DOCKER COMPOSE SERVICES ARE RUNNING
 # ============================================================================
-echo -e "${BLUE}[2/8] Checking MySQL service...${NC}"
+echo -e "${BLUE}[2/8] Starting Docker Compose services...${NC}"
+cd /workspaces/wpshadow
 
-if mysqladmin ping -h mysql -u wordpress -pwordpress &>/dev/null 2>&1; then
+if docker compose ps | grep -q "wpshadow-mysql"; then
+    echo -e "${GREEN}✓ Services already running${NC}"
+else
+    echo -e "${YELLOW}Starting services...${NC}"
+    if docker compose up -d 2>&1; then
+        echo -e "${GREEN}✓ Services started${NC}"
+    else
+        echo -e "${RED}✗ Failed to start services${NC}"
+        ERROR_COUNT=$((ERROR_COUNT + 1))
+    fi
+fi
+
+sleep 3
+
+# ============================================================================
+# 3. VERIFY MYSQL SERVICE
+# ============================================================================
+echo -e "${BLUE}[3/8] Checking MySQL service...${NC}"
+
+if mysqladmin ping -h 127.0.0.1 -u wordpress -pwordpress &>/dev/null 2>&1; then
     echo -e "${GREEN}✓ MySQL is running${NC}"
 else
     echo -e "${YELLOW}⚠ MySQL is starting...${NC}"
-    for i in {1..20}; do
-        if mysqladmin ping -h mysql -u wordpress -pwordpress &>/dev/null 2>&1; then
+    for i in {1..30}; do
+        if mysqladmin ping -h 127.0.0.1 -u wordpress -pwordpress &>/dev/null 2>&1; then
             echo -e "${GREEN}✓ MySQL is ready${NC}"
             break
         fi
         echo -n "."
         sleep 2
     done
-    if ! mysqladmin ping -h mysql -u wordpress -pwordpress &>/dev/null 2>&1; then
+    if ! mysqladmin ping -h 127.0.0.1 -u wordpress -pwordpress &>/dev/null 2>&1; then
         echo -e "${RED}✗ MySQL failed to respond${NC}"
         ERROR_COUNT=$((ERROR_COUNT + 1))
     fi
 fi
 
 # ============================================================================
-# 3. VERIFY WORDPRESS SERVICE
+# 4. VERIFY WORDPRESS SERVICE
 # ============================================================================
-echo -e "${BLUE}[3/8] Checking WordPress service...${NC}"
+echo -e "${BLUE}[4/8] Checking WordPress service...${NC}"
 
-if curl -s http://localhost/ &>/dev/null; then
+if curl -s http://localhost:8080 &>/dev/null; then
     echo -e "${GREEN}✓ WordPress is responding${NC}"
 else
     echo -e "${YELLOW}⚠ WordPress is starting...${NC}"
-    for i in {1..20}; do
-        if curl -s http://localhost/ &>/dev/null; then
+    for i in {1..30}; do
+        if curl -s http://localhost:8080 &>/dev/null; then
             echo -e "${GREEN}✓ WordPress is ready${NC}"
             break
         fi
         echo -n "."
         sleep 2
     done
-    if ! curl -s http://localhost/ &>/dev/null; then
+    if ! curl -s http://localhost:8080 &>/dev/null; then
         echo -e "${YELLOW}⚠ WordPress may still be initializing${NC}"
     fi
 fi
 
 # ============================================================================
-# 4. VERIFY PORT 9000
+# 5. VERIFY PHPMYADMIN
 # ============================================================================
-echo -e "${BLUE}[4/8] Checking port 9000...${NC}"
-if curl -s -I http://localhost:9000 &>/dev/null; then
-    echo -e "${GREEN}✓ Port 9000 is accessible${NC}"
+echo -e "${BLUE}[5/8] Checking phpMyAdmin service...${NC}"
+if curl -s http://localhost:8081 &>/dev/null; then
+    echo -e "${GREEN}✓ phpMyAdmin is accessible${NC}"
 else
-    echo -e "${YELLOW}⚠ Port 9000 not responding yet${NC}"
+    echo -e "${YELLOW}⚠ phpMyAdmin is starting...${NC}"
 fi
 
 # ============================================================================
-# 5. VERIFY PLUGIN MOUNT
+# 6. VERIFY PLUGIN MOUNT
 # ============================================================================
-echo -e "${BLUE}[5/8] Checking plugin mount...${NC}"
-if [ -f "/var/www/html/wp-content/plugins/wpshadow/wpshadow.php" ]; then
-    echo -e "${GREEN}✓ wpshadow plugin is mounted${NC}"
+echo -e "${BLUE}[6/8] Checking plugin mount...${NC}"
+if [ -f "/workspaces/wpshadow/wpshadow.php" ]; then
+    echo -e "${GREEN}✓ wpshadow plugin files are available${NC}"
     
-    VERSION=$(grep "Version:" /var/www/html/wp-content/plugins/wpshadow/wpshadow.php | head -1 | sed 's/.*Version: //' | tr -d '\r' | awk '{print $1}')
+    VERSION=$(grep "Version:" /workspaces/wpshadow/wpshadow.php | head -1 | sed 's/.*Version: //' | tr -d '\r' | awk '{print $1}')
     if [ -n "$VERSION" ]; then
         echo "  Plugin version: $VERSION"
     fi
     
     # Verify plugin syntax
-    if ! php -l /var/www/html/wp-content/plugins/wpshadow/wpshadow.php &>/dev/null 2>&1; then
+    if ! php -l /workspaces/wpshadow/wpshadow.php &>/dev/null 2>&1; then
         echo -e "${RED}✗ Plugin has syntax errors${NC}"
         ERROR_COUNT=$((ERROR_COUNT + 1))
     fi
 else
-    echo -e "${YELLOW}⚠ Plugin mount not available${NC}"
-    ERROR_COUNT=$((ERROR_COUNT + 1))
+    echo -e "${YELLOW}⚠ Plugin files not accessible via direct path${NC}"
 fi
 
 # ============================================================================
-# 6. VERIFY WORDPRESS INSTALLATION
+# 7. CHECK DOCKER SERVICE STATUS
 # ============================================================================
-echo -e "${BLUE}[6/8] Checking WordPress installation...${NC}"
-if [ ! -f "/var/www/html/wp-config.php" ]; then
-    echo -e "${YELLOW}⚠ WordPress not yet installed (will auto-install on first visit)${NC}"
+echo -e "${BLUE}[7/8] Docker service status...${NC}"
+if docker compose ps 2>&1 | grep -q "wpshadow"; then
+    echo -e "${GREEN}✓ Docker services active${NC}"
+    docker compose ps | grep wpshadow || true
 else
-    if wp db check --allow-root &>/dev/null 2>&1; then
-        echo -e "${GREEN}✓ WordPress is installed and database is accessible${NC}"
-    else
-        echo -e "${YELLOW}⚠ Database not yet fully initialized${NC}"
-    fi
+    echo -e "${YELLOW}⚠ Docker services status unclear${NC}"
 fi
 
 # ============================================================================
-# 7. CHECK FOR ERRORS IN LOGS
-# ============================================================================
-echo -e "${BLUE}[7/8] Checking for critical errors...${NC}"
-if [ -f "/var/www/html/wp-content/debug.log" ]; then
-    if grep -i "fatal" /var/www/html/wp-content/debug.log 2>/dev/null | head -3 | grep -q "fatal"; then
-        echo -e "${RED}✗ Critical errors found in debug log${NC}"
-        grep "fatal" /var/www/html/wp-content/debug.log | head -1
-        ERROR_COUNT=$((ERROR_COUNT + 1))
-    else
-        echo -e "${GREEN}✓ No critical errors in logs${NC}"
-    fi
-else
-    echo -e "${GREEN}✓ No debug log yet (created on first WordPress error)${NC}"
-fi
-
-# ============================================================================
-# 8. AUTO-RECOVERY
-# ============================================================================
-echo -e "${BLUE}[8/8] Recovery check...${NC}"
-if [ "$RECOVERY_NEEDED" = true ]; then
-    echo -e "${YELLOW}⚠ Attempting auto-recovery...${NC}"
-    sleep 5
-    # Service restart managed by Codespaces
-    echo -e "${GREEN}✓ Services restarted${NC}"
-fi
-
-# ============================================================================
-# FINAL STATUS
+# 8. FINAL STATUS
 # ============================================================================
 echo ""
 echo "═══════════════════════════════════════════════════════════════════════"
@@ -160,28 +148,73 @@ echo ""
 # ============================================================================
 # CONNECTION INFO
 # ============================================================================
-echo -e "${BLUE}Connection Information:${NC}"
+echo -e "${BLUE}🌐 Connection Information:${NC}"
 
-if [ -n "$CODESPACE_NAME" ] && [ -n "$GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN" ]; then
-    WP_URL="http://${CODESPACE_NAME}-9000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
-    echo -e "  📍 GitHub Codespaces detected"
-    echo -e "  🌐 WordPress: ${GREEN}${WP_URL}${NC}"
+if [ -n "$CODESPACE_NAME" ]; then
+    # GitHub Codespaces environment
+    PFD=${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
+    WP_URL="https://${CODESPACE_NAME}-8080.${PFD}"
+    PMA_URL="https://${CODESPACE_NAME}-8081.${PFD}"
+    echo -e "  📍 GitHub Codespaces detected: ${CODESPACE_NAME}"
+    echo -e "  🌐 WordPress:   ${GREEN}${WP_URL}${NC}"
+    echo -e "  📊 phpMyAdmin:  ${GREEN}${PMA_URL}${NC}"
 else
+    # Local environment (VS Code Dev Container or Docker Desktop)
     echo -e "  📍 Local environment detected"
-    echo -e "  🌐 WordPress: ${GREEN}http://localhost:9000${NC}"
+    echo -e "  🌐 WordPress:   ${GREEN}http://localhost:8080${NC}"
+    echo -e "  📊 phpMyAdmin:  ${GREEN}http://localhost:8081${NC}"
 fi
 
-echo -e "  🗄️  MySQL: mysql:3306 (wordpress/wordpress)"
+echo ""
+echo -e "${BLUE}Database Credentials:${NC}"
+echo "  Host: localhost:3306"
+echo "  User: wordpress"
+echo "  Password: wordpress"
+echo "  Database: wordpress"
 echo ""
 
 # ============================================================================
 # QUICK COMMANDS
 # ============================================================================
 echo -e "${BLUE}Quick Commands:${NC}"
-echo "  View logs:           Check VS Code Output panel"
-echo "  MySQL client:        mysql -u wordpress -pwordpress wordpress"
-echo "  Restart services:    Rebuild Codespace if needed"
-echo "  Check setup log:     cat $LOG"
+echo "  View services:         docker compose ps"
+echo "  View logs:             docker compose logs -f"
+echo "  MySQL client:          mysql -h127.0.0.1 -uwordpress -pwordpress wordpress"
+echo "  WP-CLI:                docker compose exec wordpress wp --allow-root [command]"
+echo "  Restart services:      docker compose restart"
+echo "  Stop services:         docker compose down"
+echo "  Check setup log:       cat $LOG"
+echo ""
+
+# ============================================================================
+# HELPFUL TIPS
+# ============================================================================
+echo -e "${BLUE}💡 Helpful Tips:${NC}"
+echo "  • WordPress will complete initialization on first browser visit"
+echo "  • Default WP admin user/pass will be shown in WordPress dashboard"
+echo "  • Use 'docker compose logs wordpress' to see WordPress startup"
+echo "  • Use 'docker compose exec wordpress bash' to enter WordPress container"
+echo ""
+
+# ============================================================================
+# START FILE WATCHER FOR AUTO-DEPLOYMENT
+# ============================================================================
+echo -e "${BLUE}Starting file watcher for auto-deployment...${NC}"
+if command -v inotifywait &> /dev/null; then
+    # Check if watcher is already running to avoid duplicates
+    if ! pgrep -f "watch-and-deploy.sh" > /dev/null 2>&1; then
+        # Run watcher in background with nohup so it survives terminal close
+        cd /workspaces/wpshadow
+        nohup ./watch-and-deploy.sh > /tmp/wpshadow-watch.log 2>&1 &
+        WATCHER_PID=$!
+        echo -e "${GREEN}✓ File watcher started (PID: $WATCHER_PID)${NC}"
+        echo "  View logs: ${BLUE}tail -f /tmp/wpshadow-watch.log${NC}"
+    else
+        echo -e "${GREEN}✓ File watcher already running${NC}"
+    fi
+else
+    echo -e "${YELLOW}⚠ inotify-tools not available${NC}"
+fi
 echo ""
 
 } 2>&1 | tee -a "$LOG"

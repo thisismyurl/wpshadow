@@ -221,6 +221,17 @@ echo "  Version: ${GREEN}$NEW_VERSION${NC}"
 echo "  Location: ${BLUE}$FTP_HOST$FTP_REMOTE_PATH${NC}"
 echo "  Build: ${BUILD_DIR}"
 echo ""
+# Auto-tag the deployment for next delta-only deployment
+echo -e "${YELLOW}Tagging deployment...${NC}"
+GIT_TAG="deploy-v$NEW_VERSION"
+if git tag "$GIT_TAG" 2>/dev/null; then
+    echo -e "${GREEN}✓${NC} Deployment tagged as $GIT_TAG"
+    echo -e "${BLUE}(Next deployment will only push changes since this tag)${NC}"
+else
+    echo -e "${YELLOW}⚠${NC}  Tag already exists or tagging failed - continuing"
+fi
+
+echo ""
 echo -e "${YELLOW}Next steps:${NC}"
 echo "  1. Visit: https://wpshadow.com/wp-admin/plugins.php"
 echo "  2. Verify the plugin updated to version $NEW_VERSION"

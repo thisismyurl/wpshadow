@@ -250,6 +250,8 @@ namespace WPShadow\Cloud\Guardian;
 | 🌍 Accessibility First | Keyboard nav, screen reader compatible | Works for all users |
 | 🎓 Learning Inclusive | Docs in text, video, interactive | All learning styles supported |
 | 🌐 Culturally Respectful | RTL support, locale-aware, translated | Global product |
+| 🛡️ Safe by Default | Backups, confirmations, secure defaults | Users stay protected |
+| ⚙️ Murphy's Law | Resilient fallbacks and recovery paths | Failures are safe and predictable |
 
 ---
 
@@ -562,7 +564,7 @@ These are diagnostics that **cannot** run on your local server:
 
 All Pro modules must maintain:
 - ✅ All 12 Commandments
-- ✅ All 3 CANON Pillars
+- ✅ All 5 CANON Pillars
 - ✅ Documentation standards (video + text)
 - ✅ Accessibility standards (WCAG AA)
 - ✅ Cultural respect (RTL, translations)
@@ -665,7 +667,7 @@ When customers pay for Guardian, Vault, or Pro:
 
 Any new product must:
 - ✅ Align with all 12 Commandments
-- ✅ Align with all 4 CANON Pillars
+- ✅ Align with all 5 CANON Pillars
 - ✅ Have transparent pricing (if paid)
 - ✅ Include free tier (if possible)
 - ✅ Integrate with Core (hub-and-spoke)

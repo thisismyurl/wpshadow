@@ -80,12 +80,13 @@ WPShadow follows 12 core commandments:
 11. **Talk-About-Worthy** - So good users recommend it
 12. **Expandable** - Open to extensions by other developers
 
-== The 4 CANON Pillars ==
+== The 5 CANON Pillars ==
 
 1. **Accessibility First** - Works for all abilities
 2. **Learning Inclusive** - Clear guidance for all skill levels
 3. **Culturally Respectful** - Global, translation-ready design
 4. **Safe by Default** - Protects users from mistakes and abuse
+5. **Murphy's Law** - Defensive engineering with resilient fallbacks
 
 == Changelog ==
 
