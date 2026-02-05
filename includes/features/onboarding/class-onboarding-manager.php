@@ -15,7 +15,7 @@ use WPShadow\Core\Hook_Subscriber_Base;
  * Philosophy: #5 Drive to KB - Link to learning resources
  * Philosophy: #6 Drive to Training - Educational journey
  *
- * @since 1.6030.2201
+ * @since 1.6089
  * @package WPShadow
  */
 class Onboarding_Manager extends Hook_Subscriber_Base {
@@ -64,6 +64,16 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 			'admin_notices'               => 'maybe_show_graduation',
 			'wpshadow_settings_sections'  => 'add_settings_section',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6089
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6089';
 	}
 
 	/**

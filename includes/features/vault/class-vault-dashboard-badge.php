@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since      1.6030.1840
+ * @since 1.6364
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Integrates Vault status into WPShadow Core dashboard.
  *
- * @since 1.6030.1840
+ * @since 1.6364
  */
 class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 
@@ -40,6 +40,16 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 			'wpshadow_dashboard_widgets' => 'add_dashboard_widget',
 			'admin_enqueue_scripts'      => 'enqueue_assets',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6364
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6364';
 	}
 
 	/**

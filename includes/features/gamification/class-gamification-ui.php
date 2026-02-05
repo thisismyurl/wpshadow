@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since      1.6004.0400
+ * @since 1.6180
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Renders admin pages for gamification features.
  *
- * @since 1.6004.0400
+ * @since 1.6180
  */
 class Gamification_UI extends Hook_Subscriber_Base {
 
@@ -40,6 +40,16 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			'admin_menu'            => array( 'register_menu_pages', 10 ),
 			'admin_enqueue_scripts' => 'enqueue_assets',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6180
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6180';
 	}
 
 	/**

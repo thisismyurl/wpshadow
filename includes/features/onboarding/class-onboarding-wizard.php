@@ -12,7 +12,7 @@
  *
  * @package WPShadow
  * @subpackage Onboarding
- * @since 1.6030.2148
+ * @since 1.6089
  */
 
 declare(strict_types=1);
@@ -33,6 +33,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * transition from other platforms (Word, Wix, Moodle, etc.) to WordPress.
  */
 class Onboarding_Wizard extends Hook_Subscriber_Base {
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6089
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6089';
+	}
 
 	/**
 	 * Get hook subscriptions.
@@ -149,7 +159,7 @@ class Onboarding_Wizard extends Hook_Subscriber_Base {
 		$shown_count = (int) get_user_meta( $user_id, 'wpshadow_onboarding_shown_count', true );
 
 		// Show wizard on first admin page load
-		return $shown_count === 0;
+		return 0 === $shown_count;
 	}
 
 	/**

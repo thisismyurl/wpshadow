@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since      1.6030.2200
+ * @since 1.6180
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors site health in real-time and generates intelligent alerts.
  *
- * @since 1.6030.2200
+ * @since 1.6180
  */
 class Realtime_Monitoring extends Hook_Subscriber_Base {
 
@@ -51,6 +51,16 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 			'wpshadow_realtime_monitor'  => 'run_monitoring_cycle',
 			'cron_schedules'             => 'add_cron_interval',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6180
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6180';
 	}
 
 	/**

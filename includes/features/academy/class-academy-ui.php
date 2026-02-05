@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6030.1920
+ * @since      1.6089
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles all admin UI for WPShadow Academy.
  *
- * @since 1.6030.1920
+ * @since 1.6089
  */
 class Academy_UI extends Hook_Subscriber_Base {
 

@@ -10,7 +10,7 @@
  * - Commandment #10 (Beyond Pure) - Privacy first, explicit consent required
  * - CANON: Accessibility First - WCAG AA compliant modals
  *
- * @since   1.6030.2148
+ * @since 1.6180
  * @package WPShadow\Engagement
  */
 
@@ -35,7 +35,7 @@ class Exit_Interview extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6180
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -43,6 +43,16 @@ class Exit_Interview extends Hook_Subscriber_Base {
 			'admin_footer-plugins.php' => 'render_deactivation_modal',
 			'admin_enqueue_scripts'    => 'enqueue_assets',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6180
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6180';
 	}
 
 	/**

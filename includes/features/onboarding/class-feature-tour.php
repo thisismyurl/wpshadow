@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Onboarding
- * @since      1.6030.2200
+ * @since      1.6089
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages guided tours for new features and utilities.
  *
- * @since 1.6030.2200
+ * @since 1.6089
  */
 class Feature_Tour extends Hook_Subscriber_Base {
 
@@ -44,6 +44,16 @@ class Feature_Tour extends Hook_Subscriber_Base {
 			'wp_ajax_wpshadow_complete_tour_step' => 'ajax_complete_step',
 			'wp_ajax_wpshadow_dismiss_tour'     => 'ajax_dismiss_tour',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6089
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6089';
 	}
 
 	/**

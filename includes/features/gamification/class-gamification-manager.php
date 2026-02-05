@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since      1.6004.0400
+ * @since 1.6180
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Coordinates achievements, badges, points, and rewards.
  *
- * @since 1.6004.0400
+ * @since 1.6180
  */
 class Gamification_Manager extends Hook_Subscriber_Base {
 
@@ -68,6 +68,16 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(); // Instance-based, registered in setup_hooks()
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6180
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6180';
 	}
 
 	/**

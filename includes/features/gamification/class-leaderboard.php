@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since      1.6004.0400
+ * @since 1.6180
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Privacy-first leaderboard system.
  *
- * @since 1.6004.0400
+ * @since 1.6180
  */
 class Leaderboard extends Hook_Subscriber_Base {
 
@@ -39,6 +39,16 @@ class Leaderboard extends Hook_Subscriber_Base {
 		return array(
 			'init' => 'schedule_leaderboard_refresh',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6180
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6180';
 	}
 
 	/**

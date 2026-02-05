@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6030.1915
+ * @since      1.6089
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages courses and their relationships to issue families.
  *
- * @since 1.6030.1915
+ * @since 1.6089
  */
 class Course_Registry extends Hook_Subscriber_Base {
 
@@ -43,6 +43,16 @@ class Course_Registry extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(); // Configuration only, no hooks needed
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6089
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6089';
 	}
 
 	/**

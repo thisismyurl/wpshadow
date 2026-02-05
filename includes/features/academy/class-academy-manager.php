@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6030.1900
+ * @since      1.6089
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages smart learning prompts, tracks user progress,
  * and recommends personalized learning paths.
  *
- * @since 1.6030.1900
+ * @since 1.6089
  */
 class Academy_Manager extends Hook_Subscriber_Base {
 
@@ -74,6 +74,16 @@ class Academy_Manager extends Hook_Subscriber_Base {
 		// Note: This is called statically but Academy_Manager uses
 		// instance methods. The instance is created in init().
 		return array(); // Hooks registered in setup_hooks() instead
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6089
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6089';
 	}
 
 	/**

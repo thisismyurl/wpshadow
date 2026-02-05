@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since      1.6030.1845
+ * @since 1.6364
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages Vault admin pages and AJAX handlers.
  *
- * @since 1.6030.1845
+ * @since 1.6364
  */
 class Vault_UI extends Hook_Subscriber_Base {
 
@@ -43,6 +43,16 @@ class Vault_UI extends Hook_Subscriber_Base {
 			'wp_ajax_wpshadow_vault_delete_backup' => 'handle_delete_backup',
 			'wp_ajax_wpshadow_vault_restore_backup' => 'handle_restore_backup',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6364
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6364';
 	}
 
 	/**

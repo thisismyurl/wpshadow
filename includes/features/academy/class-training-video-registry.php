@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6030.1910
+ * @since      1.6089
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages training videos and their relationships to findings/treatments.
  *
- * @since 1.6030.1910
+ * @since 1.6089
  */
 class Training_Video_Registry extends Hook_Subscriber_Base {
 
@@ -43,6 +43,16 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(); // Configuration only, no hooks needed
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6089
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6089';
 	}
 
 	/**

@@ -44,8 +44,9 @@ echo ""
 # HH = hours with leading zeros (00-23) in Toronto time
 # MM = minutes with leading zeros (00-59) in Toronto time
 
-TORONTO_TIME=$(TZ=America/Toronto date +"%y %j %H %M")
-read YEAR_DIGIT JULIAN_DAY HOUR MINUTE <<< "$TORONTO_TIME"
+TORONTO_TIME=$(TZ=America/Toronto date +"%Y %j %H %M")
+read FULL_YEAR JULIAN_DAY HOUR MINUTE <<< "$TORONTO_TIME"
+YEAR_DIGIT="${FULL_YEAR: -1}"  # Extract last digit of year
 NEW_VERSION="1.${YEAR_DIGIT}${JULIAN_DAY}.${HOUR}${MINUTE}"
 echo -e "${YELLOW}Updating version to: ${GREEN}$NEW_VERSION${NC}"
 echo -e "${BLUE}(Toronto time: $(TZ=America/Toronto date '+%Y-%m-%d %H:%M:%S %Z'))${NC}"

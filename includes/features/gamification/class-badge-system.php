@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since      1.6004.0400
+ * @since 1.6180
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles badge definitions and awarding logic.
  *
- * @since 1.6004.0400
+ * @since 1.6180
  */
 class Badge_System extends Hook_Subscriber_Base {
 
@@ -44,6 +44,16 @@ class Badge_System extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(); // Badges registered in register_badges(), no hooks needed
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6180
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6180';
 	}
 
 	/**

@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6059.2359
+ * @since      1.6089
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Registers job posting CPT with meta fields, taxonomies, and REST API support.
  *
- * @since 1.6059.2359
+ * @since 1.6089
  */
 class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 
@@ -51,7 +51,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6059.2359';
+		return '1.6089';
 	}
 
 	/**

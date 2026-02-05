@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since      1.6030.1835
+ * @since 1.6364
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages Vault account registration, API key exchange, and account verification.
  *
- * @since 1.6030.1835
+ * @since 1.6364
  */
 class Vault_Registration extends Hook_Subscriber_Base {
 
@@ -52,6 +52,16 @@ class Vault_Registration extends Hook_Subscriber_Base {
 			'wp_ajax_wpshadow_vault_disconnect'    => 'handle_disconnect',
 			'wp_ajax_wpshadow_vault_check_status'  => 'handle_check_status',
 		);
+	}
+
+	/**
+	 * Get the minimum required version for this feature.
+	 *
+	 * @since  1.6364
+	 * @return string Minimum required version.
+	 */
+	protected static function get_required_version(): string {
+		return '1.6364';
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * FAQ custom post type and block.
  *
  * @package WPShadow
- * @since   1.6059.2359
+ * @since   1.6089
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the FAQ post type, taxonomy, meta, and block.
  *
- * @since 1.6059.2359
+ * @since 1.6089
  */
 class FAQ_Post_Type extends Hook_Subscriber_Base {
 	/**
@@ -40,7 +40,7 @@ class FAQ_Post_Type extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6059.2359';
+		return '1.6089';
 	}
 
 	/**
