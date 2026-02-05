@@ -1,0 +1,114 @@
+<?php
+/**
+ * Redundant ARIA Labels Treatment
+ *
+ * Checks for redundant ARIA roles on native elements.
+ *
+ * @package    WPShadow
+ * @subpackage Treatments\Accessibility
+ * @since      1.6035.1400
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Treatments;
+
+use WPShadow\Core\Treatment_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Redundant ARIA Labels Treatment Class
+ *
+ * Verifies that native elements are not given redundant ARIA roles.
+ *
+ * @since 1.6035.1400
+ */
+class Treatment_Redundant_ARIA_Labels extends Treatment_Base {
+
+	/**
+	 * The treatment slug.
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'redundant-aria-labels';
+
+	/**
+	 * The treatment title.
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Redundant ARIA Labels on Native Elements';
+
+	/**
+	 * The treatment description.
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks for redundant ARIA roles on native elements';
+
+	/**
+	 * The family this treatment belongs to.
+	 *
+	 * @var string
+	 */
+	protected static $family = 'accessibility';
+
+	/**
+	 * Run the treatment check.
+	 *
+	 * @since  1.6035.1400
+	 * @return array|null Finding array if issue detected, null otherwise.
+	 */
+	public static function check() {
+		$issues = array();
+		$stats  = array();
+
+		$templates = array(
+			get_theme_file_path( 'header.php' ),
+			get_theme_file_path( 'footer.php' ),
+			get_theme_file_path( 'template-parts/content.php' ),
+		);
+
+		$redundant_count = 0;
+		foreach ( $templates as $template_path ) {
+			if ( empty( $template_path ) || ! file_exists( $template_path ) ) {
+				continue;
+			}
+
+			$content = file_get_contents( $template_path );
+			if ( preg_match( '/<button[^>]*role=\"button\"/i', $content ) ) {
+				$redundant_count++;
+			}
+			if ( preg_match( '/<a[^>]*role=\"link\"/i', $content ) ) {
+				$redundant_count++;
+			}
+		}
+
+		$stats['redundant_role_hits'] = $redundant_count;
+
+		if ( $redundant_count > 0 ) {
+			$issues[] = __( 'Redundant ARIA roles detected on native elements', 'wpshadow' );
+		}
+
+		if ( ! empty( $issues ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Native HTML elements already provide accessibility roles. Removing redundant ARIA reduces screen reader noise and confusion.', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 25,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/redundant-aria-labels',
+				'context'      => array(
+					'stats'  => $stats,
+					'issues' => $issues,
+				),
+			);
+		}
+
+		return null;
+	}
+}

@@ -127,6 +127,15 @@ if [ -f "package.json" ]; then
     fi
 fi
 
+# ============================================================================
+# FINAL: Make all scripts executable
+# ============================================================================
+echo ""
+echo "🔧 Making all scripts executable..."
+find /workspaces/wpshadow/scripts -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \; 2>/dev/null || true
+find /workspaces/wpshadow/dev-tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \; 2>/dev/null || true
+echo "✓ All scripts are executable"
+
 echo ""
 echo "✅ Post-create setup complete"
 echo "Timestamp: $(date)"

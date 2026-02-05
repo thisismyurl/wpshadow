@@ -1,6 +1,62 @@
 # WPShadow Complete Feature & Component Inventory
 
-## 📊 Executive Summary
+## � Release Schedule
+
+Features are released across multiple versions with specific @since gates:
+
+| Phase | Version Range | Release Period | Status | Key Features |
+|-------|---------------|----------------|--------|--------------|
+| **Phase 1** | `1.6004.0400` | January 4, 2026 | ✅ Released | Gamification system, initial diagnostics foundation |
+| **Phase 2** | `1.6030.1900` - `1.6036.1640` | January 30 - February 5, 2026 | ✅ Current | Academy, Onboarding, Feature Tours, Dashboard, Workflows |
+| **Phase 3** | `1.7030.1445`+ | July-September 2027 | 🔮 Planned | Advanced analytics, enhanced reporting, AI features |
+
+### Feature Version Legend
+- `@since 1.6004.0400` = Available in Phase 1+
+- `@since 1.6030.1900` = Available in Phase 2+ (not in Phase 1)
+- `@since 1.7030.1445` = Available in Phase 3+ (future)
+
+---
+
+## 📦 Features by Release Phase
+
+### Phase 1 (v1.6004.0400) — Initial Foundation
+Core systems and gamification framework:
+- Gamification system (badges, points, leaderboard)
+- Base diagnostic and treatment infrastructure
+- AJAX handler framework
+- Settings and preferences management
+- Initial KPI tracking
+
+**Availability:** January 4, 2026+
+
+### Phase 2 (v1.6030.1900 - v1.6036.1640) — Major Expansion *(Current)*
+Extended feature set with learning, workflows, and enhanced dashboards:
+- Academy system (courses, KB articles, training videos)
+- Onboarding wizard and feature tours
+- Workflow automation framework
+- Guardian automated monitoring
+- Real-time monitoring and anomaly detection
+- Comprehensive reporting system
+- Dashboard refinements and performance optimization
+- Activity logging and history tracking
+- Advanced notification system
+
+**Availability:** January 30, 2026 - February 5, 2026+
+
+### Phase 3 (v1.7030.1445+) — Advanced & AI *(Future)*
+Next-generation features with AI integration:
+- Advanced analytics with predictive capabilities
+- Enhanced reporting with AI insights
+- Advanced competitive benchmarking
+- Extended API integrations
+- Extended automation and workflow features
+- Phase 4 system initialization for upcoming features
+
+**Availability:** July-September 2027+
+
+---
+
+## �📊 Executive Summary
 
 - **2,251 Diagnostics** across 41 categories
 - **18 Treatments** (auto-fix capabilities)
@@ -16,7 +72,7 @@
 
 ### Base Classes (`includes/core/` & `includes/systems/core/`)
 - **Abstract_Registry** - Registry pattern base
-- **Activity_Logger** - System-wide activity tracking
+- **Activity_Logger** - System-wide activity tracking (@since 1.6030.1900)
 - **AJAX_Handler_Base** - Secure AJAX endpoint foundation
 - **AJAX_Router** - Smart routing for AJAX requests
 - **Asset_Enqueuer** - Intelligent asset loading
@@ -38,7 +94,7 @@
 - **Hook_Registry** - Auto-discovery of Hook_Subscriber_Base classes (Phase 2)
 - **Hook_Subscriber_Base** - Declarative hooks pattern
 - **Hooks_Initializer** - Hook system initialization
-- **KPI_Advanced_Features** - Advanced KPI tracking
+- **KPI_Advanced_Features** - Advanced KPI tracking (@since 1.6035.1400)
 - **KPI_Metadata** - KPI data structure
 - **KPI_Summary_Card** - KPI visualization
 - **KPI_Tracker** - Performance metrics tracking
@@ -51,7 +107,7 @@
 - **Plugin_Bootstrap** - Plugin initialization
 - **Query_Batch_Optimizer** - Database query optimization
 - **Rate_Limiter** - API rate limiting
-- **Recommendation_Engine** - AI-powered suggestions
+- **Recommendation_Engine** - AI-powered suggestions (@since 1.7030.1445)
 - **Scoring_Engine** - Finding severity calculation
 - **Secret_Audit_Log** - Secrets management audit trail
 - **Secret_Manager** - Secure secrets storage
@@ -76,7 +132,7 @@
 
 ## 🎯 Major Feature Modules (`includes/features/`)
 
-### 1. **Academy** (`features/academy/`)
+### 1. **Academy** (`features/academy/`) — *@since 1.6030.1900*
 Educational content and training system
 - **Academy_Manager** - Training system orchestration
 - **Academy_UI** - Training interface
@@ -90,7 +146,7 @@ Content quality and editorial workflow
 ### 3. **Engagement** (`features/engagement/`)
 User engagement and interaction tracking
 
-### 4. **Gamification** (`features/gamification/`)
+### 4. **Gamification** (`features/gamification/`) — *@since 1.6004.0400*
 Achievements, badges, and rewards
 - **Achievement_Registry** - Achievement definitions
 - **Badge_System** - Badge management
@@ -125,11 +181,11 @@ Real-time site monitoring
 - **Recovery/** - Automated recovery systems
 - **Analyzers/** - Various performance analyzers
 
-### 7. **Onboarding** (`features/onboarding/`)
+### 7. **Onboarding** (`features/onboarding/`) — *@since 1.6030.2200*
 User onboarding and setup wizard
 - **Feature_Tour** - Interactive feature tours
 - **Onboarding_Manager** - Onboarding orchestration
-- **Onboarding_Wizard** - Setup wizard
+- **Onboarding_Wizard** - Setup wizard (@since 1.7035.1400)
 - **Platform_Translator** - Platform-specific onboarding
 - **Data/** - Onboarding content
 

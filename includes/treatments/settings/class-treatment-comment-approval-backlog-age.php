@@ -1,0 +1,100 @@
+<?php
+/**
+ * Comment Approval Backlog Age Treatment
+ *
+ * Checks how long comments have been waiting for approval.
+ *
+ * @package    WPShadow
+ * @subpackage Treatments
+ * @since      1.5049.1331
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Treatments;
+
+use WPShadow\Core\Treatment_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Comment Approval Backlog Age Treatment Class
+ *
+ * Detects stale pending comments.
+ *
+ * @since 1.5049.1331
+ */
+class Treatment_Comment_Approval_Backlog_Age extends Treatment_Base {
+
+	/**
+	 * The treatment slug
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'comment-approval-backlog-age';
+
+	/**
+	 * The treatment title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Comment Approval Backlog Age';
+
+	/**
+	 * The treatment description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks how long pending comments have waited for approval';
+
+	/**
+	 * The family this treatment belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'functionality';
+
+	/**
+	 * Run the treatment check.
+	 *
+	 * @since  1.5049.1331
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		$pending = get_comments(
+			array(
+				'status'  => 'hold',
+				'number'  => 1,
+				'orderby' => 'comment_date_gmt',
+				'order'   => 'ASC',
+			)
+		);
+
+		if ( empty( $pending ) ) {
+			return null;
+		}
+
+		$oldest = $pending[0];
+		$age_seconds = time() - strtotime( $oldest->comment_date_gmt . ' GMT' );
+		$age_days = (int) floor( $age_seconds / DAY_IN_SECONDS );
+
+		if ( $age_days >= 7 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Some comments have been awaiting approval for more than 7 days.', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'details'      => array(
+					'oldest_pending_days' => $age_days,
+				),
+				'kb_link'      => 'https://wpshadow.com/kb/comment-approval-backlog-age',
+			);
+		}
+
+		return null;
+	}
+}

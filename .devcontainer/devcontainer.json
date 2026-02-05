@@ -1,96 +1,44 @@
 {
   "name": "WPShadow WordPress Development",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
   
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/git:1": {}
+      "version": "latest",
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    }
   },
 
-  "remoteEnv": {
-    "DOCKER_BUILDKIT": "1",
-    "COMPOSE_DOCKER_CLI_BUILD": "1"
+  "forwardPorts": [8080, 8081, 3306],
+
+  "portsAttributes": {
+    "8080": {
+      "label": "WordPress",
+      "visibility": "public",
+      "onAutoForward": "openBrowser"
+    },
+    "8081": {
+      "label": "phpMyAdmin",
+      "visibility": "public",
+      "onAutoForward": "notify"
+    },
+    "3306": {
+      "label": "MySQL",
+      "onAutoForward": "ignore"
+    }
   },
 
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.makefile-tools",
         "ms-azuretools.vscode-docker",
-        "ms-vscode-remote.remote-containers",
-        "esbenp.prettier-vscode",
-        "xdebug.php-debug",
-        "phpactor/phpactor",
-        "bradlc.vscode-tailwindcss",
         "bmewburn.vscode-intelephense-client",
-        "MariusAlchimavicius.json-to-ts",
-        "eamodio.gitlens",
         "GitHub.Copilot"
-      ],
-      "settings": {
-        "php.version": "8.2",
-        "[php]": {
-          "editor.formatOnSave": true,
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "terminal.integrated.shellIntegration.timeout": 999,
-        "remote.autoForwardPortsSource": "process",
-        "http.timeout": 999000,
-        "github.copilot.chat.runCommand.enabled": true,
-        "github.copilot.chat.executeCode.enabled": true,
-        "github.copilot.chat.codeActions.enabled": true,
-        "github.copilot.chat.autoApply": "always",
-        "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-        "github.copilot.advanced": {
-          "debug.overrideEngine": "copilot-gpt-4-turbo",
-          "debug.testOverrideProxyUrl": "",
-          "debug.overrideProxyUrl": ""
-        }
-      }
+      ]
     }
   },
-
-  "forwardPorts": [
-    8080,
-    8081,
-    3306
-  ],
-
-  "portsAttributes": {
-    "8080": {
-      "label": "WordPress",
-      "onAutoForward": "notify"
-    },
-    "8081": {
-      "label": "phpMyAdmin",
-      "onAutoForward": "notify"
-    },
-    "3306": {
-      "label": "MySQL",
-      "onAutoForward": "notify"
-    }
-  },
-
-  "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,readonly"
-  ],
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "postStartCommand": "bash .devcontainer/post-start-enhanced.sh",
-
-  "onCreateCommand": "apt-get update && apt-get install -y docker.io docker-compose bash curl wget git mysql-client inotify-tools",
-
-  "remoteUser": "vscode",
-
-  "containerEnv": {
-    "WORDPRESS_DB_HOST": "db",
-    "WORDPRESS_DB_USER": "wordpress",
-    "WORDPRESS_DB_PASSWORD": "wordpress",
-    "WORDPRESS_DB_NAME": "wordpress",
-    "WORDPRESS_DEBUG": "1",
-    "CODESPACE_NAME": "${localEnv:CODESPACE_NAME}",
-    "GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN": "${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
-  }
+  "postStartCommand": "bash .devcontainer/post-start-enhanced.sh"
 }
