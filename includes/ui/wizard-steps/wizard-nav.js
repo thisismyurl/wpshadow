@@ -10,6 +10,18 @@
 ( function( $ ) {
 	'use strict';
 
+	function showAlert( message, title, type ) {
+		if ( window.WPShadowModal && typeof window.WPShadowModal.alert === 'function' ) {
+			window.WPShadowModal.alert( {
+				title: title || 'Notice',
+				message: message,
+				type: type || 'warning',
+			} );
+			return;
+		}
+		window.alert( message );
+	}
+
 	const WPShadowWizard = {
 		currentStep: 'trigger-selection',
 		steps: [ 'trigger-selection', 'trigger-config', 'action-selection', 'action-config', 'review' ],
@@ -136,13 +148,13 @@
 						// Redirect to automations page with success message
 						window.location.href = '?page=wpshadow-automations&saved=true';
 					} else {
-						alert( response.data.message || 'Error saving automation' );
+						showAlert( response.data.message || 'Error saving automation', 'Save Failed', 'danger' );
 						$saveBtn.prop( 'disabled', false ).text( 'Save Automation' );
 					}
 				},
 				error: ( xhr, status, error ) => {
 					console.error( 'AJAX Error:', error );
-					alert( 'Error saving automation. Please try again.' );
+					showAlert( 'Error saving automation. Please try again.', 'Save Failed', 'danger' );
 					$saveBtn.prop( 'disabled', false ).text( 'Save Automation' );
 				},
 			} );
@@ -159,21 +171,21 @@
 
 			if ( this.currentStep === 'trigger-selection' ) {
 				if ( ! $form.find( 'input[name="trigger_id"]:checked' ).val() ) {
-					alert( 'Please select a trigger' );
+					showAlert( 'Please select a trigger', 'Missing Information', 'warning' );
 					isValid = false;
 				}
 			}
 
 			if ( this.currentStep === 'trigger-config' ) {
 				if ( ! $form.find( 'input[name="time"]' ).val() ) {
-					alert( 'Please select a time' );
+					showAlert( 'Please select a time', 'Missing Information', 'warning' );
 					isValid = false;
 				}
 			}
 
 			if ( this.currentStep === 'action-selection' ) {
 				if ( ! $form.find( 'input[name="action_id"]:checked' ).val() ) {
-					alert( 'Please select an action' );
+					showAlert( 'Please select an action', 'Missing Information', 'warning' );
 					isValid = false;
 				}
 			}
@@ -181,7 +193,7 @@
 			if ( this.currentStep === 'action-config' ) {
 				if ( $form.find( 'input[name="email_recipients"]' ).length ) {
 					if ( ! $form.find( 'input[name="email_recipients"]' ).val() ) {
-						alert( 'Please enter email recipients' );
+						showAlert( 'Please enter email recipients', 'Missing Information', 'warning' );
 						isValid = false;
 					}
 				}
@@ -189,7 +201,7 @@
 
 			if ( this.currentStep === 'review' ) {
 				if ( ! $form.find( 'input[name="automation_name"]' ).val() ) {
-					alert( 'Please enter an automation name' );
+					showAlert( 'Please enter an automation name', 'Missing Information', 'warning' );
 					isValid = false;
 				}
 			}

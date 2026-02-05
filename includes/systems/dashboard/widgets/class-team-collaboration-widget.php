@@ -257,20 +257,22 @@ class Team_Collaboration_Widget {
 		</div>
 
 		<!-- Add Note Modal -->
-		<div id="add-note-modal" class="wpshadow-modal" style="display: none;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3><?php esc_html_e( 'Add Team Note', 'wpshadow' ); ?></h3>
-					<button class="modal-close">&times;</button>
+		<div id="add-note-modal" class="wpshadow-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="add-note-modal-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+			<div class="wpshadow-modal wpshadow-modal--medium" role="document">
+				<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>" data-wpshadow-modal-close="add-note-modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<div class="wpshadow-modal-header">
+					<h3 id="add-note-modal-title" class="wpshadow-modal-title"><?php esc_html_e( 'Add Team Note', 'wpshadow' ); ?></h3>
 				</div>
-				<div class="modal-body">
+				<div class="wpshadow-modal-body">
 					<textarea id="team-note-content" rows="5" placeholder="<?php esc_attr_e( 'Add context or updates for this task...', 'wpshadow' ); ?>"></textarea>
 					<label>
 						<input type="checkbox" id="notify-team" />
 						<?php esc_html_e( 'Notify team members', 'wpshadow' ); ?>
 					</label>
 				</div>
-				<div class="modal-footer">
+				<div class="wpshadow-modal-footer">
 					<button class="button button-primary save-note"><?php esc_html_e( 'Save Note', 'wpshadow' ); ?></button>
 					<button class="button cancel-note"><?php esc_html_e( 'Cancel', 'wpshadow' ); ?></button>
 				</div>

@@ -111,9 +111,11 @@ class Exit_Interview extends Hook_Subscriber_Base {
 	public static function render_deactivation_modal() {
 		$plugin_name = 'WPShadow';
 		?>
-		<div id="wpshadow-exit-interview-modal" class="wpshadow-modal" role="dialog" aria-labelledby="wpshadow-exit-interview-title" aria-modal="true" style="display: none;">
-			<div class="wpshadow-modal-overlay" aria-hidden="true"></div>
-			<div class="wpshadow-modal-content">
+		<div id="wpshadow-exit-interview-modal" class="wpshadow-modal-overlay" role="dialog" aria-labelledby="wpshadow-exit-interview-title" aria-modal="true" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+			<div class="wpshadow-modal wpshadow-modal--wide" role="document">
+				<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>">
+					<span aria-hidden="true">&times;</span>
+				</button>
 				<div class="wpshadow-modal-header">
 					<h2 id="wpshadow-exit-interview-title">
 						<?php
@@ -121,9 +123,6 @@ class Exit_Interview extends Hook_Subscriber_Base {
 						echo esc_html( sprintf( __( 'Quick Feedback for %s', 'wpshadow' ), $plugin_name ) );
 						?>
 					</h2>
-					<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>">
-						<span aria-hidden="true">&times;</span>
-					</button>
 				</div>
 				
 				<div class="wpshadow-modal-body">

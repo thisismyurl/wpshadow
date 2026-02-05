@@ -23,11 +23,6 @@
 	margin-left: auto;
 }
 
-/* Modal */
-.wps-phone-home-modal {
-	display: none;
-}
-
 /* Animation */
 @keyframes wpshadowPulse {
 	0%,

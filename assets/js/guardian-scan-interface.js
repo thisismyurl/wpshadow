@@ -27,7 +27,7 @@
             $(document).on('click', '.check-status', this.handleCheckStatus);
             $(document).on('click', '.view-results', this.handleViewResults);
             $(document).on('click', '#connect-existing', this.showConnectModal);
-            $(document).on('click', '.modal-close', this.hideConnectModal);
+            $(document).on('click', '#connect-modal .wpshadow-modal-close', this.hideConnectModal);
             $(document).on('submit', '#connect-form', this.handleConnect);
             $(document).on('click', '#disconnect-guardian', this.handleDisconnect);
         },
@@ -114,7 +114,11 @@
          */
         showConnectModal: function(e) {
             e.preventDefault();
-            $('#connect-modal').fadeIn(200);
+            if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+                window.WPShadowModal.openStatic('connect-modal', { returnFocus: e.currentTarget });
+            } else {
+                $('#connect-modal').addClass('wpshadow-modal-show');
+            }
         },
 
         /**
@@ -122,7 +126,11 @@
          */
         hideConnectModal: function(e) {
             e.preventDefault();
-            $('#connect-modal').fadeOut(200);
+            if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
+                window.WPShadowModal.closeStatic('connect-modal');
+            } else {
+                $('#connect-modal').removeClass('wpshadow-modal-show');
+            }
         },
 
         /**

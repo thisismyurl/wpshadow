@@ -11,6 +11,25 @@
 (function($) {
     'use strict';
 
+    function showConfirm(message, onConfirm) {
+        if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+            window.WPShadowModal.confirm({
+                title: 'Please Confirm',
+                message: message,
+                confirmText: 'Continue',
+                cancelText: 'Cancel',
+                type: 'warning',
+                onConfirm: onConfirm,
+                onCancel: function() {}
+            });
+            return;
+        }
+
+        if (window.confirm(message)) {
+            onConfirm();
+        }
+    }
+
     /**
      * Initialize version history
      */
@@ -58,39 +77,38 @@
         const versionIndex = $button.data('version-index');
         const postId = $('#post_ID').val();
 
-        if (!confirm(wpShadowVersions.i18n.confirmRestore)) {
-            return;
-        }
+        showConfirm(wpShadowVersions.i18n.confirmRestore, function() {
+            $button.prop('disabled', true).text(wpShadowVersions.i18n.restoring);
 
-        $button.prop('disabled', true).text(wpShadowVersions.i18n.restoring);
-
-        $.ajax({
-            url: wpShadowVersions.ajaxUrl,
-            type: 'POST',
-            data: {
-                action: 'wpshadow_restore_version',
-                nonce: wpShadowVersions.nonce,
-                post_id: postId,
-                version_index: versionIndex
-            },
-            success: function(response) {
-                if (response.success) {
-                    showSuccess(wpShadowVersions.i18n.restored);
-                    
-                    // Reload page after 1 second to show restored content
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 1000);
-                } else {
-                    showError(response.data.message || wpShadowVersions.i18n.restoreFailed);
+            $.ajax({
+                url: wpShadowVersions.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'wpshadow_restore_version',
+                    nonce: wpShadowVersions.nonce,
+                    post_id: postId,
+                    version_index: versionIndex
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showSuccess(wpShadowVersions.i18n.restored);
+                        
+                        // Reload page after 1 second to show restored content
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        showError(response.data.message || wpShadowVersions.i18n.restoreFailed);
+                        $button.prop('disabled', false).text(wpShadowVersions.i18n.restore);
+                    }
+                },
+                error: function() {
+                    showError(wpShadowVersions.i18n.restoreFailed);
                     $button.prop('disabled', false).text(wpShadowVersions.i18n.restore);
                 }
-            },
-            error: function() {
-                showError(wpShadowVersions.i18n.restoreFailed);
-                $button.prop('disabled', false).text(wpShadowVersions.i18n.restore);
-            }
+            });
         });
+
     }
 
     /**
@@ -104,37 +122,35 @@
         const versionIndex = $button.data('version-index');
         const postId = $('#post_ID').val();
 
-        if (!confirm(wpShadowVersions.i18n.confirmDelete)) {
-            return;
-        }
+        showConfirm(wpShadowVersions.i18n.confirmDelete, function() {
+            $button.prop('disabled', true);
 
-        $button.prop('disabled', true);
-
-        $.ajax({
-            url: wpShadowVersions.ajaxUrl,
-            type: 'POST',
-            data: {
-                action: 'wpshadow_delete_version',
-                nonce: wpShadowVersions.nonce,
-                post_id: postId,
-                version_index: versionIndex
-            },
-            success: function(response) {
-                if (response.success) {
-                    $button.closest('.wpshadow-version-item').slideUp(function() {
-                        $(this).remove();
-                        updateVersionCount();
-                    });
-                    showSuccess(wpShadowVersions.i18n.deleted);
-                } else {
-                    showError(response.data.message || wpShadowVersions.i18n.deleteFailed);
+            $.ajax({
+                url: wpShadowVersions.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'wpshadow_delete_version',
+                    nonce: wpShadowVersions.nonce,
+                    post_id: postId,
+                    version_index: versionIndex
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $button.closest('.wpshadow-version-item').slideUp(function() {
+                            $(this).remove();
+                            updateVersionCount();
+                        });
+                        showSuccess(wpShadowVersions.i18n.deleted);
+                    } else {
+                        showError(response.data.message || wpShadowVersions.i18n.deleteFailed);
+                        $button.prop('disabled', false);
+                    }
+                },
+                error: function() {
+                    showError(wpShadowVersions.i18n.deleteFailed);
                     $button.prop('disabled', false);
                 }
-            },
-            error: function() {
-                showError(wpShadowVersions.i18n.deleteFailed);
-                $button.prop('disabled', false);
-            }
+            });
         });
     }
 

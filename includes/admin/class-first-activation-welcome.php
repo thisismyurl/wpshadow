@@ -170,9 +170,8 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 		$prefs   = Consent_Preferences::get_preferences( $user_id );
 
 		?>
-		<div id="wpshadow-welcome-modal" class="wpshadow-welcome-modal" role="dialog" aria-labelledby="wpshadow-welcome-title" aria-modal="true">
-			<div class="wpshadow-welcome-overlay"></div>
-			<div class="wpshadow-welcome-container">
+		<div id="wpshadow-welcome-modal" class="wpshadow-modal-overlay wpshadow-welcome-modal" role="dialog" aria-labelledby="wpshadow-welcome-title" aria-modal="true" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="false" data-esc-close="false">
+			<div class="wpshadow-modal wpshadow-modal--wide wpshadow-welcome-container" role="document">
 				<div class="wpshadow-welcome-header">
 					<div class="wpshadow-welcome-logo">
 						<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -321,28 +320,6 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	 */
 	private static function get_modal_css() {
 		return <<<CSS
-.wpshadow-welcome-modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 999999;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.wpshadow-welcome-overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0, 0, 0, 0.7);
-	backdrop-filter: blur(4px);
-}
-
 .wpshadow-welcome-container {
 	position: relative;
 	background: white;
@@ -561,6 +538,12 @@ CSS;
 	private static function get_modal_js() {
 		return <<<JS
 jQuery(document).ready(function($) {
+	if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+		window.WPShadowModal.openStatic('wpshadow-welcome-modal', { returnFocus: document.activeElement });
+	} else {
+		$('#wpshadow-welcome-modal').addClass('wpshadow-modal-show');
+	}
+
 	$('#wpshadow-welcome-continue, #wpshadow-welcome-skip').on('click', function(e) {
 		e.preventDefault();
 
@@ -578,28 +561,44 @@ jQuery(document).ready(function($) {
 			},
 			success: function(response) {
 				if (response.success) {
-					$('#wpshadow-welcome-modal').fadeOut(300, function() {
-						$(this).remove();
-					});
+					if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
+						window.WPShadowModal.closeStatic('wpshadow-welcome-modal');
+					} else {
+						$('#wpshadow-welcome-modal').removeClass('wpshadow-modal-show');
+					}
+
+					setTimeout(function() {
+						$('#wpshadow-welcome-modal').remove();
+					}, 300);
 
 					// Redirect to dashboard if not skipped
 					if (!skipped && response.data.redirect) {
 						window.location.href = response.data.redirect;
 					}
 				} else {
-					alert(wpshadowWelcome.strings.error);
+					if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
+						window.WPShadowModal.alert({
+							title: 'Something Went Wrong',
+							message: wpshadowWelcome.strings.error,
+							type: 'danger'
+						});
+					} else {
+						window.alert(wpshadowWelcome.strings.error);
+					}
 				}
 			},
 			error: function() {
-				alert(wpshadowWelcome.strings.error);
+				if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
+					window.WPShadowModal.alert({
+						title: 'Something Went Wrong',
+						message: wpshadowWelcome.strings.error,
+						type: 'danger'
+					});
+				} else {
+					window.alert(wpshadowWelcome.strings.error);
+				}
 			}
 		});
-	});
-
-	// Prevent closing by clicking overlay
-	$('.wpshadow-welcome-overlay').on('click', function(e) {
-		e.preventDefault();
-		// Optionally, show a message that they need to make a choice
 	});
 });
 JS;

@@ -22,6 +22,27 @@
 	const AUTOSAVE_INTERVAL = 5000; // 5 seconds
 	const MAX_AUTOSAVE_AGE = 24 * 60 * 60 * 1000; // 24 hours
 
+	function showConfirm(message, onConfirm, onCancel) {
+		if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+			window.WPShadowModal.confirm({
+				title: 'Restore Unsaved Changes',
+				message: message,
+				confirmText: 'Restore',
+				cancelText: 'Dismiss',
+				type: 'warning',
+				onConfirm: onConfirm,
+				onCancel: onCancel || function() {}
+			});
+			return;
+		}
+
+		if (window.confirm(message)) {
+			onConfirm();
+		} else if (onCancel) {
+			onCancel();
+		}
+	}
+
 	/**
 	 * Get unique form identifier
 	 *
@@ -209,15 +230,15 @@
 			const timestamp = new Date(data.timestamp).toLocaleString();
 			const message = `Restore unsaved changes from ${timestamp}?`;
 
-			if (confirm(message)) {
+			showConfirm(message, function() {
 				restoreFormData(form, data);
 
 				// Show notification.
 				showNotification(form, 'Unsaved changes restored.', 'success');
-			} else {
+			}, function() {
 				// User declined, delete the autosave.
 				localStorage.removeItem(key);
-			}
+			});
 		} catch (e) {
 			console.warn('WPShadow: Failed to restore form data:', e);
 		}

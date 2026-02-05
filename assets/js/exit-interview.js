@@ -46,15 +46,13 @@
 	 * Show the exit interview modal
 	 */
 	function showModal() {
-		const $modal = $('#wpshadow-exit-interview-modal');
-		$modal.fadeIn(200);
-
-		// Focus management for accessibility
-		const $closeButton = $modal.find('.wpshadow-modal-close');
-		$closeButton.focus();
-
-		// Trap focus within modal
-		trapFocus($modal);
+		if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+			window.WPShadowModal.openStatic('wpshadow-exit-interview-modal', {
+				returnFocus: deactivateLink ? deactivateLink[0] : document.activeElement
+			});
+		} else {
+			$('#wpshadow-exit-interview-modal').addClass('wpshadow-modal-show');
+		}
 
 		// Announce to screen readers
 		announceToScreenReader('Exit interview dialog opened');
@@ -64,12 +62,10 @@
 	 * Hide the exit interview modal
 	 */
 	function hideModal() {
-		const $modal = $('#wpshadow-exit-interview-modal');
-		$modal.fadeOut(200);
-
-		// Return focus to deactivate link
-		if (deactivateLink) {
-			deactivateLink.focus();
+		if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
+			window.WPShadowModal.closeStatic('wpshadow-exit-interview-modal');
+		} else {
+			$('#wpshadow-exit-interview-modal').removeClass('wpshadow-modal-show');
 		}
 
 		// Announce to screen readers
@@ -87,15 +83,9 @@
 			hideModal();
 		});
 
-		// Click overlay to close
-		$modal.find('.wpshadow-modal-overlay').on('click', function() {
-			hideModal();
-		});
-
-		// Escape key to close
-		$(document).on('keydown', function(e) {
-			if (e.key === 'Escape' && $modal.is(':visible')) {
-				e.preventDefault();
+		// Overlay click to close (when static helper is not present)
+		$modal.on('click', function(e) {
+			if (e.target === this) {
 				hideModal();
 			}
 		});
@@ -163,34 +153,7 @@
 						setTimeout(function() {
 							hideModal();
 							proceedWithDeactivation();
-						}, 1500);
-					} else {
-						showMessage('error', response.data.message || 'An error occurred.');
-						$submitButton.prop('disabled', false).text('Submit & Deactivate');
-					}
-				},
-				error: function() {
-					showMessage('error', 'Connection error. Please try again.');
-					$submitButton.prop('disabled', false).text('Submit & Deactivate');
-				}
-			});
-		});
-	}
-
-	/**
-	 * Show a message in the form
-	 *
-	 * @param {string} type    Message type (success|error)
-	 * @param {string} message Message text
-	 */
-	function showMessage(type, message) {
-		const $message = $('.wpshadow-form-message');
-		$message
-			.removeClass('wpshadow-message-success wpshadow-message-error')
-			.addClass('wpshadow-message-' + type)
-			.html('<p>' + message + '</p>')
-			.slideDown(200);
-
+						// Focus trapping handled by shared modal helper.
 		// Announce to screen readers
 		announceToScreenReader(message);
 	}

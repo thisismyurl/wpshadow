@@ -19,14 +19,12 @@ jQuery( function( $ ) {
 	 */
 	const AutomationModal = {
 		modal: null,
-		overlay: null,
 
 		/**
 		 * Initialize modal
 		 */
 		init() {
 			this.modal = $( '#wpshadow-automation-detail-modal' );
-			this.overlay = this.modal.find( '.wpshadow-modal-overlay' );
 
 			// Open detail modal
 			$( document ).on( 'click', '.wpshadow-automation-detail-btn', ( e ) => {
@@ -40,19 +38,7 @@ jQuery( function( $ ) {
 				this.open( workflowId, workflowName, trigger, action );
 			});
 
-			// Close modal
-			$( document ).on( 'click', '.wpshadow-modal-close, .wpshadow-modal-overlay', ( e ) => {
-				if ( e.target === this.overlay[0] || $( e.target ).closest( '.wpshadow-modal-close' ).length ) {
-					this.close();
-				}
-			});
-
-			// Close on Escape key
-			$( document ).on( 'keydown', ( e ) => {
-				if ( e.key === 'Escape' && this.modal.is( ':visible' ) ) {
-					this.close();
-				}
-			});
+			// Close handled by shared modal helpers
 		},
 
 		/**
@@ -76,15 +62,22 @@ jQuery( function( $ ) {
 			this.loadActivityHistory( workflowId );
 
 			// Show modal
-			this.modal.fadeIn( 200 );
-			this.modal.css( 'display', 'flex' );
+			if ( window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function' ) {
+				window.WPShadowModal.openStatic( 'wpshadow-automation-detail-modal', { returnFocus: document.activeElement } );
+			} else {
+				this.modal.addClass( 'wpshadow-modal-show' );
+			}
 		},
 
 		/**
 		 * Close modal
 		 */
 		close() {
-			this.modal.fadeOut( 200 );
+			if ( window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function' ) {
+				window.WPShadowModal.closeStatic( 'wpshadow-automation-detail-modal' );
+			} else {
+				this.modal.removeClass( 'wpshadow-modal-show' );
+			}
 		},
 
 		/**

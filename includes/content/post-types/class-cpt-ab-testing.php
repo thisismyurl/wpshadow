@@ -123,7 +123,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 			</p>
 
 			<div class="wpshadow-ab-actions">
-				<button type="button" class="button button-primary" id="create-new-test">
+				<button type="button" class="button button-primary" id="create-new-test" data-wpshadow-modal-open="create-test-modal">
 					<?php esc_html_e( 'Create New Test', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -138,10 +138,16 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 				<div id="completed-tests-container"></div>
 			</div>
 
-			<div id="create-test-modal" style="display:none;">
-				<div class="wpshadow-modal-content">
-					<h2><?php esc_html_e( 'Create New A/B Test', 'wpshadow' ); ?></h2>
-					<form id="create-test-form">
+			<div id="create-test-modal" class="wpshadow-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="create-test-modal-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+				<div class="wpshadow-modal wpshadow-modal--wide" role="document">
+					<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>" data-wpshadow-modal-close="create-test-modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<div class="wpshadow-modal-header">
+						<h2 id="create-test-modal-title" class="wpshadow-modal-title"><?php esc_html_e( 'Create New A/B Test', 'wpshadow' ); ?></h2>
+					</div>
+					<div class="wpshadow-modal-body">
+						<form id="create-test-form">
 						<table class="form-table">
 							<tr>
 								<th><label for="test_name"><?php esc_html_e( 'Test Name', 'wpshadow' ); ?></label></th>
@@ -165,9 +171,10 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 						</table>
 						<p class="submit">
 							<button type="submit" class="button button-primary"><?php esc_html_e( 'Create Test', 'wpshadow' ); ?></button>
-							<button type="button" class="button" id="cancel-create-test"><?php esc_html_e( 'Cancel', 'wpshadow' ); ?></button>
+							<button type="button" class="button" id="cancel-create-test" data-wpshadow-modal-close="create-test-modal"><?php esc_html_e( 'Cancel', 'wpshadow' ); ?></button>
 						</p>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

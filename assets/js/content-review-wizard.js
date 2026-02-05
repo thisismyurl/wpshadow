@@ -512,7 +512,15 @@
 		console.log('Content Report:', report);
 
 		// Could open report page or trigger download
-		alert('Report generated successfully! Check the WPShadow Reports menu for details.');
+		if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
+			window.WPShadowModal.alert({
+				title: 'Report Ready',
+				message: 'Report generated successfully! Check the WPShadow Reports menu for details.',
+				type: 'success'
+			});
+			return;
+		}
+		window.alert('Report generated successfully! Check the WPShadow Reports menu for details.');
 	};
 
 	/**
@@ -535,7 +543,15 @@
 	 * Show error message
 	 */
 	ContentReviewWizard.prototype.showError = function (message) {
-		alert('Error: ' + message);
+		if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
+			window.WPShadowModal.alert({
+				title: 'Error',
+				message: 'Error: ' + message,
+				type: 'danger'
+			});
+			return;
+		}
+		window.alert('Error: ' + message);
 	};
 
 	/**

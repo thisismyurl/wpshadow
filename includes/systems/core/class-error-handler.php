@@ -36,9 +36,9 @@ class Error_Handler {
 	public static function add_error_modal_script(): void {
 		?>
 		<!-- WPShadow Error Handler Modal -->
-		<div id="wpshadow-modal-overlay" class="wps-none">
-			<div class="wps-p-30-rounded-8">
-				<h2 style="margin-top: 0; color: #0073aa;">
+		<div id="wpshadow-modal-overlay" class="wpshadow-modal-overlay wps-none" role="dialog" aria-modal="true" aria-labelledby="wpshadow-error-modal-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+			<div class="wpshadow-modal wps-p-30-rounded-8" role="document">
+				<h2 id="wpshadow-error-modal-title" style="margin-top: 0; color: #0073aa;">
 					<?php esc_html_e( 'How can WPShadow help?', 'wpshadow' ); ?>
 				</h2>
 				
@@ -104,17 +104,29 @@ class Error_Handler {
 			if (errorData) {
 				window.wpshadowErrorData.lastError = errorData;
 			}
+			if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+				window.WPShadowModal.openStatic('wpshadow-modal-overlay', { returnFocus: document.activeElement });
+				return;
+			}
 			const modal = document.getElementById("wpshadow-modal-overlay");
 			if (modal) {
+				modal.classList.remove('wps-none');
 				modal.style.display = "flex";
+				modal.setAttribute('aria-hidden', 'false');
 			}
 		}
 
 		// Close modal
 		function wpshadowCloseModal() {
+			if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
+				window.WPShadowModal.closeStatic('wpshadow-modal-overlay');
+				return;
+			}
 			const modal = document.getElementById("wpshadow-modal-overlay");
 			if (modal) {
 				modal.style.display = "none";
+				modal.setAttribute('aria-hidden', 'true');
+				modal.classList.add('wps-none');
 			}
 		}
 

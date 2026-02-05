@@ -222,8 +222,18 @@ class Phone_Home_Indicator extends Hook_Subscriber_Base {
 			</p>
 		</div>
 
-		<div id="wpshadow-connections-modal" class="wps-phone-home-modal">
-			<!-- Modal rendered via JavaScript -->
+		<div id="wpshadow-connections-modal" class="wpshadow-modal-overlay wps-phone-home-modal" role="dialog" aria-modal="true" aria-labelledby="wpshadow-connections-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+			<div class="wpshadow-modal wpshadow-modal--wide" role="document">
+				<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>" data-wpshadow-modal-close="wpshadow-connections-modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<div class="wpshadow-modal-header">
+					<h2 id="wpshadow-connections-title" class="wpshadow-modal-title">
+						<?php esc_html_e( 'Recent Network Activity', 'wpshadow' ); ?>
+					</h2>
+				</div>
+				<div class="wpshadow-modal-body" id="wpshadow-connections-content"></div>
+			</div>
 		</div>
 		<?php
 	}

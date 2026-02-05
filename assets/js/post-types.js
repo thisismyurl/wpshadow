@@ -10,6 +10,25 @@
 (function($) {
 	'use strict';
 
+	function showConfirm(message, onConfirm) {
+		if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+			window.WPShadowModal.confirm({
+				title: 'Please Confirm',
+				message: message,
+				confirmText: 'Continue',
+				cancelText: 'Cancel',
+				type: 'warning',
+				onConfirm: onConfirm,
+				onCancel: function() {}
+			});
+			return;
+		}
+
+		if (window.confirm(message)) {
+			onConfirm();
+		}
+	}
+
 	const PostTypesManager = {
 		/**
 		 * Initialize the manager
@@ -81,41 +100,39 @@
 			const $card = $button.closest('.wpshadow-cpt-card');
 			
 			// Confirm deactivation
-			if (!confirm(wpshadowPostTypes.strings.confirm_deactivate)) {
-				return;
-			}
-			
-			// Update button state
-			$button.prop('disabled', true).text(wpshadowPostTypes.strings.deactivating);
-			
-			// Make AJAX request
-			$.ajax({
-				url: ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wpshadow_toggle_post_type',
-					nonce: wpshadowPostTypes.nonce,
-					post_type: postType,
-					action_type: 'deactivate'
-				},
-				success: function(response) {
-					if (response.success) {
-						// Show success message
-						PostTypesManager.showNotice('success', wpshadowPostTypes.strings.deactivated);
-						
-						// Reload page to update UI
-						setTimeout(function() {
-							window.location.reload();
-						}, 1000);
-					} else {
-						PostTypesManager.showNotice('error', response.data.message || wpshadowPostTypes.strings.error);
+			showConfirm(wpshadowPostTypes.strings.confirm_deactivate, function() {
+				// Update button state
+				$button.prop('disabled', true).text(wpshadowPostTypes.strings.deactivating);
+				
+				// Make AJAX request
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpshadow_toggle_post_type',
+						nonce: wpshadowPostTypes.nonce,
+						post_type: postType,
+						action_type: 'deactivate'
+					},
+					success: function(response) {
+						if (response.success) {
+							// Show success message
+							PostTypesManager.showNotice('success', wpshadowPostTypes.strings.deactivated);
+							
+							// Reload page to update UI
+							setTimeout(function() {
+								window.location.reload();
+							}, 1000);
+						} else {
+							PostTypesManager.showNotice('error', response.data.message || wpshadowPostTypes.strings.error);
+							$button.prop('disabled', false).text(wpshadowPostTypes.strings.deactivate);
+						}
+					},
+					error: function() {
+						PostTypesManager.showNotice('error', wpshadowPostTypes.strings.error);
 						$button.prop('disabled', false).text(wpshadowPostTypes.strings.deactivate);
 					}
-				},
-				error: function() {
-					PostTypesManager.showNotice('error', wpshadowPostTypes.strings.error);
-					$button.prop('disabled', false).text(wpshadowPostTypes.strings.deactivate);
-				}
+				});
 			});
 		},
 

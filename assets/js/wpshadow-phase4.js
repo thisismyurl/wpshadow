@@ -207,7 +207,11 @@
 			html += '</div>';
 			
 			$content.html(html);
-			$modal.fadeIn();
+			if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+				window.WPShadowModal.openStatic('wpshadow-comparison-modal', { returnFocus: document.activeElement });
+			} else {
+				$modal.addClass('wpshadow-modal-show');
+			}
 		},
 
 		/**

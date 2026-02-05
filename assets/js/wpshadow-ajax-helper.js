@@ -231,13 +231,15 @@
 				this.showAdminNotice(message, options);
 			} else {
 				// Fallback to modal
-				WPShadowModal.alert({
-					title: 'Notification',
-					message: message
-				}.alert({
-					title: 'Notification',
-					message: message
-				});
+				if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
+					window.WPShadowModal.alert({
+						title: 'Notification',
+						message: message,
+						type: options.type === 'error' ? 'danger' : 'info'
+					});
+				} else {
+					window.alert(message);
+				}
 			}
 		},
 
@@ -301,6 +303,23 @@
 		 * @returns {boolean} True if confirmed
 		 */
 		confirm: function(message, callback) {
+			if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+				window.WPShadowModal.confirm({
+					title: 'Please Confirm',
+					message: message,
+					confirmText: 'Continue',
+					cancelText: 'Cancel',
+					type: 'warning',
+					onConfirm: function() {
+						if (callback) {
+							callback();
+						}
+					},
+					onCancel: function() {}
+				});
+				return true;
+			}
+
 			var confirmed = window.confirm(message);
 			if (confirmed && callback) {
 				callback();

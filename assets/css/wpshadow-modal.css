@@ -21,11 +21,15 @@
 	justify-content: center;
 	z-index: 999999;
 	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
 	transition: opacity 0.3s ease;
 }
 
 .wpshadow-modal-overlay.wpshadow-modal-show {
 	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
 }
 
 /* Modal Container */
@@ -40,6 +44,14 @@
 	position: relative;
 	transform: scale(0.9);
 	transition: transform 0.3s ease;
+}
+
+.wpshadow-modal--medium {
+	max-width: 640px;
+}
+
+.wpshadow-modal--wide {
+	max-width: 820px;
 }
 
 .wpshadow-modal-show .wpshadow-modal {

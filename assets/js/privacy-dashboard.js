@@ -8,6 +8,36 @@
 (function($) {
 	'use strict';
 
+	function showAlert(message, type, title) {
+		if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
+			window.WPShadowModal.alert({
+				title: title || 'Notice',
+				message: message,
+				type: type || 'info'
+			});
+			return;
+		}
+		window.alert(message);
+	}
+
+	function showConfirm(message, onConfirm) {
+		if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+			window.WPShadowModal.confirm({
+				title: 'Please Confirm',
+				message: message,
+				confirmText: 'Continue',
+				cancelText: 'Cancel',
+				type: 'warning',
+				onConfirm: onConfirm,
+				onCancel: function() {}
+			});
+			return;
+		}
+		if (window.confirm(message)) {
+			onConfirm();
+		}
+	}
+
 	/**
 	 * Initialize privacy consent form handler.
 	 */
@@ -69,7 +99,7 @@
 				},
 				error: function() {
 					$button.prop('disabled', false).text(wpshadowPrivacy.strings.export_data || 'Export My Data');
-					alert(wpshadowPrivacy.strings.export_error || 'Export failed. Please try again.');
+					showAlert(wpshadowPrivacy.strings.export_error || 'Export failed. Please try again.', 'danger', 'Export Failed');
 				}
 			});
 		});
@@ -80,31 +110,30 @@
 	 */
 	function initDataDeletion() {
 		$('#wpshadow-delete-data-btn').on('click', function() {
-			if (!confirm(wpshadowPrivacy.strings.delete_confirm || 
-				'Are you sure? This will permanently delete all WPShadow data. This action cannot be undone.')) {
-				return;
-			}
+			showConfirm(wpshadowPrivacy.strings.delete_confirm ||
+				'Are you sure? This will permanently delete all WPShadow data. This action cannot be undone.', function() {
 
-			var $button = $(this);
-			$button.prop('disabled', true).text(wpshadowPrivacy.strings.deleting || 'Deleting...');
+				var $button = $('#wpshadow-delete-data-btn');
+				$button.prop('disabled', true).text(wpshadowPrivacy.strings.deleting || 'Deleting...');
 
-			$.ajax({
-				url: ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wpshadow_delete_data',
-					nonce: wpshadowPrivacy.nonce
-				},
-				success: function(response) {
-					if (response.success) {
-						alert(wpshadowPrivacy.strings.delete_success || 'All data deleted successfully.');
-						window.location.reload();
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpshadow_delete_data',
+						nonce: wpshadowPrivacy.nonce
+					},
+					success: function(response) {
+						if (response.success) {
+							showAlert(wpshadowPrivacy.strings.delete_success || 'All data deleted successfully.', 'success', 'Data Deleted');
+							window.location.reload();
+						}
+					},
+					error: function() {
+						$button.prop('disabled', false).text(wpshadowPrivacy.strings.delete_data || 'Delete All Data');
+						showAlert(wpshadowPrivacy.strings.delete_error || 'Deletion failed. Please try again.', 'danger', 'Deletion Failed');
 					}
-				},
-				error: function() {
-					$button.prop('disabled', false).text(wpshadowPrivacy.strings.delete_data || 'Delete All Data');
-					alert(wpshadowPrivacy.strings.delete_error || 'Deletion failed. Please try again.');
-				}
+				});
 			});
 		});
 	}

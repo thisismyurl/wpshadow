@@ -152,7 +152,7 @@ class Report_Form {
 					</div>
 
 					<!-- Email Report Button -->
-					<button type="button" class="wps-btn wps-btn--primary" id="email-report-btn" style="width: 100%;">
+					<button type="button" class="wps-btn wps-btn--primary" id="email-report-btn" style="width: 100%;" data-wpshadow-modal-open="email-modal">
 						<span class="dashicons dashicons-email-alt"></span>
 						<?php esc_html_e( 'Email Report', 'wpshadow' ); ?>
 					</button>
@@ -160,17 +160,17 @@ class Report_Form {
 			</div>
 
 			<!-- Email Modal -->
-			<div id="email-modal" class="wps-none">
-				<div class="wps-card wps-max-w-xl wps-mx-auto">
-					<div class="wps-card-header wps-flex wps-items-center wps-justify-between">
-						<h3 class="wps-card-title wps-m-0">
+			<div id="email-modal" class="wpshadow-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="email-modal-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+				<div class="wpshadow-modal wpshadow-modal--medium" role="document">
+					<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>" data-wpshadow-modal-close="email-modal">
+						<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+					</button>
+					<div class="wpshadow-modal-header">
+						<h3 id="email-modal-title" class="wpshadow-modal-title wps-m-0">
 							<?php esc_html_e( 'Email Report', 'wpshadow' ); ?>
 						</h3>
-						<button type="button" class="wps-btn wps-btn--ghost" id="close-email-modal">
-							<span class="dashicons dashicons-no-alt"></span>
-						</button>
 					</div>
-					<div class="wps-card-body">
+					<div class="wpshadow-modal-body">
 						<div class="wps-form-group">
 							<label for="email_recipient" class="wps-form-label">
 								<?php esc_html_e( 'Recipient Email', 'wpshadow' ); ?>
@@ -189,8 +189,8 @@ class Report_Form {
 							</select>
 						</div>
 					</div>
-					<div class="wps-card-footer">
-						<button type="button" class="wps-btn wps-btn--secondary" id="cancel-email">
+					<div class="wpshadow-modal-footer">
+						<button type="button" class="wps-btn wps-btn--secondary" id="cancel-email" data-wpshadow-modal-close="email-modal">
 							<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 						</button>
 						<button type="button" class="wps-btn wps-btn--primary" id="confirm-email">

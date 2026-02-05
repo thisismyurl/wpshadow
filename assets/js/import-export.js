@@ -11,6 +11,25 @@
 (function ($) {
 	'use strict';
 
+	function showConfirm(message, onConfirm) {
+		if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+			window.WPShadowModal.confirm({
+				title: 'Please Confirm',
+				message: message,
+				confirmText: 'Continue',
+				cancelText: 'Cancel',
+				type: 'warning',
+				onConfirm: onConfirm,
+				onCancel: function() {}
+			});
+			return;
+		}
+
+		if (window.confirm(message)) {
+			onConfirm();
+		}
+	}
+
 	const ImportExport = {
 		/**
 		 * Initialize
@@ -120,11 +139,8 @@
 			e.preventDefault();
 
 			// Confirm with user
-			if (!confirm(wpShadowImportExport.i18n.confirmImport)) {
-				return;
-			}
-
-			const $button = $(e.currentTarget);
+			return showConfirm(wpShadowImportExport.i18n.confirmImport, () => {
+				const $button = $(e.currentTarget);
 			const originalText = $button.html();
 			const nonce = $button.data('nonce');
 			const file = $('#wpshadow-import-file')[0].files[0];
@@ -200,6 +216,7 @@
 			};
 
 			reader.readAsText(file);
+		});
 		},
 
 		/**
@@ -285,11 +302,8 @@
 			e.preventDefault();
 
 			// Confirm with user
-			if (!confirm(wpShadowImportExport.i18n.confirmRestore)) {
-				return;
-			}
-
-			const $button = $(e.currentTarget);
+			return showConfirm(wpShadowImportExport.i18n.confirmRestore, () => {
+				const $button = $(e.currentTarget);
 			const originalText = $button.html();
 			const nonce = $button.data('nonce');
 
@@ -324,6 +338,7 @@
 					$button.prop('disabled', false).html(originalText);
 				},
 			});
+		});
 		},
 
 		/**

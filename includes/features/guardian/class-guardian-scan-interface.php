@@ -622,12 +622,17 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 			</div>
 		</div>
 
-		<div id="connect-modal" class="guardian-modal" style="display: none;">
-			<div class="modal-content">
-				<span class="modal-close">&times;</span>
-				<h2><?php esc_html_e( 'Connect Guardian Account', 'wpshadow' ); ?></h2>
-				<p><?php esc_html_e( 'Enter your Guardian API key to connect your account.', 'wpshadow' ); ?></p>
-				<form id="connect-form">
+		<div id="connect-modal" class="wpshadow-modal-overlay guardian-modal" role="dialog" aria-modal="true" aria-labelledby="connect-modal-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+			<div class="wpshadow-modal wpshadow-modal--medium" role="document">
+				<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>" data-wpshadow-modal-close="connect-modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<div class="wpshadow-modal-header">
+					<h2 id="connect-modal-title" class="wpshadow-modal-title"><?php esc_html_e( 'Connect Guardian Account', 'wpshadow' ); ?></h2>
+				</div>
+				<div class="wpshadow-modal-body">
+					<p><?php esc_html_e( 'Enter your Guardian API key to connect your account.', 'wpshadow' ); ?></p>
+					<form id="connect-form">
 					<input type="text"
 					       id="guardian-api-key"
 					       placeholder="<?php esc_attr_e( 'Enter API Key', 'wpshadow' ); ?>"
@@ -641,10 +646,11 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 						);
 						?>
 					</p>
-					<button type="submit" class="button button-primary">
-						<?php esc_html_e( 'Connect Account', 'wpshadow' ); ?>
-					</button>
-				</form>
+						<button type="submit" class="button button-primary">
+							<?php esc_html_e( 'Connect Account', 'wpshadow' ); ?>
+						</button>
+					</form>
+				</div>
 			</div>
 		</div>
 		<?php
@@ -984,31 +990,6 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 				font-size: 16px;
 				color: #757575;
 				margin-bottom: 20px;
-			}
-			.guardian-modal {
-				position: fixed;
-				z-index: 100000;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background: rgba(0,0,0,0.5);
-			}
-			.modal-content {
-				background: #fff;
-				margin: 10% auto;
-				padding: 40px;
-				border-radius: 8px;
-				max-width: 600px;
-				position: relative;
-			}
-			.modal-close {
-				position: absolute;
-				top: 15px;
-				right: 20px;
-				font-size: 28px;
-				font-weight: bold;
-				cursor: pointer;
 			}
 		</style>
 		<?php

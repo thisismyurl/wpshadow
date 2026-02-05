@@ -18,6 +18,25 @@
     const { select, dispatch } = wp.data;
     const { __ } = wp.i18n;
 
+    function showConfirm(message, onConfirm) {
+        if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
+            window.WPShadowModal.confirm({
+                title: __('Please Confirm', 'wpshadow'),
+                message: message,
+                confirmText: __('Delete', 'wpshadow'),
+                cancelText: __('Cancel', 'wpshadow'),
+                type: 'warning',
+                onConfirm: onConfirm,
+                onCancel: function() {}
+            });
+            return;
+        }
+
+        if (window.confirm(message)) {
+            onConfirm();
+        }
+    }
+
     /**
      * Block Presets Sidebar Component
      */
@@ -149,11 +168,26 @@
          * Delete preset
          */
         deletePreset(presetId) {
-            if (!confirm(__('Are you sure you want to delete this preset?', 'wpshadow'))) {
-                return;
-            }
+            showConfirm(__('Are you sure you want to delete this preset?', 'wpshadow'), () => {
+                this.setState({ loading: true });
 
-            this.setState({ loading: true });
+                wp.ajax.post('wpshadow_delete_block_preset', {
+                    nonce: wpShadowBlockPresets.nonce,
+                    preset_id: presetId
+                }).done(() => {
+                    this.setState({
+                        loading: false,
+                        message: { type: 'success', text: __('Preset deleted successfully', 'wpshadow') }
+                    });
+                    this.loadPresets();
+                }).fail(() => {
+                    this.setState({
+                        loading: false,
+                        message: { type: 'error', text: __('Failed to delete preset', 'wpshadow') }
+                    });
+                });
+            });
+        }
 
             wp.ajax.post('wpshadow_delete_block_preset', {
                 nonce: wpShadowBlockPresets.nonce,

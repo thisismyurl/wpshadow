@@ -8,7 +8,7 @@
 (function($) {
 	'use strict';
 
-	var modal;
+	var modalId = 'wpshadow-connections-modal';
 
 	/**
 	 * Fetch and display connection details.
@@ -92,36 +92,14 @@
 		$('#wpshadow-view-connections').on('click', function(e) {
 			e.preventDefault();
 
-			if (!modal) {
-				// Create modal on first click
-				modal = $('<div>')
-					.attr('id', 'wpshadow-phone-home-modal')
-					.addClass('wps-phone-home-modal')
-					.append(
-						$('<div>').addClass('wps-modal-overlay').on('click', closeModal),
-						$('<div>').addClass('wps-modal-content').append(
-							$('<div>').addClass('wps-modal-header').append(
-								$('<h2>').text(wpshadowPhoneHome.strings.modal_title || 'Network Activity'),
-								$('<button>').addClass('wps-modal-close').html('&times;').on('click', closeModal)
-							),
-							$('<div>').attr('id', 'wpshadow-connections-content').addClass('wps-modal-body')
-						)
-					)
-					.appendTo('body');
+			if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+				window.WPShadowModal.openStatic(modalId, { returnFocus: e.currentTarget });
+			} else {
+				$('#' + modalId).addClass('wpshadow-modal-show');
 			}
 
-			modal.show();
 			loadConnectionDetails();
 		});
-	}
-
-	/**
-	 * Close the modal.
-	 */
-	function closeModal() {
-		if (modal) {
-			modal.hide();
-		}
 	}
 
 	// Initialize on document ready

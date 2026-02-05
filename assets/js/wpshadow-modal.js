@@ -17,6 +17,44 @@
 	window.WPShadowModal = {
 		
 		/**
+		 * Get focusable elements within a modal container.
+		 *
+		 * @param {jQuery} $root Modal root element
+		 * @return {jQuery} Focusable elements
+		 */
+		_getFocusable: function($root) {
+			return $root.find('button, input, select, textarea, [href], [tabindex]:not([tabindex="-1"])');
+		},
+
+		/**
+		 * Trap focus within a modal container.
+		 *
+		 * @param {jQuery} $root Modal root element
+		 */
+		_trapFocus: function($root) {
+			const $focusable = this._getFocusable($root);
+			const $first = $focusable.first();
+			const $last = $focusable.last();
+
+			$root.off('keydown.wpshadowModalTrap').on('keydown.wpshadowModalTrap', function(e) {
+				if (e.key !== 'Tab') {
+					return;
+				}
+
+				if (e.shiftKey && document.activeElement === $first[0]) {
+					e.preventDefault();
+					$last.focus();
+					return;
+				}
+
+				if (!e.shiftKey && document.activeElement === $last[0]) {
+					e.preventDefault();
+					$first.focus();
+				}
+			});
+		},
+		
+		/**
 		 * Show confirmation modal (replaces confirm())
 		 * 
 		 * @param {Object} options Configuration object
@@ -164,33 +202,15 @@
 			
 			const $modal = $('#' + modalId);
 			const $overlay = $modal;
-			
-			// Focus trap
-			const focusableElements = $modal.find('button, input, [tabindex]:not([tabindex="-1"])');
-			const firstFocusable = focusableElements.first();
-			const lastFocusable = focusableElements.last();
+			$modal.attr('aria-hidden', 'false');
 			
 			// Trap focus within modal
-			$modal.on('keydown', function(e) {
-				if (e.key === 'Tab') {
-					if (e.shiftKey) {
-						if (document.activeElement === firstFocusable[0]) {
-							e.preventDefault();
-							lastFocusable.focus();
-						}
-					} else {
-						if (document.activeElement === lastFocusable[0]) {
-							e.preventDefault();
-							firstFocusable.focus();
-						}
-					}
-				}
-			});
+			this._trapFocus($modal);
 			
 			// Show modal
 			setTimeout(function() {
 				$modal.addClass('wpshadow-modal-show');
-				firstFocusable.focus();
+				self._getFocusable($modal).first().focus();
 			}, 10);
 			
 			// Close handlers
@@ -261,7 +281,100 @@
 					}
 				});
 			}
+		},
+
+		/**
+		 * Open a static modal already in the DOM.
+		 *
+		 * @param {string} modalId Modal element ID
+		 * @param {Object} options Optional overrides
+		 */
+		openStatic: function(modalId, options) {
+			const $overlay = $('#' + modalId);
+			if (!$overlay.length) {
+				return;
+			}
+
+			const opts = $.extend({
+				overlayClose: $overlay.data('overlay-close') !== false,
+				escClose: $overlay.data('esc-close') !== false,
+				returnFocus: document.activeElement
+			}, options || {});
+
+			$overlay.data('wpshadowReturnFocus', opts.returnFocus);
+			$overlay.data('wpshadowOverlayClose', opts.overlayClose);
+			$overlay.data('wpshadowEscClose', opts.escClose);
+			$overlay.attr('aria-hidden', 'false');
+			$overlay.addClass('wpshadow-modal-show');
+			this._trapFocus($overlay);
+
+			const $focusTarget = this._getFocusable($overlay).first();
+			if ($focusTarget.length) {
+				$focusTarget.focus();
+			}
+		},
+
+		/**
+		 * Close a static modal in the DOM.
+		 *
+		 * @param {string} modalId Modal element ID
+		 */
+		closeStatic: function(modalId) {
+			const $overlay = $('#' + modalId);
+			if (!$overlay.length) {
+				return;
+			}
+
+			$overlay.removeClass('wpshadow-modal-show');
+			$overlay.attr('aria-hidden', 'true');
+
+			const returnFocus = $overlay.data('wpshadowReturnFocus');
+			if (returnFocus && returnFocus.focus) {
+				returnFocus.focus();
+			}
 		}
 	};
+
+	// Static modal open/close bindings
+	$(function() {
+		$(document).on('click', '[data-wpshadow-modal-open]', function(e) {
+			e.preventDefault();
+			const modalId = $(this).data('wpshadowModalOpen');
+			if (modalId) {
+				window.WPShadowModal.openStatic(modalId, { returnFocus: this });
+			}
+		});
+
+		$(document).on('click', '[data-wpshadow-modal-close]', function(e) {
+			e.preventDefault();
+			const modalId = $(this).data('wpshadowModalClose');
+			if (modalId) {
+				window.WPShadowModal.closeStatic(modalId);
+			}
+		});
+
+		$(document).on('click', '.wpshadow-modal-overlay', function(e) {
+			const $overlay = $(this);
+			if ($overlay.data('wpshadow-modal') !== 'static') {
+				return;
+			}
+			if ($overlay.hasClass('wpshadow-modal-show') && e.target === this) {
+				if ($overlay.data('overlay-close') !== false) {
+					window.WPShadowModal.closeStatic($overlay.attr('id'));
+				}
+			}
+		});
+
+		$(document).on('keydown', function(e) {
+			if (e.key !== 'Escape') {
+				return;
+			}
+
+			const $openModal = $('.wpshadow-modal-overlay[data-wpshadow-modal="static"].wpshadow-modal-show').last();
+			if ($openModal.length && $openModal.data('esc-close') !== false) {
+				window.WPShadowModal.closeStatic($openModal.attr('id'));
+			}
+		});
+	});
 
 })(jQuery);

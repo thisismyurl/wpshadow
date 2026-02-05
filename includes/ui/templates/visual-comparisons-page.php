@@ -156,13 +156,15 @@ class Visual_Comparisons_Page {
 		</div>
 
 		<!-- Comparison Modal -->
-		<div id="wpshadow-comparison-modal" style="display: none;">
-			<div class="wpshadow-modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 9999;">
-				<div class="wpshadow-modal-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 20px; max-width: 90%; max-height: 90%; overflow: auto; border-radius: 4px;">
-					<button type="button" class="wpshadow-modal-close" style="float: right; border: none; background: none; font-size: 24px; cursor: pointer;">&times;</button>
-					<h2><?php esc_html_e( 'Visual Comparison', 'wpshadow' ); ?></h2>
-					<div id="wpshadow-comparison-content"></div>
+		<div id="wpshadow-comparison-modal" class="wpshadow-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="wpshadow-comparison-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+			<div class="wpshadow-modal wpshadow-modal--wide" role="document">
+				<button type="button" class="wpshadow-modal-close" aria-label="<?php echo esc_attr__( 'Close dialog', 'wpshadow' ); ?>" data-wpshadow-modal-close="wpshadow-comparison-modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<div class="wpshadow-modal-header">
+					<h2 id="wpshadow-comparison-title" class="wpshadow-modal-title"><?php esc_html_e( 'Visual Comparison', 'wpshadow' ); ?></h2>
 				</div>
+				<div class="wpshadow-modal-body comparison-content" id="wpshadow-comparison-content"></div>
 			</div>
 		</div>
 
@@ -192,7 +194,11 @@ class Visual_Comparisons_Page {
 				var comparisonId = $(this).data('comparison-id');
 				
 				// Show modal
-				$('#wpshadow-comparison-modal').show();
+				if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
+					window.WPShadowModal.openStatic('wpshadow-comparison-modal', { returnFocus: this });
+				} else {
+					$('#wpshadow-comparison-modal').addClass('wpshadow-modal-show');
+				}
 				$('#wpshadow-comparison-content').html('<p><?php esc_html_e( 'Loading...', 'wpshadow' ); ?></p>');
 				
 				// Load comparison data
@@ -241,9 +247,11 @@ class Visual_Comparisons_Page {
 			});
 			
 			// Close modal handler
-			$('.wpshadow-modal-close, .wpshadow-modal-overlay').on('click', function(e) {
-				if (e.target === this) {
-					$('#wpshadow-comparison-modal').hide();
+			$('.wpshadow-modal-close').on('click', function() {
+				if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
+					window.WPShadowModal.closeStatic('wpshadow-comparison-modal');
+				} else {
+					$('#wpshadow-comparison-modal').removeClass('wpshadow-modal-show');
 				}
 			});
 		});

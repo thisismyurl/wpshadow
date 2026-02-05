@@ -177,14 +177,13 @@ $workflows           = array_filter(
 </div>
 
 <!-- Automation Detail Modal -->
-<div id="wpshadow-automation-detail-modal" class="wpshadow-modal" style="display: none;">
-	<div class="wpshadow-modal-overlay"></div>
-	<div class="wpshadow-modal-content">
+<div id="wpshadow-automation-detail-modal" class="wpshadow-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="wpshadow-modal-automation-name" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
+	<div class="wpshadow-modal wpshadow-modal--wide" role="document">
+		<button type="button" class="wpshadow-modal-close" aria-label="<?php esc_attr_e( 'Close', 'wpshadow' ); ?>" data-wpshadow-modal-close="wpshadow-automation-detail-modal">
+			<span class="dashicons dashicons-no" aria-hidden="true"></span>
+		</button>
 		<div class="wpshadow-modal-header">
 			<h2 id="wpshadow-modal-automation-name"></h2>
-			<button type="button" class="wpshadow-modal-close" aria-label="<?php esc_attr_e( 'Close', 'wpshadow' ); ?>">
-				<span class="dashicons dashicons-no"></span>
-			</button>
 		</div>
 		<div class="wpshadow-modal-body">
 			<!-- Visual Summary -->
@@ -545,82 +544,6 @@ input:checked + .toggle-slider:before {
 	transform: translateX(22px);
 }
 
-/* Modal Styles */
-.wpshadow-modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 100000;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.wpshadow-modal-overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.5);
-	cursor: pointer;
-}
-
-.wpshadow-modal-content {
-	position: relative;
-	background: white;
-	border-radius: 8px;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-	width: 90%;
-	max-width: 600px;
-	max-height: 90vh;
-	overflow-y: auto;
-	z-index: 100001;
-}
-
-.wpshadow-modal-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 20px;
-	border-bottom: 1px solid #eee;
-	position: sticky;
-	top: 0;
-	background: white;
-}
-
-.wpshadow-modal-header h2 {
-	margin: 0;
-	font-size: 18px;
-	flex: 1;
-}
-
-.wpshadow-modal-close {
-	background: none;
-	border: none;
-	cursor: pointer;
-	padding: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.wpshadow-modal-close .dashicons {
-	width: 24px;
-	height: 24px;
-	font-size: 24px;
-	color: #666;
-}
-
-.wpshadow-modal-close:hover .dashicons {
-	color: #000;
-}
-
-.wpshadow-modal-body {
-	padding: 20px;
-}
 
 /* Summary Section */
 .wpshadow-modal-summary {
@@ -744,11 +667,6 @@ input:checked + .toggle-slider:before {
 	.wpshadow-automation-header {
 		flex-direction: column;
 		align-items: flex-start;
-	}
-
-	.wpshadow-modal-content {
-		width: 95%;
-		max-height: 95vh;
 	}
 
 	.wpshadow-modal-summary {
