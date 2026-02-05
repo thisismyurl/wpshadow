@@ -4,7 +4,7 @@ Tags: diagnostics, health, backup, recovery, emergency, documentation, maintenan
 Requires at least: 6.4
 Requires PHP: 8.1.29
 Tested up to: 6.6
-Stable tag: 1.6035.0948
+Stable tag: 1.26035.2150
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 

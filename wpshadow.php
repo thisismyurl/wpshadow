@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: WordPress health monitoring, security diagnostics, and performance optimization.
- * Version: 1.6035.1400
+ * Version: 1.26035.2150
  * Author: thisismyurl
  * Text Domain: wpshadow
  * Requires PHP: 8.1
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Constants
  */
-define( 'WPSHADOW_VERSION', '1.6059.2359' );
+define( 'WPSHADOW_VERSION', '1.26035.2150' );
 define( 'WPSHADOW_FILE', __FILE__ );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );

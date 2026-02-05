@@ -1,7 +1,7 @@
 # WPShadow Development Milestones
 
 **Project:** WPShadow Core Plugin  
-**Last Updated:** February 4, 2026  
+**Last Updated:** February 5, 2026  
 **Maintained By:** [@thisismyurl](https://github.com/thisismyurl)
 
 > **Mission:** Transform WordPress site management with educational diagnostics, automated treatments, and a helpful neighbor experience while maintaining our commitment to accessibility, learning inclusivity, and cultural respect.
@@ -12,8 +12,27 @@
 
 WPShadow follows a **monthly release cycle** with the last release of each month. Each release is tied to specific development phases that build upon previous work while maintaining backward compatibility and our core philosophy.
 
-**Version Format:** `1.YDDD.HHMM` (Year digit + Julian day + Hour/Minute in Toronto time)  
-**In Plain English:** Our version numbers tell you exactly when we released it. For example, 1.6035.1400 means it was released on the 35th day of 2026 at 2:00 PM Toronto time.  
+**Version Format:** `1.Yddd` (Year digit + Julian day in Toronto time)  
+**In Plain English:** Our version numbers tell you exactly when we released it. For example, 1.6030 means it was released on the 30th day of 2026 in Toronto time.  
+
+### CPT and Utility Release Schedule (2026)
+
+**Custom Post Types (CPTs)**
+- Release 1.6058 - February 2026: FAQ, Job Posting, Knowledge Base, Modal
+- Release 1.6089 - March 2026: Custom Fields, Inline Editing, Version History, Schema Markup
+- Release 1.6180 - June 2026: Block Builder, Block Patterns, Block Presets, Drag & Drop Ordering
+- Release 1.6272 - September 2026: Conditional Display, Bulk Operations, Export System, Import Wizard
+- Release 1.6364 - December 2026: A/B Testing, AI Content, Analytics Dashboard, API Integration, Email Marketing, Live Preview, Multi-Language, Social Auto Post
+
+**Utilities (UI Tools)**
+- Release 1.6058 - February 2026: Vault Light, Simple Cache
+- Release 1.6089 - March 2026: 404 Monitor, Cloud Utility Template, A11Y Audit
+- Release 1.6119 - April 2026: Activity History, AI Chatbot, AI Content Optimizer
+- Release 1.6150 - May 2026: AI Image Alt, AI Spam Detection, AI Translation
+- Release 1.6180 - June 2026: AI Writing Assistant, Asset Impact, Backup
+- Release 1.6272 - September 2026: Blacklist Monitor, Broken Links, Bulk Find Replace
+- Release 1.6364 - December 2026: Cloud Registration, Code Snippets, Customization Audit, Dark Mode, DDOS Detection, Deep Scan, Domain Monitor, Email Test, External Link Checker, External Malware Scanner, Global Performance, Kanban Report, Keyword Tracker, Magic Link Support, Mobile Friendliness, Plugin Conflict, Privacy Dashboard, Quick Scan, Regenerate Thumbnails, Safe Mode, Site Cloner, SSL Monitor, Timezone Alignment, Tips Coach, Update Safety, Uptime Monitor, Visual Comparisons
+
 **Total Planned Milestones:** 23 in 2026 + 12 in 2027 = 35 milestones
 
 ---
@@ -37,7 +56,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Development Team  
 **Status:** 🔄 In Progress
 
-#### **Milestone: Release 1.6059 (February 28, 2026)**
+#### **Milestone: Release 1.6058 (February 28, 2026)**
 
 **Primary Goals:**
 - Real-time gauge system implementation
@@ -72,7 +91,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Content Team + Development  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.6090 (March 31, 2026)**
+#### **Milestone: Release 1.6089 (March 31, 2026)**
 
 **Primary Goals:**
 - Knowledge Base integration framework
@@ -107,7 +126,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Security Team + Legal  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.6120 (April 30, 2026)**
+#### **Milestone: Release 1.6119 (April 30, 2026)**
 
 **Primary Goals:**
 - GDPR compliance framework (following European privacy laws)
@@ -137,7 +156,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.6151 (May 31, 2026)**
+#### **Milestone: Release 1.6150 (May 31, 2026)**
 
 **Primary Goals:**
 - Enhanced privacy features
@@ -171,7 +190,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Cloud Team + Infrastructure  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.6181 (June 30, 2026)**
+#### **Milestone: Release 1.6180 (June 30, 2026)**
 
 **Primary Goals:**
 - Cloud scanning infrastructure (MVP)
@@ -203,7 +222,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.6212 (July 31, 2026)**
+#### **Milestone: Release 1.6211 (July 31, 2026)**
 
 **Primary Goals:**
 - Advanced cloud scanning
@@ -232,7 +251,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.6243 (August 31, 2026)**
+#### **Milestone: Release 1.6242 (August 31, 2026)**
 
 **Primary Goals:**
 - Predictive analytics introduction
@@ -266,7 +285,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** UX Team + Development  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.6273 (September 30, 2026)**
+#### **Milestone: Release 1.6272 (September 30, 2026)**
 
 **Primary Goals:**
 - Points system framework
@@ -296,7 +315,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.6304 (October 31, 2026)**
+#### **Milestone: Release 1.6303 (October 31, 2026)**
 
 **Primary Goals:**
 - Social features (share achievements)
@@ -325,7 +344,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.6334 (November 30, 2026)**
+#### **Milestone: Release 1.6333 (November 30, 2026)**
 
 **Primary Goals:**
 - Gamification polish and refinement
@@ -360,7 +379,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Security Team + Encryption  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.6365 (December 31, 2026)**
+#### **Milestone: Release 1.6364 (December 31, 2026)**
 
 **Primary Goals:**
 - Secure credential storage foundation
@@ -398,7 +417,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Security Team + Cloud Infrastructure  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.7031 (January 31, 2027)**
+#### **Milestone: Release 1.7030 (January 31, 2027)**
 
 **Primary Goals:**
 - Cloud vault integration
@@ -429,7 +448,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7059 (February 28, 2027)**
+#### **Milestone: Release 1.7058 (February 28, 2027)**
 
 **Primary Goals:**
 - Vault sharing capabilities
@@ -464,7 +483,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Enterprise Team  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.7090 (March 31, 2027)**
+#### **Milestone: Release 1.7089 (March 31, 2027)**
 
 **Primary Goals:**
 - White-label capabilities
@@ -494,7 +513,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7120 (April 30, 2027)**
+#### **Milestone: Release 1.7119 (April 30, 2027)**
 
 **Primary Goals:**
 - Advanced analytics dashboard
@@ -524,7 +543,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7151 (May 31, 2027)**
+#### **Milestone: Release 1.7150 (May 31, 2027)**
 
 **Primary Goals:**
 - SLA management tools
@@ -559,7 +578,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** AI Team + Automation  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.7181 (June 30, 2027)**
+#### **Milestone: Release 1.7180 (June 30, 2027)**
 
 **Primary Goals:**
 - Advanced AI diagnostics
@@ -590,7 +609,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7212 (July 31, 2027)**
+#### **Milestone: Release 1.7211 (July 31, 2027)**
 
 **Primary Goals:**
 - Natural language diagnostics
@@ -620,7 +639,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7243 (August 31, 2027)**
+#### **Milestone: Release 1.7242 (August 31, 2027)**
 
 **Primary Goals:**
 - AI model refinement
@@ -655,7 +674,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Community Team  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.7273 (September 30, 2027)**
+#### **Milestone: Release 1.7272 (September 30, 2027)**
 
 **Primary Goals:**
 - Community diagnostic library
@@ -685,7 +704,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7304 (October 31, 2027)**
+#### **Milestone: Release 1.7303 (October 31, 2027)**
 
 **Primary Goals:**
 - Developer partnerships
@@ -715,7 +734,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 
 ---
 
-#### **Milestone: Release 1.7334 (November 30, 2027)**
+#### **Milestone: Release 1.7333 (November 30, 2027)**
 
 **Primary Goals:**
 - Community growth initiatives
@@ -750,7 +769,7 @@ WPShadow follows a **monthly release cycle** with the last release of each month
 **Lead:** Leadership Team  
 **Status:** 📋 Planned
 
-#### **Milestone: Release 1.7365 (December 31, 2027)**
+#### **Milestone: Release 1.7364 (December 31, 2027)**
 
 **Primary Goals:**
 - Annual retrospective
@@ -965,7 +984,7 @@ Every milestone must embody:
 
 #### **Release: WPShadow Pro 1.0 (March 31, 2026)**
 **Status:** 🚀 Foundation Release  
-**Dependencies:** WPShadow Core v1.6090+ (Phase 5 Academy complete)
+**Dependencies:** WPShadow Core v1.6089+ (Phase 5 Academy complete)
 
 **Primary Goals:**
 - Pro module architecture and framework
@@ -1391,7 +1410,7 @@ Every milestone must embody:
 
 #### **Release: WPShadow Pro Vault 1.0 (December 31, 2026)**
 **Status:** 🚀 Security Module Release  
-**Dependencies:** WPShadow Pro v1.0 (March), Core v1.6243+ (Phase 7)
+**Dependencies:** WPShadow Pro v1.0 (March), Core v1.6242+ (Phase 7)
 
 **Primary Goals:**
 - Enterprise backup system
@@ -1422,7 +1441,7 @@ Every milestone must embody:
 
 | Release | Module | Type | Date | Dependencies |
 |---------|--------|------|------|--------------|
-| **1.0** | **Pro Platform** | Foundation | **March 31** | Core v1.6090 |
+| **1.0** | **Pro Platform** | Foundation | **March 31** | Core v1.6089 |
 | **1.0** | **WPAdmin Core** | Primary | **April 30** | Pro 1.0 |
 | **1.0** | **WPAdmin Login** | Secondary | **May 31** | WPAdmin 1.0 |
 | **1.0** | **WPAdmin Settings** | Secondary | **May 31** | WPAdmin 1.0 |
@@ -1436,14 +1455,14 @@ Every milestone must embody:
 | **1.0** | **WPAdmin Agency** | Secondary | **Sept 30** | WPAdmin 1.0 + Multisite 1.0 |
 | **1.0** | **Media Document** | Secondary | **Oct 31** | Media Hub 1.0 |
 | **1.0** | **Integrations** | Tertiary | **Nov 30** | WPAdmin 1.0 + Media Hub 1.0 |
-| **1.0** | **Pro Vault** | Security | **Dec 31** | Pro 1.0 + Core v1.6243 |
+| **1.0** | **Pro Vault** | Security | **Dec 31** | Pro 1.0 + Core v1.6242 |
 
 ---
 
 ## Dependency Graph
 
 ```
-WPShadow Core v1.6090 (March)
+WPShadow Core v1.6089 (March)
            ↓
 WPShadow Pro 1.0 (March 31)
            ↓
@@ -1459,7 +1478,7 @@ WPShadow Pro 1.0 (March 31)
   [Agency]     ← Sept (requires Multisite)
 
 Integrations 1.0 (Nov 30) ← Requires: WPAdmin + Media Hub
-Pro Vault 1.0 (Dec 31) ← Requires: Pro Platform + Core v1.6243
+Pro Vault 1.0 (Dec 31) ← Requires: Pro Platform + Core v1.6242
 ```
 
 ---
@@ -1472,13 +1491,13 @@ To create these milestones in the repository:
 # Navigate to: Settings → Milestones
 # Or use GitHub CLI:
 
-gh milestone create "Release 1.6059 (Feb 2026)" --due-date "2026-02-28" \
+gh milestone create "Release 1.6058 - February 2026" --due-date "2026-02-28" \
   --description "Phase 4: Dashboard Excellence - Real-time gauges, UX improvements"
 
-gh milestone create "Release 1.6090 (Mar 2026)" --due-date "2026-03-31" \
+gh milestone create "Release 1.6089 - March 2026" --due-date "2026-03-31" \
   --description "Phase 5: Academy & Training - KB integration, training videos"
 
-gh milestone create "Release 1.6120 (Apr 2026)" --due-date "2026-04-30" \
+gh milestone create "Release 1.6119 - April 2026" --due-date "2026-04-30" \
   --description "Phase 6: Privacy & Compliance - GDPR framework, consent system"
 
 # Continue for all 35 milestones...
