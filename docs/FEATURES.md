@@ -677,7 +677,7 @@ Located in `includes/utils/cli/`:
 
 ## 🎓 Content & Knowledge Base
 
-### Knowledge Base System (`includes/content/kb/`)
+### Knowledge Base System (`includes/content/post-types/kb/`)
 - **KB_Article_Generator** - Generate KB articles
 - **KB_Formatter** - Format articles
 - **KB_Library** - Article library
@@ -685,7 +685,7 @@ Located in `includes/utils/cli/`:
 - **Training_Progress** - Track learning
 - **Training_Provider** - Provide training content
 
-### Job Board System (`includes/content/jobs/`)
+### Job Board System (`includes/content/post-types/jobs/`)
 - **Job_Alerts_System** - Job notifications
 - **Job_Application_Tracker** - Track applications
 - **Job_Board_Settings** - Job board configuration
