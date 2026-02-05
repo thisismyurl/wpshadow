@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1315
+ * @since      1.6090.2359
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds quick edit functionality to CPT admin screens.
  *
- * @since 1.6034.1315
+ * @since 1.6090.2359
  */
 class CPT_Inline_Editing {
 

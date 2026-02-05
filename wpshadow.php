@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Constants
  */
-define( 'WPSHADOW_VERSION', '1.6035.1400' );
+define( 'WPSHADOW_VERSION', '1.6059.2359' );
 define( 'WPSHADOW_FILE', __FILE__ );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );

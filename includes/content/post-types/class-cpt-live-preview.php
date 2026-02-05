@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1230
+ * @since      1.6365.2359
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enables live preview mode for all custom post types with
  * iframe-based rendering and real-time updates.
  *
- * @since 1.6034.1230
+ * @since 1.6365.2359
  */
 class CPT_Live_Preview {
 

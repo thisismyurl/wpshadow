@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1400
+ * @since      1.6365.2359
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Integrates custom post types with WPML and Polylang.
  *
- * @since 1.6034.1400
+ * @since 1.6365.2359
  */
 class CPT_Multi_Language {
 

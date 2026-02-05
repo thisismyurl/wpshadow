@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since      1.6035.1400
+ * @since      1.6365.2359
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles third-party API integrations for custom post types.
  *
- * @since 1.6035.1400
+ * @since 1.6365.2359
  */
 class CPT_API_Integration extends Hook_Subscriber_Base {
 
@@ -47,6 +47,10 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 			),
 			'filters' => array(),
 		);
+	}
+
+	protected static function get_required_version(): string {
+		return '1.6365.2359';
 	}
 
 	/**

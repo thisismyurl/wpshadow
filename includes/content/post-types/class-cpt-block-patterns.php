@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1200
+ * @since      1.6181.2359
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers block patterns for testimonials, team members, portfolio items,
  * events, resources, case studies, services, locations, and documentation.
  *
- * @since 1.6034.1200
+ * @since 1.6181.2359
  */
 class CPT_Block_Patterns {
 

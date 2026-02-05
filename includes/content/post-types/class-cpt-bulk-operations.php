@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since      1.6035.1400
+ * @since      1.6273.2359
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles bulk operations for custom post types.
  *
- * @since 1.6035.1400
+ * @since 1.6273.2359
  */
 class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 
@@ -48,6 +48,10 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 			),
 			'filters' => array(),
 		);
+	}
+
+	protected static function get_required_version(): string {
+		return '1.6273.2359';
 	}
 
 	/**

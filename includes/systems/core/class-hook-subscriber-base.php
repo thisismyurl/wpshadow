@@ -53,6 +53,19 @@ abstract class Hook_Subscriber_Base {
 	abstract protected static function get_hooks(): array;
 
 	/**
+	 * Get the minimum plugin version required for this feature.
+	 *
+	 * Override in subclasses to gate features behind specific releases.
+	 * Version format: 1.YDDD.HHMM (e.g., 1.6059.2359)
+	 *
+	 * @since  1.7035.1400
+	 * @return string Plugin version (e.g., '1.6059.2359') or empty string if no gating.
+	 */
+	protected static function get_required_version(): string {
+		return '';
+	}
+
+	/**
 	 * Subscribe to all hooks defined in get_hooks().
 	 *
 	 * Automatically registers all actions and filters based on hook name patterns:

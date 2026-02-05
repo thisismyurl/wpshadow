@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1245
+ * @since      1.6273.2359
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Rules engine for conditional content display based on
  * user role, device, date/time, and custom conditions.
  *
- * @since 1.6034.1245
+ * @since 1.6273.2359
  */
 class CPT_Conditional_Display {
 

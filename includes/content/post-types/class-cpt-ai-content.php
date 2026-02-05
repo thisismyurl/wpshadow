@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1345
+ * @since      1.6365.2359
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * AI-powered content generation and suggestions (Cloud feature).
  *
- * @since 1.6034.1345
+ * @since 1.6365.2359
  */
 class CPT_AI_Content {
 

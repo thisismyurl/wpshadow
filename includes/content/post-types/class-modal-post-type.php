@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1530
+ * @since      1.6059.2359
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles registration and management of the modal custom post type.
  *
- * @since 1.6034.1530
+ * @since 1.6059.2359
  */
 class Modal_Post_Type extends Hook_Subscriber_Base {
 
@@ -49,6 +49,10 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 			'save_post_' . self::POST_TYPE     => array( 'save_meta', 10, 2 ),
 			'wp_footer'                        => 'render_active_modals',
 		);
+	}
+
+	protected static function get_required_version(): string {
+		return '1.6059.2359';
 	}
 
 	/**

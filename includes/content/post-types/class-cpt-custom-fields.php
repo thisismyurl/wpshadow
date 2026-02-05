@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1000
+ * @since      1.6090.2359
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages custom fields for all Custom Post Types.
  *
- * @since 1.6034.1000
+ * @since 1.6090.2359
  */
 class CPT_Custom_Fields {
 

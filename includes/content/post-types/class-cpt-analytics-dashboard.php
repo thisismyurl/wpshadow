@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1300
+ * @since      1.6365.2359
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks and displays analytics data for all custom post types.
  *
- * @since 1.6034.1300
+ * @since 1.6365.2359
  */
 class CPT_Analytics_Dashboard {
 

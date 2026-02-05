@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since      1.6035.1400
+ * @since      1.6181.2359
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ exit;
  *
  * Handles visual block building functionality for custom post types.
  *
- * @since 1.6035.1400
+ * @since 1.6181.2359
  */
 class CPT_Block_Builder extends Hook_Subscriber_Base {
 
@@ -110,6 +110,10 @@ public static function render_custom_block( array $attributes ): string {
 tent = $attributes['content'] ?? '';
  '<div class="wpshadow-cpt-block">' . wp_kses_post( $content ) . '</div>';
 }
+
+	protected static function get_required_version(): string {
+		return '1.6181.2359';
+	}
 
 /**
  * Handle save template AJAX request.

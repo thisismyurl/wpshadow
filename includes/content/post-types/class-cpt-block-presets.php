@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1330
+ * @since      1.6181.2359
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages saved block configurations and presets.
  *
- * @since 1.6034.1330
+ * @since 1.6181.2359
  */
 class CPT_Block_Presets {
 

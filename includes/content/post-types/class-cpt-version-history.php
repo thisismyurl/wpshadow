@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1415
+ * @since      1.6090.2359
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks and manages content versions for rollback capability.
  *
- * @since 1.6034.1415
+ * @since 1.6090.2359
  */
 class CPT_Version_History {
 

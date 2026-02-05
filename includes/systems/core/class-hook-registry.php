@@ -171,10 +171,13 @@ class Hook_Registry {
 		$namespace_parts = array_slice( $parts, 0, -1 );
 
 		// Convert directory names to namespace format
-		$namespace_parts = array_map( function( $part ) {
-			// Convert kebab-case to PascalCase
-			return implode( '', array_map( 'ucfirst', explode( '-', $part ) ) );
-		}, $namespace_parts );
+		$namespace_parts = array_map(
+			function ( $part ) {
+				// Convert kebab-case to PascalCase
+				return implode( '', array_map( 'ucfirst', explode( '-', $part ) ) );
+			},
+			$namespace_parts
+		);
 
 		// Special case: 'features' directory maps to individual feature namespaces
 		if ( isset( $namespace_parts[0] ) && 'features' === strtolower( $namespace_parts[0] ) ) {
@@ -191,18 +194,85 @@ class Hook_Registry {
 	}
 
 	/**
-	 * Subscribe all discovered hook subscribers.
+	 * Subscribe all discovered classes to their hooks.
+	 *
+	 * Respects version gating - only subscribes if class required_version
+	 * is met by current WPSHADOW_VERSION.
 	 *
 	 * @since 1.7035.1400
 	 * @param array $subscribers Array of class names.
 	 * @return void
 	 */
 	private static function subscribe_all( array $subscribers ): void {
-		foreach ( $subscribers as $class ) {
-			if ( method_exists( $class, 'subscribe' ) ) {
-				$class::subscribe();
+		foreach ( $subscribers as $class_name ) {
+			// Check version gating
+			if ( ! self::is_version_met( $class_name ) ) {
+				continue;
+			}
+
+			if ( method_exists( $class_name, 'subscribe' ) ) {
+				$class_name::subscribe();
 			}
 		}
+	}
+
+	/**
+	 * Check if current plugin version meets class version requirement.
+	 *
+	 * @since  1.7035.1400
+	 * @param  string $class_name Fully qualified class name.
+	 * @return bool True if version requirement met, false otherwise.
+	 */
+	private static function is_version_met( string $class_name ): bool {
+		// Get class required version
+		if ( ! method_exists( $class_name, 'get_required_version' ) ) {
+			return true; // No version requirement
+		}
+
+		$required_version = $class_name::get_required_version();
+
+		if ( empty( $required_version ) ) {
+			return true; // No version gate
+		}
+
+		// Get current plugin version
+		$current_version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0.0';
+
+		// Compare versions (format: 1.YDDD.HHMM)
+		return self::compare_versions( $current_version, $required_version ) >= 0;
+	}
+
+	/**
+	 * Compare two plugin versions.
+	 *
+	 * Version format: 1.YDDD.HHMM
+	 * Examples: 1.6059.2359, 1.6090.2359, 1.6365.2359
+	 *
+	 * @since  1.7035.1400
+	 * @param  string $current  Current version.
+	 * @param  string $required Required version.
+	 * @return int Positive if current >= required, negative otherwise.
+	 */
+	private static function compare_versions( string $current, string $required ): int {
+		// Parse versions into components
+		$current_parts  = explode( '.', $current );
+		$required_parts = explode( '.', $required );
+
+		// Compare each component numerically
+		$max_parts = max( count( $current_parts ), count( $required_parts ) );
+		for ( $i = 0; $i < $max_parts; $i++ ) {
+			$curr = isset( $current_parts[ $i ] ) ? (int) $current_parts[ $i ] : 0;
+			$req  = isset( $required_parts[ $i ] ) ? (int) $required_parts[ $i ] : 0;
+
+			if ( $curr > $req ) {
+				return 1;
+			}
+			if ( $curr < $req ) {
+				return -1;
+			}
+		}
+
+		return 0;
 	}
 
 	/**

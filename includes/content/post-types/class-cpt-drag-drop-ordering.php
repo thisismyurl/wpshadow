@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1215
+ * @since      1.6181.2359
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds drag-and-drop ordering to CPT admin pages with persistent storage.
  *
- * @since 1.6034.1215
+ * @since 1.6181.2359
  */
 class CPT_Drag_Drop_Ordering {
 

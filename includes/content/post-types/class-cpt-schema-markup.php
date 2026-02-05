@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1100
+ * @since      1.6090.2359
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Generates JSON-LD schema markup for all Custom Post Types.
  *
- * @since 1.6034.1100
+ * @since 1.6090.2359
  */
 class CPT_Schema_Markup {
 

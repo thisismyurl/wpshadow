@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since      1.6035.1400
+ * @since      1.6365.2359
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles A/B testing functionality for custom post types with statistical analysis.
  *
- * @since 1.6035.1400
+ * @since 1.6365.2359
  */
 class CPT_AB_Testing extends Hook_Subscriber_Base {
 
@@ -49,6 +49,10 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 				array( 'the_content', array( __CLASS__, 'inject_ab_variant' ), 20 ),
 			),
 		);
+	}
+
+	protected static function get_required_version(): string {
+		return '1.6365.2359';
 	}
 
 	/**
