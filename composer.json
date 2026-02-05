@@ -28,8 +28,8 @@
 		}
 	},
 	"scripts": {
-		"phpcs": [
-			"phpcs --standard=WordPress-Extra includes features wpshadow.php",
-			"bash .d"phpcs --standard=WordPress-Extra includes features wpshadow.php",
-		"phpcbf": "phpcbf --standard=WordPress-Extra includes features wpshadow.php
+		"phpcs": "phpcs --standard=WordPress-Extra includes features wpshadow.php",
+		"phpcbf": "phpcbf --standard=WordPress-Extra includes features wpshadow.php"
+	}
+}
 
