@@ -168,17 +168,4 @@ class Treatment_Database_Transient_Cleanup extends Treatment_Base {
 			),
 		);
 	}
-					'before_count'  => $before_count,
-				),
-			);
-		}
-
-		return array(
-			'success' => true,
-			'message' => __( 'No expired transients found to clean up', 'wpshadow' ),
-			'data'    => array(
-				'deleted_count' => 0,
-			),
-		);
-	}
 }

@@ -318,5 +318,3 @@ class KB_Post_Type extends Hook_Subscriber_Base {
 		);
 	}
 }
-
-KB_Post_Type::init();

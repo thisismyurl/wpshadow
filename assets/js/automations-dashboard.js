@@ -228,13 +228,13 @@ jQuery( function( $ ) {
 					self.proceedWithAutomationDeletion( $btn, $card, originalText, workflowId );
 				}
 			});
-		}
+		},
 
 		proceedWithAutomationDeletion( $btn, $card, originalText, workflowId ) {
 			const self = this;
 			$btn.prop( 'disabled', true ).text( 'Deleting...' );
 
-		$.ajax({
+			$.ajax({
 			url: wpshadowAutomationsDashboard.ajaxUrl,
 			type: 'POST',
 			dataType: 'json',
@@ -316,15 +316,11 @@ jQuery( function( $ ) {
 		 */
 		createSuggestedWorkflow( $btn ) {
 			const title = $btn.data( 'title' );
-			const $card = $btn.closest( '.wpshadow-suggestion-card' );
-			const trigger = $card.find( '[data-trigger]' ).data( 'trigger' );
-			const actionsRaw = $card.find( '[data-actions]' ).data( 'actions' );
+			const trigger = $btn.data( 'trigger' );
+			const actionsRaw = $btn.data( 'actions' );
 			let actions = [];
 			
-			// Parse actions data
-			if ( Array.isArray( actionsRaw ) ) {
-				actions = actionsRaw;
-			} else if ( typeof actionsRaw === 'string' ) {
+			if ( actionsRaw ) {
 				try {
 					actions = JSON.parse( actionsRaw );
 				} catch ( e ) {

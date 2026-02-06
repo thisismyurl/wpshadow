@@ -46,26 +46,7 @@ class Guardian_Dashboard {
 				'dashicons-shield-alt'
 			); ?>
 
-			<?php 
-			// Check if Guardian has run
-			$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
-			$never_run = empty( $last_scan );
-			if ( $never_run ) {
-				wpshadow_render_guardian_not_run_modal();
-			}
-			?>
 
-			<!-- Status and Actions Bar -->
-			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Guardian status and actions', 'wpshadow' ); ?>">
-				<?php
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_status_badge() returns properly escaped HTML and inline script
-				echo self::render_status_badge();
-				?>
-				<?php echo wp_kses_post( self::render_quick_actions() ); ?>
-			</div>
-
-			<!-- KPI Cards Grid -->
-			<div class="wps-grid wps-grid-auto-250 wps-gap-3 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Key performance indicators', 'wpshadow' ); ?>">
 				<?php echo wp_kses_post( self::render_kpi_cards() ); ?>
 			</div>
 
@@ -95,88 +76,7 @@ class Guardian_Dashboard {
 		return ob_get_clean();
 	}
 
-	/**
-	 * Render status badge
-	 *
-	 * @return string HTML
-	 */
-	private static function render_status_badge(): string {
-		$is_enabled   = Guardian_Manager::is_enabled();
-		$status_text  = $is_enabled ? __( 'WPShadow Guardian Active', 'wpshadow' ) : __( 'WPShadow Guardian Inactive', 'wpshadow' );
-		$status_icon  = $is_enabled ? 'dashicons-yes-alt' : 'dashicons-dismiss';
-		$status_color = $is_enabled ? '#10b981' : '#6b7280';
 
-		$button_html = sprintf(
-			'<button 
-				type="button"
-				class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-lg" 
-				onclick="wpshadowToggleGuardian()"
-				aria-label="%s"
-				aria-pressed="%s"
-				role="switch">
-				<span class="dashicons %s wps-icon-sm wps-status-icon" data-status="%s" aria-hidden="true"></span>
-				<span class="wps-font-semibold wps-text-gray-800">%s</span>
-			</button>',
-			esc_attr( $status_text ),
-			esc_attr( $is_enabled ? 'true' : 'false' ),
-			esc_attr( $status_icon ),
-			esc_attr( $status_color ),
-			esc_html( $status_text )
-		);
-
-		ob_start();
-		?>
-		<script>
-		function wpshadowToggleGuardian() {
-			const confirmMessage = '<?php echo esc_js( $is_enabled ? __( 'Disable Guardian?', 'wpshadow' ) : __( 'Enable Guardian?', 'wpshadow' ) ); ?>';
-			const confirmDetails = '<?php echo esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ); ?>';
-			
-			const proceedWithToggle = function() {
-				jQuery.post(ajaxurl, {
-					action: "wpshadow_toggle_guardian",
-					nonce: <?php echo wp_json_encode( wp_create_nonce( 'wpshadow_toggle_guardian' ) ); ?>,
-					enabled: <?php echo wp_json_encode( ! $is_enabled ); ?>
-				}, function(response) {
-					if (response.success) {
-						location.reload();
-					} else {
-						var message = response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not toggle Guardian', 'wpshadow' ) ); ?>';
-						if (typeof WPShadowModal !== "undefined") {
-							WPShadowModal.alert({
-								title: '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>',
-								message: message,
-								type: 'error'
-							});
-						} else {
-							alert(message);
-						}
-					}
-				});
-			};
-			
-			// Use WPShadowModal for consistent, accessible modal dialogs
-			if (typeof WPShadowModal !== "undefined") {
-				WPShadowModal.confirm({
-					title: confirmMessage,
-					message: confirmDetails,
-				type: <?php echo wp_json_encode( $is_enabled ? 'warning' : 'info' ); ?>,
-					confirmText: '<?php echo esc_js( __( 'Confirm', 'wpshadow' ) ); ?>',
-					cancelText: '<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>',
-					onConfirm: proceedWithToggle
-				});
-			} else {
-				// Fallback to browser confirm if modal system isn't loaded
-				if (confirm(confirmMessage + '\n\n' + confirmDetails)) {
-					proceedWithToggle();
-				}
-			}
-		}
-		</script>
-		<?php
-		$script_html = ob_get_clean();
-
-		return $button_html . $script_html;
-	}
 
 	/**
 	 * Render quick actions

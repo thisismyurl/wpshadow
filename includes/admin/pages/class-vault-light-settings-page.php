@@ -44,78 +44,75 @@ class Vault_Light_Settings_Page {
 			?>
 
 			<!-- Safety Notice -->
-			<div class="wps-card wps-card--success">
-				<div class="wps-card-body">
-					<p>
-						<strong><?php esc_html_e( 'Safety First:', 'wpshadow' ); ?></strong>
-						<?php esc_html_e( 'WPShadow Vault Light creates scheduled snapshots and pre-treatment safety points so you can recover fast. Vault upgrades are seamless later.', 'wpshadow' ); ?>
-					</p>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'card_class' => 'wps-card--success',
+					'body'       => '<p><strong>' . esc_html__( 'Safety First:', 'wpshadow' ) . '</strong> ' . esc_html__( 'WPShadow Vault Light creates scheduled snapshots and pre-treatment safety points so you can recover fast. Vault upgrades are seamless later.', 'wpshadow' ) . '</p>',
+				)
+			);
+			?>
 
 			<form method="post" action="options.php" class="wps-settings-form">
 				<?php settings_fields( 'wpshadow_settings' ); ?>
 
 				<!-- Pre-Treatment Snapshots -->
-				<div class="wps-card">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-shield-alt"></span>
-							<?php esc_html_e( 'Pre-Treatment Snapshots', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'Enable or disable Vault Light snapshots before treatments are applied.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
-						<div class="wps-form-group">
-							<label class="wps-toggle" for="wpshadow_backup_enabled">
-								<input 
-									type="checkbox" 
-									id="wpshadow_backup_enabled" 
-									name="wpshadow_backup_enabled" 
-									value="1"
-									<?php checked( get_option( 'wpshadow_backup_enabled', true ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Create Snapshot Before Each Treatment', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Capture critical settings before treatments so you can roll back quickly.', 'wpshadow' ); ?>
-							</p>
-						</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Pre-Treatment Snapshots', 'wpshadow' ),
+						'description' => __( 'Enable or disable Vault Light snapshots before treatments are applied.', 'wpshadow' ),
+						'icon'        => 'dashicons-shield-alt',
+						'body'        => function() {
+							?>
+							<div class="wps-form-group">
+								<label class="wps-toggle" for="wpshadow_backup_enabled">
+									<input 
+										type="checkbox" 
+										id="wpshadow_backup_enabled" 
+										name="wpshadow_backup_enabled" 
+										value="1"
+										<?php checked( get_option( 'wpshadow_backup_enabled', true ) ); ?>
+									/>
+									<span class="wps-toggle-slider"></span>
+									<?php esc_html_e( 'Create Snapshot Before Each Treatment', 'wpshadow' ); ?>
+								</label>
+								<p class="wps-form-description">
+									<?php esc_html_e( 'Capture critical settings before treatments so you can roll back quickly.', 'wpshadow' ); ?>
+								</p>
+							</div>
 
-						<div class="wps-form-group wps-mt-4">
-							<label class="wps-toggle" for="wpshadow_backup_include_database">
-								<input 
-									type="checkbox" 
-									id="wpshadow_backup_include_database" 
-									name="wpshadow_backup_include_database" 
-									value="1"
-									<?php checked( get_option( 'wpshadow_backup_include_database', true ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Include Database in Snapshots', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Include database settings in Vault Light snapshots for faster recovery.', 'wpshadow' ); ?>
-							</p>
-						</div>
-					</div>
-				</div>
+							<div class="wps-form-group wps-mt-4">
+								<label class="wps-toggle" for="wpshadow_backup_include_database">
+									<input 
+										type="checkbox" 
+										id="wpshadow_backup_include_database" 
+										name="wpshadow_backup_include_database" 
+										value="1"
+										<?php checked( get_option( 'wpshadow_backup_include_database', true ) ); ?>
+									/>
+									<span class="wps-toggle-slider"></span>
+									<?php esc_html_e( 'Include Database in Snapshots', 'wpshadow' ); ?>
+								</label>
+								<p class="wps-form-description">
+									<?php esc_html_e( 'Include database settings in Vault Light snapshots for faster recovery.', 'wpshadow' ); ?>
+								</p>
+							</div>
+							<?php
+						},
+					)
+				);
+				?>
 
 				<!-- Scheduled Vault Light Snapshots -->
-				<div class="wps-card">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-calendar"></span>
-							<?php esc_html_e( 'Scheduled Vault Light Snapshots', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'Run WPShadow Vault Light snapshots on a schedule (daily, weekly, or monthly).', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Scheduled Vault Light Snapshots', 'wpshadow' ),
+						'description' => __( 'Run WPShadow Vault Light snapshots on a schedule (daily, weekly, or monthly).', 'wpshadow' ),
+						'icon'        => 'dashicons-calendar',
+						'body'        => function() {
+							?>
 						<div class="wps-form-group">
 							<label class="wps-toggle" for="wpshadow_backup_schedule_enabled">
 								<input
@@ -176,21 +173,21 @@ class Vault_Light_Settings_Page {
 								<?php esc_html_e( 'We run the snapshot at this time in your WordPress timezone.', 'wpshadow' ); ?>
 							</p>
 						</div>
-					</div>
-				</div>
+						<?php
+						},
+					)
+				);
+				?>
 
 				<!-- Snapshot Storage -->
-				<div class="wps-card">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-folder-open"></span>
-							<?php esc_html_e( 'Snapshot Storage', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'Control where snapshots are stored and how long to keep them.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Snapshot Storage', 'wpshadow' ),
+						'description' => __( 'Control where snapshots are stored and how long to keep them.', 'wpshadow' ),
+						'icon'        => 'dashicons-folder-open',
+						'body'        => function() {
+							?>
 						<div class="wps-form-group">
 							<label for="wpshadow_backup_retention_days" class="wps-form-label">
 								<?php esc_html_e( 'Keep Snapshots For', 'wpshadow' ); ?>
@@ -243,21 +240,21 @@ class Vault_Light_Settings_Page {
 								<?php esc_html_e( 'When snapshots exceed this size, oldest snapshots are deleted. Default: 500MB.', 'wpshadow' ); ?>
 							</p>
 						</div>
-					</div>
-				</div>
+						<?php
+						},
+					)
+				);
+				?>
 
 				<!-- Advanced Snapshot Options -->
-				<div class="wps-card">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-admin-tools"></span>
-							<?php esc_html_e( 'Advanced Options', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'Fine-tune snapshot behavior for power users.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Advanced Options', 'wpshadow' ),
+						'description' => __( 'Fine-tune snapshot behavior for power users.', 'wpshadow' ),
+						'icon'        => 'dashicons-admin-tools',
+						'body'        => function() {
+							?>
 						<div class="wps-form-group">
 							<label class="wps-toggle" for="wpshadow_backup_compress">
 								<input 
@@ -308,28 +305,31 @@ class Vault_Light_Settings_Page {
 								<?php esc_html_e( 'Test each snapshot for integrity (slower but ensures you can rollback if needed).', 'wpshadow' ); ?>
 							</p>
 						</div>
-					</div>
-				</div>
+						<?php
+						},
+					)
+				);
+				?>
 
 				<!-- Snapshot Management -->
-				<div class="wps-card">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-list-view"></span>
-							<?php esc_html_e( 'Snapshot Management', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'View and manage existing snapshots.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
-						<p><?php esc_html_e( 'You can view, download, and delete Vault Light snapshots from the Activity Log.', 'wpshadow' ); ?></p>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ); ?>" class="wps-btn wps-btn--secondary wps-mt-2">
-							<span class="dashicons dashicons-archive"></span>
-							<?php esc_html_e( 'Back to Settings', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Snapshot Management', 'wpshadow' ),
+						'description' => __( 'View and manage existing snapshots.', 'wpshadow' ),
+						'icon'        => 'dashicons-list-view',
+						'body'        => function() {
+							?>
+							<p><?php esc_html_e( 'You can view, download, and delete Vault Light snapshots from the Activity Log.', 'wpshadow' ); ?></p>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ); ?>" class="wps-btn wps-btn--secondary wps-mt-2">
+								<span class="dashicons dashicons-archive"></span>
+								<?php esc_html_e( 'Back to Settings', 'wpshadow' ); ?>
+							</a>
+							<?php
+						},
+					)
+				);
+				?>
 
 				<p class="submit">
 					<button type="submit" class="wps-btn wps-btn--primary">

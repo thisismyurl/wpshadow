@@ -1044,22 +1044,32 @@ class Plugin_Bootstrap {
 			}
 		}
 
-	// Phase 3: Value & Reliability (KPI + Defensive Engineering)
-	// Load KPI Settings
-	if ( file_exists( $settings_path . 'class-kpi-settings.php' ) ) {
-		require_once $settings_path . 'class-kpi-settings.php';
-		if ( class_exists( '\\WPShadow\\Admin\\KPI_Settings' ) ) {
-			\WPShadow\Admin\KPI_Settings::init();
+		// Phase 3: Value & Reliability (KPI + Defensive Engineering)
+		// Load KPI Settings
+		if ( file_exists( $settings_path . 'class-kpi-settings.php' ) ) {
+			require_once $settings_path . 'class-kpi-settings.php';
+			if ( class_exists( '\\WPShadow\\Admin\\KPI_Settings' ) ) {
+				\WPShadow\Admin\KPI_Settings::init();
+			}
+		}
+
+		// Load Defensive Settings
+		if ( file_exists( $settings_path . 'class-defensive-settings.php' ) ) {
+			require_once $settings_path . 'class-defensive-settings.php';
+			if ( class_exists( '\\WPShadow\\Admin\\Defensive_Settings' ) ) {
+				\WPShadow\Admin\Defensive_Settings::init();
+			}
 		}
 	}
 
-	// Load Defensive Settings
-	if ( file_exists( $settings_path . 'class-defensive-settings.php' ) ) {
-		require_once $settings_path . 'class-defensive-settings.php';
-		if ( class_exists( '\\WPShadow\\Admin\\Defensive_Settings' ) ) {
-			\WPShadow\Admin\Defensive_Settings::init();
-		}
-	}
+	/**
+	 * Get current plugin initialization status.
+	 *
+	 * @since  1.6035.2120
+	 * @return array {
+	 *     Status information.
+	 *
+	 *     @type bool  $ready  Whether plugin is ready
 	 *     @type array $errors Any initialization errors
 	 * }
 	 */

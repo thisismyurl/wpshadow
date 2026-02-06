@@ -74,7 +74,7 @@ class First_Run_Consent {
 	 */
 	public static function get_consent_html() {
 		return '
-		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow" style="position: relative; padding: 22px; border-radius: 10px; background: #fff; border: 1px solid #dcdcde; margin: 10px 0;">
+		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow">
 			<button type="button" class="wpshadow-consent-dismiss" aria-label="' . esc_attr__( 'Dismiss privacy notice', 'wpshadow' ) . '" style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; cursor: pointer; padding: 5px; color: #646970; font-size: 20px; line-height: 1;">
 				<span class="dashicons dashicons-no-alt"></span>
 			</button>

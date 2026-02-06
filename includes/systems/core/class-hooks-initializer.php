@@ -118,7 +118,7 @@ class Hooks_Initializer {
 		// Run database migrations (create tables, schema updates)
 		// This ensures all necessary tables exist for the plugin
 		// Use dynamic include to avoid circular dependencies
-		require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
+		require_once WPSHADOW_PATH . 'includes/systems/core/class-database-migrator.php';
 		Database_Migrator::migrate();
 
 		// Log plugin activation

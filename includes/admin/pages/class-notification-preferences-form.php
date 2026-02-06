@@ -86,12 +86,9 @@ class Notification_Preferences_Form {
 						<label class="wps-label">
 							<?php esc_html_e( 'Digest Mode', 'wpshadow' ); ?>
 						</label>
-						<label>
-							<input type="checkbox" id="digest_mode" name="digest_mode" value="1" />
-							<?php esc_html_e( 'Send batched notifications (instead of individual alerts)', 'wpshadow' ); ?>
-						</label>
-						<span class="wps-help-text">
-							<?php esc_html_e( 'Reduces email frequency by grouping related notifications', 'wpshadow' ); ?>
+					<label class="wps-toggle" for="digest_mode">
+						<input type="checkbox" id="digest_mode" name="digest_mode" value="1" />
+						<span class="wps-toggle-slider"></span>
 						</span>
 					</div>
 
@@ -167,12 +164,15 @@ class Notification_Preferences_Form {
 			$is_enabled = $preferences[ $key ] ?? false;
 			$html      .= sprintf(
 				'<div class="alert-type-item">
-					<label class="alert-toggle">
-						<input type="checkbox" class="alert-checkbox" name="alerts[]" value="%s" %s />
+					<label class="wps-toggle alert-toggle" for="alert-%s">
+						<input type="checkbox" class="alert-checkbox" id="alert-%s" name="alerts[]" value="%s" %s />
+						<span class="wps-toggle-slider"></span>
 						<span class="toggle-label">%s</span>
 					</label>
 					<p class="alert-description">%s</p>
 				</div>',
+				esc_attr( $key ),
+				esc_attr( $key ),
 				esc_attr( $key ),
 				checked( $is_enabled, true, false ),
 				esc_html( $config['label'] ),

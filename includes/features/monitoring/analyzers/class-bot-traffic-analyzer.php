@@ -87,10 +87,6 @@ class Bot_Traffic_Analyzer extends Hook_Subscriber_Base {
 
 		// Subscribe to hooks
 		self::subscribe();
-	}
-		if ( ! wp_next_scheduled( 'wpshadow_analyze_bot_traffic' ) ) {
-			wp_schedule_event( time(), 'hourly', 'wpshadow_analyze_bot_traffic' );
-		}
 		add_action( 'wpshadow_analyze_bot_traffic', array( __CLASS__, 'analyze' ) );
 	}
 

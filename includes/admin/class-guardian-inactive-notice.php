@@ -58,29 +58,18 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	 * @since 1.6030.2148
 	 */
 	public static function display_notice(): void {
-		// Check if another notice has already been shown (only one at a time)
-		$shown_notice = get_transient( 'wpshadow_active_notice_' . get_current_user_id() );
-		if ( ! empty( $shown_notice ) ) {
-			return;
-		}
-
 		// Only show on WPShadow pages
-		if ( ! isset( $_GET['page'] ) || strpos( (string) $_GET['page'], 'wpshadow' ) === false ) {
+		if ( ! isset( $_GET['page'] ) || false === strpos( (string) $_GET['page'], 'wpshadow' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 
 		// Only show to users who can manage options
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if (! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
-		// Check if Guardian_Manager is available
-		if ( ! class_exists( 'WPShadow\Guardian\Guardian_Manager' ) ) {
-			return; // Guardian module not loaded
-		}
-
 		// Don't show if Guardian is already enabled
-		if ( \WPShadow\Guardian\Guardian_Manager::is_enabled() ) {
+		if ( get_option( 'wpshadow_guardian_enabled', false ) ) {
 			return;
 		}
 
@@ -89,9 +78,6 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 		if ( ! empty( $dismissed ) ) {
 			return;
 		}
-
-		// Mark this notice as active (blocks other notices)
-		set_transient( 'wpshadow_active_notice_' . get_current_user_id(), 'guardian', HOUR_IN_SECONDS );
 
 		// Display the notice
 		?>
@@ -181,9 +167,6 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 
 		update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
 
-		// Clear the active notice transient so other notices can show
-		delete_transient( 'wpshadow_active_notice_' . get_current_user_id() );
-
 		wp_send_json_success( array( 'message' => __( 'Notice dismissed', 'wpshadow' ) ) );
 	}
 
@@ -201,39 +184,25 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}
 
-		// Verify Guardian Manager is available
-		if ( ! class_exists( 'WPShadow\Guardian\Guardian_Manager' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Guardian module not available', 'wpshadow' ) ) );
+		// Enable Guardian
+		update_option( 'wpshadow_guardian_enabled', true );
+
+		// Dismiss the notice automatically
+		update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
+
+		// Log the activation
+		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+			\WPShadow\Core\Activity_Logger::log(
+				'guardian_enabled',
+				'Guardian activated from admin notice',
+				'guardian'
+			);
 		}
 
-		// Enable Guardian with default settings
-		\WPShadow\Core\Cache_Manager::set(
-			'guardian_first_activation',
-			true,
-			3600,
-			'wpshadow_notices'
-		);
-		$success = \WPShadow\Guardian\Guardian_Manager::update_settings(
+		wp_send_json_success(
 			array(
-				'enabled' => true,
+				'message' => __( 'Guardian has been activated successfully!', 'wpshadow' ),
 			)
 		);
-
-		if ( $success ) {
-			// Dismiss the notice automatically
-			update_user_meta( get_current_user_id(), 'wpshadow_guardian_notice_dismissed', true );
-
-			wp_send_json_success(
-				array(
-					'message' => __( 'Guardian has been activated successfully!', 'wpshadow' ),
-				)
-			);
-		} else {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Failed to activate Guardian. Please try again.', 'wpshadow' ),
-				)
-			);
-		}
 	}
 }

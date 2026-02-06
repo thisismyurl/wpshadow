@@ -14,7 +14,7 @@ namespace WPShadow\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 // Manually load required files for testing
-require_once __DIR__ . '/../../includes/core/class-diagnostic-base.php';
+require_once __DIR__ . '/../../includes/systems/core/class-diagnostic-base.php';
 require_once __DIR__ . '/../../includes/diagnostics/tests/performance/class-diagnostic-crop-vs-resize-settings.php';
 
 use WPShadow\Diagnostics\Diagnostic_Crop_Vs_Resize_Settings;

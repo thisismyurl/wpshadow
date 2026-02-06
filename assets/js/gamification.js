@@ -28,23 +28,17 @@
 		 * Handle achievement category tabs
 		 */
 		achievementTabs: function() {
-		$('.tab-button').on('click keydown', function(e) {
-			// Support both click and keyboard (Enter/Space) activation
-			if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') {
-				return;
-			}
-			
-			if (e.type === 'keydown') {
-				e.preventDefault();
-			}
-			
-
-				if (category === 'all') {
-					$('.achievement-card').show();
-				} else {
-					$('.achievement-card').hide();
-					$(`.achievement-card[data-category="${category}"]`).show();
+			$('.tab-button').on('click keydown', function(e) {
+				// Support both click and keyboard (Enter/Space) activation
+				if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') {
+					return;
 				}
+				
+				e.preventDefault();
+
+				const category = $(this).data('category');
+				$('.achievement-card').hide();
+				$(`.achievement-card[data-category="${category}"]`).show();
 			});
 		},
 
@@ -58,33 +52,38 @@
 				const button = $(this);
 				const rewardId = button.data('reward-id');
 
-			WPShadowModal.confirm({
-				title: 'Redeem Reward',
-				message: 'Are you sure you want to redeem this reward?',
-				confirmText: 'Redeem',
-				cancelText: 'Cancel',
-				type: 'info',
-				onCancel: function() {
-					return;
-				},
-				onConfirm: function() {
-					data: {
-						action: 'wpshadow_redeem_reward',
-						nonce: wpShadowGamification.nonce,
-						reward_id: rewardId
+				WPShadowModal.confirm({
+					title: 'Redeem Reward',
+					message: 'Are you sure you want to redeem this reward?',
+					confirmText: 'Redeem',
+					cancelText: 'Cancel',
+					type: 'info',
+					onCancel: function() {
+						return;
 					},
-					success: function(response) {
-						if (response.success) {
-							WPShadowGamification.showNotice('success', response.data.message || 'Reward redeemed.');
-							window.location.reload();
-						} else {
-							WPShadowGamification.showNotice('error', response.data.message || 'Unable to redeem reward.');
-							button.prop('disabled', false).text('Redeem');
-						}
-					},
-					error: function() {
-						WPShadowGamification.showNotice('error', 'Network error. Please try again.');
-						button.prop('disabled', false).text('Redeem');
+					onConfirm: function() {
+						$.ajax({
+							url: wpShadowGamification.ajaxurl,
+							method: 'POST',
+							data: {
+								action: 'wpshadow_redeem_reward',
+								nonce: wpShadowGamification.nonce,
+								reward_id: rewardId
+							},
+							success: function(response) {
+								if (response.success) {
+									WPShadowGamification.showNotice('success', response.data.message || 'Reward redeemed.');
+									window.location.reload();
+								} else {
+									WPShadowGamification.showNotice('error', response.data.message || 'Unable to redeem reward.');
+									button.prop('disabled', false).text('Redeem');
+								}
+							},
+							error: function() {
+								WPShadowGamification.showNotice('error', 'Network error. Please try again.');
+								button.prop('disabled', false).text('Redeem');
+							}
+						});
 					}
 				});
 			});

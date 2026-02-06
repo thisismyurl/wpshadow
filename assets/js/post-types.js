@@ -41,22 +41,33 @@
 		 * Bind event handlers
 		 */
 		bindEvents: function() {
-			$(document).on('click', '.wpshadow-activate-cpt', this.handleActivate.bind(this));
-			$(document).on('click', '.wpshadow-deactivate-cpt', this.handleDeactivate.bind(this));
+			$(document).on('change', '.wpshadow-cpt-toggle', this.handleToggle.bind(this));
 		},
 
 		/**
-		 * Handle post type activation
+		 * Handle toggle change
 		 */
-		handleActivate: function(e) {
-			e.preventDefault();
+		handleToggle: function(e) {
+			const $toggle = $(e.currentTarget);
+			const postType = $toggle.data('post-type');
+			const isActivating = $toggle.is(':checked');
 			
-			const $button = $(e.currentTarget);
-			const postType = $button.data('post-type');
-			const $card = $button.closest('.wpshadow-cpt-card');
+			if (isActivating) {
+				this.activatePostType($toggle, postType);
+			} else {
+				this.deactivatePostType($toggle, postType);
+			}
+		},
+
+		/**
+		 * Activate post type
+		 */
+		activatePostType: function($toggle, postType) {
+			const $card = $toggle.closest('.wps-card');
 			
-			// Update button state
-			$button.prop('disabled', true).text(wpshadowPostTypes.strings.activating);
+			// Update toggle state
+			$toggle.prop('disabled', true);
+			$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.activating);
 			
 			// Make AJAX request
 			$.ajax({
@@ -73,36 +84,35 @@
 						// Show success message
 						PostTypesManager.showNotice('success', wpshadowPostTypes.strings.activated);
 						
-						// Reload page to update UI
-						setTimeout(function() {
-							window.location.reload();
-						}, 1000);
+						// Update card visually without reload
+						$card.addClass('wps-card--active');
+						$toggle.prop('disabled', false).prop('checked', true);
+						$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.active);
 					} else {
 						PostTypesManager.showNotice('error', response.data.message || wpshadowPostTypes.strings.error);
-						$button.prop('disabled', false).text(wpshadowPostTypes.strings.activate);
+						$toggle.prop('disabled', false).prop('checked', false);
+						$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.inactive);
 					}
 				},
 				error: function() {
 					PostTypesManager.showNotice('error', wpshadowPostTypes.strings.error);
-					$button.prop('disabled', false).text(wpshadowPostTypes.strings.activate);
+					$toggle.prop('disabled', false).prop('checked', false);
+					$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.inactive);
 				}
 			});
 		},
 
 		/**
-		 * Handle post type deactivation
+		 * Deactivate post type
 		 */
-		handleDeactivate: function(e) {
-			e.preventDefault();
-			
-			const $button = $(e.currentTarget);
-			const postType = $button.data('post-type');
-			const $card = $button.closest('.wpshadow-cpt-card');
+		deactivatePostType: function($toggle, postType) {
+			const $card = $toggle.closest('.wps-card');
 			
 			// Confirm deactivation
 			showConfirm(wpshadowPostTypes.strings.confirm_deactivate, function() {
-				// Update button state
-				$button.prop('disabled', true).text(wpshadowPostTypes.strings.deactivating);
+				// Update toggle state
+				$toggle.prop('disabled', true);
+				$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.deactivating);
 				
 				// Make AJAX request
 				$.ajax({
@@ -119,18 +129,20 @@
 							// Show success message
 							PostTypesManager.showNotice('success', wpshadowPostTypes.strings.deactivated);
 							
-							// Reload page to update UI
-							setTimeout(function() {
-								window.location.reload();
-							}, 1000);
+							// Update card visually without reload
+							$card.removeClass('wps-card--active');
+							$toggle.prop('disabled', false).prop('checked', false);
+							$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.inactive);
 						} else {
 							PostTypesManager.showNotice('error', response.data.message || wpshadowPostTypes.strings.error);
-							$button.prop('disabled', false).text(wpshadowPostTypes.strings.deactivate);
+							$toggle.prop('disabled', false).prop('checked', true);
+							$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.active);
 						}
 					},
 					error: function() {
 						PostTypesManager.showNotice('error', wpshadowPostTypes.strings.error);
-						$button.prop('disabled', false).text(wpshadowPostTypes.strings.deactivate);
+						$toggle.prop('disabled', false).prop('checked', true);
+						$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.active);
 					}
 				});
 			});

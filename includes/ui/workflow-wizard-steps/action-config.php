@@ -17,7 +17,7 @@ $action_index = Form_Param_Helper::get( 'action_index', 'int', 0 );
 
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id . '&step=action' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id . '&step=action-selection' ) );
 	} else {
 		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) );
 	}
@@ -26,7 +26,7 @@ if ( empty( $trigger_id ) ) {
 ?>
 
 <div class="wps-page-container">
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action-selection&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
 		<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
 		<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 	</a>
@@ -52,11 +52,11 @@ jQuery(document).ready(function($) {
 	
 	// Load actions from sessionStorage
 	if (!actions || actions.length === 0) {
-		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
+		window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
 	}
 	
 	if (!actions[actionIndex]) {
-		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
+		window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
 		return;
 	}
 	

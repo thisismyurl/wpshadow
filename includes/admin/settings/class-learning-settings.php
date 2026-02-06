@@ -48,8 +48,7 @@ class Learning_Settings {
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
-		add_submenu_page(
-			'wpshadow',
+		add_options_page(
 			__( 'Learning Settings', 'wpshadow' ),
 			__( 'Learning', 'wpshadow' ),
 			'manage_options',
@@ -66,7 +65,7 @@ class Learning_Settings {
 	 * @return void
 	 */
 	public static function enqueue_assets( string $hook ): void {
-		if ( 'wpshadow_page_wpshadow-learning' !== $hook ) {
+		if ( 'settings_page_wpshadow-learning' !== $hook ) {
 			return;
 		}
 

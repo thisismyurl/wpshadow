@@ -20,6 +20,27 @@ class Workflow_Manager {
 	const WORKFLOWS_OPTION = 'wpshadow_workflows';
 
 	/**
+	 * Cached workflows for the current request.
+	 *
+	 * @var array|null
+	 */
+	private static $workflows_cache = null;
+
+	/**
+	 * Cached diagnostics list.
+	 *
+	 * @var array|null
+	 */
+	private static $diagnostics_cache = null;
+
+	/**
+	 * Cached treatments list.
+	 *
+	 * @var array|null
+	 */
+	private static $treatments_cache = null;
+
+	/**
 	 * Generate a silly default workflow name
 	 */
 	public static function generate_silly_name() {
@@ -874,8 +895,14 @@ class Workflow_Manager {
 	 * Get all workflows
 	 */
 	public static function get_workflows() {
-		$workflows = get_option( self::WORKFLOWS_OPTION, array() );
-		return is_array( $workflows ) ? $workflows : array();
+		if ( null !== self::$workflows_cache ) {
+			return self::$workflows_cache;
+		}
+
+		$workflows             = get_option( self::WORKFLOWS_OPTION, array() );
+		self::$workflows_cache = is_array( $workflows ) ? $workflows : array();
+
+		return self::$workflows_cache;
 	}
 
 	/**
@@ -934,6 +961,7 @@ class Workflow_Manager {
 		);
 
 		update_option( self::WORKFLOWS_OPTION, $workflows );
+		self::$workflows_cache = $workflows;
 
 		return $workflows[ $workflow_id ];
 	}
@@ -957,6 +985,7 @@ class Workflow_Manager {
 
 			unset( $workflows[ $workflow_id ] );
 			update_option( self::WORKFLOWS_OPTION, $workflows );
+			self::$workflows_cache = $workflows;
 
 			/**
 			 * Fires after a workflow is deleted.
@@ -989,6 +1018,7 @@ class Workflow_Manager {
 		}
 
 		update_option( self::WORKFLOWS_OPTION, $workflows );
+		self::$workflows_cache = $workflows;
 
 		return $workflows[ $workflow_id ];
 	}
@@ -997,6 +1027,10 @@ class Workflow_Manager {
 	 * Get all diagnostics for use in action blocks
 	 */
 	public static function get_available_diagnostics() {
+		if ( null !== self::$diagnostics_cache ) {
+			return self::$diagnostics_cache;
+		}
+
 		$diagnostics = array();
 
 		// Load diagnostic registry if available
@@ -1024,13 +1058,19 @@ class Workflow_Manager {
 			);
 		}
 
-		return $diagnostics;
+		self::$diagnostics_cache = $diagnostics;
+
+		return self::$diagnostics_cache;
 	}
 
 	/**
 	 * Get all treatments for use in action blocks
 	 */
 	public static function get_available_treatments() {
+		if ( null !== self::$treatments_cache ) {
+			return self::$treatments_cache;
+		}
+
 		$treatments = array();
 
 		// Load treatment registry if available
@@ -1068,7 +1108,9 @@ class Workflow_Manager {
 			);
 		}
 
-		return $treatments;
+		self::$treatments_cache = $treatments;
+
+		return self::$treatments_cache;
 	}
 
 	/**

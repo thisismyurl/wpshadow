@@ -70,7 +70,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	 *
 	 * @since 1.6035.0000
 	 */
-	public function render() {
+	public function render(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You don\'t have permission to access this page.', 'wpshadow' ) );
 		}

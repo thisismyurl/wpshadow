@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Content\Post_Types;
 
-use WPShadow\Systems\Core\Hook_Subscriber_Base;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

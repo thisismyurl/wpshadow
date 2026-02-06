@@ -60,132 +60,131 @@ class Import_Export_Settings_Page {
 			?>
 
 			<!-- Export Section -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h3 class="wps-card-title">
-						<span class="dashicons dashicons-download"></span>
-						<?php esc_html_e( 'Export Settings', 'wpshadow' ); ?>
-					</h3>
-					<p class="wps-card-description">
-						<?php esc_html_e( 'Download your complete WPShadow configuration as a JSON file.', 'wpshadow' ); ?>
-					</p>
-				</div>
-				<div class="wps-card-body">
-					<div class="wps-form-group">
-						<p class="wps-text-muted">
-							<?php esc_html_e( 'This will export all your WPShadow settings including:', 'wpshadow' ); ?>
-						</p>
-						<ul class="wps-list wps-list-disc wps-pl-6 wps-text-muted">
-							<li><?php esc_html_e( 'Guardian settings and auto-fix preferences', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Email notification configuration', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Privacy and telemetry preferences', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Cache settings and performance options', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Workflow automation rules', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Advanced configuration options', 'wpshadow' ); ?></li>
-						</ul>
-						<p class="wps-text-muted wps-mt-3">
-							<strong><?php esc_html_e( 'Note:', 'wpshadow' ); ?></strong>
-							<?php esc_html_e( 'Sensitive data like API keys are excluded from exports for security.', 'wpshadow' ); ?>
-						</p>
-					</div>
-
-					<?php if ( $last_export ) : ?>
-						<div class="wps-alert wps-alert--info wps-mt-4">
-							<span class="dashicons dashicons-info"></span>
-							<div>
-								<strong><?php esc_html_e( 'Last Export:', 'wpshadow' ); ?></strong>
-								<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $last_export ) ) ); ?>
-							</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'       => __( 'Export Settings', 'wpshadow' ),
+					'description' => __( 'Download your complete WPShadow configuration as a JSON file.', 'wpshadow' ),
+					'icon'        => 'dashicons-download',
+					'body'        => function() use ( $last_export ) {
+						?>
+						<div class="wps-form-group">
+							<p class="wps-text-muted">
+								<?php esc_html_e( 'This will export all your WPShadow settings including:', 'wpshadow' ); ?>
+							</p>
+							<ul class="wps-list wps-list-disc wps-pl-6 wps-text-muted">
+								<li><?php esc_html_e( 'Guardian settings and auto-fix preferences', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Email notification configuration', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Privacy and telemetry preferences', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Cache settings and performance options', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Workflow automation rules', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Advanced configuration options', 'wpshadow' ); ?></li>
+							</ul>
+							<p class="wps-text-muted wps-mt-3">
+								<strong><?php esc_html_e( 'Note:', 'wpshadow' ); ?></strong>
+								<?php esc_html_e( 'Sensitive data like API keys are excluded from exports for security.', 'wpshadow' ); ?>
+							</p>
 						</div>
-					<?php endif; ?>
 
-					<div class="wps-form-actions wps-mt-4">
-						<button
-							type="button"
-							class="wps-btn wps-btn--primary"
-							id="wpshadow-export-settings"
-							data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_export_settings' ) ); ?>"
-						>
-							<span class="dashicons dashicons-download"></span>
-							<?php esc_html_e( 'Export Settings', 'wpshadow' ); ?>
-						</button>
-					</div>
-				</div>
-			</div>
+						<?php if ( $last_export ) : ?>
+							<div class="wps-alert wps-alert--info wps-mt-4">
+								<span class="dashicons dashicons-info"></span>
+								<div>
+									<strong><?php esc_html_e( 'Last Export:', 'wpshadow' ); ?></strong>
+									<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $last_export ) ) ); ?>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<div class="wps-form-actions wps-mt-4">
+							<button
+								type="button"
+								class="wps-btn wps-btn--primary"
+								id="wpshadow-export-settings"
+								data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_export_settings' ) ); ?>"
+							>
+								<span class="dashicons dashicons-download"></span>
+								<?php esc_html_e( 'Export Settings', 'wpshadow' ); ?>
+							</button>
+						</div>
+						<?php
+					},
+				)
+			);
+			?>
 
 			<!-- Import Section -->
-			<div class="wps-card wps-mt-6">
-				<div class="wps-card-header">
-					<h3 class="wps-card-title">
-						<span class="dashicons dashicons-upload"></span>
-						<?php esc_html_e( 'Import Settings', 'wpshadow' ); ?>
-					</h3>
-					<p class="wps-card-description">
-						<?php esc_html_e( 'Restore your WPShadow configuration from a previously exported JSON file.', 'wpshadow' ); ?>
-					</p>
-				</div>
-				<div class="wps-card-body">
-					<div class="wps-form-group">
-						<label for="wpshadow-import-file" class="wps-form-label">
-							<?php esc_html_e( 'Select Settings File', 'wpshadow' ); ?>
-						</label>
-						<input
-							type="file"
-							id="wpshadow-import-file"
-							accept=".json,application/json"
-							class="wps-form-control"
-						/>
-						<span class="wps-help-text">
-							<?php esc_html_e( 'Choose a JSON file exported from WPShadow.', 'wpshadow' ); ?>
-						</span>
-					</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'       => __( 'Import Settings', 'wpshadow' ),
+					'description' => __( 'Restore your WPShadow configuration from a previously exported JSON file.', 'wpshadow' ),
+					'icon'        => 'dashicons-upload',
+					'card_class'  => 'wps-mt-6',
+					'body'        => function() use ( $last_import ) {
+						?>
+						<div class="wps-form-group">
+							<label for="wpshadow-import-file" class="wps-form-label">
+								<?php esc_html_e( 'Select Settings File', 'wpshadow' ); ?>
+							</label>
+							<input
+								type="file"
+								id="wpshadow-import-file"
+								accept=".json,application/json"
+								class="wps-form-control"
+							/>
+							<span class="wps-help-text">
+								<?php esc_html_e( 'Choose a JSON file exported from WPShadow.', 'wpshadow' ); ?>
+							</span>
+						</div>
 
-					<?php if ( $last_import ) : ?>
-						<div class="wps-alert wps-alert--success wps-mt-4">
-							<span class="dashicons dashicons-yes"></span>
+						<?php if ( $last_import ) : ?>
+							<div class="wps-alert wps-alert--success wps-mt-4">
+								<span class="dashicons dashicons-yes"></span>
+								<div>
+									<strong><?php esc_html_e( 'Last Import:', 'wpshadow' ); ?></strong>
+									<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $last_import ) ) ); ?>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<div class="wps-alert wps-alert--warning wps-mt-4">
+							<span class="dashicons dashicons-warning"></span>
 							<div>
-								<strong><?php esc_html_e( 'Last Import:', 'wpshadow' ); ?></strong>
-								<?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $last_import ) ) ); ?>
+								<strong><?php esc_html_e( 'Heads up:', 'wpshadow' ); ?></strong>
+								<?php esc_html_e( 'Importing will overwrite your current settings. Your existing configuration will be backed up automatically.', 'wpshadow' ); ?>
 							</div>
 						</div>
-					<?php endif; ?>
 
-					<div class="wps-alert wps-alert--warning wps-mt-4">
-						<span class="dashicons dashicons-warning"></span>
-						<div>
-							<strong><?php esc_html_e( 'Heads up:', 'wpshadow' ); ?></strong>
-							<?php esc_html_e( 'Importing will overwrite your current settings. Your existing configuration will be backed up automatically.', 'wpshadow' ); ?>
+						<div class="wps-form-actions wps-mt-4">
+							<button
+								type="button"
+								class="wps-btn wps-btn--secondary"
+								id="wpshadow-import-settings"
+								data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_import_settings' ) ); ?>"
+								disabled
+							>
+								<span class="dashicons dashicons-upload"></span>
+								<?php esc_html_e( 'Import Settings', 'wpshadow' ); ?>
+							</button>
 						</div>
-					</div>
-
-					<div class="wps-form-actions wps-mt-4">
-						<button
-							type="button"
-							class="wps-btn wps-btn--secondary"
-							id="wpshadow-import-settings"
-							data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_import_settings' ) ); ?>"
-							disabled
-						>
-							<span class="dashicons dashicons-upload"></span>
-							<?php esc_html_e( 'Import Settings', 'wpshadow' ); ?>
-						</button>
-					</div>
-				</div>
-			</div>
+						<?php
+					},
+				)
+			);
+			?>
 
 			<!-- Cloud Sync Section (for registered users) -->
-			<?php if ( $is_registered ) : ?>
-				<div class="wps-card wps-mt-6">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-cloud"></span>
-							<?php esc_html_e( 'Cloud Sync', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'Automatically sync your settings with wpshadow.com and access them from any site.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
+			<?php
+			if ( $is_registered ) {
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Cloud Sync', 'wpshadow' ),
+						'description' => __( 'Automatically sync your settings with wpshadow.com and access them from any site.', 'wpshadow' ),
+						'icon'        => 'dashicons-cloud',
+						'card_class'  => 'wps-mt-6',
+						'body'        => function() use ( $account_info, $cloud_sync_enabled, $last_cloud_sync ) {
+							?>
 						<div class="wps-alert wps-alert--info wps-mb-4">
 							<span class="dashicons dashicons-info"></span>
 							<div>
@@ -257,22 +256,20 @@ class Import_Export_Settings_Page {
 								'<a href="https://wpshadow.com/privacy?utm_source=plugin&utm_medium=settings&utm_campaign=cloud_sync" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Privacy Policy', 'wpshadow' ) . '</a>'
 							);
 							?>
-						</div>
-					</div>
-				</div>
-			<?php else : ?>
-				<!-- Cloud Sync Promo for Non-Registered Users -->
-				<div class="wps-card wps-mt-6 wps-card--highlight">
-					<div class="wps-card-header">
-						<h3 class="wps-card-title">
-							<span class="dashicons dashicons-cloud"></span>
-							<?php esc_html_e( 'Cloud Sync Available', 'wpshadow' ); ?>
-						</h3>
-						<p class="wps-card-description">
-							<?php esc_html_e( 'Register for a free WPShadow account to unlock cloud settings sync.', 'wpshadow' ); ?>
-						</p>
-					</div>
-					<div class="wps-card-body">
+							<?php
+						},
+					)
+				);
+			} else {
+				// Cloud Sync Promo for Non-Registered Users
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Cloud Sync Available', 'wpshadow' ),
+						'description' => __( 'Register for a free WPShadow account to unlock cloud settings sync.', 'wpshadow' ),
+						'icon'        => 'dashicons-cloud',
+						'card_class'  => 'wps-mt-6 wps-card--highlight',
+						'body'        => function() {
+							?>
 						<p>
 							<?php esc_html_e( 'With a free WPShadow account, you can:', 'wpshadow' ); ?>
 						</p>
@@ -308,9 +305,12 @@ class Import_Export_Settings_Page {
 								<?php esc_html_e( 'Learn More', 'wpshadow' ); ?>
 							</a>
 						</div>
-					</div>
-				</div>
-			<?php endif; ?>
+						<?php
+					},
+				)
+			);
+		}
+		?>
 
 			<!-- Status Messages -->
 			<div id="wpshadow-import-export-messages" class="wps-mt-6"></div>

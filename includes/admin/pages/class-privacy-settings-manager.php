@@ -127,11 +127,12 @@ class Privacy_Settings_Manager {
 					
 					<!-- Require consent toggle -->
 					<div class="wps-flex-gap-12-items-flex-start">
-						<input type="checkbox" name="consent_required" <?php checked( $settings['consent_required'] ); ?> id="consent-required" class="wps-checkbox-large" />
+						<label class="wps-toggle" for="consent-required">
+							<input type="checkbox" name="consent_required" <?php checked( $settings['consent_required'] ); ?> id="consent-required" value="1" />
+							<span class="wps-toggle-slider"></span>
+							<?php esc_html_e( 'Require explicit user consent before processing data', 'wpshadow' ); ?>
+						</label>
 						<div class="wps-privacy-flex-container">
-							<label for="consent-required" class="wps-block">
-								<?php esc_html_e( 'Require explicit user consent before processing data', 'wpshadow' ); ?>
-							</label>
 							<p class="wps-m-4">
 								<?php esc_html_e( 'When enabled, users must explicitly consent before WPShadow collects or processes their data.', 'wpshadow' ); ?>
 							</p>
@@ -140,11 +141,12 @@ class Privacy_Settings_Manager {
 					
 					<!-- Analytics collection toggle -->
 					<div class="wps-flex-gap-12-items-flex-start">
-						<input type="checkbox" name="collect_analytics" <?php checked( $settings['collect_analytics'] ); ?> id="collect-analytics" class="wps-checkbox-large" />
+						<label class="wps-toggle" for="collect-analytics">
+							<input type="checkbox" name="collect_analytics" <?php checked( $settings['collect_analytics'] ); ?> id="collect-analytics" value="1" />
+							<span class="wps-toggle-slider"></span>
+							<?php esc_html_e( 'Allow anonymized analytics collection', 'wpshadow' ); ?>
+						</label>
 						<div class="wps-privacy-flex-container">
-							<label for="collect-analytics" class="wps-block">
-								<?php esc_html_e( 'Allow anonymized analytics collection', 'wpshadow' ); ?>
-							</label>
 							<p class="wps-m-4">
 								<?php esc_html_e( 'Help improve WPShadow by sharing anonymized usage data (no personal information is collected).', 'wpshadow' ); ?>
 							</p>
@@ -167,11 +169,12 @@ class Privacy_Settings_Manager {
 						<legend class="wps-privacy-legend"><?php esc_html_e( 'Data Subject Rights (GDPR)', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="export_user_data" <?php checked( $settings['export_user_data'] ); ?> id="export-user-data" class="wps-checkbox-large" />
+							<label class="wps-toggle" for="export-user-data">
+								<input type="checkbox" name="export_user_data" <?php checked( $settings['export_user_data'] ); ?> id="export-user-data" value="1" />
+								<span class="wps-toggle-slider"></span>
+								<?php esc_html_e( 'Allow data export (Right to Access)', 'wpshadow' ); ?>
+							</label>
 							<div class="wps-privacy-flex-container">
-								<label for="export-user-data" class="wps-block">
-									<?php esc_html_e( 'Allow data export (Right to Access)', 'wpshadow' ); ?>
-								</label>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Users can request a copy of their personal data.', 'wpshadow' ); ?>
 								</p>
@@ -179,11 +182,12 @@ class Privacy_Settings_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="delete_user_data" <?php checked( $settings['delete_user_data'] ); ?> id="delete-user-data" class="wps-checkbox-large" />
+							<label class="wps-toggle" for="delete-user-data">
+								<input type="checkbox" name="delete_user_data" <?php checked( $settings['delete_user_data'] ); ?> id="delete-user-data" value="1" />
+								<span class="wps-toggle-slider"></span>
+								<?php esc_html_e( 'Allow data deletion (Right to be Forgotten)', 'wpshadow' ); ?>
+							</label>
 							<div class="wps-privacy-flex-container">
-								<label for="delete-user-data" class="wps-block">
-									<?php esc_html_e( 'Allow data deletion (Right to be Forgotten)', 'wpshadow' ); ?>
-								</label>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Users can request deletion of their personal data.', 'wpshadow' ); ?>
 								</p>
@@ -191,11 +195,12 @@ class Privacy_Settings_Manager {
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="anonymize_on_delete" <?php checked( $settings['anonymize_on_delete'] ); ?> id="anonymize-on-delete" class="wps-checkbox-large" />
+							<label class="wps-toggle" for="anonymize-on-delete">
+								<input type="checkbox" name="anonymize_on_delete" <?php checked( $settings['anonymize_on_delete'] ); ?> id="anonymize-on-delete" value="1" />
+								<span class="wps-toggle-slider"></span>
+								<?php esc_html_e( 'Anonymize instead of delete', 'wpshadow' ); ?>
+							</label>
 							<div class="wps-privacy-flex-container">
-								<label for="anonymize-on-delete" class="wps-block">
-									<?php esc_html_e( 'Anonymize instead of delete', 'wpshadow' ); ?>
-								</label>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'When deleting data, anonymize it instead of permanently removing it (retains historical records).', 'wpshadow' ); ?>
 								</p>

@@ -233,30 +233,9 @@ class Murphy_Safe_Request {
 				return $response;
 			}
 
-			/**
-			 * Determine if a response should be retried.
-			 *
-			 * Retries on network errors and transient HTTP status codes.
-			 *
-			 * @since  1.8035.1200
-			 * @param  mixed $response Response from wp_remote_get.
-			 * @return bool True if retryable.
-			 */
-			private static function is_retryable_response( $response ) : bool {
-				if ( is_wp_error( $response ) ) {
-					return true;
-				}
-
-				$code = wp_remote_retrieve_response_code( $response );
-				if ( in_array( $code, array( 408, 429 ), true ) ) {
-					return true;
-				}
-
-				if ( $code >= 500 && $code <= 599 ) {
-					return true;
-				}
-
-				return false;
+			// Check if response is retryable
+			if ( ! self::is_retryable_response( $response ) ) {
+				return $response;
 			}
 
 			// Last attempt failed.
@@ -284,6 +263,32 @@ class Murphy_Safe_Request {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Determine if a response should be retried.
+	 *
+	 * Retries on network errors and transient HTTP status codes.
+	 *
+	 * @since  1.8035.1200
+	 * @param  mixed $response Response from wp_remote_get.
+	 * @return bool True if retryable.
+	 */
+	private static function is_retryable_response( $response ): bool {
+		if ( is_wp_error( $response ) ) {
+			return true;
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( in_array( $code, array( 408, 429 ), true ) ) {
+			return true;
+		}
+
+		if ( $code >= 500 && $code <= 599 ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

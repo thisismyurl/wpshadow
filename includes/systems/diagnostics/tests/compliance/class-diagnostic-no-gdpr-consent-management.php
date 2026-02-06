@@ -74,7 +74,7 @@ class Diagnostic_No_GDPR_Consent_Management extends Diagnostic_Base {
 	public static function check() {
 		// Check for consent management plugins
 		$has_consent_management = is_plugin_active( 'cookiebot/cookiebot.php' ) ||
-			is_plugin_active( 'gdpr-cookie-consent/gdpr-cookie-consent.php' ||
+			is_plugin_active( 'gdpr-cookie-consent/gdpr-cookie-consent.php' ) ||
 			is_plugin_active( 'wp-gdpr-compliance/wp-gdpr-compliance.php' ) ||
 			is_plugin_active( 'iubenda-cookie-law-solution/iubenda.php' );
 

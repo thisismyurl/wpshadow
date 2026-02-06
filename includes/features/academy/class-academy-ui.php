@@ -229,99 +229,61 @@ class Academy_UI extends Hook_Subscriber_Base {
 			); ?>
 
 			<!-- Academy Grid -->
+			<?php
+			$academy_cards = array(
+				array(
+					'title'        => __( 'Courses', 'wpshadow' ),
+					'description'  => __( 'Step-by-step classes that teach you everything (like taking a workshop).', 'wpshadow' ),
+					'url'          => 'https://wpshadow.com/academy/courses?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=courses',
+					'icon'         => 'dashicons-media-video',
+					'action_label' => __( 'Browse Courses', 'wpshadow' ),
+				),
+				array(
+					'title'        => __( 'My Learning Path', 'wpshadow' ),
+					'description'  => __( 'Personalized recommendations based on your site\'s diagnostics.', 'wpshadow' ),
+					'url'          => 'https://wpshadow.com/academy/learning-path/',
+					'icon'         => 'dashicons-superhero',
+					'action_label' => __( 'View Learning Path', 'wpshadow' ),
+				),
+				array(
+					'title'        => __( 'Quick Answer Guides', 'wpshadow' ),
+					'description'  => __( 'Short articles that answer common questions (like having a cheat sheet handy).', 'wpshadow' ),
+					'url'          => 'https://wpshadow.com/kb?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=kb_articles',
+					'icon'         => 'dashicons-book-alt',
+					'action_label' => __( 'Browse Articles', 'wpshadow' ),
+				),
+				array(
+					'title'        => __( 'Video Lessons', 'wpshadow' ),
+					'description'  => __( 'Watch and learn how to do things (like having someone show you in person).', 'wpshadow' ),
+					'url'          => 'https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos',
+					'icon'         => 'dashicons-video-alt3',
+					'action_label' => __( 'Start Watching', 'wpshadow' ),
+				),
+			);
+			?>
 			<div class="wps-grid wps-grid-auto-320">
-				<!-- Courses -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-media-video wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="https://wpshadow.com/academy/courses?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=courses" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Courses', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-								<?php esc_html_e( 'Step-by-step classes that teach you everything (like taking a workshop).', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="https://wpshadow.com/academy/courses?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=courses" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-external"></span>
-							<?php esc_html_e( 'Browse Courses', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-
-				<!-- My Learning Path -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-superhero wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-								<a href="https://wpshadow.com/academy/learning-path/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
-									<?php esc_html_e( 'My Learning Path', 'wpshadow' ); ?>
-								</a>
-							</h3>
-							<p class="wps-card-description wps-m-0">
-								<?php esc_html_e( 'Personalized recommendations based on your site\'s diagnostics.', 'wpshadow' ); ?>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="wps-card-body">
-					<a href="https://wpshadow.com/academy/learning-path/" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
-						<span class="dashicons dashicons-external"></span>
-						<?php esc_html_e( 'View Learning Path', 'wpshadow' ); ?>
-					</a>
-				</div>
-			</div>
-
-			<!-- KB Articles -->
-										<?php esc_html_e( 'Quick Answer Guides', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Short articles that answer common questions (like having a cheat sheet handy).', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="https://wpshadow.com/kb?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=kb_articles" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-external"></span>
-							<?php esc_html_e( 'Browse Articles', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-
-				<!-- Training Videos -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-video-alt3 wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Video Lessons', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Watch and learn how to do things (like having someone show you in person).', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-external"></span>
-							<?php esc_html_e( 'Start Watching', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
+				<?php foreach ( $academy_cards as $card ) : ?>
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'       => $card['title'],
+							'title_url'   => $card['url'],
+							'description' => $card['description'],
+							'icon'        => $card['icon'],
+							'actions'     => array(
+								array(
+									'label'  => $card['action_label'],
+									'url'    => $card['url'],
+									'class'  => 'wps-btn wps-btn--secondary',
+									'icon'   => 'dashicons-external',
+									'target' => '_blank',
+									'rel'    => 'noopener noreferrer',
+								),
+							),
+						)
+					);
+					?>
+				<?php endforeach; ?>
 			</div>
 
 			<!-- My Learning Path Summary Section -->
@@ -335,28 +297,36 @@ class Academy_UI extends Hook_Subscriber_Base {
 				<h2 style="font-size: 20px; margin-bottom: 20px; color: #1d2327;">
 					<?php esc_html_e( 'What We Think You Should Learn Next', 'wpshadow' ); ?>
 				</h2>
-				<div class="wps-card">
-					<div class="wps-card-body">
-						<?php if ( ! empty( $learning_path ) ) : ?>
-							<p><?php esc_html_e( 'After looking at your site, here\'s what would help you most right now:', 'wpshadow' ); ?></p>
-							<ul style="list-style: disc; margin-left: 20px;">
-								<?php 
-								foreach ( array_slice( $learning_path, 0, 5 ) as $item ) :
-									$title = isset( $item['course'] ) ? $item['course'] : ( isset( $item['title'] ) ? $item['title'] : __( 'Course', 'wpshadow' ) );
-									?>
-									<li><?php echo esc_html( $title ); ?></li>
-								<?php endforeach; ?>
-							</ul>
-							<div style="margin-top: 20px;">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=learning-path' ) ); ?>" class="wps-btn wps-btn--primary">
-									<?php esc_html_e( 'View Full Learning Path', 'wpshadow' ); ?>
-								</a>
-							</div>
-						<?php else : ?>
-							<p><?php esc_html_e( 'Your site looks good! Browse our courses and videos to learn even more ways to improve.', 'wpshadow' ); ?></p>
-						<?php endif; ?>
-					</div>
-				</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'body' => function () use ( $learning_path ) {
+							if ( ! empty( $learning_path ) ) {
+								?>
+								<p><?php esc_html_e( 'After looking at your site, here\'s what would help you most right now:', 'wpshadow' ); ?></p>
+								<ul style="list-style: disc; margin-left: 20px;">
+									<?php
+									foreach ( array_slice( $learning_path, 0, 5 ) as $item ) :
+										$title = isset( $item['course'] ) ? $item['course'] : ( isset( $item['title'] ) ? $item['title'] : __( 'Course', 'wpshadow' ) );
+										?>
+										<li><?php echo esc_html( $title ); ?></li>
+									<?php endforeach; ?>
+								</ul>
+								<div style="margin-top: 20px;">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-academy&tab=learning-path' ) ); ?>" class="wps-btn wps-btn--primary">
+										<?php esc_html_e( 'View Full Learning Path', 'wpshadow' ); ?>
+									</a>
+								</div>
+								<?php
+							} else {
+								?>
+								<p><?php esc_html_e( 'Your site looks good! Browse our courses and videos to learn even more ways to improve.', 'wpshadow' ); ?></p>
+								<?php
+							}
+						},
+					)
+				);
+				?>
 			</div>
 
 			<!-- Recent Activity Section -->

@@ -194,7 +194,7 @@ $has_config    = ! empty( $config_fields );
 			const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
 			const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
 			const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
-			window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
+			window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
 		</script>
 	<?php endif; ?>
 </div>
@@ -253,7 +253,7 @@ jQuery(document).ready(function($) {
 		const triggerId = formData.trigger_id;
 		const workflowId = formData.workflow_id;
 		const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
-		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
+		window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
 	});
 });
 </script>

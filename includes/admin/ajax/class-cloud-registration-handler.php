@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once WPSHADOW_PATH . 'includes/core/class-ajax-handler-base.php';
-require_once WPSHADOW_PATH . 'includes/integration/cloud/class-cloud-service-connector.php';
+require_once WPSHADOW_PATH . 'includes/systems/core/class-ajax-handler-base.php';
+require_once WPSHADOW_PATH . 'includes/systems/integration/class-cloud-service-connector.php';
 
 /**
  * Cloud Registration Handler

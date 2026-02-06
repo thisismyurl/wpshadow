@@ -47,8 +47,7 @@ class Defensive_Settings {
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
-		add_submenu_page(
-			'wpshadow',
+		add_options_page(
 			__( 'Defensive Engineering', 'wpshadow' ),
 			__( 'Defensive', 'wpshadow' ),
 			'manage_options',

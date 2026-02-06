@@ -330,33 +330,42 @@ class Scan_Frequency_Manager {
 						<legend class="wps-p-0"><?php esc_html_e( 'Scan Behavior', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="run_diagnostics" <?php checked( $config['run_diagnostics'] ); ?> id="run-diagnostics" class="wps-scan-input-radio" />
-							<label for="run-diagnostics" class="wps-scan-label">
+							<label class="wps-toggle" for="run-diagnostics">
+								<input type="checkbox" name="run_diagnostics" <?php checked( $config['run_diagnostics'] ); ?> id="run-diagnostics" value="1" />
+								<span class="wps-toggle-slider"></span>
 								<strong><?php esc_html_e( 'Run Diagnostics', 'wpshadow' ); ?></strong>
+							</label>
+							<div class="wps-scan-label">
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Always recommended - checks for security, performance, and configuration issues', 'wpshadow' ); ?>
 								</p>
-							</label>
+							</div>
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="run_treatments" <?php checked( $config['run_treatments'] ); ?> id="auto-treatments" class="wps-scan-input-radio" />
-							<label for="auto-treatments" class="wps-scan-label">
+							<label class="wps-toggle" for="auto-treatments">
+								<input type="checkbox" name="run_treatments" <?php checked( $config['run_treatments'] ); ?> id="auto-treatments" value="1" />
+								<span class="wps-toggle-slider"></span>
 								<strong><?php esc_html_e( 'Auto-Apply Safe Treatments', 'wpshadow' ); ?></strong>
+							</label>
+							<div class="wps-scan-label">
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically apply low-risk fixes. You can undo any treatment at any time.', 'wpshadow' ); ?>
 								</p>
-							</label>
+							</div>
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="email_results" <?php checked( $config['email_results'] ); ?> id="email-results" class="wps-scan-input-radio" />
-							<label for="email-results" class="wps-scan-label">
+							<label class="wps-toggle" for="email-results">
+								<input type="checkbox" name="email_results" <?php checked( $config['email_results'] ); ?> id="email-results" value="1" />
+								<span class="wps-toggle-slider"></span>
 								<strong><?php esc_html_e( 'Email Scan Results', 'wpshadow' ); ?></strong>
+							</label>
+							<div class="wps-scan-label">
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Send email summary after each automatic scan', 'wpshadow' ); ?>
 								</p>
-							</label>
+							</div>
 						</div>
 					</fieldset>
 					
@@ -365,23 +374,29 @@ class Scan_Frequency_Manager {
 						<legend class="wps-p-0"><?php esc_html_e( 'Trigger on Updates', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="scan_on_plugin_update" <?php checked( $config['scan_on_plugin_update'] ); ?> id="scan-plugin-update" class="wps-scan-input-radio" />
-							<label for="scan-plugin-update" class="wps-scan-label">
+							<label class="wps-toggle" for="scan-plugin-update">
+								<input type="checkbox" name="scan_on_plugin_update" <?php checked( $config['scan_on_plugin_update'] ); ?> id="scan-plugin-update" value="1" />
+								<span class="wps-toggle-slider"></span>
 								<strong><?php esc_html_e( 'After Plugin Update', 'wpshadow' ); ?></strong>
+							</label>
+							<div class="wps-scan-label">
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically scan after any plugin is updated or activated', 'wpshadow' ); ?>
 								</p>
-							</label>
+							</div>
 						</div>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="scan_on_theme_update" <?php checked( $config['scan_on_theme_update'] ); ?> id="scan-theme-update" class="wps-scan-input-radio" />
-							<label for="scan-theme-update" class="wps-scan-label">
+							<label class="wps-toggle" for="scan-theme-update">
+								<input type="checkbox" name="scan_on_theme_update" <?php checked( $config['scan_on_theme_update'] ); ?> id="scan-theme-update" value="1" />
+								<span class="wps-toggle-slider"></span>
 								<strong><?php esc_html_e( 'After Theme Update', 'wpshadow' ); ?></strong>
+							</label>
+							<div class="wps-scan-label">
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically scan after any theme is updated or activated', 'wpshadow' ); ?>
 								</p>
-							</label>
+							</div>
 						</div>
 					</fieldset>
 					

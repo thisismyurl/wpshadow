@@ -1,6 +1,4 @@
 <?php
-
-<?php
 /**
  * AJAX Handler: Quick Scan (Fast Health Check)
  *

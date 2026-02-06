@@ -110,12 +110,22 @@ class Compromised_Accounts_Analyzer {
 			);
 		}
 
-	\WPShadow\Core\Cache_Manager::set(
-		'suspicious_account_events',
-		$suspicious_events,
-		WEEK_IN_SECONDS,
-		'wpshadow_monitoring'
+		\WPShadow\Core\Cache_Manager::set(
+			'suspicious_account_events',
+			$suspicious_events,
+			WEEK_IN_SECONDS,
+			'wpshadow_monitoring'
 		);
+	}
+
+	/**
+	 * Track role changes
+	 *
+	 * @param  int    $user_id   User ID.
+	 * @param  string $role      New role.
+	 * @param  array  $old_roles Old roles.
+	 * @return void
+	 */
 	public static function track_role_change( int $user_id, string $role, array $old_roles ): void {
 		$suspicious_events = \WPShadow\Core\Cache_Manager::get(
 			'suspicious_account_events',

@@ -47,8 +47,7 @@ class KPI_Settings {
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
-		add_submenu_page(
-			'wpshadow',
+		add_options_page(
 			__( 'KPI & Impact Tracking', 'wpshadow' ),
 			__( 'KPI Tracking', 'wpshadow' ),
 			'manage_options',

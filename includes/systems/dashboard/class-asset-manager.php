@@ -63,6 +63,33 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		);
 
 		wp_localize_script(
+			'wpshadow-workflow-wizard-steps',
+			'wpshadowData',
+			array(
+				'adminUrl' => admin_url( 'admin.php' ) . '?',
+			)
+		);
+
+		wp_localize_script(
+			'wpshadow-workflow-wizard-steps',
+			'wpshadowI18n',
+			array(
+				'trigger'          => __( 'Trigger', 'wpshadow' ),
+				'actions'          => __( 'Actions', 'wpshadow' ),
+				'everyDay'         => __( 'Every Day', 'wpshadow' ),
+				'everyWeek'        => __( 'Every Week', 'wpshadow' ),
+				'everyHour'        => __( 'Every Hour', 'wpshadow' ),
+				'everyPageLoad'    => __( 'Every Page Load', 'wpshadow' ),
+				'frontendPageLoad' => __( 'Frontend Page Load', 'wpshadow' ),
+				'adminPageLoad'    => __( 'Admin Page Load', 'wpshadow' ),
+				'userLogin'        => __( 'User Login', 'wpshadow' ),
+				'pluginActivated'  => __( 'Plugin Activated', 'wpshadow' ),
+				'workflowSavedSuccess' => __( 'Workflow saved successfully!', 'wpshadow' ),
+				'errorSavingWorkflow'  => __( 'Error saving workflow', 'wpshadow' ),
+			)
+		);
+
+		wp_localize_script(
 			'wpshadow-workflow-list',
 			'wpshadowWorkflow',
 			array(

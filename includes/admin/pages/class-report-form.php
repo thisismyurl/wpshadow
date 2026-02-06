@@ -39,19 +39,15 @@ class Report_Form {
 			<div class="wps-grid" style="grid-template-columns: 1fr 2fr; gap: 2rem;">
 				<!-- LEFT COLUMN: Report Generator (33%) -->
 				<div>
-					<div class="wps-card">
-						<div class="wps-card-header">
-							<div>
-								<h2 class="wps-card-title wps-m-0">
-									<span class="dashicons dashicons-chart-line"></span>
-									<?php esc_html_e( 'Report Generator', 'wpshadow' ); ?>
-								</h2>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Configure date range, type, and format for your report.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-						<div class="wps-card-body">
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Report Generator', 'wpshadow' ),
+						'title_tag'   => 'h2',
+						'description' => __( 'Configure date range, type, and format for your report.', 'wpshadow' ),
+						'icon'        => 'dashicons-chart-line',
+						'body'        => function() {
+							?>
 							<form class="report-form" id="wpshadow-report-form">
 								<?php wp_nonce_field( 'wpshadow_generate_report', 'report_nonce' ); ?>
 
@@ -120,16 +116,19 @@ class Report_Form {
 									</select>
 								</div>
 							</form>
-						</div>
-						<div class="wps-card-footer">
-							<button type="button" class="wps-btn wps-btn--primary" id="generate-report-btn" style="width: 100%;">
-								<span class="dashicons dashicons-chart-line"></span>
-								<?php esc_html_e( 'Generate Report', 'wpshadow' ); ?>
-							</button>
-						</div>
-					</div>
-				</div>
-
+						<?php
+					},
+					'footer'      => function() {
+						?>
+						<button type="button" class="wps-btn wps-btn--primary" id="generate-report-btn" style="width: 100%;">
+							<span class="dashicons dashicons-chart-line"></span>
+							<?php esc_html_e( 'Generate Report', 'wpshadow' ); ?>
+						</button>
+						<?php
+					},
+				)
+			);
+			?>
 				<!-- RIGHT COLUMN: Report Preview & Email (66%) -->
 				<div>
 					<!-- Loading State -->
@@ -224,38 +223,39 @@ class Report_Form {
 	 * @return string HTML
 	 */
 	public static function render_previous_reports(): string {
-		$html = '<div class="wps-card wps-mt-6">
-			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0">
-					<span class="dashicons dashicons-archive"></span>
-					' . esc_html__( 'Previous Reports', 'wpshadow' ) . '
-				</h3>
-			</div>
-			<div class="wps-card-body">
-				<table class="wp-list-table widefat striped wps-m-0">
-					<thead>
-						<tr>
-							<th>' . esc_html__( 'Date Range', 'wpshadow' ) . '</th>
-							<th>' . esc_html__( 'Type', 'wpshadow' ) . '</th>
-							<th>' . esc_html__( 'Generated', 'wpshadow' ) . '</th>
-							<th>' . esc_html__( 'Actions', 'wpshadow' ) . '</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>2026-01-01 to 2026-01-31</td>
-							<td>Summary</td>
-							<td>2026-02-01 10:00</td>
-							<td>
-								<a href="#" class="wps-btn wps-btn--secondary wps-mr-2">' . esc_html__( 'View', 'wpshadow' ) . '</a>
-								<a href="#" class="wps-btn wps-btn--secondary">' . esc_html__( 'Download', 'wpshadow' ) . '</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>';
-
-		return $html;
+		ob_start();
+		wpshadow_render_card(
+			array(
+				'title'      => __( 'Previous Reports', 'wpshadow' ),
+				'icon'       => 'dashicons-archive',
+				'card_class' => 'wps-mt-6',
+				'body'       => function() {
+					?>
+					<table class="wp-list-table widefat striped wps-m-0">
+						<thead>
+							<tr>
+								<th><?php esc_html_e( 'Date Range', 'wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Type', 'wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Generated', 'wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Actions', 'wpshadow' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>2026-01-01 to 2026-01-31</td>
+								<td>Summary</td>
+								<td>2026-02-01 10:00</td>
+								<td>
+									<a href="#" class="wps-btn wps-btn--secondary wps-mr-2"><?php esc_html_e( 'View', 'wpshadow' ); ?></a>
+									<a href="#" class="wps-btn wps-btn--secondary"><?php esc_html_e( 'Download', 'wpshadow' ); ?></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<?php
+				},
+			)
+		);
+		return ob_get_clean();
 	}
 }

@@ -31,6 +31,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-chart-line',
 			'family'  => 'analysis',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Deep Scan Report', 'wpshadow' ),
@@ -39,6 +40,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'analysis',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Quick Scan Report', 'wpshadow' ),
@@ -47,6 +49,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'analysis',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Security Reports
@@ -57,6 +60,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'security',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Performance Reports
@@ -67,6 +71,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'performance',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// SEO Reports
@@ -77,6 +82,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'seo',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Optimization Reports
@@ -87,6 +93,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-database',
 			'family'  => 'optimization',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Plugin Audit Report', 'wpshadow' ),
@@ -95,6 +102,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'optimization',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Commerce Reports
@@ -105,6 +113,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-cart',
 			'family'  => 'commerce',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Compliance & Operations Reports
@@ -115,6 +124,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-privacy',
 			'family'  => 'operations',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Email Deliverability Report', 'wpshadow' ),
@@ -123,6 +133,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-email-alt',
 			'family'  => 'operations',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Backup Readiness Report', 'wpshadow' ),
@@ -131,6 +142,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'operations',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Multisite Network Report', 'wpshadow' ),
@@ -139,6 +151,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-multisite',
 			'family'  => 'operations',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Page-Specific Reports
@@ -149,6 +162,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-smartphone',
 			'family'  => 'page-analysis',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Accessibility Audit Report', 'wpshadow' ),
@@ -157,6 +171,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-universal-access',
 			'family'  => 'page-analysis',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Broken Links Report', 'wpshadow' ),
@@ -165,6 +180,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-links',
 			'family'  => 'page-analysis',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Comparison & Historical Reports
@@ -175,6 +191,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-images-alt2',
 			'family'  => 'comparison',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 		array(
 			'title'   => __( 'Customization Audit Report', 'wpshadow' ),
@@ -183,6 +200,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-customizer',
 			'family'  => 'comparison',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 
 		// Activity & History Reports
@@ -193,6 +211,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'history',
 			'enabled' => true,
+			'since'   => '1.6033.1530', // Active feature
 		),
 	);
 }
@@ -217,14 +236,8 @@ function wpshadow_render_reports_page() {
 	}
 
 	// Render reports catalog page
-	$catalog = wpshadow_get_reports_catalog();
-
-	// Group by family
-	$grouped = array();
-	foreach ( $catalog as $item ) {
-		$family                 = $item['family'] ?? 'other';
-		$grouped[ $family ][] = $item;
-	}
+	$all_reports = wpshadow_get_reports_catalog();
+	$catalog = wpshadow_filter_features_by_status( $all_reports );
 
 	?>
 	<div class="wrap wps-page-container">
@@ -237,131 +250,18 @@ function wpshadow_render_reports_page() {
 		);
 		?>
 
-		<!-- Analysis & Insights Section -->
-		<?php if ( ! empty( $grouped['analysis'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Analysis & Insights', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['analysis'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Security Reports Section -->
-		<?php if ( ! empty( $grouped['security'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Security Reports', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['security'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Performance Reports Section -->
-		<?php if ( ! empty( $grouped['performance'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Performance Reports', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['performance'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- SEO Reports Section -->
-		<?php if ( ! empty( $grouped['seo'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'SEO Reports', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['seo'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Optimization Reports Section -->
-		<?php if ( ! empty( $grouped['optimization'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Optimization Reports', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['optimization'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Commerce Reports Section -->
-		<?php if ( ! empty( $grouped['commerce'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'E-Commerce Reports', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['commerce'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Operations Reports Section -->
-		<?php if ( ! empty( $grouped['operations'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Compliance & Operations', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['operations'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Page-Specific Analysis Section -->
-		<?php if ( ! empty( $grouped['page-analysis'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Page-Specific Analysis', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['page-analysis'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Comparison & Historical Section -->
-		<?php if ( ! empty( $grouped['comparison'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Comparison & Historical', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['comparison'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<!-- Activity & History Section -->
-		<?php if ( ! empty( $grouped['history'] ) ) : ?>
-			<div class="wps-section wps-mb-6">
-				<h2 class="wps-section-title"><?php esc_html_e( 'Activity & History', 'wpshadow' ); ?></h2>
-				<div class="wps-grid wps-grid-auto-320">
-					<?php foreach ( $grouped['history'] as $item ) : ?>
-						<?php wpshadow_render_report_card( $item ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		<?php endif; ?>
+		<!-- All Reports Grid -->
+		<div class="wps-grid wps-grid-auto-320">
+			<?php foreach ( $catalog as $item ) : ?>
+				<?php wpshadow_render_report_card( $item ); ?>
+			<?php endforeach; ?>
+		</div>
 	</div>
 	<?php
 }
 
 /**
- * Render individual report card
+ * Render individual report card using standardized card function.
  *
  * @since  1.6030.2148
  * @param  array $item Report configuration.
@@ -376,34 +276,68 @@ function wpshadow_render_report_card( $item ) {
 		admin_url( 'admin.php' )
 	);
 
-	$badge_class = isset( $item['badge'] ) ? 'has-badge' : '';
-	?>
-	<a href="<?php echo esc_url( $report_url ); ?>" class="wps-card wps-card-hover <?php echo esc_attr( $badge_class ); ?>">
-		<?php if ( isset( $item['badge'] ) ) : ?>
-			<span class="wps-badge wps-badge-new"><?php echo esc_html( ucfirst( $item['badge'] ) ); ?></span>
-		<?php endif; ?>
+	// Get feature status
+	$feature_status = wpshadow_get_feature_status( $item['since'] );
+	$is_coming_soon = ( 'coming_soon' === $feature_status['status'] );
 
-		<div class="wps-card-header wps-pb-3 wps-border-bottom">
-			<div class="wps-flex wps-gap-3 wps-items-start">
-				<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?> wps-text-2xl wps-text-primary"></span>
-				<div class="wps-flex-1">
-					<h3 class="wps-card-title wps-mb-0"><?php echo esc_html( $item['title'] ); ?></h3>
-				</div>
-			</div>
-		</div>
+	// Build badge array
+	$badge = array();
+	if ( $is_coming_soon ) {
+		$badge = array(
+			'label' => __( 'Coming Soon', 'wpshadow' ),
+			'class' => 'wps-badge wps-badge--info',
+		);
+	} elseif ( isset( $item['badge'] ) ) {
+		$badge = array(
+			'label' => ucfirst( $item['badge'] ),
+			'class' => 'wps-badge wps-badge-new',
+		);
+	}
 
-		<div class="wps-card-body">
-			<p class="wps-text-muted wps-mb-0"><?php echo esc_html( $item['desc'] ); ?></p>
-		</div>
+	// Build card classes
+	$card_class = 'wps-card-hover';
+	if ( $is_coming_soon ) {
+		$card_class .= ' wps-card--coming-soon';
+	}
 
-		<div class="wps-card-footer wps-pt-3 wps-border-top">
-			<span class="wps-button-link">
-				<?php esc_html_e( 'Generate Report', 'wpshadow' ); ?>
-				<span class="dashicons dashicons-arrow-right-alt2"></span>
-			</span>
-		</div>
-	</a>
-	<?php
+	// Build card arguments
+	$card_args = array(
+		'title'       => $item['title'],
+		'title_url'   => $is_coming_soon ? '' : $report_url,
+		'description' => $item['desc'],
+		'icon'        => $item['icon'],
+		'icon_class'  => 'wps-text-primary',
+		'card_class'  => $card_class,
+		'badge'       => $badge,
+		'attrs'       => $is_coming_soon ? array( 'style' => 'cursor: not-allowed; opacity: 0.8;' ) : array(),
+		'footer'      => function() use ( $is_coming_soon, $report_url, $feature_status ) {
+			if ( ! $is_coming_soon ) {
+				?>
+				<a href="<?php echo esc_url( $report_url ); ?>" class="wps-btn wps-btn--secondary">
+					<span class="dashicons dashicons-arrow-right-alt"></span>
+					<?php esc_html_e( 'Generate Report', 'wpshadow' ); ?>
+				</a>
+				<?php
+			} else {
+				?>
+				<span class="wps-text-muted" style="font-size: 12px;">
+					<?php
+					echo esc_html(
+						sprintf(
+							/* translators: %s: launch date */
+							__( 'Available %s', 'wpshadow' ),
+							$feature_status['launch_date']
+						)
+					);
+					?>
+				</span>
+				<?php
+			}
+		},
+	);
+
+	// Render using standardized function
+	wpshadow_render_card( $card_args );
 }
 
 /**

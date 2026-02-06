@@ -33,17 +33,91 @@ function wpshadow_render_scan_settings() {
 	<div class="wrap wps-page-container">
 		<?php wpshadow_render_page_header(
 			__( 'Scan Settings', 'wpshadow' ),
-			__( 'Manage which diagnostics and treatments are enabled.', 'wpshadow' )
+			__( 'Configure scan performance and manage which diagnostics and treatments are enabled.', 'wpshadow' )
 		); ?>
 
-		<section aria-labelledby="diagnostics-heading">
-			<h2 id="diagnostics-heading"><?php echo esc_html__( 'Diagnostics', 'wpshadow' ); ?></h2>
-			<div class="wpshadow-controls">
-				<label for="wpshadow-search"><?php echo esc_html__( 'Search', 'wpshadow' ); ?></label>
-				<input type="search" id="wpshadow-search" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'wpshadow' ); ?>" />
-				<label for="wpshadow-family"><?php echo esc_html__( 'Family', 'wpshadow' ); ?></label>
-				<select id="wpshadow-family">
-					<option value=""><?php echo esc_html__( 'All', 'wpshadow' ); ?></option>
+		<!-- Performance Tuning -->
+		<form method="post" action="options.php" class="wps-settings-form">
+			<?php settings_fields( 'wpshadow_settings' ); ?>
+			
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'       => __( 'Scan Performance', 'wpshadow' ),
+					'description' => __( 'Tune how scans run to match your server capabilities.', 'wpshadow' ),
+					'icon'        => 'dashicons-performance',
+					'body'        => function() {
+						?>
+						<div class="wps-form-group">
+							<label for="wpshadow_scan_batch_size" class="wps-form-label">
+								<?php esc_html_e( 'Diagnostics Per Batch', 'wpshadow' ); ?>
+							</label>
+							<div class="wps-input-group">
+								<input 
+									type="number" 
+									id="wpshadow_scan_batch_size" 
+									name="wpshadow_scan_batch_size" 
+									value="<?php echo esc_attr( get_option( 'wpshadow_scan_batch_size', 10 ) ); ?>"
+									min="1"
+									max="100"
+									step="1"
+									class="wps-input wps-w-32"
+								/>
+								<span class="wps-input-addon"><?php esc_html_e( 'diagnostics', 'wpshadow' ); ?></span>
+							</div>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Run this many diagnostics per batch. Lower values use less memory but take longer. Higher values are faster but use more memory.', 'wpshadow' ); ?>
+							</p>
+						</div>
+
+						<div class="wps-form-group wps-mt-4">
+							<label for="wpshadow_timeout_seconds" class="wps-form-label">
+								<?php esc_html_e( 'Scan Timeout', 'wpshadow' ); ?>
+							</label>
+							<div class="wps-input-group">
+								<input 
+									type="number" 
+									id="wpshadow_timeout_seconds" 
+									name="wpshadow_timeout_seconds" 
+									value="<?php echo esc_attr( get_option( 'wpshadow_timeout_seconds', 60 ) ); ?>"
+									min="30"
+									max="300"
+									step="5"
+									class="wps-input wps-w-32"
+								/>
+								<span class="wps-input-addon"><?php esc_html_e( 'seconds', 'wpshadow' ); ?></span>
+							</div>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Maximum time to wait for a scan to complete. Increase on slower servers to avoid timeouts, decrease to fail faster.', 'wpshadow' ); ?>
+							</p>
+						</div>
+
+						<div class="wps-form-group wps-mt-4">
+							<label class="wps-toggle" for="wpshadow_parallel_scans">
+								<input 
+									type="checkbox" 
+									id="wpshadow_parallel_scans" 
+									name="wpshadow_parallel_scans" 
+									value="1"
+									<?php checked( get_option( 'wpshadow_parallel_scans', false ) ); ?>
+								/>
+								<span class="wps-toggle-slider"></span>
+								<?php esc_html_e( 'Enable Parallel Scanning', 'wpshadow' ); ?>
+							</label>
+							<p class="wps-form-description">
+								<?php esc_html_e( 'Run multiple diagnostics at the same time (requires good server resources). Makes scans faster but uses more CPU and memory.', 'wpshadow' ); ?>
+							</p>
+						</div>
+						<?php
+					},
+					'footer'      => function() {
+						?>
+						<?php submit_button( __( 'Save Performance Settings', 'wpshadow' ), 'primary', 'submit', false ); ?>
+						<?php
+					},
+				)
+			);
+			?>
 				</select>
 			</div>
 

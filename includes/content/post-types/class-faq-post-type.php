@@ -250,5 +250,3 @@ class FAQ_Post_Type extends Hook_Subscriber_Base {
 		return $html;
 	}
 }
-
-FAQ_Post_Type::init();

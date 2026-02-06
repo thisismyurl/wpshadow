@@ -14,17 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load all workflow-related classes
-require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-manager.php';
-require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-suggestions.php';
-require_once WPSHADOW_PATH . 'includes/workflow/class-kanban-workflow-helper.php';
-require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
-require_once WPSHADOW_PATH . 'includes/workflow/class-workflow-executor.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-workflow-manager.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-workflow-wizard.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-workflow-suggestions.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-kanban-workflow-helper.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-block-registry.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-workflow-executor.php';
 
 // Load AJAX handlers
-require_once WPSHADOW_PATH . 'includes/admin/ajax-handlers/class-ajax-save-automation.php';
-
-// Ensure Block_Registry is loaded.
-require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
+require_once WPSHADOW_PATH . 'includes/admin/ajax/save-workflow-handler.php';
 
 // Use statement for cleaner code.
 use WPShadow\Workflow\Block_Registry;
@@ -50,7 +48,7 @@ function wpshadow_render_workflow_builder() {
 	// Route to the wizard for create/edit actions (new simplified interface).
 	if ( in_array( $action, array( 'create', 'edit' ), true ) ) {
 		// Load the automations wizard
-		require_once WPSHADOW_PATH . 'includes/views/automations-wizard.php';
+		require_once WPSHADOW_PATH . 'includes/ui/templates/automations-wizard.php';
 		return;
 	} else {
 		// Enqueue modal system for detail modal.
@@ -94,6 +92,6 @@ function wpshadow_render_workflow_builder() {
 		);
 
 		// Load the dashboard view.
-		require_once WPSHADOW_PATH . 'includes/views/automations-dashboard.php';
+		require_once WPSHADOW_PATH . 'includes/ui/templates/automations-dashboard.php';
 	}
 }

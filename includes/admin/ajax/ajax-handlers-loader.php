@@ -153,3 +153,8 @@ require_once $ajax_path . 'test-ajax-handler.php';
 
 // Content review wizard
 require_once $ajax_path . 'class-content-review-handlers.php';
+
+// Register consent handler (must be called explicitly)
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Consent_Preferences_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
+}

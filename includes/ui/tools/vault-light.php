@@ -249,7 +249,7 @@ if ( is_dir( $backup_dir ) ) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/views/components/sales-widget.php';
+require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
 
 wpshadow_render_sales_widget(
 	array(

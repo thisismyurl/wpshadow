@@ -18,12 +18,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Workflow_Wizard {
 
 	/**
+	 * Cached trigger categories.
+	 *
+	 * @var array|null
+	 */
+	private static $trigger_categories = null;
+
+	/**
+	 * Cached actions list.
+	 *
+	 * @var array|null
+	 */
+	private static $all_actions = null;
+
+	/**
 	 * Get trigger categories and their triggers
 	 *
 	 * @return array Categorized triggers
 	 */
 	public static function get_trigger_categories() {
-		return array(
+		if ( null !== self::$trigger_categories ) {
+			return self::$trigger_categories;
+		}
+
+		self::$trigger_categories = array(
 			'schedule'       => array(
 				'label'       => 'Scheduled Tasks',
 				'description' => 'Run tasks on a regular schedule - daily, weekly, or hourly',
@@ -167,6 +185,8 @@ class Workflow_Wizard {
 				),
 			),
 		);
+
+		return self::$trigger_categories;
 	}
 
 	/**
@@ -195,7 +215,11 @@ class Workflow_Wizard {
 	 * @return array All actions
 	 */
 	private static function get_all_actions() {
-		$all_actions = array(
+		if ( null !== self::$all_actions ) {
+			return self::$all_actions;
+		}
+
+		self::$all_actions = array(
 			'diagnostics'             => array(
 				'label'   => 'Diagnostics',
 				'icon'    => 'search',
@@ -663,6 +687,8 @@ class Workflow_Wizard {
 				),
 			),
 		);
+
+		return self::$all_actions;
 	}
 
 	/**

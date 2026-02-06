@@ -63,21 +63,20 @@ class Diagnostic_Static_Analysis_Not_Automated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'run_static_analysis' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Static analysis not automated. Use PHPStan,
-						'severity'   =>   'medium',
-						'threat_level'   =>   35,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/static-analysis-not-automated'
-						);
-						);,
-						);
-						}
-						return null;
+		// Check if static analysis is automated
+		if ( ! has_filter( 'init', 'run_static_analysis' ) ) {
+			return array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'Static analysis not automated. Use PHPStan or Psalm to catch bugs before they reach production.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'threat_level'  => 35,
+				'auto_fixable'  => true,
+				'kb_link'       => 'https://wpshadow.com/kb/static-analysis-not-automated',
+			);
+		}
+
+		return null;
 						}
 						return null;
 						}

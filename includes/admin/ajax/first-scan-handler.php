@@ -114,33 +114,17 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 			}
 
 			self::send_success(
-				<?php
-				/**
-				 * AJAX Handler: Dashboard First Scan (Onboarding Critical Moment)
-				 *
-				 * Runs initial diagnostic scan during plugin activation/onboarding.
-				 * This is often the user's FIRST impression of WPShadow - critical moment!
-				 *
-				 * **Strategic Importance:**
-				 * - User just activated plugin → Run scan to prove value immediately
-				 * - Discovers 5-10 issues instantly → Builds confidence
-				 * - Shows quick fixes available → Demonstrates auto-fix capability
-				 * - Sets baseline for tracking improvements → Shows ROI over time
-				 *
-				 * **Optimizations:**
-				 * - Subset of fast checks (2-5 seconds, not full 30-second scan)
-				 * - Skip expensive scans to show results quickly
-				 * - Prioritize high-impact issues
-				 * - Save results to show on dashboard immediately
-				 *
-				 * **Philosophy Alignment:**
-				 * - #9 (Show Value): "Look what we found immediately"
-				 * - #7 (Ridiculously Good): Fast results impress users
-				 * - #1 (Helpful Neighbor): "Here's how we can help"
-				 *
-				 * @package WPShadow
-				 * @since 1.6030.2148
-				 */
+				array(
+					'progress'     => $progress_steps,
+					'findings'     => $findings,
+					'issue_counts' => $issue_counts,
+					'total'        => $total,
+				)
+			);
+
+		} catch ( \Exception $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging
+			error_log( 'First scan failed: ' . $e->getMessage() );
 			error_log( 'Stack trace: ' . $e->getTraceAsString() );
 			self::send_error(
 				sprintf(

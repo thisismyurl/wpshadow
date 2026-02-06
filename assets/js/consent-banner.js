@@ -57,11 +57,15 @@
 					}
 				} else {
 					// Show error message
-					WPShadowModal.alert({
-						title: 'Dismiss Failed',
-						message: response.data && response.data.message ? response.data.message : 'Failed to dismiss. Please try again.',
-						type: 'warning'
-					});
+					if (typeof WPShadowModal !== 'undefined') {
+						WPShadowModal.alert({
+							title: 'Dismiss Failed',
+							message: response.data && response.data.message ? response.data.message : 'Failed to dismiss. Please try again.',
+							type: 'warning'
+						});
+					} else {
+						alert(response.data && response.data.message ? response.data.message : 'Failed to dismiss. Please try again.');
+					}
 					$allButtons.prop('disabled', false);
 					if ($button && buttonText) {
 						$button.text(buttonText.replace('...', ''));
@@ -69,11 +73,15 @@
 				}
 			},
 			error: function() {
-				WPShadowModal.alert({
-					title: 'Network Error',
-					message: 'Network error occurred. Please try again.',
-					type: 'danger'
-				});
+				if (typeof WPShadowModal !== 'undefined') {
+					WPShadowModal.alert({
+						title: 'Network Error',
+						message: 'Network error occurred. Please try again.',
+						type: 'danger'
+					});
+				} else {
+					alert('Network error occurred. Please try again.');
+				}
 				$allButtons.prop('disabled', false);
 				if ($button && buttonText) {
 					$button.text(buttonText.replace('...', ''));
@@ -137,21 +145,29 @@
 						}, 2000);
 					} else {
 						// Show error message
-						WPShadowModal.alert({
-							title: 'Save Failed',
-							message: response.data.message || 'Failed to save preferences. Please try again.',
-							type: 'warning'
-						});
+						if (typeof WPShadowModal !== 'undefined') {
+							WPShadowModal.alert({
+								title: 'Save Failed',
+								message: response.data.message || 'Failed to save preferences. Please try again.',
+								type: 'warning'
+							});
+						} else {
+							alert(response.data.message || 'Failed to save preferences. Please try again.');
+						}
 						$acceptBtn.prop('disabled', false).text('Save preferences');
 						$dismissBtn.prop('disabled', false);
 					}
 				},
 				error: function() {
-					WPShadowModal.alert({
-						title: 'Save Failed',
-						message: 'Failed to save preferences. Please try again.',
-						type: 'danger'
-					});
+					if (typeof WPShadowModal !== 'undefined') {
+						WPShadowModal.alert({
+							title: 'Save Failed',
+							message: 'Failed to save preferences. Please try again.',
+							type: 'danger'
+						});
+					} else {
+						alert('Failed to save preferences. Please try again.');
+					}
 					$acceptBtn.prop('disabled', false).text('Save preferences');
 					$dismissBtn.prop('disabled', false);
 				}

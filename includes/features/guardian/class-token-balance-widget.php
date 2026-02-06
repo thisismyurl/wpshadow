@@ -63,9 +63,8 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function add_admin_bar_item( $wp_admin_bar ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
+		// Admin bar widget disabled
+		return;
 
 		// Check if Guardian is enabled
 		$is_enabled = Guardian_Manager::is_enabled();
@@ -265,75 +264,86 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function enqueue_scripts() {
+		// Only load on admin pages
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$nonce = wp_create_nonce( 'wpshadow_toggle_guardian' );
-		?>
-		<script>
+
+		// Enqueue jQuery (it should already be enqueued, but be explicit)
+		wp_enqueue_script( 'jquery' );
+
+		// Build inline script with proper dependencies
+		$inline_script = '
 		jQuery(document).ready(function($) {
 			// Toggle function for both main item and submenu
 			function toggleGuardian(e) {
 				e.preventDefault();
 
 				var $link = $(this);
-				var $statusDot = $link.find('.wpshadow-status-dot');
-				var isActive = $statusDot.hasClass('wpshadow-status-active');
+				var $statusDot = $link.find(".wpshadow-status-dot");
+				var isActive = $statusDot.hasClass("wpshadow-status-active");
 				var newState = !isActive;
 
 				// Show loading state on status dot
-				$statusDot.css('opacity', '0.5');
+				$statusDot.css("opacity", "0.5");
 
 				$.ajax({
 					url: ajaxurl,
-					type: 'POST',
+					type: "POST",
 					data: {
-						action: 'wpshadow_toggle_guardian',
-						nonce: '<?php echo esc_js( $nonce ); ?>',
-						enabled: newState ? '1' : '0'
+						action: "wpshadow_toggle_guardian",
+						nonce: "' . esc_js( $nonce ) . '",
+						enabled: newState ? "1" : "0"
 					},
 					success: function(response) {
 						if (response.success) {
 							// Update all status dots in main toolbar item
-							var $mainStatusDot = $('#wp-admin-bar-wpshadow-guardian > a .wpshadow-status-dot');
+							var $mainStatusDot = $("#wp-admin-bar-wpshadow-guardian > a .wpshadow-status-dot");
 							if (newState) {
-								$mainStatusDot.removeClass('wpshadow-status-inactive')
-									.addClass('wpshadow-status-active')
-									.attr('title', '<?php echo esc_js( __( 'Guardian Active', 'wpshadow' ) ); ?>');
+								$mainStatusDot.removeClass("wpshadow-status-inactive")
+									.addClass("wpshadow-status-active")
+									.attr("title", "' . esc_js( __( 'Guardian Active', 'wpshadow' ) ) . '");
 							} else {
-								$mainStatusDot.removeClass('wpshadow-status-active')
-									.addClass('wpshadow-status-inactive')
-									.attr('title', '<?php echo esc_js( __( 'Guardian Inactive', 'wpshadow' ) ); ?>');
+								$mainStatusDot.removeClass("wpshadow-status-active")
+									.addClass("wpshadow-status-inactive")
+									.attr("title", "' . esc_js( __( 'Guardian Inactive', 'wpshadow' ) ) . '");
 							}
 
 							// Update toggle submenu text
-							var $toggleText = $('#wp-admin-bar-wpshadow-guardian-toggle a span');
+							var $toggleText = $("#wp-admin-bar-wpshadow-guardian-toggle a span");
 							if (newState) {
-								$toggleText.removeClass('wpshadow-guardian-toggle-inactive')
-									.addClass('wpshadow-guardian-toggle-active')
-									.text('<?php echo esc_js( __( '✓ Guardian Running', 'wpshadow' ) ); ?>');
+								$toggleText.removeClass("wpshadow-guardian-toggle-inactive")
+									.addClass("wpshadow-guardian-toggle-active")
+									.text("' . esc_js( __( '✓ Guardian Running', 'wpshadow' ) ) . '");
 							} else {
-								$toggleText.removeClass('wpshadow-guardian-toggle-active')
-									.addClass('wpshadow-guardian-toggle-inactive')
-									.text('<?php echo esc_js( __( '○ Guardian Stopped', 'wpshadow' ) ); ?>');
+								$toggleText.removeClass("wpshadow-guardian-toggle-active")
+									.addClass("wpshadow-guardian-toggle-inactive")
+									.text("' . esc_js( __( '○ Guardian Stopped', 'wpshadow' ) ) . '");
 							}
 
-							$statusDot.css('opacity', '1');
+							$statusDot.css("opacity", "1");
 						} else {
-							$statusDot.css('opacity', '1');
-							alert(response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Failed to toggle Guardian', 'wpshadow' ) ); ?>');
+							$statusDot.css("opacity", "1");
+							alert(response.data && response.data.message ? response.data.message : "' . esc_js( __( 'Failed to toggle Guardian', 'wpshadow' ) ) . '");
 						}
 					},
 					error: function() {
-						$statusDot.css('opacity', '1');
-						alert('<?php echo esc_js( __( 'Failed to toggle Guardian', 'wpshadow' ) ); ?>');
+						$statusDot.css("opacity", "1");
+						alert("' . esc_js( __( 'Failed to toggle Guardian', 'wpshadow' ) ) . '");
 					}
 				});
 			}
 
 			// Bind toggle to main admin bar item and submenu toggle
-			$('#wp-admin-bar-wpshadow-guardian > a.wpshadow-guardian-main-toggle').on('click', toggleGuardian);
-			$('#wp-admin-bar-wpshadow-guardian-toggle a').on('click', toggleGuardian);
+			$("#wp-admin-bar-wpshadow-guardian > a.wpshadow-guardian-main-toggle").on("click", toggleGuardian);
+			$("#wp-admin-bar-wpshadow-guardian-toggle a").on("click", toggleGuardian);
 		});
-		</script>
-		<?php
+		';
+
+		// Add inline script with jQuery as dependency
+		wp_add_inline_script( 'jquery', $inline_script );
 	}
 
 	/**

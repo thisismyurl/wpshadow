@@ -71,12 +71,12 @@ class Domain_Expiration_Analyzer {
 		}
 
 		// Cache for 1 week
-		\\WPShadow\\Core\\Cache_Manager::set(
+		\WPShadow\Core\Cache_Manager::set(
 			'domain_expiry_data',
 			$results,
 			WEEK_IN_SECONDS,
 			'wpshadow_guardian'
-			);
+		);
 
 		return $results;
 	}

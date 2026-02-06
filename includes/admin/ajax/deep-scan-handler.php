@@ -36,7 +36,11 @@ use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 use WPShadow\Core\Activity_Logger;
 use WPShadow\Core\KPI_Tracker;
+
+/**
+ * Deep_Scan_Handler Class
  *
+ * @since   1.6030.2148
  * @package WPShadow
  */
 class Deep_Scan_Handler extends AJAX_Handler_Base {

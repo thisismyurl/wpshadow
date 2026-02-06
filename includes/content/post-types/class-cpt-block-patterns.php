@@ -513,7 +513,6 @@ class CPT_Block_Patterns {
 <!-- wp:wpshadow/content-tabs {"orientation":"horizontal"} /-->',
 			)
 		);
-	}
 
 		// Pattern: Event Calendar View.
 		register_block_pattern(

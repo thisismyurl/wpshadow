@@ -16,14 +16,14 @@ $workflow_id = Form_Param_Helper::get( 'workflow', 'key', '' );
 
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id . '&step=action' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id . '&step=action-selection' ) );
 	} else {
 		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) );
 	}
 	exit;
 }
 
-$back_url = admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id );
+$back_url = admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action-selection&trigger=' . $trigger_id );
 ?>
 
 <div class="wps-page-container">

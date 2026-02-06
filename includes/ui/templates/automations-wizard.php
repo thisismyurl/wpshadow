@@ -48,14 +48,7 @@ $triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
 $actions = \WPShadow\Workflow\Block_Registry::get_actions();
 
 // Enqueue wizard assets
-wp_enqueue_style( 'wpshadow-wizard-styles', WPSHADOW_URL . 'includes/views/wizard-steps/wizard-styles.css', array(), WPSHADOW_VERSION );
-wp_enqueue_script( 'wpshadow-wizard-nav', WPSHADOW_URL . 'includes/views/wizard-steps/wizard-nav.js', array( 'jquery' ), WPSHADOW_VERSION, true );
-
-// Localize script
-wp_localize_script( 'wpshadow-wizard-nav', 'wpShadowWizard', array(
-	'nonce' => wp_create_nonce( 'wpshadow_save_automation' ),
-	'ajaxurl' => admin_url( 'admin-ajax.php' ),
-) );
+wp_enqueue_style( 'wpshadow-wizard-styles', WPSHADOW_URL . 'includes/ui/wizard-steps/wizard-styles.css', array(), WPSHADOW_VERSION );
 ?>
 
 <div class="wpshadow-wizard-container">
@@ -88,45 +81,19 @@ wp_localize_script( 'wpshadow-wizard-nav', 'wpShadowWizard', array(
 		</div>
 	</div>
 
-	<!-- Wizard Form -->
-	<form method="GET" class="wpshadow-wizard-form">
-		<!-- Wizard Content -->
-		<div class="wpshadow-wizard-content">
-			<div class="wpshadow-wizard-step active" id="wizard-step">
-				<?php
-				// Load the appropriate step view
-				$step_file = WPSHADOW_PATH . 'includes/views/wizard-steps/step-' . $current_step . '.php';
+	<!-- Wizard Content -->
+	<div class="wpshadow-wizard-content">
+		<div class="wpshadow-wizard-step active" id="wizard-step">
+			<?php
+			// Load the appropriate step view
+			$step_file = WPSHADOW_PATH . 'includes/ui/workflow-wizard-steps/' . $current_step . '.php';
 
-				if ( file_exists( $step_file ) ) {
-					require_once $step_file;
-				} else {
-					echo '<p>' . esc_html__( 'Step not found.', 'wpshadow' ) . '</p>';
-				}
-				?>
-			</div>
+			if ( file_exists( $step_file ) ) {
+				require_once $step_file;
+			} else {
+				echo '<p>' . esc_html__( 'Step not found.', 'wpshadow' ) . '</p>';
+			}
+			?>
 		</div>
-
-		<!-- Navigation Buttons -->
-		<div class="wpshadow-wizard-footer">
-			<button type="button" class="wpshadow-wizard-btn wpshadow-wizard-cancel-btn">
-				<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
-			</button>
-
-			<?php if ( $current_step !== 'trigger-selection' ) : ?>
-				<button type="button" class="wpshadow-wizard-btn wpshadow-wizard-back-btn" style="<?php echo ( $current_step === 'trigger-selection' ) ? 'display:none;' : ''; ?>">
-					<?php esc_html_e( 'Back', 'wpshadow' ); ?>
-				</button>
-			<?php endif; ?>
-
-			<?php if ( $current_step !== 'review' ) : ?>
-				<button type="button" class="wpshadow-wizard-btn wpshadow-wizard-next-btn">
-					<?php esc_html_e( 'Next', 'wpshadow' ); ?>
-				</button>
-			<?php else : ?>
-				<button type="button" class="wpshadow-wizard-btn wpshadow-wizard-save-btn">
-					<?php esc_html_e( 'Save Automation', 'wpshadow' ); ?>
-				</button>
-			<?php endif; ?>
-		</div>
-	</form>
+	</div>
 </div>

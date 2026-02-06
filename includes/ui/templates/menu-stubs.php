@@ -13,6 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Load feature availability helper functions
+if ( file_exists( WPSHADOW_PATH . 'includes/ui/templates/functions-feature-availability.php' ) ) {
+	require_once WPSHADOW_PATH . 'includes/ui/templates/functions-feature-availability.php';
+}
+
 if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page (Kanban Board)
@@ -141,13 +146,18 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			exit;
 		}
 
+		// If import-export tab is requested, redirect to Utilities instead
+		if ( 'import-export' === $tab ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-utilities&tab=import-export' ) );
+			exit;
+		}
+
 		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
 			$settings_pages = array(
 				'general'       => 'WPShadow\\Admin\\Pages\\General_Settings_Page',
 				'privacy'       => 'WPShadow\\Admin\\Pages\\Privacy_Settings_Page',
 				'notifications' => 'WPShadow\\Admin\\Pages\\Notifications_Settings_Page',
-				'import-export' => 'WPShadow\\Admin\\Pages\\Import_Export_Settings_Page',
 				'advanced'      => 'WPShadow\\Admin\\Pages\\Advanced_Settings_Page',
 			);
 
@@ -181,11 +191,14 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				);
 				?>
 
-				<div class="wps-card wps-card--warning">
-					<div class="wps-card-body">
-						<p><?php esc_html_e( 'This settings section is not available. Please check the URL or select a different settings tab.', 'wpshadow' ); ?></p>
-					</div>
-				</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'card_class' => 'wps-card--warning',
+						'body'       => '<p>' . esc_html__( 'This settings section is not available. Please check the URL or select a different settings tab.', 'wpshadow' ) . '</p>',
+					)
+				);
+				?>
 			</div>
 			<?php
 			return;
@@ -203,179 +216,61 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			?>
 
 			<!-- Settings Grid -->
+			<?php
+			$settings_cards = array(
+				array(
+					'title'        => __( 'General Settings', 'wpshadow' ),
+					'description'  => __( 'Configure general plugin behavior and preferences.', 'wpshadow' ),
+					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=general' ),
+					'icon'         => 'dashicons-admin-generic',
+					'action_label' => __( 'Configure', 'wpshadow' ),
+				),
+
+				array(
+					'title'        => __( 'Privacy Dashboard', 'wpshadow' ),
+					'description'  => __( 'Manage data export, deletion, and privacy preferences.', 'wpshadow' ),
+					'url'          => admin_url( 'admin.php?page=wpshadow-privacy' ),
+					'icon'         => 'dashicons-lock',
+					'action_label' => __( 'Open', 'wpshadow' ),
+				),
+
+				array(
+					'title'        => __( 'Notifications', 'wpshadow' ),
+					'description'  => __( 'Configure email alerts and notification preferences.', 'wpshadow' ),
+					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ),
+					'icon'         => 'dashicons-email',
+					'action_label' => __( 'Configure', 'wpshadow' ),
+				),
+				array(
+					'title'        => __( 'Advanced', 'wpshadow' ),
+					'description'  => __( 'Advanced configuration options for power users.', 'wpshadow' ),
+					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ),
+					'icon'         => 'dashicons-admin-tools',
+					'action_label' => __( 'Configure', 'wpshadow' ),
+				),
+			);
+			?>
 			<div class="wps-grid wps-grid-auto-320">
-				<!-- General Settings -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-admin-generic wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=general' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'General Settings', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Configure general plugin behavior and preferences.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=general' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-
-				<!-- Scan Settings -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-search wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-scan-settings' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Scan Settings', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Enable or disable specific diagnostic checks and treatments.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-scan-settings' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-
-							<!-- Privacy Dashboard -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-lock wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Privacy Dashboard', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Manage data export, deletion, and privacy preferences.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Open', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-
-				<!-- Privacy & Data Settings -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-admin-network wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Privacy & Data Settings', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Configure data collection and anonymous reporting preferences.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-
-				<!-- Notification Settings -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-email wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Notifications', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Configure email alerts and notification preferences.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
-			<!-- Import/Export Settings -->
-			<div class="wps-card">
-				<div class="wps-card-header wps-pb-3 wps-border-bottom">
-					<div class="wps-flex wps-gap-3 wps-items-start">
-						<span class="dashicons dashicons-upload wps-text-3xl wps-text-primary"></span>
-						<div>
-							<h3 class="wps-card-title wps-m-0">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=import-export' ) ); ?>" style="color: inherit; text-decoration: none;">
-									<?php esc_html_e( 'Import / Export', 'wpshadow' ); ?>
-								</a>
-							</h3>
-							<p class="wps-card-description wps-m-0">
-								<?php esc_html_e( 'Backup, restore, or sync your configuration.', 'wpshadow' ); ?>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="wps-card-body">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=import-export' ) ); ?>" class="wps-btn wps-btn--secondary">
-						<span class="dashicons dashicons-arrow-right-alt"></span>
-						<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-					</a>
-				</div>
-			</div>
-			<!-- Advanced Settings -->
-				<div class="wps-card">
-					<div class="wps-card-header wps-pb-3 wps-border-bottom">
-						<div class="wps-flex wps-gap-3 wps-items-start">
-							<span class="dashicons dashicons-admin-tools wps-text-3xl wps-text-primary"></span>
-							<div>
-								<h3 class="wps-card-title wps-m-0">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ) ); ?>" style="color: inherit; text-decoration: none;">
-										<?php esc_html_e( 'Advanced', 'wpshadow' ); ?>
-									</a>
-								</h3>
-								<p class="wps-card-description wps-m-0">
-									<?php esc_html_e( 'Advanced configuration options for power users.', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="wps-card-body">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ) ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt"></span>
-							<?php esc_html_e( 'Configure', 'wpshadow' ); ?>
-						</a>
-					</div>
-				</div>
+				<?php foreach ( $settings_cards as $card ) : ?>
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'       => $card['title'],
+							'title_url'   => $card['url'],
+							'description' => $card['description'],
+							'icon'        => $card['icon'],
+							'actions'     => array(
+								array(
+									'label' => $card['action_label'],
+									'url'   => $card['url'],
+									'class' => 'wps-btn wps-btn--secondary',
+									'icon'  => 'dashicons-arrow-right-alt',
+								),
+							),
+						)
+					);
+					?>
+				<?php endforeach; ?>
 			</div>
 
 			<!-- Recent Activity Section -->
@@ -420,7 +315,7 @@ if ( ! function_exists( 'wpshadow_render_scan_settings' ) ) {
 // Load Utilities module (defines wpshadow_render_utilities if not already defined)
 // Legacy: Also define wpshadow_render_tools for backward compatibility
 if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
-	require_once WPSHADOW_PATH . 'includes/screens/class-utilities-page-module.php';
+	require_once WPSHADOW_PATH . 'includes/admin/pages/class-utilities-page-module.php';
 }
 
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {
@@ -439,17 +334,17 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 
 // Load Help module (defines wpshadow_render_help if not already defined)
 if ( ! function_exists( 'wpshadow_render_help' ) ) {
-	require_once WPSHADOW_PATH . 'includes/screens/class-help-page-module.php';
+	require_once WPSHADOW_PATH . 'includes/admin/pages/class-help-page-module.php';
 }
 
 // Load Reports module (defines wpshadow_render_reports if not already defined)
 if ( ! function_exists( 'wpshadow_render_reports' ) ) {
-	require_once WPSHADOW_PATH . 'includes/screens/class-reports-page-module.php';
+	require_once WPSHADOW_PATH . 'includes/admin/pages/class-reports-page-module.php';
 }
 
 // Load Workflows module (defines wpshadow_render_workflow_builder if not already defined)
 if ( ! function_exists( 'wpshadow_render_workflow_builder' ) ) {
-	require_once WPSHADOW_PATH . 'includes/workflow/workflow-module.php';
+	require_once WPSHADOW_PATH . 'includes/systems/workflow/workflow-module.php';
 }
 
 

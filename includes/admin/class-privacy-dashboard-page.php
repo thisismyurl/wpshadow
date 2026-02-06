@@ -144,74 +144,95 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 			?>
 
 			<!-- Privacy Score Card -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'Privacy Status', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_privacy_score( $prefs ); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'Privacy Status', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() use ( $prefs ) {
+						self::render_privacy_score( $prefs );
+					},
+				)
+			);
+			?>
 
 			<!-- Consent Management -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'Data Collection Preferences', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_consent_controls( $prefs ); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'Data Collection Preferences', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() use ( $prefs ) {
+						self::render_consent_controls( $prefs );
+					},
+				)
+			);
+			?>
 
 			<!-- What We Collect -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'What We Collect', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_data_collection_info(); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'What We Collect', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() {
+						self::render_data_collection_info();
+					},
+				)
+			);
+			?>
 
 			<!-- Your Data -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'Your Data', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_user_data( $user_id ); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'Your Data', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() use ( $user_id ) {
+						self::render_user_data( $user_id );
+					},
+				)
+			);
+			?>
 
 			<!-- Data Management Actions -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'Data Management', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_data_actions(); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'Data Management', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() {
+						self::render_data_actions();
+					},
+				)
+			);
+			?>
 
 			<!-- Consent History -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'Consent History', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_consent_history( $user_id ); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'Consent History', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() use ( $user_id ) {
+						self::render_consent_history( $user_id );
+					},
+				)
+			);
+			?>
 
 			<!-- Third-Party Services -->
-			<div class="wps-card">
-				<div class="wps-card-header">
-					<h2><?php esc_html_e( 'Third-Party Services', 'wpshadow' ); ?></h2>
-				</div>
-				<div class="wps-card-body">
-					<?php self::render_third_party_services(); ?>
-				</div>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'     => __( 'Third-Party Services', 'wpshadow' ),
+					'title_tag' => 'h2',
+					'body'      => function() {
+						self::render_third_party_services();
+					},
+				)
+			);
+			?>
 		</div>
 		<?php
 	}
@@ -455,7 +476,12 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 
 		// Count activity logs (if Activity_Logger exists)
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			$logs_count = \WPShadow\Core\Activity_Logger::count_user_activities( $user_id );
+			$result = \WPShadow\Core\Activity_Logger::get_activities(
+				array( 'user_id' => $user_id ),
+				1, // limit - we only need the count
+				0  // offset
+			);
+			$logs_count = isset( $result['total'] ) ? $result['total'] : 0;
 			if ( $logs_count > 0 ) {
 				$data_points[] = sprintf(
 					/* translators: %d: number of log entries */

@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once __DIR__ . '/../core/class-options-manager.php';
-require_once __DIR__ . '/../diagnostics/class-diagnostic-registry.php';
+require_once __DIR__ . '/../systems/core/class-options-manager.php';
+require_once __DIR__ . '/../systems/diagnostics/class-diagnostic-registry.php';
 
 use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;

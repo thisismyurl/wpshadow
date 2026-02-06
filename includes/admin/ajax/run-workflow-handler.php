@@ -33,7 +33,15 @@ namespace WPShadow\Admin\Ajax;
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Workflow\Workflow_Manager;
 use WPShadow\Workflow\Workflow_Executor;
+
+/**
+ * Run_Workflow_Handler Class
+ *
+ * Handles manual workflow execution.
  * Capability: manage_options
+ *
+ * @since   1.6030.2148
+ * @package WPShadow
  */
 class Run_Workflow_Handler extends AJAX_Handler_Base {
 

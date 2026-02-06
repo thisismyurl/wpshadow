@@ -63,21 +63,20 @@ class Diagnostic_Network_Request_Batching_Not_Optimized extends Diagnostic_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('wp_head',
-						'batch_network_requests' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Network request batching not optimized. Combine multiple API calls into single batched requests to reduce round trips and improve performance.',
-						'severity'   =>   'low',
-						'threat_level'   =>   20,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/network-request-batching-not-optimized'
-						);
-						);,
-						);
-						}
-						return null;
+		// Check if network request batching is implemented
+		if ( ! has_filter( 'wp_head', 'batch_network_requests' ) ) {
+			return array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'Network request batching not optimized. Combine multiple API calls into single batched requests to reduce round trips and improve performance.', 'wpshadow' ),
+				'severity'      => 'low',
+				'threat_level'  => 20,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/network-request-batching-not-optimized',
+			);
+		}
+
+		return null;
 						}
 						return null;
 						}

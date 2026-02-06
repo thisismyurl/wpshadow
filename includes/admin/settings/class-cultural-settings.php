@@ -48,8 +48,7 @@ class Cultural_Settings {
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
-		add_submenu_page(
-			'wpshadow',
+		add_options_page(
 			__( 'Cultural Settings', 'wpshadow' ),
 			__( 'Cultural', 'wpshadow' ),
 			'manage_options',

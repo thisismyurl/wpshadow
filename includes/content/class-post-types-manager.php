@@ -75,6 +75,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 25,
 				'taxonomies'  => array( 'wps_testimonial_category', 'wps_rating' ),
+				'since'       => '1.6033.1530', // Active feature.
 			),
 			'wps_team_member'   => array(
 				'singular'    => __( 'Team Member', 'wpshadow' ),
@@ -88,6 +89,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 26,
 				'taxonomies'  => array( 'wps_department', 'wps_team_role' ),
+				'since'       => '1.6180.1200', // Release 1.6180 (June 2026).
 			),
 			'wps_portfolio'     => array(
 				'singular'    => __( 'Portfolio Item', 'wpshadow' ),
@@ -101,6 +103,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 27,
 				'taxonomies'  => array( 'wps_portfolio_category', 'wps_skill' ),
+				'since'       => '1.6272.1200', // Release 1.6272 (September 2026).
 			),
 			'wps_faq'           => array(
 				'singular'    => __( 'FAQ', 'wpshadow' ),
@@ -114,6 +117,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 28,
 				'taxonomies'  => array( 'wps_faq_category' ),
+				'since'       => '1.6033.1530', // Active feature.
 			),
 			'wps_case_study'    => array(
 				'singular'    => __( 'Case Study', 'wpshadow' ),
@@ -127,6 +131,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 29,
 				'taxonomies'  => array( 'wps_industry', 'wps_solution' ),
+				'since'       => '1.6272.1200', // Release 1.6272 (September 2026).
 			),
 			'wps_event'         => array(
 				'singular'    => __( 'Event', 'wpshadow' ),
@@ -140,6 +145,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 30,
 				'taxonomies'  => array( 'wps_event_category', 'wps_event_type' ),
+				'since'       => '1.6364.1200', // Release 1.6364 (December 2026).
 			),
 			'wps_resource'      => array(
 				'singular'    => __( 'Resource', 'wpshadow' ),
@@ -153,6 +159,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 31,
 				'taxonomies'  => array( 'wps_resource_type', 'wps_resource_category' ),
+				'since'       => '1.6180.1200', // Release 1.6180 (June 2026).
 			),
 			'wps_service'       => array(
 				'singular'    => __( 'Service', 'wpshadow' ),
@@ -166,6 +173,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 32,
 				'taxonomies'  => array( 'wps_service_category' ),
+				'since'       => '1.6364.1200', // Release 1.6364 (December 2026).
 			),
 			'wps_location'      => array(
 				'singular'    => __( 'Location', 'wpshadow' ),
@@ -179,6 +187,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 33,
 				'taxonomies'  => array( 'wps_location_type' ),
+				'since'       => '1.6364.1200', // Release 1.6364 (December 2026).
 			),
 			'wps_documentation' => array(
 				'singular'    => __( 'Documentation', 'wpshadow' ),
@@ -192,6 +201,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 34,
 				'taxonomies'  => array( 'wps_doc_category', 'wps_doc_version' ),
+				'since'       => '1.6089.1200', // Release 1.6089 (March 2026).
 			),
 		);
 	}

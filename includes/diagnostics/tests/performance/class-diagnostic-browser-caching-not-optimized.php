@@ -63,21 +63,20 @@ class Diagnostic_Browser_Caching_Not_Optimized extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'optimize_browser_cache' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Browser caching not optimized. Set Cache-Control headers with appropriate max-age for static assets.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/browser-caching-not-optimized'
-						);
-						);,
-						);
-						}
-						return null;
+		// Check if browser caching is optimized
+		if ( ! has_filter( 'init', 'optimize_browser_cache' ) ) {
+			return array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'Browser caching not optimized. Set Cache-Control headers with appropriate max-age for static assets.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'threat_level'  => 40,
+				'auto_fixable'  => true,
+				'kb_link'       => 'https://wpshadow.com/kb/browser-caching-not-optimized',
+			);
+		}
+
+		return null;
 						}
 						return null;
 						}

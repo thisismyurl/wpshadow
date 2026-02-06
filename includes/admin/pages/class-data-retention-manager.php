@@ -335,11 +335,12 @@ class Data_Retention_Manager {
 						<legend class="wps-p-0"><?php esc_html_e( 'Automatic Cleanup', 'wpshadow' ); ?></legend>
 						
 						<div class="wps-flex-gap-12-items-flex-start">
-							<input type="checkbox" name="auto_cleanup_enabled" <?php checked( $settings['auto_cleanup_enabled'] ); ?> id="auto-cleanup-enabled" class="wps-checkbox-large" />
+							<label class="wps-toggle" for="auto-cleanup-enabled">
+								<input type="checkbox" name="auto_cleanup_enabled" <?php checked( $settings['auto_cleanup_enabled'] ); ?> id="auto-cleanup-enabled" value="1" />
+								<span class="wps-toggle-slider"></span>
+								<?php esc_html_e( 'Enable automatic cleanup', 'wpshadow' ); ?>
+							</label>
 							<div class="wps-retention-flex-item">
-								<label for="auto-cleanup-enabled" class="wps-block">
-									<?php esc_html_e( 'Enable automatic cleanup', 'wpshadow' ); ?>
-								</label>
 								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically delete old records according to your retention settings.', 'wpshadow' ); ?>
 								</p>

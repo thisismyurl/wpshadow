@@ -33,8 +33,22 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	 * Handle AJAX request to create workflow from suggestion
 	 */
 	public static function handle(): void {
-		// Security check (use automations dashboard nonce)
-		self::verify_request( 'wpshadow_automations', 'manage_options' );
+		// Security check (accept automations or workflow nonces from different UIs)
+		$nonce_value  = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+		$nonce_action = '';
+
+		if ( $nonce_value && wp_verify_nonce( $nonce_value, 'wpshadow_automations' ) ) {
+			$nonce_action = 'wpshadow_automations';
+		} elseif ( $nonce_value && wp_verify_nonce( $nonce_value, 'wpshadow_workflow' ) ) {
+			$nonce_action = 'wpshadow_workflow';
+		}
+
+		if ( '' === $nonce_action ) {
+			self::send_error( __( 'Please refresh the page and try again.', 'wpshadow' ) );
+			return;
+		}
+
+		self::verify_request( $nonce_action, 'manage_options' );
 
 		// Get parameters
 		$title   = self::get_post_param( 'title', 'text', '', true );

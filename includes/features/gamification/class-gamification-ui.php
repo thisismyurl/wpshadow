@@ -196,15 +196,27 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			<!-- Unlocked achievements -->
 			<div class="wpshadow-achievements-section">
 				<h2><?php esc_html_e( 'Unlocked Achievements', 'wpshadow' ); ?></h2>
-				<div class="achievements-grid">
+				<div class="wps-grid wps-grid-auto-320">
 					<?php foreach ( $unlocked as $id => $achievement ) : ?>
-						<div class="achievement-card unlocked" data-category="<?php echo esc_attr( $achievement['category'] ); ?>">
-							<span class="achievement-emoji"><?php echo esc_html( $achievement['emoji'] ); ?></span>
-							<h3><?php echo esc_html( $achievement['name'] ); ?></h3>
-							<p><?php echo esc_html( $achievement['description'] ); ?></p>
-							<div class="achievement-meta">
-								<span class="points"><?php echo esc_html( $achievement['points'] ); ?> pts</span>
-								<span class="date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $achievement['unlocked_at'] ) ) ); ?></span>
+						<div class="wps-card" data-category="<?php echo esc_attr( $achievement['category'] ); ?>">
+							<div class="wps-card-body wps-text-center">
+								<span class="achievement-emoji" style="font-size: 64px; display: block; margin-bottom: 15px;">
+									<?php echo esc_html( $achievement['emoji'] ); ?>
+								</span>
+								<h3 style="margin-bottom: 10px;">
+									<?php echo esc_html( $achievement['name'] ); ?>
+								</h3>
+								<p style="color: #666; margin-bottom: 15px; font-size: 14px;">
+									<?php echo esc_html( $achievement['description'] ); ?>
+								</p>
+								<div class="achievement-meta" style="display: flex; justify-content: space-between; font-size: 12px; color: #999;">
+									<span class="points" style="font-weight: bold; color: #f093fb;">
+										<?php echo esc_html( $achievement['points'] ); ?> pts
+									</span>
+									<span class="date">
+										<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $achievement['unlocked_at'] ) ) ); ?>
+									</span>
+								</div>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -214,14 +226,24 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			<!-- Locked achievements -->
 			<div class="wpshadow-achievements-section">
 				<h2><?php esc_html_e( 'Locked Achievements', 'wpshadow' ); ?></h2>
-				<div class="achievements-grid">
+				<div class="wps-grid wps-grid-auto-320">
 					<?php foreach ( $locked as $id => $achievement ) : ?>
-						<div class="achievement-card locked" data-category="<?php echo esc_attr( $achievement['category'] ); ?>">
-							<span class="achievement-emoji grayscale"><?php echo esc_html( $achievement['emoji'] ); ?></span>
-							<h3><?php echo esc_html( $achievement['name'] ); ?></h3>
-							<p><?php echo esc_html( $achievement['description'] ); ?></p>
-							<div class="achievement-meta">
-								<span class="points"><?php echo esc_html( $achievement['points'] ); ?> pts</span>
+						<div class="wps-card" style="opacity: 0.6;" data-category="<?php echo esc_attr( $achievement['category'] ); ?>">
+							<div class="wps-card-body wps-text-center">
+								<span class="achievement-emoji" style="font-size: 64px; display: block; margin-bottom: 15px; filter: grayscale(100%);">
+									<?php echo esc_html( $achievement['emoji'] ); ?>
+								</span>
+								<h3 style="margin-bottom: 10px;">
+									<?php echo esc_html( $achievement['name'] ); ?>
+								</h3>
+								<p style="color: #666; margin-bottom: 15px; font-size: 14px;">
+									<?php echo esc_html( $achievement['description'] ); ?>
+								</p>
+								<div class="achievement-meta" style="display: flex; justify-content: center; font-size: 12px; color: #999;">
+									<span class="points" style="font-weight: bold; color: #f093fb;">
+										<?php echo esc_html( $achievement['points'] ); ?> pts
+									</span>
+								</div>
 							</div>
 						</div>
 					<?php endforeach; ?>

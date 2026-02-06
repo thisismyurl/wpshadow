@@ -120,7 +120,7 @@ Tool_View_Base::render_header( __( 'Broken Link Checker', 'wpshadow' ) );
 </style>
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/views/components/sales-widget.php';
+require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
 
 wpshadow_render_sales_widget(
 	array(

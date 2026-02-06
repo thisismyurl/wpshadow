@@ -188,80 +188,103 @@ class Email_Template_Manager {
 		?>
 		<div class="wps-email-container">
 			<!-- Template Selector -->
-			<div class="wps-card">
-				<h3><?php esc_html_e( 'Select Email Template', 'wpshadow' ); ?></h3>
-				<div class="wps-grid wps-grid-auto-250 wps-gap-3">
-					<?php foreach ( $templates as $key => $tmpl ) : ?>
-					<label style="padding: 12px; border: 2px solid <?php echo isset( $tmpl['custom'] ) ? '#2196f3' : '#ddd'; ?>; border-radius: 6px; background: <?php echo isset( $tmpl['custom'] ) ? '#e3f2fd' : '#f9f9f9'; ?>; cursor: pointer; transition: all 0.2s;">
-						<input type="radio" name="template" value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_template, $key ); ?> onchange="location.href='<?php echo esc_js( add_query_arg( 'template', '', admin_url( 'admin.php?page=wpshadow-settings&tab=email' ) ) ); ?>' + this.value" class="wps-email-template-radio" />
-						<div>
-							<strong class="wps-email-template-label"><?php echo esc_html( $tmpl['label'] ); ?></strong>
-							<?php if ( isset( $tmpl['custom'] ) ) : ?>
-							<span class="wps-block">● <?php esc_html_e( 'Customized', 'wpshadow' ); ?></span>
-							<?php endif; ?>
-							<p class="wps-m-4"><?php echo esc_html( $tmpl['description'] ); ?></p>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title' => __( 'Select Email Template', 'wpshadow' ),
+					'body'  => function() use ( $templates, $selected_template ) {
+						?>
+						<div class="wps-grid wps-grid-auto-250 wps-gap-3">
+							<?php foreach ( $templates as $key => $tmpl ) : ?>
+							<label style="padding: 12px; border: 2px solid <?php echo isset( $tmpl['custom'] ) ? '#2196f3' : '#ddd'; ?>; border-radius: 6px; background: <?php echo isset( $tmpl['custom'] ) ? '#e3f2fd' : '#f9f9f9'; ?>; cursor: pointer; transition: all 0.2s;">
+								<input type="radio" name="template" value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_template, $key ); ?> onchange="location.href='<?php echo esc_js( add_query_arg( 'template', '', admin_url( 'admin.php?page=wpshadow-settings&tab=email' ) ) ); ?>' + this.value" class="wps-email-template-radio" />
+								<div>
+									<strong class="wps-email-template-label"><?php echo esc_html( $tmpl['label'] ); ?></strong>
+									<?php if ( isset( $tmpl['custom'] ) ) : ?>
+									<span class="wps-block">● <?php esc_html_e( 'Customized', 'wpshadow' ); ?></span>
+									<?php endif; ?>
+									<p class="wps-m-4"><?php echo esc_html( $tmpl['description'] ); ?></p>
+								</div>
+							</label>
+							<?php endforeach; ?>
 						</div>
-					</label>
-					<?php endforeach; ?>
-				</div>
-			</div>
+						<?php
+					},
+				)
+			);
+			?>
 
 			<!-- Template Editor -->
 			<div class="wps-grid wps-grid-auto-320 wps-gap-4">
 				<!-- Edit Section -->
-				<div class="wps-card">
-					<h3><?php esc_html_e( 'Edit Template', 'wpshadow' ); ?></h3>
-					
-					<form id="wpshadow-email-template-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
-						<?php wp_nonce_field( 'wpshadow_email_template_nonce' ); ?>
-						<input type="hidden" name="action" value="wpshadow_save_email_template" />
-						<input type="hidden" name="template_key" value="<?php echo esc_attr( $selected_template ); ?>" />
-						
-						<!-- HTML Template -->
-						<label class="wps-block">
-							<strong><?php esc_html_e( 'HTML Template', 'wpshadow' ); ?></strong>
-							<p class="wps-m-2">
-								<?php esc_html_e( 'Use {title}, {content}, {footer} placeholders', 'wpshadow' ); ?>
-							</p>
-						</label>
-						<textarea name="template_html" class="wps-textarea" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['html'] ); ?></textarea>
-						
-						<!-- Plain Text Template -->
-						<label class="wps-block-m-15">
-							<strong><?php esc_html_e( 'Plain Text Template', 'wpshadow' ); ?></strong>
-							<p class="wps-m-2">
-								<?php esc_html_e( 'Fallback for email clients that don\'t support HTML', 'wpshadow' ); ?>
-							</p>
-						</label>
-						<textarea name="template_text" class="wps-textarea" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['text'] ); ?></textarea>
-						
-						<!-- Actions -->
-						<div class="wps-flex wps-gap-2" class="wps-email-actions">
-							<button type="submit" class="wps-btn wps-btn-primary">
-								<?php esc_html_e( 'Save Template', 'wpshadow' ); ?>
-							</button>
-							<button type="button" class="wps-btn wps-btn-secondary" onclick="wpshadowResetEmailTemplate('<?php echo esc_js( $selected_template ); ?>')">
-								<?php esc_html_e( 'Reset to Default', 'wpshadow' ); ?>
-							</button>
-						</div>
-						<p id="wpshadow-template-status" class="wps-email-status"></p>
-					</form>
-				</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'title' => __( 'Edit Template', 'wpshadow' ),
+						'body'  => function() use ( $selected_template, $template ) {
+							?>
+							<form id="wpshadow-email-template-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+								<?php wp_nonce_field( 'wpshadow_email_template_nonce' ); ?>
+								<input type="hidden" name="action" value="wpshadow_save_email_template" />
+								<input type="hidden" name="template_key" value="<?php echo esc_attr( $selected_template ); ?>" />
+								
+								<!-- HTML Template -->
+								<label class="wps-block">
+									<strong><?php esc_html_e( 'HTML Template', 'wpshadow' ); ?></strong>
+									<p class="wps-m-2">
+										<?php esc_html_e( 'Use {title}, {content}, {footer} placeholders', 'wpshadow' ); ?>
+									</p>
+								</label>
+								<textarea name="template_html" class="wps-textarea" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['html'] ); ?></textarea>
+								
+								<!-- Plain Text Template -->
+								<label class="wps-block-m-15">
+									<strong><?php esc_html_e( 'Plain Text Template', 'wpshadow' ); ?></strong>
+									<p class="wps-m-2">
+										<?php esc_html_e( 'Fallback for email clients that don\'t support HTML', 'wpshadow' ); ?>
+									</p>
+								</label>
+								<textarea name="template_text" class="wps-textarea" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['text'] ); ?></textarea>
+								
+								<!-- Actions -->
+								<div class="wps-flex wps-gap-2" class="wps-email-actions">
+									<button type="submit" class="wps-btn wps-btn-primary">
+										<?php esc_html_e( 'Save Template', 'wpshadow' ); ?>
+									</button>
+									<button type="button" class="wps-btn wps-btn-secondary" onclick="wpshadowResetEmailTemplate('<?php echo esc_js( $selected_template ); ?>')">
+										<?php esc_html_e( 'Reset to Default', 'wpshadow' ); ?>
+									</button>
+								</div>
+								<p id="wpshadow-template-status" class="wps-email-status"></p>
+							</form>
+							<?php
+						},
+					)
+				);
+				?>
 
 				<!-- Preview Section -->
-				<div class="wps-card">
-					<h3><?php esc_html_e( 'Preview', 'wpshadow' ); ?></h3>
-					<div class="wps-p-15-rounded-4">
-						<div id="wpshadow-template-preview" class="wps-email-preview">
-							<p class="wps-email-preview-placeholder">
-								<?php esc_html_e( 'Live preview of your template will appear here', 'wpshadow' ); ?>
+				<?php
+				wpshadow_render_card(
+					array(
+						'title' => __( 'Preview', 'wpshadow' ),
+						'body'  => function() {
+							?>
+							<div class="wps-p-15-rounded-4">
+								<div id="wpshadow-template-preview" class="wps-email-preview">
+									<p class="wps-email-preview-placeholder">
+										<?php esc_html_e( 'Live preview of your template will appear here', 'wpshadow' ); ?>
+									</p>
+								</div>
+							</div>
+							<p class="wps-email-help-text">
+								<?php esc_html_e( 'This preview uses sample data. Actual emails will contain your real data.', 'wpshadow' ); ?>
 							</p>
-						</div>
-					</div>
-					<p class="wps-email-help-text">
-						<?php esc_html_e( 'This preview uses sample data. Actual emails will contain your real data.', 'wpshadow' ); ?>
-					</p>
-				</div>
+							<?php
+						},
+					)
+				);
+				?>
 			</div>
 		</div>
 

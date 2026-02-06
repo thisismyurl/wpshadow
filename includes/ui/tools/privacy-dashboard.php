@@ -1,8 +1,8 @@
 <?php
 /**
- * Privacy Dashboard Redirect Utility
+ * Privacy Dashboard Utility
  *
- * Redirects to the main Privacy Dashboard page.
+ * Renders the Privacy Dashboard directly from the Utilities page.
  *
  * @package WPShadow
  * @since   1.6030.2300
@@ -14,6 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Redirect to the Privacy Dashboard page
-wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-privacy' ) );
-exit;
+// Load the Privacy Dashboard Page class if not already loaded
+if ( ! class_exists( 'WPShadow\Admin\Privacy_Dashboard_Page' ) ) {
+	require_once WPSHADOW_PATH . 'includes/admin/class-privacy-dashboard-page.php';
+}
+
+// Render the privacy dashboard
+\WPShadow\Admin\Privacy_Dashboard_Page::render_page();

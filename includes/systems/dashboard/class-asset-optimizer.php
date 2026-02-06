@@ -65,6 +65,7 @@ class Asset_Optimizer {
 			'wpshadow-tooltips',
 			'wpshadow-kanban-board',
 			'wpshadow-workflow-list',
+		);
 
 		if ( in_array( $handle, $critical_scripts, true ) ) {
 			return $tag;
