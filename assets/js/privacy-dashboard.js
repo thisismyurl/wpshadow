@@ -38,6 +38,20 @@
 		}
 	}
 
+	function insertNotice($notice) {
+		var $slot = $('#wpshadow-page-notices');
+		if ($slot.length) {
+			$slot.append($notice);
+			return;
+		}
+		var $wrap = $('.wrap').first();
+		if ($wrap.length) {
+			$wrap.prepend($notice);
+			return;
+		}
+		$notice.prependTo('body');
+	}
+
 	/**
 	 * Initialize privacy consent form handler.
 	 */
@@ -45,7 +59,7 @@
 		$('#wpshadow-consent-form').on('submit', function(e) {
 			e.preventDefault();
 
-			var telemetry = $('#consent-telemetry').is(':checked');
+			var telemetry = $('#wpshadow-consent-form input[name="anonymized_telemetry"]').val() === '1';
 
 			$.ajax({
 				url: ajaxurl,
@@ -58,19 +72,18 @@
 				success: function(response) {
 					if (response.success) {
 						// Show success message
-						$('<div class="notice notice-success is-dismissible"><p>' + 
-							(wpshadowPrivacy.strings.consent_saved || 'Privacy preferences saved successfully.') + 
-							'</p></div>')
-							.insertAfter('.wps-page-header')
-							.delay(3000)
-							.fadeOut();
+						var $notice = $('<div class="notice notice-success is-dismissible"><p>' +
+							(wpshadowPrivacy.strings.consent_saved || 'Privacy preferences saved successfully.') +
+							'</p></div>');
+						insertNotice($notice);
+						$notice.delay(3000).fadeOut();
 					}
 				},
 				error: function() {
-					$('<div class="notice notice-error is-dismissible"><p>' + 
-						(wpshadowPrivacy.strings.consent_error || 'Failed to save preferences. Please try again.') + 
-						'</p></div>')
-						.insertAfter('.wps-page-header');
+					var $notice = $('<div class="notice notice-error is-dismissible"><p>' +
+						(wpshadowPrivacy.strings.consent_error || 'Failed to save preferences. Please try again.') +
+						'</p></div>');
+					insertNotice($notice);
 				}
 			});
 		});
@@ -84,24 +97,27 @@
 			var $button = $(this);
 			$button.prop('disabled', true).text(wpshadowPrivacy.strings.exporting || 'Exporting...');
 
-			$.ajax({
-				url: ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wpshadow_export_data',
-					nonce: wpshadowPrivacy.nonce
-				},
-				success: function(response) {
-					if (response.success && response.data.download_url) {
-						window.location.href = response.data.download_url;
-						$button.prop('disabled', false).text(wpshadowPrivacy.strings.export_data || 'Export My Data');
-					}
-				},
-				error: function() {
-					$button.prop('disabled', false).text(wpshadowPrivacy.strings.export_data || 'Export My Data');
-					showAlert(wpshadowPrivacy.strings.export_error || 'Export failed. Please try again.', 'danger', 'Export Failed');
-				}
+			if (!wpshadowPrivacy || !wpshadowPrivacy.nonce) {
+				$button.prop('disabled', false).text(wpshadowPrivacy.strings.export_data || 'Export My Data');
+				showAlert(wpshadowPrivacy.strings.export_error || 'Export failed. Please try again.', 'danger', 'Export Failed');
+				return;
+			}
+
+			var $form = $('<form>', {
+				method: 'POST',
+				action: ajaxurl,
+				target: '_blank'
 			});
+
+			$form.append($('<input>', { type: 'hidden', name: 'action', value: 'wpshadow_export_data' }));
+			$form.append($('<input>', { type: 'hidden', name: 'nonce', value: wpshadowPrivacy.nonce }));
+			$form.appendTo('body');
+			$form.trigger('submit');
+			$form.remove();
+
+			window.setTimeout(function() {
+				$button.prop('disabled', false).text(wpshadowPrivacy.strings.export_data || 'Export My Data');
+			}, 500);
 		});
 	}
 

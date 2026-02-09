@@ -339,6 +339,8 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Auto Deploy from GitHub', 'wpshadow' ); ?></h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<?php if ( ! $is_enabled ) : ?>
 				<div class="notice notice-warning is-dismissible">
 					<p>
@@ -360,102 +362,144 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 				</div>
 			<?php endif; ?>
 
-			<div class="wps-card wps-card-narrow">
-				<h2><?php esc_html_e( 'Webhook Configuration', 'wpshadow' ); ?></h2>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'       => __( 'Webhook Configuration', 'wpshadow' ),
+					'title_tag'   => 'h2',
+					'title_class' => 'wps-card-title wps-m-0',
+					'card_class'  => 'wps-card-narrow',
+					'body'        => function() use ( $webhook_url, $webhook_secret ) {
+						?>
+						<form method="post" action="">
+							<?php wp_nonce_field( 'wpshadow_auto_deploy_settings' ); ?>
 
-				<form method="post" action="">
-					<?php wp_nonce_field( 'wpshadow_auto_deploy_settings' ); ?>
+							<table class="form-table">
+								<tr>
+									<th scope="row">
+										<label for="webhook_url"><?php esc_html_e( 'Webhook URL', 'wpshadow' ); ?></label>
+									</th>
+									<td>
+										<input type="text" id="webhook_url" class="regular-text" value="<?php echo esc_attr( $webhook_url ); ?>" readonly>
+										<p class="description">
+											<?php esc_html_e( 'Use this URL in your GitHub repository webhook settings.', 'wpshadow' ); ?>
+										</p>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+										<label for="wpshadow_webhook_secret"><?php esc_html_e( 'Webhook Secret', 'wpshadow' ); ?></label>
+									</th>
+									<td>
+										<input type="password" name="wpshadow_webhook_secret" id="wpshadow_webhook_secret" class="regular-text" value="" autocomplete="off" placeholder="<?php echo $webhook_secret ? esc_attr( \WPShadow\Core\Secret_Manager::mask( $webhook_secret ) ) : esc_attr__( 'Enter webhook secret from GitHub', 'wpshadow' ); ?>">
+										<p class="description">
+											<?php esc_html_e( 'Generate a random secret and use the same value in GitHub webhook settings. 🔒 Secrets are encrypted before storage.', 'wpshadow' ); ?>
+											<button type="button" class="button" onclick="generateWebhookSecret();">
+												<?php esc_html_e( 'Generate Random', 'wpshadow' ); ?>
+											</button>
+										</p>
+									</td>
+								</tr>
+							</table>
 
-					<table class="form-table">
-						<tr>
-							<th scope="row">
-								<label for="webhook_url"><?php esc_html_e( 'Webhook URL', 'wpshadow' ); ?></label>
-							</th>
-							<td>
-								<input type="text" id="webhook_url" class="regular-text" value="<?php echo esc_attr( $webhook_url ); ?>" readonly>
-								<p class="description">
-									<?php esc_html_e( 'Use this URL in your GitHub repository webhook settings.', 'wpshadow' ); ?>
-								</p>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<label for="wpshadow_webhook_secret"><?php esc_html_e( 'Webhook Secret', 'wpshadow' ); ?></label>
-							</th>
-							<td>
-								<input type="password" name="wpshadow_webhook_secret" id="wpshadow_webhook_secret" class="regular-text" value="" autocomplete="off" placeholder="<?php echo $webhook_secret ? esc_attr( \WPShadow\Core\Secret_Manager::mask( $webhook_secret ) ) : esc_attr__( 'Enter webhook secret from GitHub', 'wpshadow' ); ?>">
-								<p class="description">
-									<?php esc_html_e( 'Generate a random secret and use the same value in GitHub webhook settings. 🔒 Secrets are encrypted before storage.', 'wpshadow' ); ?>
-									<button type="button" class="button" onclick="generateWebhookSecret();">
-										<?php esc_html_e( 'Generate Random', 'wpshadow' ); ?>
-									</button>
-								</p>
-							</td>
-						</tr>
-					</table>
+							<?php submit_button(); ?>
+						</form>
+						<?php
+					},
+				)
+			);
 
-					<?php submit_button(); ?>
-				</form>
-			</div>
-
-			<div class="wps-card wps-card-narrow">
-				<h2><?php esc_html_e( 'GitHub Setup Instructions', 'wpshadow' ); ?></h2>
-				<ol>
-					<li><?php esc_html_e( 'Go to your GitHub repository: Settings → Webhooks → Add webhook', 'wpshadow' ); ?></li>
-					<li><?php echo wp_kses_post( sprintf( __( 'Payload URL: %s', 'wpshadow' ), '<code>' . esc_html( $webhook_url ) . '</code>' ) ); ?></li>
-					<li><?php esc_html_e( 'Content type: application/json', 'wpshadow' ); ?></li>
-					<li><?php echo wp_kses_post( sprintf( __( 'Secret: %s (copy from above)', 'wpshadow' ), '<code>' . esc_html( $webhook_secret ) . '</code>' ) ); ?></li>
-					<li><?php esc_html_e( 'Which events: Just the push event', 'wpshadow' ); ?></li>
-					<li><?php esc_html_e( 'Active: ✓ (checked)', 'wpshadow' ); ?></li>
-				</ol>
-			</div>
+			wpshadow_render_card(
+				array(
+					'title'       => __( 'GitHub Setup Instructions', 'wpshadow' ),
+					'title_tag'   => 'h2',
+					'title_class' => 'wps-card-title wps-m-0',
+					'card_class'  => 'wps-card-narrow',
+					'body'        => function() use ( $webhook_url, $webhook_secret ) {
+						?>
+						<ol>
+							<li><?php esc_html_e( 'Go to your GitHub repository: Settings → Webhooks → Add webhook', 'wpshadow' ); ?></li>
+							<li><?php echo wp_kses_post( sprintf( __( 'Payload URL: %s', 'wpshadow' ), '<code>' . esc_html( $webhook_url ) . '</code>' ) ); ?></li>
+							<li><?php esc_html_e( 'Content type: application/json', 'wpshadow' ); ?></li>
+							<li><?php echo wp_kses_post( sprintf( __( 'Secret: %s (copy from above)', 'wpshadow' ), '<code>' . esc_html( $webhook_secret ) . '</code>' ) ); ?></li>
+							<li><?php esc_html_e( 'Which events: Just the push event', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'Active: ✓ (checked)', 'wpshadow' ); ?></li>
+						</ol>
+						<?php
+					},
+				)
+			);
+			?>
 
 			<?php if ( ! empty( $logs ) ) : ?>
-				<div class="wps-card wps-card-wide">
-					<h2><?php esc_html_e( 'Recent Deployments', 'wpshadow' ); ?></h2>
-					<table class="wp-list-table widefat fixed striped">
-						<thead>
-							<tr>
-								<th><?php esc_html_e( 'Date/Time', 'wpshadow' ); ?></th>
-								<th><?php esc_html_e( 'Commit', 'wpshadow' ); ?></th>
-								<th><?php esc_html_e( 'Pusher', 'wpshadow' ); ?></th>
-								<th><?php esc_html_e( 'Message', 'wpshadow' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ( $logs as $log ) : ?>
-								<tr>
-									<td><?php echo esc_html( $log['timestamp'] ); ?></td>
-									<td><code><?php echo esc_html( substr( $log['commit'], 0, 7 ) ); ?></code></td>
-									<td><?php echo esc_html( $log['pusher'] ); ?></td>
-									<td><?php echo esc_html( $log['message'] ); ?></td>
-								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
-				</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Recent Deployments', 'wpshadow' ),
+						'title_tag'   => 'h2',
+						'title_class' => 'wps-card-title wps-m-0',
+						'card_class'  => 'wps-card-wide',
+						'body'        => function() use ( $logs ) {
+							?>
+							<table class="wp-list-table widefat fixed striped">
+								<thead>
+									<tr>
+										<th><?php esc_html_e( 'Date/Time', 'wpshadow' ); ?></th>
+										<th><?php esc_html_e( 'Commit', 'wpshadow' ); ?></th>
+										<th><?php esc_html_e( 'Pusher', 'wpshadow' ); ?></th>
+										<th><?php esc_html_e( 'Message', 'wpshadow' ); ?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ( $logs as $log ) : ?>
+										<tr>
+											<td><?php echo esc_html( $log['timestamp'] ); ?></td>
+											<td><code><?php echo esc_html( substr( $log['commit'], 0, 7 ) ); ?></code></td>
+											<td><?php echo esc_html( $log['pusher'] ); ?></td>
+											<td><?php echo esc_html( $log['message'] ); ?></td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+							<?php
+						},
+					)
+				);
+				?>
 			<?php endif; ?>
 
-			<div class="wps-card wps-card-warning">
-				<h3>⚠️ <?php esc_html_e( 'Security Notice', 'wpshadow' ); ?></h3>
-				<ul>
-					<li><?php esc_html_e( 'Only enable auto-deploy on TEST/STAGING servers', 'wpshadow' ); ?></li>
-					<li><?php esc_html_e( 'NEVER enable on production servers', 'wpshadow' ); ?></li>
-					<li><?php esc_html_e( 'Ensure your server has git installed and configured', 'wpshadow' ); ?></li>
-				<li><?php esc_html_e( 'The web server user needs git pull permissions', 'wpshadow' ); ?></li>
-					<li><?php esc_html_e( 'Always use a strong webhook secret', 'wpshadow' ); ?></li>
-					<li><?php esc_html_e( 'Webhook requests are restricted to GitHub IP addresses only', 'wpshadow' ); ?></li>
-				</ul>
-				<p>
-					<form method="post" action="">
-						<?php wp_nonce_field( 'wpshadow_update_github_ips' ); ?>
-						<button type="submit" name="wpshadow_update_github_ips" class="button button-secondary">
-							<?php esc_html_e( 'Update GitHub IP Whitelist', 'wpshadow' ); ?>
-						</button>
-						<span class="description"><?php esc_html_e( 'Fetches latest GitHub IP ranges from api.github.com/meta', 'wpshadow' ); ?></span>
-					</form>
-				</p>
-			</div>
+			<?php
+			wpshadow_render_card(
+				array(
+					'title'       => __( 'Security Notice', 'wpshadow' ),
+					'title_tag'   => 'h3',
+					'title_class' => 'wps-card-title wps-m-0',
+					'icon'        => 'dashicons-warning',
+					'card_class'  => 'wps-card-warning',
+					'body'        => function() {
+						?>
+						<ul>
+							<li><?php esc_html_e( 'Only enable auto-deploy on TEST/STAGING servers', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'NEVER enable on production servers', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'Ensure your server has git installed and configured', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'The web server user needs git pull permissions', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'Always use a strong webhook secret', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'Webhook requests are restricted to GitHub IP addresses only', 'wpshadow' ); ?></li>
+						</ul>
+						<p>
+							<form method="post" action="">
+								<?php wp_nonce_field( 'wpshadow_update_github_ips' ); ?>
+								<button type="submit" name="wpshadow_update_github_ips" class="button button-secondary">
+									<?php esc_html_e( 'Update GitHub IP Whitelist', 'wpshadow' ); ?>
+								</button>
+								<span class="description"><?php esc_html_e( 'Fetches latest GitHub IP ranges from api.github.com/meta', 'wpshadow' ); ?></span>
+							</form>
+						</p>
+						<?php
+					},
+				)
+			);
+			?>
 		</div>
 		<?php
 	}

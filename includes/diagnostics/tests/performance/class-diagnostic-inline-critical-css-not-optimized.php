@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * **Real-World Scenario:**
  * Used Critical plugin (WordPress). Generated critical CSS for homepage,
- * blog archive, single post. Inlined in <head>: <style>/* critical */</style>.
+	 * blog archive, single post. Inlined in <head>: <style>[critical]</style>.
  * Full CSS: <link rel="preload" as="style" onload="this.rel='stylesheet'">.
  * Result: content renders before full CSS loads. FCP improved 1.9 seconds.
  * Mobile users especially benefited (slow connections). PageSpeed score

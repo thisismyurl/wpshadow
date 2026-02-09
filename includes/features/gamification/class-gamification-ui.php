@@ -94,15 +94,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			array( __CLASS__, 'render_rewards_page' )
 		);
 
-		// Privacy page (under Achievements parent)
-		add_submenu_page(
-			'wpshadow-achievements',
-			__( 'Privacy Dashboard', 'wpshadow' ),
-			__( 'Privacy', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-privacy',
-			array( 'WPShadow\Admin\Privacy_Dashboard_Page', 'render_page' )
-		);
+		// Privacy dashboard moved to Settings tabs (legacy redirect handled elsewhere).
 	}
 
 	/**
@@ -153,12 +145,45 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			wp_die( 'Insufficient permissions.' );
 		}
 
+		$cloud_api_key = get_option( 'wpshadow_cloud_api_key', '' );
+		$points_total = null;
+		$points_error = '';
+
+		if ( ! empty( $cloud_api_key ) ) {
+			$feed_url = apply_filters( 'wpshadow_achievements_points_feed_url', '' );
+			if ( ! empty( $feed_url ) ) {
+				$feed_response = wp_remote_get(
+					$feed_url,
+					array(
+						'timeout' => 8,
+						'headers' => array(
+							'Authorization' => 'Bearer ' . $cloud_api_key,
+						),
+					)
+				);
+
+				if ( is_wp_error( $feed_response ) ) {
+					$points_error = $feed_response->get_error_message();
+				} else {
+					$body = wp_remote_retrieve_body( $feed_response );
+					$decoded = json_decode( $body, true );
+					if ( is_array( $decoded ) ) {
+						if ( isset( $decoded['points_total'] ) ) {
+							$points_total = (int) $decoded['points_total'];
+						} elseif ( isset( $decoded['points'] ) ) {
+							$points_total = (int) $decoded['points'];
+						}
+					}
+				}
+			}
+		}
+
 		$user_id = get_current_user_id();
 		$progress = Achievement_Registry::get_progress( $user_id );
 		$unlocked = Achievement_Registry::get_unlocked( $user_id );
 		$locked = Achievement_Registry::get_locked( $user_id );
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php wpshadow_render_page_header(
 				__( 'Achievements', 'wpshadow' ),
 				__( 'Unlock achievements and earn points by maintaining your WordPress site.', 'wpshadow' ),
@@ -166,18 +191,37 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			); ?>
 
 			<div class="wpshadow-achievements-stats">
-				<div class="stat-card">
-					<span class="stat-value"><?php echo esc_html( $progress['unlocked'] ); ?></span>
-					<span class="stat-label"><?php esc_html_e( 'Unlocked', 'wpshadow' ); ?></span>
-				</div>
-				<div class="stat-card">
-					<span class="stat-value"><?php echo esc_html( $progress['percentage'] ); ?>%</span>
-					<span class="stat-label"><?php esc_html_e( 'Complete', 'wpshadow' ); ?></span>
-				</div>
-				<div class="stat-card">
-					<span class="stat-value"><?php echo esc_html( $progress['locked'] ); ?></span>
-					<span class="stat-label"><?php esc_html_e( 'Remaining', 'wpshadow' ); ?></span>
-				</div>
+				<?php
+				$stat_cards = array(
+					array(
+						'value' => $progress['unlocked'],
+						'label' => __( 'Unlocked', 'wpshadow' ),
+					),
+					array(
+						'value' => sprintf( '%s%%', $progress['percentage'] ),
+						'label' => __( 'Complete', 'wpshadow' ),
+					),
+					array(
+						'value' => $progress['locked'],
+						'label' => __( 'Remaining', 'wpshadow' ),
+					),
+				);
+
+				foreach ( $stat_cards as $stat ) :
+					wpshadow_render_card(
+						array(
+							'card_class' => 'stat-card wps-m-0',
+							'body_class' => 'wps-card-body wps-text-center',
+							'body'       => function() use ( $stat ) {
+								?>
+								<span class="stat-value"><?php echo esc_html( $stat['value'] ); ?></span>
+								<span class="stat-label"><?php echo esc_html( $stat['label'] ); ?></span>
+								<?php
+							},
+						)
+					);
+				endforeach;
+				?>
 			</div>
 
 			<!-- Categories tabs -->
@@ -198,27 +242,45 @@ class Gamification_UI extends Hook_Subscriber_Base {
 				<h2><?php esc_html_e( 'Unlocked Achievements', 'wpshadow' ); ?></h2>
 				<div class="wps-grid wps-grid-auto-320">
 					<?php foreach ( $unlocked as $id => $achievement ) : ?>
-						<div class="wps-card" data-category="<?php echo esc_attr( $achievement['category'] ); ?>">
-							<div class="wps-card-body wps-text-center">
-								<span class="achievement-emoji" style="font-size: 64px; display: block; margin-bottom: 15px;">
-									<?php echo esc_html( $achievement['emoji'] ); ?>
-								</span>
-								<h3 style="margin-bottom: 10px;">
-									<?php echo esc_html( $achievement['name'] ); ?>
-								</h3>
-								<p style="color: #666; margin-bottom: 15px; font-size: 14px;">
-									<?php echo esc_html( $achievement['description'] ); ?>
-								</p>
-								<div class="achievement-meta" style="display: flex; justify-content: space-between; font-size: 12px; color: #999;">
-									<span class="points" style="font-weight: bold; color: #f093fb;">
-										<?php echo esc_html( $achievement['points'] ); ?> pts
+						<?php
+						$unlocked_date = date_i18n( get_option( 'date_format' ), strtotime( $achievement['unlocked_at'] ) );
+						wpshadow_render_card(
+							array(
+								'card_class' => 'achievement-card unlocked wps-m-0',
+								'body_class' => 'wps-card-body wps-text-center',
+								'attrs'      => array(
+									'data-category' => $achievement['category'],
+								),
+								'body'       => function() use ( $achievement, $unlocked_date ) {
+									?>
+									<span class="achievement-emoji">
+										<?php echo esc_html( $achievement['emoji'] ); ?>
 									</span>
-									<span class="date">
-										<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $achievement['unlocked_at'] ) ) ); ?>
-									</span>
-								</div>
-							</div>
-						</div>
+									<h3>
+										<?php echo esc_html( $achievement['name'] ); ?>
+									</h3>
+									<p>
+										<?php echo esc_html( $achievement['description'] ); ?>
+									</p>
+									<div class="achievement-meta">
+										<span class="points">
+											<?php
+											printf(
+												/* translators: %s: points earned */
+												esc_html__( '%s pts', 'wpshadow' ),
+												esc_html( $achievement['points'] )
+											);
+											?>
+										</span>
+										<span class="date">
+											<?php echo esc_html( $unlocked_date ); ?>
+										</span>
+									</div>
+									<?php
+								},
+							)
+						);
+						?>
 					<?php endforeach; ?>
 				</div>
 			</div>
@@ -228,31 +290,81 @@ class Gamification_UI extends Hook_Subscriber_Base {
 				<h2><?php esc_html_e( 'Locked Achievements', 'wpshadow' ); ?></h2>
 				<div class="wps-grid wps-grid-auto-320">
 					<?php foreach ( $locked as $id => $achievement ) : ?>
-						<div class="wps-card" style="opacity: 0.6;" data-category="<?php echo esc_attr( $achievement['category'] ); ?>">
-							<div class="wps-card-body wps-text-center">
-								<span class="achievement-emoji" style="font-size: 64px; display: block; margin-bottom: 15px; filter: grayscale(100%);">
-									<?php echo esc_html( $achievement['emoji'] ); ?>
-								</span>
-								<h3 style="margin-bottom: 10px;">
-									<?php echo esc_html( $achievement['name'] ); ?>
-								</h3>
-								<p style="color: #666; margin-bottom: 15px; font-size: 14px;">
-									<?php echo esc_html( $achievement['description'] ); ?>
-								</p>
-								<div class="achievement-meta" style="display: flex; justify-content: center; font-size: 12px; color: #999;">
-									<span class="points" style="font-weight: bold; color: #f093fb;">
-										<?php echo esc_html( $achievement['points'] ); ?> pts
+						<?php
+						wpshadow_render_card(
+							array(
+								'card_class' => 'achievement-card locked wps-m-0',
+								'body_class' => 'wps-card-body wps-text-center',
+								'attrs'      => array(
+									'data-category' => $achievement['category'],
+								),
+								'body'       => function() use ( $achievement ) {
+									?>
+									<span class="achievement-emoji grayscale">
+										<?php echo esc_html( $achievement['emoji'] ); ?>
 									</span>
-								</div>
-							</div>
-						</div>
+									<h3>
+										<?php echo esc_html( $achievement['name'] ); ?>
+									</h3>
+									<p>
+										<?php echo esc_html( $achievement['description'] ); ?>
+									</p>
+									<div class="achievement-meta is-centered">
+										<span class="points">
+											<?php
+											printf(
+												/* translators: %s: points available */
+												esc_html__( '%s pts', 'wpshadow' ),
+												esc_html( $achievement['points'] )
+											);
+											?>
+										</span>
+									</div>
+									<?php
+								},
+							)
+						);
+						?>
 					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
 
-		<!-- Achievements Activity Log -->
-		<?php wpshadow_render_activity_log( 'achievements', 10 ); ?>
+		<?php if ( ! empty( $cloud_api_key ) ) : ?>
+			<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'WPShadow Points', 'wpshadow' ),
+						'description' => __( 'A quick look at the points you have earned so far.', 'wpshadow' ),
+						'icon'        => 'dashicons-awards',
+						'card_class'  => 'wps-mt-8',
+						'body'        => function() use ( $points_total, $points_error ) {
+							if ( null !== $points_total ) {
+								?>
+								<p class="wps-text-2xl wps-font-semibold">
+									<?php echo esc_html( number_format_i18n( $points_total ) ); ?>
+								</p>
+								<p class="wps-text-sm wps-text-muted">
+									<?php esc_html_e( 'Total points earned', 'wpshadow' ); ?>
+								</p>
+								<?php
+								return;
+							}
+							?>
+							<p class="wps-text-sm wps-text-muted">
+								<?php esc_html_e( 'Your points summary will appear here once the WPShadow feed is connected.', 'wpshadow' ); ?>
+							</p>
+							<?php if ( $points_error ) : ?>
+								<p class="wps-text-xs wps-text-muted">
+									<?php echo esc_html( $points_error ); ?>
+								</p>
+							<?php endif; ?>
+							<?php
+						},
+					)
+				);
+			?>
+		<?php endif; ?>
 		<?php
 	}
 
@@ -351,6 +463,13 @@ class Gamification_UI extends Hook_Subscriber_Base {
 					<p><?php esc_html_e( 'Opt in to view the leaderboard and compete with other WPShadow users!', 'wpshadow' ); ?></p>
 				</div>
 			<?php endif; ?>
+
+			<!-- Recent Activity Section -->
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'achievements', 10 );
+			}
+			?>
 		</div>
 		<?php
 	}
@@ -426,6 +545,13 @@ class Gamification_UI extends Hook_Subscriber_Base {
 											</div>
 										<?php endif; ?>
 									<?php endif; ?>
+
+									<!-- Recent Activity Section -->
+									<?php
+									if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+										wpshadow_render_page_activities( 'achievements', 10 );
+									}
+									?>
 								</div>
 							</div>
 					<?php endforeach; ?>

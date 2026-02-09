@@ -164,9 +164,6 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		</div>
 	</div>
 
-	<!-- Recent Activity Section -->
-	<?php wpshadow_render_activity_log( 'workflow', 10 ); ?>
-
 	<!-- Page-Specific Activity History Section -->
 	<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
 		<?php

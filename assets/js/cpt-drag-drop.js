@@ -186,10 +186,11 @@
 			);
 
 			// Insert notice.
-			if ($('.wrap > h1').length) {
-				$('.wrap > h1').after($notice);
-			} else {
-				$('.wrap').prepend($notice);
+			var $slot = $('#wpshadow-page-notices');
+			if ($slot.length) {
+				$slot.append($notice);
+			} else if ($('.wrap').length) {
+				$('.wrap').first().prepend($notice);
 			}
 
 			// Handle dismiss button.

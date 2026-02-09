@@ -73,7 +73,7 @@ function wpshadow_get_feature_status( string $since_version ): array {
 	// Determine status
 	$coming_soon_threshold = 65;
 	
-	if ( $days_until < 0 ) {
+	if ( $days_until <= 0 ) {
 		// Feature is in the past (active)
 		$status = 'active';
 	} elseif ( $days_until <= $coming_soon_threshold ) {

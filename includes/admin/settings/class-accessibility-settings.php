@@ -313,6 +313,8 @@ class Accessibility_Settings {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Accessibility Settings', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( '🌍 Making WPShadow Work for Everyone', 'wpshadow' ); ?></h2>

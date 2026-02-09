@@ -145,7 +145,7 @@ class Diagnostic_No_Competitor_Price_Monitoring extends Diagnostic_Base {
 			'Pricing Power'       => 'Can you increase price without losing customers?',
 			'Price-Value Gap'     => 'Are customers getting more value than they pay for?',
 			'Market Share Loss'   => 'If you raise price 10%, how many customers leave?',
-			'Margin Pressure'     => 'Are competitors' lower prices squeezing your margin?',
+			'Margin Pressure'     => "Are competitors' lower prices squeezing your margin?",
 		);
 	}
 }

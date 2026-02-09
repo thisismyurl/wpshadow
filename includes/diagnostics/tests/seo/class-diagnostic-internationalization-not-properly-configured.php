@@ -54,7 +54,7 @@ class Diagnostic_Internationalization_Not_Properly_Configured extends Diagnostic
 	 *
 	 * @var string
 	 */
-	protected static $family = 'functionality';
+	protected static $family = 'seo';
 
 	/**
 	 * Run the diagnostic check.
@@ -63,24 +63,18 @@ class Diagnostic_Internationalization_Not_Properly_Configured extends Diagnostic
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_i18n_setup' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Internationalization not properly configured. Use load_plugin_textdomain() and translate all user-facing strings.',
-						'severity'   =>   'low',
-						'threat_level'   =>   10,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/internationalization-not-properly-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'validate_i18n_setup' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Internationalization is not fully configured yet. Loading translations with load_plugin_textdomain() helps visitors read your site in their language.', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 10,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/internationalization-not-properly-configured',
+			);
+		}
+
+		return null;
 	}
 }

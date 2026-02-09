@@ -131,7 +131,11 @@ function wpshadow_render_dashboard() {
 
 
 			<!-- Dashboard Activity Log -->
-			<?php wpshadow_render_activity_log( 'general', 10 ); ?>
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'general', 10 );
+			}
+			?>
 		</div>
 	</div>
 

@@ -85,8 +85,21 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 		$cached = get_transient( 'wpshadow_diagnostic_file_map' );
 		if ( is_array( $cached ) && ! empty( $cached ) ) {
-			self::$diagnostic_file_map = $cached;
-			return self::$diagnostic_file_map;
+			$legacy_dir = WPSHADOW_PATH . 'includes/diagnostics/tests';
+			$has_legacy = false;
+			if ( is_dir( $legacy_dir ) ) {
+				foreach ( $cached as $item ) {
+					if ( ! empty( $item['file'] ) && false !== strpos( $item['file'], '/includes/diagnostics/' ) ) {
+						$has_legacy = true;
+						break;
+					}
+				}
+			}
+
+			if ( ! is_dir( $legacy_dir ) || $has_legacy ) {
+				self::$diagnostic_file_map = $cached;
+				return self::$diagnostic_file_map;
+			}
 		}
 
 		$map = self::build_diagnostic_file_map();
@@ -103,49 +116,58 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	private static function build_diagnostic_file_map(): array {
-		$map     = array();
-		$base    = __DIR__;
-		$subdirs = array( 'tests', 'help', 'todo', 'verified' );
+		$map      = array();
+		$subdirs  = array( 'tests', 'help', 'todo', 'verified' );
+		$base_dirs = array(
+			__DIR__,
+			WPSHADOW_PATH . 'includes/diagnostics',
+		);
 
-		foreach ( $subdirs as $subdir ) {
-			$dir = $base . '/' . $subdir;
-			if ( ! is_dir( $dir ) ) {
+		foreach ( $base_dirs as $base ) {
+			if ( ! is_dir( $base ) ) {
 				continue;
 			}
 
-			$iterator = new \RecursiveIteratorIterator(
-				new \RecursiveDirectoryIterator( $dir, \FilesystemIterator::SKIP_DOTS )
-			);
-
-			foreach ( $iterator as $file_info ) {
-				/** @var \SplFileInfo $file_info */
-				if ( ! $file_info->isFile() ) {
+			foreach ( $subdirs as $subdir ) {
+				$dir = $base . '/' . $subdir;
+				if ( ! is_dir( $dir ) ) {
 					continue;
 				}
 
-				$filename = $file_info->getFilename();
-				if ( 0 !== strpos( $filename, 'class-diagnostic-' ) && 0 !== strpos( $filename, 'class-test-' ) ) {
-					continue;
-				}
-
-				if ( 'php' !== $file_info->getExtension() ) {
-					continue;
-				}
-
-				$class_name = self::get_class_name_from_file( $file_info->getPathname() );
-				if ( ! $class_name ) {
-					continue;
-				}
-
-				if ( isset( $map[ $class_name ] ) ) {
-					continue;
-				}
-
-				$family             = self::get_family_from_path( $file_info->getPathname() );
-				$map[ $class_name ] = array(
-					'file'   => $file_info->getPathname(),
-					'family' => $family,
+				$iterator = new \RecursiveIteratorIterator(
+					new \RecursiveDirectoryIterator( $dir, \FilesystemIterator::SKIP_DOTS )
 				);
+
+				foreach ( $iterator as $file_info ) {
+					/** @var \SplFileInfo $file_info */
+					if ( ! $file_info->isFile() ) {
+						continue;
+					}
+
+					$filename = $file_info->getFilename();
+					if ( 0 !== strpos( $filename, 'class-diagnostic-' ) && 0 !== strpos( $filename, 'class-test-' ) ) {
+						continue;
+					}
+
+					if ( 'php' !== $file_info->getExtension() ) {
+						continue;
+					}
+
+					$class_name = self::get_class_name_from_file( $file_info->getPathname() );
+					if ( ! $class_name ) {
+						continue;
+					}
+
+					if ( isset( $map[ $class_name ] ) ) {
+						continue;
+					}
+
+					$family             = self::get_family_from_path( $file_info->getPathname() );
+					$map[ $class_name ] = array(
+						'file'   => $file_info->getPathname(),
+						'family' => $family,
+					);
+				}
 			}
 		}
 

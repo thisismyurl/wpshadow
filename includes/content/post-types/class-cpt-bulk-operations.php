@@ -130,6 +130,8 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-bulk-operations">
 			<h1><?php esc_html_e( 'Bulk Operations', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			
 			<div class="wpshadow-bulk-controls">
 				<div class="wpshadow-bulk-filters">

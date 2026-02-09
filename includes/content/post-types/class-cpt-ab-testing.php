@@ -122,6 +122,8 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-ab-testing">
 			<h1><?php esc_html_e( 'A/B Testing Dashboard', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<p class="description">
 				<?php esc_html_e( 'Create and manage A/B tests for your custom post types to optimize content performance.', 'wpshadow' ); ?>
 			</p>

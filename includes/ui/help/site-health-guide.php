@@ -19,6 +19,7 @@ if ( ! current_user_can( 'read' ) ) {
 
 <div class="wrap wps-help-container">
 	<h1><?php esc_html_e( 'Site Health Explained', 'wpshadow' ); ?></h1>
+	<?php do_action( 'wpshadow_after_page_header' ); ?>
 	<p class="wps-help-subtitle">
 		<?php esc_html_e( 'Your WordPress Site Health shows the overall status of your website\'s performance, security, and compatibility. This guide explains what each check means and why it matters.', 'wpshadow' ); ?>
 	</p>

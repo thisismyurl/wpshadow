@@ -41,22 +41,39 @@
 		 * Bind event handlers
 		 */
 		bindEvents: function() {
-			$(document).on('change', '.wpshadow-cpt-toggle', this.handleToggle.bind(this));
+			$(document).on('click', '.wpshadow-cpt-toggle', this.handleToggleClick.bind(this));
 		},
 
 		/**
-		 * Handle toggle change
+		 * Handle toggle click
 		 */
-		handleToggle: function(e) {
+		handleToggleClick: function(e) {
 			const $toggle = $(e.currentTarget);
-			const postType = $toggle.data('post-type');
-			const isActivating = $toggle.is(':checked');
-			
-			if (isActivating) {
-				this.activatePostType($toggle, postType);
-			} else {
-				this.deactivatePostType($toggle, postType);
+			if (!$toggle.length || $toggle.is(':disabled')) {
+				return;
 			}
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			const postType = $toggle.data('post-type');
+			const isActivating = !$toggle.is(':checked');
+
+			const runAction = () => {
+				$toggle.prop('checked', isActivating);
+				if (isActivating) {
+					this.activatePostType($toggle, postType);
+				} else {
+					this.deactivatePostType($toggle, postType);
+				}
+			};
+
+			if (isActivating) {
+				runAction();
+				return;
+			}
+
+			showConfirm(wpshadowPostTypes.strings.confirm_deactivate, runAction);
 		},
 
 		/**
@@ -64,10 +81,13 @@
 		 */
 		activatePostType: function($toggle, postType) {
 			const $card = $toggle.closest('.wps-card');
+			const $status = $card.find('.wpshadow-toggle-label');
 			
 			// Update toggle state
 			$toggle.prop('disabled', true);
-			$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.activating);
+			if ($status.length) {
+				$status.text(wpshadowPostTypes.strings.activating);
+			}
 			
 			// Make AJAX request
 			$.ajax({
@@ -87,17 +107,23 @@
 						// Update card visually without reload
 						$card.addClass('wps-card--active');
 						$toggle.prop('disabled', false).prop('checked', true);
-						$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.active);
+						if ($status.length) {
+							$status.text(wpshadowPostTypes.strings.active);
+						}
 					} else {
 						PostTypesManager.showNotice('error', response.data.message || wpshadowPostTypes.strings.error);
 						$toggle.prop('disabled', false).prop('checked', false);
-						$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.inactive);
+						if ($status.length) {
+							$status.text(wpshadowPostTypes.strings.inactive);
+						}
 					}
 				},
 				error: function() {
 					PostTypesManager.showNotice('error', wpshadowPostTypes.strings.error);
 					$toggle.prop('disabled', false).prop('checked', false);
-					$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.inactive);
+					if ($status.length) {
+						$status.text(wpshadowPostTypes.strings.inactive);
+					}
 				}
 			});
 		},
@@ -107,12 +133,15 @@
 		 */
 		deactivatePostType: function($toggle, postType) {
 			const $card = $toggle.closest('.wps-card');
+			const $status = $card.find('.wpshadow-toggle-label');
 			
 			// Confirm deactivation
 			showConfirm(wpshadowPostTypes.strings.confirm_deactivate, function() {
 				// Update toggle state
 				$toggle.prop('disabled', true);
-				$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.deactivating);
+				if ($status.length) {
+					$status.text(wpshadowPostTypes.strings.deactivating);
+				}
 				
 				// Make AJAX request
 				$.ajax({
@@ -132,17 +161,23 @@
 							// Update card visually without reload
 							$card.removeClass('wps-card--active');
 							$toggle.prop('disabled', false).prop('checked', false);
-							$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.inactive);
+							if ($status.length) {
+								$status.text(wpshadowPostTypes.strings.inactive);
+							}
 						} else {
 							PostTypesManager.showNotice('error', response.data.message || wpshadowPostTypes.strings.error);
 							$toggle.prop('disabled', false).prop('checked', true);
-							$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.active);
+							if ($status.length) {
+								$status.text(wpshadowPostTypes.strings.active);
+							}
 						}
 					},
 					error: function() {
 						PostTypesManager.showNotice('error', wpshadowPostTypes.strings.error);
 						$toggle.prop('disabled', false).prop('checked', true);
-						$card.find('.wpshadow-toggle-label').text(wpshadowPostTypes.strings.active);
+						if ($status.length) {
+							$status.text(wpshadowPostTypes.strings.active);
+						}
 					}
 				});
 			});
@@ -155,7 +190,14 @@
 			const noticeClass = type === 'success' ? 'notice-success' : 'notice-error';
 			const $notice = $('<div class="notice ' + noticeClass + ' is-dismissible"><p>' + message + '</p></div>');
 			
-			$('.wpshadow-post-types .wps-page-header').after($notice);
+			const $slot = $('#wpshadow-page-notices');
+			if ($slot.length) {
+				$slot.append($notice);
+			} else if ($('.wrap').length) {
+				$('.wrap').first().prepend($notice);
+			} else {
+				$('body').prepend($notice);
+			}
 			
 			// Auto-dismiss after 5 seconds
 			setTimeout(function() {

@@ -107,6 +107,148 @@ class Report_Snapshot_Manager {
 	}
 
 	/**
+	 * Get total snapshot count for a report.
+	 *
+	 * @since  1.7039.1200
+	 * @param  string $report_id Report identifier.
+	 * @return int Snapshot count.
+	 */
+	public static function get_snapshots_count( $report_id ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
+
+		$count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$table_name} WHERE report_id = %s",
+				$report_id
+			)
+		);
+
+		return (int) $count;
+	}
+
+	/**
+	 * Get paginated snapshots for a report.
+	 *
+	 * @since  1.7039.1200
+	 * @param  string $report_id Report identifier.
+	 * @param  int    $limit     Number of snapshots to retrieve.
+	 * @param  int    $offset    Result offset.
+	 * @return array Snapshots.
+	 */
+	public static function get_snapshots_paginated( $report_id, $limit = 10, $offset = 0 ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
+
+		$snapshots = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE report_id = %s ORDER BY created_at DESC LIMIT %d OFFSET %d",
+				$report_id,
+				$limit,
+				$offset
+			),
+			ARRAY_A
+		);
+
+		foreach ( $snapshots as &$snapshot ) {
+			$snapshot['data'] = json_decode( $snapshot['data'], true );
+			$snapshot['metadata'] = json_decode( $snapshot['metadata'], true );
+		}
+
+		return $snapshots;
+	}
+
+	/**
+	 * Get paginated snapshots for a report and user.
+	 *
+	 * @since  1.7039.1200
+	 * @param  string $report_id Report identifier.
+	 * @param  int    $user_id   User ID.
+	 * @param  int    $limit     Number of snapshots to retrieve.
+	 * @param  int    $offset    Result offset.
+	 * @return array Snapshots.
+	 */
+	public static function get_snapshots_for_user( $report_id, $user_id, $limit = 10, $offset = 0 ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
+		$needle     = $wpdb->esc_like( '"user_id":' . (int) $user_id );
+		$like       = '%' . $needle . '%';
+
+		$snapshots = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE report_id = %s AND metadata LIKE %s ORDER BY created_at DESC LIMIT %d OFFSET %d",
+				$report_id,
+				$like,
+				$limit,
+				$offset
+			),
+			ARRAY_A
+		);
+
+		foreach ( $snapshots as &$snapshot ) {
+			$snapshot['data'] = json_decode( $snapshot['data'], true );
+			$snapshot['metadata'] = json_decode( $snapshot['metadata'], true );
+		}
+
+		return $snapshots;
+	}
+
+	/**
+	 * Get total snapshot count for a report and user.
+	 *
+	 * @since  1.7039.1200
+	 * @param  string $report_id Report identifier.
+	 * @param  int    $user_id   User ID.
+	 * @return int Snapshot count.
+	 */
+	public static function get_snapshots_for_user_count( $report_id, $user_id ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
+		$needle     = $wpdb->esc_like( '"user_id":' . (int) $user_id );
+		$like       = '%' . $needle . '%';
+
+		$count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$table_name} WHERE report_id = %s AND metadata LIKE %s",
+				$report_id,
+				$like
+			)
+		);
+
+		return (int) $count;
+	}
+
+	/**
+	 * Delete snapshots for a report and user.
+	 *
+	 * @since  1.7039.1200
+	 * @param  string $report_id Report identifier.
+	 * @param  int    $user_id   User ID.
+	 * @return int Number of snapshots deleted.
+	 */
+	public static function delete_snapshots_for_user( $report_id, $user_id ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
+		$needle     = $wpdb->esc_like( '"user_id":' . (int) $user_id );
+		$like       = '%' . $needle . '%';
+
+		$deleted = $wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$table_name} WHERE report_id = %s AND metadata LIKE %s",
+				$report_id,
+				$like
+			)
+		);
+
+		return (int) $deleted;
+	}
+
+	/**
 	 * Compare two snapshots
 	 *
 	 * @since  1.603.0200

@@ -77,9 +77,5 @@ class Diagnostic_Network_Request_Batching_Not_Optimized extends Diagnostic_Base 
 		}
 
 		return null;
-						}
-						return null;
-						}
-						return null;
 	}
 }

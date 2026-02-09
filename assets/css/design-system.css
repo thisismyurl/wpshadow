@@ -1379,9 +1379,18 @@ a.wps-card:focus {
 
 .wps-toggle {
     position: relative;
-    width: 44px;
-    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wps-space-2);
     cursor: pointer;
+}
+
+label.wps-toggle,
+.form-table label.wps-toggle,
+.wps-settings-form label.wps-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wps-space-2);
 }
 
 .wps-toggle input {
@@ -1391,11 +1400,10 @@ a.wps-card:focus {
 }
 
 .wps-toggle-slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 24px;
     background: var(--wps-gray-300);
     border-radius: var(--wps-radius-full);
     transition: all var(--wps-transition-base);
@@ -2963,6 +2971,75 @@ a.wps-card:focus {
     margin-bottom: 0;
 }
 
+/* Toggle groups with aligned label and description */
+.wps-settings-form .wps-toggle-field {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: var(--wps-space-2);
+    align-items: start;
+    justify-items: start;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.wps-settings-form .wps-toggle-field .wps-toggle {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: var(--wps-space-2);
+    align-items: center;
+    justify-items: start;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.wps-settings-form .wps-toggle-field .wps-toggle-slider {
+    grid-column: 1;
+}
+
+.wps-settings-form .wps-toggle-field .wps-toggle-text {
+    grid-column: 2;
+    font-weight: var(--wps-font-semibold);
+}
+
+.wps-settings-form .wps-toggle-field .wps-form-description {
+    grid-column: 2;
+    margin-top: var(--wps-space-1);
+    margin-bottom: 0;
+}
+
+/* Advanced settings: align toggle labels flush left */
+.wps-settings-form.wps-settings-form--advanced .wps-toggle-field {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: var(--wps-space-2);
+    align-items: start;
+    margin-left: -20px;
+    padding-left: 0;
+}
+
+.wps-settings-form.wps-settings-form--advanced .wps-toggle-field .wps-toggle,
+.wps-settings-form.wps-settings-form--advanced .wps-toggle-field label.wps-toggle {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: var(--wps-space-2);
+    align-items: center;
+    margin-left: 0;
+    padding: 0;
+    list-style: none;
+    text-indent: 0;
+}
+
+.wps-settings-form.wps-settings-form--advanced .wps-toggle-field .wps-toggle-text {
+    font-weight: var(--wps-font-semibold);
+    margin: 0;
+}
+
+.wps-settings-form.wps-settings-form--advanced .wps-toggle-field .wps-form-description {
+    margin-left: 0;
+    padding-left: 0;
+}
+
 .wps-label {
     display: block;
     font-size: var(--wps-text-sm);
@@ -4485,6 +4562,15 @@ a:focus-visible {
 /* Grid template columns utility */
 .wps-grid-cols-320-1fr {
     grid-template-columns: minmax(320px, 380px) 1fr;
+}
+
+/* Grid item span utilities */
+.wps-grid-span-full {
+    grid-column: 1 / -1;
+}
+
+.wps-grid-span-half {
+    grid-column: span 1;
 }
 
 .wps-card-warning {

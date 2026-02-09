@@ -22,6 +22,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		<div class="onboarding-step active" id="step-platform">
 			<div class="onboarding-welcome">
 				<h1><?php esc_html_e( 'Welcome! Let\'s Get You Started', 'wpshadow' ); ?></h1>
+				<?php do_action( 'wpshadow_after_page_header' ); ?>
 				<p class="lead">
 					<?php esc_html_e( 'We want to make WordPress feel comfortable for you. To help us do that, which of these are you most familiar with?', 'wpshadow' ); ?>
 				</p>

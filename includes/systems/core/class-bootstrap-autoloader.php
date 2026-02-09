@@ -84,6 +84,7 @@ class Bootstrap_Autoloader {
 		// Helper functions
 		'includes/utils/helpers/form-controls.php',
 		'includes/utils/helpers/html-fetcher-helpers.php',
+		'includes/utils/helpers/findings-cache-helpers.php',
 		'includes/utils/helpers/feature-status-helpers.php',
 		
 		// View functions
@@ -99,6 +100,8 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-menu-manager.php',
 		'includes/systems/core/class-ajax-router.php',
 		'includes/systems/core/class-hooks-initializer.php',
+		'includes/systems/dashboard/class-asset-manager.php',
+		'includes/systems/dashboard/class-asset-optimizer.php',
 		
 		// Monitoring/tracking
 		'includes/features/monitoring/class-wordpress-hooks-tracker.php',
@@ -241,17 +244,23 @@ class Bootstrap_Autoloader {
 
 		foreach ( $iterator as $file ) {
 			if ( $file->isFile() && 'php' === $file->getExtension() ) {
+				$file_path = $file->getPathname();
+
+				if ( false !== strpos( $file_path, '/includes/ui/reports/' ) || false !== strpos( $file_path, '/includes/features/onboarding/data/' ) ) {
+					continue;
+				}
+
 				// Skip test files
-				if ( false !== strpos( $file->getPathname(), '/tests/' ) ) {
+				if ( false !== strpos( $file_path, '/tests/' ) ) {
 					continue;
 				}
 
 				// Skip vendor files
-				if ( false !== strpos( $file->getPathname(), '/vendor/' ) ) {
+				if ( false !== strpos( $file_path, '/vendor/' ) ) {
 					continue;
 				}
 
-				$files[] = $file->getPathname();
+				$files[] = $file_path;
 			}
 		}
 

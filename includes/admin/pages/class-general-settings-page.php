@@ -39,7 +39,7 @@ class General_Settings_Page {
 		}
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'General Settings', 'wpshadow' ),
@@ -55,28 +55,24 @@ class General_Settings_Page {
 				<?php
 				wpshadow_render_card(
 					array(
-						'title'       => __( 'Caching', 'wpshadow' ),
+						'title'       => __( 'Diagnostic Caching', 'wpshadow' ),
 						'description' => __( 'Control how diagnostic results are cached to improve performance.', 'wpshadow' ),
 						'icon'        => 'dashicons-performance',
 						'body'        => function() {
 							?>
 							<div class="wps-form-group">
-								<div class="wps-flex wps-gap-6 wps-items-start wps-justify-between">
-									<label class="wps-toggle" for="wpshadow_cache_enabled">
-										<input
-											type="checkbox"
-											id="wpshadow_cache_enabled"
-											name="wpshadow_cache_enabled"
-											value="1"
-											<?php checked( get_option( 'wpshadow_cache_enabled', true ) ); ?>
-										/>
-										<span class="wps-toggle-slider"></span>
-										<?php esc_html_e( 'Enable Result Caching', 'wpshadow' ); ?>
-									</label>
-									<p class="wps-form-description wps-m-0">
-										<?php esc_html_e( 'Cache diagnostic results to reduce server load. Cache is automatically cleared when settings change.', 'wpshadow' ); ?>
-									</p>
-								</div>
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
+								echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+									array(
+										'id'          => 'wpshadow_cache_enabled',
+										'name'        => 'wpshadow_cache_enabled',
+										'label'       => __( 'Enable Result Caching', 'wpshadow' ),
+										'helper_text' => __( 'Cache diagnostic results to reduce server load. Cache is automatically cleared when settings change.', 'wpshadow' ),
+										'checked'     => (bool) get_option( 'wpshadow_cache_enabled', true ),
+									)
+								);
+								?>
 							</div>
 
 							<div class="wps-form-group wps-mt-4">
@@ -88,29 +84,29 @@ class General_Settings_Page {
 									name="wpshadow_cache_duration"
 									class="wps-form-control"
 								>
-									<option value="300" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 300 ); ?>>
+									<option value="300" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 300 ); ?>>
 										<?php esc_html_e( '5 minutes', 'wpshadow' ); ?>
 									</option>
-									<option value="900" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 900 ); ?>>
+									<option value="900" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 900 ); ?>>
 										<?php esc_html_e( '15 minutes', 'wpshadow' ); ?>
 									</option>
-									<option value="1800" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 1800 ); ?>>
+									<option value="1800" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 1800 ); ?>>
 										<?php esc_html_e( '30 minutes', 'wpshadow' ); ?>
 									</option>
-									<option value="3600" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 3600 ); ?>>
-										<?php esc_html_e( '1 hour (default)', 'wpshadow' ); ?>
+									<option value="3600" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 3600 ); ?>>
+										<?php esc_html_e( '1 hour', 'wpshadow' ); ?>
 									</option>
-									<option value="7200" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 7200 ); ?>>
+									<option value="7200" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 7200 ); ?>>
 										<?php esc_html_e( '2 hours', 'wpshadow' ); ?>
 									</option>
-									<option value="14400" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 14400 ); ?>>
+									<option value="14400" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 14400 ); ?>>
 										<?php esc_html_e( '4 hours', 'wpshadow' ); ?>
 									</option>
-									<option value="28800" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 28800 ); ?>>
+									<option value="28800" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 28800 ); ?>>
 										<?php esc_html_e( '8 hours', 'wpshadow' ); ?>
 									</option>
-									<option value="86400" <?php selected( get_option( 'wpshadow_cache_duration', 3600 ), 86400 ); ?>>
-										<?php esc_html_e( '24 hours (1 day)', 'wpshadow' ); ?>
+									<option value="86400" <?php selected( get_option( 'wpshadow_cache_duration', 86400 ), 86400 ); ?>>
+										<?php esc_html_e( '24 hours (default)', 'wpshadow' ); ?>
 									</option>
 								</select>
 								<span class="wps-help-text">
@@ -148,7 +144,11 @@ class General_Settings_Page {
 			</form>
 
 			<!-- Page-Specific Activity History Section -->
-			<?php wpshadow_render_activity_log( 'settings', 10 ); ?>
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'settings', 10 );
+			}
+			?>
 		</div>
 		<?php
 	}

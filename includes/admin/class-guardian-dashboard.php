@@ -70,7 +70,11 @@ class Guardian_Dashboard {
 			</div>
 
 			<!-- Page-Specific Activity History Section -->
-			<?php wpshadow_render_activity_log( 'guardian', 10 ); ?>
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'guardian', 10 );
+			}
+			?>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -184,66 +188,58 @@ class Guardian_Dashboard {
 
 		$activities = \WPShadow\Core\Activity_Logger::get_recent( 20 );
 
-		if ( empty( $activities ) ) {
-			return '<div class="wps-card">
-				<div class="wps-card-header">
-					<h3 class="wps-card-title wps-m-0" id="activity-heading">
-						<span class="dashicons dashicons-clock wps-icon-mr-2" aria-hidden="true"></span>
-						' . esc_html__( 'Guardian Activity Log', 'wpshadow' ) . '
-					</h3>
-				</div>
-				<div class="wps-card-body">
-					<div class="wps-activity-empty">
-						<span class="dashicons dashicons-admin-post wps-activity-empty-icon" aria-hidden="true"></span>
-						<p class="wps-m-0">' . esc_html__( 'No recent activity. Guardian will start logging once enabled.', 'wpshadow' ) . '</p>
+		ob_start();
+		wpshadow_render_card(
+			array(
+				'title' => __( 'Guardian Activity Log', 'wpshadow' ),
+				'icon'  => 'dashicons-clock',
+				'body'  => function() use ( $activities ) {
+					if ( empty( $activities ) ) {
+						?>
+						<div class="wps-activity-empty">
+							<span class="dashicons dashicons-admin-post wps-activity-empty-icon" aria-hidden="true"></span>
+							<p class="wps-m-0">
+								<?php esc_html_e( 'No recent activity. Guardian will start logging once enabled.', 'wpshadow' ); ?>
+							</p>
+						</div>
+						<?php
+						return;
+					}
+					?>
+					<div class="wps-activity-timeline">
+						<?php
+						$activity_count = count( $activities );
+						$index          = 0;
+						foreach ( $activities as $activity ) {
+							$is_last     = ( ++$index === $activity_count );
+							$action_text = self::format_activity_action_new( $activity );
+							$icon_class  = self::get_activity_icon_new( $activity );
+							$icon_color  = self::get_activity_color_new( $activity );
+
+							$timestamp = isset( $activity['timestamp'] ) ? (int) $activity['timestamp'] : current_time( 'timestamp' );
+							$time_text = human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago';
+							?>
+							<div class="wps-activity-item <?php echo esc_attr( $is_last ? 'wps-activity-last' : '' ); ?>" role="article" style="--activity-color: <?php echo esc_attr( $icon_color ); ?>;">
+								<div class="wps-activity-icon-wrapper">
+									<span class="dashicons <?php echo esc_attr( $icon_class ); ?>" aria-hidden="true"></span>
+								</div>
+								<div class="wps-activity-content">
+									<div class="wps-activity-text"><?php echo esc_html( $action_text ); ?></div>
+									<time class="wps-activity-time" datetime="<?php echo esc_attr( ! empty( $activity['timestamp'] ) ? $activity['timestamp'] : '' ); ?>">
+										<?php echo esc_html( $time_text ); ?>
+									</time>
+								</div>
+							</div>
+							<?php
+						}
+						?>
 					</div>
-				</div>
-			</div>';
-		}
+					<?php
+				},
+			)
+		);
 
-		$html = '<div class="wps-card">
-			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0" id="activity-heading">
-					<span class="dashicons dashicons-clock wps-icon-mr-2" aria-hidden="true"></span>
-					' . esc_html__( 'Guardian Activity Log', 'wpshadow' ) . '
-				</h3>
-			</div>
-			<div class="wps-card-body">
-				<div class="wps-activity-timeline">';
-
-		$activity_count = count( $activities );
-		$index          = 0;
-		foreach ( $activities as $activity ) {
-			$is_last     = ( ++$index === $activity_count );
-			$action_text = self::format_activity_action_new( $activity );
-			$icon_class  = self::get_activity_icon_new( $activity );
-			$icon_color  = self::get_activity_color_new( $activity );
-
-			$timestamp = isset( $activity['timestamp'] ) ? (int) $activity['timestamp'] : current_time( 'timestamp' );
-			$time_text = human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago';
-
-			$html .= sprintf(
-				'<div class="wps-activity-item %s" role="article" style="--activity-color: %s;">
-					<div class="wps-activity-icon-wrapper">
-						<span class="dashicons %s" aria-hidden="true"></span>
-					</div>
-					<div class="wps-activity-content">
-						<div class="wps-activity-text">%s</div>
-						<time class="wps-activity-time" datetime="%s">%s</time>
-					</div>
-				</div>',
-				$is_last ? 'wps-activity-last' : '',
-				esc_attr( $icon_color ),
-				esc_attr( $icon_class ),
-				esc_html( $action_text ),
-				esc_attr( ! empty( $activity['timestamp'] ) ? $activity['timestamp'] : '' ),
-				esc_html( $time_text )
-			);
-		}
-
-		$html .= '</div></div></div>';
-
-		return $html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -472,37 +468,38 @@ class Guardian_Dashboard {
 	private static function render_auto_fix_stats(): string {
 		$stats = Auto_Fix_Executor::get_statistics();
 
-		$html = '<div class="wps-card wps-mt-4">
-			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0">
-					<span class="dashicons dashicons-chart-bar wps-icon-mr-2"></span>
-					' . esc_html__( 'Auto-Fix Statistics', 'wpshadow' ) . '
-				</h3>
-			</div>
-			<div class="wps-card-body">
-				<div class="wps-grid wps-grid-auto-200 wps-gap-3">';
-
-		$stat_items = array(
-			__( 'Executions', 'wpshadow' )   => $stats['total_executions'] ?? 0,
-			__( 'Success Rate', 'wpshadow' ) => ( $stats['success_rate'] ?? 0 ) . '%',
-			__( 'Avg Duration', 'wpshadow' ) => ( $stats['avg_duration'] ?? 0 ) . 'ms',
-			__( 'Last Run', 'wpshadow' )     => $stats['last_run'] ?? 'Never',
+		ob_start();
+		wpshadow_render_card(
+			array(
+				'title'      => __( 'Auto-Fix Statistics', 'wpshadow' ),
+				'icon'       => 'dashicons-chart-bar',
+				'card_class' => 'wps-mt-4',
+				'body'       => function() use ( $stats ) {
+					$stat_items = array(
+						__( 'Executions', 'wpshadow' )   => $stats['total_executions'] ?? 0,
+						__( 'Success Rate', 'wpshadow' ) => ( $stats['success_rate'] ?? 0 ) . '%',
+						__( 'Avg Duration', 'wpshadow' ) => ( $stats['avg_duration'] ?? 0 ) . 'ms',
+						__( 'Last Run', 'wpshadow' )     => $stats['last_run'] ?? 'Never',
+					);
+					?>
+					<div class="wps-grid wps-grid-auto-200 wps-gap-3">
+						<?php foreach ( $stat_items as $label => $value ) : ?>
+							<div>
+								<div class="wps-text-xs wps-text-gray-500 wps-uppercase wps-tracking-wide wps-font-semibold">
+									<?php echo esc_html( $label ); ?>
+								</div>
+								<div class="wps-text-lg wps-font-bold wps-text-gray-800 wps-mt-1">
+									<?php echo esc_html( (string) $value ); ?>
+								</div>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<?php
+				},
+			)
 		);
 
-		foreach ( $stat_items as $label => $value ) {
-			$html .= sprintf(
-				'<div>
-						<div class="wps-text-xs wps-text-gray-500 wps-uppercase wps-tracking-wide wps-font-semibold">%s</div>
-						<div class="wps-text-lg wps-font-bold wps-text-gray-800 wps-mt-1">%s</div>
-				</div>',
-				esc_html( $label ),
-				esc_html( (string) $value )
-			);
-		}
-
-		$html .= '</div></div></div>';
-
-		return $html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -513,44 +510,44 @@ class Guardian_Dashboard {
 	private static function render_recovery_widget(): string {
 		$recovery_points = Recovery_System::get_recovery_points( 5 );
 
-		$html = '<div class="wps-card">
-			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0 wps-flex wps-gap-2 wps-items-center">
-					<span class="dashicons dashicons-backup"></span>
-					' . esc_html__( 'Recovery Points', 'wpshadow' ) . '
-				</h3>
-			</div>
-			<div class="wps-card-body">';
+		ob_start();
+		wpshadow_render_card(
+			array(
+				'title' => __( 'Recovery Points', 'wpshadow' ),
+				'icon'  => 'dashicons-backup',
+				'body'  => function() use ( $recovery_points ) {
+					if ( empty( $recovery_points ) ) {
+						?>
+						<p class="wps-m-0">
+							<?php esc_html_e( 'No recovery points yet', 'wpshadow' ); ?>
+						</p>
+						<?php
+						return;
+					}
+					?>
+					<div class="wps-flex wps-gap-3">
+						<?php foreach ( $recovery_points as $point ) : ?>
+							<div class="wps-flex wps-items-center wps-justify-between">
+								<div>
+									<div class="wps-font-medium wps-text-gray-800">
+										<?php echo esc_html( $point['reason'] ?? 'Unknown' ); ?>
+									</div>
+									<div class="wps-text-xs wps-text-gray-500 wps-mt-1">
+										<?php echo esc_html( $point['timestamp'] ?? 'N/A' ); ?>
+									</div>
+								</div>
+								<button class="wps-btn wps-btn--secondary wps-p-1" data-recovery-id="<?php echo esc_attr( $point['id'] ?? '' ); ?>" data-action="restore">
+									<?php esc_html_e( 'Restore', 'wpshadow' ); ?>
+								</button>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<?php
+				},
+			)
+		);
 
-		if ( empty( $recovery_points ) ) {
-			$html .= '<p class="wps-m-0">' . esc_html__( 'No recovery points yet', 'wpshadow' ) . '</p>';
-		} else {
-			$html .= '<div class="wps-flex wps-gap-3">';
-
-			foreach ( $recovery_points as $point ) {
-				$html .= sprintf(
-					'<div class="wps-flex wps-items-center wps-justify-between">
-						<div>
-							<div class="wps-font-medium wps-text-gray-800">%s</div>
-							<div class="wps-text-xs wps-text-gray-500 wps-mt-1">%s</div>
-						</div>
-						<button class="wps-btn wps-btn--secondary wps-p-1" data-recovery-id="%s" data-action="restore">
-							%s
-						</button>
-					</div>',
-					esc_html( $point['reason'] ?? 'Unknown' ),
-					esc_html( $point['timestamp'] ?? 'N/A' ),
-					esc_attr( $point['id'] ?? '' ),
-					esc_html__( 'Restore', 'wpshadow' )
-				);
-			}
-
-			$html .= '</div>';
-		}
-
-		$html .= '</div></div>';
-
-		return $html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -559,15 +556,6 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_system_health(): string {
-		$html = '<div class="wps-card wps-mt-4">
-			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0">
-					<span class="dashicons dashicons-heart wps-icon-mr-2"></span>
-					' . esc_html__( 'System Health', 'wpshadow' ) . '
-				</h3>
-			</div>
-			<div class="wps-card-body">';
-
 		$checks = array(
 			array(
 				'name'   => __( 'Memory Usage', 'wpshadow' ),
@@ -591,28 +579,38 @@ class Guardian_Dashboard {
 			),
 		);
 
-		$html .= '<div class="wps-flex wps-gap-3">';
-
-		foreach ( $checks as $check ) {
-			$status_color = 'good' === $check['status'] ? '#10b981' : ( 'warning' === $check['status'] ? '#f59e0b' : '#ef4444' );
-			$html        .= sprintf(
-				'<div class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-md wps-status-check-item" style="--status-color: %s;">
-					<span class="dashicons %s wps-icon-md wps-status-check-icon"></span>
-					<div class="wps-flex-1">
-						<div class="wps-font-medium wps-text-gray-800">%s</div>
+		ob_start();
+		wpshadow_render_card(
+			array(
+				'title'      => __( 'System Health', 'wpshadow' ),
+				'icon'       => 'dashicons-heart',
+				'card_class' => 'wps-mt-4',
+				'body'       => function() use ( $checks ) {
+					?>
+					<div class="wps-flex wps-gap-3">
+						<?php foreach ( $checks as $check ) : ?>
+							<?php
+							$status_color = 'good' === $check['status'] ? '#10b981' : ( 'warning' === $check['status'] ? '#f59e0b' : '#ef4444' );
+							?>
+							<div class="wps-flex wps-gap-3 wps-items-center wps-p-3 wps-rounded-md wps-status-check-item" style="--status-color: <?php echo esc_attr( $status_color ); ?>;">
+								<span class="dashicons <?php echo esc_attr( $check['icon'] ); ?> wps-icon-md wps-status-check-icon"></span>
+								<div class="wps-flex-1">
+									<div class="wps-font-medium wps-text-gray-800">
+										<?php echo esc_html( $check['name'] ); ?>
+									</div>
+								</div>
+								<div class="wps-text-xs wps-font-semibold wps-status-check-text">
+									<?php echo esc_html( ucfirst( $check['status'] ) ); ?>
+								</div>
+							</div>
+						<?php endforeach; ?>
 					</div>
-					<div class="wps-text-xs wps-font-semibold wps-status-check-text">%s</div>
-				</div>',
-				esc_attr( $status_color ),
-				esc_attr( $check['icon'] ),
-				esc_html( $check['name'] ),
-				esc_html( ucfirst( $check['status'] ) )
-			);
-		}
+					<?php
+				},
+			)
+		);
 
-		$html .= '</div></div></div>';
-
-		return $html;
+		return ob_get_clean();
 	}
 
 	/**

@@ -504,6 +504,16 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 				'findReplaceDetails' => __( 'We are updating your content safely.', 'wpshadow' ),
 				'runningDiagnostics' => __( 'Running diagnostics...', 'wpshadow' ),
 				'diagnosticsDetails' => __( 'This can take a few minutes.', 'wpshadow' ),
+				'diagnosticsProgressSteps' => array(
+					__( 'Reviewing site settings and visibility options', 'wpshadow' ),
+					__( 'Checking titles, descriptions, and metadata', 'wpshadow' ),
+					__( 'Looking at mobile readiness and performance', 'wpshadow' ),
+					__( 'Scanning internal links and structure', 'wpshadow' ),
+					__( 'Reviewing structured data and sharing tags', 'wpshadow' ),
+				),
+				'diagnosticsStepLabel' => __( 'Step {current} of {total}', 'wpshadow' ),
+				'diagnosticsElapsedLabel' => __( 'Elapsed', 'wpshadow' ),
+				'diagnosticsRemainingLabel' => __( 'Estimated remaining', 'wpshadow' ),
 				'runningScan'    => __( 'Running a scan...', 'wpshadow' ),
 				'scanDetails'    => __( 'We will update you when the scan is done.', 'wpshadow' ),
 				'generatingDna'  => __( 'Generating site DNA...', 'wpshadow' ),
@@ -534,11 +544,27 @@ function wpshadow_enqueue_report_assets( $hook ) {
 		WPSHADOW_VERSION
 	);
 
+	// Enqueue modal system for report confirmations
+	wp_enqueue_style(
+		'wpshadow-modal',
+		WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	wp_enqueue_script(
+		'wpshadow-modal',
+		WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
+		array( 'jquery' ),
+		WPSHADOW_VERSION,
+		true
+	);
+
 	// Enqueue report JS
 	wp_enqueue_script(
 		'wpshadow-reports',
 		WPSHADOW_URL . 'assets/js/reports.js',
-		array( 'jquery', 'wpshadow-admin-pages' ),
+		array( 'jquery', 'wp-util', 'wpshadow-admin-pages', 'wpshadow-modal' ),
 		WPSHADOW_VERSION,
 		true
 	);

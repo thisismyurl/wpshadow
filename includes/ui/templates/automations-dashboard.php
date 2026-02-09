@@ -821,6 +821,10 @@ if ( ! function_exists( 'wpshadow_workflow_get_action_summary' ) ) {
 
 <!-- Workflow Activity Log -->
 <div style="margin-top: 40px;">
-	<?php wpshadow_render_activity_log( 'workflow', 10 ); ?>
+	<?php
+	if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+		wpshadow_render_page_activities( 'workflows', 10 );
+	}
+	?>
 </div>
 </div>

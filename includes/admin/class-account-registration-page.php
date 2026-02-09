@@ -43,7 +43,6 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(
-			'admin_menu'            => array( 'register_menu', 5 ),
 			'admin_enqueue_scripts' => 'enqueue_assets',
 		);
 	}

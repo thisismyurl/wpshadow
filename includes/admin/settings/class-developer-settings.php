@@ -255,6 +255,8 @@ class Developer_Settings {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Developer Settings', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			
 			<div class="wpshadow-developer-intro">
 				<h2><?php esc_html_e( '🛠️ Build Extensions for Free', 'wpshadow' ); ?></h2>

@@ -201,7 +201,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6089.1200', // Release 1.6089 (March 2026)
+			'since'   => '1.6035.2150', // Release 1.6035 (February 2026)
 		),
 		array(
 			'title'   => __( 'Dark Mode', 'wpshadow' ),
@@ -264,7 +264,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-warning',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6089.1200', // Release 1.6089 (March 2026)
+			'since'   => '1.6035.2150', // Release 1.6035 (February 2026)
 		),
 		array(
 			'title'   => __( 'Safe Update Checker', 'wpshadow' ),
@@ -371,23 +371,30 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 				?>
 				<div class="wrap wps-page-container">
 					<?php wpshadow_render_page_header(
-						__( 'Helpful Tools', 'wpshadow' ),
+						__( 'WPShadow Utilities', 'wpshadow' ),
 						__( 'Extra tools to help you manage, test, and improve your site.', 'wpshadow' ),
 						'dashicons-admin-tools'
 					); ?>
 
-					<div class="wps-card wps-card--warning">
-						<div class="wps-card-body">
-							<p>
-								<?php esc_html_e( 'That tool isn\'t available right now. You might have clicked an old link.', 'wpshadow' ); ?>
-							</p>
-							<p>
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
-									&larr; <?php esc_html_e( 'Back to Utilities', 'wpshadow' ); ?>
-								</a>
-							</p>
-						</div>
-					</div>
+					<?php
+					wpshadow_render_card(
+						array(
+							'card_class' => 'wps-card--warning',
+							'body'       => function() {
+								?>
+								<p>
+									<?php esc_html_e( 'That tool isn\'t available right now. You might have clicked an old link.', 'wpshadow' ); ?>
+								</p>
+								<p>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
+										&larr; <?php esc_html_e( 'Back to Utilities', 'wpshadow' ); ?>
+									</a>
+								</p>
+								<?php
+							},
+						)
+					);
+					?>
 				</div>
 				<?php
 				return;
@@ -409,18 +416,25 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 					'dashicons-admin-tools'
 				); ?>
 
-				<div class="wps-card wps-card--error">
-					<div class="wps-card-body">
-						<p>
-							<?php esc_html_e( 'We couldn\'t load this tool. The file might be missing or moved.', 'wpshadow' ); ?>
-						</p>
-						<p>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
-								&larr; <?php esc_html_e( 'Back to Utilities', 'wpshadow' ); ?>
-							</a>
-						</p>
-					</div>
-				</div>
+				<?php
+				wpshadow_render_card(
+					array(
+						'card_class' => 'wps-card--error',
+						'body'       => function() {
+							?>
+							<p>
+								<?php esc_html_e( 'We couldn\'t load this tool. The file might be missing or moved.', 'wpshadow' ); ?>
+							</p>
+							<p>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities' ) ); ?>" class="wps-btn wps-btn--secondary">
+									&larr; <?php esc_html_e( 'Back to Utilities', 'wpshadow' ); ?>
+								</a>
+							</p>
+							<?php
+							},
+						)
+					);
+					?>
 			</div>
 			<?php
 			return;
@@ -447,7 +461,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 	<div class="wrap wps-page-container">
 		<!-- Page Header -->
 		<?php wpshadow_render_page_header(
-			__( 'Helpful Tools', 'wpshadow' ),
+			__( 'WPShadow Utilities', 'wpshadow' ),
 			__( 'Extra tools to help you manage, test, and improve your site.', 'wpshadow' ),
 			'dashicons-admin-tools'
 		); ?>
@@ -466,57 +480,73 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 						foreach ( $family_items as $item ) :
 							$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';
 							$utility_url = admin_url( 'admin.php?page=wpshadow-utilities&tab=' . $item['tool'] );
-							
+
 							// Get feature status
 							$feature_status = wpshadow_get_feature_status( $item['since'] );
 							$is_coming_soon = ( 'coming_soon' === $feature_status['status'] );
+							$card_class     = ( ! empty( $item['enabled'] ) && ! $is_coming_soon ) ? 'wps-card--link' : '';
+							$card_attrs     = array();
+							$width_class    = '';
+							$card_width     = $item['width'] ?? 'half';
+							if ( 'full' === $card_width ) {
+								$width_class = 'wps-grid-span-full';
+							} elseif ( 'half' === $card_width ) {
+								$width_class = 'wps-grid-span-half';
+							}
+							$card_class = trim( $card_class . ' ' . $width_class );
 
+							if ( ! empty( $item['enabled'] ) && ! $is_coming_soon ) {
+								$card_attrs = array(
+									'data-utility-url' => $utility_url,
+									'role'             => 'link',
+									'tabindex'         => '0',
+									'aria-label'       => sprintf( __( 'Open %s utility', 'wpshadow' ), $item['title'] ),
+								);
+							}
+
+							$badge = array();
+							if ( $is_coming_soon ) {
+								$badge = array(
+									'label' => sprintf( __( 'Available %s', 'wpshadow' ), $feature_status['launch_date'] ),
+									'class' => 'wps-badge--info',
+								);
+							}
 							?>
-			<div class="wps-card<?php echo ( ! empty( $item['enabled'] ) && ! $is_coming_soon ) ? ' wps-card--link' : ''; ?>"<?php if ( ! empty( $item['enabled'] ) && ! $is_coming_soon ) : ?> data-utility-url="<?php echo esc_url( $utility_url ); ?>" role="link" tabindex="0" aria-label="<?php echo esc_attr( sprintf( __( 'Open %s utility', 'wpshadow' ), $item['title'] ) ); ?>"<?php endif; ?>>
-				<div class="wps-card-header wps-pb-3 wps-border-bottom">
-					<div class="wps-flex wps-gap-3 wps-items-start">
-						<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-text-3xl wps-text-primary"></span>
-						<div>
-							<h3 class="wps-card-title wps-m-0">
-						<?php if ( ! empty( $item['enabled'] ) && ! $is_coming_soon ) : ?>
-							<a href="<?php echo esc_url( $utility_url ); ?>" style="color: inherit; text-decoration: none;">
-								<?php echo esc_html( $item['title'] ); ?>
-							</a>
-						<?php else : ?>
-							<?php echo esc_html( $item['title'] ); ?>
-						<?php endif; ?>
-			</h3>
-							<p class="wps-card-description wps-m-0">
-								<?php echo esc_html( $item['desc'] ); ?>
-							</p>
-							<?php if ( $is_coming_soon ) : ?>
-								<p class="wps-m-0" style="margin-top: 4px; font-style: italic; color: #757575;">
-									<?php echo esc_html( sprintf( __( 'Available %s', 'wpshadow' ), $feature_status['launch_date'] ) ); ?>
-								</p>
-							<?php endif; ?>
-						</div>
-					</div>
-				</div>
-				<div class="wps-card-body">
-					<?php if ( $is_coming_soon ) : ?>
-						<button class="wps-btn wps-btn--secondary" disabled>
-							<span class="dashicons dashicons-hourglass"></span>
-							<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
-						</button>
-					<?php elseif ( ! empty( $item['enabled'] ) ) : ?>
-						<a href="<?php echo esc_url( $utility_url ); ?>" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-arrow-right-alt2"></span>
-							<?php esc_html_e( 'Open This Tool', 'wpshadow' ); ?>
-						</a>
-					<?php else : ?>
-						<button class="wps-btn wps-btn--secondary" disabled>
-							<span class="dashicons dashicons-hourglass"></span>
-							<?php esc_html_e( 'Available Soon', 'wpshadow' ); ?>
-						</button>
-					<?php endif; ?>
-				</div>
-			</div>
-			<?php endforeach; ?>
+							<?php
+							wpshadow_render_card(
+								array(
+									'title'       => $item['title'],
+									'title_url'   => ( ! empty( $item['enabled'] ) && ! $is_coming_soon ) ? $utility_url : '',
+									'description' => $item['desc'],
+									'icon'        => $icon_class,
+									'icon_class'  => 'wps-text-primary',
+									'badge'       => $badge,
+									'card_class'  => $card_class,
+									'attrs'       => $card_attrs,
+									'body'        => function() use ( $is_coming_soon, $item, $utility_url ) {
+										?>
+										<?php if ( $is_coming_soon ) : ?>
+											<button class="wps-btn wps-btn--secondary" disabled>
+												<span class="dashicons dashicons-hourglass"></span>
+												<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
+											</button>
+										<?php elseif ( ! empty( $item['enabled'] ) ) : ?>
+											<a href="<?php echo esc_url( $utility_url ); ?>" class="wps-btn wps-btn--secondary">
+												<span class="dashicons dashicons-arrow-right-alt2"></span>
+												<?php esc_html_e( 'Open This Tool', 'wpshadow' ); ?>
+											</a>
+										<?php else : ?>
+											<button class="wps-btn wps-btn--secondary" disabled>
+												<span class="dashicons dashicons-hourglass"></span>
+												<?php esc_html_e( 'Available Soon', 'wpshadow' ); ?>
+											</button>
+										<?php endif; ?>
+										<?php
+									},
+								)
+							);
+							?>
+						<?php endforeach; ?>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -526,7 +556,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 		<div style="margin-top: 60px; border-top: 1px solid #e0e0e0; padding-top: 40px;">
 			<?php
 			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-				wpshadow_render_page_activities( 'utilities', 10 );
+				wpshadow_render_page_activities( 'tools', 10 );
 			}
 			?>
 		</div>

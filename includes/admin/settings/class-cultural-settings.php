@@ -79,6 +79,8 @@ class Cultural_Settings {
 		?>
 		<div class="wrap wpshadow-settings-page">
 			<h1>🌐 <?php esc_html_e( 'Cultural Settings', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'WPShadow Speaks Your Language', 'wpshadow' ); ?></h2>

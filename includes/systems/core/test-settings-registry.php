@@ -226,9 +226,9 @@ class Test_Settings_Registry {
 		$cache                          = get_option( 'wpshadow_cache_enabled', true );
 		$tests['cache_enabled_default'] = $cache === true;
 
-		// Cache duration reasonable (1 hour)
-		$duration                         = get_option( 'wpshadow_cache_duration', 3600 );
-		$tests['cache_duration_is_1hour'] = $duration === 3600;
+		// Cache duration reasonable (24 hours)
+		$duration                          = get_option( 'wpshadow_cache_duration', 86400 );
+		$tests['cache_duration_is_24hour'] = $duration === 86400;
 
 		// Safety mode enabled by default (Guardian)
 		$safety                       = get_option( 'wpshadow_guardian_safety_mode', true );

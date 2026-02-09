@@ -55,6 +55,7 @@ wp_enqueue_style( 'wpshadow-wizard-styles', WPSHADOW_URL . 'includes/ui/wizard-s
 	<!-- Page Header -->
 	<div class="wpshadow-wizard-header">
 		<h1><?php echo esc_html( $workflow_id ? __( 'Edit Automation', 'wpshadow' ) : __( 'Create New Automation', 'wpshadow' ) ); ?></h1>
+		<?php do_action( 'wpshadow_after_page_header' ); ?>
 		<p><?php echo esc_html( $workflow_id ? sprintf( __( 'Modify "%s" automation', 'wpshadow' ), esc_html( $workflow['name'] ?? 'Unknown' ) ) : __( 'Build your automation step by step.', 'wpshadow' ) ); ?></p>
 	</div>
 
@@ -97,3 +98,9 @@ wp_enqueue_style( 'wpshadow-wizard-styles', WPSHADOW_URL . 'includes/ui/wizard-s
 		</div>
 	</div>
 </div>
+
+<?php
+if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+	wpshadow_render_page_activities( 'workflows', 10 );
+}
+?>

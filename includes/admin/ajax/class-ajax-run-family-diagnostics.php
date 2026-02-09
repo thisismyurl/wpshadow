@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Diagnostics\Diagnostic_Registry;
@@ -46,20 +46,50 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 	public static function handle() {
 		// Verify nonce and capability
 		self::verify_request( 'wpshadow_security_scan', 'manage_options' );
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 30 );
+		}
+		ini_set( 'default_socket_timeout', '10' );
 
 		// Get and sanitize parameters
 		$family = self::get_post_param( 'family', 'text', '', true );
+		error_log( sprintf( 'WPShadow: %s diagnostics request started', $family ) );
 
 		// Validate family
-		$valid_families = array( 'security', 'performance', 'seo', 'accessibility', 'protection' );
+		$valid_families = array( 'security', 'performance', 'seo', 'accessibility', 'protection', 'email' );
 		if ( ! in_array( $family, $valid_families, true ) ) {
 			self::send_error( __( 'Invalid diagnostic family specified.', 'wpshadow' ) );
 		}
+
+		// Limit external HTTP calls to keep AJAX responsive.
+		$http_args_filter = static function ( $args ) {
+			$timeout = isset( $args['timeout'] ) ? (float) $args['timeout'] : 0;
+			if ( 0 === $timeout || $timeout > 10 ) {
+				$args['timeout'] = 10;
+			}
+			return $args;
+		};
+		add_filter( 'http_request_args', $http_args_filter, 10, 1 );
+
+		update_option(
+			'wpshadow_diagnostics_status',
+			array(
+				'family'    => $family,
+				'slug'      => '',
+				'last_slug' => '',
+				'state'     => 'starting',
+				'started'   => time(),
+				'updated'   => time(),
+			)
+		);
 
 		// Get all diagnostics
 		$all_diagnostics = Diagnostic_Registry::get_all();
 		$family_diagnostics = array();
 		$findings = array();
+		$start_time = microtime( true );
+		$max_duration = 25;
+		$timed_out = false;
 
 		// Filter diagnostics by family
 		foreach ( $all_diagnostics as $slug => $class ) {
@@ -74,15 +104,33 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 			}
 
 			$family_diagnostics[ $slug ] = $class;
+			update_option(
+				'wpshadow_diagnostics_status',
+				array(
+					'family'    => $family,
+					'slug'      => $slug,
+					'last_slug' => $slug,
+					'state'     => 'running',
+					'started'   => time(),
+					'updated'   => time(),
+				)
+			);
+			error_log( sprintf( 'WPShadow: %s diagnostic start %s', $family, $slug ) );
 
 			// Run the diagnostic
 			try {
+				$diagnostic_start = microtime( true );
 				if ( method_exists( $class, 'execute' ) ) {
 					$result = $class::execute();
 				} elseif ( method_exists( $class, 'check' ) ) {
 					$result = $class::check();
 				} else {
 					continue;
+				}
+				$diagnostic_duration = microtime( true ) - $diagnostic_start;
+				error_log( sprintf( 'WPShadow: %s diagnostic end %s (%.3fs)', $family, $slug, $diagnostic_duration ) );
+				if ( $diagnostic_duration > 1 ) {
+					error_log( sprintf( 'WPShadow: %s diagnostic %s took %.3fs', $family, $slug, $diagnostic_duration ) );
 				}
 
 				// If finding detected, add to results
@@ -102,7 +150,30 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 				// Log error but continue with other diagnostics
 				error_log( sprintf( 'WPShadow: Error running diagnostic %s: %s', $class, $e->getMessage() ) );
 			}
+
+			if ( ( microtime( true ) - $start_time ) >= $max_duration ) {
+				$timed_out = true;
+				error_log( sprintf( 'WPShadow: %s diagnostics stopped after %.2fs', $family, $max_duration ) );
+				break;
+			}
 		}
+
+		remove_filter( 'http_request_args', $http_args_filter, 10 );
+
+		$duration = microtime( true ) - $start_time;
+		error_log( sprintf( 'WPShadow: %s diagnostics completed in %.3fs (%d checks)', $family, $duration, count( $family_diagnostics ) ) );
+		$current_status = get_option( 'wpshadow_diagnostics_status', array() );
+		update_option(
+			'wpshadow_diagnostics_status',
+			array(
+				'family'    => $family,
+				'slug'      => '',
+				'last_slug' => $current_status['last_slug'] ?? '',
+				'state'     => $timed_out ? 'timed_out' : 'complete',
+				'finished'  => time(),
+				'updated'   => time(),
+			)
+		);
 
 		// Sort findings by severity (critical > high > medium > low)
 		usort(
@@ -133,12 +204,25 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 			'auto_fixable'      => count( array_filter( $findings, fn( $f ) => $f['auto_fixable'] ) ),
 		);
 
+		update_option(
+			'wpshadow_last_family_results',
+			array(
+				'family'    => $family,
+				'created'   => time(),
+				'findings'  => $findings,
+				'stats'     => $stats,
+				'total'     => $stats['total_diagnostics'],
+				'timed_out' => $timed_out,
+			)
+		);
+
 		self::send_success(
 			array(
 				'family'            => $family,
 				'findings'          => $findings,
 				'stats'             => $stats,
 				'total_diagnostics' => $stats['total_diagnostics'],
+				'timed_out'         => $timed_out,
 				'message'           => sprintf(
 					/* translators: 1: number of issues, 2: family name */
 					_n(

@@ -54,7 +54,7 @@ class Diagnostic_Accept_Language_Header_Abuse_Not_Prevented extends Diagnostic_B
 	 *
 	 * @var string
 	 */
-	protected static $family = 'security';
+	protected static $family = 'seo';
 
 	/**
 	 * Run the diagnostic check.
@@ -63,24 +63,18 @@ class Diagnostic_Accept_Language_Header_Abuse_Not_Prevented extends Diagnostic_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_accept_language' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Accept-Language header abuse not prevented. Validate language codes and prevent header injection attacks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   30,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/accept-language-header-abuse-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'validate_accept_language' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Accept-Language headers are not validated. Checking language codes helps prevent unexpected header values from affecting site behavior.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 30,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/accept-language-header-abuse-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

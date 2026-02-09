@@ -115,6 +115,8 @@ class Exit_Followups_Page {
 		<div class="wrap wpshadow-exit-followups-page">
 			<h1><?php esc_html_e( 'Exit Interview Followups', 'wpshadow' ); ?></h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<p class="description">
 				<?php
 				esc_html_e(

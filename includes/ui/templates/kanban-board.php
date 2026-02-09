@@ -549,7 +549,11 @@ $severity_legend = array(
 		</div>
 
 <!-- Recent Activity Section -->
-<?php wpshadow_render_activity_log( 'diagnostics', 10 ); ?>
+<?php
+if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+	wpshadow_render_page_activities( 'diagnostics', 10 );
+}
+?>
 
 	</div>
 
@@ -804,4 +808,8 @@ $severity_legend = array(
 	});
 </script>
 <!-- Findings Activity Log -->
-<?php wpshadow_render_activity_log( 'diagnostics', 10 ); ?>
+<?php
+if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+	wpshadow_render_page_activities( 'diagnostics', 10 );
+}
+?>

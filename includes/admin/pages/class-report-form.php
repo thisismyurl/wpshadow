@@ -138,17 +138,33 @@ class Report_Form {
 					</div>
 
 					<!-- Report Preview -->
-					<div id="report-preview" class="wps-card wps-mb-4 wps-none">
-						<div class="wps-card-header wps-flex wps-items-center wps-justify-between">
-							<h3 class="wps-card-title wps-m-0">
-								<?php esc_html_e( 'Report Preview', 'wpshadow' ); ?>
-							</h3>
-							<button type="button" class="wps-btn wps-btn--ghost" id="close-preview">
-								<span class="dashicons dashicons-no-alt"></span>
-							</button>
-						</div>
-						<div class="wps-card-body" id="report-content"></div>
-					</div>
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'          => __( 'Report Preview', 'wpshadow' ),
+							'card_class'     => 'wps-mb-4 wps-none',
+							'attrs'          => array(
+								'id' => 'report-preview',
+							),
+							'header_actions' => array(
+								array(
+									'label'      => __( 'Close', 'wpshadow' ),
+									'class'      => 'wps-btn wps-btn--ghost',
+									'icon'       => 'dashicons-no-alt',
+									'attrs'      => array(
+										'id' => 'close-preview',
+									),
+									'aria_label' => __( 'Close report preview', 'wpshadow' ),
+								),
+							),
+							'body'           => function() {
+								?>
+								<div id="report-content"></div>
+								<?php
+							},
+						)
+					);
+					?>
 
 					<!-- Email Report Button -->
 					<button type="button" class="wps-btn wps-btn--primary" id="email-report-btn" style="width: 100%;" data-wpshadow-modal-open="email-modal">

@@ -128,6 +128,8 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-import-wizard">
 			<h1><?php esc_html_e( 'Import Wizard', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<p class="description">
 				<?php esc_html_e( 'Import custom post types from CSV, JSON, or XML files with field mapping and validation.', 'wpshadow' ); ?>
 			</p>

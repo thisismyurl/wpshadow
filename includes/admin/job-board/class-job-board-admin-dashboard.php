@@ -86,6 +86,8 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Job Board Dashboard', 'wpshadow' ); ?></h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<div class="wpshadow-dashboard-grid">
 				<?php self::render_stats_cards(); ?>
 			</div>
@@ -245,6 +247,8 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Job Applications', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<!-- Applications list table will be rendered here -->
 		</div>
 		<?php
@@ -259,6 +263,8 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Job Board Settings', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<form method="post" action="options.php">
 				<?php
 				settings_fields( 'wpshadow_job_board' );

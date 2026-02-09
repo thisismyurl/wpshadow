@@ -10,65 +10,42 @@
 
 declare(strict_types=1);
 
-use WPShadow\Core\UTM_Link_Manager;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Get help catalog.
+ * Get help cards from modular card definitions.
  *
- * @return array Help items.
+ * @return array Help cards.
  */
-function wpshadow_get_help_catalog() {
-	// Initialize UTM Link Manager for tracking
-	$utm = UTM_Link_Manager::class;
-	
-	return array(
-		array(
-			'title'       => __( 'Getting Started with WPShadow', 'wpshadow' ),
-			'description' => __( 'Learn the basics of how WPShadow helps you maintain a healthy WordPress site.', 'wpshadow' ),
-			'icon'        => 'dashicons-info',
-			'url'         => $utm::kb_link( 'getting-started', 'help_page' ),
-			'video'       => 'https://wpshadow.com/academy/getting-started?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_getting_started',
-		),
-		array(
-			'title'       => __( 'Understanding Diagnostics', 'wpshadow' ),
-			'description' => __( 'Discover what each diagnostic check does and what issues it helps identify.', 'wpshadow' ),
-			'icon'        => 'dashicons-search',
-			'url'         => $utm::kb_link( 'diagnostics', 'help_page' ),
-			'video'       => 'https://wpshadow.com/academy/diagnostics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_diagnostics',
-		),
-		array(
-			'title'       => __( 'Applying Treatments', 'wpshadow' ),
-			'description' => __( 'Learn how to safely apply fixes to your site with one-click treatments and undo support.', 'wpshadow' ),
-			'icon'        => 'dashicons-admin-tools',
-			'url'         => $utm::kb_link( 'treatments', 'help_page' ),
-			'video'       => 'https://wpshadow.com/academy/treatments?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_treatments',
-		),
-		array(
-			'title'       => __( 'Workflows & Automation', 'wpshadow' ),
-			'description' => __( 'Set up automated workflows to keep your site healthy without manual intervention.', 'wpshadow' ),
-			'icon'        => 'dashicons-schedule',
-			'url'         => $utm::kb_link( 'workflows', 'help_page' ),
-			'video'       => 'https://wpshadow.com/academy/workflows?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_workflows',
-		),
-		array(
-			'title'       => __( 'Monitoring & Alerts', 'wpshadow' ),
-			'description' => __( 'Stay informed with real-time monitoring and custom alert notifications.', 'wpshadow' ),
-			'icon'        => 'dashicons-bell',
-			'url'         => $utm::kb_link( 'monitoring', 'help_page' ),
-			'video'       => 'https://wpshadow.com/academy/monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_monitoring',
-		),
-		array(
-			'title'       => __( 'Privacy & Security', 'wpshadow' ),
-			'description' => __( 'Learn about our privacy-first approach and how your data is protected.', 'wpshadow' ),
-			'icon'        => 'dashicons-lock',
-			'url'         => $utm::kb_link( 'privacy', 'help_page' ),
-			'video'       => 'https://wpshadow.com/academy/privacy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=video_privacy',
-		),
+function wpshadow_get_help_cards() {
+	$cards = array();
+	$base  = WPSHADOW_PATH . 'includes/ui/help';
+	$dirs  = glob( $base . '/*', GLOB_ONLYDIR );
+
+	if ( ! empty( $dirs ) ) {
+		foreach ( $dirs as $dir ) {
+			$card_file = $dir . '/card.php';
+			if ( ! file_exists( $card_file ) ) {
+				continue;
+			}
+
+			$card = require $card_file;
+			if ( is_array( $card ) ) {
+				$cards[] = $card;
+			}
+		}
+	}
+
+	usort(
+		$cards,
+		static function ( $left, $right ) {
+			return ( $left['order'] ?? 0 ) <=> ( $right['order'] ?? 0 );
+		}
 	);
+
+	return $cards;
 }
 
 /**
@@ -81,33 +58,84 @@ function wpshadow_render_help() {
 		wp_die( 'Insufficient permissions.' );
 	}
 
-	$catalog = wpshadow_get_help_catalog();
+	$cloud_api_key = get_option( 'wpshadow_cloud_api_key', '' );
+	$recent_learning_items = array();
+	$recent_learning_error = '';
+
+	if ( ! empty( $cloud_api_key ) ) {
+		$feed_url = apply_filters( 'wpshadow_help_activity_feed_url', '' );
+
+		if ( ! empty( $feed_url ) ) {
+			$feed_response = wp_remote_get(
+				$feed_url,
+				array(
+					'timeout' => 8,
+					'headers' => array(
+						'Authorization' => 'Bearer ' . $cloud_api_key,
+					),
+				)
+			);
+
+			if ( is_wp_error( $feed_response ) ) {
+				$recent_learning_error = $feed_response->get_error_message();
+			} else {
+				$body = wp_remote_retrieve_body( $feed_response );
+				$decoded = json_decode( $body, true );
+				if ( is_array( $decoded ) && ! empty( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
+					$recent_learning_items = $decoded['items'];
+				}
+			}
+		}
+	}
+
+	$cards = wpshadow_get_help_cards();
+	$resource_cards = array_filter(
+		$cards,
+		static function ( $card ) {
+			return ( $card['section'] ?? 'resources' ) === 'resources';
+		}
+	);
+	$support_cards = array_filter(
+		$cards,
+		static function ( $card ) {
+			return ( $card['section'] ?? '' ) === 'support';
+		}
+	);
 
 	?>
 	<div class="wrap wps-page-container">
 		<!-- Page Header -->
 		<?php wpshadow_render_page_header(
-			__( 'WPShadow Help & Learning', 'wpshadow' ),
+			__( 'WPShadow Help', 'wpshadow' ),
 			__( 'Explore tutorials, guides, and resources to get the most out of WPShadow.', 'wpshadow' ),
 			'dashicons-editor-help'
 		); ?>
 
 		<!-- Help Resources Grid -->
 		<div class="wps-grid wps-grid-auto-320">
-			<?php foreach ( $catalog as $item ) : ?>
+			<?php foreach ( $resource_cards as $item ) : ?>
 				<?php
+				$width_class = '';
+				$card_width  = $item['width'] ?? '';
+				if ( 'full' === $card_width ) {
+					$width_class = 'wps-grid-span-full';
+				} elseif ( 'half' === $card_width ) {
+					$width_class = 'wps-grid-span-half';
+				}
+
 				wpshadow_render_card(
 					array(
-						'title'       => ! empty( $item['url'] ) ? $item['title'] : $item['title'],
-						'title_url'   => ! empty( $item['url'] ) ? $item['url'] : '',
-						'description' => $item['description'],
-						'icon'        => $item['icon'],
+						'title'       => $item['title'] ?? '',
+						'title_url'   => $item['url'] ?? '',
+						'description' => $item['description'] ?? '',
+						'icon'        => $item['icon'] ?? '',
 						'icon_class'  => 'wps-text-primary',
+						'card_class'  => $width_class,
 						'body'        => function() use ( $item ) {
 							?>
 							<div class="wps-flex wps-gap-2">
 								<?php if ( ! empty( $item['url'] ) ) : ?>
-									<a href="<?php echo esc_url( $item['url'] ); ?>" 
+									<a href="<?php echo esc_url( $item['url'] ); ?>"
 										target="_blank" rel="noopener noreferrer"
 										class="wps-btn wps-btn--secondary">
 										<span class="dashicons dashicons-external"></span>
@@ -115,7 +143,7 @@ function wpshadow_render_help() {
 									</a>
 								<?php endif; ?>
 								<?php if ( ! empty( $item['video'] ) ) : ?>
-									<a href="<?php echo esc_url( $item['video'] ); ?>" 
+									<a href="<?php echo esc_url( $item['video'] ); ?>"
 										target="_blank" rel="noopener noreferrer"
 										class="wps-btn wps-btn--secondary">
 										<span class="dashicons dashicons-video-alt2"></span>
@@ -132,38 +160,95 @@ function wpshadow_render_help() {
 		</div>
 
 		<!-- Contact Support & Resources -->
-		<?php
-		wpshadow_render_card(
-			array(
-				'title'       => __( 'Need More Help?', 'wpshadow' ),
-				'title_tag'   => 'h2',
-				'description' => __( 'Access our knowledge base, training videos, and community support.', 'wpshadow' ),
-				'icon'        => 'dashicons-sos',
-				'card_class'  => 'wps-mt-8',
-				'body'        => function() {
-					?>
-					<div class="wps-flex wps-gap-3">
-						<a href="https://github.com/thisismyurl/wpshadow/issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=contact_support" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--primary">
-							<span class="dashicons dashicons-admin-comments"></span>
-							<?php esc_html_e( 'Contact Support', 'wpshadow' ); ?>
-						</a>
-						<a href="https://wpshadow.com/academy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=help_page&utm_content=academy_cta" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-video-alt2"></span>
-							<?php esc_html_e( 'Online Training', 'wpshadow' ); ?>
-						</a>
-						<a href="<?php echo esc_url( UTM_Link_Manager::kb_link( '', 'help_page' ) ); ?>" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn--secondary">
-							<span class="dashicons dashicons-book"></span>
-							<?php esc_html_e( 'Knowledge Base', 'wpshadow' ); ?>
-						</a>
-					</div>
-					<?php
-				},
-			)
-		);
-		?>
+		<?php foreach ( $support_cards as $card ) : ?>
+			<?php
+			$body_callback = $card['body_callback'] ?? '';
+			$width_class   = '';
+			$card_width    = $card['width'] ?? '';
+			if ( 'full' === $card_width ) {
+				$width_class = 'wps-grid-span-full';
+			} elseif ( 'half' === $card_width ) {
+				$width_class = 'wps-grid-span-half';
+			}
+			$card_class = trim( ( $card['card_class'] ?? 'wps-mt-8' ) . ' ' . $width_class );
+			wpshadow_render_card(
+				array(
+					'title'       => $card['title'] ?? '',
+					'title_tag'   => $card['title_tag'] ?? 'h2',
+					'description' => $card['description'] ?? '',
+					'icon'        => $card['icon'] ?? '',
+					'card_class'  => $card_class,
+					'body'        => function() use ( $body_callback ) {
+						if ( $body_callback && function_exists( $body_callback ) ) {
+							call_user_func( $body_callback );
+						}
+					},
+				)
+			);
+			?>
+		<?php endforeach; ?>
 
-		<!-- Recent Activity -->
-		<?php wpshadow_render_activity_log( 'general', 10 ); ?>
+		<?php if ( ! empty( $cloud_api_key ) ) : ?>
+			<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Recent Learning Activity', 'wpshadow' ),
+						'description' => __( 'See the last guides and videos you opened inside WPShadow.', 'wpshadow' ),
+						'icon'        => 'dashicons-welcome-learn-more',
+						'card_class'  => 'wps-mt-8',
+						'body'        => function() use ( $recent_learning_items, $recent_learning_error ) {
+							if ( ! empty( $recent_learning_items ) ) {
+								?>
+								<ul class="wps-list-disc wps-ml-5">
+									<?php foreach ( $recent_learning_items as $item ) : ?>
+										<?php
+											$title = isset( $item['title'] ) ? (string) $item['title'] : '';
+											$type  = isset( $item['type'] ) ? (string) $item['type'] : '';
+											$url   = isset( $item['url'] ) ? (string) $item['url'] : '';
+											$viewed_at = isset( $item['viewed_at'] ) ? (string) $item['viewed_at'] : '';
+											$meta_bits = array();
+											if ( $type ) {
+												$meta_bits[] = $type;
+											}
+											if ( $viewed_at ) {
+												$meta_bits[] = $viewed_at;
+											}
+											$meta_text = $meta_bits ? implode( ' • ', $meta_bits ) : '';
+										?>
+										<li class="wps-mb-2">
+											<?php if ( $url ) : ?>
+												<a class="wps-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo esc_html( $title ); ?>
+												</a>
+											<?php else : ?>
+												<?php echo esc_html( $title ); ?>
+											<?php endif; ?>
+											<?php if ( $meta_text ) : ?>
+												<span class="wps-text-xs wps-text-muted">
+													<?php echo esc_html( $meta_text ); ?>
+												</span>
+											<?php endif; ?>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+								<?php
+								return;
+							}
+							?>
+							<p class="wps-text-sm wps-text-muted">
+								<?php esc_html_e( 'Your recent reading and viewing history will appear here once the WPShadow feed is connected.', 'wpshadow' ); ?>
+							</p>
+							<?php if ( $recent_learning_error ) : ?>
+								<p class="wps-text-xs wps-text-muted">
+									<?php echo esc_html( $recent_learning_error ); ?>
+								</p>
+							<?php endif; ?>
+							<?php
+						},
+					)
+				);
+			?>
+		<?php endif; ?>
 	</div>
 	<?php
 }

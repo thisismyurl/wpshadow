@@ -1254,7 +1254,13 @@ class Hooks_Initializer {
 			'read',
 			'wpshadow',
 			function () {
-				echo '<div class="wrap"><h1>WPShadow (Network)</h1><p>Network admin menu check.</p></div>';
+				?>
+				<div class="wrap">
+					<h1>WPShadow (Network)</h1>
+					<?php do_action( 'wpshadow_after_page_header' ); ?>
+					<p>Network admin menu check.</p>
+				</div>
+				<?php
 			},
 			'dashicons-admin-generic',
 			999

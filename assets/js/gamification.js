@@ -137,8 +137,14 @@
 		showNotice: function(type, message) {
 			const noticeClass = type === 'success' ? 'notice-success' : 'notice-error';
 			const notice = `<div class="notice ${noticeClass} is-dismissible"><p>${message}</p></div>`;
-
-			$('.wpshadow-gamification-page h1').after(notice);
+			const $slot = $('#wpshadow-page-notices');
+			if ($slot.length) {
+				$slot.append(notice);
+			} else if ($('.wrap').length) {
+				$('.wrap').first().prepend(notice);
+			} else {
+				$('body').prepend(notice);
+			}
 		}
 	};
 

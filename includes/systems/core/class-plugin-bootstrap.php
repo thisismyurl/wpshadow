@@ -434,6 +434,16 @@ class Plugin_Bootstrap {
 		// Load Phase 6: Privacy & Consent Excellence
 		self::load_privacy_consent();
 
+		// Load report download handlers
+		$admin_path = WPSHADOW_PATH . 'includes/admin/';
+		if ( file_exists( $admin_path . 'class-user-privacy-report-download.php' ) ) {
+			require_once $admin_path . 'class-user-privacy-report-download.php';
+
+			if ( class_exists( '\\WPShadow\\Admin\\User_Privacy_Report_Download' ) ) {
+				\WPShadow\Admin\User_Privacy_Report_Download::init();
+			}
+		}
+
 		// Load Phase 7: WPShadow Guardian (Cloud AI Scanning)
 		self::load_guardian_integration();
 

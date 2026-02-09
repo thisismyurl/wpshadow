@@ -45,6 +45,7 @@ $tips = array(
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Tips & Guidance', 'wpshadow' ); ?></h1>
+	<?php do_action( 'wpshadow_after_page_header' ); ?>
 	<p><?php esc_html_e( 'Helpful tips and best practices for managing your WordPress site.', 'wpshadow' ); ?></p>
 
 	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">

@@ -124,6 +124,8 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 				<?php esc_html_e( 'WPShadow Guardian', 'wpshadow' ); ?>
 			</h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<nav class="nav-tab-wrapper">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=dashboard' ) ); ?>"
 				   class="nav-tab <?php echo 'dashboard' === $tab ? 'nav-tab-active' : ''; ?>">
@@ -615,7 +617,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 					printf(
 						/* translators: %s: Privacy Policy link */
 						esc_html__( 'Guardian requires sending anonymized site data to our cloud service for analysis. Review our %s to learn exactly what we collect.', 'wpshadow' ),
-						'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-privacy' ) ) . '">' . esc_html__( 'Privacy Policy', 'wpshadow' ) . '</a>'
+						'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=privacy-dashboard' ) ) . '">' . esc_html__( 'Privacy Policy', 'wpshadow' ) . '</a>'
 					);
 					?>
 				</p>

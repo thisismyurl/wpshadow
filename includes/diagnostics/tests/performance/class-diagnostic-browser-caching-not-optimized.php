@@ -77,9 +77,5 @@ class Diagnostic_Browser_Caching_Not_Optimized extends Diagnostic_Base {
 		}
 
 		return null;
-						}
-						return null;
-						}
-						return null;
 	}
 }

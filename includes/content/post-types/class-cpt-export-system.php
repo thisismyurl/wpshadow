@@ -139,6 +139,8 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-export-system">
 			<h1><?php esc_html_e( 'Export Anywhere', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<p class="description">
 				<?php esc_html_e( 'Export your custom post types to multiple formats and destinations.', 'wpshadow' ); ?>
 			</p>

@@ -20,12 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param string $context Page context (tools, reports, guardian, workflows, settings, security, performance)
  * @param int    $limit Maximum activities to display (default: 10)
+ * @param string $report_slug Optional report slug for report-specific filtering
  * @return void
  */
-function wpshadow_render_page_activities( string $context = '', int $limit = 10 ): void {
+function wpshadow_render_page_activities( string $context = '', int $limit = 10, string $report_slug = '' ): void {
 	if ( empty( $context ) ) {
 		return;
 	}
+
+	$report_slug = sanitize_key( $report_slug );
 
 	$nonce = wp_create_nonce( 'wpshadow_get_activities' );
 	?>
@@ -43,7 +46,8 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 				 data-context="<?php echo esc_attr( $context ); ?>"
 				 data-limit="<?php echo esc_attr( (string) $limit ); ?>"
 				 data-nonce="<?php echo esc_attr( $nonce ); ?>"
-				 data-refresh-interval="3000">
+					 data-refresh-interval="3000"
+					 <?php if ( ! empty( $report_slug ) ) : ?>data-report="<?php echo esc_attr( $report_slug ); ?>"<?php endif; ?>>
 				<div class="wps-activity-loading" style="text-align: center; padding: 20px;">
 					<span class="spinner" style="float: none; margin: 0;"></span>
 					<p><?php esc_html_e( 'Loading activity...', 'wpshadow' ); ?></p>
@@ -90,34 +94,60 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 
 			loadActivities: function(container, context, limit) {
 				const nonce = container.getAttribute('data-nonce');
+				const report = container.getAttribute('data-report') || '';
 				const currentTimestamp = Math.floor(Date.now() / 1000);
+				const sinceTimestamp = this.getLastTimestamp(context);
 
 				$.post(ajaxurl, {
 					action: 'wpshadow_get_activities',
 					nonce: nonce,
 					context: context,
+					report: report,
 					limit: limit,
 					offset: 0,
-					since: this.getLastTimestamp(context)
+					since: sinceTimestamp
 				}, (response) => {
 					if (response.success && response.data.activities) {
-						this.renderActivities(container, response.data.activities);
-						this.setLastTimestamp(context, currentTimestamp);
+						if (response.data.activities.length > 0 || sinceTimestamp === 0) {
+							this.renderActivities(container, response.data.activities);
+							this.setLastTimestamp(context, currentTimestamp);
+						}
 					}
 				});
 			},
 
-			renderActivities: function(container, activities) {
+				renderActivities: function(container, activities) {
+					const i18n = window.wpshadow_i18n || {};
+				let highlightNew = false;
+				if (activities.length > 0) {
+					const latestId = activities[0].id || '';
+					if (latestId && container.dataset.latestActivityId === latestId) {
+						return;
+					}
+					highlightNew = Boolean(container.dataset.latestActivityId);
+					container.dataset.latestActivityId = latestId;
+				}
+
 				if (activities.length === 0) {
 					container.innerHTML = '<div class="wps-activity-empty"><p>' + 
-						wpshadow_i18n.no_activities + '</p></div>';
+						this.escapeHtml(i18n.no_activities || 'No activities yet') + '</p></div>';
 					return;
 				}
 
 				let html = '';
-				activities.forEach((activity) => {
+					activities.forEach((activity) => {
 					const iconClass = this.getIconClass(activity.action);
 					const iconColor = this.getIconColor(activity.action);
+						const reportLink = activity.report_url && activity.report_label
+							? `<a href="${this.escapeAttr(activity.report_url)}" class="wps-link">${this.escapeHtml(activity.report_label)}</a>`
+							: '';
+						const detailsLine = reportLink
+							? `
+								<div class="wps-activity-details">
+									${this.escapeHtml(i18n.report_label || 'Report')}: ${reportLink}
+								</div>
+							`
+							: (activity.details ? `<div class="wps-activity-details">${this.escapeHtml(activity.details)}</div>` : '');
 
 					html += `
 						<div class="wps-activity-item" role="listitem">
@@ -126,7 +156,7 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 							</div>
 							<div class="wps-activity-content">
 								<div class="wps-activity-text">${this.escapeHtml(activity.action)}</div>
-								${activity.details ? `<div class="wps-activity-details">${this.escapeHtml(activity.details)}</div>` : ''}
+									${detailsLine}
 								<time class="wps-activity-time" datetime="${new Date(activity.timestamp * 1000).toISOString()}">
 									${this.escapeHtml(activity.time_ago)} • ${this.escapeHtml(activity.user_name)}
 								</time>
@@ -136,6 +166,15 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 				});
 
 				container.innerHTML = html;
+				if (highlightNew) {
+					const firstItem = container.querySelector('.wps-activity-item');
+					if (firstItem) {
+						firstItem.classList.add('wps-activity-item--new');
+						window.setTimeout(() => {
+							firstItem.classList.remove('wps-activity-item--new');
+						}, 1200);
+					}
+				}
 			},
 
 			getIconClass: function(action) {
@@ -147,6 +186,7 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 					'guardian_executed': 'dashicons-shield-alt',
 					'report_generated': 'dashicons-chart-area',
 					'cache_cleared': 'dashicons-update',
+					'Settings Updated': 'dashicons-admin-settings',
 				};
 				return iconMap[action] || 'dashicons-admin-generic';
 			},
@@ -178,6 +218,10 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 				return div.innerHTML;
 			},
 
+				escapeAttr: function(text) {
+					return this.escapeHtml(text).replace(/"/g, '&quot;');
+				},
+
 			destroy: function() {
 				Object.values(this.refreshTimers).forEach((timer) => clearInterval(timer));
 				this.refreshTimers = {};
@@ -199,18 +243,14 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10 
 
 	<style>
 	.wps-activity-ajax-container .wps-activity-item {
-		animation: fadeIn 0.3s ease-in;
+		transition: opacity 0.2s ease-in;
 	}
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(-10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
+	.wps-activity-item--new {
+		background: rgba(34, 113, 177, 0.08);
+		box-shadow: inset 0 0 0 1px rgba(34, 113, 177, 0.12);
+		border-radius: 6px;
+		transition: background 0.6s ease, box-shadow 0.6s ease;
 	}
 
 	.wps-activity-details {
@@ -264,6 +304,7 @@ function wpshadow_activity_display_localization(): void {
 	wp_localize_script( 'jquery', 'wpshadow_i18n', array(
 		'no_activities' => __( 'No activities yet', 'wpshadow' ),
 		'loading'       => __( 'Loading activity...', 'wpshadow' ),
+		'report_label'  => __( 'Report', 'wpshadow' ),
 	) );
 }
 add_action( 'wp_enqueue_scripts', 'wpshadow_activity_display_localization' );

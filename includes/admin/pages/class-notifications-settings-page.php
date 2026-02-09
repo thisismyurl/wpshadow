@@ -36,7 +36,7 @@ class Notifications_Settings_Page {
 		}
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'Notifications', 'wpshadow' ),
@@ -54,7 +54,7 @@ class Notifications_Settings_Page {
 					array(
 						'title'       => __( 'Email Notifications', 'wpshadow' ),
 						'description' => __( 'Control when and how WPShadow sends you email alerts.', 'wpshadow' ),
-						'icon'        => 'dashicons-mail',
+						'icon'        => 'dashicons-email-alt',
 						'body'        => function() {
 							?>
 							<div class="wps-form-group">
@@ -261,6 +261,13 @@ class Notifications_Settings_Page {
 				);
 				?>
 			</form>
+
+			<!-- Recent Activity Section -->
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'settings', 10 );
+			}
+			?>
 		</div>
 		<?php
 	}

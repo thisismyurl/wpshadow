@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WPShadow\Admin\Post_Types_Page;
 use WPShadow\Core\Form_Param_Helper;
 /**
  * Manages WPShadow admin menu registration and setup
@@ -33,6 +34,7 @@ class Menu_Manager {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menus' ) );
 		add_action( 'admin_init', array( __CLASS__, 'handle_legacy_redirects' ) );
+		add_action( 'admin_enqueue_scripts', array( 'WPShadow\Admin\Post_Types_Page', 'enqueue_assets' ) );
 	}
 
 	/**
@@ -122,6 +124,8 @@ class Menu_Manager {
 			array( 'WPShadow\Admin\Post_Types_Page', 'render_page' )
 		);
 
+		Post_Types_Page::subscribe();
+
 		// Scan Settings is now a tab on Settings page, not a separate menu
 		// Legacy redirect handled in handle_legacy_redirects()
 
@@ -184,6 +188,7 @@ class Menu_Manager {
 			'wpshadow-guardian-reports'       => 'wpshadow-reports',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
+			'wpshadow-privacy'                => 'wpshadow-settings&tab=privacy-dashboard',
 			'wpshadow-tools'                  => 'wpshadow-utilities',
 			'wpshadow-exit-followups'         => 'wpshadow', // Redirect exit-followups to dashboard
 		);

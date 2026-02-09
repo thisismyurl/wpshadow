@@ -142,6 +142,13 @@ function wpshadow_render_scan_settings() {
 				<button type="button" class="button" id="wpshadow-t-next" aria-label="<?php echo esc_attr__( 'Next page', 'wpshadow' ); ?>">&rarr;</button>
 			</div>
 		</section>
+
+		<!-- Recent Activity Section -->
+		<?php
+		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+			wpshadow_render_page_activities( 'settings', 10 );
+		}
+		?>
 	</div>
 	<script type="text/javascript">
 	(function(){

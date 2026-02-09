@@ -61,8 +61,13 @@ class Training_Widget extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-		wp_add_inline_style( 'wpshadow-admin', self::get_widget_styles() );
-		wp_add_inline_script( 'wpshadow-admin', self::get_widget_scripts() );
+		if ( wp_style_is( 'wpshadow-admin-pages', 'enqueued' ) || wp_style_is( 'wpshadow-admin-pages', 'registered' ) ) {
+			wp_add_inline_style( 'wpshadow-admin-pages', self::get_widget_styles() );
+		}
+
+		if ( wp_script_is( 'wpshadow-admin-pages', 'enqueued' ) || wp_script_is( 'wpshadow-admin-pages', 'registered' ) ) {
+			wp_add_inline_script( 'wpshadow-admin-pages', self::get_widget_scripts() );
+		}
 	}
 
 	/**

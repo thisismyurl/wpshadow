@@ -35,7 +35,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(
-			'admin_notices'                                      => 'display_notice',
+			'wpshadow_after_page_header'                         => 'display_notice',
 			'wp_ajax_wpshadow_dismiss_guardian_notice'           => 'dismiss_notice',
 			'wp_ajax_wpshadow_activate_guardian_from_notice'     => 'activate_guardian',
 		);
@@ -58,6 +58,12 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	 * @since 1.6030.2148
 	 */
 	public static function display_notice(): void {
+		static $rendered = false;
+
+		if ( $rendered ) {
+			return;
+		}
+
 		// Only show on WPShadow pages
 		if ( ! isset( $_GET['page'] ) || false === strpos( (string) $_GET['page'], 'wpshadow' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
@@ -78,6 +84,8 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 		if ( ! empty( $dismissed ) ) {
 			return;
 		}
+
+		$rendered = true;
 
 		// Display the notice
 		?>

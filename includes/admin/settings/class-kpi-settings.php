@@ -76,6 +76,8 @@ class KPI_Settings {
 		?>
 		<div class="wrap wpshadow-settings-page">
 			<h1>📊 <?php esc_html_e( 'KPI & Impact Tracking', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'See the Value WPShadow Delivers', 'wpshadow' ); ?></h2>

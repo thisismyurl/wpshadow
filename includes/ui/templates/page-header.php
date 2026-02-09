@@ -30,6 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php echo esc_html( $title ); ?>
 	</h1>
 	<p class="wps-version-tag">v<?php echo esc_html( WPSHADOW_VERSION ); ?></p>
+	<?php do_action( 'wpshadow_after_page_header' ); ?>
 	<?php if ( ! empty( $subtitle ) ) : ?>
 		<p class="wps-page-subtitle"><?php echo wp_kses_post( $subtitle ); ?></p>
 	<?php endif; ?>

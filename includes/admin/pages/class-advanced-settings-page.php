@@ -37,7 +37,7 @@ class Advanced_Settings_Page {
 		}
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'Advanced Settings', 'wpshadow' ),
@@ -47,16 +47,21 @@ class Advanced_Settings_Page {
 			?>
 
 			<!-- Warning Notice -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'card_class' => 'wps-card--warning',
-					'body'       => '<p><strong>' . esc_html__( '⚠️ Advanced Settings', 'wpshadow' ) . '</strong><br/>' . esc_html__( 'These settings are for advanced users only. Incorrect settings may cause performance issues or unexpected behavior. Proceed with caution.', 'wpshadow' ) . '</p>',
-				)
-			);
-			?>
+			<div class="wps-card wpshadow-advanced-warning-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: #ffffff;">
+				<div class="wps-card-body">
+					<div class="wpshadow-advanced-warning-content">
+						<div class="wpshadow-advanced-warning-icon">
+							<span class="dashicons dashicons-warning"></span>
+						</div>
+						<div class="wpshadow-advanced-warning-text">
+							<h3><?php esc_html_e( 'Advanced Settings', 'wpshadow' ); ?></h3>
+							<p><?php esc_html_e( 'These settings are for advanced users only. Incorrect settings may cause performance issues or unexpected behavior. Proceed with caution.', 'wpshadow' ); ?></p>
+						</div>
+					</div>
+				</div>
+			</div>
 
-			<form method="post" action="options.php" class="wps-settings-form">
+			<form method="post" action="options.php" class="wps-settings-form wps-settings-form--advanced">
 				<?php settings_fields( 'wpshadow_settings' ); ?>
 
 				<?php
@@ -64,16 +69,19 @@ class Advanced_Settings_Page {
 				// (admin.php?page=wpshadow-scan-settings) to co-locate them with diagnostic management.
 				?>
 
-				<!-- Debug & Logging -->
-				<?php
-				wpshadow_render_card(
-					array(
-						'title'       => __( 'Debug & Logging', 'wpshadow' ),
-						'description' => __( 'Enable logging for troubleshooting (useful when reporting issues).', 'wpshadow' ),
-						'icon'        => 'dashicons-bug',
-						'body'        => function() {
+				<div class="wps-grid wps-grid-auto-320 wps-mb-4">
+					<!-- Debug & Logging -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'       => __( 'Debug & Logging', 'wpshadow' ),
+							'description' => __( 'Enable logging for troubleshooting (useful when reporting issues).', 'wpshadow' ),
+							'icon'        => 'dashicons-admin-tools',
+							'icon_class'  => 'wps-text-primary',
+							'card_class'  => 'wps-grid-span-half',
+							'body'        => function() {
 							?>
-							<div class="wps-form-group">
+							<div class="wps-form-group wps-toggle-field">
 								<label class="wps-toggle" for="wpshadow_debug_mode">
 									<input 
 										type="checkbox" 
@@ -83,14 +91,14 @@ class Advanced_Settings_Page {
 										<?php checked( get_option( 'wpshadow_debug_mode', false ) ); ?>
 									/>
 									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Enable Debug Mode', 'wpshadow' ); ?>
+									<span class="wps-toggle-text"><?php esc_html_e( 'Enable Debug Mode', 'wpshadow' ); ?></span>
 								</label>
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Log detailed diagnostic and treatment execution traces (affects performance).', 'wpshadow' ); ?>
 								</p>
 							</div>
 
-							<div class="wps-form-group wps-mt-4">
+							<div class="wps-form-group wps-toggle-field wps-mt-4">
 								<label class="wps-toggle" for="wpshadow_log_api_calls">
 									<input 
 										type="checkbox" 
@@ -100,7 +108,7 @@ class Advanced_Settings_Page {
 										<?php checked( get_option( 'wpshadow_log_api_calls', false ) ); ?>
 									/>
 									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Log API Calls', 'wpshadow' ); ?>
+									<span class="wps-toggle-text"><?php esc_html_e( 'Log API Calls', 'wpshadow' ); ?></span>
 								</label>
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Log all WPShadow API requests and responses (for debugging integrations).', 'wpshadow' ); ?>
@@ -128,21 +136,22 @@ class Advanced_Settings_Page {
 								</select>
 							</div>
 							<?php
-						},
-					)
-				);
-				?>
+							},
+						)
+					);
+					?>
 
-				<!-- Advanced Features -->
-				<?php
-				wpshadow_render_card(
-					array(
-						'title'       => __( 'Advanced Features', 'wpshadow' ),
-						'description' => __( 'Enable experimental features and advanced integrations.', 'wpshadow' ),
-						'icon'        => 'dashicons-lightbulb',
-						'body'        => function() {
+						<!-- Advanced Features -->
+						<?php
+						wpshadow_render_card(
+							array(
+								'title'       => __( 'Advanced Features', 'wpshadow' ),
+								'description' => __( 'Enable experimental features and advanced integrations.', 'wpshadow' ),
+								'icon'        => 'dashicons-lightbulb',
+								'card_class'  => 'wps-grid-span-half',
+								'body'        => function() {
 							?>
-							<div class="wps-form-group">
+							<div class="wps-form-group wps-toggle-field">
 								<label class="wps-toggle" for="wpshadow_rest_api_enabled">
 									<input 
 										type="checkbox" 
@@ -152,14 +161,14 @@ class Advanced_Settings_Page {
 										<?php checked( get_option( 'wpshadow_rest_api_enabled', true ) ); ?>
 									/>
 									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Enable REST API', 'wpshadow' ); ?>
+									<span class="wps-toggle-text"><?php esc_html_e( 'Enable REST API', 'wpshadow' ); ?></span>
 								</label>
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Allow third-party tools to control WPShadow via WordPress REST API (requires authentication).', 'wpshadow' ); ?>
 								</p>
 							</div>
 
-							<div class="wps-form-group wps-mt-4">
+							<div class="wps-form-group wps-toggle-field wps-mt-4">
 								<label class="wps-toggle" for="wpshadow_wp_cli_enabled">
 									<input 
 										type="checkbox" 
@@ -169,31 +178,14 @@ class Advanced_Settings_Page {
 										<?php checked( get_option( 'wpshadow_wp_cli_enabled', true ) ); ?>
 									/>
 									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Enable WP-CLI Commands', 'wpshadow' ); ?>
+									<span class="wps-toggle-text"><?php esc_html_e( 'Enable WP-CLI Commands', 'wpshadow' ); ?></span>
 								</label>
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Allow WP-CLI to run WPShadow commands from the command line.', 'wpshadow' ); ?>
 								</p>
 							</div>
 
-							<div class="wps-form-group wps-mt-4">
-								<label class="wps-toggle" for="wpshadow_magic_link_expiry_notifications">
-									<input 
-										type="checkbox" 
-										id="wpshadow_magic_link_expiry_notifications" 
-										name="wpshadow_magic_link_expiry_notifications" 
-										value="1"
-										<?php checked( get_option( 'wpshadow_magic_link_expiry_notifications', false ) ); ?>
-									/>
-									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Magic Link Expiry Notifications', 'wpshadow' ); ?>
-								</label>
-								<p class="wps-form-description">
-									<?php esc_html_e( 'Send email notifications when temporary access links expire, with option to create permanent user accounts.', 'wpshadow' ); ?>
-								</p>
-							</div>
-
-							<div class="wps-form-group wps-mt-4">
+							<div class="wps-form-group wps-toggle-field wps-mt-4">
 								<label class="wps-toggle" for="wpshadow_webhooks_enabled">
 									<input 
 										type="checkbox" 
@@ -203,17 +195,18 @@ class Advanced_Settings_Page {
 										<?php checked( get_option( 'wpshadow_webhooks_enabled', false ) ); ?>
 									/>
 									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Enable Webhooks (Experimental)', 'wpshadow' ); ?>
+									<span class="wps-toggle-text"><?php esc_html_e( 'Enable Webhooks (Experimental)', 'wpshadow' ); ?></span>
 								</label>
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Allow WPShadow to send webhooks to external services when events occur.', 'wpshadow' ); ?>
 								</p>
 							</div>
 							<?php
-						},
-					)
-				);
-				?>
+							},
+						)
+					);
+					?>
+					</div>
 
 				<!-- Performance Monitoring -->
 				<?php
@@ -224,7 +217,7 @@ class Advanced_Settings_Page {
 						'icon'        => 'dashicons-chart-line',
 						'body'        => function() {
 							?>
-							<div class="wps-form-group">
+							<div class="wps-form-group wps-toggle-field">
 								<label class="wps-toggle" for="wpshadow_track_performance">
 									<input 
 										type="checkbox" 
@@ -234,7 +227,7 @@ class Advanced_Settings_Page {
 										<?php checked( get_option( 'wpshadow_track_performance', true ) ); ?>
 									/>
 									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Track Performance Impact', 'wpshadow' ); ?>
+									<span class="wps-toggle-text"><?php esc_html_e( 'Track Performance Impact', 'wpshadow' ); ?></span>
 								</label>
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Measure how much CPU time and memory WPShadow uses. Viewable in Reports.', 'wpshadow' ); ?>
@@ -298,7 +291,7 @@ class Advanced_Settings_Page {
 					array(
 						'title'       => __( 'System Information', 'wpshadow' ),
 						'description' => __( 'View information about your WPShadow installation.', 'wpshadow' ),
-						'icon'        => 'info',
+						'icon'        => 'dashicons-info',
 						'body'        => function() {
 							$diagnostic_count = \WPShadow\Diagnostics\Diagnostic_Registry::count();
 							$treatment_count  = class_exists( '\WPShadow\Treatments\Treatment_Registry' ) 
@@ -345,6 +338,69 @@ class Advanced_Settings_Page {
 									<td class="wps-td-p-2 wps-font-mono-xs"><?php echo esc_html( $GLOBALS['table_prefix'] ); ?></td>
 								</tr>
 							</table>
+							<div class="wps-mt-3 wps-flex wps-items-center wps-gap-2 wps-justify-end">
+								<button
+									type="button"
+									class="wps-btn wps-btn--secondary"
+									id="wpshadow-copy-system-info"
+									data-system-info="<?php echo esc_attr( wp_json_encode( array(
+										'wpshadow_version'    => WPSHADOW_VERSION,
+										'wordpress_version'   => get_bloginfo( 'version' ),
+										'php_version'         => phpversion(),
+										'diagnostics_count'   => $diagnostic_count,
+										'treatments_count'    => $treatment_count,
+										'installation_path'   => WPSHADOW_PATH,
+										'database_prefix'     => $GLOBALS['table_prefix'],
+									) ) ); ?>"
+								>
+									<?php esc_html_e( 'Copy for Support', 'wpshadow' ); ?>
+								</button>
+								<span id="wpshadow-copy-system-info-status" class="description" role="status" aria-live="polite"></span>
+							</div>
+							<script>
+							(function() {
+								const button = document.getElementById('wpshadow-copy-system-info');
+								const status = document.getElementById('wpshadow-copy-system-info-status');
+								if (!button) {
+									return;
+								}
+								const copyText = function(text) {
+									if (navigator.clipboard && navigator.clipboard.writeText) {
+										return navigator.clipboard.writeText(text);
+									}
+									const textarea = document.createElement('textarea');
+									textarea.value = text;
+									textarea.setAttribute('readonly', '');
+									textarea.style.position = 'absolute';
+									textarea.style.left = '-9999px';
+									document.body.appendChild(textarea);
+									textarea.select();
+									try {
+										document.execCommand('copy');
+										return Promise.resolve();
+									} catch (error) {
+										return Promise.reject(error);
+									} finally {
+										document.body.removeChild(textarea);
+									}
+								};
+
+								button.addEventListener('click', function() {
+									const json = button.getAttribute('data-system-info') || '{}';
+									copyText(json)
+										.then(function() {
+											if (status) {
+												status.textContent = '<?php echo esc_js( __( 'Copied.', 'wpshadow' ) ); ?>';
+											}
+										})
+										.catch(function() {
+											if (status) {
+												status.textContent = '<?php echo esc_js( __( 'Copy failed.', 'wpshadow' ) ); ?>';
+											}
+										});
+								});
+							})();
+							</script>
 							<?php
 						},
 					)
@@ -369,6 +425,13 @@ class Advanced_Settings_Page {
 				);
 				?>
 			</form>
+
+			<!-- Recent Activity Section -->
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'settings', 10 );
+			}
+			?>
 		</div>
 		<?php
 	}

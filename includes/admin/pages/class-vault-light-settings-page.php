@@ -34,7 +34,7 @@ class Vault_Light_Settings_Page {
 		}
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'WPShadow Vault Light', 'wpshadow' ),

@@ -43,6 +43,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 		$limit     = self::get_post_param( 'limit', 'int', 10 );
 		$offset    = self::get_post_param( 'offset', 'int', 0 );
 		$timestamp = self::get_post_param( 'since', 'int', 0 );
+		$report    = self::get_post_param( 'report', 'text', '', false );
 
 		// Limit bounds
 		$limit = min( max( $limit, 5 ), 100 );
@@ -56,9 +57,29 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 		}
 
 		// Get activities
-		$result       = Activity_Logger::get_activities( $filters, $limit, $offset );
-		$activities   = $result['activities'] ?? array();
-		$total        = $result['total'] ?? 0;
+		$report = sanitize_key( $report );
+
+		if ( ! empty( $report ) ) {
+			$result     = Activity_Logger::get_activities( $filters, Activity_Logger::MAX_ACTIVITIES, 0 );
+			$activities = $result['activities'] ?? array();
+			$activities = array_values(
+				array_filter(
+					$activities,
+					static function ( array $activity ) use ( $report ) {
+						$metadata = $activity['metadata'] ?? array();
+						$logged_report = isset( $metadata['report'] ) ? sanitize_key( (string) $metadata['report'] ) : '';
+						return $logged_report === $report;
+					}
+				)
+			);
+
+			$total      = count( $activities );
+			$activities = array_slice( $activities, $offset, $limit );
+		} else {
+			$result     = Activity_Logger::get_activities( $filters, $limit, $offset );
+			$activities = $result['activities'] ?? array();
+			$total      = $result['total'] ?? 0;
+		}
 
 		// Format activities for display
 		$formatted = array_map( array( self::class, 'format_activity' ), $activities );
@@ -84,7 +105,22 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 
 		// Map contexts to activity categories/actions
 		$context_filters = array(
+			'diagnostics' => array(
+				'actions' => array(
+					'diagnostic_run',
+					'diagnostic_failed',
+					'treatment_applied',
+					'treatment_undone',
+					'finding_status_change',
+					'finding_dismissed',
+					'finding_excluded',
+					'finding_resolved',
+				),
+			),
 			'tools'     => array(
+				'actions' => array( 'tool_run', 'tool_executed', 'deep_scan', 'quick_scan' ),
+			),
+			'utilities' => array(
 				'actions' => array( 'tool_run', 'tool_executed', 'deep_scan', 'quick_scan' ),
 			),
 			'reports'   => array(
@@ -98,6 +134,12 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 			),
 			'settings'  => array(
 				'actions' => array( 'settings_changed', 'site_settings_changed', 'cache_settings_changed', 'retention_setting_updated' ),
+			),
+			'training'  => array(
+				'categories' => array( 'academy' ),
+			),
+			'achievements' => array(
+				'categories' => array( 'gamification' ),
 			),
 			'security'  => array(
 				'categories' => array( 'security' ),
@@ -160,6 +202,10 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 			'report_scheduled'          => __( 'Report Scheduled', 'wpshadow' ),
 			'report_sent'               => __( 'Report Sent', 'wpshadow' ),
 			'data_cleanup_completed'    => __( 'Data Cleanup Completed', 'wpshadow' ),
+			'settings_changed'          => __( 'Settings Updated', 'wpshadow' ),
+			'site_settings_changed'     => __( 'Settings Updated', 'wpshadow' ),
+			'cache_settings_changed'    => __( 'Settings Updated', 'wpshadow' ),
+			'retention_setting_updated' => __( 'Settings Updated', 'wpshadow' ),
 		);
 
 		$action     = $activity['action'] ?? '';
@@ -168,6 +214,24 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 		$timestamp  = $activity['timestamp'] ?? current_time( 'timestamp' );
 		$user_name  = $activity['user_name'] ?? __( 'System', 'wpshadow' );
 		$category   = $activity['category'] ?? '';
+		$metadata   = $activity['metadata'] ?? array();
+		$report_url = '';
+		$report_label = '';
+
+		if ( 'report_generated' === $action && ! empty( $metadata['report'] ) ) {
+			$report_slug  = (string) $metadata['report'];
+			$report_label = ucwords( str_replace( '-', ' ', $report_slug ) );
+			if ( function_exists( 'wpshadow_get_reports_catalog' ) ) {
+				foreach ( wpshadow_get_reports_catalog() as $item ) {
+					if ( isset( $item['report'], $item['title'] ) && $item['report'] === $report_slug ) {
+						$report_label = $item['title'];
+						break;
+					}
+				}
+			}
+			$report_url = admin_url( add_query_arg( array( 'page' => 'wpshadow-reports', 'report' => $report_slug ), 'admin.php' ) );
+			$details    = '';
+		}
 
 		return array(
 			'id'        => $activity['id'] ?? '',
@@ -177,7 +241,9 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 			'time_ago'  => human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago',
 			'user_name' => $user_name,
 			'category'  => $category,
-			'metadata'  => $activity['metadata'] ?? array(),
+			'metadata'  => $metadata,
+			'report_url' => $report_url,
+			'report_label' => $report_label,
 		);
 	}
 }

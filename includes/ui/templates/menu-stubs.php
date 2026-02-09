@@ -124,6 +124,11 @@ if ( ! function_exists( 'wpshadow_render_reports' ) ) {
 				'dashicons-chart-line'
 			);
 			?>
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'reports', 10 );
+			}
+			?>
 		</div>
 		<?php
 	}
@@ -155,10 +160,11 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
 			$settings_pages = array(
-				'general'       => 'WPShadow\\Admin\\Pages\\General_Settings_Page',
-				'privacy'       => 'WPShadow\\Admin\\Pages\\Privacy_Settings_Page',
-				'notifications' => 'WPShadow\\Admin\\Pages\\Notifications_Settings_Page',
-				'advanced'      => 'WPShadow\\Admin\\Pages\\Advanced_Settings_Page',
+				'general'           => 'WPShadow\\Admin\\Pages\\General_Settings_Page',
+				'privacy'           => 'WPShadow\\Admin\\Pages\\Privacy_Settings_Page',
+				'privacy-dashboard' => 'WPShadow\\Admin\\Privacy_Dashboard_Page',
+				'notifications'     => 'WPShadow\\Admin\\Pages\\Notifications_Settings_Page',
+				'advanced'          => 'WPShadow\\Admin\\Pages\\Advanced_Settings_Page',
 			);
 
 			// Check if the requested tab exists
@@ -166,11 +172,22 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				$class = $settings_pages[ $tab ];
 
 				// Require the settings file if it exists
-				$file_path = WPSHADOW_PATH . 'includes/admin/pages/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\\Admin\\Pages\\', '', $class ) ) ) . '.php';
+				if ( 'WPShadow\\Admin\\Privacy_Dashboard_Page' === $class ) {
+					$file_path = WPSHADOW_PATH . 'includes/admin/class-privacy-dashboard-page.php';
+				} else {
+					$file_path = WPSHADOW_PATH . 'includes/admin/pages/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\\Admin\\Pages\\', '', $class ) ) ) . '.php';
+				}
 				if ( file_exists( $file_path ) ) {
 					require_once $file_path;
-					if ( class_exists( $class ) && method_exists( $class, 'render' ) ) {
-						$class::render();
+							if ( class_exists( $class ) ) {
+								if ( method_exists( $class, 'render' ) ) {
+									$class::render();
+									return;
+								}
+								if ( method_exists( $class, 'render_page' ) ) {
+									$class::render_page();
+									return;
+								}
 						return;
 					}
 				}
@@ -178,7 +195,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 
 			// Fallback for unknown tabs
 			?>
-			<div class="wps-page-container">
+			<div class="wrap wps-page-container">
 				<?php
 				wpshadow_render_page_header(
 					sprintf(
@@ -199,6 +216,12 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					)
 				);
 				?>
+
+				<?php
+				if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+					wpshadow_render_page_activities( 'settings', 10 );
+				}
+				?>
 			</div>
 			<?php
 			return;
@@ -206,7 +229,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 
 		// Show settings overview grid
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'WPShadow Settings', 'wpshadow' ),
@@ -229,7 +252,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				array(
 					'title'        => __( 'Privacy Dashboard', 'wpshadow' ),
 					'description'  => __( 'Manage data export, deletion, and privacy preferences.', 'wpshadow' ),
-					'url'          => admin_url( 'admin.php?page=wpshadow-privacy' ),
+					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=privacy-dashboard' ),
 					'icon'         => 'dashicons-lock',
 					'action_label' => __( 'Open', 'wpshadow' ),
 				),
@@ -275,8 +298,8 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 
 			<!-- Recent Activity Section -->
 			<?php
-			if ( function_exists( 'wpshadow_render_recent_activity' ) ) {
-				wpshadow_render_recent_activity();
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'settings', 10 );
 			}
 			?>
 		</div>

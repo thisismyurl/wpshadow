@@ -17,6 +17,163 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Handle user privacy report downloads before admin output.
+ *
+ * @return void
+ */
+function wpshadow_maybe_handle_user_privacy_download() {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	$page   = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+	$report = isset( $_GET['report'] ) ? sanitize_key( wp_unslash( $_GET['report'] ) ) : '';
+	$download = isset( $_GET['download'] ) ? sanitize_key( wp_unslash( $_GET['download'] ) ) : '';
+	$snapshot_id = isset( $_GET['snapshot_id'] ) ? absint( $_GET['snapshot_id'] ) : 0;
+
+	if ( 'wpshadow-reports' !== $page || 'user-privacy-report' !== $report || empty( $download ) || ! $snapshot_id ) {
+		return;
+	}
+
+	require_once WPSHADOW_PATH . 'includes/views/reports/partials/user-privacy-download-handler.php';
+	if ( function_exists( 'wpshadow_handle_user_privacy_download' ) ) {
+		wpshadow_handle_user_privacy_download();
+	}
+}
+
+add_action( 'admin_init', 'wpshadow_maybe_handle_user_privacy_download', 1 );
+
+/**
+ * Handle SEO report downloads before admin output.
+ *
+ * @return void
+ */
+function wpshadow_maybe_handle_seo_report_download() {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	$page       = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+	$report     = isset( $_GET['report'] ) ? sanitize_key( wp_unslash( $_GET['report'] ) ) : '';
+	$download   = isset( $_GET['download'] ) ? sanitize_key( wp_unslash( $_GET['download'] ) ) : '';
+	$snapshot_id = isset( $_GET['snapshot_id'] ) ? absint( $_GET['snapshot_id'] ) : 0;
+
+	if ( 'wpshadow-reports' !== $page || 'seo-report' !== $report || empty( $download ) || ! $snapshot_id ) {
+		return;
+	}
+
+	require_once WPSHADOW_PATH . 'includes/views/reports/partials/seo-download-handler.php';
+	if ( function_exists( 'wpshadow_handle_seo_report_download' ) ) {
+		wpshadow_handle_seo_report_download();
+	}
+}
+
+add_action( 'admin_init', 'wpshadow_maybe_handle_seo_report_download', 1 );
+
+/**
+ * Handle delete all privacy reports action.
+ *
+ * @return void
+ */
+function wpshadow_handle_delete_privacy_reports() {
+	check_admin_referer( 'wpshadow_delete_privacy_reports', 'wpshadow_delete_privacy_reports_nonce' );
+
+	$current_user_id = get_current_user_id();
+	$can_view_others = current_user_can( 'list_users' );
+	$selected_user_id = $can_view_others
+		? (int) ( isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : $current_user_id )
+		: $current_user_id;
+
+	$can_manage_reports = $can_view_others || $selected_user_id === $current_user_id;
+
+	if ( $can_manage_reports && class_exists( 'WPShadow\\Reporting\\Report_Snapshot_Manager' ) ) {
+		\WPShadow\Reporting\Report_Snapshot_Manager::delete_snapshots_for_user( 'user-privacy-report', $selected_user_id );
+	}
+
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'page'    => 'wpshadow-reports',
+				'report'  => 'user-privacy-report',
+				'user_id' => $selected_user_id,
+			),
+			admin_url( 'admin.php' )
+		)
+	);
+	exit;
+}
+
+add_action( 'admin_post_wpshadow_delete_privacy_reports', 'wpshadow_handle_delete_privacy_reports' );
+
+/**
+ * Handle delete all email reports action.
+ *
+ * @return void
+ */
+function wpshadow_handle_delete_email_reports() {
+	check_admin_referer( 'wpshadow_delete_email_reports', 'wpshadow_delete_email_reports_nonce' );
+
+	if ( current_user_can( 'manage_options' ) ) {
+		$upload_dir  = wp_upload_dir();
+		$reports_dir = trailingslashit( $upload_dir['basedir'] ) . 'wpshadow-reports/';
+
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		WP_Filesystem();
+		global $wp_filesystem;
+
+		if ( $wp_filesystem && is_dir( $reports_dir ) ) {
+			$files     = glob( $reports_dir . 'email-report-*' );
+			$base_real = realpath( $reports_dir );
+			foreach ( $files as $file ) {
+				$file_real = realpath( $file );
+				if ( $base_real && $file_real && 0 === strpos( $file_real, $base_real ) ) {
+					$wp_filesystem->delete( $file_real, false, 'f' );
+				}
+			}
+		}
+	}
+
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'page'   => 'wpshadow-reports',
+				'report' => 'email-report',
+			),
+			admin_url( 'admin.php' )
+		)
+	);
+	exit;
+}
+
+add_action( 'admin_post_wpshadow_delete_email_reports', 'wpshadow_handle_delete_email_reports' );
+
+/**
+ * Handle delete all SEO reports action.
+ *
+ * @return void
+ */
+function wpshadow_handle_delete_seo_reports() {
+	check_admin_referer( 'wpshadow_delete_seo_reports', 'wpshadow_delete_seo_reports_nonce' );
+
+	if ( current_user_can( 'manage_options' ) && class_exists( 'WPShadow\\Reporting\\Report_Snapshot_Manager' ) ) {
+		\WPShadow\Reporting\Report_Snapshot_Manager::delete_snapshots( 'seo-report' );
+	}
+
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'page'   => 'wpshadow-reports',
+				'report' => 'seo-report',
+			),
+			admin_url( 'admin.php' )
+		)
+	);
+	exit;
+}
+
+add_action( 'admin_post_wpshadow_delete_seo_reports', 'wpshadow_handle_delete_seo_reports' );
+
+/**
  * Get reports catalog.
  *
  * @return array Reports organized by category.
@@ -31,7 +188,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-chart-line',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6177.1200', // Release 1.6177 (June 2026)
 		),
 		array(
 			'title'   => __( 'Deep Scan Report', 'wpshadow' ),
@@ -40,7 +197,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6177.1200', // Release 1.6177 (June 2026)
 		),
 		array(
 			'title'   => __( 'Quick Scan Report', 'wpshadow' ),
@@ -49,7 +206,16 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6212.1200', // Release 1.6212 (July 2026)
+		),
+		array(
+			'title'   => __( 'Diagnostics Fix Rate Report', 'wpshadow' ),
+			'desc'    => __( 'See how many diagnostics have run and how fixes are getting resolved (like a repair log showing which issues were solved automatically versus manually). Helpful for tracking progress over time.', 'wpshadow' ),
+			'report'  => 'diagnostics-fix-rate',
+			'icon'    => 'dashicons-yes-alt',
+			'family'  => 'analysis',
+			'enabled' => true,
+			'since'   => '1.7038.1200',
 		),
 
 		// Security Reports
@@ -60,7 +226,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'security',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6119.1200', // Release 1.6119 (April 2026)
 		),
 
 		// Performance Reports
@@ -71,7 +237,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'performance',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6119.1200', // Release 1.6119 (April 2026)
 		),
 
 		// SEO Reports
@@ -82,7 +248,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'seo',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6038.1200', // Release 1.6038 (February 2026)
 		),
 
 		// Optimization Reports
@@ -93,7 +259,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-database',
 			'family'  => 'optimization',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6212.1200', // Release 1.6212 (July 2026)
 		),
 		array(
 			'title'   => __( 'Plugin Audit Report', 'wpshadow' ),
@@ -102,7 +268,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'optimization',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6240.1200', // Release 1.6240 (August 2026)
 		),
 
 		// Commerce Reports
@@ -113,7 +279,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-cart',
 			'family'  => 'commerce',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6240.1200', // Release 1.6240 (August 2026)
 		),
 
 		// Compliance & Operations Reports
@@ -124,7 +290,16 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-privacy',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
+		),
+		array(
+			'title'   => __( 'User Privacy Report', 'wpshadow' ),
+			'desc'    => __( 'See exactly what WPShadow stores about a specific user (like a personal file folder you can open and review). This helps administrators answer privacy questions quickly and transparently.', 'wpshadow' ),
+			'report'  => 'user-privacy-report',
+			'icon'    => 'dashicons-id-alt',
+			'family'  => 'operations',
+			'enabled' => true,
+			'since'   => '1.6038.1200',
 		),
 		array(
 			'title'   => __( 'Email Deliverability Report', 'wpshadow' ),
@@ -133,7 +308,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-email-alt',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6038.1200', // Release 1.6038 (February 2026)
 		),
 		array(
 			'title'   => __( 'Backup Readiness Report', 'wpshadow' ),
@@ -142,7 +317,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6268.1200', // Release 1.6268 (September 2026)
 		),
 		array(
 			'title'   => __( 'Multisite Network Report', 'wpshadow' ),
@@ -151,7 +326,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-multisite',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6268.1200', // Release 1.6268 (September 2026)
 		),
 
 		// Page-Specific Reports
@@ -162,7 +337,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-smartphone',
 			'family'  => 'page-analysis',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6303.1200', // Release 1.6303 (October 2026)
 		),
 		array(
 			'title'   => __( 'Accessibility Audit Report', 'wpshadow' ),
@@ -171,7 +346,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-universal-access',
 			'family'  => 'page-analysis',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6303.1200', // Release 1.6303 (October 2026)
 		),
 		array(
 			'title'   => __( 'Broken Links Report', 'wpshadow' ),
@@ -180,7 +355,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-links',
 			'family'  => 'page-analysis',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6331.1200', // Release 1.6331 (November 2026)
 		),
 
 		// Comparison & Historical Reports
@@ -191,7 +366,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-images-alt2',
 			'family'  => 'comparison',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6331.1200', // Release 1.6331 (November 2026)
 		),
 		array(
 			'title'   => __( 'Customization Audit Report', 'wpshadow' ),
@@ -200,7 +375,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-customizer',
 			'family'  => 'comparison',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6359.1200', // Release 1.6359 (December 2026)
 		),
 
 		// Activity & History Reports
@@ -211,7 +386,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'history',
 			'enabled' => true,
-			'since'   => '1.6033.1530', // Active feature
+			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
 		),
 	);
 }
@@ -256,6 +431,13 @@ function wpshadow_render_reports_page() {
 				<?php wpshadow_render_report_card( $item ); ?>
 			<?php endforeach; ?>
 		</div>
+
+		<!-- Recent Activity Section -->
+		<?php
+		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+			wpshadow_render_page_activities( 'reports', 10 );
+		}
+		?>
 	</div>
 	<?php
 }
@@ -359,7 +541,9 @@ function wpshadow_render_report_detail( $report ) {
 		'ecommerce-report'     => 'ecommerce-report.php',
 		'plugins-report'       => 'plugins-report.php',
 		'compliance-report'    => 'compliance-report.php',
+		'user-privacy-report'  => 'user-privacy-report.php',
 		'email-report'         => 'email-report.php',
+		'diagnostics-fix-rate' => 'diagnostics-fix-rate.php',
 		'backup-report'        => 'backup-report.php',
 		'multisite-report'     => 'multisite-report.php',
 		'mobile-friendliness'  => 'mobile-friendliness.php',
@@ -380,6 +564,38 @@ function wpshadow_render_report_detail( $report ) {
 	// Check if file exists
 	if ( ! file_exists( $report_file ) ) {
 		wp_die( esc_html__( 'Report view file not found.', 'wpshadow' ) );
+	}
+
+	if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+		$catalog      = wpshadow_get_reports_catalog();
+		$report_title = '';
+		foreach ( $catalog as $item ) {
+			if ( isset( $item['report'] ) && $item['report'] === $report ) {
+				$report_title = $item['title'];
+				break;
+			}
+		}
+
+		$details = $report_title
+			? sprintf(
+				/* translators: %s: report name */
+				__( 'Report generated: %s', 'wpshadow' ),
+				$report_title
+			)
+			: sprintf(
+				/* translators: %s: report slug */
+				__( 'Report generated: %s', 'wpshadow' ),
+				$report
+			);
+
+		\WPShadow\Core\Activity_Logger::log(
+			'report_generated',
+			$details,
+			'reports',
+			array(
+				'report' => $report,
+			)
+		);
 	}
 
 	// Load the report view

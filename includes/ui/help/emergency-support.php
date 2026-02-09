@@ -20,6 +20,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Emergency Support', 'wpshadow' ); ?></h1>
+	<?php do_action( 'wpshadow_after_page_header' ); ?>
 	<p><?php esc_html_e( 'Monitor critical errors and access emergency recovery options.', 'wpshadow' ); ?></p>
 
 	<?php if ( ! empty( $recent_errors ) ) : ?>

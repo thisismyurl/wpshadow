@@ -120,6 +120,8 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-api-integrations">
 			<h1><?php esc_html_e( 'Third-Party API Integrations', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<p class="description">
 				<?php esc_html_e( 'Connect your custom post types to external services via API integrations and webhooks.', 'wpshadow' ); ?>
 			</p>

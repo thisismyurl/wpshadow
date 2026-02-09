@@ -118,6 +118,8 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-email-marketing">
 			<h1><?php esc_html_e( 'Email Marketing Integration', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<p class="description">
 				<?php esc_html_e( 'Send newsletters and manage email campaigns for your custom post types.', 'wpshadow' ); ?>
 			</p>

@@ -63,24 +63,18 @@ class Diagnostic_Vertical_Scaling_Limits_Not_Monitored extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'monitor_scaling_limits' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Vertical scaling limits not monitored. Track CPU,
-						'severity'   =>   'medium',
-						'threat_level'   =>   45,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/vertical-scaling-limits-not-monitored'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'monitor_scaling_limits' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Vertical scaling limits are not being monitored. Keeping an eye on CPU and memory ceilings helps prevent slowdowns during traffic spikes.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 45,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/vertical-scaling-limits-not-monitored',
+			);
+		}
+
+		return null;
 	}
 }

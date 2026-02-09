@@ -6,10 +6,42 @@
  */
 
 /* Privacy Score Display */
+.wps-privacy-dashboard-layout {
+	display: flex;
+	gap: 24px;
+	align-items: stretch;
+	flex-wrap: wrap;
+}
+
+.wps-privacy-dashboard-main {
+	flex: 2 1 520px;
+	min-width: 0;
+}
+
+.wps-privacy-dashboard-side {
+	flex: 1 1 320px;
+	min-width: 0;
+}
+
 .wps-privacy-score-container {
 	display: flex;
 	align-items: center;
 	gap: 30px;
+	flex-wrap: wrap;
+}
+
+.wps-privacy-score-gauge {
+	text-align: center;
+}
+
+.wps-privacy-score-gauge svg {
+	display: block;
+	margin: 0 auto;
+}
+
+.wps-privacy-score-details {
+	flex: 1;
+	min-width: 240px;
 }
 
 .wps-privacy-score-badge {
@@ -58,7 +90,33 @@
 
 /* Consent Form */
 .wps-consent-form {
-	max-width: 800px;
+	max-width: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.wps-consent-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	width: 100%;
+}
+
+.wps-consent-stack > .wps-card {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.wps-consent-footer {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.wps-consent-footer-note {
+	margin: 0;
 }
 
 .wps-consent-required {
@@ -274,11 +332,52 @@
 	color: #6b7280;
 }
 
+.wps-data-report {
+	margin-top: 24px;
+}
+
+.wps-data-report h4 {
+	margin-bottom: 8px;
+}
+
+.wps-data-report h5 {
+	margin: 20px 0 8px;
+}
+
+.wps-data-report .wps-table {
+	width: 100%;
+}
+
+.wps-pre-wrap {
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-size: 12px;
+	line-height: 1.5;
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	padding: 12px;
+	margin: 0;
+}
+
+.wps-data-report-raw summary {
+	cursor: pointer;
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
 /* Data Actions */
 .wps-data-actions-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 20px;
+	align-items: stretch;
+}
+
+@media (max-width: 900px) {
+	.wps-data-actions-grid {
+		grid-template-columns: 1fr;
+	}
 }
 
 .wps-data-action-card {
@@ -286,6 +385,9 @@
 	background: #f9fafb;
 	border-radius: 8px;
 	border: 2px solid #e0e0e0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
 .wps-data-action-card-export {
@@ -315,6 +417,10 @@
 	margin: 0 0 16px;
 	font-size: 14px;
 	color: #6b7280;
+}
+
+.wps-data-action-card .button {
+	align-self: flex-start;
 }
 
 /* Activity Log */
@@ -379,4 +485,17 @@
 	margin: 0;
 	font-size: 14px;
 	color: #3c434a;
+}
+
+/* Card spacing normalization for privacy dashboard */
+.wpshadow-privacy .wps-card {
+	margin-bottom: 24px;
+}
+
+.wpshadow-privacy .wps-card-body > *:first-child {
+	margin-top: 0;
+}
+
+.wpshadow-privacy .wps-card-body > *:last-child {
+	margin-bottom: 0;
 }

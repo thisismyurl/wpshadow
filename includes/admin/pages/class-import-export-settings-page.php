@@ -50,7 +50,7 @@ class Import_Export_Settings_Page {
 		$last_cloud_sync = get_option( 'wpshadow_last_cloud_sync', '' );
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'Import / Export Settings', 'wpshadow' ),

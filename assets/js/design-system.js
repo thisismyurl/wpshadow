@@ -158,6 +158,8 @@
         notify: function(message, type = 'info', duration = 5000) {
             type = type || 'info';
 
+            const typeClass = type === 'error' ? 'danger' : type;
+
             const icons = {
                 success: 'dashicons-yes-alt',
                 error: 'dashicons-dismiss',
@@ -168,7 +170,7 @@
             const icon = icons[type] || icons.info;
 
             const notificationHTML = `
-                <div class="wps-alert wps-alert-${type}" style="margin-bottom: 12px; animation: wps-slide-in-right 0.3s ease-out; cursor: pointer; box-shadow: var(--wps-shadow-lg);">
+                <div class="wps-alert wps-alert-${typeClass}" style="margin-bottom: 12px; animation: wps-slide-in-right 0.3s ease-out; cursor: pointer; box-shadow: var(--wps-shadow-lg);">
                     <span class="dashicons ${icon} wps-alert-icon"></span>
                     <div class="wps-alert-content">
                         <p class="wps-alert-message" style="margin: 0;">${message}</p>

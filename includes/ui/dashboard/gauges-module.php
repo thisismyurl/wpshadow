@@ -225,8 +225,8 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						stroke-linecap="round" transform="rotate(-90 100 100)"
 						class="wps-gauge-progress" />
 					<!-- Center text -->
-					<text x="100" y="95" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>"><?php echo isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0; ?>%</text>
-					<text x="100" y="120" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( isset( $overall_health['status'] ) && $overall_health['status'] ? $overall_health['status'] : 'Unknown' ); ?></text>
+				<text x="100" y="110" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>"><?php echo isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0; ?>%</text>
+				<text x="100" y="135" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( isset( $overall_health['status'] ) && $overall_health['status'] ? $overall_health['status'] : 'Unknown' ); ?></text>
 				</svg>
 
 				<p class="wps-health-gauge-message"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
@@ -309,7 +309,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 									stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
 									stroke-linecap="round" transform="rotate(-90 50 50)" />
 								<!-- Percentage text -->
-								<text x="50" y="58" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
+							<text x="50" y="73" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
 							</svg>
 						</div>
 

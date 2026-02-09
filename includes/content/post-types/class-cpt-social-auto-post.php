@@ -118,6 +118,8 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 		?>
 		<div class="wrap wpshadow-social-autopost">
 			<h1><?php esc_html_e( 'Social Media Auto-Post', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			<p class="description">
 				<?php esc_html_e( 'Automatically post your custom post types to social media platforms when published.', 'wpshadow' ); ?>
 			</p>

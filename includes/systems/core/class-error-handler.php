@@ -23,11 +23,37 @@ class Error_Handler {
 	 * Why do programmers prefer dark mode? Because light attracts bugs!
 	 */
 	public static function init(): void {
+		self::enable_screen_error_output();
+
 		// Hook into WordPress PHP error handler
 		add_filter( 'wp_php_error_message', array( __CLASS__, 'enhance_error_message' ), 10, 2 );
 		add_filter( 'wp_php_error_args', array( __CLASS__, 'enhance_error_args' ), 10, 2 );
 		// Only add error modal script when there's an actual error
 		// (removed from wp_footer/admin_footer as it was showing on ALL pages)
+	}
+
+	/**
+	 * Ensure errors show on screen and are logged.
+	 *
+	 * @since  1.7038.1200
+	 * @return void
+	 */
+	private static function enable_screen_error_output(): void {
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+			return;
+		}
+
+		@ini_set( 'display_errors', '1' );
+		@ini_set( 'display_startup_errors', '1' );
+		@ini_set( 'log_errors', '1' );
+		@ini_set( 'html_errors', '1' );
+		error_reporting( E_ALL );
+
+		if ( ! defined( 'WP_DEBUG_LOG' ) || true === WP_DEBUG_LOG ) {
+			if ( defined( 'WP_CONTENT_DIR' ) ) {
+				@ini_set( 'error_log', trailingslashit( WP_CONTENT_DIR ) . 'debug.log' );
+			}
+		}
 	}
 
 	/**

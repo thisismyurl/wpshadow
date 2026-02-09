@@ -67,7 +67,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 		wp_enqueue_style(
 			'wpshadow-health-widget',
 			WPSHADOW_URL . 'assets/css/health-history-widget.css',
-			array( 'wpshadow-admin' ),
+			array( 'wpshadow-admin-pages' ),
 			WPSHADOW_VERSION
 		);
 	}

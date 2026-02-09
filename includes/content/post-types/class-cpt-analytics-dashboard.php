@@ -110,6 +110,8 @@ class CPT_Analytics_Dashboard {
 		<div class="wrap wpshadow-analytics">
 			<h1><?php esc_html_e( 'Content Analytics', 'wpshadow' ); ?></h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<div class="wpshadow-analytics-filters">
 				<select id="wpshadow-analytics-post-type">
 					<option value="all"><?php esc_html_e( 'All Post Types', 'wpshadow' ); ?></option>

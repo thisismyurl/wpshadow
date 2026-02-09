@@ -79,6 +79,8 @@ class Defensive_Settings {
 		?>
 		<div class="wrap wpshadow-settings-page">
 			<h1>⚙️ <?php esc_html_e( 'Defensive Engineering', 'wpshadow' ); ?></h1>
+
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
 			
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'Protect Your Work from System Failures', 'wpshadow' ); ?></h2>

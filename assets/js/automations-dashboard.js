@@ -374,10 +374,12 @@ jQuery( function( $ ) {
 				</div>
 			` );
 
-			// Add to top of page
-			const $container = $( '.wps-page-container' );
-			if ( $container.length ) {
-				$notice.insertAfter( $container.find( '.wps-page-header' ) );
+			// Add to notice slot when available
+			const $slot = $( '#wpshadow-page-notices' );
+			if ( $slot.length ) {
+				$slot.append( $notice );
+			} else if ( $( '.wrap' ).length ) {
+				$( '.wrap' ).first().prepend( $notice );
 			} else {
 				$notice.prependTo( 'body' );
 			}

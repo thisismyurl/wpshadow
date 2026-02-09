@@ -40,4 +40,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 	</div>
+
+	<!-- Recent Activity Section -->
+	<?php
+	if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+		wpshadow_render_page_activities( 'reports', 10 );
+	}
+	?>
 </div>

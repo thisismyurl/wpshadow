@@ -105,6 +105,8 @@ class Vault_UI extends Hook_Subscriber_Base {
 		<div class="wrap wpshadow-vault-page">
 			<h1><?php esc_html_e( 'WPShadow Vault - Backups', 'wpshadow' ); ?></h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<?php if ( ! $status['registered'] ) : ?>
 				<?php self::render_registration_prompt(); ?>
 			<?php else : ?>

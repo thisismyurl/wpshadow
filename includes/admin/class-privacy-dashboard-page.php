@@ -79,23 +79,23 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function enqueue_assets( $hook ) {
-		if ( 'wpshadow_page_wpshadow-privacy' !== $hook ) {
+		if ( 'wpshadow_page_wpshadow-privacy' !== $hook && ! self::is_settings_privacy_tab() ) {
 			return;
 		}
 
-		wp_enqueue_style( 'wpshadow-admin' );
+		wp_enqueue_style( 'wpshadow-admin-pages' );
 		wp_enqueue_style(
 			'wpshadow-privacy-dashboard',
 			WPSHADOW_URL . 'assets/css/privacy-dashboard.css',
-			array( 'wpshadow-admin' ),
+			array( 'wpshadow-admin-pages' ),
 			WPSHADOW_VERSION
 		);
 
-		wp_enqueue_script( 'wpshadow-admin' );
+		wp_enqueue_script( 'wpshadow-admin-pages' );
 		wp_enqueue_script(
 			'wpshadow-privacy-dashboard',
 			WPSHADOW_URL . 'assets/js/privacy-dashboard.js',
-			array( 'jquery', 'wpshadow-admin' ),
+			array( 'jquery', 'wpshadow-admin-pages' ),
 			WPSHADOW_VERSION,
 			true
 		);
@@ -124,6 +124,23 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 	}
 
 	/**
+	 * Check if the current page is the Settings privacy dashboard tab.
+	 *
+	 * @since  1.7035.1400
+	 * @return bool True when on the Settings privacy dashboard tab.
+	 */
+	private static function is_settings_privacy_tab(): bool {
+		if ( ! isset( $_GET['page'], $_GET['tab'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return false;
+		}
+
+		$page = sanitize_key( wp_unslash( $_GET['page'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$tab  = sanitize_key( wp_unslash( $_GET['tab'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		return 'wpshadow-settings' === $page && 'privacy-dashboard' === $tab;
+	}
+
+	/**
 	 * Render privacy dashboard page.
 	 *
 	 * @since  1.6004.0200
@@ -143,96 +160,204 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 			);
 			?>
 
-			<!-- Privacy Score Card -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'Privacy Status', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() use ( $prefs ) {
-						self::render_privacy_score( $prefs );
-					},
-				)
-			);
-			?>
+			<style>
+				.wps-privacy-dashboard-layout {
+					display: flex;
+					gap: 24px;
+					align-items: stretch;
+					flex-wrap: wrap;
+				}
 
-			<!-- Consent Management -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'Data Collection Preferences', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() use ( $prefs ) {
-						self::render_consent_controls( $prefs );
-					},
-				)
-			);
-			?>
+				.wps-privacy-dashboard-main {
+					flex: 2 1 520px;
+					min-width: 0;
+				}
 
-			<!-- What We Collect -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'What We Collect', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() {
-						self::render_data_collection_info();
-					},
-				)
-			);
-			?>
+				.wps-privacy-dashboard-side {
+					flex: 1 1 320px;
+					min-width: 0;
+				}
 
-			<!-- Your Data -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'Your Data', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() use ( $user_id ) {
-						self::render_user_data( $user_id );
-					},
-				)
-			);
-			?>
+				.wps-consent-stack {
+					display: flex;
+					flex-direction: column;
+					gap: 16px;
+					width: 100%;
+				}
 
-			<!-- Data Management Actions -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'Data Management', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() {
-						self::render_data_actions();
-					},
-				)
-			);
-			?>
+				.wps-consent-stack > .wps-card {
+					width: 100%;
+					max-width: 100%;
+					box-sizing: border-box;
+				}
 
-			<!-- Consent History -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'Consent History', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() use ( $user_id ) {
-						self::render_consent_history( $user_id );
-					},
-				)
-			);
-			?>
+				.wps-consent-form {
+					max-width: 100%;
+					width: 100%;
+					overflow: hidden;
+				}
 
-			<!-- Third-Party Services -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'title'     => __( 'Third-Party Services', 'wpshadow' ),
-					'title_tag' => 'h2',
-					'body'      => function() {
-						self::render_third_party_services();
-					},
-				)
-			);
-			?>
+				.wps-privacy-score-gauge {
+					text-align: center;
+					margin-bottom: 16px;
+				}
+
+				.wps-privacy-score-gauge svg {
+					display: block;
+					margin: 0 auto;
+				}
+
+				.wps-data-actions-grid {
+					display: grid;
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+					gap: 20px;
+					align-items: stretch;
+				}
+
+				@media (max-width: 900px) {
+					.wps-data-actions-grid {
+						grid-template-columns: 1fr;
+					}
+				}
+
+				.wps-data-report {
+					margin-top: 24px;
+				}
+
+				.wps-data-report h4 {
+					margin-bottom: 8px;
+				}
+
+				.wps-data-report h5 {
+					margin: 20px 0 8px;
+				}
+
+				.wps-data-report .wps-table {
+					width: 100%;
+				}
+
+				.wps-pre-wrap {
+					white-space: pre-wrap;
+					word-break: break-word;
+					font-size: 12px;
+					line-height: 1.5;
+					background: #f9fafb;
+					border: 1px solid #e5e7eb;
+					border-radius: 8px;
+					padding: 12px;
+					margin: 0;
+				}
+
+				.wps-data-report-raw summary {
+					cursor: pointer;
+					font-weight: 600;
+					margin-bottom: 8px;
+				}
+			</style>
+
+			<div class="wps-privacy-dashboard-layout">
+				<div class="wps-privacy-dashboard-main">
+					<!-- Consent Management -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'Data Collection Preferences', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-forms',
+							'body'      => function() use ( $prefs ) {
+								self::render_consent_controls( $prefs );
+							},
+						)
+					);
+					?>
+
+					<!-- Data Management Actions -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'Data Management', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-database',
+							'body'      => function() {
+								self::render_data_actions();
+							},
+						)
+					);
+					?>
+
+					<!-- Consent History -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'Consent History', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-clock',
+							'body'      => function() use ( $user_id ) {
+								self::render_consent_history( $user_id );
+							},
+						)
+					);
+					?>
+
+					<!-- Third-Party Services -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'Third-Party Services', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-admin-links',
+							'body'      => function() {
+								self::render_third_party_services();
+							},
+						)
+					);
+					?>
+				</div>
+
+				<div class="wps-privacy-dashboard-side">
+					<!-- Privacy Score Card -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'Privacy Status', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-shield-alt',
+							'body'      => function() use ( $prefs ) {
+								self::render_privacy_score( $prefs );
+							},
+						)
+					);
+					?>
+
+					<!-- What We Collect -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'What We Collect', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-search',
+							'body'      => function() {
+								self::render_data_collection_info();
+							},
+						)
+					);
+					?>
+
+					<!-- Your Data -->
+					<?php
+					wpshadow_render_card(
+						array(
+							'title'     => __( 'Your Data', 'wpshadow' ),
+							'title_tag' => 'h2',
+							'icon'      => 'dashicons-archive',
+							'body'      => function() use ( $user_id ) {
+								self::render_user_data( $user_id );
+							},
+						)
+					);
+					?>
+				</div>
+			</div>
 		</div>
 		<?php
 	}
@@ -249,11 +374,36 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 		$color = $score === 100 ? '#22c55e' : '#6366F1';
 
 		?>
+		<?php
+		$status_label = 100 === $score ? __( 'Excellent', 'wpshadow' ) : __( 'High', 'wpshadow' );
+		$radius       = 85;
+		$dash_total   = 2 * M_PI * $radius;
+		$dash_value   = ( $score / 100 ) * $dash_total;
+		$dash_gap     = max( 0, $dash_total - $dash_value );
+		?>
 		<div class="wps-privacy-score-container">
-			<div class="wps-privacy-score-badge">
-				<div class="wps-privacy-score-circle" style="background: <?php echo esc_attr( $color ); ?>;">
-					<span class="wps-privacy-score-number"><?php echo esc_html( $score ); ?></span>
-				</div>
+			<div class="wps-privacy-score-gauge">
+				<svg width="200" height="200" viewBox="0 0 200 200" class="wps-health-gauge-svg" aria-labelledby="privacy-score-title" role="img">
+					<title id="privacy-score-title">
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %d: privacy score percentage */
+								__( 'Privacy score: %d%%', 'wpshadow' ),
+								$score
+							)
+						);
+						?>
+					</title>
+					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="2" opacity="0.2" />
+					<circle cx="100" cy="100" r="85" fill="none" stroke="#e0e0e0" stroke-width="16" />
+					<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="16"
+						stroke-dasharray="<?php echo esc_attr( sprintf( '%.2f %.2f', $dash_value, $dash_gap ) ); ?>"
+						stroke-linecap="round" transform="rotate(-90 100 100)"
+						class="wps-gauge-progress" />
+				<text x="100" y="110" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( $color ); ?>"><?php echo esc_html( $score ); ?>%</text>
+				<text x="100" y="135" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( $status_label ); ?></text>
+				</svg>
 				<p class="wps-privacy-score-label">
 					<?php esc_html_e( 'Privacy Score', 'wpshadow' ); ?>
 				</p>
@@ -306,71 +456,84 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 		<form id="wpshadow-consent-form" class="wps-consent-form">
 			<?php wp_nonce_field( 'wpshadow_privacy_actions', 'wpshadow_consent_nonce' ); ?>
 
-			<!-- Essential (Always On) -->
-			<div class="wps-form-group wps-consent-required">
-				<div class="wps-consent-group">
-					<input type="checkbox" checked disabled class="wps-consent-checkbox" />
-					<div class="wps-consent-content">
-						<strong class="wps-consent-title">
-							<?php esc_html_e( 'Essential Functions', 'wpshadow' ); ?>
-						</strong>
-						<span class="wps-consent-badge-required">
-							<?php esc_html_e( 'Required', 'wpshadow' ); ?>
-						</span>
-						<p class="wps-consent-description">
-							<?php esc_html_e( 'Required for basic plugin functionality. Cannot be disabled.', 'wpshadow' ); ?>
-						</p>
-						<ul class="wps-consent-feature-list">
-							<li><?php esc_html_e( 'Settings and preferences storage', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Diagnostic scan results (local database)', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Activity and audit logging (local only)', 'wpshadow' ); ?></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			<!-- Anonymous Telemetry (Opt-In) -->
-			<div class="wps-form-group wps-consent-optional">
-				<div class="wps-consent-group">
-					<input
-						type="checkbox"
-						name="anonymized_telemetry"
-						id="consent-telemetry"
-						value="1"
-						<?php checked( $prefs['anonymized_telemetry'] ); ?>
-						class="wps-consent-checkbox"
-					/>
-					<div class="wps-consent-content">
-						<label for="consent-telemetry" class="wps-consent-label">
-							<strong class="wps-consent-title">
-								<?php esc_html_e( 'Anonymous Usage Data', 'wpshadow' ); ?>
-							</strong>
-							<span class="wps-consent-badge-optional">
-								<?php esc_html_e( 'Optional', 'wpshadow' ); ?>
-							</span>
-						</label>
-						<p class="wps-consent-description">
-							<?php esc_html_e( 'Help us improve WPShadow by sharing anonymous usage data.', 'wpshadow' ); ?>
-						</p>
-						<ul class="wps-consent-feature-list">
-							<li><?php esc_html_e( 'Which features you use (no personal info)', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Diagnostic scan frequency and results', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'Treatment success/failure rates', 'wpshadow' ); ?></li>
-							<li><?php esc_html_e( 'WordPress and PHP versions (for compatibility)', 'wpshadow' ); ?></li>
-						</ul>
-						<div class="wps-consent-benefit-box">
-							<strong class="wps-consent-benefit-title">
-								<?php esc_html_e( 'We never collect:', 'wpshadow' ); ?>
-							</strong>
-							<ul class="wps-consent-benefit-list">
-								<li><?php esc_html_e( 'Your name, email, or personal information', 'wpshadow' ); ?></li>
-								<li><?php esc_html_e( 'Your site URL, domain name, or content', 'wpshadow' ); ?></li>
-								<li><?php esc_html_e( 'User data, post content, or comments', 'wpshadow' ); ?></li>
-								<li><?php esc_html_e( 'Anything that could identify you or your site', 'wpshadow' ); ?></li>
+			<div class="wps-consent-stack">
+				<?php
+				// Essential Functions card.
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Essential Functions', 'wpshadow' ),
+						'description' => __( 'Required for basic plugin functionality. Always on.', 'wpshadow' ),
+						'icon'        => 'dashicons-shield',
+						'badge'       => array(
+							'label' => __( 'Required', 'wpshadow' ),
+							'class' => 'wps-badge wps-badge--success',
+						),
+						'body'        => function() {
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+							echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+								array(
+									'id'          => 'consent-essential',
+									'label'       => __( 'Always enabled', 'wpshadow' ),
+									'helper_text' => __( 'Core features like diagnostics and settings storage.', 'wpshadow' ),
+									'checked'     => true,
+									'disabled'    => true,
+								)
+							);
+							?>
+							<ul class="wps-consent-feature-list">
+								<li><?php esc_html_e( 'Settings and preferences storage', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Diagnostic scan results (local database)', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Activity and audit logging (local only)', 'wpshadow' ); ?></li>
 							</ul>
-						</div>
-					</div>
-				</div>
+							<?php
+						},
+					)
+				);
+
+				// Anonymous Usage Data card.
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'Anonymous Usage Data', 'wpshadow' ),
+						'description' => __( 'Share anonymous usage data to help us improve WPShadow.', 'wpshadow' ),
+						'icon'        => 'dashicons-chart-bar',
+						'badge'       => array(
+							'label' => __( 'Optional', 'wpshadow' ),
+							'class' => 'wps-badge wps-badge--info',
+						),
+						'body'        => function() use ( $prefs ) {
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+							echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+								array(
+									'id'          => 'consent-telemetry',
+									'name'        => 'anonymized_telemetry',
+									'label'       => __( 'Share anonymous usage data', 'wpshadow' ),
+									'helper_text' => __( 'This is fully anonymized and never includes personal data.', 'wpshadow' ),
+									'checked'     => $prefs['anonymized_telemetry'],
+								)
+							);
+							?>
+							<ul class="wps-consent-feature-list">
+								<li><?php esc_html_e( 'Which features you use (no personal info)', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Diagnostic scan frequency and results', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'Treatment success/failure rates', 'wpshadow' ); ?></li>
+								<li><?php esc_html_e( 'WordPress and PHP versions (for compatibility)', 'wpshadow' ); ?></li>
+							</ul>
+							<div class="wps-consent-benefit-box">
+								<strong class="wps-consent-benefit-title">
+									<?php esc_html_e( 'We never collect:', 'wpshadow' ); ?>
+								</strong>
+								<ul class="wps-consent-benefit-list">
+									<li><?php esc_html_e( 'Your name, email, or personal information', 'wpshadow' ); ?></li>
+									<li><?php esc_html_e( 'Your site URL, domain name, or content', 'wpshadow' ); ?></li>
+									<li><?php esc_html_e( 'User data, post content, or comments', 'wpshadow' ); ?></li>
+									<li><?php esc_html_e( 'Anything that could identify you or your site', 'wpshadow' ); ?></li>
+								</ul>
+							</div>
+							<?php
+						},
+					)
+				);
+				?>
 			</div>
 
 			<div class="wps-consent-footer">
@@ -449,9 +612,10 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 	 */
 	private static function render_user_data( $user_id ) {
 		$data_points = array();
+		$settings    = get_option( 'wpshadow_settings', array() );
 
 		// Count settings
-		$settings_count = count( get_option( 'wpshadow_settings', array() ) );
+		$settings_count = count( $settings );
 		if ( $settings_count > 0 ) {
 			$data_points[] = sprintf(
 				/* translators: %d: number of settings */
@@ -461,8 +625,8 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 		}
 
 		// Count user meta
-		$user_meta = get_user_meta( $user_id );
-		$wpshadow_meta = array_filter( $user_meta, function( $key ) {
+		$user_meta    = get_user_meta( $user_id );
+		$wpshadow_meta = array_filter( $user_meta, function ( $key ) {
 			return 0 === strpos( $key, 'wpshadow_' );
 		}, ARRAY_FILTER_USE_KEY );
 
@@ -475,13 +639,15 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 		}
 
 		// Count activity logs (if Activity_Logger exists)
+		$activity_logs = array();
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			$result = \WPShadow\Core\Activity_Logger::get_activities(
 				array( 'user_id' => $user_id ),
-				1, // limit - we only need the count
+				500,
 				0  // offset
 			);
-			$logs_count = isset( $result['total'] ) ? $result['total'] : 0;
+			$activity_logs = isset( $result['activities'] ) ? $result['activities'] : array();
+			$logs_count    = isset( $result['total'] ) ? $result['total'] : count( $activity_logs );
 			if ( $logs_count > 0 ) {
 				$data_points[] = sprintf(
 					/* translators: %d: number of log entries */
@@ -490,6 +656,33 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 				);
 			}
 		}
+
+		$consent = Consent_Preferences::get_preferences( $user_id );
+		$format_value = function ( $value ) {
+			if ( is_bool( $value ) ) {
+				return $value ? __( 'Yes', 'wpshadow' ) : __( 'No', 'wpshadow' );
+			}
+			if ( is_array( $value ) || is_object( $value ) ) {
+				return wp_json_encode( $value, JSON_PRETTY_PRINT );
+			}
+			if ( '' === $value || null === $value ) {
+				return __( 'None', 'wpshadow' );
+			}
+			return (string) $value;
+		};
+
+		$report_data = array(
+			'generated_at'  => current_time( 'mysql' ),
+			'user'          => array(
+				'id'           => $user_id,
+				'display_name' => wp_get_current_user()->display_name,
+				'email'        => wp_get_current_user()->user_email,
+			),
+			'consent'       => $consent,
+			'settings'      => $settings,
+			'user_meta'     => $wpshadow_meta,
+			'activity_logs' => $activity_logs,
+		);
 
 		?>
 		<div class="wps-data-management-container">
@@ -512,6 +705,17 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 			<p class="wps-data-management-footer">
 				<?php esc_html_e( 'This is everything WPShadow knows about you. No hidden data, no secrets.', 'wpshadow' ); ?>
 			</p>
+
+			<div class="wps-data-report">
+				<h4><?php esc_html_e( 'Your Data Report', 'wpshadow' ); ?></h4>
+				<p class="wps-data-management-note">
+					<?php esc_html_e( 'Open the full privacy report to see a complete, well-formatted breakdown of everything WPShadow stores about you.', 'wpshadow' ); ?>
+				</p>
+				<a class="wps-btn wps-btn--secondary wps-mb-3" href="<?php echo esc_url( add_query_arg( array( 'page' => 'wpshadow-reports', 'report' => 'user-privacy-report', 'user_id' => $user_id ), admin_url( 'admin.php' ) ) ); ?>">
+					<span class="dashicons dashicons-privacy"></span>
+					<?php esc_html_e( 'Open Full Privacy Report', 'wpshadow' ); ?>
+				</a>
+			</div>
 		</div>
 		<?php
 	}
@@ -646,7 +850,7 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 		<div class="wps-external-services-note">
 			<p>
 				<strong><?php esc_html_e( 'Future Pro Features:', 'wpshadow' ); ?></strong>
-				<?php esc_html_e( 'If you enable optional Pro features in the future, some may use external services (cloud scanning, email notifications). We\'ll always ask for your consent first and explain exactly what data is shared.', 'wpshadow' ); ?>
+				<?php esc_html_e( 'If you enable optional Pro features in the future, some may use WPShadow Cloud services to access your WPShadow server for cloud scanning or email notifications. We\'ll always ask for your consent first and explain exactly what data is shared.', 'wpshadow' ); ?>
 			</p>
 		</div>
 		<?php

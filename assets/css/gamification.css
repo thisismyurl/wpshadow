@@ -147,6 +147,10 @@
 	color: #999;
 }
 
+.achievement-meta.is-centered {
+	justify-content: center;
+}
+
 .achievement-meta .points {
 	font-weight: bold;
 	color: #f093fb;

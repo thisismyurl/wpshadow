@@ -1,13 +1,12 @@
 <?php
 /**
  * Privacy & Data Settings Page
-			<?php
-			wpshadow_render_page_header(
-				__( 'Privacy & Data Settings', 'wpshadow' ),
-				__( 'Configure data collection and privacy preferences.', 'wpshadow' ),
-				'dashicons-admin-network'
-			);
-			?>
+ *
+ * @package WPShadow
+ * @subpackage Settings
+ * @since 1.6030.2148
+ */
+
 declare(strict_types=1);
 
 namespace WPShadow\Admin\Pages;
@@ -35,7 +34,7 @@ class Privacy_Settings_Page {
 		}
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php
 			wpshadow_render_page_header(
 				__( 'Privacy & Data', 'wpshadow' ),
@@ -238,6 +237,13 @@ class Privacy_Settings_Page {
 				);
 				?>
 			</form>
+
+			<!-- Recent Activity Section -->
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'settings', 10 );
+			}
+			?>
 		</div>
 		<?php
 	}

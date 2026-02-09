@@ -53,6 +53,11 @@ require_once $ajax_path . 'generate-report-handler.php';
 require_once $ajax_path . 'download-report-handler.php';
 require_once $ajax_path . 'send-executive-report-handler.php';
 require_once $ajax_path . 'export-csv-handler.php';
+require_once $ajax_path . 'user-search-handler.php';
+require_once $ajax_path . 'class-ajax-run-privacy-report.php';
+require_once $ajax_path . 'class-ajax-refresh-privacy-reports.php';
+require_once $ajax_path . 'class-ajax-run-seo-report.php';
+require_once $ajax_path . 'class-ajax-refresh-seo-reports.php';
 
 // Settings management
 require_once $ajax_path . 'save-email-template-handler.php';
@@ -61,6 +66,7 @@ require_once $ajax_path . 'update-report-schedule-handler.php';
 require_once $ajax_path . 'update-privacy-settings-handler.php';
 require_once $ajax_path . 'update-data-retention-handler.php';
 require_once $ajax_path . 'update-scan-frequency-handler.php';
+require_once $ajax_path . 'class-save-setting-handler.php';
 require_once $ajax_path . 'class-import-export-handler.php';
 
 // Workflow operations
@@ -145,6 +151,8 @@ require_once $ajax_path . 'class-ajax-toggle-diagnostic.php';
 require_once $ajax_path . 'class-ajax-treatments-list.php';
 require_once $ajax_path . 'class-ajax-toggle-treatment.php';
 require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
+require_once $ajax_path . 'class-ajax-diagnostics-status.php';
+require_once $ajax_path . 'class-ajax-last-family-results.php';
 
 // Exit interview and followup operations
 require_once $ajax_path . 'exit-followup-handlers.php';
@@ -157,4 +165,40 @@ require_once $ajax_path . 'class-content-review-handlers.php';
 // Register consent handler (must be called explicitly)
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Consent_Preferences_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
+}
+
+// Register family diagnostics handler explicitly to guarantee availability.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {
+	\WPShadow\Admin\Ajax\AJAX_Run_Family_Diagnostics::register();
+}
+
+// Register diagnostics status handler explicitly for live progress polling.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Diagnostics_Status' ) ) {
+	\WPShadow\Admin\Ajax\AJAX_Diagnostics_Status::register();
+}
+
+// Register last family results handler for recovery fallback.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Last_Family_Results' ) ) {
+	\WPShadow\Admin\Ajax\AJAX_Last_Family_Results::register();
+}
+
+// Register privacy reports refresh handler for live list updates.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Refresh_Privacy_Reports_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Refresh_Privacy_Reports_Handler::register();
+}
+
+// Register privacy report runner for AJAX snapshot generation.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_Privacy_Report_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Run_Privacy_Report_Handler::register();
+	
+}
+
+// Register SEO reports refresh handler for live list updates.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Refresh_SEO_Reports_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Refresh_SEO_Reports_Handler::register();
+}
+
+// Register SEO report runner for AJAX snapshot generation.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_SEO_Report_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Run_SEO_Report_Handler::register();
 }

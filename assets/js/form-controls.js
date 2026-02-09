@@ -64,13 +64,22 @@
 
 			// Handle toggle click
 			$(document).on('click', '.wps-toggle', function(e) {
-				e.preventDefault();
-				
-				if ($(this).is(':disabled')) {
+				const $toggle = $(this);
+				const hasNativeCheckbox = $toggle.is('label') && $toggle.find('input[type="checkbox"]').length;
+				if (hasNativeCheckbox) {
 					return;
 				}
 
-				const $toggle = $(this);
+				if (!$toggle.is('[role="switch"]')) {
+					return;
+				}
+
+				e.preventDefault();
+
+				if ($toggle.is(':disabled')) {
+					return;
+				}
+
 				const isChecked = $toggle.attr('aria-checked') === 'true';
 				const newState = !isChecked;
 				
@@ -99,6 +108,9 @@
 
 			// Keyboard support (Space/Enter)
 			$(document).on('keydown', '.wps-toggle', function(e) {
+				if (!$(this).is('[role="switch"]')) {
+					return;
+				}
 				if (e.key === ' ' || e.key === 'Enter') {
 					e.preventDefault();
 					$(this).click();

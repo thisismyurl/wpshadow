@@ -77,9 +77,5 @@ class Diagnostic_Static_Analysis_Not_Automated extends Diagnostic_Base {
 		}
 
 		return null;
-						}
-						return null;
-						}
-						return null;
 	}
 }

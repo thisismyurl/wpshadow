@@ -46,7 +46,14 @@
 					// Show brief confirmation if message provided
 					if (response.data && response.data.message) {
 						const $notice = $('<div class="notice notice-info is-dismissible" style="margin: 10px 0;"><p>' + response.data.message + '</p></div>');
-						$('h1').first().after($notice);
+						const $slot = $('#wpshadow-page-notices');
+						if ($slot.length) {
+							$slot.append($notice);
+						} else if ($('.wrap').length) {
+							$('.wrap').first().prepend($notice);
+						} else {
+							$('body').prepend($notice);
+						}
 						
 						// Auto-dismiss notice after 5 seconds
 						setTimeout(function() {

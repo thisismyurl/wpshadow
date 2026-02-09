@@ -78,6 +78,8 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 		<div class="wrap wpshadow-security-api-page">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
+			<?php do_action( 'wpshadow_after_page_header' ); ?>
+
 			<div class="wpshadow-api-intro">
 				<p>
 					<?php

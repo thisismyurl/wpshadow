@@ -272,12 +272,11 @@
 			}
 
 			var $notice = $('<div class="' + noticeClass + '"><p>' + message + '</p></div>');
-
-			// Insert after h1 or at top of .wrap
-			if ($('h1').first().length) {
-				$('h1').first().after($notice);
+			var $slot = $('#wpshadow-page-notices');
+			if ($slot.length) {
+				$slot.append($notice);
 			} else if ($('.wrap').length) {
-				$('.wrap').prepend($notice);
+				$('.wrap').first().prepend($notice);
 			}
 
 			// Auto dismiss after duration

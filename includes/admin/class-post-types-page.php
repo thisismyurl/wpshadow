@@ -60,23 +60,23 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function enqueue_assets( $hook ) {
-		if ( 'wpshadow_page_wpshadow-post-types' !== $hook ) {
+		if ( ! is_string( $hook ) || false === strpos( $hook, 'wpshadow-post-types' ) ) {
 			return;
 		}
 
-		wp_enqueue_style( 'wpshadow-admin' );
+		wp_enqueue_style( 'wpshadow-admin-pages' );
 		wp_enqueue_style(
 			'wpshadow-post-types',
 			WPSHADOW_URL . 'assets/css/post-types.css',
-			array( 'wpshadow-admin' ),
+			array( 'wpshadow-admin-pages' ),
 			WPSHADOW_VERSION
 		);
 
-		wp_enqueue_script( 'wpshadow-admin' );
+		wp_enqueue_script( 'wpshadow-admin-pages' );
 		wp_enqueue_script(
 			'wpshadow-post-types',
 			WPSHADOW_URL . 'assets/js/post-types.js',
-			array( 'jquery', 'wpshadow-admin' ),
+			array( 'jquery', 'wpshadow-admin-pages' ),
 			WPSHADOW_VERSION,
 			true
 		);
@@ -109,6 +109,45 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function render_page() {
+		self::enqueue_assets( 'wpshadow_page_wpshadow-post-types' );
+		wp_print_styles( array( 'wpshadow-admin-pages', 'wpshadow-post-types' ) );
+		wp_print_scripts( array( 'wpshadow-admin-pages', 'wpshadow-post-types' ) );
+
+		if ( ! wp_style_is( 'wpshadow-post-types', 'done' ) ) {
+			printf(
+				'<link rel="stylesheet" id="wpshadow-post-types-css" href="%sassets/css/post-types.css?ver=%s" media="all" />',
+				esc_url( WPSHADOW_URL ),
+				esc_attr( WPSHADOW_VERSION )
+			);
+		}
+
+		if ( ! wp_script_is( 'wpshadow-post-types', 'done' ) ) {
+			$localized = array(
+				'nonce'   => wp_create_nonce( 'wpshadow_post_types' ),
+				'strings' => array(
+					'active'             => __( 'Active', 'wpshadow' ),
+					'inactive'           => __( 'Inactive', 'wpshadow' ),
+					'activating'         => __( 'Activating...', 'wpshadow' ),
+					'deactivating'       => __( 'Deactivating...', 'wpshadow' ),
+					'activated'          => __( 'Post type activated successfully', 'wpshadow' ),
+					'deactivated'        => __( 'Post type deactivated successfully', 'wpshadow' ),
+					'error'              => __( 'Operation failed. Please try again.', 'wpshadow' ),
+					'saving'             => __( 'Saving...', 'wpshadow' ),
+					'saved'              => __( 'Settings saved successfully', 'wpshadow' ),
+					'confirm_deactivate' => __( 'Deactivating will hide this post type from your admin menu. Existing content will not be deleted. Continue?', 'wpshadow' ),
+				),
+			);
+			printf(
+				'<script>window.wpshadowPostTypes=%s;</script>',
+				wp_json_encode( $localized )
+			);
+			printf(
+				'<script id="wpshadow-post-types-js" src="%sassets/js/post-types.js?ver=%s"></script>',
+				esc_url( WPSHADOW_URL ),
+				esc_attr( WPSHADOW_VERSION )
+			);
+		}
+
 		$all_post_types = Post_Types_Manager::get_available_post_types();
 		$active         = get_option( 'wpshadow_active_post_types', array() );
 
@@ -201,16 +240,15 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 							?>
 							<div class="wps-flex wps-justify-between wps-items-center">
 								<div class="wps-flex wps-items-center wps-gap-2">
-									<label class="wpshadow-toggle-switch" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s post type', 'wpshadow' ), $config['singular'] ) ); ?>">
+									<label class="wps-toggle wpshadow-toggle-switch" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s post type', 'wpshadow' ), $config['singular'] ) ); ?>">
 										<input type="checkbox" 
 											class="wpshadow-cpt-toggle" 
 											data-post-type="<?php echo esc_attr( $key ); ?>"
 											<?php checked( $is_active ); ?>
 										>
-										<span class="wpshadow-toggle-slider"></span>
-									</label>
-									<span class="wpshadow-toggle-label"><?php echo $is_active ? esc_html__( 'Active', 'wpshadow' ) : esc_html__( 'Inactive', 'wpshadow' ); ?></span>
-								</div>
+											<span class="wps-toggle-slider wpshadow-toggle-slider"></span>
+										</label>
+									</div>
 								<?php if ( $is_active ) : ?>
 									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . $key ) ); ?>" class="wps-btn wps-btn--primary wps-btn--sm">
 										<?php esc_html_e( 'Manage', 'wpshadow' ); ?>
@@ -226,44 +264,11 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 				<?php endforeach; ?>
 			</div>
 
-			<!-- Help Section -->
+			<!-- Recent Activity -->
 			<?php
-			wpshadow_render_card(
-				array(
-					'title'       => __( 'Need Help?', 'wpshadow' ),
-					'card_class'  => 'wpshadow-help-section',
-					'body'        => function() {
-						?>
-						<div class="help-grid">
-							<div class="help-item">
-								<span class="dashicons dashicons-book"></span>
-								<h4><?php esc_html_e( 'Documentation', 'wpshadow' ); ?></h4>
-								<p><?php esc_html_e( 'Learn how to use custom post types effectively in your WordPress site.', 'wpshadow' ); ?></p>
-								<a href="https://wpshadow.com/kb/custom-post-types" target="_blank" class="button button-secondary">
-									<?php esc_html_e( 'Read Guide', 'wpshadow' ); ?>
-								</a>
-							</div>
-							<div class="help-item">
-								<span class="dashicons dashicons-video-alt3"></span>
-								<h4><?php esc_html_e( 'Video Tutorials', 'wpshadow' ); ?></h4>
-								<p><?php esc_html_e( 'Watch step-by-step tutorials on creating and managing custom content.', 'wpshadow' ); ?></p>
-								<a href="https://wpshadow.com/academy/custom-post-types" target="_blank" class="button button-secondary">
-									<?php esc_html_e( 'Watch Now', 'wpshadow' ); ?>
-								</a>
-							</div>
-							<div class="help-item">
-								<span class="dashicons dashicons-admin-generic"></span>
-								<h4><?php esc_html_e( 'Best Practices', 'wpshadow' ); ?></h4>
-								<p><?php esc_html_e( 'Discover recommended approaches for organizing your content structure.', 'wpshadow' ); ?></p>
-								<a href="https://wpshadow.com/kb/cpt-best-practices" target="_blank" class="button button-secondary">
-									<?php esc_html_e( 'Learn More', 'wpshadow' ); ?>
-								</a>
-							</div>
-						</div>
-						<?php
-					},
-				)
-			);
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'settings', 10 );
+			}
 			?>
 		</div>
 		<?php

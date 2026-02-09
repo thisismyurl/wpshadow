@@ -106,6 +106,9 @@ class Tool_View_Base {
 	 * @return void
 	 */
 	public static function render_footer(): void {
+		if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+			wpshadow_render_page_activities( 'tools', 10 );
+		}
 		?>
 		</div><!-- .wrap.wps-page-container -->
 		<?php

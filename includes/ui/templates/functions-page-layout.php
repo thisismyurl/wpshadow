@@ -49,6 +49,16 @@ function wpshadow_render_page_footer() {
 }
 
 /**
+ * Render a shared notice slot after the page header.
+ *
+ * @since  1.6038.1200
+ * @return void
+ */
+function wpshadow_render_page_notice_slot() {
+	echo '<div class="wpshadow-page-notices" id="wpshadow-page-notices"></div>';
+}
+
+/**
  * Load and render page-specific activities component
  *
 	 * Includes the page-activities component file which provides functions for
@@ -69,6 +79,15 @@ function wpshadow_load_page_activities_component() {
 		$component_file = WPSHADOW_PATH . 'includes/views/components/page-activities.php';
 		if ( file_exists( $component_file ) ) {
 			require_once $component_file;
+			return;
+		}
+	}
+
+	// Current location fallback
+	if ( ! function_exists( 'wpshadow_render_page_activities' ) ) {
+		$component_file = WPSHADOW_PATH . 'includes/ui/components/page-activities.php';
+		if ( file_exists( $component_file ) ) {
+			require_once $component_file;
 		}
 	}
 }
@@ -76,6 +95,9 @@ function wpshadow_load_page_activities_component() {
 
 // Load page activities component on init
 add_action( 'wp_loaded', 'wpshadow_load_page_activities_component' );
+
+// Provide a consistent placement target for notices right under the header.
+add_action( 'wpshadow_after_page_header', 'wpshadow_render_page_notice_slot', 5 );
 
 /**
  * Render a context-specific activity log section.

@@ -224,45 +224,47 @@ class Dashboard_Customization {
 			'wordpress_health' => __( 'WordPress Site Health', 'wpshadow' ),
 		);
 		?>
-		<div class="wps-card wps-mt-5">
-			<div class="wps-card-header">
-				<h3 class="wps-card-title" class="wps-m-0">
-					<?php esc_html_e( 'Customize Your Dashboard', 'wpshadow' ); ?>
-				</h3>
-			</div>
-			<p class="wps-text-muted">
-				<?php esc_html_e( 'Choose which categories to display and pin the most important ones to the top.', 'wpshadow' ); ?>
-			</p>
-			
-			<div class="wps-grid wps-grid-auto-250 wps-gap-4 wps-mt-4">
-				<?php foreach ( $categories as $key => $label ) : ?>
-					<div class="wps-flex wps-items-center wps-gap-3" class="wps-p-12-rounded-var(--wps-radius-md)">
-						<input 
-							type="checkbox" 
-							class="wpshadow-category-toggle" 
-							data-category="<?php echo esc_attr( $key ); ?>"
-							<?php checked( $prefs[ $key ]['visible'] ?? true ); ?>
-							class="wps-cursor-pointer wps-w-18 wps-h-18"
-						/>
-						<label class="wps-m-0">
-							<?php echo esc_html( $label ); ?>
-						</label>
-						<button 
-							class="wpshadow-category-pin" 
-							data-category="<?php echo esc_attr( $key ); ?>"
-							style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 0; opacity: <?php echo ( $prefs[ $key ]['pinned'] ?? false ) ? '1' : '0.3'; ?>;"
-							title="<?php esc_attr_e( 'Pin to top', 'wpshadow' ); ?>"
-						>
-							📌
-						</button>
+		<?php
+		wpshadow_render_card(
+			array(
+				'title'       => __( 'Customize Your Dashboard', 'wpshadow' ),
+				'description' => __( 'Choose which categories to display and pin the most important ones to the top.', 'wpshadow' ),
+				'card_class'  => 'wps-mt-5',
+				'body'        => function() use ( $categories, $prefs ) {
+					?>
+					<div class="wps-grid wps-grid-auto-250 wps-gap-4 wps-mt-4">
+						<?php foreach ( $categories as $key => $label ) : ?>
+							<div class="wps-flex wps-items-center wps-gap-3" class="wps-p-12-rounded-var(--wps-radius-md)">
+								<input 
+									type="checkbox" 
+									class="wpshadow-category-toggle" 
+									data-category="<?php echo esc_attr( $key ); ?>"
+									<?php checked( $prefs[ $key ]['visible'] ?? true ); ?>
+									class="wps-cursor-pointer wps-w-18 wps-h-18"
+								/>
+								<label class="wps-m-0">
+									<?php echo esc_html( $label ); ?>
+								</label>
+								<button 
+									class="wpshadow-category-pin" 
+									data-category="<?php echo esc_attr( $key ); ?>"
+									style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 0; opacity: <?php echo ( $prefs[ $key ]['pinned'] ?? false ) ? '1' : '0.3'; ?>;"
+									title="<?php esc_attr_e( 'Pin to top', 'wpshadow' ); ?>"
+								>
+										📌
+								</button>
+							</div>
+						<?php endforeach; ?>
 					</div>
-				<?php endforeach; ?>
-			</div>
-			
-			<button id="wpshadow-save-customization" class="wps-btn wps-btn-primary wps-mt-4">
-				<?php esc_html_e( 'Save Preferences', 'wpshadow' ); ?>
-			</button>
-		</div>
+
+					<button id="wpshadow-save-customization" class="wps-btn wps-btn-primary wps-mt-4">
+						<?php esc_html_e( 'Save Preferences', 'wpshadow' ); ?>
+					</button>
+					<?php
+				},
+			)
+		);
+		?>
 		
 		<script>
 		document.addEventListener( 'DOMContentLoaded', function() {

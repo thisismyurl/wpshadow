@@ -200,7 +200,14 @@
 		 */
 		showNotice: function(message, type) {
 			const $notice = $('<div class="notice notice-' + type + ' is-dismissible"><p>' + message + '</p></div>');
-			$('.wpshadow-exit-followups-page h1').after($notice);
+			const $slot = $('#wpshadow-page-notices');
+			if ($slot.length) {
+				$slot.append($notice);
+			} else if ($('.wrap').length) {
+				$('.wrap').first().prepend($notice);
+			} else {
+				$('body').prepend($notice);
+			}
 
 			// Auto-dismiss after 3 seconds
 			setTimeout(function() {

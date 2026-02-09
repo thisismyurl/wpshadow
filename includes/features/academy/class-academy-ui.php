@@ -188,13 +188,48 @@ class Academy_UI extends Hook_Subscriber_Base {
 			wp_die( 'Insufficient permissions.' );
 		}
 
+		$cloud_api_key = get_option( 'wpshadow_cloud_api_key', '' );
+		$recent_learning_items = array();
+		$next_learning_modules = array();
+		$learning_feed_error = '';
+
+		if ( ! empty( $cloud_api_key ) ) {
+			$feed_url = apply_filters( 'wpshadow_academy_learning_feed_url', '' );
+			if ( ! empty( $feed_url ) ) {
+				$feed_response = wp_remote_get(
+					$feed_url,
+					array(
+						'timeout' => 8,
+						'headers' => array(
+							'Authorization' => 'Bearer ' . $cloud_api_key,
+						),
+					)
+				);
+
+				if ( is_wp_error( $feed_response ) ) {
+					$learning_feed_error = $feed_response->get_error_message();
+				} else {
+					$body = wp_remote_retrieve_body( $feed_response );
+					$decoded = json_decode( $body, true );
+					if ( is_array( $decoded ) ) {
+						if ( ! empty( $decoded['recent_items'] ) && is_array( $decoded['recent_items'] ) ) {
+							$recent_learning_items = $decoded['recent_items'];
+						}
+						if ( ! empty( $decoded['next_modules'] ) && is_array( $decoded['next_modules'] ) ) {
+							$next_learning_modules = $decoded['next_modules'];
+						}
+					}
+				}
+			}
+		}
+
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 
 		// If a specific tab is requested, render that content (only learning-path is supported)
 		if ( ! empty( $tab ) ) {
 			if ( 'learning-path' === $tab ) {
 				?>
-				<div class="wps-page-container">
+				<div class="wrap wps-page-container">
 					<?php wpshadow_render_page_header(
 					__( 'Your Custom Study Plan', 'wpshadow' ),
 					__( 'Lessons we picked specifically for your site (based on what we found when checking it).', 'wpshadow' ),
@@ -209,6 +244,68 @@ class Academy_UI extends Hook_Subscriber_Base {
 					<div class="tab-content">
 						<?php self::render_learning_path_tab(); ?>
 					</div>
+
+					<?php if ( ! empty( $cloud_api_key ) ) : ?>
+						<?php
+							wpshadow_render_card(
+								array(
+									'title'       => __( 'Recent Learning Activity', 'wpshadow' ),
+									'description' => __( 'A quick list of the guides and videos you have opened most recently.', 'wpshadow' ),
+									'icon'        => 'dashicons-welcome-learn-more',
+									'card_class'  => 'wps-mt-8',
+									'body'        => function() use ( $recent_learning_items, $learning_feed_error ) {
+										if ( ! empty( $recent_learning_items ) ) {
+											?>
+											<ul class="wps-list-disc wps-ml-5">
+												<?php foreach ( $recent_learning_items as $item ) : ?>
+													<?php
+														$title = isset( $item['title'] ) ? (string) $item['title'] : '';
+														$type  = isset( $item['type'] ) ? (string) $item['type'] : '';
+														$url   = isset( $item['url'] ) ? (string) $item['url'] : '';
+														$viewed_at = isset( $item['viewed_at'] ) ? (string) $item['viewed_at'] : '';
+														$meta_bits = array();
+														if ( $type ) {
+															$meta_bits[] = $type;
+														}
+														if ( $viewed_at ) {
+															$meta_bits[] = $viewed_at;
+														}
+														$meta_text = $meta_bits ? implode( ' • ', $meta_bits ) : '';
+													?>
+													<li class="wps-mb-2">
+														<?php if ( $url ) : ?>
+															<a class="wps-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer">
+																<?php echo esc_html( $title ); ?>
+															</a>
+														<?php else : ?>
+															<?php echo esc_html( $title ); ?>
+														<?php endif; ?>
+														<?php if ( $meta_text ) : ?>
+															<span class="wps-text-xs wps-text-muted">
+																<?php echo esc_html( $meta_text ); ?>
+															</span>
+														<?php endif; ?>
+													</li>
+												<?php endforeach; ?>
+											</ul>
+											<?php
+											return;
+										}
+										?>
+										<p class="wps-text-sm wps-text-muted">
+											<?php esc_html_e( 'Your recent learning history will appear here once the feed is connected.', 'wpshadow' ); ?>
+										</p>
+										<?php if ( $learning_feed_error ) : ?>
+											<p class="wps-text-xs wps-text-muted">
+												<?php echo esc_html( $learning_feed_error ); ?>
+											</p>
+										<?php endif; ?>
+										<?php
+									},
+								)
+							);
+						?>
+					<?php endif; ?>
 				</div>
 				<?php
 				return;
@@ -221,9 +318,9 @@ class Academy_UI extends Hook_Subscriber_Base {
 
 		// Show academy overview grid
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<?php wpshadow_render_page_header(
-				__( 'Learning Center', 'wpshadow' ),
+				__( 'WPShadow Academy', 'wpshadow' ),
 				__( 'Learn how to keep your WordPress site fast, safe, and running smoothly. Everything explained in plain English.', 'wpshadow' ),
 				'dashicons-welcome-learn-more'
 			); ?>
@@ -237,6 +334,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 					'url'          => 'https://wpshadow.com/academy/courses?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=courses',
 					'icon'         => 'dashicons-media-video',
 					'action_label' => __( 'Browse Courses', 'wpshadow' ),
+					'width'        => 'half',
 				),
 				array(
 					'title'        => __( 'My Learning Path', 'wpshadow' ),
@@ -244,6 +342,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 					'url'          => 'https://wpshadow.com/academy/learning-path/',
 					'icon'         => 'dashicons-superhero',
 					'action_label' => __( 'View Learning Path', 'wpshadow' ),
+					'width'        => 'half',
 				),
 				array(
 					'title'        => __( 'Quick Answer Guides', 'wpshadow' ),
@@ -251,6 +350,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 					'url'          => 'https://wpshadow.com/kb?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=kb_articles',
 					'icon'         => 'dashicons-book-alt',
 					'action_label' => __( 'Browse Articles', 'wpshadow' ),
+					'width'        => 'half',
 				),
 				array(
 					'title'        => __( 'Video Lessons', 'wpshadow' ),
@@ -258,18 +358,28 @@ class Academy_UI extends Hook_Subscriber_Base {
 					'url'          => 'https://wpshadow.com/academy/videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=academy_page&utm_content=training_videos',
 					'icon'         => 'dashicons-video-alt3',
 					'action_label' => __( 'Start Watching', 'wpshadow' ),
+					'width'        => 'half',
 				),
 			);
 			?>
 			<div class="wps-grid wps-grid-auto-320">
 				<?php foreach ( $academy_cards as $card ) : ?>
 					<?php
+					$width_class = '';
+					$card_width  = $card['width'] ?? '';
+					if ( 'full' === $card_width ) {
+						$width_class = 'wps-grid-span-full';
+					} elseif ( 'half' === $card_width ) {
+						$width_class = 'wps-grid-span-half';
+					}
+
 					wpshadow_render_card(
 						array(
 							'title'       => $card['title'],
 							'title_url'   => $card['url'],
 							'description' => $card['description'],
 							'icon'        => $card['icon'],
+							'card_class'  => $width_class,
 							'actions'     => array(
 								array(
 									'label'  => $card['action_label'],
@@ -300,16 +410,30 @@ class Academy_UI extends Hook_Subscriber_Base {
 				<?php
 				wpshadow_render_card(
 					array(
-						'body' => function () use ( $learning_path ) {
-							if ( ! empty( $learning_path ) ) {
+						'card_class' => 'wps-grid-span-full',
+						'body' => function () use ( $next_learning_modules, $learning_feed_error ) {
+							if ( ! empty( $next_learning_modules ) ) {
 								?>
-								<p><?php esc_html_e( 'After looking at your site, here\'s what would help you most right now:', 'wpshadow' ); ?></p>
+								<p><?php esc_html_e( 'Based on what you have already learned, here are the next modules to focus on:', 'wpshadow' ); ?></p>
 								<ul style="list-style: disc; margin-left: 20px;">
-									<?php
-									foreach ( array_slice( $learning_path, 0, 5 ) as $item ) :
-										$title = isset( $item['course'] ) ? $item['course'] : ( isset( $item['title'] ) ? $item['title'] : __( 'Course', 'wpshadow' ) );
+									<?php foreach ( array_slice( $next_learning_modules, 0, 5 ) as $item ) : ?>
+										<?php
+											$title = isset( $item['title'] ) ? (string) $item['title'] : '';
+											$url   = isset( $item['url'] ) ? (string) $item['url'] : '';
+											$meta  = isset( $item['type'] ) ? (string) $item['type'] : '';
 										?>
-										<li><?php echo esc_html( $title ); ?></li>
+										<li>
+											<?php if ( $url ) : ?>
+												<a href="<?php echo esc_url( $url ); ?>" class="wps-link" target="_blank" rel="noopener noreferrer">
+													<?php echo esc_html( $title ); ?>
+												</a>
+											<?php else : ?>
+												<?php echo esc_html( $title ); ?>
+											<?php endif; ?>
+											<?php if ( $meta ) : ?>
+												<span class="wps-text-xs wps-text-muted"><?php echo esc_html( $meta ); ?></span>
+											<?php endif; ?>
+										</li>
 									<?php endforeach; ?>
 								</ul>
 								<div style="margin-top: 20px;">
@@ -318,21 +442,83 @@ class Academy_UI extends Hook_Subscriber_Base {
 									</a>
 								</div>
 								<?php
-							} else {
-								?>
-								<p><?php esc_html_e( 'Your site looks good! Browse our courses and videos to learn even more ways to improve.', 'wpshadow' ); ?></p>
-								<?php
+								return;
 							}
+							?>
+							<p><?php esc_html_e( 'Your next modules will appear here once the learning feed is connected.', 'wpshadow' ); ?></p>
+							<?php if ( $learning_feed_error ) : ?>
+								<p class="wps-text-xs wps-text-muted">
+									<?php echo esc_html( $learning_feed_error ); ?>
+								</p>
+							<?php endif; ?>
+							<?php
 						},
 					)
 				);
 				?>
 			</div>
 
-			<!-- Recent Activity Section -->
-			<div style="margin-top: 40px;">
-				<?php wpshadow_render_activity_log( 'training', 10 ); ?>
-			</div>
+			<?php if ( ! empty( $cloud_api_key ) ) : ?>
+				<?php
+					wpshadow_render_card(
+						array(
+							'title'       => __( 'Recent Learning Activity', 'wpshadow' ),
+							'description' => __( 'A quick list of the guides and videos you have opened most recently.', 'wpshadow' ),
+							'icon'        => 'dashicons-welcome-learn-more',
+							'card_class'  => 'wps-mt-8',
+							'body'        => function() use ( $recent_learning_items, $learning_feed_error ) {
+								if ( ! empty( $recent_learning_items ) ) {
+									?>
+									<ul class="wps-list-disc wps-ml-5">
+										<?php foreach ( $recent_learning_items as $item ) : ?>
+											<?php
+												$title = isset( $item['title'] ) ? (string) $item['title'] : '';
+												$type  = isset( $item['type'] ) ? (string) $item['type'] : '';
+												$url   = isset( $item['url'] ) ? (string) $item['url'] : '';
+												$viewed_at = isset( $item['viewed_at'] ) ? (string) $item['viewed_at'] : '';
+												$meta_bits = array();
+												if ( $type ) {
+													$meta_bits[] = $type;
+												}
+												if ( $viewed_at ) {
+													$meta_bits[] = $viewed_at;
+												}
+												$meta_text = $meta_bits ? implode( ' • ', $meta_bits ) : '';
+											?>
+											<li class="wps-mb-2">
+												<?php if ( $url ) : ?>
+													<a class="wps-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer">
+														<?php echo esc_html( $title ); ?>
+													</a>
+												<?php else : ?>
+													<?php echo esc_html( $title ); ?>
+												<?php endif; ?>
+												<?php if ( $meta_text ) : ?>
+													<span class="wps-text-xs wps-text-muted">
+														<?php echo esc_html( $meta_text ); ?>
+													</span>
+												<?php endif; ?>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+									<?php
+									return;
+								}
+								?>
+								<p class="wps-text-sm wps-text-muted">
+									<?php esc_html_e( 'Your recent learning history will appear here once the feed is connected.', 'wpshadow' ); ?>
+								</p>
+								<?php if ( $learning_feed_error ) : ?>
+									<p class="wps-text-xs wps-text-muted">
+										<?php echo esc_html( $learning_feed_error ); ?>
+									</p>
+								<?php endif; ?>
+								<?php
+							},
+						)
+					);
+				?>
+			<?php endif; ?>
 		</div>
 		<?php
 	}

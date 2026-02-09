@@ -18,6 +18,31 @@ namespace WPShadow\Core;
  * @subpackage Core
  */
 class Settings_Registry {
+	/**
+	 * Get a WPShadow setting value.
+	 *
+	 * @since  1.6038.1215
+	 * @param  string $key     Setting key (with or without wpshadow_ prefix).
+	 * @param  mixed  $default Default value if not set.
+	 * @return mixed Setting value.
+	 */
+	public static function get( string $key, $default = '' ) {
+		$option = 0 === strpos( $key, 'wpshadow_' ) ? $key : 'wpshadow_' . $key;
+		return get_option( $option, $default );
+	}
+
+	/**
+	 * Set a WPShadow setting value.
+	 *
+	 * @since  1.6038.1215
+	 * @param  string $key   Setting key (with or without wpshadow_ prefix).
+	 * @param  mixed  $value Value to store.
+	 * @return bool Whether the value was updated.
+	 */
+	public static function set( string $key, $value ): bool {
+		$option = 0 === strpos( $key, 'wpshadow_' ) ? $key : 'wpshadow_' . $key;
+		return update_option( $option, $value );
+	}
 
 
 	/**
@@ -50,6 +75,10 @@ class Settings_Registry {
 			}
 		}
 
+		if ( $old_value === $value ) {
+			return;
+		}
+
 		/**
 		 * Fires when a WPShadow setting is updated.
 		 *
@@ -69,6 +98,29 @@ class Settings_Registry {
 		 * @param mixed $value     New value.
 		 */
 		do_action( "wpshadow_setting_updated_{$option}", $old_value, $value );
+
+		if ( ! self::is_settings_request() ) {
+			return;
+		}
+
+		$label = self::get_setting_label( $option );
+		$new_value = self::format_setting_value( $value );
+		$details   = sprintf(
+			/* translators: 1: setting label, 2: new value */
+			__( 'Updated setting: %1$s is now %2$s.', 'wpshadow' ),
+			$label,
+			$new_value
+		);
+		$metadata = array(
+			'setting' => $option,
+		);
+
+		if ( self::can_log_value( $option ) ) {
+			$metadata['value']     = $new_value;
+			$metadata['old_value'] = self::format_setting_value( $old_value );
+		}
+
+		Activity_Logger::log( 'settings_changed', $details, 'settings', $metadata );
 	}
 
 	/**
@@ -106,6 +158,111 @@ class Settings_Registry {
 		 * @param mixed $value Setting value.
 		 */
 		do_action( "wpshadow_setting_added_{$option}", $value );
+
+		if ( ! self::is_settings_request() ) {
+			return;
+		}
+
+		$label = self::get_setting_label( $option );
+		$new_value = self::format_setting_value( $value );
+		$details   = sprintf(
+			/* translators: 1: setting label, 2: new value */
+			__( 'Updated setting: %1$s is now %2$s.', 'wpshadow' ),
+			$label,
+			$new_value
+		);
+		$metadata = array(
+			'setting' => $option,
+		);
+
+		if ( self::can_log_value( $option ) ) {
+			$metadata['value'] = $new_value;
+		}
+
+		Activity_Logger::log( 'settings_changed', $details, 'settings', $metadata );
+	}
+
+	/**
+	 * Check whether the update came from the General Settings page.
+	 *
+	 * @since 1.6040.0000
+	 * @return bool True when the referer matches the general settings page.
+	 */
+	private static function is_settings_request(): bool {
+		if ( ! is_admin() ) {
+			return false;
+		}
+
+		$referer = wp_get_referer();
+		if ( empty( $referer ) ) {
+			return false;
+		}
+
+		$referer_parts = wp_parse_url( $referer );
+		if ( empty( $referer_parts['query'] ) ) {
+			return false;
+		}
+
+		parse_str( $referer_parts['query'], $query_args );
+		if ( empty( $query_args['page'] ) || 'wpshadow-settings' !== $query_args['page'] ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Build a human-friendly label for a setting.
+	 *
+	 * @since 1.6040.0000
+	 * @param string $option Option name.
+	 * @return string Label for display.
+	 */
+	private static function get_setting_label( string $option ): string {
+		$label = preg_replace( '/^wpshadow_/', '', $option );
+		$label = str_replace( array( '-', '_' ), ' ', (string) $label );
+		$label = ucwords( $label );
+
+		return (string) apply_filters( 'wpshadow_setting_label', $label, $option );
+	}
+
+	/**
+	 * Determine whether a setting value is safe to log.
+	 *
+	 * @since 1.6040.0000
+	 * @param string $option Option name.
+	 * @return bool True when logging the value is allowed.
+	 */
+	private static function can_log_value( string $option ): bool {
+		$blocked_fragments = array( 'api_key', 'secret', 'token', 'password', 'license' );
+		$option_lower = strtolower( $option );
+
+		foreach ( $blocked_fragments as $fragment ) {
+			if ( false !== strpos( $option_lower, $fragment ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Normalize setting values for logging.
+	 *
+	 * @since 1.6040.0000
+	 * @param mixed $value Setting value.
+	 * @return string Normalized value.
+	 */
+	private static function format_setting_value( $value ): string {
+		if ( is_bool( $value ) ) {
+			return $value ? __( 'Enabled', 'wpshadow' ) : __( 'Disabled', 'wpshadow' );
+		}
+
+		if ( is_array( $value ) ) {
+			return __( 'Updated', 'wpshadow' );
+		}
+
+		return (string) $value;
 	}
 
 	/**
@@ -336,7 +493,7 @@ class Settings_Registry {
 			'wpshadow_cache_duration',
 			array(
 				'type'              => 'integer',
-				'default'           => 3600, // 1 hour
+				'default'           => 86400, // 24 hours
 				'sanitize_callback' => 'absint',
 				'show_in_rest'      => false,
 				'description'       => __( 'Cache duration in seconds', 'wpshadow' ),

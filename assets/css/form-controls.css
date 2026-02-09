@@ -80,7 +80,7 @@
    3. TOGGLE SWITCHES - Replace checkboxes
    ============================================================================ */
 
-.wps-toggle {
+.wps-toggle[role="switch"] {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
@@ -94,16 +94,16 @@
 	flex-shrink: 0;
 }
 
-.wps-toggle:hover {
+.wps-toggle[role="switch"]:hover {
 	transform: scale(1.02);
 }
 
-.wps-toggle:focus {
+.wps-toggle[role="switch"]:focus {
 	outline: 2px solid var(--wps-info);
 	outline-offset: 2px;
 }
 
-.wps-toggle:disabled {
+.wps-toggle[role="switch"]:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
 }
@@ -131,11 +131,11 @@
 }
 
 /* Active/Checked State */
-.wps-toggle[aria-checked="true"] .wps-toggle-track {
+.wps-toggle[role="switch"][aria-checked="true"] .wps-toggle-track {
 	background-color: var(--wps-info);
 }
 
-.wps-toggle[aria-checked="true"] .wps-toggle-thumb {
+.wps-toggle[role="switch"][aria-checked="true"] .wps-toggle-thumb {
 	transform: translateX(24px);
 }
 
@@ -164,11 +164,11 @@
 	opacity: 0;
 }
 
-.wps-toggle[aria-checked="true"] .wps-toggle-label-off {
+.wps-toggle[role="switch"][aria-checked="true"] .wps-toggle-label-off {
 	opacity: 0;
 }
 
-.wps-toggle[aria-checked="true"] .wps-toggle-label-on {
+.wps-toggle[role="switch"][aria-checked="true"] .wps-toggle-label-on {
 	opacity: 1;
 }
 
