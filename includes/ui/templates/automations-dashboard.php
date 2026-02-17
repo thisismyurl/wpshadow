@@ -13,6 +13,139 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Helper function to get trigger summary
+ * Note: This function is also defined in workflow-list.php
+ * Using it here to ensure availability in the dashboard view
+ *
+ * @since  1.6030.2148
+ * @param  array $workflow Workflow data.
+ * @return string Trigger summary.
+ */
+if ( ! function_exists( 'wpshadow_workflow_get_trigger_summary' ) ) {
+	function wpshadow_workflow_get_trigger_summary( $workflow ) {
+		// Try to get from blocks format (new format)
+		$trigger_block = null;
+		if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
+			foreach ( $workflow['blocks'] as $block ) {
+				if ( 'trigger' === $block['type'] ) {
+					$trigger_block = $block;
+					break;
+				}
+			}
+		}
+
+		// Fallback to direct trigger key (legacy format)
+		if ( ! $trigger_block && ! empty( $workflow['trigger'] ) ) {
+			$trigger_block = $workflow['trigger'];
+		}
+
+		if ( ! $trigger_block ) {
+			return __( 'No trigger configured', 'wpshadow' );
+		}
+
+		$trigger_id = isset( $trigger_block['id'] ) ? $trigger_block['id'] : '';
+		$config     = isset( $trigger_block['config'] ) ? $trigger_block['config'] : array();
+
+		// For time triggers, show the schedule
+		if ( 'time_daily' === $trigger_id || ( isset( $trigger_block['type'] ) && 'time_trigger' === $trigger_block['type'] ) ) {
+			$frequency = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
+			$time      = isset( $config['time'] ) ? $config['time'] : '02:00';
+
+			// Convert time format (24-hour to 12-hour with AM/PM)
+			$time_parts   = explode( ':', $time );
+			$hour         = intval( $time_parts[0] );
+			$minute       = isset( $time_parts[1] ) ? $time_parts[1] : '00';
+			$ampm         = $hour >= 12 ? 'PM' : 'AM';
+			$display_hour = $hour % 12;
+			if ( 0 === $display_hour ) {
+				$display_hour = 12;
+			}
+
+			$time_display = sprintf( '%d:%s %s', $display_hour, $minute, $ampm );
+
+			if ( 'daily' === $frequency ) {
+				return sprintf( __( 'Daily at %s', 'wpshadow' ), $time_display );
+			} elseif ( 'weekly' === $frequency ) {
+				$day = isset( $config['day'] ) ? ucfirst( $config['day'] ) : 'Sunday';
+				return sprintf( __( 'Weekly on %1$s at %2$s', 'wpshadow' ), $day, $time_display );
+			} elseif ( 'monthly' === $frequency ) {
+				$day = isset( $config['day'] ) ? $config['day'] : '1';
+				return sprintf( __( 'Monthly on day %1$s at %2$s', 'wpshadow' ), $day, $time_display );
+			}
+		}
+
+		// For other triggers, get label from registry
+		$all_triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
+
+		if ( ! empty( $trigger_id ) && isset( $all_triggers[ $trigger_id ] ) ) {
+			$trigger_block_data = $all_triggers[ $trigger_id ];
+			return $trigger_block_data['label'];
+		}
+
+		// Fallback to type-based summary
+		if ( isset( $trigger_block['type'] ) ) {
+			$type      = $trigger_block['type'];
+			$summaries = array(
+				'time_trigger'      => __( 'On schedule', 'wpshadow' ),
+				'page_load_trigger' => __( 'On page load', 'wpshadow' ),
+				'event_trigger'     => __( 'On event', 'wpshadow' ),
+				'condition_trigger' => __( 'When condition met', 'wpshadow' ),
+			);
+			return isset( $summaries[ $type ] ) ? $summaries[ $type ] : $type;
+		}
+
+		return __( 'Unknown trigger', 'wpshadow' );
+	}
+}
+
+/**
+ * Helper function to get action summary
+ * Note: This function is also defined in workflow-list.php
+ * Using it here to ensure availability in the dashboard view
+ *
+ * @since  1.6030.2148
+ * @param  array $workflow Workflow data.
+ * @return string Action summary.
+ */
+if ( ! function_exists( 'wpshadow_workflow_get_action_summary' ) ) {
+	function wpshadow_workflow_get_action_summary( $workflow ) {
+		$action_blocks = array();
+
+		// Try to get from blocks format (new format)
+		if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
+			foreach ( $workflow['blocks'] as $block ) {
+				if ( 'action' === $block['type'] ) {
+					$action_blocks[] = $block;
+				}
+			}
+		}
+
+		// Fallback to direct actions key (legacy format)
+		if ( empty( $action_blocks ) && ! empty( $workflow['actions'] ) && is_array( $workflow['actions'] ) ) {
+			$action_blocks = $workflow['actions'];
+		}
+
+		if ( empty( $action_blocks ) ) {
+			return __( 'No actions configured', 'wpshadow' );
+		}
+
+		$first_action = $action_blocks[0];
+		$action_id    = isset( $first_action['id'] ) ? $first_action['id'] : '';
+
+		// Get action from registry to get the label
+		$all_actions = \WPShadow\Workflow\Block_Registry::get_actions();
+
+		if ( ! empty( $action_id ) && isset( $all_actions[ $action_id ] ) ) {
+			$action_block_data = $all_actions[ $action_id ];
+			return $action_block_data['label'];
+		}
+
+		// Fallback - just count (shouldn't happen with one-action-per-trigger rule)
+		return __( '1 action', 'wpshadow' );
+	}
+}
+
 $workflows   = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 $suggestions = \WPShadow\Workflow\Workflow_Suggestions::get_suggestions();
 $suggestions = array_slice( $suggestions, 0, 5 );
@@ -80,6 +213,7 @@ $workflows           = array_filter(
 							<button 
 								type="button" 
 								class="wps-btn wps-btn-secondary wps-btn-block create-suggested-workflow" 
+								data-suggestion-id="<?php echo esc_attr( $suggestion['id'] ); ?>"
 								data-title="<?php echo esc_attr( $suggestion['title'] ); ?>"
 								data-trigger="<?php echo esc_attr( $suggestion['trigger'] ); ?>"
 								data-actions='<?php echo esc_attr( wp_json_encode( $suggestion['actions'] ) ); ?>'
@@ -684,139 +818,6 @@ input:checked + .toggle-slider:before {
 }
 </style>
 
-<?php
-/**
- * Helper function to get trigger summary
- * Note: This function is also defined in workflow-list.php
- * Using it here to ensure availability in the dashboard view
- *
- * @since  1.6030.2148
- * @param  array $workflow Workflow data.
- * @return string Trigger summary.
- */
-if ( ! function_exists( 'wpshadow_workflow_get_trigger_summary' ) ) {
-	function wpshadow_workflow_get_trigger_summary( $workflow ) {
-		// Try to get from blocks format (new format)
-		$trigger_block = null;
-		if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
-			foreach ( $workflow['blocks'] as $block ) {
-				if ( 'trigger' === $block['type'] ) {
-					$trigger_block = $block;
-					break;
-				}
-			}
-		}
-
-		// Fallback to direct trigger key (legacy format)
-		if ( ! $trigger_block && ! empty( $workflow['trigger'] ) ) {
-			$trigger_block = $workflow['trigger'];
-		}
-
-		if ( ! $trigger_block ) {
-			return __( 'No trigger configured', 'wpshadow' );
-		}
-
-		$trigger_id = isset( $trigger_block['id'] ) ? $trigger_block['id'] : '';
-		$config     = isset( $trigger_block['config'] ) ? $trigger_block['config'] : array();
-
-		// For time triggers, show the schedule
-		if ( 'time_daily' === $trigger_id || ( isset( $trigger_block['type'] ) && 'time_trigger' === $trigger_block['type'] ) ) {
-			$frequency = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
-			$time      = isset( $config['time'] ) ? $config['time'] : '02:00';
-
-			// Convert time format (24-hour to 12-hour with AM/PM)
-			$time_parts   = explode( ':', $time );
-			$hour         = intval( $time_parts[0] );
-			$minute       = isset( $time_parts[1] ) ? $time_parts[1] : '00';
-			$ampm         = $hour >= 12 ? 'PM' : 'AM';
-			$display_hour = $hour % 12;
-			if ( 0 === $display_hour ) {
-				$display_hour = 12;
-			}
-
-			$time_display = sprintf( '%d:%s %s', $display_hour, $minute, $ampm );
-
-			if ( 'daily' === $frequency ) {
-				return sprintf( __( 'Daily at %s', 'wpshadow' ), $time_display );
-			} elseif ( 'weekly' === $frequency ) {
-				$day = isset( $config['day'] ) ? ucfirst( $config['day'] ) : 'Sunday';
-				return sprintf( __( 'Weekly on %1$s at %2$s', 'wpshadow' ), $day, $time_display );
-			} elseif ( 'monthly' === $frequency ) {
-				$day = isset( $config['day'] ) ? $config['day'] : '1';
-				return sprintf( __( 'Monthly on day %1$s at %2$s', 'wpshadow' ), $day, $time_display );
-			}
-		}
-
-		// For other triggers, get label from registry
-		$all_triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
-
-		if ( ! empty( $trigger_id ) && isset( $all_triggers[ $trigger_id ] ) ) {
-			$trigger_block_data = $all_triggers[ $trigger_id ];
-			return $trigger_block_data['label'];
-		}
-
-		// Fallback to type-based summary
-		if ( isset( $trigger_block['type'] ) ) {
-			$type      = $trigger_block['type'];
-			$summaries = array(
-				'time_trigger'      => __( 'On schedule', 'wpshadow' ),
-				'page_load_trigger' => __( 'On page load', 'wpshadow' ),
-				'event_trigger'     => __( 'On event', 'wpshadow' ),
-				'condition_trigger' => __( 'When condition met', 'wpshadow' ),
-			);
-			return isset( $summaries[ $type ] ) ? $summaries[ $type ] : $type;
-		}
-
-		return __( 'Unknown trigger', 'wpshadow' );
-	}
-}
-
-/**
- * Helper function to get action summary
- * Note: This function is also defined in workflow-list.php
- * Using it here to ensure availability in the dashboard view
- *
- * @since  1.6030.2148
- * @param  array $workflow Workflow data.
- * @return string Action summary.
- */
-if ( ! function_exists( 'wpshadow_workflow_get_action_summary' ) ) {
-	function wpshadow_workflow_get_action_summary( $workflow ) {
-		$action_blocks = array();
-
-		// Try to get from blocks format (new format)
-		if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
-			foreach ( $workflow['blocks'] as $block ) {
-				if ( 'action' === $block['type'] ) {
-					$action_blocks[] = $block;
-				}
-			}
-		}
-
-		// Fallback to direct actions key (legacy format)
-		if ( empty( $action_blocks ) && ! empty( $workflow['actions'] ) && is_array( $workflow['actions'] ) ) {
-			$action_blocks = $workflow['actions'];
-		}
-
-		if ( empty( $action_blocks ) ) {
-			return __( 'No actions configured', 'wpshadow' );
-		}
-
-		$first_action = $action_blocks[0];
-		$action_id    = isset( $first_action['id'] ) ? $first_action['id'] : '';
-
-		// Get action from registry to get the label
-		$all_actions = \WPShadow\Workflow\Block_Registry::get_actions();
-
-		if ( ! empty( $action_id ) && isset( $all_actions[ $action_id ] ) ) {
-			$action_block_data = $all_actions[ $action_id ];
-			return $action_block_data['label'];
-		}
-
-		// Fallback - just count (shouldn't happen with one-action-per-trigger rule)
-		return __( '1 action', 'wpshadow' );
-	}
-}
 ?>
 
 <!-- Workflow Activity Log -->

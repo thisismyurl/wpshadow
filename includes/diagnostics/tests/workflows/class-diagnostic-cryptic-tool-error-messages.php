@@ -71,7 +71,7 @@ class Diagnostic_Cryptic_Tool_Error_Messages extends Diagnostic_Base {
 		$debug_file = WP_CONTENT_DIR . '/debug.log';
 		
 		if ( file_exists( $debug_file ) && is_readable( $debug_file ) ) {
-			$recent_errors = array();
+			$recent_errors = 0;
 			$handle = @fopen( $debug_file, 'r' );
 			
 			if ( $handle ) {

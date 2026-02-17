@@ -81,6 +81,20 @@ add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_gauges_assets' );
 function wpshadow_get_health_status(): array {
 	$findings = \wpshadow_get_site_findings();
 
+	// Check if diagnostics have ever been run
+	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
+	$never_run = empty( $last_scan );
+
+	// Show 0% until diagnostics have been run
+	if ( $never_run ) {
+		return array(
+			'score'   => 0,
+			'status'  => __( 'Not Scanned', 'wpshadow' ),
+			'color'   => '#999999',
+			'message' => __( 'Run your first scan to see your site health.', 'wpshadow' ),
+		);
+	}
+
 	if ( empty( $findings ) ) {
 		return array(
 			'score'   => 100,
@@ -159,6 +173,10 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 
 	// Get findings (empty array if none)
 	$findings = \wpshadow_get_site_findings();
+
+	// Check if diagnostics have ever been run
+	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
+	$never_run = empty( $last_scan );
 
 	// Group findings by category
 	$category_meta = \wpshadow_get_category_metadata();
@@ -282,6 +300,12 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					}
 					$gauge_percent = $total > 0 ? min( 100, $threat_total / $total ) : 0;
 					$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
+					
+					// Show 0% until diagnostics have been run
+					if ( $never_run ) {
+						$gauge_percent = 0;
+					}
+					
 					$gauge_color   = $get_threat_gauge_color( 100 - $gauge_percent );
 					?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" 
@@ -309,7 +333,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 									stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
 									stroke-linecap="round" transform="rotate(-90 50 50)" />
 								<!-- Percentage text -->
-							<text x="50" y="73" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
+							<text x="50" y="55" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
 							</svg>
 						</div>
 

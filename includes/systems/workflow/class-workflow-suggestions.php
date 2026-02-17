@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Workflow_Suggestions {
 
 	/**
-	 * Get personalized workflow suggestions based on site analysis
+	 * Get ALL personalized workflow suggestions based on site analysis (sorted by priority)
 	 *
-	 * @return array Array of suggested workflows with reasoning
+	 * @return array Array of all suggested workflows with reasoning
 	 */
-	public static function get_suggestions(): array {
+	public static function get_all_suggestions(): array {
 		$suggestions = array();
 
 		// Analyze site conditions
@@ -259,6 +259,51 @@ class Workflow_Suggestions {
 
 		// Apply filter for extensibility (hook #1)
 		return apply_filters( 'wpshadow_workflow_suggestions', $suggestions );
+	}
+
+	/**
+	 * Get top 4 suggestions for initial display
+	 *
+	 * @return array Top 4 suggestions
+	 */
+	public static function get_suggestions(): array {
+		$all_suggestions = self::get_all_suggestions();
+		return array_slice( $all_suggestions, 0, 4 );
+	}
+
+	/**
+	 * Get the next suggestion after the one just created
+	 *
+	 * @param string $created_suggestion_id ID of the suggestion that was just created
+	 * @return array|null Next suggestion or null if no more available
+	 */
+	public static function get_next_suggestion( string $created_suggestion_id ): ?array {
+		$all_suggestions = self::get_all_suggestions();
+		$current_four    = self::get_suggestions();
+		
+		// Get all suggestion IDs that are currently shown (top 4)
+		$current_ids = array_map(
+			function ( $s ) {
+				return $s['id'];
+			},
+			$current_four
+		);
+		
+		// Find the index of created suggestion in current 4
+		$index = array_search( $created_suggestion_id, $current_ids, true );
+		
+		if ( $index === false ) {
+			return null;
+		}
+		
+		// Get the first suggestion not in the top 4
+		foreach ( $all_suggestions as $suggestion ) {
+			if ( ! in_array( $suggestion['id'], $current_ids, true ) ) {
+				return $suggestion;
+			}
+		}
+		
+		return null;
 	}
 
 	/**

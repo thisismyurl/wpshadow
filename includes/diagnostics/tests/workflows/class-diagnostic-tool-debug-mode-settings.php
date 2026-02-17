@@ -78,14 +78,17 @@ class Diagnostic_Tool_Debug_Mode_Settings extends Diagnostic_Base {
 		$wp_debug_log     = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
 		$wp_debug_display = defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY;
 
+		// Check if function exists and has required parameter (WP 6.3+).
+		$is_dev_mode = function_exists( 'wp_is_development_mode' ) && wp_is_development_mode( 'all' );
+
 		// For development sites, WP_DEBUG should typically be enabled.
-		if ( ! wp_is_development_mode() && ! $wp_debug_enabled ) {
+		if ( ! $is_dev_mode && ! $wp_debug_enabled ) {
 			// This is production, so debug mode being off is expected and OK.
 			return null;
 		}
 
 		// If in development mode or WP_DEBUG is on, check for proper logging.
-		if ( wp_is_development_mode() || $wp_debug_enabled ) {
+		if ( $is_dev_mode || $wp_debug_enabled ) {
 			if ( ! $wp_debug_log ) {
 				$issues[] = __( 'WP_DEBUG_LOG is not enabled; tool errors may not be logged to file for debugging', 'wpshadow' );
 			}

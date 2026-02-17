@@ -315,6 +315,7 @@ jQuery( function( $ ) {
 		 * @param {jQuery} $btn Button element
 		 */
 		createSuggestedWorkflow( $btn ) {
+			const suggestionId = $btn.data( 'suggestion-id' );
 			const title = $btn.data( 'title' );
 			const trigger = $btn.data( 'trigger' );
 			const actionsRaw = $btn.data( 'actions' );
@@ -343,8 +344,9 @@ jQuery( function( $ ) {
 					actions: JSON.stringify( actions ),
 				},
 				success: ( response ) => {
-					if ( response.success && response.data.redirect ) {
-						window.location.href = response.data.redirect;
+					if ( response.success ) {
+						// After creating the automation, replace with next suggestion
+						this.replaceWithNextSuggestion( $btn, suggestionId );
 					} else {
 						this.showNotice( 'Failed to create automation', 'error' );
 						$btn.prop( 'disabled', false ).text( originalText );
@@ -353,6 +355,68 @@ jQuery( function( $ ) {
 				error: () => {
 					this.showNotice( 'Failed to create automation', 'error' );
 					$btn.prop( 'disabled', false ).text( originalText );
+				},
+			});
+		},
+
+		/**
+		 * Replace suggestion with next one via AJAX
+		 *
+		 * @param {jQuery} $btn Button element
+		 * @param {string} suggestionId ID of created suggestion
+		 */
+		replaceWithNextSuggestion( $btn, suggestionId ) {
+			const $card = $btn.closest( '.wpshadow-suggestion-card' );
+			const self = this;
+
+			$.ajax({
+				url: wpshadowAutomationsDashboard.ajaxUrl,
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					action: 'wpshadow_get_next_suggestion',
+					nonce: wpshadowAutomationsDashboard.nonce,
+					suggestion_id: suggestionId,
+				},
+				success: ( response ) => {
+					if ( response.success && response.data.suggestion ) {
+						const nextSuggestion = response.data.suggestion;
+
+						// Generate HTML for new suggestion card
+						const html = `
+							<div class="wpshadow-suggestion-icon" style="background: ${ nextSuggestion.color };">
+								<span class="dashicons ${ nextSuggestion.icon }"></span>
+							</div>
+							<h3>${ self.escapeHtml( nextSuggestion.title ) }</h3>
+							<p class="wpshadow-suggestion-reason">${ self.escapeHtml( nextSuggestion.reason ) }</p>
+							<p class="wpshadow-suggestion-description">${ self.escapeHtml( nextSuggestion.description ) }</p>
+							<button 
+								type="button" 
+								class="wps-btn wps-btn-secondary wps-btn-block create-suggested-workflow" 
+								data-suggestion-id="${ nextSuggestion.id }"
+								data-title="${ self.escapeHtml( nextSuggestion.title ) }"
+								data-trigger="${ nextSuggestion.trigger }"
+								data-actions='${ JSON.stringify( nextSuggestion.actions ) }'
+							>
+								${ wpshadowAutomationsDashboard.strings.createAutomation }
+							</button>
+						`;
+
+						// Replace card content with smooth fade
+						$card.fadeOut( 200, function() {
+							$card.find( '.wps-card-body' ).html( html );
+							$card.fadeIn( 200 );
+						});
+
+						self.showNotice( wpshadowAutomationsDashboard.strings.createdSuccess, 'success' );
+					} else {
+						// No more suggestions, just show success message
+						self.showNotice( 'Automation created successfully!', 'success' );
+					}
+				},
+				error: () => {
+					// Reload page on error, fallback to original behavior
+					window.location.reload();
 				},
 			});
 		},

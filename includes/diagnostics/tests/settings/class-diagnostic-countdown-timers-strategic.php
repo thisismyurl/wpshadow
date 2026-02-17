@@ -278,7 +278,16 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 		// Check for timers in key pages.
 		$key_pages = array( 'checkout', 'cart', 'pricing', 'special offer' );
 		foreach ( $key_pages as $page_title ) {
-			$page = get_page_by_title( $page_title );
+			$query = new \WP_Query( array(
+				'post_type'              => 'page',
+				'title'                  => $page_title,
+				'posts_per_page'         => 1,
+				'no_found_rows'          => true,
+				'ignore_sticky_posts'    => true,
+				'update_post_term_cache' => false,
+				'update_post_meta_cache' => false,
+			) );
+			$page = ! empty( $query->posts ) ? $query->posts[0] : null;
 			if ( $page && ( strpos( $page->post_content, 'countdown' ) !== false ||
 						   strpos( $page->post_content, 'timer' ) !== false ) ) {
 				return true;

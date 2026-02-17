@@ -81,7 +81,7 @@ class Diagnostic_Resource_Hints extends Diagnostic_Base {
 		// Count web fonts (should be preloaded)
 		foreach ( $wp_styles->queue as $handle ) {
 			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && stripos( $style->src ?? '', 'fonts.googleapis.com' ) !== false ) {
+			if ( $style && is_string( $style->src ) && stripos( $style->src, 'fonts.googleapis.com' ) !== false ) {
 				$critical_fonts++;
 			}
 		}

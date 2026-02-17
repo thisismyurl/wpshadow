@@ -14,9 +14,18 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+// Ensure helper class is loaded
+if ( ! class_exists( '\WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper' ) ) {
+	$helper_file = WPSHADOW_PATH . 'includes/diagnostics/helpers/class-diagnostic-url-and-pattern-helper.php';
+	if ( file_exists( $helper_file ) ) {
+		require_once $helper_file;
+	}
 }
 
 /**

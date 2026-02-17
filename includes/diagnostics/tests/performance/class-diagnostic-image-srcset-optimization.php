@@ -87,7 +87,16 @@ class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 								is_plugin_active( 'responsive-images/responsive-images.php' );
 
 		// Test featured image srcset.
-		$test_post = get_page_by_title( 'Sample Page', OBJECT, 'page' );
+		$query = new \WP_Query( array(
+			'post_type'              => 'page',
+			'title'                  => 'Sample Page',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'ignore_sticky_posts'    => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+		) );
+		$test_post = ! empty( $query->posts ) ? $query->posts[0] : null;
 		$featured_image_id = $test_post ? get_post_thumbnail_id( $test_post->ID ) : 0;
 		$has_featured_srcset = false;
 

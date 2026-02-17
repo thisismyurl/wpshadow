@@ -101,7 +101,7 @@ function wpshadow_render_dashboard() {
 			</div>
 		<?php endif; ?>
 
-		<div class="wpshadow-dashboard-content <?php echo wp_json_encode( $needs_refresh ) ? 'wps-loading' : ''; ?>">
+		<div class="wpshadow-dashboard-content <?php echo $needs_refresh ? 'wps-loading' : ''; ?>">
 			<?php
 			/**
 			 * Health Gauges Section

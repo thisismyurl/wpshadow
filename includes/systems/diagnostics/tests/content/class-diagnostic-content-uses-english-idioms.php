@@ -156,7 +156,16 @@ class Diagnostic_Content_Uses_English_Idioms extends Diagnostic_Base {
 		$content .= wp_remote_retrieve_body( wp_remote_get( home_url( '/' ) ) ) . ' ';
 
 		// Get about page if exists
-		$about = get_page_by_title( 'About' );
+		$query = new \WP_Query( array(
+			'post_type'              => 'page',
+			'title'                  => 'About',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'ignore_sticky_posts'    => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+		) );
+		$about = ! empty( $query->posts ) ? $query->posts[0] : null;
 		if ( $about ) {
 			$content .= $about->post_content . ' ';
 		}

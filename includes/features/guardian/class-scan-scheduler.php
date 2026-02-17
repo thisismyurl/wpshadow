@@ -166,9 +166,10 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 
 		Activity_Logger::log(
 			'scheduled_scan_enabled',
-			array(
-				'frequency' => self::get_frequency_label(),
-				'next_run'  => wp_date( 'Y-m-d H:i:s', $next_run ),
+			sprintf(
+				__( 'Frequency: %s, Next run: %s', 'wpshadow' ),
+				self::get_frequency_label(),
+				wp_date( 'Y-m-d H:i:s', $next_run )
 			)
 		);
 	}
@@ -186,9 +187,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 
 		Activity_Logger::log(
 			'scheduled_scan_disabled',
-			array(
-				'reason' => 'plugin_deactivation',
-			)
+			__( 'Reason: Plugin deactivation', 'wpshadow' )
 		);
 	}
 
@@ -225,14 +224,17 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 		}
 
 		// Log activity
+		$findings_count = count( $results['findings'] ?? array() );
+		$critical_count = count( array_filter( $results['findings'] ?? array(), function( $f ) {
+			return ( $f['severity'] ?? 'low' ) === 'critical';
+		} ) );
 		Activity_Logger::log(
 			'scheduled_scan_completed',
-			array(
-				'execution_time' => round( $execution_time, 2 ),
-				'findings_count' => count( $results['findings'] ?? array() ),
-				'critical_count' => count( array_filter( $results['findings'] ?? array(), function( $f ) {
-					return ( $f['severity'] ?? 'low' ) === 'critical';
-				} ) ),
+			sprintf(
+				__( 'Time: %.2fs, %d findings (%d critical)', 'wpshadow' ),
+				$execution_time,
+				$findings_count,
+				$critical_count
 			)
 		);
 
@@ -301,9 +303,10 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 			} catch ( \Exception $e ) {
 				Activity_Logger::log(
 					'scheduled_scan_error',
-					array(
-						'diagnostic' => $slug,
-						'error'      => $e->getMessage(),
+					sprintf(
+						__( 'Error in %s: %s', 'wpshadow' ),
+						$slug,
+						$e->getMessage()
 					)
 				);
 			}

@@ -91,6 +91,7 @@ class Bootstrap_Autoloader {
 		'includes/ui/templates/functions-page-layout.php',
 		'includes/ui/templates/menu-stubs.php',
 		'includes/ui/templates/dashboard-page.php',
+		'includes/ui/dashboard/gauges-module.php',
 		
 		// Backup/recovery
 		'includes/features/monitoring/recovery/class-backup-manager.php',

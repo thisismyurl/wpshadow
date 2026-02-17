@@ -46,7 +46,8 @@ class Guardian_Dashboard {
 				'dashicons-shield-alt'
 			); ?>
 
-
+			<!-- KPI Cards Grid -->
+			<div class="wps-grid wps-grid-cols-4 wps-gap-4 wps-mb-4" style="display: flex; flex-wrap: wrap; gap: 1rem;">
 				<?php echo wp_kses_post( self::render_kpi_cards() ); ?>
 			</div>
 
@@ -150,7 +151,7 @@ class Guardian_Dashboard {
 		$html = '';
 		foreach ( $cards as $card ) {
 			$html .= sprintf(
-				'<div class="wps-kpi-card" role="article" aria-labelledby="kpi-%s" style="--kpi-color: %s;">
+				'<div class="wps-kpi-card" role="article" aria-labelledby="kpi-%s" style="--kpi-color: %s; width: 25%%; flex: 1 1 25%%;">
 					<div class="wps-kpi-card-header">
 						<div class="wps-kpi-icon-wrapper">
 							<span class="dashicons %s wps-kpi-icon" aria-hidden="true"></span>

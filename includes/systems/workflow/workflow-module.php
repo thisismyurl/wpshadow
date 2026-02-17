@@ -86,8 +86,8 @@ function wpshadow_render_workflow_builder() {
 					'toggleError'          => __( 'Failed to update automation status', 'wpshadow' ),
 					'noActivity'           => __( 'No activity recorded', 'wpshadow' ),
 					'errorLoadingActivity' => __( 'Error loading activity', 'wpshadow' ),
-					'loadingActivity'      => __( 'Loading activity...', 'wpshadow' ),
-				),
+					'loadingActivity'      => __( 'Loading activity...', 'wpshadow' ),					'createAutomation'     => __( 'Create Automation', 'wpshadow' ),
+					'createdSuccess'       => __( 'Automation created! Next suggestion loaded.', 'wpshadow' ),				),
 			)
 		);
 

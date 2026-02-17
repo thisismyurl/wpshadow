@@ -107,7 +107,7 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_core_classes() {
-		$core_path = WPSHADOW_PATH . 'includes/core/';
+		$core_path = WPSHADOW_PATH . 'includes/systems/core/';
 
 		// Already loaded by wpshadow.php:
 		// - class-treatment-base.php
