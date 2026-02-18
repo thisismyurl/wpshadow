@@ -1,0 +1,86 @@
+<?php
+/**
+ * Unicode Normalization Not Applied Diagnostic
+ *
+ * Checks unicode normalization.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.6033.2033
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Diagnostic_Unicode_Normalization_Not_Applied Class
+ *
+ * Performs diagnostic check for Unicode Normalization Not Applied.
+ *
+ * @since 1.6033.2033
+ */
+class Diagnostic_Unicode_Normalization_Not_Applied extends Diagnostic_Base {
+
+	/**
+	 * The diagnostic slug
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'unicode-normalization-not-applied';
+
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Unicode Normalization Not Applied';
+
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks unicode normalization';
+
+	/**
+	 * The family this diagnostic belongs to
+	 *
+	 * @var string
+	 */
+	protected static $family = 'security';
+
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @since  1.6033.2033
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		if (   !has_filter('init',
+						'normalize_unicode_input' ) {
+						return array(
+						'id'   =>   self::$slug,
+						'title'   =>   self::$title,
+						'description'   =>   __('Unicode normalization not applied. Use unicode normalization (NFC/NFD) to prevent homograph attacks.',
+						'severity'   =>   'medium',
+						'threat_level'   =>   35,
+						'auto_fixable'   =>   false,
+						'kb_link'   =>   'https://wpshadow.com/kb/unicode-normalization-not-applied'
+						);
+						);,
+						);
+						}
+						return null;
+						}
+						return null;
+						}
+						return null;
+	}
+}
