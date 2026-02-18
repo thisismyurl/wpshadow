@@ -55,7 +55,7 @@ function wpshadow_render_dashboard() {
 	$last_scan        = get_option( 'wpshadow_last_quick_scan', 0 );
 	$never_run        = empty( $last_scan );
 	$five_minutes_ago = time() - ( 5 * MINUTE_IN_SECONDS );
-	$needs_refresh    = ( $last_scan > 0 && $last_scan < $five_minutes_ago );
+	$needs_refresh    = ( $never_run || ( $last_scan > 0 && $last_scan < $five_minutes_ago ) );
 
 	?>
 	<div class="wrap wpshadow-dashboard wps-page-container">
@@ -87,7 +87,7 @@ function wpshadow_render_dashboard() {
 			<!-- Stale data overlay with progress -->
 			<div class="wps-scan-overlay" id="wpshadow-refresh-overlay" role="dialog" aria-labelledby="wpshadow-scan-heading" aria-modal="true" aria-busy="true">
 				<div class="wps-scan-overlay-content">
-					<h2 id="wpshadow-scan-heading"><?php esc_html_e( 'Refreshing Dashboard Data', 'wpshadow' ); ?></h2>
+					<h2 id="wpshadow-scan-heading"><?php echo esc_html( $never_run ? __( 'Running Initial Scan', 'wpshadow' ) : __( 'Refreshing Dashboard Data', 'wpshadow' ) ); ?></h2>
 					<div class="wps-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
 						<div class="wps-progress-fill" id="wpshadow-progress-fill"></div>
 					</div>

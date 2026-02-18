@@ -116,10 +116,17 @@ class Guardian_Dashboard {
 	private static function render_kpi_cards(): string {
 		$kpis = KPI_Tracker::get_kpi_summary();
 
+		// Get actual findings count from running diagnostics (like the Findings page does)
+		$all_findings = array();
+		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+			$all_findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
+		}
+		$findings_count = count( $all_findings );
+
 		$cards = array(
 			array(
 				'label'       => __( 'Issues Found', 'wpshadow' ),
-				'value'       => $kpis['findings_detected'] ?? 0,
+				'value'       => $findings_count > 0 ? $findings_count : ( $kpis['findings_detected'] ?? 0 ),
 				'icon'        => 'dashicons-search',
 				'color'       => '#f59e0b',
 				'description' => __( 'Total findings detected', 'wpshadow' ),

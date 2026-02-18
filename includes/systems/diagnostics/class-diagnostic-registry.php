@@ -144,15 +144,6 @@ class Diagnostic_Registry extends Abstract_Registry {
 						continue;
 					}
 
-					// Skip test directories with systemic corruption issues
-					// These files have parse errors and syntax issues that prevent loading
-					// TODO: Rebuild these testing/optional diagnostics when corruption is fixed
-					$path_str = str_replace( '\\', '/', $file_info->getPathname() );
-					if ( false !== strpos( $path_str, '/tests/' ) ) {
-						// Skip all files in /tests/ subdirectories for now
-						continue;
-					}
-
 					$filename = $file_info->getFilename();
 					if ( 0 !== strpos( $filename, 'class-diagnostic-' ) && 0 !== strpos( $filename, 'class-test-' ) ) {
 						continue;

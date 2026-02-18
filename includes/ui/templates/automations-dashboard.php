@@ -337,6 +337,14 @@ $workflows           = array_filter(
 
 			<!-- Action Buttons -->
 			<div class="wpshadow-modal-actions">
+				<button 
+					type="button" 
+					id="wpshadow-modal-delete-btn" 
+					class="wps-btn wps-btn-danger"
+					data-workflow-id=""
+				>
+					<?php esc_html_e( 'Delete', 'wpshadow' ); ?>
+				</button>
 				<a id="wpshadow-modal-edit-btn" href="#" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 				</a>
@@ -347,14 +355,6 @@ $workflows           = array_filter(
 					data-workflow-id=""
 				>
 					<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
-				</button>
-				<button 
-					type="button" 
-					id="wpshadow-modal-delete-btn" 
-					class="wps-btn wps-btn-danger"
-					data-workflow-id=""
-				>
-					<?php esc_html_e( 'Delete', 'wpshadow' ); ?>
 				</button>
 			</div>
 
@@ -727,11 +727,16 @@ input:checked + .toggle-slider:before {
 	gap: 10px;
 	margin-bottom: 30px;
 	flex-wrap: wrap;
+	align-items: center;
 }
 
 .wpshadow-modal-actions .wps-btn {
-	flex: 1;
 	min-width: 120px;
+	flex: 0 1 auto;
+}
+
+.wpshadow-modal-actions #wpshadow-modal-delete-btn {
+	margin-right: auto;
 }
 
 /* Activity List */
@@ -812,8 +817,17 @@ input:checked + .toggle-slider:before {
 		transform: rotate(90deg);
 	}
 
+	.wpshadow-modal-actions {
+		flex-direction: column;
+	}
+
 	.wpshadow-modal-actions .wps-btn {
 		width: 100%;
+	}
+
+	.wpshadow-modal-actions #wpshadow-modal-delete-btn {
+		margin-right: 0;
+		order: -1;
 	}
 }
 </style>

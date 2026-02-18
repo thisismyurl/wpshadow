@@ -1331,3 +1331,24 @@
 }
 }
 }
+/* ============================================================================
+   Full-Width Activity Section
+   ============================================================================ */
+
+.wpshadow-findings-activity-fullwidth {
+	width: 100%;
+	background: var(--wps-gray-50);
+	padding: var(--wps-space-6);
+	margin: 0;
+}
+
+.wpshadow-findings-activity-fullwidth .wps-card {
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Override wps-card max-width if set */
+body .wpshadow-findings-activity-fullwidth .wps-card {
+	width: 100%;
+}

@@ -556,15 +556,18 @@ $severity_legend = array(
 			<span class="wps-kanban-status-text wps-ml-auto wps-m-0 wps-text-gray-600 wps-text-sm">Column dots match status colors</span>
 		</div>
 
-<!-- Recent Activity Section -->
-<?php
-if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-	wpshadow_render_page_activities( 'diagnostics', 10 );
-}
-?>
-
 	</div>
 
+</div>
+<!-- END: wps-page-container -->
+
+<!-- Recent Activity - Full Width Section -->
+<div class="wpshadow-findings-activity-fullwidth">
+	<?php
+	if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+		wpshadow_render_page_activities( 'diagnostics', 10 );
+	}
+	?>
 </div>
 
 <script>
