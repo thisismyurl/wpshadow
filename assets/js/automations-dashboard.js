@@ -90,7 +90,7 @@ jQuery( function( $ ) {
 			$activityList.html( '<p class="wpshadow-activity-loading">' + wpshadowAutomationsDashboard.strings.loadingActivity + '</p>' );
 
 			$.ajax({
-				url: wpshadowAutomationsDashboard.ajaxUrl,
+				url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -149,10 +149,35 @@ jQuery( function( $ ) {
 				this.runAutomation( $( e.currentTarget ) );
 			});
 
-			// Delete automation
+			// Delete automation from card
 			$( document ).on( 'click', '.workflow-delete-btn', ( e ) => {
 				e.preventDefault();
 				this.deleteAutomation( $( e.currentTarget ) );
+			});
+
+			// Delete automation from modal
+			$( document ).on( 'click', '#wpshadow-modal-delete-btn', ( e ) => {
+				e.preventDefault();
+				const workflowId = $( e.currentTarget ).data( 'workflow-id' );
+				const $btn = $( e.currentTarget );
+				const $card = $( `.wpshadow-automation-card[data-workflow-id="${workflowId}"]` );
+				const originalText = $btn.text();
+				const self = this;
+
+				WPShadowModal.confirm({
+					title: 'Delete Automation',
+					message: wpshadowAutomationsDashboard.strings.confirmDelete,
+					onCancel: function() {
+						return;
+					},
+					onConfirm: function() {
+						self.proceedWithAutomationDeletion( $btn, $card, originalText, workflowId );
+						// Close modal after deletion
+						if ( window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function' ) {
+							window.WPShadowModal.closeStatic( 'wpshadow-automation-detail-modal' );
+						}
+					}
+				});
 			});
 
 			// Toggle automation enabled/disabled
@@ -179,7 +204,7 @@ jQuery( function( $ ) {
 			$btn.prop( 'disabled', true ).text( 'Running...' );
 
 			$.ajax({
-				url: wpshadowAutomationsDashboard.ajaxUrl,
+				url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -235,7 +260,7 @@ jQuery( function( $ ) {
 			$btn.prop( 'disabled', true ).text( 'Deleting...' );
 
 			$.ajax({
-			url: wpshadowAutomationsDashboard.ajaxUrl,
+			url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -281,7 +306,7 @@ jQuery( function( $ ) {
 			const isEnabled = $checkbox.prop( 'checked' );
 
 			$.ajax({
-				url: wpshadowAutomationsDashboard.ajaxUrl,
+				url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -320,10 +345,15 @@ jQuery( function( $ ) {
 			const trigger = $btn.data( 'trigger' );
 			const actionsRaw = $btn.data( 'actions' );
 			let actions = [];
-			
-			if ( actionsRaw ) {
+
+			if ( Array.isArray( actionsRaw ) ) {
+				actions = actionsRaw;
+			} else if ( typeof actionsRaw === 'string' ) {
 				try {
-					actions = JSON.parse( actionsRaw );
+					const parsed = JSON.parse( actionsRaw );
+					if ( Array.isArray( parsed ) ) {
+						actions = parsed;
+					}
 				} catch ( e ) {
 					actions = [];
 				}
@@ -333,7 +363,7 @@ jQuery( function( $ ) {
 			$btn.prop( 'disabled', true ).text( 'Creating...' );
 
 			$.ajax({
-				url: wpshadowAutomationsDashboard.ajaxUrl,
+			url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -370,7 +400,7 @@ jQuery( function( $ ) {
 			const self = this;
 
 			$.ajax({
-				url: wpshadowAutomationsDashboard.ajaxUrl,
+				url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 				type: 'POST',
 				dataType: 'json',
 				data: {

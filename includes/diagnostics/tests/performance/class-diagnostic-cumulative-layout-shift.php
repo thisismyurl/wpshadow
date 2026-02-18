@@ -165,7 +165,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( $script && isset( $script->src ) ) {
 					foreach ( $ad_scripts as $ad_keyword ) {
-						if ( stripos( $script->src, $ad_keyword ) !== false ) {
+						if ( isset( $script->src ) && is_string( $script->src ) && stripos( $script->src, $ad_keyword ) !== false ) {
 							$has_ads = true;
 							break 2;
 						}

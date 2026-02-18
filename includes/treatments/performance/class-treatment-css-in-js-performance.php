@@ -82,7 +82,7 @@ class Treatment_CSS_In_JS_Performance extends Treatment_Base {
 		$style_tag_count    = 0;
 
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 

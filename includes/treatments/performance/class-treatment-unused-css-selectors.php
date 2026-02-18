@@ -90,14 +90,14 @@ class Treatment_Unused_CSS_Selectors extends Treatment_Base {
 		$total_css_size   = 0;
 
 		foreach ( $wp_styles->registered as $handle => $style ) {
-			if ( ! $wp_styles->is_enqueued( $handle ) ) {
+			if ( ! $wp_styles->query( $handle ) ) {
 				continue;
 			}
 
 			$stylesheet_count++;
 
 			// Estimate size for local stylesheets
-			if ( isset( $style->src ) && strpos( $style->src, home_url() ) !== false ) {
+			if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, home_url() ) !== false ) {
 				$file_path = str_replace( home_url(), ABSPATH, $style->src );
 				$file_path = str_replace( array( 'http://', 'https://' ), '', $file_path );
 

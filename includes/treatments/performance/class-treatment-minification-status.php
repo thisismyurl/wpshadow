@@ -152,7 +152,7 @@ class Treatment_Minification_Status extends Treatment_Base {
 				$total_css++;
 				
 				// Check if minified (contains .min.css)
-				if ( strpos( $style->src, '.min.css' ) === false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, '.min.css' ) === false ) {
 					$unminified_css++;
 					
 					// Try to get file size

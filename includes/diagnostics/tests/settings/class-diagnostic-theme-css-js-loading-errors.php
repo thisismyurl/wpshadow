@@ -90,7 +90,7 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 		// Check enqueued styles.
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( isset( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
 					$file_path = str_replace( content_url(), WP_CONTENT_DIR, $style->src );
 					$file_path = preg_replace( '/\?.*$/', '', $file_path );
 

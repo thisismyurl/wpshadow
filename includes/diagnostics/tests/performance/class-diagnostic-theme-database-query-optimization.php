@@ -83,12 +83,12 @@ class Diagnostic_Theme_Database_Query_Optimization extends Diagnostic_Base {
 
 		// Problematic query patterns.
 		$patterns = array(
-			'get_posts(\s*array\(\s*\'numberposts\'\s*=>\s*-1'  => __( 'Retrieving all posts without limit (get_posts with numberposts => -1)', 'wpshadow' ),
-			'WP_Query.*\'posts_per_page\'\s*=>\s*-1'            => __( 'WP_Query retrieving unlimited posts', 'wpshadow' ),
-			'get_users(\s*array\(\s*\'number\'\s*=>\s*\'\''    => __( 'Retrieving all users without limit', 'wpshadow' ),
-			'while\s*\(\s*have_posts.*get_post_meta'            => __( 'Potential N+1 query: get_post_meta in loop', 'wpshadow' ),
-			'foreach.*get_user_meta'                             => __( 'Potential N+1 query: get_user_meta in loop', 'wpshadow' ),
-			'wpdb->query\(.*DELETE.*WHERE\s+[^=]*IN'            => __( 'Potentially inefficient DELETE with IN clause', 'wpshadow' ),
+			'get_posts\(\s*array\(\s*\'numberposts\'\s*=>\s*-1'  => __( 'Retrieving all posts without limit (get_posts with numberposts => -1)', 'wpshadow' ),
+			'WP_Query.*\'posts_per_page\'\s*=>\s*-1'             => __( 'WP_Query retrieving unlimited posts', 'wpshadow' ),
+			'get_users\(\s*array\(\s*\'number\'\s*=>\s*\'\'|get_users\(\s*array\(\s*\'number\'\s*=>\s*-1' => __( 'Retrieving all users without limit', 'wpshadow' ),
+			'while\s*\(\s*have_posts.*get_post_meta'             => __( 'Potential N+1 query: get_post_meta in loop', 'wpshadow' ),
+			'foreach.*get_user_meta'                              => __( 'Potential N+1 query: get_user_meta in loop', 'wpshadow' ),
+			'wpdb->query\(.*DELETE.*WHERE\s+[^=]*IN'             => __( 'Potentially inefficient DELETE with IN clause', 'wpshadow' ),
 		);
 
 		// Scan theme files.

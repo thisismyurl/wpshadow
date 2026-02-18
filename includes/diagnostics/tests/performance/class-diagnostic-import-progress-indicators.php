@@ -84,13 +84,17 @@ class Diagnostic_Import_Progress_Indicators extends Diagnostic_Base {
 		}
 
 		// Check for REST API progress endpoints.
-		$rest_routes = rest_get_routes();
+		$rest_server = rest_get_server();
 		$has_import_progress = false;
 
-		foreach ( $rest_routes as $route => $methods ) {
-			if ( stripos( $route, 'import' ) !== false && stripos( $route, 'progress' ) !== false ) {
-				$has_import_progress = true;
-				break;
+		if ( $rest_server && is_callable( array( $rest_server, 'get_routes' ) ) ) {
+			$rest_routes = $rest_server->get_routes();
+
+			foreach ( $rest_routes as $route => $methods ) {
+				if ( stripos( $route, 'import' ) !== false && stripos( $route, 'progress' ) !== false ) {
+					$has_import_progress = true;
+					break;
+				}
 			}
 		}
 

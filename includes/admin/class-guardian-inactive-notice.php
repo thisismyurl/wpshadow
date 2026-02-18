@@ -119,7 +119,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 					type: 'POST',
 					data: {
 						action: 'wpshadow_activate_guardian_from_notice',
-						nonce: $btn.attr('data-nonce')
+						_wpnonce: $btn.attr('data-nonce')
 					},
 					success: function(response) {
 						if (response.success) {
@@ -152,7 +152,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 					type: 'POST',
 					data: {
 						action: 'wpshadow_dismiss_guardian_notice',
-						nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_dismiss_guardian_notice' ) ); ?>'
+						_wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_dismiss_guardian_notice' ) ); ?>'
 					}
 				});
 			});

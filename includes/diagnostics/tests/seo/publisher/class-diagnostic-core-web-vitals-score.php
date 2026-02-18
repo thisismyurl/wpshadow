@@ -180,7 +180,7 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 				if ( isset( $wp_styles->registered[ $handle ] ) ) {
 					$style = $wp_styles->registered[ $handle ];
 					// Check if style is critical (render-blocking).
-					if ( strpos( $style->src, 'bootstrap' ) !== false ||
+					if ( is_string( $style->src ) && ( strpos( $style->src, 'bootstrap' ) !== false ||
 						 strpos( $style->src, 'foundation' ) !== false ) {
 						$render_blocking_styles++;
 					}

@@ -71,7 +71,7 @@ class Diagnostic_Preload_Prefetch_Optimization extends Diagnostic_Base {
 
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( $wp_scripts->is_enqueued( $handle ) ) {
+				if ( $wp_scripts->query( $handle ) ) {
 					$script_count++;
 				}
 			}
@@ -79,10 +79,10 @@ class Diagnostic_Preload_Prefetch_Optimization extends Diagnostic_Base {
 
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( $wp_styles->is_enqueued( $handle ) ) {
+				if ( $wp_styles->query( $handle ) ) {
 					$style_count++;
 				}
-				if ( isset( $style->src ) && strpos( $style->src, 'fonts' ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, 'fonts' ) !== false ) {
 					$font_requests++;
 				}
 			}

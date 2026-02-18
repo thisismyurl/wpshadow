@@ -107,12 +107,8 @@ class Diagnostic_Process_State_Loss_During_Tool_Operations extends Diagnostic_Ba
 		}
 
 		// Check for object cache support (better state storage).
-		$has_cache = wp_cache_is_enabled();
-
-		if ( ! $has_cache ) {
-			$issues[] = __( 'Object cache not enabled - state storage will be slower', 'wpshadow' );
-		}
-
+	// In WordPress, wp_cache_enabled() checks if object cache is being used
+	$has_cache = function_exists( 'wp_cache_enabled' ) && wp_cache_enabled();
 		if ( ! empty( $issues ) ) {
 			return array(
 				'id'           => self::$slug,

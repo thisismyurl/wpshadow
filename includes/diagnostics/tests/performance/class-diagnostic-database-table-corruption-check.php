@@ -62,8 +62,7 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-exit;
-}
+	exit;
 }
 
 /**

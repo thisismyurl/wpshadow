@@ -68,8 +68,9 @@ class Diagnostic_Character_Encoding_Corruption_During_Import extends Diagnostic_
 		$issues = array();
 
 		// Check database charset.
-		$db_charset = $wpdb->get_charset_info();
-		if ( empty( $db_charset ) || strpos( strtolower( $db_charset->charset ), 'utf' ) === false ) {
+		// Use wpdb properties instead of non-existent method
+		$db_charset = $wpdb->charset ?? '';
+		if ( empty( $db_charset ) || stripos( $db_charset, 'utf' ) === false ) {
 			$issues[] = __( 'Database is not using UTF-8 encoding', 'wpshadow' );
 		}
 

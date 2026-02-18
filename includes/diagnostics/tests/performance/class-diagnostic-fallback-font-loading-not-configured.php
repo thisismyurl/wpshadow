@@ -78,7 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @font-face {
  *   font-family: 'CustomFont';
  *   src: url('font.woff2');
- *   font-display: swap; /* <- Added this */
+ *   font-display: swap; // <- Added this
  * }
  * body { font-family: 'CustomFont', Arial, sans-serif; }
  * Result: text shows immediately in Arial. Custom font swaps when loaded.

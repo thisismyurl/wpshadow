@@ -134,7 +134,7 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
 				// Skip WordPress core scripts (they're managed properly).
-				if ( strpos( $script->src, WPINC ) !== false ) {
+				if ( is_string( $script->src ) && strpos( $script->src, WPINC ) !== false ) {
 					continue;
 				}
 
@@ -151,7 +151,7 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
 				// Skip WordPress core styles.
-				if ( strpos( $style->src, WPINC ) !== false ) {
+				if ( is_string( $style->src ) && strpos( $style->src, WPINC ) !== false ) {
 					continue;
 				}
 

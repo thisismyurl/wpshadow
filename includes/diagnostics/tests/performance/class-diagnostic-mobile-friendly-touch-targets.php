@@ -77,7 +77,7 @@ class Diagnostic_Mobile_Friendly_Touch_Targets extends Diagnostic_Base {
 		// Check for mobile-specific styles
 		foreach ( $wp_styles->queue as $handle ) {
 			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && strpos( $style->src ?? '', 'mobile' ) !== false ) {
+			if ( $style && is_string( $style->src ) && strpos( $style->src, 'mobile' ) !== false ) {
 				$mobile_css_found = true;
 				break;
 			}

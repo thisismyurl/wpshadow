@@ -103,7 +103,7 @@ class Diagnostic_Memory_Exhaustion_During_Import extends Diagnostic_Base {
 		$debug_log_file = WP_CONTENT_DIR . '/debug.log';
 		if ( file_exists( $debug_log_file ) ) {
 			$log_content = file_get_contents( $debug_log_file, false, null, -1000 );
-			if ( stripos( $log_content, 'memory' ) !== false && stripos( $log_content, 'allowed' ) !== false ) {
+			if ( is_string( $log_content ) && stripos( $log_content, 'memory' ) !== false && stripos( $log_content, 'allowed' ) !== false ) {
 				$issues[] = __( 'Memory limit warnings found in debug.log', 'wpshadow' );
 			}
 		}
@@ -121,11 +121,7 @@ class Diagnostic_Memory_Exhaustion_During_Import extends Diagnostic_Base {
 			);
 		}
 
-		// Check for object cache.
-		if ( ! wp_cache_is_enabled() ) {
-			$issues[] = __( 'Object cache not enabled - may cause high memory usage during large imports', 'wpshadow' );
-		}
-
+		// Return finding if any issues detected.
 		if ( ! empty( $issues ) ) {
 			return array(
 				'id'           => self::$slug,

@@ -142,7 +142,7 @@ class Treatment_Image_Sprites_Not_Implemented extends Treatment_Base {
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $style ) {
 				// Check for background image usage in CSS.
-				if ( ! empty( $style->src ) && ( strpos( $style->src, 'icon' ) !== false || strpos( $style->src, 'sprite' ) !== false ) ) {
+				if ( ! empty( $style->src ) && is_string( $style->src ) && ( strpos( $style->src, 'icon' ) !== false || strpos( $style->src, 'sprite' ) !== false ) ) {
 					$small_image_count++;
 				}
 			}

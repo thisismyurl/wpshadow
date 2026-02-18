@@ -66,6 +66,17 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
+		// Load helper class defensively
+		$helper_path = __DIR__ . '/../helpers/class-diagnostic-url-and-pattern-helper.php';
+		if ( file_exists( $helper_path ) ) {
+			require_once $helper_path;
+		}
+
+		// If helper class doesn't exist, return early
+		if ( ! class_exists( 'WPShadow\Diagnostics\Diagnostic_URL_And_Pattern_Helper' ) ) {
+			return null;
+		}
+
 		global $wp_scripts, $wp_styles;
 
 		$prefetch_configured = false;
@@ -81,7 +92,7 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 		if ( ! empty( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
-				if ( $script && ! empty( $script->src ) ) {
+				if ( $script && ! empty( $script->src ) && is_string( $script->src ) ) {
 					$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( $script->src );
 					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() ) ), true ) ) {
 						$external_domains[] = $domain;

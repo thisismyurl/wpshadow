@@ -76,7 +76,7 @@ class Diagnostic_Javascript_Bundling_Strategy extends Diagnostic_Base {
 		$jquery_dependents = 0;
 
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 
@@ -87,7 +87,7 @@ class Diagnostic_Javascript_Bundling_Strategy extends Diagnostic_Base {
 				$external_scripts++;
 
 				// Estimate size for local scripts
-				if ( strpos( $script->src, home_url() ) !== false ) {
+				if ( is_string( $script->src ) && strpos( $script->src, home_url() ) !== false ) {
 					$file_path = str_replace( home_url(), ABSPATH, $script->src );
 					if ( file_exists( $file_path ) ) {
 						$total_size += filesize( $file_path );

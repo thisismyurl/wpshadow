@@ -90,7 +90,7 @@ class Diagnostic_Code_Splitting_Detection extends Diagnostic_Base {
 				}
 
 				// Estimate from URL parameters
-				if ( stripos( $script->src, 'min' ) === false ) {
+				if ( isset( $script->src ) && is_string( $script->src ) && stripos( $script->src, 'min' ) === false ) {
 					$large_scripts++;
 				}
 			}

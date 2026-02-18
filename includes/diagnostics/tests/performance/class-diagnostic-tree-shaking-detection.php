@@ -81,7 +81,7 @@ class Diagnostic_Tree_Shaking_Detection extends Diagnostic_Base {
 		$total_scripts      = 0;
 
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 
@@ -89,8 +89,8 @@ class Diagnostic_Tree_Shaking_Detection extends Diagnostic_Base {
 
 			// Check for library presence
 			foreach ( $large_libraries as $library => $detected ) {
-				if ( strpos( $handle, $library ) !== false || 
-				     ( isset( $script->src ) && strpos( $script->src, $library ) !== false ) ) {
+				if ( is_string( $handle ) && strpos( $handle, $library ) !== false || 
+				     ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, $library ) !== false ) ) {
 					$large_libraries[ $library ] = true;
 					$detected_libraries[]         = $library;
 				}

@@ -119,8 +119,8 @@ class Diagnostic_Import_Timeout_And_Interruption extends Diagnostic_Base {
 		}
 
 		// Check if async processing is available (for large imports).
-		$has_background_processing = wp_is_background_update_running();
-		if ( $has_background_processing === false ) {
+		$has_background_processing = function_exists( 'wp_get_auto_updater' ) || \get_option( 'background_processing_enabled' );
+		if ( ! $has_background_processing ) {
 			// Background processing not available.
 		}
 

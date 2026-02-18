@@ -75,7 +75,7 @@ class Diagnostic_Javascript_Garbage_Collection extends Diagnostic_Base {
 
 		// Check inline scripts for problematic patterns
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 

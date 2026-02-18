@@ -85,7 +85,7 @@ class Diagnostic_Critical_CSS_Detection extends Diagnostic_Base {
 		$stylesheet_count = 0;
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( $wp_styles->is_enqueued( $handle ) ) {
+				if ( $wp_styles->query( $handle ) ) {
 					$stylesheet_count++;
 				}
 			}

@@ -63,24 +63,18 @@ class Diagnostic_Query_Performance_Not_Analyzed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'log_slow_queries' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Query performance not analyzed. Enable slow query log and use EXPLAIN to identify missing indexes and optimize queries.',
-						'severity'   =>   'high',
-						'threat_level'   =>   60,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/query-performance-not-analyzed'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'log_slow_queries' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Query performance not analyzed. Enable slow query log and use EXPLAIN to identify missing indexes and optimize queries.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 60,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/query-performance-not-analyzed',
+			);
+		}
+
+		return null;
 	}
 }

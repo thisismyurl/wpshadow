@@ -185,7 +185,7 @@ class Phone_Home_Indicator extends Hook_Subscriber_Base {
 		}
 
 		// Get recent connections
-		$connections = \WPShadow\Core\Cache_Manager::get( 'recent_connections', 'wpshadow_admin' ) ?: array();
+		$connections = \WPShadow\Core\Cache_Manager::get( 'recent_connections', 'wpshadow_phone_home' ) ?: array();
 		if ( empty( $connections ) ) {
 			return;
 		}
@@ -289,7 +289,7 @@ class Phone_Home_Indicator extends Hook_Subscriber_Base {
 	 */
 	public static function ajax_get_connections() {
 		// Use Security_Validator for consistent security checks
-		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_phone_home', 'nonce', false ) ||
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_phone_home', '_wpnonce', false ) ||
 			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
 			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
 		}

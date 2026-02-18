@@ -93,7 +93,7 @@ class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( isset( $script->src ) && strpos( $script->src, '/themes/' . $theme_slug ) !== false ) {
+				if ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, '/themes/' . $theme_slug ) !== false ) {
 					$theme_scripts++;
 				}
 			}
@@ -101,7 +101,7 @@ class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( isset( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
 					$theme_styles++;
 				}
 			}
@@ -129,7 +129,7 @@ class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 			$jquery_dependents = 0;
 			foreach ( $wp_scripts->registered as $script ) {
 				if ( isset( $script->deps ) && in_array( 'jquery', $script->deps, true ) ) {
-					if ( isset( $script->src ) && strpos( $script->src, '/themes/' . $theme_slug ) !== false ) {
+					if ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, '/themes/' . $theme_slug ) !== false ) {
 						$jquery_dependents++;
 					}
 				}
@@ -144,7 +144,7 @@ class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 		$render_blocking = 0;
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $style ) {
-				if ( isset( $style->src ) &&
+				if ( isset( $style->src ) && is_string( $style->src ) &&
 					 strpos( $style->src, '/themes/' . $theme_slug ) !== false &&
 					 ! isset( $style->extra['defer'] ) ) {
 					$render_blocking++;

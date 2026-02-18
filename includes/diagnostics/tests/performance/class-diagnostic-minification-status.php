@@ -128,7 +128,7 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 				$total_js++;
 				
 				// Check if minified (contains .min.js)
-				if ( strpos( $script->src, '.min.js' ) === false ) {
+				if ( is_string( $script->src ) && strpos( $script->src, '.min.js' ) === false ) {
 					$unminified_js++;
 					
 					// Try to get file size
@@ -152,10 +152,8 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 				$total_css++;
 				
 				// Check if minified (contains .min.css)
-				if ( strpos( $style->src, '.min.css' ) === false ) {
-					$unminified_css++;
-					
-					// Try to get file size
+			if ( is_string( $style->src ) && strpos( $style->src, '.min.css' ) === false ) {
+				$unminified_css++;
 					$local_path = str_replace( site_url(), ABSPATH, $style->src );
 					if ( file_exists( $local_path ) ) {
 						$unminified_size += filesize( $local_path );

@@ -77,9 +77,5 @@ class Diagnostic_Database_Query_Optimization_Not_Applied extends Diagnostic_Base
 		}
 
 		return null;
-						}
-						return null;
-						}
-						return null;
 	}
 }

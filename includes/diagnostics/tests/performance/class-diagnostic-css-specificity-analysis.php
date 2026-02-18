@@ -74,12 +74,12 @@ class Diagnostic_CSS_Specificity_Analysis extends Diagnostic_Base {
 		$analyzed_files         = 0;
 
 		foreach ( $wp_styles->registered as $handle => $style ) {
-			if ( ! $wp_styles->is_enqueued( $handle ) ) {
+			if ( ! $wp_styles->query( $handle ) ) {
 				continue;
 			}
 
 			// Only analyze local stylesheets
-			if ( ! isset( $style->src ) || strpos( $style->src, home_url() ) === false ) {
+			if ( ! isset( $style->src ) || ! is_string( $style->src ) || strpos( $style->src, home_url() ) === false ) {
 				continue;
 			}
 

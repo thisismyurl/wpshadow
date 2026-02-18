@@ -95,59 +95,64 @@ function wpshadow_get_health_status(): array {
 		);
 	}
 
-	if ( empty( $findings ) ) {
-		return array(
-			'score'   => 100,
-			'status'  => __( 'Excellent', 'wpshadow' ),
-			'color'   => '#2e7d32',
-			'message' => __( 'No issues detected. Your site is in excellent health!', 'wpshadow' ),
+	// Calculate average of all category gauges
+	$category_meta = \wpshadow_get_category_metadata();
+	$findings_by_category = array();
+	
+	foreach ( $category_meta as $cat_key => $meta ) {
+		$findings_by_category[ $cat_key ] = array_filter(
+			$findings,
+			function ( $f ) use ( $cat_key ) {
+				return isset( $f['category'] ) && $f['category'] === $cat_key;
+			}
 		);
 	}
 
-	$critical_count = 0;
-	$high_count     = 0;
-	$medium_count   = 0;
+	// Calculate average score from all categories
+	$total_score = 0;
+	$category_count = 0;
 
-	foreach ( $findings as $finding ) {
-		$threat = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-
-		if ( $threat >= 75 ) {
-			++$critical_count;
-		} elseif ( $threat >= 50 ) {
-			++$high_count;
-		} else {
-			++$medium_count;
+	foreach ( $findings_by_category as $cat_findings ) {
+		$total = count( $cat_findings );
+		$threat_total = 0;
+		
+		foreach ( $cat_findings as $finding ) {
+			$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 		}
+		
+		$gauge_percent = $total > 0 ? min( 100, $threat_total / $total ) : 0;
+		$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
+		
+		$total_score += $gauge_percent;
+		$category_count++;
 	}
 
-	$total_findings = count( $findings );
-	$weighted_score = 100 - ( ( $critical_count * 30 + $high_count * 15 + $medium_count * 5 ) / $total_findings );
-	$weighted_score = max( 0, min( 100, (int) $weighted_score ) );
+	$weighted_score = $category_count > 0 ? (int) ( $total_score / $category_count ) : 100;
+	$weighted_score = max( 0, min( 100, $weighted_score ) );
 
 	if ( $weighted_score >= 80 ) {
 		$status  = __( 'Good', 'wpshadow' );
 		$color   = '#2e7d32';
 		$message = sprintf(
-			/* translators: %d: number of issues found */
-			__( 'Your site is in good health with %d issue(s) to address.', 'wpshadow' ),
-			$total_findings
+			/* translators: %d: health score */
+			__( 'Your site is in good health: %d%%.', 'wpshadow' ),
+			$weighted_score
 		);
 	} elseif ( $weighted_score >= 60 ) {
 		$status  = __( 'Fair', 'wpshadow' );
 		$color   = '#f57c00';
 		$message = sprintf(
-			/* translators: 1: total issues count, 2: critical issues count */
-			__( 'Your site needs attention: %1$d issue(s) detected, including %2$d critical issue(s).', 'wpshadow' ),
-			$total_findings,
-			$critical_count
+			/* translators: %d: health score */
+			__( 'Your site needs attention: %d%%.', 'wpshadow' ),
+			$weighted_score
 		);
 	} else {
 		$status  = __( 'Poor', 'wpshadow' );
 		$color   = '#c62828';
 		$message = sprintf(
-			/* translators: %d: number of critical issues */
-			__( 'Your site has %d critical issue(s) that need immediate attention.', 'wpshadow' ),
-			$critical_count
+			/* translators: %d: health score */
+			__( 'Your site requires immediate attention: %d%%.', 'wpshadow' ),
+			$weighted_score
 		);
 	}
 
@@ -156,6 +161,90 @@ function wpshadow_get_health_status(): array {
 		'status'  => $status,
 		'color'   => $color,
 		'message' => $message,
+	);
+}
+
+/**
+ * Get WordPress native Site Health score
+ *
+ * Retrieves the WordPress Site Health status from WordPress's health check transient
+ *
+ * @return array WordPress health status
+ */
+function wpshadow_get_wordpress_health(): array {
+	// Get WordPress site health check results from transient
+	// WordPress stores: {"good": X, "recommended": Y, "critical": Z}
+	$health_check = get_transient( 'health-check-site-status-result' );
+	
+	if ( false === $health_check ) {
+		// Transient not set - health checks haven't been run
+		return array(
+			'score'   => 0,
+			'status'  => __( 'Not Checked', 'wpshadow' ),
+			'color'   => '#999999',
+			'message' => __( 'WordPress Site Health hasn\'t been checked yet.', 'wpshadow' ),
+		);
+	}
+
+	if ( ! is_array( $health_check ) ) {
+		// Try to parse if it's JSON string
+		$parsed = json_decode( $health_check, true );
+		if ( is_array( $parsed ) ) {
+			$health_check = $parsed;
+		} else {
+			return array(
+				'score'   => 0,
+				'status'  => __( 'Unknown', 'wpshadow' ),
+				'color'   => '#999999',
+				'message' => __( 'Unable to interpret WordPress Site Health data.', 'wpshadow' ),
+			);
+		}
+	}
+
+	// Calculate score from health check results
+	// Formula: (good * 100 + recommended * 50) / (good + recommended + critical) 
+	// This gives us a percentage between 0-100
+	$good = isset( $health_check['good'] ) ? (int) $health_check['good'] : 0;
+	$recommended = isset( $health_check['recommended'] ) ? (int) $health_check['recommended'] : 0;
+	$critical = isset( $health_check['critical'] ) ? (int) $health_check['critical'] : 0;
+
+	$total = $good + $recommended + $critical;
+
+	if ( 0 === $total ) {
+		// No health checks available
+		return array(
+			'score'   => 0,
+			'status'  => __( 'No Data', 'wpshadow' ),
+			'color'   => '#999999',
+			'message' => __( 'WordPress Site Health has no check data.', 'wpshadow' ),
+		);
+	}
+
+	// Calculate percentage: Weight good as 100%, recommended as 50%, critical as 0%
+	$percentage = (int) ( ( ( $good * 100 ) + ( $recommended * 50 ) ) / $total );
+	$percentage = max( 0, min( 100, $percentage ) );
+
+	// Determine status and color based on critical issues
+	if ( $critical > 0 ) {
+		$status = __( 'Critical', 'wpshadow' );
+		$color = '#c62828'; // Red
+	} elseif ( $recommended > 0 ) {
+		$status = __( 'Recommended', 'wpshadow' );
+		$color = '#f57c00'; // Orange
+	} else {
+		$status = __( 'Good', 'wpshadow' );
+		$color = '#2e7d32'; // Green
+	}
+
+	return array(
+		'score'  => $percentage,
+		'status' => $status,
+		'color'  => $color,
+		'message' => sprintf(
+			/* translators: %d: WordPress health percentage */
+			__( 'WordPress reports %d%% health.', 'wpshadow' ),
+			$percentage
+		),
 	);
 }
 
@@ -201,8 +290,8 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 		);
 	}
 
-	// Calculate overall health
-	$overall_health = \wpshadow_calculate_overall_health( $findings_by_category, $category_meta );
+	// Calculate overall health from all categories
+	$overall_health = \wpshadow_get_health_status();
 
 	// Get threat gauge color utility function
 	$get_threat_gauge_color = function ( $threat_level ) {
@@ -263,7 +352,66 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 		<div class="wps-health-gauge-categories">
 			<div class="wps-health-gauge-grid">
 				<?php
-				foreach ( $category_meta as $cat_key => $meta ) :
+				foreach ( $category_meta as $cat_key => $meta ) :				// Skip the overall category (shown as large gauge on left)
+				if ( 'overall' === $cat_key ) {
+					continue;
+				}
+									// Special handling for WordPress Health category
+					if ( 'wordpress-health' === $cat_key ) {
+						$wp_health = \wpshadow_get_wordpress_health();
+						$gauge_percent = $wp_health['score'];
+						$status_text = $wp_health['status'];
+						$status_icon = 'ℹ';
+						
+						// Determine status color for WordPress Health
+						if ( $gauge_percent >= 80 ) {
+							$status_color = '#10b981'; // Green
+							$gauge_color = '#2e7d32';
+						} elseif ( $gauge_percent >= 60 ) {
+							$status_color = '#f59e0b'; // Orange
+							$gauge_color = '#f57c00';
+						} else {
+							$status_color = '#ef4444'; // Red
+							$gauge_color = '#c62828';
+						}
+						
+						$total = 1; // For display purposes
+						?>
+						<div class="wps-category-gauge" aria-label="<?php esc_attr_e( 'WordPress Site Health status', 'wpshadow' ); ?>">
+							<div class="wps-category-gauge-icon">
+								<svg width="70" height="70" viewBox="0 0 100 100" aria-hidden="true">
+									<!-- Gauge background -->
+									<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
+									<!-- Gauge progress -->
+									<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( $gauge_color ); ?>" stroke-width="8"
+										class="wps-gauge-progress"
+										stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
+										stroke-linecap="round" transform="rotate(-90 50 50)" />
+									<!-- Percentage text -->
+									<text x="50" y="55" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
+								</svg>
+							</div>
+
+							<div class="wps-category-gauge-content">
+								<!-- Title -->
+								<h4 class="wps-category-gauge-title"><?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?></h4>
+
+								<!-- Status -->
+								<div class="wps-category-gauge-status">
+									<span class="wps-category-gauge-status-text">
+										<span aria-hidden="true"><?php echo esc_html( $status_icon ); ?></span>
+										<?php echo esc_html( $status_text ); ?>
+									</span>
+									<button type="button" class="wps-category-gauge-count wps-btn-link" onclick="window.location.href='<?php echo esc_url( admin_url( 'admin.php?page=site-health' ) ); ?>'">
+										<?php esc_html_e( 'View Details', 'wpshadow' ); ?>
+									</button>
+								</div>
+							</div>
+						</div>
+						<?php
+						continue;
+					}
+					
 					$cat_findings = $findings_by_category[ $cat_key ] ?? array();
 					$total        = count( $cat_findings );
 

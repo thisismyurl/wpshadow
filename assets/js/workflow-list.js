@@ -4,7 +4,11 @@
  * Handles workflow list interactions (enable/disable, run, delete)
  */
 
+
 jQuery(document).ready(function($) {
+	if ( $( '.wpshadow-workflow-list' ).length === 0 ) {
+		return;
+	}
 	
 	// Toggle workflow enabled/disabled
 	$('.workflow-enable-toggle').on('change', function() {

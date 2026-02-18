@@ -15,18 +15,38 @@
  * **Why This Matters:**
  * admin-ajax.php is the gateway for all AJAX requests in WordPress. Slow AJAX responses block
  * autosave, live search, infinite scroll, quick edit, and hundreds of plugin features. Users
- * notice this immediately as "laggy" admin interface or slow frontend interactions. With 50 AJAX
- * requests per page load, a slow AJAX endpoint (500ms each) results in 25 seconds of total wait time.\n *
- * **Real-World Scenario:**\n * SaaS platform using WooCommerce with custom AJAX cart. Users complained about 8-10 second delay
- * when adding items to cart. Investigation showed admin-ajax.php taking 2.5 seconds per request due to
- * synchronous external API calls in a cart hook. Converting to async (fire-and-forget) reduced cart
- * AJAX time from 2.5s to 0.08s. Add-to-cart conversion increased 62%. Cost: 4 hours refactoring.
- * Value: $185,000 in additional orders that quarter.\n *
- * **Business Impact:**\n * - Frontend feels laggy/unresponsive (users think site is broken)\n * - Admin interface unusable (admins can't quick-edit or bulk actions)\n * - Autosave fails (users lose work)\n * - Real-time features timeout (comments, notifications)\n * - E-commerce: cart abandonment from slow add-to-cart ($1,000-$100,000 lost revenue)\n * - User frustration visible in analytics (high bounce, low engagement)\n *
- * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible responsiveness problems\n * - #9 Show Value: Delivers immediate snappiness improvement\n * - #10 Talk-About-Worthy: "Site feels fast now" is immediately noticed\n *
- * **Related Checks:**\n * - Plugin Load Performance (identifies problematic plugins)\n * - Database Query Optimization (slow queries block AJAX)\n * - Third-Party API Integration (external calls blocking)\n * - Server Response Time Too Slow (overall TTFB)\n *
- * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/admin-ajax-performance\n * - Video: https://wpshadow.com/training/ajax-optimization-101 (6 min)\n * - Advanced: https://wpshadow.com/training/async-patterns-wordpress (11 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6033.2065\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Diagnostics\\Helpers\\Diagnostic_Request_Helper;\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Admin-Ajax Performance Diagnostic Class\n *\n * Measures admin-ajax.php endpoint performance and identifies slow handlers.
+ * notice this immediately as "laggy" admin interface or slow frontend interactions.
+ *
+ * **Real-World Scenario:**
+ * SaaS platform using WooCommerce with custom AJAX cart. Users complained about 8-10 second delay
+ * when adding items to cart. Async pattern conversion reduced AJAX time from 2.5s to 0.08s.
+ * Add-to-cart conversion increased 62%.
+ *
+ * **Related Checks:**
+ * - Plugin Load Performance (identifies problematic plugins)
+ * - Database Query Optimization (slow queries block AJAX)
+ * - Server Response Time Too Slow (overall TTFB)
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.6033.2065
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Admin-Ajax Performance Diagnostic Class
+ *
+ * Measures admin-ajax.php endpoint performance and identifies slow handlers.
  *
  * @since 1.6033.2065
  */
@@ -44,14 +64,14 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Admin-Ajax Performance';
+	protected static $title = 'Admin-Ajax Performance Issue';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Measures admin-ajax.php response time';
+	protected static $description = 'Measures and reports admin-ajax.php response times';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -75,12 +95,12 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 			// Skip if not in admin context
 			return null;
 		}
-		
+
 		$ajax_url = admin_url( 'admin-ajax.php' );
-		
+
 		// Test with heartbeat action (always available)
 		$start_time = microtime( true );
-		
+
 		$response = Diagnostic_Request_Helper::post_result(
 			$ajax_url,
 			array(
@@ -91,10 +111,10 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 				),
 			)
 		);
-		
+
 		$elapsed_time = microtime( true ) - $start_time;
 		$elapsed_ms   = round( $elapsed_time * 1000 );
-		
+
 		// Check for errors
 		if ( ! $response['success'] ) {
 			return array(
@@ -115,7 +135,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Check response code
 		$http_code = (int) $response['code'];
 		if ( 200 !== $http_code ) {
@@ -132,32 +152,32 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/admin-ajax-troubleshooting',
 				'meta'         => array(
-					'http_code'      => $http_code,
+					'http_code'        => $http_code,
 					'response_time_ms' => $elapsed_ms,
 				),
 			);
 		}
-		
+
 		// Check response time
 		if ( $elapsed_ms > 1000 ) {
-			$severity = 'high';
+			$severity     = 'high';
 			$threat_level = 70;
 		} elseif ( $elapsed_ms > 500 ) {
-			$severity = 'medium';
+			$severity     = 'medium';
 			$threat_level = 50;
 		} elseif ( $elapsed_ms > 300 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 30;
 		} else {
 			return null; // Fast enough
 		}
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: response time in milliseconds */
-				__( 'admin-ajax.php response time is %dms (should be <300ms). Slow admin-ajax impacts all AJAX interactions, plugin functionality, and admin responsiveness.', 'wpshadow' ),
+				__( 'admin-ajax.php response time is %dms (should be <300ms). Slow admin-ajax impacts all AJAX interactions and plugin functionality.', 'wpshadow' ),
 				$elapsed_ms
 			),
 			'severity'     => $severity,

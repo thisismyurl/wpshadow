@@ -89,7 +89,7 @@ class Diagnostic_Theme_Font_Loading_Issues extends Diagnostic_Base {
 
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( isset( $style->src ) && strpos( $style->src, 'fonts.googleapis.com' ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, 'fonts.googleapis.com' ) !== false ) {
 					$google_fonts_count++;
 
 					// Extract font families.

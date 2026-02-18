@@ -66,7 +66,7 @@ class Canvas_WebGL_Performance_Analyzer {
 			}
 
 			foreach ( $graphics_libs as $lib => $name ) {
-				if ( stripos( $script->src, $lib ) !== false ) {
+				if ( isset( $script->src ) && is_string( $script->src ) && stripos( $script->src, $lib ) !== false ) {
 					$found_libs[]                = $name;
 					$results['canvas_scripts'][] = array(
 						'handle'  => $handle,

@@ -151,7 +151,7 @@ class Treatment_Cache_Busting_Not_Implemented extends Treatment_Base {
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
 				// Skip WordPress core styles.
-				if ( strpos( $style->src, WPINC ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, WPINC ) !== false ) {
 					continue;
 				}
 

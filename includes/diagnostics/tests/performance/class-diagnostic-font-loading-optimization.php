@@ -77,7 +77,7 @@ class Diagnostic_Font_Loading_Optimization extends Diagnostic_Base {
 		// Check for Google Fonts or other web fonts
 		foreach ( $wp_styles->queue as $handle ) {
 			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && ! empty( $style->src ) ) {
+			if ( $style && is_string( $style->src ) && ! empty( $style->src ) ) {
 				if ( stripos( $style->src, 'fonts.googleapis.com' ) !== false ||
 					 stripos( $style->src, 'fonts.gstatic.com' ) !== false ||
 					 stripos( $style->src, 'typekit.net' ) !== false ) {

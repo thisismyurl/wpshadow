@@ -128,7 +128,14 @@ class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnost
 	 */
 	public static function check() {
 		// Check if performance monitoring is active
-		if ( ! has_option( 'performance_monitoring_enabled' ) ) {
+		// WordPress core function may not be available during early diagnostics load
+		if ( ! function_exists( 'get_option' ) ) {
+			return null;
+		}
+
+		$monitoring_enabled = get_option( 'performance_monitoring_enabled', false );
+		
+		if ( empty( $monitoring_enabled ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

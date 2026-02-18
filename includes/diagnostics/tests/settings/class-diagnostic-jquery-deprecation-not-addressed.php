@@ -65,7 +65,7 @@ class Diagnostic_jQuery_Deprecation_Not_Addressed extends Diagnostic_Base {
 	public static function check() {
 		// Check if deprecation warnings are handled
 		global $wp_scripts;
-		if ( $wp_scripts && $wp_scripts->is_enqueued( 'jquery' ) && ! get_option( 'jquery_migration_plan' ) ) {
+		if ( $wp_scripts && $wp_scripts->query( 'jquery' ) && ! get_option( 'jquery_migration_plan' ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

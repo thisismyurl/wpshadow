@@ -101,7 +101,7 @@ class Treatment_Theme_Frontend_Performance extends Treatment_Base {
 
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( isset( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
 					$theme_styles++;
 				}
 			}
@@ -145,7 +145,7 @@ class Treatment_Theme_Frontend_Performance extends Treatment_Base {
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $style ) {
 				if ( isset( $style->src ) &&
-					 strpos( $style->src, '/themes/' . $theme_slug ) !== false &&
+					 is_string( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false &&
 					 ! isset( $style->extra['defer'] ) ) {
 					$render_blocking++;
 				}

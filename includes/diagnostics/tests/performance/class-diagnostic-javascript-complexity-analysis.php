@@ -74,7 +74,7 @@ class Diagnostic_Javascript_Complexity_Analysis extends Diagnostic_Base {
 		$local_scripts    = array();
 
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 

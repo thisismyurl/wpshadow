@@ -18,8 +18,8 @@
 			url: wpshadowPhoneHome.ajax_url,
 			type: 'POST',
 			data: {
-				action: 'wpshadow_get_phone_home_details',
-				nonce: wpshadowPhoneHome.nonce
+				action: 'wpshadow_get_recent_connections',
+				_wpnonce: wpshadowPhoneHome.nonce
 			},
 			beforeSend: function() {
 				$('#wpshadow-connections-content').html(
@@ -60,15 +60,16 @@
 		} else {
 			html += '<table class="wp-list-table widefat fixed striped wps-connection-table">';
 			html += '<thead><tr>';
-			html += '<th>Timestamp</th><th>Endpoint</th><th>Status</th><th>Response Time</th>';
+			html += '<th>Timestamp</th><th>Domain</th><th>URL</th><th>Purpose</th><th>Method</th>';
 			html += '</tr></thead><tbody>';
 
 			$.each(data.connections, function(i, conn) {
 				html += '<tr>';
 				html += '<td>' + (conn.timestamp || '-') + '</td>';
-				html += '<td>' + (conn.endpoint || '-') + '</td>';
-				html += '<td>' + (conn.status || '-') + '</td>';
-				html += '<td>' + (conn.response_time || '-') + '</td>';
+				html += '<td>' + (conn.domain || '-') + '</td>';
+				html += '<td>' + (conn.url || conn.endpoint || '-') + '</td>';
+				html += '<td>' + (conn.purpose || '-') + '</td>';
+				html += '<td>' + (conn.method || '-') + '</td>';
 				html += '</tr>';
 			});
 

@@ -77,7 +77,7 @@ class Treatment_Theme_Performance_Analysis extends Treatment_Base {
 		// Count theme stylesheets
 		foreach ( $wp_styles->queue as $handle ) {
 			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && strpos( $style->src ?? '', get_theme_file_uri() ) !== false ) {
+			if ( $style && isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, get_theme_file_uri() ) !== false ) {
 				$theme_stylesheet_count++;
 			}
 		}

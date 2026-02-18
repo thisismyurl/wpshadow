@@ -155,6 +155,17 @@ class Diagnostic_Mobile_JS_Execution_Time extends Diagnostic_Base {
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {
+		// Load helper if available
+		$helper_file = __DIR__ . '/helpers/class-diagnostic-html-helper.php';
+		if ( file_exists( $helper_file ) && ! class_exists( 'WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper' ) ) {
+			require_once $helper_file;
+		}
+
+		// Return null if helper not available
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper' ) ) {
+			return null;
+		}
+
 		return Diagnostic_HTML_Helper::fetch_homepage_html(
 			array(
 				'timeout'   => 5,

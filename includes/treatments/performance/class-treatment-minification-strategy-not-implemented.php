@@ -177,7 +177,7 @@ class Treatment_Minification_Strategy_Not_Implemented extends Treatment_Base {
 			foreach ( $wp_styles->registered as $handle => $style ) {
 				if ( ! empty( $style->src ) ) {
 					$total_styles++;
-					if ( strpos( $style->src, '.min.css' ) !== false ) {
+					if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, '.min.css' ) !== false ) {
 						$minified_styles++;
 					}
 				}

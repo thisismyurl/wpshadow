@@ -82,16 +82,16 @@ class Diagnostic_CSS_In_JS_Performance extends Diagnostic_Base {
 		$style_tag_count    = 0;
 
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 
 			// Check for CSS-in-JS library presence
 			foreach ( $css_in_js_libraries as $library => $name ) {
-				if ( strpos( $handle, $library ) !== false || 
-				     ( isset( $script->src ) && strpos( $script->src, $library ) !== false ) ) {
-					$detected_libraries[ $library ] = $name;
-				}
+			if ( is_string( $handle ) && strpos( $handle, $library ) !== false || 
+			     ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, $library ) !== false ) ) {
+				$detected_libraries[ $library ] = $name;
+			}
 			}
 
 			// Check inline styles injected via JavaScript

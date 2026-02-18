@@ -142,7 +142,7 @@ class Treatment_First_Contentful_Paint_FCP extends Treatment_Base {
 					continue;
 				}
 				$style = $wp_styles->registered[ $handle ];
-				if ( ! empty( $style->src ) && strpos( $style->src, home_url() ) === 0 ) {
+				if ( ! empty( $style->src ) && is_string( $style->src ) && strpos( $style->src, home_url() ) === 0 ) {
 					// Local stylesheet - check size
 					$path = str_replace( home_url(), ABSPATH, $style->src );
 					if ( file_exists( $path ) && filesize( $path ) > 100000 ) {

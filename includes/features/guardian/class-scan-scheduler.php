@@ -261,6 +261,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 
 		$findings = array();
 		$skipped = array();
+		$diagnostics_run = array();
 
 		// MURPHY-SAFE: Track elapsed time (bug fix - was comparing microtime() against $max_time)
 		$start_time = microtime( true );
@@ -291,6 +292,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 			try {
 				// Run diagnostic
 				if ( class_exists( $class ) && method_exists( $class, 'execute' ) ) {
+					$diagnostics_run[] = $slug;
 					$result = call_user_func( array( $class, 'execute' ) );
 
 					if ( $result ) {
@@ -299,6 +301,8 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 							'source'      => 'scheduled_scan',
 						) );
 					}
+				} else {
+					$skipped[] = $slug;
 				}
 			} catch ( \Exception $e ) {
 				Activity_Logger::log(
@@ -313,9 +317,12 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 		}
 
 		return array(
-			'findings' => $findings,
-			'skipped'  => $skipped,
-			'depth'    => $depth,
+			'findings'            => $findings,
+			'skipped'             => $skipped,
+			'depth'               => $depth,
+			'diagnostics_run'     => $diagnostics_run,
+			'diagnostics_skipped' => $skipped,
+			'diagnostics_total'   => array_keys( $diagnostics ),
 		);
 	}
 
@@ -472,6 +479,107 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 		}
 
 		return $next_run;
+	}
+
+	/**
+	 * Get latest scheduled scan summary.
+	 *
+	 * Provides a safe, normalized snapshot of the most recent scan results.
+	 *
+	 * @since  1.8001.1200
+	 * @return array {
+	 *     Latest scan summary.
+	 *
+	 *     @type string $scan_date           Date of the scan (Y-m-d H:i:s).
+	 *     @type float  $execution_time      Scan duration in seconds.
+	 *     @type int    $findings_count      Number of findings.
+	 *     @type int    $critical_count      Number of critical findings.
+	 *     @type string $depth               Scan depth.
+	 *     @type array  $diagnostics_run     Diagnostic slugs that ran.
+	 *     @type array  $diagnostics_skipped Diagnostic slugs that were skipped.
+	 * }
+	 */
+	public static function get_latest_scan_results(): array {
+		$latest = get_option( self::$settings_prefix . '_latest_results', array() );
+		if ( empty( $latest ) || ! is_array( $latest ) ) {
+			return array();
+		}
+
+		$results = array();
+		if ( isset( $latest['results'] ) ) {
+			$results = maybe_unserialize( $latest['results'] );
+			if ( ! is_array( $results ) ) {
+				$results = array();
+			}
+		}
+
+		return array(
+			'scan_date'           => $latest['scan_date'] ?? '',
+			'execution_time'      => $latest['execution_time'] ?? 0,
+			'findings_count'      => $latest['findings_count'] ?? 0,
+			'critical_count'      => $latest['critical_count'] ?? 0,
+			'depth'               => $results['depth'] ?? ( $latest['depth'] ?? '' ),
+			'diagnostics_run'     => $results['diagnostics_run'] ?? array(),
+			'diagnostics_skipped' => $results['diagnostics_skipped'] ?? array(),
+		);
+	}
+
+	/**
+	 * Get diagnostic map for the next scheduled scan.
+	 *
+	 * Uses the currently configured depth to build the diagnostic list.
+	 *
+	 * @since  1.8001.1200
+	 * @return array Array of diagnostic slugs mapped to class names.
+	 */
+	public static function get_next_scan_diagnostics(): array {
+		$depth = get_option( self::$settings_prefix . '_depth', 'standard' );
+		return self::get_diagnostics_by_depth( $depth );
+	}
+
+	/**
+	 * Get diagnostic map for a specific depth.
+	 *
+	 * @since  1.8001.1200
+	 * @param  string $depth Scan depth (quick, standard, deep).
+	 * @return array Array of diagnostic slugs mapped to class names.
+	 */
+	public static function get_diagnostics_for_depth( string $depth ): array {
+		$depth = sanitize_key( $depth );
+		if ( empty( $depth ) ) {
+			$depth = 'standard';
+		}
+		return self::get_diagnostics_by_depth( $depth );
+	}
+
+	/**
+	 * Get the next scheduled scan time.
+	 *
+	 * @since  1.8001.1200
+	 * @return string Next scan time in Y-m-d H:i:s, or empty string if unknown.
+	 */
+	public static function get_next_scan_time(): string {
+		$next_scan = (string) get_option( self::$settings_prefix . '_next_scan', '' );
+		if ( ! empty( $next_scan ) ) {
+			return $next_scan;
+		}
+
+		$timestamp = wp_next_scheduled( self::$cron_hook );
+		if ( $timestamp ) {
+			return wp_date( 'Y-m-d H:i:s', $timestamp );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Check if scheduled scans are enabled.
+	 *
+	 * @since  1.8001.1200
+	 * @return bool True when scheduled scans are enabled.
+	 */
+	public static function is_scheduled_scan_enabled(): bool {
+		return (bool) get_option( self::$settings_prefix . '_enabled', true );
 	}
 
 	/**

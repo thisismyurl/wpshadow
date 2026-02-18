@@ -83,7 +83,7 @@ class Diagnostic_Polyfill_Detection extends Diagnostic_Base {
 		$polyfill_size      = 0;
 
 		foreach ( $wp_scripts->registered as $handle => $script ) {
-			if ( ! $wp_scripts->is_enqueued( $handle ) ) {
+			if ( ! $wp_scripts->query( $handle ) ) {
 				continue;
 			}
 

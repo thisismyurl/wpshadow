@@ -69,13 +69,6 @@ class Guardian_Dashboard {
 			<div class="wps-mt-4" role="region" aria-labelledby="activity-heading">
 				<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
 			</div>
-
-			<!-- Page-Specific Activity History Section -->
-			<?php
-			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
-				wpshadow_render_page_activities( 'guardian', 10 );
-			}
-			?>
 		</div>
 		<?php
 		return ob_get_clean();

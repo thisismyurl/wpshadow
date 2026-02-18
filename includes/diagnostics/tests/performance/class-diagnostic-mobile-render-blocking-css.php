@@ -124,17 +124,23 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 
 			// Get CSS file
 			$src = $style->src;
-			if ( 0 === strpos( $src, '/' ) ) {
-				$src = ABSPATH . substr( $src, 1 );
-			} elseif ( 0 === strpos( $src, 'http' ) && strpos( $src, home_url() ) !== false ) {
-				$src = str_replace( home_url(), ABSPATH, $src );
-			} else {
-				continue; // External or unresolvable
-			}
+		
+		// Verify src is a string before using strpos
+		if ( ! is_string( $src ) ) {
+			continue;
+		}
 
-			if ( ! file_exists( $src ) ) {
-				continue;
-			}
+		if ( 0 === strpos( $src, '/' ) ) {
+			$src = ABSPATH . substr( $src, 1 );
+		} elseif ( 0 === strpos( $src, 'http' ) && strpos( $src, home_url() ) !== false ) {
+			$src = str_replace( home_url(), ABSPATH, $src );
+		} else {
+			continue; // External or unresolvable
+		}
+
+		if ( ! file_exists( $src ) ) {
+			continue;
+		}
 
 			$size = filesize( $src );
 

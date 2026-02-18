@@ -20,6 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Ensure helper class is loaded
+if ( ! class_exists( '\WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper' ) ) {
+	$helper_file = WPSHADOW_PATH . 'includes/diagnostics/helpers/class-diagnostic-request-helper.php';
+	if ( file_exists( $helper_file ) ) {
+		require_once $helper_file;
+	}
+}
+
 /**
  * Import Blocking Admin Access Diagnostic Class
  *

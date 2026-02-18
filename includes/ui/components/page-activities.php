@@ -47,11 +47,18 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10,
 				 data-limit="<?php echo esc_attr( (string) $limit ); ?>"
 				 data-nonce="<?php echo esc_attr( $nonce ); ?>"
 					 data-refresh-interval="3000"
+					 data-current-page="0"
 					 <?php if ( ! empty( $report_slug ) ) : ?>data-report="<?php echo esc_attr( $report_slug ); ?>"<?php endif; ?>>
 				<div class="wps-activity-loading" style="text-align: center; padding: 20px;">
 					<span class="spinner" style="float: none; margin: 0;"></span>
 					<p><?php esc_html_e( 'Loading activity...', 'wpshadow' ); ?></p>
 				</div>
+			</div>
+			<!-- Pagination -->
+			<div class="wps-activity-pagination" style="display: none; margin-top: 15px; text-align: center;">
+				<button class="wps-activity-pagination-prev button" disabled><?php esc_html_e( '← Previous', 'wpshadow' ); ?></button>
+				<span class="wps-activity-pagination-info" style="margin: 0 10px; display: inline-block;"></span>
+				<button class="wps-activity-pagination-next button" disabled><?php esc_html_e( 'Next →', 'wpshadow' ); ?></button>
 			</div>
 		</div>
 	</div>
@@ -74,25 +81,49 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10,
 				const context = container.getAttribute('data-context');
 				const limit = parseInt(container.getAttribute('data-limit')) || 10;
 				const interval = parseInt(container.getAttribute('data-refresh-interval')) || 3000;
+				const paginationDiv = container.parentElement.querySelector('.wps-activity-pagination');
+				const prevBtn = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-prev') : null;
+				const nextBtn = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-next') : null;
 
 				// Load initial activities
-				this.loadActivities(container, context, limit);
+				this.loadActivities(container, context, limit, 0);
+
+				// Setup pagination buttons
+				if (prevBtn) {
+					prevBtn.addEventListener('click', (e) => {
+						e.preventDefault();
+						const currentPage = parseInt(container.getAttribute('data-current-page')) || 0;
+						if (currentPage > 0) {
+							this.loadActivities(container, context, limit, (currentPage - 1) * limit);
+						}
+					});
+				}
+
+				if (nextBtn) {
+					nextBtn.addEventListener('click', (e) => {
+						e.preventDefault();
+						const currentPage = parseInt(container.getAttribute('data-current-page')) || 0;
+						this.loadActivities(container, context, limit, (currentPage + 1) * limit);
+					});
+				}
 
 				// Setup auto-refresh
 				const timer = setInterval(() => {
-					this.loadActivities(container, context, limit);
+					const currentPage = parseInt(container.getAttribute('data-current-page')) || 0;
+					this.loadActivities(container, context, limit, currentPage * limit);
 				}, interval);
 
 				this.refreshTimers[context] = timer;
 
 				// Listen for activity logged events
 				document.addEventListener('wpshadow_activity_logged', (e) => {
-					// Refresh this container when activity is logged
-					this.loadActivities(container, context, limit);
+					// Refresh current page when activity is logged
+					const currentPage = parseInt(container.getAttribute('data-current-page')) || 0;
+					this.loadActivities(container, context, limit, currentPage * limit);
 				});
 			},
 
-			loadActivities: function(container, context, limit) {
+			loadActivities: function(container, context, limit, offset = 0) {
 				const nonce = container.getAttribute('data-nonce');
 				const report = container.getAttribute('data-report') || '';
 				const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -104,20 +135,53 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10,
 					context: context,
 					report: report,
 					limit: limit,
-					offset: 0,
+					offset: offset,
 					since: sinceTimestamp
 				}, (response) => {
 					if (response.success && response.data.activities) {
 						if (response.data.activities.length > 0 || sinceTimestamp === 0) {
-							this.renderActivities(container, response.data.activities);
+							this.renderActivities(container, response.data.activities, response.data);
 							this.setLastTimestamp(context, currentTimestamp);
 						}
 					}
 				});
 			},
 
-				renderActivities: function(container, activities) {
+				renderActivities: function(container, activities, responseData = {}) {
 					const i18n = window.wpshadow_i18n || {};
+					const paginationDiv = container.parentElement.querySelector('.wps-activity-pagination');
+					const prevBtn = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-prev') : null;
+					const nextBtn = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-next') : null;
+					const infoSpan = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-info') : null;
+
+					// Update pagination info
+					const limit = responseData.limit || 5;
+					const offset = responseData.offset || 0;
+					const total = responseData.total || 0;
+					const currentPage = Math.floor(offset / limit);
+					const totalPages = Math.ceil(total / limit);
+
+					// Update container page attribute
+					container.setAttribute('data-current-page', currentPage);
+
+					// Show/hide pagination and update button states
+					if (paginationDiv) {
+						if (totalPages > 1) {
+							paginationDiv.style.display = 'block';
+							if (infoSpan) {
+								infoSpan.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+							}
+							if (prevBtn) {
+								prevBtn.disabled = currentPage === 0;
+							}
+							if (nextBtn) {
+								nextBtn.disabled = currentPage >= totalPages - 1;
+							}
+						} else {
+							paginationDiv.style.display = 'none';
+						}
+					}
+
 				let highlightNew = false;
 				if (activities.length > 0) {
 					const latestId = activities[0].id || '';

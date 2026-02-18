@@ -148,7 +148,7 @@ if ( ! function_exists( 'wpshadow_workflow_get_action_summary' ) ) {
 
 $workflows   = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 $suggestions = \WPShadow\Workflow\Workflow_Suggestions::get_suggestions();
-$suggestions = array_slice( $suggestions, 0, 5 );
+$suggestions = array_slice( $suggestions, 0, 4 );
 
 // Filter out temporary Kanban workflows
 $hidden_workflow_ids = \WPShadow\Workflow\Kanban_Workflow_Helper::get_hidden_workflow_ids();
@@ -817,8 +817,6 @@ input:checked + .toggle-slider:before {
 	}
 }
 </style>
-
-?>
 
 <!-- Workflow Activity Log -->
 <div style="margin-top: 40px;">

@@ -15,17 +15,51 @@
  * **Why This Matters:**
  * An index is the #1 performance win for databases. A query without an index forces MySQL to scan
  * every row. With 1 million posts, scanning 1 million rows to find 10 posts takes 5-30 seconds.
- * Same query with an index takes 0.001 seconds. That's a 5,000x speedup from one index.\n *
- * **Real-World Scenario:**\n * Membership site had slow admin list pages. Investigation showed no index on wp_postmeta.post_id
+ * Same query with an index takes 0.001 seconds. That's a 5,000x speedup from one index.
+ *
+ * **Real-World Scenario:**
+ * Membership site had slow admin list pages. Investigation showed no index on wp_postmeta.post_id
  * for a "member_status" custom field. Every admin page load queried 1 million rows. After adding index,
- * query went from 8 seconds to 0.03 seconds. Admin pages loaded instantly. Site could scale from 10 to
- * 10,000 concurrent users without adding hardware. Cost: 30 seconds to add index. Value: $500k in avoided
- * infrastructure upgrade.\n *
- * **Business Impact:**\n * - Every page load 5-30 seconds slower without indexes\n * - Database server CPU spikes to 100% (triggers cascading failures)\n * - Site becomes unusable under traffic\n * - Search breaks\n * - Admin interface unusable\n * - Revenue loss from slowdown ($5,000-$50,000 per hour)\n * - Scaling costs 10-100x higher without proper indexing\n *
- * **Philosophy Alignment:**\n * - #9 Show Value: Delivers massive immediate performance wins\n * - #8 Inspire Confidence: Prevents database bottleneck crashes\n * - #10 Talk-About-Worthy: "5,000x faster queries" is unbelievable\n *
- * **Related Checks:**\n * - Missing Query Indexes (specialized version)\n * - Meta Query Performance (postmeta indexing)\n * - LIKE Query Optimization (index bypass detection)\n * - Slow Query Log Analysis (identifies slow queries needing indexes)\n *
- * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/database-index-efficiency\n * - Video: https://wpshadow.com/training/database-indexing-strategy (7 min)\n * - Advanced: https://wpshadow.com/training/mysql-index-design (14 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.5049.1401\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}
+ * query went from 8 seconds to 0.03 seconds. Admin pages loaded instantly.
+ *
+ * **Business Impact:**
+ * - Every page load 5-30 seconds slower without indexes
+ * - Database server CPU spikes to 100% (triggers cascading failures)
+ * - Site becomes unusable under traffic
+ * - Search breaks
+ * - Admin interface unusable
+ * - Revenue loss from slowdown ($5,000-$50,000 per hour)
+ *
+ * **Philosophy Alignment:**
+ * - #9 Show Value: Delivers massive immediate performance wins
+ * - #8 Inspire Confidence: Prevents database bottleneck crashes
+ * - #10 Talk-About-Worthy: "5,000x faster queries" is unbelievable
+ *
+ * **Related Checks:**
+ * - Missing Query Indexes (specialized version)
+ * - Meta Query Performance (postmeta indexing)
+ * - LIKE Query Optimization (index bypass detection)
+ * - Slow Query Log Analysis (identifies slow queries needing indexes)
+ *
+ * **Learn More:**
+ * - KB Article: https://wpshadow.com/kb/database-index-efficiency
+ * - Video: https://wpshadow.com/training/database-indexing-strategy (7 min)
+ * - Advanced: https://wpshadow.com/training/mysql-index-design (14 min)
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.5049.1401
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Database Index Efficiency Diagnostic Class

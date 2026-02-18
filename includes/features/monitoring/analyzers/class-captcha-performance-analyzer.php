@@ -70,7 +70,7 @@ class Captcha_Performance_Analyzer {
 			}
 
 			foreach ( self::$captcha_services as $domain => $service ) {
-				if ( stripos( $script->src, $domain ) !== false ) {
+				if ( isset( $script->src ) && is_string( $script->src ) && stripos( $script->src, $domain ) !== false ) {
 					$results['has_captcha']     = true;
 					$results['captcha_service'] = $service;
 

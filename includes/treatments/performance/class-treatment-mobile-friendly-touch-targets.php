@@ -77,7 +77,7 @@ class Treatment_Mobile_Friendly_Touch_Targets extends Treatment_Base {
 		// Check for mobile-specific styles
 		foreach ( $wp_styles->queue as $handle ) {
 			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && strpos( $style->src ?? '', 'mobile' ) !== false ) {
+			if ( $style && isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, 'mobile' ) !== false ) {
 				$mobile_css_found = true;
 				break;
 			}

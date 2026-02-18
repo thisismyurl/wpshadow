@@ -153,7 +153,7 @@ class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
 
 		if ( ! empty( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( ! empty( $style->src ) && ! strpos( $style->src, '/wp-includes/' ) ) {
+				if ( ! empty( $style->src ) && is_string( $style->src ) && ! strpos( $style->src, '/wp-includes/' ) ) {
 					// Skip WordPress core styles (already minified).
 					$total_styles++;
 

@@ -116,6 +116,17 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
+		// Load helper class defensively
+		$helper_path = __DIR__ . '/../helpers/class-diagnostic-html-helper.php';
+		if ( file_exists( $helper_path ) ) {
+			require_once $helper_path;
+		}
+
+		// If helper class doesn't exist, return early
+		if ( ! class_exists( 'WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper' ) ) {
+			return null;
+		}
+
 		$shift_sources = self::identify_shift_sources();
 
 		if ( empty( $shift_sources['sources'] ) ) {

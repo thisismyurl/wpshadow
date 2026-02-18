@@ -123,6 +123,10 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
 				$total_scripts++;
 				$src = $script->src ?? '';
+				// Ensure src is actually a string
+				if ( ! is_string( $src ) ) {
+					$src = '';
+				}
 				// Check if .min.js is in the src.
 				if ( ! empty( $src ) && strpos( $src, '.min.js' ) === false && strpos( $src, '.js' ) !== false ) {
 					$unminified_scripts++;
@@ -135,6 +139,10 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 			foreach ( $wp_styles->registered as $handle => $style ) {
 				$total_styles++;
 				$src = $style->src ?? '';
+				// Ensure src is actually a string
+				if ( ! is_string( $src ) ) {
+					$src = '';
+				}
 				// Check if .min.css is in the src.
 				if ( ! empty( $src ) && strpos( $src, '.min.css' ) === false && strpos( $src, '.css' ) !== false ) {
 					$unminified_styles++;

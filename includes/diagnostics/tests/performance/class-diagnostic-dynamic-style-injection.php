@@ -74,7 +74,7 @@ class Diagnostic_Dynamic_Style_Injection extends Diagnostic_Base {
 		$handles_with_inline = array();
 
 		foreach ( $wp_styles->registered as $handle => $style ) {
-			if ( ! $wp_styles->is_enqueued( $handle ) ) {
+			if ( ! $wp_styles->query( $handle ) ) {
 				continue;
 			}
 

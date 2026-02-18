@@ -126,6 +126,9 @@ abstract class AJAX_Handler_Base {
 				return rest_sanitize_boolean( $value );
 			case 'url':
 				return esc_url_raw( $value );
+			case 'json':
+				$decoded = json_decode( $value, true );
+				return is_array( $decoded ) ? $decoded : $default;
 			case 'text':
 			default:
 				return sanitize_text_field( $value );
@@ -171,6 +174,9 @@ abstract class AJAX_Handler_Base {
 				return rest_sanitize_boolean( $value );
 			case 'url':
 				return esc_url_raw( $value );
+			case 'json':
+				$decoded = json_decode( $value, true );
+				return is_array( $decoded ) ? $decoded : $default;
 			case 'text':
 			default:
 				return sanitize_text_field( $value );

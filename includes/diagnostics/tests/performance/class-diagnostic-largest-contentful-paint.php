@@ -140,8 +140,8 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( $script && isset( $script->src ) ) {
-					if ( strpos( $script->src, 'lazy' ) !== false || 
-					     strpos( $script->src, 'lazyload' ) !== false ) {
+					if ( is_string( $script->src ) && ( strpos( $script->src, 'lazy' ) !== false || 
+					     strpos( $script->src, 'lazyload' ) !== false ) ) {
 						$lazy_load_enabled = true;
 						break;
 					}

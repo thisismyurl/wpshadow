@@ -242,8 +242,8 @@ class Treatment_Hooks {
 
 		foreach ( $wp_styles->registered as $handle => $style ) {
 			if ( isset( $style->src ) && is_string( $style->src ) ) {
-				if ( strpos( $style->src, 'fonts.googleapis.com' ) !== false ||
-					strpos( $style->src, 'fonts.gstatic.com' ) !== false ) {
+			if ( isset( $style->src ) && is_string( $style->src ) && ( strpos( $style->src, 'fonts.googleapis.com' ) !== false ||
+				strpos( $style->src, 'fonts.gstatic.com' ) !== false ) ) {
 					wp_dequeue_style( $handle );
 					wp_deregister_style( $handle );
 				}
