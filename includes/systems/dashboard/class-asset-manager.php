@@ -152,7 +152,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		wp_enqueue_script(
 			'wpshadow-guardian',
 			WPSHADOW_URL . 'assets/js/guardian.js',
-			array( 'jquery', 'wpshadow-admin-pages', 'wpshadow-modal' ),
+			array( 'jquery', 'wp-util', 'wpshadow-admin-pages', 'wpshadow-modal' ),
 			WPSHADOW_VERSION,
 			true
 		);

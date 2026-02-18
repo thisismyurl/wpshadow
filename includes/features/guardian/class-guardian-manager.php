@@ -149,8 +149,13 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 		$diagnostics    = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
 		$findings       = array();
 		$critical_count = 0;
+		$diagnostics_run = array();
 
 		foreach ( $diagnostics as $diagnostic ) {
+			if ( class_exists( $diagnostic ) ) {
+				$diagnostics_run[] = method_exists( $diagnostic, 'get_slug' ) ? $diagnostic::get_slug() : $diagnostic;
+			}
+
 			if ( $diagnostic->has_issues() ) {
 				$severity = $diagnostic::get_severity();
 
@@ -168,6 +173,15 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 
 		// Log health check
 		Guardian_Activity_Logger::log_health_check( $findings );
+
+		// Store latest diagnostics run for Guardian dashboard display.
+		update_option(
+			'wpshadow_guardian_last_diagnostics',
+			array(
+				'timestamp'   => current_time( 'mysql' ),
+				'diagnostics' => $diagnostics_run,
+			)
+		);
 
 		// Update baseline for anomaly detection
 		Baseline_Manager::update_baseline( $findings );

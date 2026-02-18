@@ -22,6 +22,8 @@
             this.initScanControls();
             this.initIssueActions();
             this.initAutoRefresh();
+            this.initHeartbeatCountdown();
+            this.initHeartbeatRefresh();
         },
 
         /**
@@ -363,6 +365,87 @@
                     }
                 });
             }, refreshInterval);
+        },
+
+        /**
+         * Initialize heartbeat countdown display
+         */
+        initHeartbeatCountdown: function() {
+            const $countdown = $('.wps-guardian-heartbeat-countdown');
+            if (!$countdown.length) {
+                return;
+            }
+
+            const intervalSeconds = parseInt($countdown.data('interval'), 10) || 15;
+            let remaining = intervalSeconds;
+
+            const updateCountdown = function() {
+                remaining = Math.max(0, remaining - 1);
+                $countdown.text(remaining);
+
+                if (remaining <= 0) {
+                    remaining = intervalSeconds;
+                }
+            };
+
+            setInterval(updateCountdown, 1000);
+
+            $(document).on('heartbeat-tick', function() {
+                remaining = intervalSeconds;
+                $countdown.text(remaining);
+            });
+        },
+
+        /**
+         * Refresh Guardian dashboard sections after heartbeat runs
+         */
+        initHeartbeatRefresh: function() {
+            const self = this;
+
+            if (!$('#wpshadow-guardian-diagnostics-overview').length) {
+                return;
+            }
+
+            $(document).on('heartbeat-tick', function(event, data) {
+                if (!data || !data.wpshadow_guardian) {
+                    return;
+                }
+
+                const guardianData = data.wpshadow_guardian;
+                const ranDiagnostics = Array.isArray(guardianData.diagnostics_run) && guardianData.diagnostics_run.length > 0;
+
+                if (guardianData.executed || ranDiagnostics) {
+                    self.refreshDashboardSections();
+                }
+            });
+        },
+
+        /**
+         * Fetch updated diagnostics schedule and activity log
+         */
+        refreshDashboardSections: function() {
+            $.ajax({
+                url: wpshadowGuardian.ajaxUrl,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'wpshadow_guardian_refresh_sections',
+                    nonce: wpshadowGuardian.nonce
+                },
+                success: function(response) {
+                    if (!response.success || !response.data) {
+                        return;
+                    }
+
+                    if (response.data.diagnostics_overview) {
+                        $('#wpshadow-guardian-diagnostics-overview').html(response.data.diagnostics_overview);
+                    }
+
+                    if (response.data.activity_log) {
+                        $('#wpshadow-guardian-activity-log').html(response.data.activity_log);
+                    }
+                }
+            });
         }
     };
 

@@ -46,7 +46,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 		$report    = self::get_post_param( 'report', 'text', '', false );
 
 		// Limit bounds
-		$limit = min( max( $limit, 5 ), 100 );
+		$limit = min( max( $limit, 1 ), 100 );
 
 		// Build filters based on context
 		$filters = self::get_filters_for_context( $context );

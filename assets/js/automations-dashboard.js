@@ -363,7 +363,7 @@ jQuery( function( $ ) {
 			$btn.prop( 'disabled', true ).text( 'Creating...' );
 
 			$.ajax({
-			url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
+				url: window.ajaxurl || wpshadowAutomationsDashboard.ajaxUrl,
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -375,6 +375,9 @@ jQuery( function( $ ) {
 				},
 				success: ( response ) => {
 					if ( response.success ) {
+						if ( response.data && response.data.card_html ) {
+							this.insertAutomationCard( response.data.card_html, response.data.section_html );
+						}
 						// After creating the automation, replace with next suggestion
 						this.replaceWithNextSuggestion( $btn, suggestionId );
 					} else {
@@ -387,6 +390,31 @@ jQuery( function( $ ) {
 					$btn.prop( 'disabled', false ).text( originalText );
 				},
 			});
+		},
+
+		/**
+		 * Insert the new automation card into the list.
+		 *
+		 * @param {string} cardHtml Rendered card HTML.
+		 * @param {string} sectionHtml Rendered section HTML.
+		 */
+		insertAutomationCard( cardHtml, sectionHtml ) {
+			const $list = $( '.wpshadow-automations-list' );
+			if ( $list.length ) {
+				$list.prepend( cardHtml );
+				return;
+			}
+
+			const $emptyState = $( '.wpshadow-empty-automations' );
+			if ( $emptyState.length && sectionHtml ) {
+				$emptyState.replaceWith( sectionHtml );
+				return;
+			}
+
+			const $container = $( '.wpshadow-automations-dashboard' );
+			if ( $container.length && sectionHtml ) {
+				$container.append( sectionHtml );
+			}
 		},
 
 		/**

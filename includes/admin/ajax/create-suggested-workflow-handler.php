@@ -72,6 +72,11 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 		$workflow_id = 'wf_' . wp_generate_uuid4();
 		$workflow    = Workflow_Manager::save_workflow( $title, $blocks, $workflow_id );
 
+		$trigger_label = self::get_trigger_summary( $trigger, $mapped_trigger );
+		$action_label  = self::get_action_summary( $blocks );
+		$card_html     = self::render_workflow_card( $workflow_id, $title, $trigger_label, $action_label );
+		$section_html  = self::render_workflow_section( $card_html );
+
 		// Log activity (Philosophy #9: Show Value)
 		Activity_Logger::log(
 			'workflow_created',
@@ -87,15 +92,175 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 
 		self::send_success(
 			array(
-				'message'     => sprintf(
+				'message'      => sprintf(
 					/* translators: %s: workflow title */
 					__( 'Workflow "%s" created successfully!', 'wpshadow' ),
 					$title
 				),
-				'workflow_id' => $workflow_id,
-				'redirect'    => admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id ),
+				'workflow_id'  => $workflow_id,
+				'redirect'     => admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow_id ),
+				'card_html'    => $card_html,
+				'section_html' => $section_html,
 			)
 		);
+	}
+
+	/**
+	 * Get a friendly trigger summary.
+	 *
+	 * @param string $trigger_slug Trigger identifier.
+	 * @param array  $trigger_block Trigger block config.
+	 * @return string
+	 */
+	private static function get_trigger_summary( string $trigger_slug, array $trigger_block ): string {
+		switch ( $trigger_slug ) {
+			case 'time_daily':
+				return __( 'Daily at 2:00 AM', 'wpshadow' );
+			case 'time_weekly':
+				return __( 'Weekly on Monday at 3:00 AM', 'wpshadow' );
+			case 'hourly_check':
+				return __( 'Every hour', 'wpshadow' );
+			case 'pre_publish_review':
+				return __( 'Before publishing', 'wpshadow' );
+			case 'comment_posted':
+				return __( 'When a comment is posted', 'wpshadow' );
+			case 'plugin_state_changed':
+				return __( 'When a plugin is activated', 'wpshadow' );
+			case 'post_status_changed':
+				return __( 'When a post status changes', 'wpshadow' );
+			case 'user_registered':
+				return __( 'When a user registers', 'wpshadow' );
+			case 'theme_changed':
+				return __( 'When the theme changes', 'wpshadow' );
+			default:
+				break;
+		}
+
+		if ( isset( $trigger_block['id'] ) && 'time_trigger' === $trigger_block['id'] ) {
+			return __( 'On schedule', 'wpshadow' );
+		}
+
+		if ( isset( $trigger_block['id'] ) && 'event_trigger' === $trigger_block['id'] ) {
+			return __( 'On event', 'wpshadow' );
+		}
+
+		return __( 'On schedule', 'wpshadow' );
+	}
+
+	/**
+	 * Get a friendly action summary from workflow blocks.
+	 *
+	 * @param array $blocks Workflow blocks.
+	 * @return string
+	 */
+	private static function get_action_summary( array $blocks ): string {
+		$actions = Block_Registry::get_actions();
+
+		foreach ( $blocks as $block ) {
+			if ( ! isset( $block['type'], $block['id'] ) ) {
+				continue;
+			}
+			if ( 'action' !== $block['type'] || 'kanban_note' === $block['id'] ) {
+				continue;
+			}
+			if ( isset( $actions[ $block['id'] ]['label'] ) ) {
+				return $actions[ $block['id'] ]['label'];
+			}
+			return __( 'Action', 'wpshadow' );
+		}
+
+		return __( 'Action', 'wpshadow' );
+	}
+
+	/**
+	 * Render an automation card for the dashboard list.
+	 *
+	 * @param string $workflow_id Workflow ID.
+	 * @param string $title Workflow title.
+	 * @param string $trigger_label Trigger summary label.
+	 * @param string $action_label Action summary label.
+	 * @return string
+	 */
+	private static function render_workflow_card( string $workflow_id, string $title, string $trigger_label, string $action_label ): string {
+		$card_class = 'enabled';
+
+		ob_start();
+		?>
+		<div class="wps-card wpshadow-automation-card <?php echo esc_attr( $card_class ); ?>" data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>">
+			<div class="wps-card-body">
+				<div class="wpshadow-automation-header">
+					<div class="wpshadow-automation-toggle">
+						<label class="workflow-toggle">
+							<input type="checkbox" class="workflow-enable-toggle" <?php echo checked( true, true, false ); ?>>
+							<span class="toggle-slider"></span>
+						</label>
+					</div>
+					<div class="wpshadow-automation-info">
+						<h3><?php echo esc_html( $title ); ?></h3>
+						<p class="wpshadow-automation-summary">
+							<span class="wpshadow-automation-trigger">
+								<span class="dashicons dashicons-clock"></span>
+								<?php echo esc_html( $trigger_label ); ?>
+							</span>
+							<span class="wpshadow-automation-actions">
+								<span class="dashicons dashicons-admin-tools"></span>
+								<?php echo esc_html( $action_label ); ?>
+							</span>
+						</p>
+					</div>
+				</div>
+				<div class="wpshadow-automation-actions-buttons">
+					<button
+						type="button"
+						class="wps-btn wps-btn-secondary wps-btn-sm wpshadow-automation-detail-btn"
+						data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>"
+						data-workflow-name="<?php echo esc_attr( $title ); ?>"
+						data-trigger="<?php echo esc_attr( $trigger_label ); ?>"
+						data-action="<?php echo esc_attr( $action_label ); ?>"
+					>
+						<?php esc_html_e( 'View Details', 'wpshadow' ); ?>
+					</button>
+					<button
+						type="button"
+						class="wps-btn wps-btn-success wps-btn-sm workflow-run-btn"
+						data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>"
+					>
+						<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
+					</button>
+					<button
+						type="button"
+						class="wps-btn wps-btn-danger wps-btn-sm workflow-delete-btn"
+						data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>"
+					>
+						<?php esc_html_e( 'Delete', 'wpshadow' ); ?>
+					</button>
+				</div>
+			</div>
+		</div>
+		<?php
+		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Render the automations section wrapper with a single card.
+	 *
+	 * @param string $card_html Rendered card HTML.
+	 * @return string
+	 */
+	private static function render_workflow_section( string $card_html ): string {
+		ob_start();
+		?>
+		<div class="wpshadow-automations-section">
+			<h2><?php esc_html_e( 'Your Automations', 'wpshadow' ); ?></h2>
+			<p class="wpshadow-automations-intro">
+				<?php esc_html_e( 'Manage and monitor your active automations.', 'wpshadow' ); ?>
+			</p>
+			<div class="wpshadow-automations-list">
+				<?php echo $card_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+		</div>
+		<?php
+		return (string) ob_get_clean();
 	}
 
 	/**

@@ -185,6 +185,23 @@ class Plugin_Bootstrap {
 		if ( file_exists( $core_path . 'class-visual-comparator.php' ) ) {
 			require_once $core_path . 'class-visual-comparator.php';
 		}
+
+		// Load Guardian Executor (handles background diagnostics during heartbeat)
+		if ( file_exists( $core_path . 'class-guardian-executor.php' ) ) {
+			require_once $core_path . 'class-guardian-executor.php';
+			if ( class_exists( '\\WPShadow\\Core\\Guardian_Executor' ) ) {
+				\WPShadow\Core\Guardian_Executor::init();
+			}
+		}
+
+		// Load Diagnostic Scheduler (manages diagnostic frequency and scheduling)
+		$utils_path = WPSHADOW_PATH . 'includes/utils/';
+		if ( file_exists( $utils_path . 'class-diagnostic-scheduler.php' ) ) {
+			require_once $utils_path . 'class-diagnostic-scheduler.php';
+			if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Scheduler' ) ) {
+				\WPShadow\Core\Diagnostic_Scheduler::init();
+			}
+		}
 	}
 
 	/**
@@ -575,6 +592,7 @@ class Plugin_Bootstrap {
 
 		// Utilities AJAX handlers
 		$handlers = array(
+			'class-guardian-refresh-sections-handler.php',
 			'create-clone-handler.php',
 			'delete-clone-handler.php',
 			'sync-clone-handler.php',

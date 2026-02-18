@@ -9,6 +9,7 @@ use WPShadow\Guardian\Guardian_Manager;
 use WPShadow\Guardian\Guardian_Activity_Logger;
 use WPShadow\Guardian\Auto_Fix_Executor;
 use WPShadow\Guardian\Recovery_System;
+use WPShadow\Guardian\Scan_Scheduler;
 use WPShadow\Reporting\Event_Logger;
 
 /**
@@ -65,8 +66,13 @@ class Guardian_Dashboard {
 				</div>
 			</div>
 
+			<!-- Diagnostics Overview -->
+			<div id="wpshadow-guardian-diagnostics-overview" class="wps-mt-4" role="region" aria-labelledby="diagnostics-heading">
+				<?php echo wp_kses_post( self::render_diagnostics_overview() ); ?>
+			</div>
+
 			<!-- Activity Log (Full Width) -->
-			<div class="wps-mt-4" role="region" aria-labelledby="activity-heading">
+			<div id="wpshadow-guardian-activity-log" class="wps-mt-4" role="region" aria-labelledby="activity-heading">
 				<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
 			</div>
 		</div>
@@ -234,6 +240,274 @@ class Guardian_Dashboard {
 		);
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * Render diagnostics overview
+	 *
+	 * Shows recently run diagnostics and the next scheduled diagnostics list.
+	 *
+	 * @return string HTML
+	 */
+	private static function render_diagnostics_overview(): string {
+		if ( ! class_exists( Scan_Scheduler::class ) ) {
+			return '';
+		}
+
+		$latest_results = Scan_Scheduler::get_latest_scan_results();
+		$latest_run     = $latest_results['diagnostics_run'] ?? array();
+		$latest_depth   = $latest_results['depth'] ?? '';
+		$latest_date    = $latest_results['scan_date'] ?? '';
+		$latest_map     = ! empty( $latest_depth ) ? Scan_Scheduler::get_diagnostics_for_depth( $latest_depth ) : array();
+		$latest_list    = self::format_diagnostic_list( $latest_run, $latest_map );
+
+		if ( empty( $latest_list ) ) {
+			$guardian_latest = get_option( 'wpshadow_guardian_last_diagnostics', array() );
+			$guardian_run    = $guardian_latest['diagnostics'] ?? array();
+			$guardian_date   = $guardian_latest['timestamp'] ?? '';
+			$guardian_map    = self::get_diagnostic_map_from_registry();
+			$latest_list     = self::format_diagnostic_list( $guardian_run, $guardian_map );
+			if ( ! empty( $guardian_date ) ) {
+				$latest_date = $guardian_date;
+			}
+		}
+
+		$next_map        = Scan_Scheduler::get_next_scan_diagnostics();
+		$next_slugs      = array_keys( $next_map );
+		$next_list       = self::format_diagnostic_list( $next_slugs, $next_map );
+		$next_time       = Scan_Scheduler::get_next_scan_time();
+		$next_depth      = (string) get_option( 'wpshadow_scheduled_scans_depth', 'standard' );
+		$scheduled_on    = Scan_Scheduler::is_scheduled_scan_enabled();
+		$depth_label     = self::get_scan_depth_label( $latest_depth );
+		$next_depth_label = self::get_scan_depth_label( $next_depth );
+
+		ob_start();
+		wpshadow_render_card(
+			array(
+				'title' => __( 'Diagnostics Schedule', 'wpshadow' ),
+				'icon'  => 'dashicons-list-view',
+				'body'  => function() use ( $latest_list, $latest_date, $depth_label, $next_list, $next_time, $next_depth_label, $scheduled_on ) {
+					?>
+					<div class="wps-grid wps-grid-auto-240 wps-gap-4">
+						<div>
+							<div class="wps-text-sm wps-font-semibold wps-text-gray-800" id="diagnostics-heading">
+								<?php esc_html_e( 'Diagnostics That Just Ran', 'wpshadow' ); ?>
+							</div>
+							<?php if ( ! empty( $latest_date ) ) : ?>
+								<p class="wps-text-xs wps-text-muted wps-mt-1">
+									<?php
+									echo esc_html(
+										sprintf(
+											/* translators: 1: scan date, 2: scan depth */
+											__( 'Last scan: %1$s (%2$s depth)', 'wpshadow' ),
+											$latest_date,
+											$depth_label
+										)
+									);
+									?>
+								</p>
+							<?php endif; ?>
+							<?php if ( empty( $latest_list ) ) : ?>
+								<p class="wps-text-sm wps-text-muted wps-mt-2">
+									<?php esc_html_e( 'No diagnostics recorded yet. Run a scan to start building a history.', 'wpshadow' ); ?>
+								</p>
+							<?php else : ?>
+								<ul class="wps-list-disc wps-ml-5 wps-text-sm wps-mt-2">
+									<?php foreach ( $latest_list as $label ) : ?>
+										<li><?php echo esc_html( $label ); ?></li>
+									<?php endforeach; ?>
+								</ul>
+							<?php endif; ?>
+						</div>
+
+						<div>
+							<div class="wps-text-sm wps-font-semibold wps-text-gray-800">
+								<?php esc_html_e( 'Upcoming Diagnostics', 'wpshadow' ); ?>
+							</div>
+							<?php if ( ! $scheduled_on ) : ?>
+								<p class="wps-text-sm wps-text-muted wps-mt-2">
+									<?php esc_html_e( 'Scheduled scans are paused. Turn them on to queue the next heartbeat run.', 'wpshadow' ); ?>
+								</p>
+							<?php else : ?>
+								<?php if ( ! empty( $next_time ) ) : ?>
+									<p class="wps-text-xs wps-text-muted wps-mt-1">
+										<?php
+										echo esc_html(
+											sprintf(
+												/* translators: 1: next scan time, 2: scan depth */
+												__( 'Next run: %1$s (%2$s depth)', 'wpshadow' ),
+												$next_time,
+												$next_depth_label
+											)
+										);
+									?>
+									</p>
+								<?php else : ?>
+									<?php
+									$heartbeat_interval = self::get_heartbeat_interval_seconds();
+									$heartbeat_message  = sprintf(
+										/* translators: %s: heartbeat interval in seconds */
+										__( 'Next run will happen on the next heartbeat (about <span class="wps-guardian-heartbeat-countdown" data-interval="%s">%s</span> seconds while this page is open).', 'wpshadow' ),
+										number_format_i18n( $heartbeat_interval ),
+										number_format_i18n( $heartbeat_interval )
+									);
+									?>
+									<p class="wps-text-xs wps-text-muted wps-mt-1">
+										<?php
+										echo wp_kses(
+											$heartbeat_message,
+											array(
+												'span' => array(
+													'class'        => true,
+													'data-interval' => true,
+												),
+											)
+										);
+									?>
+									</p>
+								<?php endif; ?>
+								<?php if ( empty( $next_list ) ) : ?>
+									<p class="wps-text-sm wps-text-muted wps-mt-2">
+										<?php esc_html_e( 'No diagnostics are queued yet.', 'wpshadow' ); ?>
+									</p>
+								<?php else : ?>
+									<ul class="wps-list-disc wps-ml-5 wps-text-sm wps-mt-2">
+										<?php foreach ( $next_list as $label ) : ?>
+											<li><?php echo esc_html( $label ); ?></li>
+										<?php endforeach; ?>
+									</ul>
+								<?php endif; ?>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php
+				},
+			)
+		);
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Format diagnostic slugs into human-friendly labels.
+	 *
+	 * @param array $slugs Diagnostic slugs.
+	 * @param array $map   Diagnostic map of slug => class.
+	 * @return array List of labels.
+	 */
+	private static function format_diagnostic_list( array $slugs, array $map ): array {
+		$labels = array();
+
+		foreach ( $slugs as $slug ) {
+			$labels[] = self::get_diagnostic_label( (string) $slug, $map );
+		}
+
+		return array_filter( $labels );
+	}
+
+	/**
+	 * Get diagnostic display label from slug/class map.
+	 *
+	 * @param string $slug Diagnostic slug.
+	 * @param array  $map  Diagnostic map of slug => class.
+	 * @return string Label for display.
+	 */
+	private static function get_diagnostic_label( string $slug, array $map ): string {
+		$class = $map[ $slug ] ?? '';
+		if ( ! empty( $class ) && class_exists( $class ) && is_subclass_of( $class, '\\WPShadow\\Core\\Diagnostic_Base' ) ) {
+			return $class::get_title();
+		}
+
+		$label = str_replace( array( '-', '_' ), ' ', $slug );
+		return ucwords( $label );
+	}
+
+	/**
+	 * Get diagnostics overview HTML for AJAX refresh.
+	 *
+	 * @since 1.6049.1500
+	 * @return string HTML output.
+	 */
+	public static function get_diagnostics_overview_html(): string {
+		return self::render_diagnostics_overview();
+	}
+
+	/**
+	 * Get activity timeline HTML for AJAX refresh.
+	 *
+	 * @since 1.6049.1500
+	 * @return string HTML output.
+	 */
+	public static function get_activity_timeline_html(): string {
+		return self::render_activity_timeline();
+	}
+
+	/**
+	 * Build a diagnostic slug map using the registry.
+	 *
+	 * @return array Diagnostic map of slug => class.
+	 */
+	private static function get_diagnostic_map_from_registry(): array {
+		if ( ! class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+			return array();
+		}
+
+		$classes = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
+		$map     = array();
+
+		foreach ( $classes as $class ) {
+			if ( class_exists( $class ) && is_subclass_of( $class, '\\WPShadow\\Core\\Diagnostic_Base' ) ) {
+				$map[ $class::get_slug() ] = $class;
+			}
+		}
+
+		return $map;
+	}
+
+	/**
+	 * Normalize scan depth labels for display.
+	 *
+	 * @param string $depth Scan depth.
+	 * @return string Friendly label.
+	 */
+	private static function get_scan_depth_label( string $depth ): string {
+		$depth = sanitize_key( $depth );
+		if ( empty( $depth ) ) {
+			return __( 'Standard', 'wpshadow' );
+		}
+
+		$labels = array(
+			'quick'    => __( 'Quick', 'wpshadow' ),
+			'standard' => __( 'Standard', 'wpshadow' ),
+			'deep'     => __( 'Deep', 'wpshadow' ),
+		);
+
+		return $labels[ $depth ] ?? ucwords( $depth );
+	}
+
+	/**
+	 * Get the Heartbeat interval in seconds.
+	 *
+	 * @return int Interval in seconds.
+	 */
+	private static function get_heartbeat_interval_seconds(): int {
+		$interval = 15;
+		if ( function_exists( 'wp_heartbeat_settings' ) ) {
+			$settings = wp_heartbeat_settings( array( 'interval' => $interval ) );
+			if ( is_array( $settings ) && isset( $settings['interval'] ) ) {
+				$interval = (int) $settings['interval'];
+			}
+		} else {
+			$settings = apply_filters( 'heartbeat_settings', array( 'interval' => $interval ) );
+			if ( is_array( $settings ) && isset( $settings['interval'] ) ) {
+				$interval = (int) $settings['interval'];
+			}
+		}
+		if ( $interval < 1 ) {
+			$interval = 15;
+		}
+
+		return $interval;
 	}
 
 	/**
