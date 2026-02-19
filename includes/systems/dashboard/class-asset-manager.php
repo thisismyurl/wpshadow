@@ -100,21 +100,8 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 
 	// Guardian Dashboard and Settings assets (Phase 8)
 	if ( strpos( $hook, 'wpshadow-guardian' ) !== false ) {
-		// Enqueue modal system (required for Guardian toggle button)
-		wp_enqueue_style(
-			'wpshadow-modal',
-			WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
-			array(),
-			WPSHADOW_VERSION
-		);
-
-		wp_enqueue_script(
-			'wpshadow-modal',
-			WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
+		// Enqueue modal system (required for Guardian toggle button).
+		\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 
 		wp_enqueue_style(
 			'wpshadow-guardian-dashboard-settings',
@@ -131,14 +118,14 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 			true
 		);
 
-		// Localize script for AJAX
-		wp_localize_script(
+		// Localize script for AJAX.
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-guardian-dashboard-settings',
 			'wpshadow',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'wpshadow_guardian_nonce' ),
-			)
+			'wpshadow_guardian_nonce',
+			array(),
+			'nonce',
+			'ajax_url'
 		);
 
 		// Enqueue consolidated Guardian assets
@@ -157,13 +144,12 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 			true
 		);
 
-		// Localize Guardian-specific data
-		wp_localize_script(
+		// Localize Guardian-specific data.
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-guardian',
 			'wpshadowGuardian',
+			'wpshadow_guardian',
 			array(
-				'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'wpshadow_guardian' ),
 				'refreshInterval' => 120000, // 2 minutes
 				'i18n'            => array(
 					'active'     => __( 'Active', 'wpshadow' ),
@@ -209,12 +195,11 @@ function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
 		true
 	);
 
-	wp_localize_script(
+	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 		'wpshadow-mobile-friendliness',
 		'wpshadowMobileCheck',
+		'wpshadow_mobile_check',
 		array(
-			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-			'nonce'       => wp_create_nonce( 'wpshadow_mobile_check' ),
 			'defaultUrl'  => home_url(),
 			'i18nError'   => __( 'Unable to complete the mobile check. Please try again.', 'wpshadow' ),
 			'i18nRun'     => __( 'Run Mobile Check', 'wpshadow' ),
@@ -254,12 +239,11 @@ function wpshadow_enqueue_a11y_audit_assets( $hook ) {
 		true
 	);
 
-	wp_localize_script(
+	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 		'wpshadow-a11y-audit',
 		'wpshadowA11yAudit',
+		'wpshadow_a11y_scan',
 		array(
-			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-			'nonce'       => wp_create_nonce( 'wpshadow_a11y_scan' ),
 			'defaultUrl'  => home_url(),
 			'i18nError'   => __( 'Unable to complete the accessibility scan. Please try again.', 'wpshadow' ),
 			'i18nRun'     => __( 'Run Accessibility Scan', 'wpshadow' ),
@@ -299,12 +283,11 @@ function wpshadow_enqueue_broken_links_assets( $hook ) {
 		true
 	);
 
-	wp_localize_script(
+	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 		'wpshadow-broken-links',
 		'wpshadowBrokenLinks',
+		'wpshadow_link_check',
 		array(
-			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-			'nonce'       => wp_create_nonce( 'wpshadow_link_check' ),
 			'defaultUrl'  => home_url(),
 			'i18nError'   => __( 'Unable to complete the link check. Please try again.', 'wpshadow' ),
 			'i18nRun'     => __( 'Check Links', 'wpshadow' ),
@@ -478,15 +461,14 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 		true
 	);
 
-	// Localize common admin data
-	wp_localize_script(
+	// Localize common admin data.
+	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 		'wpshadow-admin-pages',
 		'wpshadowAdmin',
+		'wpshadow_admin',
 		array(
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'wpshadow_admin' ),
-			'locale'  => get_locale(),
-			'i18n'    => array(
+			'locale' => get_locale(),
+			'i18n'   => array(
 				'saving'        => __( 'Saving...', 'wpshadow' ),
 				'saved'         => __( 'Saved successfully!', 'wpshadow' ),
 				'error'         => __( 'An error occurred. Please try again.', 'wpshadow' ),
@@ -544,21 +526,8 @@ function wpshadow_enqueue_report_assets( $hook ) {
 		WPSHADOW_VERSION
 	);
 
-	// Enqueue modal system for report confirmations
-	wp_enqueue_style(
-		'wpshadow-modal',
-		WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
-		array(),
-		WPSHADOW_VERSION
-	);
-
-	wp_enqueue_script(
-		'wpshadow-modal',
-		WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
-		array( 'jquery' ),
-		WPSHADOW_VERSION,
-		true
-	);
+	// Enqueue modal system for report confirmations.
+	\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 
 	// Enqueue report JS
 	wp_enqueue_script(
@@ -570,13 +539,12 @@ function wpshadow_enqueue_report_assets( $hook ) {
 	);
 
 	// Localize report-specific data
-	wp_localize_script(
+	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 		'wpshadow-reports',
 		'wpshadowReportBuilder',
+		'wpshadow_report_builder',
 		array(
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'wpshadow_report_builder' ),
-			'i18n'    => array(
+			'i18n' => array(
 				'generating'       => __( 'Generating report...', 'wpshadow' ),
 				'generated'        => __( 'Report generated successfully!', 'wpshadow' ),
 				'reportGenerated'  => __( 'Your report has been generated.', 'wpshadow' ),
@@ -587,13 +555,12 @@ function wpshadow_enqueue_report_assets( $hook ) {
 		)
 	);
 
-	wp_localize_script(
+	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 		'wpshadow-reports',
 		'wpshadowReportDisplay',
+		'wpshadow_report_export',
 		array(
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'wpshadow_report_export' ),
-			'i18n'    => array(
+			'i18n' => array(
 				'exporting'   => __( 'Exporting...', 'wpshadow' ),
 				'exported'    => __( 'Report exported successfully!', 'wpshadow' ),
 				'exportError' => __( 'An error occurred while exporting the report.', 'wpshadow' ),
@@ -655,7 +622,6 @@ function wpshadow_register_asset_hooks() {
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_a11y_audit_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_broken_links_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_dark_mode_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_tooltip_assets' );
 
 	// Auto-extracted inline styles

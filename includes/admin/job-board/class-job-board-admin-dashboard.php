@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Core\Hook_Subscriber_Base;
+use WPShadow\JobPostings\Job_Application_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,16 +111,9 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 		$active_jobs = wp_count_posts( 'wps_job_posting' );
 		$active_count = $active_jobs->publish ?? 0;
 
-		// Total applications
-		global $wpdb;
-		$total_applications = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}wpshadow_job_applications"
-		);
-
-		// New applications
-		$new_applications = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}wpshadow_job_applications WHERE status = 'new'"
-		);
+		// Application counts
+		$total_applications = Job_Application_Tracker::get_total_applications();
+		$new_applications   = Job_Application_Tracker::get_applications_count_by_status( 'new' );
 
 		$stats = array(
 			array(
@@ -165,13 +159,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	 * @since 1.6050.0000
 	 */
 	private static function render_recent_applications() {
-		global $wpdb;
-
-		$recent = $wpdb->get_results(
-			"SELECT a.*, p.post_title FROM {$wpdb->prefix}wpshadow_job_applications a
-			JOIN {$wpdb->posts} p ON a.job_id = p.ID
-			ORDER BY a.applied_at DESC LIMIT 5"
-		);
+		$recent = Job_Application_Tracker::get_recent_applications( 5 );
 
 		if ( empty( $recent ) ) {
 			return;

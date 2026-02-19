@@ -82,14 +82,13 @@ class Exit_Followups_Page {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-exit-followups',
 			'wpShadowExitFollowups',
+			'wpshadow_get_exit_followups',
 			array(
-				'nonce'       => wp_create_nonce( 'wpshadow_get_exit_followups' ),
 				'updateNonce' => wp_create_nonce( 'wpshadow_update_exit_followup' ),
 				'cancelNonce' => wp_create_nonce( 'wpshadow_cancel_exit_followups' ),
-				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
 				'strings'     => array(
 					'loading'       => __( 'Loading followups...', 'wpshadow' ),
 					'noFollowups'   => __( 'No followups scheduled', 'wpshadow' ),

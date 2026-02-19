@@ -63,11 +63,7 @@ class Refresh_Privacy_Reports_Handler extends AJAX_Handler_Base {
 			self::send_error( __( 'Report system not available', 'wpshadow' ) );
 		}
 
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$table_match = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
-
-		if ( $table_match !== $table_name ) {
+		if ( ! Report_Snapshot_Manager::has_snapshots_table() ) {
 			self::send_error( __( 'Report database not available', 'wpshadow' ) );
 		}
 

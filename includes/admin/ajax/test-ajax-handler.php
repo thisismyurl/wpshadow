@@ -9,17 +9,19 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
 
+use WPShadow\Core\AJAX_Handler_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Test_AJAX_Handler {
+class Test_AJAX_Handler extends AJAX_Handler_Base {
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_test_ajax', array( __CLASS__, 'handle' ) );
-		add_action( 'wp_ajax_nopriv_wpshadow_test_ajax', array( __CLASS__, 'handle' ) );
 	}
 
 	public static function handle(): void {
+		self::verify_request( 'wpshadow_test_ajax', 'read' );
 		wp_send_json_success( array( 'message' => 'AJAX is working!' ) );
 	}
 }

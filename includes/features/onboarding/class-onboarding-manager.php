@@ -194,6 +194,8 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function maybe_show_graduation(): void {
+		self::enqueue_assets();
+
 		$user_id = get_current_user_id();
 
 		// Check if eligible for graduation
@@ -230,32 +232,11 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 				<button type="button" class="wps-btn wps-btn-secondary" id="wpshadow-graduate-later">
 					<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
 				</button>
-				<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'wordpress-graduation', 'onboarding' ) ); ?>" target="_blank" style="margin-left: 15px;">
+				<a href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'wordpress-graduation', 'onboarding' ) ); ?>" target="_blank" class="wps-onboarding-link-spaced">
 					<?php esc_html_e( 'Learn More', 'wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
-		<script>
-		jQuery(document).ready(function($) {
-			$('#wpshadow-graduate-btn').on('click', function() {
-				$.post(ajaxurl, {
-					action: 'wpshadow_show_all_features',
-					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
-				}, function() {
-					location.reload();
-				});
-			});
-			
-			$('#wpshadow-graduate-later').on('click', function() {
-				$.post(ajaxurl, {
-					action: 'wpshadow_dismiss_graduation',
-					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
-				}, function() {
-					$('.wpshadow-graduation-notice').fadeOut();
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 
@@ -276,6 +257,8 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function add_settings_section(): void {
+		self::enqueue_assets();
+
 		?>
 		<div class="wpshadow-settings-section">
 			<h3><?php esc_html_e( 'Onboarding & Learning', 'wpshadow' ); ?></h3>
@@ -311,7 +294,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 						<?php else : ?>
 							<em><?php esc_html_e( 'Not set', 'wpshadow' ); ?></em>
 						<?php endif; ?>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&onboarding=restart' ) ); ?>" style="margin-left: 15px;">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&onboarding=restart' ) ); ?>" class="wps-onboarding-link-spaced">
 							<?php esc_html_e( 'Change', 'wpshadow' ); ?>
 						</a>
 					</div>
@@ -380,5 +363,36 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 		$privacy = get_user_meta( $user_id, 'wpshadow_privacy_preferences', true );
 
 		return is_array( $privacy ) ? wp_parse_args( $privacy, $defaults ) : $defaults;
+	}
+
+	/**
+	 * Enqueue onboarding manager assets.
+	 *
+	 * @since  1.7035.1400
+	 * @return void
+	 */
+	private static function enqueue_assets(): void {
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_style(
+			'wpshadow-onboarding-manager',
+			WPSHADOW_URL . 'assets/css/onboarding-manager.css',
+			array(),
+			$version
+		);
+
+		wp_enqueue_script(
+			'wpshadow-onboarding-manager',
+			WPSHADOW_URL . 'assets/js/onboarding-manager.js',
+			array( 'jquery' ),
+			$version,
+			true
+		);
+
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+			'wpshadow-onboarding-manager',
+			'wpsOnboardingManager',
+			'wpshadow_onboarding'
+		);
 	}
 }

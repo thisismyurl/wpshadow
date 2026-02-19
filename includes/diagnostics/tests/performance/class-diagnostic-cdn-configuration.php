@@ -4,27 +4,24 @@
  *
  * Detects missing or misconfigured CDN setup that prevents geographic optimization benefits.
  *
- * **What This Check Does:**
- * 1. Checks if CDN plugin is installed and activated (CloudFlare, Bunny, etc.)
- * 2. Verifies CDN URL is configured in settings
- * 3. Validates static assets are actually being served from CDN
- * 4. Checks HTTPS enforcement on CDN URLs
- * 5. Measures geographic origin of asset requests
- * 6. Identifies if images are still served from origin server\n *
- * **Why This Matters:**\n * CDNs distribute content across geographically diverse servers. A US visitor gets content from US server (10ms).
- * A Tokyo visitor gets content from Tokyo server (10ms). Without CDN, both get US server (10ms + 150ms latency).
- * With 100 countries accessing your site, geographic latency is the #1 performance issue. Without CDN,
- * 90% of visitors experience 5-10x slower load times than US visitors. This kills conversions in
- * growth markets (Asia, Europe, South America).\n *
- * **Real-World Scenario:**\n * SaaS platform with 60% users in Europe and Asia. US users enjoyed 1.2s load time. European users
- * saw 8-12s load times. Asian users: 12-18s. No CDN was configured despite plugin being installed.\n * After enabling CDN (CloudFlare) and configuring URL rewriting, European load time: 1.1s, Asian: 1.3s.
- * Conversion rate increased 34% in Asia, 28% in Europe (same product, now accessible). Cost: 30 minutes
- * setup. Value: $340,000 in additional quarterly revenue from geographic markets.\n *
- * **Business Impact:**\n * - International users experience 5-10x slower loads (bounce rate 60-80% higher)\n * - Conversions outside home country 50-75% lower than deserved\n * - SEO penalty for non-home-country searches (slower = lower ranking)\n * - Mobile users on international connections abandon immediately\n * - Revenue loss from international market penetration ($5,000-$500,000 opportunity)\n * - Hosting cost per gigabyte 10-50x higher without CDN\n *
- * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible international user experience problems\n * - #9 Show Value: Delivers 5-10x latency reduction for 90% of global users\n * - #10 Talk-About-Worthy: "Our site is fast everywhere now" unlocks growth\n *
- * **Related Checks:**\n * - Image Optimization (complements CDN for images)\n * - Browser Caching Headers (works with CDN caching)\n * - Server Response Time (measures CDN effectiveness)\n * - Global Analytics (reveals geographic performance disparities)\n *
- * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/cdn-configuration\n * - Video: https://wpshadow.com/training/cdn-setup-guide (6 min)\n * - Advanced: https://wpshadow.com/training/global-performance-strategy (14 min)\n *
- * @since   1.6033.2076\n * @package WPShadow\\Diagnostics\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CDN Configuration Diagnostic Class\n *\n * Validates CDN setup for geographic performance optimization.
+ * @since   1.6033.2076
+ * @package WPShadow\Diagnostics
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * CDN Configuration Diagnostic Class
+ *
+ * Validates CDN setup for geographic performance optimization.
  *
  * @since 1.6033.2076
  */

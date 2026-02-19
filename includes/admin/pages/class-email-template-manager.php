@@ -185,6 +185,40 @@ class Email_Template_Manager {
 		}
 
 		$template = $templates[ $selected_template ];
+
+		wp_enqueue_style(
+			'wpshadow-email-template-manager',
+			WPSHADOW_URL . 'assets/css/email-template-manager.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-email-template-manager',
+			WPSHADOW_URL . 'assets/js/email-template-manager.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-email-template-manager',
+			'wpshadowEmailTemplateManager',
+			array(
+				'nonce'    => wp_create_nonce( 'wpshadow_email_template_nonce' ),
+				'strings'  => array(
+					'saving'            => __( 'Saving...', 'wpshadow' ),
+					'save_template'     => __( 'Save Template', 'wpshadow' ),
+					'error_saving'      => __( 'Error saving template', 'wpshadow' ),
+					'network_error'     => __( 'Network error', 'wpshadow' ),
+					'preview_title'     => __( 'WPShadow Report', 'wpshadow' ),
+					'preview_content'   => __( 'Your site health report is ready.', 'wpshadow' ),
+					'preview_footer'    => __( 'Powered by WPShadow', 'wpshadow' ),
+					'reset_confirm'     => __( 'Reset this template to default?', 'wpshadow' ),
+				),
+				'template_base_url' => add_query_arg( 'template', '', admin_url( 'admin.php?page=wpshadow-settings&tab=email' ) ),
+			)
+		);
 		?>
 		<div class="wps-email-container">
 			<!-- Template Selector -->
@@ -196,12 +230,12 @@ class Email_Template_Manager {
 						?>
 						<div class="wps-grid wps-grid-auto-250 wps-gap-3">
 							<?php foreach ( $templates as $key => $tmpl ) : ?>
-							<label style="padding: 12px; border: 2px solid <?php echo isset( $tmpl['custom'] ) ? '#2196f3' : '#ddd'; ?>; border-radius: 6px; background: <?php echo isset( $tmpl['custom'] ) ? '#e3f2fd' : '#f9f9f9'; ?>; cursor: pointer; transition: all 0.2s;">
-								<input type="radio" name="template" value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_template, $key ); ?> onchange="location.href='<?php echo esc_js( add_query_arg( 'template', '', admin_url( 'admin.php?page=wpshadow-settings&tab=email' ) ) ); ?>' + this.value" class="wps-email-template-radio" />
+							<label class="wps-email-template-option <?php echo isset( $tmpl['custom'] ) ? 'wps-email-template-option-custom' : 'wps-email-template-option-default'; ?>">
+								<input type="radio" name="template" value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_template, $key ); ?> class="wps-email-template-radio" />
 								<div>
 									<strong class="wps-email-template-label"><?php echo esc_html( $tmpl['label'] ); ?></strong>
 									<?php if ( isset( $tmpl['custom'] ) ) : ?>
-									<span class="wps-block">● <?php esc_html_e( 'Customized', 'wpshadow' ); ?></span>
+									<span class="wps-block wps-email-template-customized">● <?php esc_html_e( 'Customized', 'wpshadow' ); ?></span>
 									<?php endif; ?>
 									<p class="wps-m-4"><?php echo esc_html( $tmpl['description'] ); ?></p>
 								</div>
@@ -235,7 +269,7 @@ class Email_Template_Manager {
 										<?php esc_html_e( 'Use {title}, {content}, {footer} placeholders', 'wpshadow' ); ?>
 									</p>
 								</label>
-								<textarea name="template_html" class="wps-textarea" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['html'] ); ?></textarea>
+								<textarea name="template_html" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['html'] ); ?></textarea>
 								
 								<!-- Plain Text Template -->
 								<label class="wps-block-m-15">
@@ -244,14 +278,14 @@ class Email_Template_Manager {
 										<?php esc_html_e( 'Fallback for email clients that don\'t support HTML', 'wpshadow' ); ?>
 									</p>
 								</label>
-								<textarea name="template_text" class="wps-textarea" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['text'] ); ?></textarea>
+								<textarea name="template_text" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['text'] ); ?></textarea>
 								
 								<!-- Actions -->
-								<div class="wps-flex wps-gap-2" class="wps-email-actions">
+								<div class="wps-flex wps-gap-2 wps-email-actions">
 									<button type="submit" class="wps-btn wps-btn-primary">
 										<?php esc_html_e( 'Save Template', 'wpshadow' ); ?>
 									</button>
-									<button type="button" class="wps-btn wps-btn-secondary" onclick="wpshadowResetEmailTemplate('<?php echo esc_js( $selected_template ); ?>')">
+									<button type="button" class="wps-btn wps-btn-secondary wps-reset-email-template" data-template-key="<?php echo esc_attr( $selected_template ); ?>">
 										<?php esc_html_e( 'Reset to Default', 'wpshadow' ); ?>
 									</button>
 								</div>
@@ -288,72 +322,6 @@ class Email_Template_Manager {
 			</div>
 		</div>
 
-		<script>
-		jQuery(document).ready(function($) {
-			// Save template form submission
-			$('#wpshadow-email-template-form').on('submit', function(e) {
-				e.preventDefault();
-				var $form = $(this);
-				var $btn = $form.find('button[type="submit"]');
-				var $status = $('#wpshadow-template-status');
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
-				$status.html('');
-				
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					data: $form.serialize(),
-					dataType: 'json',
-					success: function(response) {
-						if (response.success) {
-							$status.html('<div class="wps-p-10-rounded-4">✓ ' + response.data.message + '</div>');
-						} else {
-							$status.html('<div class="wps-p-10-rounded-4">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error saving template', 'wpshadow' ) ); ?>') + '</div>');
-						}
-						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Template', 'wpshadow' ) ); ?>');
-					},
-					error: function() {
-						$status.html('<div class="wps-p-10-rounded-4">✗ <?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?></div>');
-						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Template', 'wpshadow' ) ); ?>');
-					}
-				});
-			});
-			
-			// Update preview as user types
-			$('#wpshadow-email-template-form textarea').on('input change', function() {
-				var html = $('textarea[name="template_html"]').val();
-				var preview = html
-					.replace('{title}', '<?php echo esc_js( __( 'WPShadow Report', 'wpshadow' ) ); ?>')
-					.replace('{content}', '<?php echo esc_js( __( 'Your site health report is ready.', 'wpshadow' ) ); ?>')
-					.replace('{footer}', '<?php echo esc_js( __( 'Powered by WPShadow', 'wpshadow' ) ); ?>');
-				
-				// Simple HTML sanitization for preview
-				if (preview.indexOf('<') === -1) {
-					preview = preview.replace(/\n/g, '<br />');
-				}
-				
-				$('#wpshadow-template-preview').html(preview);
-			});
-			
-			// Trigger initial preview update
-			$('#wpshadow-email-template-form textarea:first').trigger('change');
-		});
-		
-		function wpshadowResetEmailTemplate(templateKey) {
-			if (confirm('<?php echo esc_js( __( 'Reset this template to default?', 'wpshadow' ) ); ?>')) {
-				$.post(ajaxurl, {
-					action: 'wpshadow_reset_email_template',
-					template_key: templateKey,
-					nonce: '<?php echo wp_create_nonce( 'wpshadow_email_template_nonce' ); ?>'
-				}, function(response) {
-					if (response.success) {
-						location.reload();
-					}
-				});
-			}
-		}
-		</script>
 		<?php
 	}
 

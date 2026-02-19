@@ -186,6 +186,71 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	}
 
 	/**
+	 * Get total application count.
+	 *
+	 * @since  1.6050.0000
+	 * @return int Total applications.
+	 */
+	public static function get_total_applications() {
+		global $wpdb;
+
+		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" );
+
+		return (int) $total;
+	}
+
+	/**
+	 * Get application count by status.
+	 *
+	 * @since  1.6050.0000
+	 * @param  string $status Application status.
+	 * @return int Count for status.
+	 */
+	public static function get_applications_count_by_status( $status ) {
+		global $wpdb;
+
+		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
+		$count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$table} WHERE status = %s",
+				sanitize_text_field( $status )
+			)
+		);
+
+		return (int) $count;
+	}
+
+	/**
+	 * Get recent applications.
+	 *
+	 * @since  1.6050.0000
+	 * @param  int $limit Number of recent applications to retrieve.
+	 * @return array Recent applications.
+	 */
+	public static function get_recent_applications( $limit = 5 ) {
+		global $wpdb;
+
+		$table  = $wpdb->prefix . self::TABLE_APPLICATIONS;
+		$recent = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table} ORDER BY applied_at DESC LIMIT %d",
+				absint( $limit )
+			)
+		);
+
+		if ( empty( $recent ) ) {
+			return array();
+		}
+
+		foreach ( $recent as $application ) {
+			$application->post_title = get_the_title( (int) $application->job_id );
+		}
+
+		return $recent;
+	}
+
+	/**
 	 * Update application status.
 	 *
 	 * @since  1.6050.0000

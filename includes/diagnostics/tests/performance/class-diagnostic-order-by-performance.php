@@ -7,18 +7,56 @@
  * **What This Check Does:**
  * 1. Analyzes query patterns for ORDER BY clauses
  * 2. Identifies ORDER BY on non-indexed columns
- * 3. Detects filesort operations (expensive sort in memory)\n * 4. Checks for sorting on large result sets\n * 5. Flags queries using temporary tables for sorting\n * 6. Measures sorting performance impact\n *
- * **Why This Matters:**\n * When ORDER BY uses a column without an index, MySQL must sort results in memory (filesort). Sorting
- * 1 million rows in memory takes 5-30 seconds and uses huge amounts of RAM. Same query with an index on\n * the ORDER BY column returns pre-sorted results in milliseconds. This difference compounds: one filesort query
- * at 10 seconds × 10,000 daily requests = 28 hours of wasted database processing per day.\n *
- * **Real-World Scenario:**\n * Blog's "posts sorted by date, then by author" query had no index on the author column. Every archive page
+ * 3. Detects filesort operations (expensive sort in memory)
+ * 4. Checks for sorting on large result sets
+ * 5. Flags queries using temporary tables for sorting
+ * 6. Measures sorting performance impact
+ *
+ * **Why This Matters:** When ORDER BY uses a column without an index, MySQL must sort results in memory (filesort). Sorting
+ * 1 million rows in memory takes 5-30 seconds and uses huge amounts of RAM. Same query with an index on the ORDER BY column returns pre-sorted results in milliseconds. This difference compounds: one filesort query
+ * at 10 seconds × 10,000 daily requests = 28 hours of wasted database processing per day.
+ *
+ * **Real-World Scenario:** Blog's "posts sorted by date, then by author" query had no index on the author column. Every archive page
  * generated a filesort of 50,000 posts. Page load: 12 seconds. Adding a compound index on (post_date, author)
- * eliminated filesort. Page load: 0.4 seconds. 30x faster. Site could now handle 10x traffic without upgrade.\n * Cost: 30 seconds to add index. Value: prevented $50,000 infrastructure upgrade.\n *
- * **Business Impact:**\n * - Archive pages extremely slow (users bounce immediately)\n * - Database CPU at 100% from sorting (affects all users)\n * - Sorting large result sets consumes all server memory\n * - Search/filtering pages timeout\n * - Reports/analytics pages unusable\n * - Revenue loss from slow pages ($5,000-$50,000 per hour)\n *
- * **Philosophy Alignment:**\n * - #9 Show Value: Delivers massive (30x) speed improvements\n * - #8 Inspire Confidence: Prevents database CPU exhaustion\n * - #10 Talk-About-Worthy: "Archive pages load instantly now" is huge\n *
- * **Related Checks:**\n * - Database Index Efficiency (foundational check)\n * - Missing Query Indexes (related optimization)\n * - Meta Query Performance (ORDER BY meta optimization)\n * - Slow Query Log Analysis (identifies slow ORDER BY queries)\n *
- * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/order-by-performance\n * - Video: https://wpshadow.com/training/query-optimization-101 (6 min)\n * - Advanced: https://wpshadow.com/training/filesort-elimination (11 min)\n *
- * @since   1.4031.1939\n * @package WPShadow\\Diagnostics\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}
+ * eliminated filesort. Page load: 0.4 seconds. 30x faster. Site could now handle 10x traffic without upgrade. Cost: 30 seconds to add index. Value: prevented $50,000 infrastructure upgrade.
+ *
+ * **Business Impact:**
+ * - Archive pages extremely slow (users bounce immediately)
+ * - Database CPU at 100% from sorting (affects all users)
+ * - Sorting large result sets consumes all server memory
+ * - Search/filtering pages timeout
+ * - Reports/analytics pages unusable
+ * - Revenue loss from slow pages ($5,000-$50,000 per hour)
+ *
+ * **Philosophy Alignment:**
+ * - #9 Show Value: Delivers massive (30x) speed improvements
+ * - #8 Inspire Confidence: Prevents database CPU exhaustion
+ * - #10 Talk-About-Worthy: "Archive pages load instantly now" is huge
+ *
+ * **Related Checks:**
+ * - Database Index Efficiency (foundational check)
+ * - Missing Query Indexes (related optimization)
+ * - Meta Query Performance (ORDER BY meta optimization)
+ * - Slow Query Log Analysis (identifies slow ORDER BY queries)
+ *
+ * **Learn More:**
+ * - KB Article: https://wpshadow.com/kb/order-by-performance
+ * - Video: https://wpshadow.com/training/query-optimization-101 (6 min)
+ * - Advanced: https://wpshadow.com/training/filesort-elimination (11 min)
+ *
+ * @since   1.4031.1939
+ * @package WPShadow\Diagnostics
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Diagnostic_Order_By_Performance Class

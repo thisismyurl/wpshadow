@@ -63,23 +63,18 @@ class Diagnostic_Incident_Response_Plan_Not_Documented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('incident_response_plan_documented' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Incident response plan not documented. Create playbooks for common security incidents and test procedures.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/incident-response-plan-not-documented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'incident_response_plan_documented' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'An incident response plan is not documented yet. A simple written playbook helps your team respond quickly and confidently during outages or security events.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 40,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/incident-response-plan-not-documented',
+			);
+		}
+
+		return null;
 	}
 }

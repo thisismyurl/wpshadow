@@ -598,12 +598,11 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-gamification',
 			'wpShadowGamification',
+			'wpshadow_gamification',
 			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_gamification' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'strings' => array(
 					'achievementUnlocked' => __( 'Achievement Unlocked!', 'wpshadow' ),
 					'badgeEarned'         => __( 'Badge Earned!', 'wpshadow' ),

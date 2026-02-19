@@ -63,23 +63,18 @@ class Diagnostic_Analytics_Privacy_Not_Balanced extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('analytics_privacy_mode' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Analytics privacy not balanced. Use privacy-first analytics (Plausible,
-						'severity'   =>   'medium',
-						'threat_level'   =>   35,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/analytics-privacy-not-balanced'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'analytics_privacy_mode' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Analytics privacy settings are not balanced yet. A privacy-first analytics setup can help measure performance while respecting visitor data preferences.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/analytics-privacy-not-balanced',
+			);
+		}
+
+		return null;
 	}
 }

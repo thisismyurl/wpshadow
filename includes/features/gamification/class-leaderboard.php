@@ -160,36 +160,19 @@ class Leaderboard extends Hook_Subscriber_Base {
 			return $cached;
 		}
 
-		global $wpdb;
-
-		$meta_key = 'wpshadow_lifetime_points';
-		$date_query = '';
-
-		if ( 'monthly' === $period ) {
-			$meta_key = 'wpshadow_points_history';
-			$date_query = " AND meta_value LIKE '%\"timestamp\":\"" . date( 'Y-m' ) . "%'";
-		} elseif ( 'weekly' === $period ) {
-			$meta_key = 'wpshadow_points_history';
-			$week_ago = date( 'Y-m-d', strtotime( '-7 days' ) );
-			$date_query = " AND meta_value >= '{$week_ago}'";
-		}
-
-		// Get opted-in users with points
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT DISTINCT user_id
-				FROM {$wpdb->usermeta}
-				WHERE meta_key = 'wpshadow_leaderboard_optin'
-				AND meta_value = '1'
-				LIMIT %d",
-				$limit
+		$results = get_users(
+			array(
+				'meta_key'   => 'wpshadow_leaderboard_optin',
+				'meta_value' => '1',
+				'fields'     => 'ID',
+				'number'     => $limit,
 			)
 		);
 
 		$leaderboard = array();
 
-		foreach ( $results as $row ) {
-			$user_id = (int) $row->user_id;
+		foreach ( $results as $user_id ) {
+			$user_id = (int) $user_id;
 			$points = 0;
 
 			if ( 'all_time' === $period ) {

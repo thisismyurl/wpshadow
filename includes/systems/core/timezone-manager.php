@@ -79,12 +79,11 @@ class Timezone_Manager {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-timezone-detection',
 			'wpshadowTimezone',
+			'wpshadow_timezone_nonce',
 			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wpshadow_timezone_nonce' ),
 				'current' => self::get_admin_timezone(),
 			)
 		);

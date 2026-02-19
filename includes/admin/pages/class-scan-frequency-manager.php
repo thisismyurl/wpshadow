@@ -269,6 +269,40 @@ class Scan_Frequency_Manager {
 	 * @return void
 	 */
 	public static function render_scan_ui() {
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_style(
+			'wpshadow-scan-frequency-manager',
+			WPSHADOW_URL . 'assets/css/scan-frequency-manager.css',
+			array(),
+			$version
+		);
+
+		wp_enqueue_script(
+			'wpshadow-scan-frequency-manager',
+			WPSHADOW_URL . 'assets/js/scan-frequency-manager.js',
+			array( 'jquery' ),
+			$version,
+			true
+		);
+
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+			'wpshadow-scan-frequency-manager',
+			'wpsScanFrequencyManager',
+			'wpshadow_scan_frequency_nonce',
+			array(
+				'runNowNonce'         => wp_create_nonce( 'wpshadow_scan_frequency_nonce' ),
+				'savingText'          => __( 'Saving...', 'wpshadow' ),
+				'savedText'           => __( 'Saved', 'wpshadow' ),
+				'errorText'           => __( 'Error', 'wpshadow' ),
+				'saveButtonText'      => __( 'Save Scan Settings', 'wpshadow' ),
+				'scanningText'        => __( 'Scanning...', 'wpshadow' ),
+				'startScanText'       => __( 'Start Scan', 'wpshadow' ),
+				'scanCompleteText'    => __( 'Scan complete!', 'wpshadow' ),
+				'scanErrorText'       => __( 'Error running scan', 'wpshadow' ),
+			)
+		);
+
 		$config      = self::get_scan_config();
 		$frequencies = self::get_available_frequencies();
 		$next_scan   = self::get_next_scan_time();
@@ -297,10 +331,8 @@ class Scan_Frequency_Manager {
 						<?php foreach ( $frequencies as $freq_key => $freq_data ) : ?>
 							<?php
 							$is_selected  = $config['frequency'] === $freq_key;
-							$border_color = $is_selected ? '#0073aa' : '#e0e0e0';
-							$bg_color     = $is_selected ? '#f0f6fc' : '#fff';
 							?>
-							<div class="wps-scan-frequency-option" style="border: 2px solid <?php echo esc_attr( $border_color ); ?>; background: <?php echo esc_attr( $bg_color ); ?>;">
+							<div class="wps-scan-frequency-option <?php echo $is_selected ? 'wps-scan-frequency-option-selected' : 'wps-scan-frequency-option-default'; ?>">
 								<label class="wps-flex-gap-12-items-flex-start">
 									<input type="radio" name="frequency" value="<?php echo esc_attr( $freq_key ); ?>" <?php checked( $config['frequency'], $freq_key ); ?> class="wps-scan-input-radio" />
 									<div class="wps-scan-flex-expand">
@@ -315,7 +347,7 @@ class Scan_Frequency_Manager {
 					</fieldset>
 					
 					<!-- Scan Time -->
-					<div class="wps-p-15-rounded-4" id="scan-time-container" style="display: <?php echo $config['frequency'] === 'manual' ? 'none' : 'block'; ?>;">
+					<div class="wps-p-15-rounded-4 <?php echo $config['frequency'] === 'manual' ? 'wps-scan-time-hidden' : ''; ?>" id="scan-time-container">
 						<label class="wps-block">
 							<?php esc_html_e( 'Preferred Scan Time:', 'wpshadow' ); ?>
 						</label>
@@ -421,90 +453,18 @@ class Scan_Frequency_Manager {
 				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-media-play" class="wps-scan-success-icon"></span>
 					<div class="wps-scan-flex-expand">
-						<strong style="color: #2e7d32;"><?php esc_html_e( 'Run Scan Now', 'wpshadow' ); ?></strong>
+						<strong class="wps-scan-run-now-title"><?php esc_html_e( 'Run Scan Now', 'wpshadow' ); ?></strong>
 						<p class="wps-m-4">
 							<?php esc_html_e( 'Start a diagnostic scan immediately regardless of schedule.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					<button type="button" id="wpshadow-scan-now-btn" class="button" style="flex-shrink: 0;">
+					<button type="button" id="wpshadow-scan-now-btn" class="button wps-scan-now-btn">
 						<?php esc_html_e( 'Start Scan', 'wpshadow' ); ?>
 					</button>
 				</div>
-				<div id="wpshadow-scan-result" style="margin-top: 12px;"></div>
+				<div id="wpshadow-scan-result" class="wps-scan-result"></div>
 			</div>
 		</div>
-
-		<script>
-		jQuery(document).ready(function($) {
-			// Show/hide scan time based on frequency
-			$('input[name="frequency"]').on('change', function() {
-				var frequency = $(this).val();
-				$('#scan-time-container').toggle( frequency !== 'manual' );
-			});
-			
-			// Save scan settings
-			$('.wpshadow-scan-frequency-form').on('submit', function(e) {
-				e.preventDefault();
-				var $form = $(this);
-				var $btn = $form.find('button[type="submit"]');
-				var $status = $('#wpshadow-scan-status');
-				
-				var data = {
-					action: 'wpshadow_update_scan_frequency',
-					nonce: $form.find('input[name="_wpnonce"]').val(),
-					frequency: $form.find('input[name="frequency"]:checked').val(),
-					scan_time: $form.find('input[name="scan_time"]').val(),
-					run_diagnostics: $form.find('input[name="run_diagnostics"]').prop('checked'),
-					run_treatments: $form.find('input[name="run_treatments"]').prop('checked'),
-					email_results: $form.find('input[name="email_results"]').prop('checked'),
-					scan_on_plugin_update: $form.find('input[name="scan_on_plugin_update"]').prop('checked'),
-					scan_on_theme_update: $form.find('input[name="scan_on_theme_update"]').prop('checked'),
-				};
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
-				$status.html('');
-				
-				$.post(ajaxurl, data, function(response) {
-					if (response.success) {
-						$status.html('<span style="color: #2e7d32;">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
-						if (response.data.next_scan_time) {
-							$('#next-scan-time').text(response.data.next_scan_time);
-						}
-					} else {
-						$status.html('<span style="color: #c62828;">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
-					}
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Scan Settings', 'wpshadow' ) ); ?>');
-				});
-			});
-			
-			// Run scan now
-			$('#wpshadow-scan-now-btn').on('click', function() {
-				var $btn = $(this);
-				var $result = $('#wpshadow-scan-result');
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Scanning...', 'wpshadow' ) ); ?>');
-				$result.html('');
-				
-				$.post(ajaxurl, {
-					action: 'wpshadow_run_scan_now',
-					nonce: '<?php echo wp_create_nonce( 'wpshadow_scan_frequency_nonce' ); ?>'
-				}, function(response) {
-					if (response.success && response.data.results) {
-						var results = response.data.results;
-						var html = '<div class="wps-p-12-rounded-4">' +
-							'<strong>✓ <?php echo esc_js( __( 'Scan complete!', 'wpshadow' ) ); ?></strong><br/>' +
-							'Diagnostics run: ' + results.diagnostics_run + '<br/>' +
-							'Findings: ' + results.findings +
-							'</div>';
-						$result.html(html);
-					} else {
-						$result.html('<div class="wps-p-12-rounded-4">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error running scan', 'wpshadow' ) ); ?>') + '</div>');
-					}
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Start Scan', 'wpshadow' ) ); ?>');
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 }

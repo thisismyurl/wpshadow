@@ -63,23 +63,20 @@ class Diagnostic_Web_Performance_Monitoring_Not_Configured extends Diagnostic_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('performance_monitoring_service' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Web performance monitoring not configured. Set up monitoring with DataDog,
-						'severity'   =>   'medium',
-						'threat_level'   =>   35,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/web-performance-monitoring-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		$monitoring_service = (string) get_option( 'performance_monitoring_service', '' );
+
+		if ( '' === $monitoring_service ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Web performance monitoring is not configured yet. Adding a monitoring service helps you spot slow pages and fix speed issues before visitors notice.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/web-performance-monitoring-not-configured',
+			);
+		}
+
+		return null;
 	}
 }

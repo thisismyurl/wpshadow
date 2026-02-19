@@ -279,13 +279,13 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 			WPSHADOW_VERSION
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-content-review-report',
 			'wpShadowContentReview',
-			array(
-				'nonce'     => wp_create_nonce( 'wpshadow_content_review' ),
-				'ajax_url'  => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_content_review',
+			array(),
+			'nonce',
+			'ajax_url'
 		);
 	}
 }

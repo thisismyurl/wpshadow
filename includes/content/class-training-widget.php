@@ -62,11 +62,30 @@ class Training_Widget extends Hook_Subscriber_Base {
 	 */
 	public static function enqueue_assets() {
 		if ( wp_style_is( 'wpshadow-admin-pages', 'enqueued' ) || wp_style_is( 'wpshadow-admin-pages', 'registered' ) ) {
-			wp_add_inline_style( 'wpshadow-admin-pages', self::get_widget_styles() );
+			wp_enqueue_style(
+				'wpshadow-training-widget',
+				WPSHADOW_URL . 'assets/css/training-widget.css',
+				array( 'wpshadow-admin-pages' ),
+				WPSHADOW_VERSION
+			);
 		}
 
 		if ( wp_script_is( 'wpshadow-admin-pages', 'enqueued' ) || wp_script_is( 'wpshadow-admin-pages', 'registered' ) ) {
-			wp_add_inline_script( 'wpshadow-admin-pages', self::get_widget_scripts() );
+			wp_enqueue_script(
+				'wpshadow-training-widget',
+				WPSHADOW_URL . 'assets/js/training-widget.js',
+				array( 'jquery' ),
+				WPSHADOW_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wpshadow-training-widget',
+				'wpshadowTrainingWidget',
+				array(
+					'nonce' => wp_create_nonce( 'wpshadow_training_widget' ),
+				)
+			);
 		}
 	}
 
@@ -236,7 +255,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 		}
 		?>
 		<div class="wpshadow-training-widget wpshadow-training-widget--inline" data-context="<?php echo esc_attr( $args['context'] ); ?>">
-			<span class="dashicons dashicons-lightbulb" style="color: #2271b1;"></span>
+			<span class="dashicons dashicons-lightbulb wpshadow-training-widget__inline-icon"></span>
 			<span>
 				<strong><?php esc_html_e( 'Learn more:', 'wpshadow' ); ?></strong>
 				<a href="<?php echo esc_url( $course['video_url'] ); ?>"
@@ -360,164 +379,6 @@ class Training_Widget extends Hook_Subscriber_Base {
 				'kb_url'      => UTM_Link_Manager::kb_link( 'plugin-performance', 'training-widget' ),
 			),
 		);
-	}
-
-	/**
-	 * Get widget styles
-	 *
-	 * @since  1.6004.0100
-	 * @return string CSS styles.
-	 */
-	private static function get_widget_styles(): string {
-		return '
-		.wpshadow-training-widget {
-			background: #fff;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-			margin: 20px 0;
-		}
-		.wpshadow-training-widget--card {
-			padding: 20px;
-		}
-		.wpshadow-training-widget__header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 15px;
-			padding-bottom: 15px;
-			border-bottom: 1px solid #ddd;
-		}
-		.wpshadow-training-widget__title {
-			margin: 0;
-			font-size: 16px;
-			font-weight: 600;
-			color: #1d2327;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-		}
-		.wpshadow-training-widget__title .dashicons {
-			color: #2271b1;
-		}
-		.wpshadow-training-widget__dismiss {
-			background: none;
-			border: none;
-			padding: 4px;
-			cursor: pointer;
-			color: #50575e;
-		}
-		.wpshadow-training-widget__dismiss:hover {
-			color: #d63638;
-		}
-		.wpshadow-training-widget__intro {
-			margin: 0 0 15px;
-			color: #50575e;
-		}
-		.wpshadow-training-courses {
-			display: flex;
-			flex-direction: column;
-			gap: 15px;
-		}
-		.wpshadow-training-course {
-			display: flex;
-			gap: 12px;
-			padding: 15px;
-			background: #f9f9f9;
-			border-radius: 4px;
-			border-left: 4px solid #2271b1;
-		}
-		.wpshadow-training-course__icon {
-			flex-shrink: 0;
-		}
-		.wpshadow-training-course__icon .dashicons {
-			font-size: 32px;
-			width: 32px;
-			height: 32px;
-			color: #2271b1;
-		}
-		.wpshadow-training-course__content {
-			flex: 1;
-		}
-		.wpshadow-training-course__title {
-			margin: 0 0 5px;
-			font-size: 14px;
-			font-weight: 600;
-			color: #1d2327;
-		}
-		.wpshadow-training-course__description {
-			margin: 0 0 8px;
-			font-size: 13px;
-			color: #50575e;
-		}
-		.wpshadow-training-course__meta {
-			display: flex;
-			gap: 12px;
-			align-items: center;
-			margin-bottom: 10px;
-			font-size: 12px;
-			color: #50575e;
-		}
-		.wpshadow-training-course__duration {
-			display: flex;
-			align-items: center;
-			gap: 4px;
-		}
-		.wpshadow-training-course__level {
-			padding: 2px 8px;
-			background: #fff;
-			border-radius: 3px;
-			font-size: 11px;
-		}
-		.wpshadow-training-course__actions {
-			display: flex;
-			gap: 8px;
-		}
-		.wpshadow-training-widget--inline {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			padding: 12px;
-			background: #f0f6fc;
-			border-left: 4px solid #2271b1;
-		}
-		';
-	}
-
-	/**
-	 * Get widget scripts
-	 *
-	 * @since  1.6004.0100
-	 * @return string JavaScript code.
-	 */
-	private static function get_widget_scripts(): string {
-		return "
-		jQuery(document).ready(function($) {
-			// Handle dismiss
-			$('.wpshadow-training-widget__dismiss').on('click', function() {
-				var widget = $(this).closest('.wpshadow-training-widget');
-				var context = widget.data('context');
-
-				widget.fadeOut(300);
-
-				$.post(ajaxurl, {
-					action: 'wpshadow_dismiss_training_widget',
-					context: context,
-					nonce: '" . wp_create_nonce( 'wpshadow_training_widget' ) . "'
-				});
-			});
-
-			// Track clicks
-			$('.wpshadow-training-click').on('click', function() {
-				var course = $(this).data('course');
-
-				$.post(ajaxurl, {
-					action: 'wpshadow_track_training_click',
-					course: course,
-					nonce: '" . wp_create_nonce( 'wpshadow_training_widget' ) . "'
-				});
-			});
-		});
-		";
 	}
 
 	/**

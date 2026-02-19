@@ -168,13 +168,10 @@ class CPT_Analytics_Dashboard {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-analytics',
 			'wpShadowAnalytics',
-			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_analytics' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_analytics'
 		);
 
 		wp_enqueue_style(
@@ -215,43 +212,48 @@ class CPT_Analytics_Dashboard {
 	 * @return array Analytics data.
 	 */
 	private static function get_analytics_data( $post_type, $period ) {
-		global $wpdb;
-
 		$post_types = array( 'testimonial', 'team_member', 'portfolio_item', 'wps_event', 'resource', 'case_study', 'service', 'location', 'documentation', 'wps_product' );
 
 		if ( 'all' !== $post_type ) {
 			$post_types = array( $post_type );
 		}
 
-		$placeholders = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
-
-		// Get top posts by views.
-		$top_posts = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT p.ID, p.post_title, p.post_type, pm.meta_value as views
-				FROM {$wpdb->posts} p
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type IN ($placeholders)
-				AND pm.meta_key = '_wpshadow_views'
-				AND p.post_status = 'publish'
-				ORDER BY CAST(pm.meta_value AS UNSIGNED) DESC
-				LIMIT 10",
-				$post_types
+		$top_posts_query = new \WP_Query(
+			array(
+				'post_type'      => $post_types,
+				'post_status'    => 'publish',
+				'posts_per_page' => 10,
+				'meta_key'       => '_wpshadow_views',
+				'orderby'        => 'meta_value_num',
+				'order'          => 'DESC',
+				'fields'         => 'ids',
 			)
 		);
 
-		// Get total views.
-		$total_views = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT SUM(CAST(pm.meta_value AS UNSIGNED))
-				FROM {$wpdb->posts} p
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type IN ($placeholders)
-				AND pm.meta_key = '_wpshadow_views'
-				AND p.post_status = 'publish'",
-				$post_types
+		$top_posts = array();
+		foreach ( $top_posts_query->posts as $top_post_id ) {
+			$top_posts[] = (object) array(
+				'ID'         => (int) $top_post_id,
+				'post_title' => get_the_title( $top_post_id ),
+				'post_type'  => get_post_type( $top_post_id ),
+				'views'      => (string) (int) get_post_meta( $top_post_id, '_wpshadow_views', true ),
+			);
+		}
+
+		$total_views_query = new \WP_Query(
+			array(
+				'post_type'      => $post_types,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
 			)
 		);
+
+		$total_views = 0;
+		foreach ( $total_views_query->posts as $post_id_item ) {
+			$total_views += (int) get_post_meta( $post_id_item, '_wpshadow_views', true );
+		}
 
 		return array(
 			'top_posts'   => $top_posts,

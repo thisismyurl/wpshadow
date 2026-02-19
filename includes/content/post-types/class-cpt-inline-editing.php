@@ -148,13 +148,10 @@ class CPT_Inline_Editing {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-inline-edit',
 			'wpShadowInlineEdit',
-			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_inline_edit' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_inline_edit'
 		);
 	}
 

@@ -16,19 +16,27 @@
  * Without lazy loading, browsers load every image on page load, even images users never scroll to see.
  * A single article with 20 images might load 15MB on page load, but only 2-3 images appear above the fold.
  * Those other 12-17 images waste 12-15MB of bandwidth. At 100,000 monthly visits, that's 1.2-1.5 petabytes
- * of wasted bandwidth per month. Mobile users on data plans literally pay for bandwidth they never see.\n *
+ * of wasted bandwidth per month. Mobile users on data plans literally pay for bandwidth they never see.
  * **Real-World Scenario:**
  * Gallery website with 500+ high-res photo albums. Each album had 50 images averaging 500KB each (25MB per album).
- * Users rarely scrolled beyond first 10 images. Without lazy loading, every album load consumed full 25MB.\n * After implementing WordPress native lazy loading (loading="lazy" on every <img>), initial page load dropped from
- * 45MB to 2.5MB. Page load time improved from 28 seconds to 3.2 seconds on 4G. Bounce rate decreased 52%.\n * Cost: 2 hours. Value: $45,000 in recovered site traffic and improved user retention.\n *
- * **Business Impact:**
- * - Wasted bandwidth ($500-$5,000/month for media-heavy sites)\n * - Slow page load kills conversions (3 second → 8 second = 40-60% conversion loss)\n * - Mobile users abandon site (99% bounce on slow mobile loads)\n * - SEO penalty (Google penalizes slow sites in rankings)\n * - Server overload from unnecessary image requests\n *
- * **Philosophy Alignment:**
- * - #8 Inspire Confidence: Prevents bandwidth waste and server overload\n * - #9 Show Value: Delivers 80%+ bandwidth savings for image-heavy sites\n * - #10 Talk-About-Worthy: "Our site loads instantly now" is huge for galleries\n *
- * **Related Checks:**\n * - Image Optimization Plugin Not Active (compression + lazy loading combo)\n * - Responsive Images Not Configured (srcset + lazy loading combo)\n * - Mobile Bandwidth Optimization (overall mobile efficiency)\n * - First Contentful Paint Not Optimized (FCP improvement via lazy loading)\n *
- * **Learn More:**
- * - KB Article: https://wpshadow.com/kb/lazy-loading-implementation\n * - Video: https://wpshadow.com/training/lazy-loading-guide (4 min)\n * - Advanced: https://wpshadow.com/training/intersection-observer-api (9 min)\n *
- * @since   1.6033.2074\n * @package WPShadow\\Diagnostics\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Lazy Loading Implementation Diagnostic Class\n *\n * Verifies offscreen images use lazy loading to defer non-critical image loading.
+ * @since   1.6033.2074
+ * @package WPShadow\Diagnostics
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Lazy Loading Implementation Diagnostic Class
+ *
+ * Verifies offscreen images use lazy loading to defer non-critical image loading.
  *
  * @since 1.6033.2074
  */

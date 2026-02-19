@@ -103,11 +103,11 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-account',
 			'wpShadowAccount',
+			'wpshadow_account_status',
 			array(
-				'ajax_url'       => admin_url( 'admin-ajax.php' ),
 				'is_registered'  => WPShadow_Account_API::is_registered(),
 				'nonces'         => array(
 					'register'   => wp_create_nonce( 'wpshadow_account_register' ),
@@ -123,7 +123,9 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 					'syncing'        => __( 'Syncing services...', 'wpshadow' ),
 					'confirm_disconnect' => __( 'Are you sure you want to disconnect your account? Your local data will be safe.', 'wpshadow' ),
 				),
-			)
+			),
+			'nonce',
+			'ajax_url'
 		);
 	}
 

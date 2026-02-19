@@ -91,12 +91,11 @@ class CPT_Block_Presets {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-block-presets',
 			'wpShadowPresets',
+			'wpshadow_block_presets',
 			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_block_presets' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'presets' => self::get_user_presets(),
 			)
 		);

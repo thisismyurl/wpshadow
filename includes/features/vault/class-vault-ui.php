@@ -373,11 +373,11 @@ class Vault_UI extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-vault-ui',
 			'wpShadowVault',
+			'wpshadow_vault_create_backup',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonces'   => array(
 					'create_backup'  => wp_create_nonce( 'wpshadow_vault_create_backup' ),
 					'delete_backup'  => wp_create_nonce( 'wpshadow_vault_delete_backup' ),
@@ -392,7 +392,9 @@ class Vault_UI extends Hook_Subscriber_Base {
 					'confirm_delete'  => __( 'Are you sure you want to delete this backup? This cannot be undone.', 'wpshadow' ),
 					'confirm_restore' => __( 'Are you sure you want to restore this backup? Your current site will be backed up first.', 'wpshadow' ),
 				),
-			)
+			),
+			'nonce',
+			'ajax_url'
 		);
 	}
 

@@ -31,7 +31,11 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 	public static function handle() {
 		self::verify_request( 'wpshadow_site_cloner', 'manage_options' );
 
-		$clone_name = self::get_post_param( 'clone_name', 'text', '', true );
+		$clone_name = sanitize_key( self::get_post_param( 'clone_name', 'text', '', true ) );
+		if ( '' === $clone_name ) {
+			self::send_error( __( 'Invalid clone name', 'wpshadow' ) );
+			return;
+		}
 
 		// Get existing clones
 		$existing_clones = get_option( 'wpshadow_site_clones', array() );

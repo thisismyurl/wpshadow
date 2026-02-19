@@ -224,7 +224,8 @@ foreach (\$private_posts as \$post) {
 					'metadata_exposure' => __( 'Check if private content metadata is exposed in APIs', 'wpshadow' ),
 					'search_inclusion' => __( 'Ensure private posts excluded from search results for non-admin', 'wpshadow' ),
 					'recommendation' => __( 'Remove read_private_posts capability from low-privilege roles', 'wpshadow' ),
-				);
+				),
+			);
 			}
 		}
 

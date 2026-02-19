@@ -29,6 +29,35 @@ class Report_Builder {
 	 * @return void
 	 */
 	public static function render(): void {
+		wp_enqueue_style(
+			'wpshadow-report-builder',
+			WPSHADOW_URL . 'assets/css/report-builder.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-report-builder',
+			WPSHADOW_URL . 'assets/js/report-builder.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+			'wpshadow-report-builder',
+			'wpshadowReportBuilder',
+			'wpshadow_report_builder',
+			array(
+				'strings'  => array(
+					'loading' => __( 'Loading...', 'wpshadow' ),
+					'error'   => __( 'Error generating report', 'wpshadow' ),
+				),
+			),
+			'nonce',
+			'ajax_url'
+		);
+
 		?>
 		<div class="wps-page-container">
 			<?php
@@ -139,14 +168,14 @@ class Report_Builder {
 							</div>
 
 							<!-- Email Option -->
-							<div class="wps-form-group wps-mt-4" style="border-top: 1px solid var(--wps-gray-200); padding-top: var(--wps-space-4);">
+							<div class="wps-form-group wps-mt-4 wps-report-builder-email-group">
 								<label class="wps-flex wps-items-center wps-gap-2 wps-cursor-pointer">
 									<input type="checkbox" name="email_report" id="email_report" />
 									<?php esc_html_e( 'Email this report', 'wpshadow' ); ?>
 								</label>
 								<div id="email-options" class="wps-mt-3" class="wps-none">
 									<input type="email" name="email_to" class="wps-input" placeholder="<?php esc_attr_e( 'Email address', 'wpshadow' ); ?>" />
-									<label class="wps-flex wps-items-center wps-gap-2 wps-mt-2" style="cursor: pointer;">
+									<label class="wps-flex wps-items-center wps-gap-2 wps-mt-2 wps-report-builder-cursor-pointer">
 										<input type="checkbox" name="schedule_email" />
 										<?php esc_html_e( 'Schedule monthly', 'wpshadow' ); ?>
 									</label>
@@ -169,91 +198,6 @@ class Report_Builder {
 			</div>
 		</div>
 		
-		<?php self::render_scripts(); ?>
-		<?php
-	}
-
-	/**
-	 * Render JavaScript for form interactions
-	 *
-	 * @return void
-	 */
-	private static function render_scripts(): void {
-		?>
-		<script>
-		jQuery(document).ready(function($) {
-			// Quick preset handling
-			$('.preset-btn').on('click', function(e) {
-				e.preventDefault();
-				const preset = $(this).data('preset');
-				const today = new Date();
-				let startDate, endDate;
-				
-				endDate = new Date(today);
-				endDate.setHours(23, 59, 59, 999);
-				
-				switch(preset) {
-					case 'today':
-						startDate = new Date(today);
-						startDate.setHours(0, 0, 0, 0);
-						break;
-					case 'week':
-						startDate = new Date(today);
-						startDate.setDate(startDate.getDate() - 7);
-						break;
-					case 'month':
-						startDate = new Date(today);
-						startDate.setDate(startDate.getDate() - 30);
-						break;
-					case 'quarter':
-						startDate = new Date(today);
-						startDate.setDate(startDate.getDate() - 90);
-						break;
-				}
-				
-				$('#report_start_date').val(startDate.toISOString().split('T')[0]);
-				$('#report_end_date').val(endDate.toISOString().split('T')[0]);
-			});
-			
-			// Email checkbox toggle
-			$('#email_report').on('change', function() {
-				$('#email-options').toggle(this.checked);
-			});
-			
-			// Form submission
-			$('#wpshadow-report-builder').on('submit', function(e) {
-				e.preventDefault();
-				
-				const formData = {
-					date_from: $('#report_start_date').val(),
-					date_to: $('#report_end_date').val(),
-					category: $('#report_category').val(),
-					type: $('#report_type').val(),
-					format: $('#report_format').val(),
-					action: 'wpshadow_generate_report',
-					nonce: $('input[name="report_nonce"]').val()
-				};
-				
-				$('#report-content').html('<p class="wps-p-40">Loading...</p>');
-				
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: formData,
-					success: function(response) {
-						if (response.success) {
-							$('#report-content').html(response.data.html);
-						} else {
-							$('#report-content').html('<p style="color: red;">' + response.data.message + '</p>');
-						}
-					},
-					error: function() {
-						$('#report-content').html('<p style="color: red;">Error generating report</p>');
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 }

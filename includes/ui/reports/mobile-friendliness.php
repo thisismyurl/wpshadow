@@ -36,12 +36,11 @@ wp_enqueue_script(
 );
 
 // Localize script settings
-wp_localize_script(
+\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 	'wpshadow-mobile-friendliness',
 	'wpshadowMobileCheck',
+	'wpshadow_mobile_check',
 	array(
-		'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-		'nonce'      => wp_create_nonce( 'wpshadow_mobile_check' ),
 		'defaultUrl' => home_url(),
 		'i18nRun'    => __( 'Run Mobile Check', 'wpshadow' ),
 		'i18nRunning' => __( 'Checking...', 'wpshadow' ),

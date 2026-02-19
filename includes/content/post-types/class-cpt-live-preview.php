@@ -66,12 +66,11 @@ class CPT_Live_Preview {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-live-preview',
 			'wpShadowPreview',
+			'wpshadow_live_preview',
 			array(
-				'nonce'      => wp_create_nonce( 'wpshadow_live_preview' ),
-				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
 				'previewUrl' => get_preview_post_link(),
 			)
 		);

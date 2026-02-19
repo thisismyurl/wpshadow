@@ -38,6 +38,27 @@ class Defensive_Settings {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu_page' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+	}
+
+	/**
+	 * Enqueue defensive settings assets.
+	 *
+	 * @since 1.6035.1500
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_assets( string $hook ): void {
+		if ( 'settings_page_wpshadow-defensive' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wpshadow-defensive-settings',
+			WPSHADOW_URL . 'assets/css/defensive-settings.css',
+			array(),
+			WPSHADOW_VERSION
+		);
 	}
 
 	/**
@@ -121,7 +142,7 @@ class Defensive_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-recommendation" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #00a32a;">
+							<div class="wpshadow-recommendation">
 								<strong>💡 <?php esc_html_e( 'Recommended:', 'wpshadow' ); ?></strong><br>
 								<?php esc_html_e( '30 seconds (balances protection vs. server load)', 'wpshadow' ); ?>
 							</div>
@@ -154,7 +175,7 @@ class Defensive_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-example-box" style="margin-top: 10px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107;">
+							<div class="wpshadow-example-box">
 								<strong><?php esc_html_e( 'Example:', 'wpshadow' ); ?></strong><br>
 								<?php esc_html_e( 'Cloud scan fails due to network issue → WPShadow waits 1 second and tries again → Success! You never knew there was a problem.', 'wpshadow' ); ?>
 							</div>
@@ -187,7 +208,7 @@ class Defensive_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-analogy" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #2271b1;">
+							<div class="wpshadow-analogy">
 								<strong>📖 <?php esc_html_e( 'Analogy:', 'wpshadow' ); ?></strong><br>
 								<?php esc_html_e( 'Like reading yesterday\'s newspaper when today\'s delivery doesn\'t arrive. The news is slightly old, but you still learn something useful.', 'wpshadow' ); ?>
 							</div>
@@ -220,9 +241,9 @@ class Defensive_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-feature-list" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #00a32a;">
+							<div class="wpshadow-feature-list">
 								<strong><?php esc_html_e( 'What Works Offline:', 'wpshadow' ); ?></strong>
-								<ul style="margin: 10px 0 0 20px;">
+								<ul class="wpshadow-feature-list-items">
 									<li>✅ <?php esc_html_e( 'Local diagnostics (security, performance)', 'wpshadow' ); ?></li>
 									<li>✅ <?php esc_html_e( 'Treatment applications (fixes)', 'wpshadow' ); ?></li>
 									<li>✅ <?php esc_html_e( 'Report generation', 'wpshadow' ); ?></li>
@@ -258,21 +279,21 @@ class Defensive_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-comparison" style="margin-top: 10px;">
-								<table style="width: 100%; border-collapse: collapse;">
+							<div class="wpshadow-comparison">
+								<table class="wpshadow-comparison-table">
 									<tr>
-										<th style="padding: 10px; background: #dc3232; color: white; text-align: left;">
+										<th class="wpshadow-comparison-head wpshadow-comparison-head-error">
 											❌ <?php esc_html_e( 'Technical Error', 'wpshadow' ); ?>
 										</th>
-										<th style="padding: 10px; background: #00a32a; color: white; text-align: left;">
+										<th class="wpshadow-comparison-head wpshadow-comparison-head-friendly">
 											✅ <?php esc_html_e( 'User-Friendly Error', 'wpshadow' ); ?>
 										</th>
 									</tr>
 									<tr>
-										<td style="padding: 10px; background: #f0f0f1; font-family: monospace; font-size: 12px;">
+										<td class="wpshadow-comparison-cell wpshadow-comparison-cell-code">
 											<code>Fatal error: Uncaught PDOException in /var/www/html/wp-content/plugins/wpshadow/includes/core/class-database.php:47</code>
 										</td>
-										<td style="padding: 10px; background: #f0f0f1;">
+										<td class="wpshadow-comparison-cell">
 											<?php esc_html_e( 'We couldn\'t connect to the database. This usually means your hosting server is temporarily busy. Try again in a minute?', 'wpshadow' ); ?>
 										</td>
 									</tr>
@@ -308,7 +329,7 @@ class Defensive_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-recommendation" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #00a32a;">
+							<div class="wpshadow-recommendation">
 								<strong>💡 <?php esc_html_e( 'Recommended:', 'wpshadow' ); ?></strong><br>
 								<?php esc_html_e( '30 seconds (most operations complete within 10s)', 'wpshadow' ); ?>
 							</div>
@@ -349,29 +370,6 @@ class Defensive_Settings {
 			</div>
 		</div>
 
-		<style>
-			.wpshadow-settings-intro {
-				background: #fff;
-				border-left: 4px solid #2271b1;
-				padding: 20px;
-				margin: 20px 0;
-			}
-			.wpshadow-settings-intro h2 {
-				margin-top: 0;
-			}
-			.wpshadow-settings-footer {
-				margin-top: 40px;
-				padding-top: 20px;
-				border-top: 1px solid #c3c4c7;
-			}
-			.wpshadow-comparison table {
-				margin-top: 10px;
-				border: 1px solid #c3c4c7;
-			}
-			.wpshadow-comparison td {
-				vertical-align: top;
-			}
-		</style>
 		<?php
 	}
 }

@@ -307,6 +307,28 @@ class Report_Scheduler {
 	 * @return void
 	 */
 	public static function render_scheduler_ui() {
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_script(
+			'wpshadow-report-scheduler',
+			WPSHADOW_URL . 'assets/js/report-scheduler.js',
+			array( 'jquery' ),
+			$version,
+			true
+		);
+
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+			'wpshadow-report-scheduler',
+			'wpsReportScheduler',
+			'wpshadow_schedule_report_nonce',
+			array(
+				'savingText'   => __( 'Saving...', 'wpshadow' ),
+				'savedText'    => __( 'Saved', 'wpshadow' ),
+				'errorText'    => __( 'Error', 'wpshadow' ),
+				'saveButton'   => __( 'Save Schedule', 'wpshadow' ),
+			)
+		);
+
 		$schedules   = self::get_all_schedules();
 		$frequencies = self::get_frequencies();
 		?>
@@ -444,42 +466,6 @@ class Report_Scheduler {
 			</div>
 		</div>
 
-		<script>
-		jQuery(document).ready(function($) {
-			$('.wpshadow-schedule-form').on('submit', function(e) {
-				e.preventDefault();
-				var $form = $(this);
-				var $btn = $form.find('button[type="submit"]');
-				var $status = $form.find('.schedule-status');
-				var reportType = $form.data('report-type');
-				
-				// Parse recipients
-				var recipientsText = $form.find('input[name="recipients"]').val();
-				var recipients = recipientsText.split(',').map(function(s) { return $.trim(s); }).filter(function(s) { return s.length > 0; });
-				
-				var data = {
-					action: 'wpshadow_update_report_schedule',
-					nonce: $form.find('input[name="_wpnonce"]').val(),
-					report_type: reportType,
-					enabled: $form.find('input[name="enabled"]').prop('checked'),
-					frequency: $form.find('select[name="frequency"]').val(),
-					recipients: recipients
-				};
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
-				$status.html('');
-				
-				$.post(ajaxurl, data, function(response) {
-					if (response.success) {
-						$status.html('<span class="wps-schedule-success">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
-					} else {
-						$status.html('<span class="wps-schedule-error">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
-					}
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Schedule', 'wpshadow' ) ); ?>');
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 }

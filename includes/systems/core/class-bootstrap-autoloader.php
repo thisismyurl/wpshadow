@@ -62,6 +62,7 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-cache-manager.php',
 		'includes/systems/core/class-kpi-tracker.php',
 		'includes/systems/core/class-settings-registry.php',
+		'includes/systems/core/class-admin-asset-registry.php',
 		'includes/systems/core/class-database-migrator.php',
 		'includes/systems/core/class-form-param-helper.php',
 		'includes/systems/core/class-options-manager.php',

@@ -236,7 +236,8 @@ foreach (\$admins as \$admin) {
 					'enable_2fa' => __( 'Require two-factor authentication for all admins', 'wpshadow' ),
 					'monitoring' => __( 'Monitor for new admin account creation in activity logs', 'wpshadow' ),
 					'recommendation' => __( 'Investigate suspicious account creation patterns', 'wpshadow' ),
-				);
+				),
+			);
 			}
 		}
 
@@ -384,13 +385,14 @@ add_filter('author_link', function() {
 });",
 					'username_recommendations' => array(
 						'Avoid using real names',
-						'Use generic 'admin' sparingly',
-						'Consider aliases like 'editor', 'publisher'',
+						'Use generic "admin" sparingly',
+						'Consider aliases like "editor", "publisher"',
 						'Never use predictable names',
 					),
 					'plugin_solution' => __( 'Consider "Hide My WP" or similar security plugins', 'wpshadow' ),
 					'recommendation' => __( 'Prevent author enumeration through archives and REST API', 'wpshadow' ),
-				);
+				),
+			);
 			}
 		}
 

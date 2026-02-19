@@ -773,13 +773,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-academy',
 			'wpShadowAcademy',
-			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_academy' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_academy'
 		);
 	}
 

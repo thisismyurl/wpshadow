@@ -217,6 +217,32 @@ class Data_Retention_Manager {
 	 * @return void
 	 */
 	public static function render_retention_ui() {
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_script(
+			'wpshadow-data-retention-manager',
+			WPSHADOW_URL . 'assets/js/data-retention-manager.js',
+			array( 'jquery' ),
+			$version,
+			true
+		);
+
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+			'wpshadow-data-retention-manager',
+			'wpsDataRetentionManager',
+			'wpshadow_retention_settings_nonce',
+			array(
+				'cleanupNonce'        => wp_create_nonce( 'wpshadow_retention_settings_nonce' ),
+				'savingText'          => __( 'Saving...', 'wpshadow' ),
+				'savedText'           => __( 'Saved', 'wpshadow' ),
+				'errorText'           => __( 'Error', 'wpshadow' ),
+				'saveButtonText'      => __( 'Save Retention Settings', 'wpshadow' ),
+				'runningText'         => __( 'Running...', 'wpshadow' ),
+				'runNowText'          => __( 'Run Now', 'wpshadow' ),
+				'cleanupErrorText'    => __( 'Error running cleanup', 'wpshadow' ),
+			)
+		);
+
 		$settings = self::get_retention_settings();
 		?>
 		<div class="wps-retention-container">
@@ -384,67 +410,6 @@ class Data_Retention_Manager {
 			</div>
 		</div>
 
-		<script>
-		jQuery(document).ready(function($) {
-			// Save retention settings
-			$('.wpshadow-retention-form').on('submit', function(e) {
-				e.preventDefault();
-				var $form = $(this);
-				var $btn = $form.find('button[type="submit"]');
-				var $status = $('#wpshadow-retention-status');
-				
-				var data = {
-					action: 'wpshadow_update_retention_settings',
-					nonce: $form.find('input[name="_wpnonce"]').val(),
-					activity_log_days: $form.find('input[name="activity_log_days"]').val(),
-					finding_log_days: $form.find('input[name="finding_log_days"]').val(),
-					workflow_log_days: $form.find('input[name="workflow_log_days"]').val(),
-					auto_cleanup_enabled: $form.find('input[name="auto_cleanup_enabled"]').prop('checked'),
-					cleanup_time: $form.find('input[name="cleanup_time"]').val(),
-				};
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
-				$status.html('');
-				
-				$.post(ajaxurl, data, function(response) {
-					if (response.success) {
-						$status.html('<span class="wps-status-success">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
-					} else {
-						$status.html('<span class="wps-status-error">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
-					}
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Retention Settings', 'wpshadow' ) ); ?>');
-				});
-			});
-			
-			// Run cleanup now
-			$('#wpshadow-cleanup-now-btn').on('click', function() {
-				var $btn = $(this);
-				var $result = $('#wpshadow-cleanup-result');
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running...', 'wpshadow' ) ); ?>');
-				$result.html('');
-				
-				$.post(ajaxurl, {
-					action: 'wpshadow_run_data_cleanup_now',
-					nonce: '<?php echo wp_create_nonce( 'wpshadow_retention_settings_nonce' ); ?>'
-				}, function(response) {
-					if (response.success && response.data.results) {
-						var results = response.data.results;
-						var html = '<div class="wps-p-12-rounded-4">' +
-							'<strong>✓ ' + response.data.message + '</strong><br/>' +
-							'Activity logs: ' + results.activity_logs + ' removed<br/>' +
-							'Finding logs: ' + results.finding_logs + ' removed<br/>' +
-							'Workflow logs: ' + results.workflow_logs + ' removed' +
-							'</div>';
-						$result.html(html);
-					} else {
-						$result.html('<div class="wps-p-12-rounded-4">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error running cleanup', 'wpshadow' ) ); ?>') + '</div>');
-					}
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run Now', 'wpshadow' ) ); ?>');
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 }

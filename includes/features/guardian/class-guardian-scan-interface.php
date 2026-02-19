@@ -92,12 +92,11 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-guardian-scan',
 			'wpShadowGuardian',
+			'wpshadow_guardian',
 			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_guardian' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'strings' => array(
 					'scanning'       => __( 'Scanning...', 'wpshadow' ),
 					'complete'       => __( 'Scan Complete!', 'wpshadow' ),

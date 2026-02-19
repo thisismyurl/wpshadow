@@ -57,8 +57,6 @@ class Option_Optimizer {
 			return;
 		}
 
-		global $wpdb;
-
 		// Batch load WPShadow options (1 query instead of multiple)
 		$option_names = array(
 			'wpshadow_workflows',
@@ -144,8 +142,6 @@ class Option_Optimizer {
 	 * @return array Associative array of option_name => value
 	 */
 	public static function get_options( array $option_names ): array {
-		global $wpdb;
-
 		$results  = array();
 		$to_fetch = array();
 

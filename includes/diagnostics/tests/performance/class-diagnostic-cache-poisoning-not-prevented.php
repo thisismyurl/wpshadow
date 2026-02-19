@@ -63,24 +63,20 @@ class Diagnostic_Cache_Poisoning_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_cache_poisoning' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Cache poisoning not prevented. Validate cache keys and use cache key namespacing to prevent collision attacks.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/cache-poisoning-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		$has_prevention_hook = has_filter( 'init', 'prevent_cache_poisoning' );
+
+		if ( false === $has_prevention_hook ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Cache poisoning safeguards do not appear to be configured yet. Adding cache key validation and cache key namespacing helps protect cached responses from being tampered with.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/cache-poisoning-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

@@ -38,6 +38,27 @@ class KPI_Settings {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu_page' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+	}
+
+	/**
+	 * Enqueue KPI settings assets.
+	 *
+	 * @since 1.6035.1500
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_assets( string $hook ): void {
+		if ( 'settings_page_wpshadow-kpi' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wpshadow-kpi-settings',
+			WPSHADOW_URL . 'assets/css/kpi-settings.css',
+			array(),
+			WPSHADOW_VERSION
+		);
 	}
 
 	/**
@@ -117,7 +138,7 @@ class KPI_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-privacy-box" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #00a32a;">
+							<div class="wpshadow-privacy-box">
 								<strong>🔒 <?php esc_html_e( 'Privacy Promise:', 'wpshadow' ); ?></strong><br>
 								<?php esc_html_e( 'We ONLY track feature names (like "Security Diagnostic Run"), never your actual site data. No personal information, no content, no visitors tracked.', 'wpshadow' ); ?>
 							</div>
@@ -150,9 +171,9 @@ class KPI_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-example-box" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #2271b1;">
+							<div class="wpshadow-example-box">
 								<strong><?php esc_html_e( 'Example Metrics:', 'wpshadow' ); ?></strong><br>
-								<ul style="margin: 10px 0 0 20px;">
+								<ul class="wpshadow-example-list">
 									<li>⏱️ <?php esc_html_e( 'Time saved: 12.5 hours this month', 'wpshadow' ); ?></li>
 									<li>🚀 <?php esc_html_e( 'Performance: 28% faster page loads', 'wpshadow' ); ?></li>
 									<li>🛡️ <?php esc_html_e( 'Security: 8 vulnerabilities prevented', 'wpshadow' ); ?></li>
@@ -188,14 +209,14 @@ class KPI_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-value-formula" style="margin-top: 10px; padding: 15px; background: #fff; border: 1px solid #c3c4c7; border-radius: 4px;">
+							<div class="wpshadow-value-formula">
 								<strong><?php esc_html_e( 'How We Calculate Value:', 'wpshadow' ); ?></strong>
-								<ul style="margin: 10px 0 0 20px; list-style: disc;">
+								<ul class="wpshadow-value-formula-list">
 									<li><?php esc_html_e( 'Time saved × your hourly rate (you set this in settings)', 'wpshadow' ); ?></li>
 									<li><?php esc_html_e( 'Issues prevented × industry average cost of that issue', 'wpshadow' ); ?></li>
 									<li><?php esc_html_e( 'Performance gains × estimated revenue impact (based on research)', 'wpshadow' ); ?></li>
 								</ul>
-								<p style="margin-top: 10px; font-style: italic; color: #646970;">
+								<p class="wpshadow-value-formula-tip">
 									<?php esc_html_e( '💡 Tip: These are conservative estimates based on industry research. Your actual value may be higher!', 'wpshadow' ); ?>
 								</p>
 							</div>
@@ -228,30 +249,6 @@ class KPI_Settings {
 			</div>
 		</div>
 
-		<style>
-			.wpshadow-settings-intro {
-				background: #fff;
-				border-left: 4px solid #2271b1;
-				padding: 20px;
-				margin: 20px 0;
-			}
-			.wpshadow-settings-intro h2 {
-				margin-top: 0;
-			}
-			.wpshadow-settings-footer {
-				margin-top: 40px;
-				padding-top: 20px;
-				border-top: 1px solid #c3c4c7;
-			}
-			.wpshadow-privacy-box,
-			.wpshadow-example-box {
-				font-size: 14px;
-			}
-			.wpshadow-value-formula {
-				font-size: 14px;
-				line-height: 1.6;
-			}
-		</style>
 		<?php
 	}
 }

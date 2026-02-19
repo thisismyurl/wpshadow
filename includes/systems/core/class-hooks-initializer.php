@@ -373,13 +373,13 @@ class Hooks_Initializer {
 		);
 
 		// Localize AJAX helper with nonce
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-ajax-helper',
 			'wpShadowData',
-			array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wpshadow_ajax' ),
-			)
+			'wpshadow_ajax',
+			array(),
+			'nonce',
+			'ajaxurl'
 		);
 
 		// Enqueue modern form controls
@@ -437,20 +437,7 @@ class Hooks_Initializer {
 		);
 
 		// Modal system (needed for dashboard Guardian actions)
-		wp_enqueue_style(
-			'wpshadow-modal',
-			WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
-			array(),
-			WPSHADOW_VERSION
-		);
-
-		wp_enqueue_script(
-			'wpshadow-modal',
-			WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
+		\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 
 		wp_enqueue_style(
 			'wpshadow-guardian-dashboard-modern',
@@ -494,24 +481,7 @@ class Hooks_Initializer {
 			)
 		);
 
-		// Workflow list scripts
-		if ( is_string( $hook ) && ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-automations' ) !== false ) ) {
-			wp_enqueue_script(
-				'wpshadow-workflow-list',
-				WPSHADOW_URL . 'assets/js/workflow-list.js',
-				array( 'jquery' ),
-				WPSHADOW_VERSION,
-				true
-			);
-
-			wp_localize_script(
-				'wpshadow-workflow-list',
-				'wpshadowWorkflow',
-				array(
-					'nonce' => wp_create_nonce( 'wpshadow_workflow' ),
-				)
-			);
-		}
+		// Workflow assets are enqueued via dashboard asset manager to avoid duplicate registrations.
 
 		// Guardian assets
 		if ( is_string( $hook ) && strpos( $hook, 'wpshadow-guardian' ) !== false ) {
@@ -530,13 +500,13 @@ class Hooks_Initializer {
 				true
 			);
 
-			wp_localize_script(
+			\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 				'wpshadow-guardian-dashboard-settings',
 				'wpshadow',
-				array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-					'nonce'    => wp_create_nonce( 'wpshadow_guardian_nonce' ),
-				)
+				'wpshadow_guardian_nonce',
+				array(),
+				'nonce',
+				'ajax_url'
 			);
 		}
 

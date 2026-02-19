@@ -74,6 +74,35 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You don\'t have permission to access this page.', 'wpshadow' ) );
 		}
+
+		wp_enqueue_style(
+			'wpshadow-security-api-settings-page',
+			WPSHADOW_URL . 'assets/css/security-api-settings-page.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-security-api-settings-page',
+			WPSHADOW_URL . 'assets/js/security-api-settings-page.js',
+			array(),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-security-api-settings-page',
+			'wpshadowSecurityApiSettings',
+			array(
+				'testNonce' => wp_create_nonce( 'wpshadow_test_api_connection' ),
+				'saveNonce' => wp_create_nonce( 'wpshadow_save_api_settings' ),
+				'strings'   => array(
+					'testing'             => __( 'Testing...', 'wpshadow' ),
+					'connected_success'   => __( 'Connected successfully', 'wpshadow' ),
+					'connection_failed'   => __( 'Connection failed', 'wpshadow' ),
+				),
+			)
+		);
 		?>
 		<div class="wrap wpshadow-security-api-page">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
@@ -621,219 +650,6 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 			</form>
 		</div>
 
-		<style>
-			.wpshadow-security-api-page {
-				max-width: 1000px;
-			}
-
-			.wpshadow-api-intro {
-				background: #f0f8ff;
-				border-left: 4px solid #0073aa;
-				padding: 15px 20px;
-				margin: 20px 0;
-				border-radius: 3px;
-			}
-
-			.wpshadow-api-service {
-				background: #fff;
-				border: 1px solid #ccc;
-				border-radius: 3px;
-				margin: 20px 0;
-				padding: 20px;
-				box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-			}
-
-			.wpshadow-api-header h2 {
-				margin-top: 0;
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
-
-			.wpshadow-api-number {
-				font-size: 1.5em;
-			}
-
-			.wpshadow-badge {
-				display: inline-block;
-				padding: 2px 8px;
-				border-radius: 3px;
-				font-size: 12px;
-				font-weight: 600;
-				margin-left: auto;
-			}
-
-			.wpshadow-badge-recommended {
-				background: #d4edda;
-				color: #155724;
-			}
-
-			.wpshadow-badge-privacy-sensitive {
-				background: #fff3cd;
-				color: #856404;
-			}
-
-			.wpshadow-service-description {
-				margin: 5px 0;
-				color: #666;
-				font-size: 14px;
-			}
-
-			.wpshadow-privacy-notice {
-				background: #fff3cd;
-				border: 1px solid #ffc107;
-				border-radius: 3px;
-				padding: 12px;
-				margin-bottom: 15px;
-			}
-
-			.wpshadow-api-details {
-				background: #f5f5f5;
-				padding: 12px;
-				border-radius: 3px;
-				margin-top: 15px;
-				border-left: 3px solid #0073aa;
-			}
-
-			.wpshadow-api-details p {
-				margin: 5px 0;
-			}
-
-			.wpshadow-toggle {
-				position: relative;
-				display: inline-block;
-				width: 50px;
-				height: 24px;
-			}
-
-			.wpshadow-toggle input {
-				opacity: 0;
-				width: 0;
-				height: 0;
-			}
-
-			.wpshadow-toggle-slider {
-				position: absolute;
-				cursor: pointer;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background-color: #ccc;
-				transition: 0.3s;
-				border-radius: 24px;
-			}
-
-			.wpshadow-toggle input:checked + .wpshadow-toggle-slider {
-				background-color: #0073aa;
-			}
-
-			.wpshadow-toggle-slider:before {
-				position: absolute;
-				content: "";
-				height: 18px;
-				width: 18px;
-				left: 3px;
-				bottom: 3px;
-				background-color: white;
-				transition: 0.3s;
-				border-radius: 50%;
-			}
-
-			.wpshadow-toggle input:checked + .wpshadow-toggle-slider:before {
-				transform: translateX(26px);
-			}
-
-			.wpshadow-test-status {
-				margin-left: 10px;
-				display: inline-block;
-			}
-
-			.wpshadow-test-status.success {
-				color: #155724;
-			}
-
-			.wpshadow-test-status.error {
-				color: #721c24;
-			}
-
-			.wpshadow-api-actions {
-				margin-top: 30px;
-			}
-
-			@media (max-width: 768px) {
-				.wpshadow-api-header h2 {
-					flex-direction: column;
-					align-items: flex-start;
-				}
-
-				.wpshadow-badge {
-					margin-left: 0;
-					margin-top: 5px;
-				}
-
-				.wpshadow-api-key-input {
-					max-width: 100%;
-				}
-			}
-		</style>
-
-		<script>
-			(function() {
-				'use strict';
-
-				// Test API connection
-				document.querySelectorAll('.wpshadow-test-connection').forEach(function(btn) {
-					btn.addEventListener('click', function(e) {
-						e.preventDefault();
-						const service = this.dataset.service;
-						const statusEl = document.getElementById(service + '-status');
-						
-						statusEl.textContent = '<?php esc_html_e( 'Testing...', 'wpshadow' ); ?>';
-						statusEl.className = '';
-
-						const formData = new FormData();
-						formData.append('action', 'wpshadow_test_api_connection');
-						formData.append('service', service);
-						formData.append('nonce', '<?php echo esc_js( wp_create_nonce( 'wpshadow_test_api_connection' ) ); ?>');
-
-						fetch(ajaxurl, {
-							method: 'POST',
-							body: formData
-						})
-						.then(response => response.json())
-						.then(data => {
-							if (data.success) {
-								statusEl.textContent = '✅ <?php esc_html_e( 'Connected successfully', 'wpshadow' ); ?>';
-								statusEl.className = 'success';
-							} else {
-								statusEl.textContent = '❌ ' + data.data.message;
-								statusEl.className = 'error';
-							}
-						})
-						.catch(error => {
-							statusEl.textContent = '❌ <?php esc_html_e( 'Connection failed', 'wpshadow' ); ?>';
-							statusEl.className = 'error';
-						});
-					});
-				});
-
-				// Auto-save on toggle change
-				document.querySelectorAll('input[type="checkbox"]').forEach(function(input) {
-					input.addEventListener('change', function() {
-						const form = this.closest('form');
-						const formData = new FormData(form);
-						formData.append('action', 'wpshadow_save_api_keys');
-						formData.append('nonce', '<?php echo esc_js( wp_create_nonce( 'wpshadow_save_api_settings' ) ); ?>');
-
-						fetch(ajaxurl, {
-							method: 'POST',
-							body: formData
-						});
-					});
-				});
-			})();
-		</script>
 		<?php
 	}
 

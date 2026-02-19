@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin;
 
 use WPShadow\Core\Hook_Subscriber_Base;
+use WPShadow\Reporting\Report_Snapshot_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -73,19 +74,14 @@ class User_Privacy_Report_Download extends Hook_Subscriber_Base {
 		$current_user_id = get_current_user_id();
 		$can_view_others = current_user_can( 'list_users' );
 
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$snapshot   = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $snapshot_id ),
-			ARRAY_A
-		);
+		$snapshot = Report_Snapshot_Manager::get_snapshot_by_id( $snapshot_id );
 
-		if ( ! $snapshot || 'user-privacy-report' !== $snapshot['report_id'] ) {
+		if ( ! is_array( $snapshot ) || 'user-privacy-report' !== $snapshot['report_id'] ) {
 			wp_die( esc_html__( 'Privacy report not found.', 'wpshadow' ) );
 		}
 
-		$snapshot_data     = json_decode( $snapshot['data'], true );
-		$snapshot_metadata = json_decode( $snapshot['metadata'], true );
+		$snapshot_data     = $snapshot['data'] ?? array();
+		$snapshot_metadata = $snapshot['metadata'] ?? array();
 		$target_user_id    = isset( $snapshot_metadata['user_id'] ) ? (int) $snapshot_metadata['user_id'] : 0;
 
 		if ( ! $can_view_others && $target_user_id !== $current_user_id ) {

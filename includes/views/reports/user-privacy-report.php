@@ -118,11 +118,7 @@ $past_reports_pages = 1;
 $past_reports_page = 1;
 $last_report_time = 0;
 if ( class_exists( 'WPShadow\\Reporting\\Report_Snapshot_Manager' ) ) {
-	global $wpdb;
-	$table_name  = $wpdb->prefix . 'wpshadow_report_snapshots';
-	$table_match = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
-
-	if ( $table_match === $table_name ) {
+	if ( Report_Snapshot_Manager::has_snapshots_table() ) {
 		$past_reports_total = Report_Snapshot_Manager::get_snapshots_for_user_count( 'user-privacy-report', $selected_user_id );
 		$past_reports_pages = max( 1, (int) ceil( $past_reports_total / $past_reports_per_page ) );
 		$past_reports_page = (int) Form_Param_Helper::get( 'privacy_past_page', 'int', 1 );

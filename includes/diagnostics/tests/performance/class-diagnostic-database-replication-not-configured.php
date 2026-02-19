@@ -10,19 +10,56 @@
  * 3. Checks replica lag (how far behind main DB)
  * 4. Detects single point of failure
  * 5. Validates failover capability
- * 6. Flags mission-critical sites without redundancy\n *
- * **Why This Matters:**\n * Without replication, a single database server failure = complete site shutdown. No failover. No
+ * 6. Flags mission-critical sites without redundancy.
+ *
+ * **Why This Matters:** Without replication, a single database server failure = complete site shutdown. No failover. No
  * backup system. With replication, if main server fails, replica instantly takes over. High-traffic
- * sites without replication are gambling. SaaS platforms without replication are playing Russian roulette.\n *
- * **Real-World Scenario:**\n * SaaS platform with 50,000 daily active users, no database replication configured. Main database
+ * sites without replication are gambling. SaaS platforms without replication are playing Russian roulette.
+ *
+ * **Real-World Scenario:** SaaS platform with 50,000 daily active users, no database replication configured. Main database
  * server failed (disk failure). No failover. Site completely down for 6 hours until database recovered.
- * 50,000 users locked out. Clients lost $200,000 in transactions. Lawsuits filed. Company reputation damaged.\n * After incident, implemented master-slave replication. Future failures now result in <1 second failover
- * vs 6+ hour downtime. Cost: $5,000 setup + $500/month for replica server. Value: prevented $200k+ loss\n * and preserved customer trust.\n *
- * **Business Impact:**\n * - Single server failure = total site shutdown (100% downtime)\n * - No backup if main server corrupts (data permanently lost)\n * - SaaS contracts violated (uptime guarantees broken)\n * - Legal liability (failed service = damages)\n * - Customer trust destroyed (they assume you're unprepared)\n * - Revenue loss: $1,000-$100,000+ per hour of downtime\n * - Data loss risk: years of customer data gone forever\n *
- * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents catastrophic single-point-of-failure\n * - #9 Show Value: Enables automatic failover capability\n * - #10 Talk-About-Worthy: "99.99% uptime guaranteed" requires replication\n *
- * **Related Checks:**\n * - Database Backup Availability (related redundancy)\n * - Database Health Monitoring (early failure detection)\n * - Disaster Recovery Plan (related preparation)\n * - System Uptime Monitoring (failure impact)\n *
- * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/database-replication-configuration\n * - Video: https://wpshadow.com/training/mysql-replication-101 (8 min)\n * - Advanced: https://wpshadow.com/training/high-availability-architecture (15 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.2033.0000\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}
+ * 50,000 users locked out. Clients lost $200,000 in transactions. Lawsuits filed. Company reputation damaged. After incident, implemented master-slave replication. Future failures now result in <1 second failover
+ * vs 6+ hour downtime. Cost: $5,000 setup + $500/month for replica server. Value: prevented $200k+ loss and preserved customer trust.
+ *
+ * **Business Impact:**
+ * - Single server failure = total site shutdown (100% downtime)
+ * - No backup if main server corrupts (data permanently lost)
+ * - SaaS contracts violated (uptime guarantees broken)
+ * - Legal liability (failed service = damages)
+ * - Customer trust destroyed (they assume you're unprepared)
+ * - Revenue loss: $1,000-$100,000+ per hour of downtime
+ * - Data loss risk: years of customer data gone forever
+ *
+ * **Philosophy Alignment:**
+ * - #8 Inspire Confidence: Prevents catastrophic single-point-of-failure
+ * - #9 Show Value: Enables automatic failover capability
+ * - #10 Talk-About-Worthy: "99.99% uptime guaranteed" requires replication
+ *
+ * **Related Checks:**
+ * - Database Backup Availability (related redundancy)
+ * - Database Health Monitoring (early failure detection)
+ * - Disaster Recovery Plan (related preparation)
+ * - System Uptime Monitoring (failure impact)
+ *
+ * **Learn More:**
+ * - KB Article: https://wpshadow.com/kb/database-replication-configuration
+ * - Video: https://wpshadow.com/training/mysql-replication-101 (8 min)
+ * - Advanced: https://wpshadow.com/training/high-availability-architecture (15 min)
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.2033.0000
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Diagnostic_Database_Replication_Not_Configured Class

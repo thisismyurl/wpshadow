@@ -36,6 +36,32 @@ class Advanced_Settings_Page {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'wpshadow' ) );
 		}
 
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_style(
+			'wpshadow-advanced-settings-page',
+			WPSHADOW_URL . 'assets/css/advanced-settings-page.css',
+			array(),
+			$version
+		);
+
+		wp_enqueue_script(
+			'wpshadow-advanced-settings-page',
+			WPSHADOW_URL . 'assets/js/advanced-settings-page.js',
+			array(),
+			$version,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-advanced-settings-page',
+			'wpsAdvancedSettingsPage',
+			array(
+				'copiedText'     => __( 'Copied.', 'wpshadow' ),
+				'copyFailedText' => __( 'Copy failed.', 'wpshadow' ),
+			)
+		);
+
 		?>
 		<div class="wrap wps-page-container">
 			<?php
@@ -47,7 +73,7 @@ class Advanced_Settings_Page {
 			?>
 
 			<!-- Warning Notice -->
-			<div class="wps-card wpshadow-advanced-warning-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: #ffffff;">
+			<div class="wps-card wpshadow-advanced-warning-card">
 				<div class="wps-card-body">
 					<div class="wpshadow-advanced-warning-content">
 						<div class="wpshadow-advanced-warning-icon">
@@ -237,7 +263,7 @@ class Advanced_Settings_Page {
 							<div class="wps-form-group wps-mt-4">
 								<label for="wpshadow_performance_sample_rate" class="wps-form-label">
 									<?php esc_html_e( 'Performance Sample Rate', 'wpshadow' ); ?>
-									<span id="wpshadow_sample_rate_display" style="font-weight: bold; margin-left: 8px;">
+									<span id="wpshadow_sample_rate_display" class="wps-advanced-sample-rate-display">
 										<?php 
 										$current_rate = floatval( get_option( 'wpshadow_performance_sample_rate', 0.1 ) );
 										echo esc_html( round( $current_rate * 100 ) . '%' );
@@ -252,7 +278,7 @@ class Advanced_Settings_Page {
 									max="100" 
 									step="1"
 									value="<?php echo esc_attr( round( floatval( get_option( 'wpshadow_performance_sample_rate', 0.1 ) ) * 100 ) ); ?>"
-									style="width: 100%; max-width: 400px;"
+									class="wps-advanced-sample-rate-slider"
 								/>
 								<input 
 									type="hidden" 
@@ -263,21 +289,6 @@ class Advanced_Settings_Page {
 								<p class="wps-form-description">
 									<?php esc_html_e( 'Higher percentages = more accurate data but more overhead. Lower = less overhead but less data.', 'wpshadow' ); ?>
 								</p>
-								<script>
-								(function() {
-									const slider = document.getElementById('wpshadow_performance_sample_rate_slider');
-									const display = document.getElementById('wpshadow_sample_rate_display');
-									const hiddenInput = document.getElementById('wpshadow_performance_sample_rate');
-									
-									if (slider && display && hiddenInput) {
-										slider.addEventListener('input', function() {
-											const percentage = parseInt(this.value);
-											display.textContent = percentage + '%';
-											hiddenInput.value = (percentage / 100).toFixed(2);
-										});
-									}
-								})();
-								</script>
 							</div>
 							<?php
 						},
@@ -299,37 +310,37 @@ class Advanced_Settings_Page {
 								: 0;
 							?>
 							<table class="wps-table wps-table-collapse">
-								<tr style="border-bottom: 1px solid #ddd;">
+								<tr class="wps-advanced-system-row">
 									<td class="wps-th-p-2-bold"><?php esc_html_e( 'WPShadow Version', 'wpshadow' ); ?></td>
 									<td class="wps-td-p-2"><?php echo esc_html( WPSHADOW_VERSION ); ?></td>
 								</tr>
-								<tr style="border-bottom: 1px solid #ddd;">
+								<tr class="wps-advanced-system-row">
 									<td class="wps-th-p-2-bold"><?php esc_html_e( 'WordPress Version', 'wpshadow' ); ?></td>
 									<td class="wps-td-p-2"><?php echo esc_html( get_bloginfo( 'version' ) ); ?></td>
 								</tr>
-								<tr style="border-bottom: 1px solid #ddd;">
+								<tr class="wps-advanced-system-row">
 									<td class="wps-th-p-2-bold"><?php esc_html_e( 'PHP Version', 'wpshadow' ); ?></td>
 									<td class="wps-td-p-2"><?php echo esc_html( phpversion() ); ?></td>
 								</tr>
-								<tr style="border-bottom: 1px solid #ddd;">
+								<tr class="wps-advanced-system-row">
 									<td class="wps-th-p-2-bold"><?php esc_html_e( 'Registered Diagnostics', 'wpshadow' ); ?></td>
 									<td class="wps-td-p-2">
 										<?php echo esc_html( number_format_i18n( $diagnostic_count ) ); ?>
-										<span class="description" style="display: block; font-size: 11px; margin-top: 2px;">
+										<span class="description wps-advanced-system-description">
 											<?php esc_html_e( 'Total diagnostic tests available', 'wpshadow' ); ?>
 										</span>
 									</td>
 								</tr>
-								<tr style="border-bottom: 1px solid #ddd;">
+								<tr class="wps-advanced-system-row">
 									<td class="wps-th-p-2-bold"><?php esc_html_e( 'Registered Treatments', 'wpshadow' ); ?></td>
 									<td class="wps-td-p-2">
 										<?php echo esc_html( number_format_i18n( $treatment_count ) ); ?>
-										<span class="description" style="display: block; font-size: 11px; margin-top: 2px;">
+										<span class="description wps-advanced-system-description">
 											<?php esc_html_e( 'Total auto-fix treatments available', 'wpshadow' ); ?>
 										</span>
 									</td>
 								</tr>
-								<tr style="border-bottom: 1px solid #ddd;">
+								<tr class="wps-advanced-system-row">
 									<td class="wps-th-p-2-bold"><?php esc_html_e( 'Installation Path', 'wpshadow' ); ?></td>
 									<td class="wps-td-p-2 wps-font-mono-xs"><?php echo esc_html( WPSHADOW_PATH ); ?></td>
 								</tr>
@@ -357,50 +368,6 @@ class Advanced_Settings_Page {
 								</button>
 								<span id="wpshadow-copy-system-info-status" class="description" role="status" aria-live="polite"></span>
 							</div>
-							<script>
-							(function() {
-								const button = document.getElementById('wpshadow-copy-system-info');
-								const status = document.getElementById('wpshadow-copy-system-info-status');
-								if (!button) {
-									return;
-								}
-								const copyText = function(text) {
-									if (navigator.clipboard && navigator.clipboard.writeText) {
-										return navigator.clipboard.writeText(text);
-									}
-									const textarea = document.createElement('textarea');
-									textarea.value = text;
-									textarea.setAttribute('readonly', '');
-									textarea.style.position = 'absolute';
-									textarea.style.left = '-9999px';
-									document.body.appendChild(textarea);
-									textarea.select();
-									try {
-										document.execCommand('copy');
-										return Promise.resolve();
-									} catch (error) {
-										return Promise.reject(error);
-									} finally {
-										document.body.removeChild(textarea);
-									}
-								};
-
-								button.addEventListener('click', function() {
-									const json = button.getAttribute('data-system-info') || '{}';
-									copyText(json)
-										.then(function() {
-											if (status) {
-												status.textContent = '<?php echo esc_js( __( 'Copied.', 'wpshadow' ) ); ?>';
-											}
-										})
-										.catch(function() {
-											if (status) {
-												status.textContent = '<?php echo esc_js( __( 'Copy failed.', 'wpshadow' ) ); ?>';
-											}
-										});
-								});
-							})();
-							</script>
 							<?php
 						},
 					)

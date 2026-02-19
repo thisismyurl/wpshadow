@@ -32,12 +32,11 @@ wp_enqueue_script(
 );
 
 // Localize script with settings and translations
-wp_localize_script(
+\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 	'wpshadow-site-dna',
 	'wpshadowSiteDNA',
+	'wpshadow_generate_dna',
 	array(
-		'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
-		'nonce'     => wp_create_nonce( 'wpshadow_generate_dna' ),
 		'i18nStage1' => __( 'Initializing diagnostic scan...', 'wpshadow' ),
 		'i18nStage2' => __( 'Analyzing security posture...', 'wpshadow' ),
 		'i18nStage3' => __( 'Evaluating performance metrics...', 'wpshadow' ),

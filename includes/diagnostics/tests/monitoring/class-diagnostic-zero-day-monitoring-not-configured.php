@@ -63,23 +63,18 @@ class Diagnostic_Zero_Day_Monitoring_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('zeroday_monitoring_enabled' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Zero-day monitoring not configured. Subscribe to security advisories from WordPress security organizations.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   50,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/zero-day-monitoring-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'zeroday_monitoring_enabled' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Zero-day monitoring is not configured yet. Tracking trusted WordPress security advisories helps you respond faster to new vulnerabilities.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 50,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/zero-day-monitoring-not-configured',
+			);
+		}
+
+		return null;
 	}
 }

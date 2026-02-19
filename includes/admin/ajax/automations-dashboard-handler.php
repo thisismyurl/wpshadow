@@ -20,7 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_get_automation_activity_handler() {
 	// Verify nonce and capability.
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpshadow_automations' ) ) {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 
@@ -78,7 +79,8 @@ add_action( 'wp_ajax_wpshadow_get_automation_activity', 'wpshadow_get_automation
  */
 function wpshadow_run_automation_handler() {
 	// Verify nonce and capability.
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpshadow_automations' ) ) {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 
@@ -142,7 +144,8 @@ add_action( 'wp_ajax_wpshadow_run_automation', 'wpshadow_run_automation_handler'
  */
 function wpshadow_delete_automation_handler() {
 	// Verify nonce and capability.
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpshadow_automations' ) ) {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 
@@ -197,7 +200,8 @@ add_action( 'wp_ajax_wpshadow_delete_automation', 'wpshadow_delete_automation_ha
  */
 function wpshadow_toggle_automation_handler() {
 	// Verify nonce and capability.
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpshadow_automations' ) ) {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
 	}
 

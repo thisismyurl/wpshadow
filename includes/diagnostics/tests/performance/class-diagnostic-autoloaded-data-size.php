@@ -16,14 +16,27 @@
  * WordPress loads ALL autoloaded options into memory on every page request. If autoloaded data
  * is 5MB, WordPress wastes 5MB of network bandwidth + memory + parsing time on every single
  * request. A site with 100,000 daily requests wastes 500TB of bandwidth per month. This directly
- * impacts page load time (each 1MB of autoload adds ~50-100ms) and server memory usage.\n *
- * **Real-World Scenario:**\n * Community forum had autoloaded data of 8.2MB due to abandoned themes/plugins storing analytics.\n * After removing 5 non-active themes, autoload dropped to 1.8MB. Database query time improved 40%.\n * Page load time decreased from 3.8s to 2.1s. Server memory usage dropped 35%. With 500,000 monthly
- * page requests, bandwidth savings = $800/month. Cost: 30 minutes cleanup. Value: recurring $800/month.\n *
- * **Business Impact:**\n * - Slow page loads (each 1MB of autoload = ~50-100ms delay)\n * - High server memory usage (scaling becomes more expensive)\n * - Database lock contention (autoload query slows other queries)\n * - Wasted bandwidth ($200-$2,000/month for sites with 5MB+ autoload)\n * - Server CPU spikes from memory pressure\n * - Hosting costs 30-50% higher than necessary\n *
- * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible database bloat\n * - #9 Show Value: Delivers 30-60% reduction in autoload size through cleanup\n * - #10 Talk-About-Worthy: "We found 10MB of garbage options" is satisfying\n *
- * **Related Checks:**\n * - Transients Not Cleaned Up (related autoload bloat)\n * - Database Table Optimization (similar cleanup)\n * - Inactive Plugins/Themes (major autoload bloat source)\n * - Database Query Optimization (overall speed)\n *
- * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/autoloaded-data-size\n * - Video: https://wpshadow.com/training/wordpress-database-cleanup (5 min)\n * - Advanced: https://wpshadow.com/training/autoload-strategy (10 min)\n *
- * @package    WPShadow\n * @subpackage Diagnostics\n * @since      1.6033.2063\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Diagnostics;\n\nuse WPShadow\\Core\\Diagnostic_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Autoloaded Data Size Diagnostic Class\n *\n * Measures autoloaded WordPress options that load on every page request.
+ * impacts page load time (each 1MB of autoload adds ~50-100ms) and server memory usage.
+ *
+ * @package    WPShadow
+ * @subpackage Diagnostics
+ * @since      1.6033.2063
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Autoloaded Data Size Diagnostic Class
+ *
+ * Measures autoloaded WordPress options that load on every page request.
  *
  * @since 1.6033.2063
  */

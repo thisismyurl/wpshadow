@@ -287,9 +287,53 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( __CLASS__, 'rest_handle_webhook' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => array( __CLASS__, 'rest_authorize_webhook' ),
 			)
 		);
+	}
+
+	/**
+	 * Authorize webhook requests.
+	 *
+	 * Allows site administrators and external webhook callers that provide
+	 * the configured shared secret in the X-WPShadow-Webhook-Secret header.
+	 *
+	 * @since  1.6060.0000
+	 * @param  \WP_REST_Request $request Request object.
+	 * @return bool|\WP_Error True when authorized, WP_Error otherwise.
+	 */
+	public static function rest_authorize_webhook( $request ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		$stored_secret = (string) get_option( 'wpshadow_webhook_secret', '' );
+		if ( '' === $stored_secret ) {
+			return new \WP_Error(
+				'wpshadow_webhook_secret_missing',
+				__( 'Webhook secret is not configured.', 'wpshadow' ),
+				array( 'status' => 403 )
+			);
+		}
+
+		$provided_secret = (string) $request->get_header( 'x-wpshadow-webhook-secret' );
+		if ( '' === $provided_secret ) {
+			return new \WP_Error(
+				'wpshadow_webhook_secret_required',
+				__( 'Webhook secret is required.', 'wpshadow' ),
+				array( 'status' => 401 )
+			);
+		}
+
+		if ( ! hash_equals( $stored_secret, $provided_secret ) ) {
+			return new \WP_Error(
+				'wpshadow_webhook_secret_invalid',
+				__( 'Webhook secret is invalid.', 'wpshadow' ),
+				array( 'status' => 401 )
+			);
+		}
+
+		return true;
 	}
 
 	/**
@@ -337,6 +381,9 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	 */
 	public static function rest_handle_webhook( $request ) {
 		$payload = $request->get_json_params();
+		if ( ! is_array( $payload ) ) {
+			$payload = array();
+		}
 
 		self::log_api_activity( 'webhook_received', $payload );
 
@@ -403,6 +450,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	 */
 	public static function trigger_webhooks( int $post_id, $post ): void {
 		$webhook_url = get_option( 'wpshadow_webhook_url', '' );
+		$webhook_secret = (string) get_option( 'wpshadow_webhook_secret', '' );
 
 		if ( empty( $webhook_url ) ) {
 			return;
@@ -418,11 +466,16 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 			),
 		);
 
+		$headers = array( 'Content-Type' => 'application/json' );
+		if ( '' !== $webhook_secret ) {
+			$headers['X-WPShadow-Webhook-Secret'] = $webhook_secret;
+		}
+
 		wp_remote_post(
 			$webhook_url,
 			array(
 				'body'    => wp_json_encode( $payload ),
-				'headers' => array( 'Content-Type' => 'application/json' ),
+				'headers' => $headers,
 				'timeout' => 15,
 			)
 		);

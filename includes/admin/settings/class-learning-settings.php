@@ -69,6 +69,13 @@ class Learning_Settings {
 			return;
 		}
 
+		wp_enqueue_style(
+			'wpshadow-learning-settings',
+			WPSHADOW_URL . 'assets/css/learning-settings.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
 		// Enqueue dyslexia-friendly font if enabled
 		if ( Settings_Registry::use_dyslexia_font() ) {
 			wp_enqueue_style(
@@ -98,6 +105,15 @@ class Learning_Settings {
 		$show_examples = Settings_Registry::show_examples();
 		$adhd_mode = Settings_Registry::is_adhd_friendly_mode();
 		$dyslexia_font = Settings_Registry::use_dyslexia_font();
+
+		if ( $dyslexia_font ) {
+			add_filter(
+				'admin_body_class',
+				static function( string $classes ): string {
+					return trim( $classes . ' wpshadow-dyslexic-font' );
+				}
+			);
+		}
 
 		?>
 		<div class="wrap wpshadow-settings-page">
@@ -205,7 +221,7 @@ class Learning_Settings {
 
 					<tr>
 						<td colspan="2">
-							<hr style="margin: 30px 0;">
+							<hr class="wpshadow-learning-settings-separator">
 							<h3><?php esc_html_e( 'Neurodiversity Support', 'wpshadow' ); ?></h3>
 							<p><?php esc_html_e( 'These settings help people with ADHD, dyslexia, and other neurodivergent conditions use WPShadow more comfortably.', 'wpshadow' ); ?></p>
 						</td>
@@ -276,8 +292,8 @@ class Learning_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-font-preview" style="margin-top: 10px; padding: 15px; background: #f0f0f1; border-left: 4px solid #2271b1;">
-								<p style="font-family: <?php echo $dyslexia_font ? 'OpenDyslexic, ' : ''; ?>-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+							<div class="wpshadow-font-preview">
+								<p class="wpshadow-font-preview-text">
 									<?php
 									esc_html_e(
 										'This is how text looks with OpenDyslexic: letters have weighted bottoms to prevent rotation and confusion.',
@@ -315,53 +331,6 @@ class Learning_Settings {
 			</div>
 		</div>
 
-		<style>
-			.wpshadow-settings-intro {
-				background: #fff;
-				border-left: 4px solid #2271b1;
-				padding: 20px;
-				margin: 20px 0;
-			}
-			.wpshadow-settings-intro h2 {
-				margin-top: 0;
-			}
-			.wpshadow-settings-footer {
-				margin-top: 40px;
-				padding-top: 20px;
-				border-top: 1px solid #c3c4c7;
-			}
-			.wpshadow-feature-list {
-				margin-top: 10px;
-				padding: 10px;
-				background: #f0f0f1;
-				border-left: 4px solid #00a32a;
-			}
-			.wpshadow-feature-list ul {
-				margin: 10px 0 0 0;
-				padding-left: 20px;
-			}
-			.wpshadow-font-preview {
-				font-size: 16px;
-				line-height: 1.6;
-			}
-			<?php if ( $dyslexia_font ) : ?>
-			@font-face {
-				font-family: 'OpenDyslexic';
-				src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/fonts/opendyslexic-regular.woff2') format('woff2');
-				font-weight: normal;
-				font-style: normal;
-			}
-			body.wpshadow-dyslexic-font {
-				font-family: 'OpenDyslexic', sans-serif !important;
-			}
-			<?php endif; ?>
-		</style>
-
-		<?php if ( $dyslexia_font ) : ?>
-		<script>
-			document.body.classList.add('wpshadow-dyslexic-font');
-		</script>
-		<?php endif; ?>
 		<?php
 	}
 }

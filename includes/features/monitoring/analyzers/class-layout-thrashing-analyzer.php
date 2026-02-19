@@ -197,6 +197,15 @@ class Layout_Thrashing_Analyzer {
 			return $patterns;
 		}
 
+		$mtime = (string) filemtime( $file );
+		if ( '' !== $mtime ) {
+			$file_cache_key = 'wpshadow_layout_thrash_file_' . md5( $file . '|' . $mtime );
+			$cached_patterns = get_transient( $file_cache_key );
+			if ( is_array( $cached_patterns ) ) {
+				return $cached_patterns;
+			}
+		}
+
 		$content = file_get_contents( $file );
 		if ( ! $content ) {
 			return $patterns;
@@ -243,6 +252,10 @@ class Layout_Thrashing_Analyzer {
 					}
 				}
 			}
+		}
+
+		if ( isset( $file_cache_key ) ) {
+			set_transient( $file_cache_key, $patterns, 12 * HOUR_IN_SECONDS );
 		}
 
 		return $patterns;

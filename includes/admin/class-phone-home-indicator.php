@@ -266,18 +266,19 @@ class Phone_Home_Indicator extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-phone-home',
 			'wpshadowPhoneHome',
+			'wpshadow_phone_home',
 			array(
-				'nonce'    => wp_create_nonce( 'wpshadow_phone_home' ),
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'strings'  => array(
+				'strings' => array(
 					'loading'     => __( 'Loading connection details...', 'wpshadow' ),
 					'no_data'     => __( 'No recent connections found.', 'wpshadow' ),
 					'modal_title' => __( 'Recent Network Activity', 'wpshadow' ),
 				),
-			)
+			),
+			'nonce',
+			'ajax_url'
 		);
 	}
 

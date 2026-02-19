@@ -95,12 +95,11 @@ class Feature_Tour extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-feature-tour',
 			'wpShadowTour',
+			'wpshadow_feature_tour',
 			array(
-				'nonce'     => wp_create_nonce( 'wpshadow_feature_tour' ),
-				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 				'tours'     => self::get_available_tours(),
 				'completed' => self::get_completed_tours(),
 			)

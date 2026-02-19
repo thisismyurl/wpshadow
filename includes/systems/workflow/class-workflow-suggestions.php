@@ -346,11 +346,16 @@ class Workflow_Suggestions {
 	 * @return bool
 	 */
 	private static function has_comments(): bool {
-		global $wpdb;
-		$recent_comments = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_date > %s AND comment_approved = '1'",
-				gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) )
+		$recent_comments = get_comments(
+			array(
+				'status'     => 'approve',
+				'count'      => true,
+				'date_query' => array(
+					array(
+						'after'     => gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) ),
+						'inclusive' => true,
+					),
+				),
 			)
 		);
 		return (int) $recent_comments > 10;

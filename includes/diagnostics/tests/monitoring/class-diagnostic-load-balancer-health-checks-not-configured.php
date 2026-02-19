@@ -63,24 +63,18 @@ class Diagnostic_Load_Balancer_Health_Checks_Not_Configured extends Diagnostic_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'configure_health_checks' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Load balancer health checks not configured. Implement endpoints that verify backend availability without side effects.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   45,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/load-balancer-health-checks-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'configure_health_checks' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Load balancer health checks are not configured yet. Adding reliable health endpoints helps traffic route only to healthy servers.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 45,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/load-balancer-health-checks-not-configured',
+			);
+		}
+
+		return null;
 	}
 }

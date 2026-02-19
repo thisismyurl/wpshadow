@@ -63,24 +63,18 @@ class Diagnostic_HTTP_Response_Splitting_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_response_splitting' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('HTTP response splitting not prevented. Validate all header values and remove CRLF characters.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/http-response-splitting-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_response_splitting' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'HTTP response splitting protections are not detected yet. Adding strict header validation helps keep response headers safe and predictable.', 'wpshadow' ),
+				'severity'    => 'high',
+				'threat_level' => 70,
+				'auto_fixable' => true,
+				'kb_link'     => 'https://wpshadow.com/kb/http-response-splitting-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

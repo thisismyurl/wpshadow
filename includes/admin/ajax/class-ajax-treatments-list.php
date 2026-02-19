@@ -44,6 +44,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class AJAX_Treatments_List extends AJAX_Handler_Base {
 	/**
+	 * Treatments discovery transient key.
+	 *
+	 * @var string
+	 */
+	private const TREATMENTS_CACHE_KEY = 'wpshadow_treatments_catalog_';
+
+	/**
 	 * Handle the AJAX request.
 	 *
 	 * @since 1.6030.2148
@@ -59,41 +66,28 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 		$items    = array();
 		$disabled = get_option( 'wpshadow_disabled_treatment_classes', array() );
 		$disabled = is_array( $disabled ) ? $disabled : array();
+		$search   = strtolower( $search );
 
-		// Discover treatment classes by scanning includes/treatments
-		$treatment_dir = plugin_dir_path( __FILE__ ) . '../../treatments';
-		$files         = glob( $treatment_dir . '/class-treatment-*.php' );
+		$catalog = self::get_treatments_catalog();
+		foreach ( $catalog as $treatment ) {
+			$class_name = $treatment['class_name'];
+			$label      = $treatment['label'];
 
-		if ( $files ) {
-			foreach ( $files as $file ) {
-				$basename = basename( $file, '.php' );
-				// Convert file name to class name: class-treatment-foo-bar => Treatment_Foo_Bar
-				$slug_parts = explode( '-', substr( $basename, strlen( 'class-' ) ) );
-				$slug_parts = array_map( 'ucfirst', $slug_parts );
-				$class_name = '\\WPShadow\\Treatments\\' . implode( '_', $slug_parts );
-
-				if ( ! class_exists( $class_name ) ) {
+			if ( ! empty( $search ) ) {
+				$hay = strtolower( $label . ' ' . $class_name );
+				if ( false === strpos( $hay, $search ) ) {
 					continue;
 				}
-
-				$label = implode( ' ', array_map( 'ucfirst', explode( '-', str_replace( 'class-treatment-', '', $basename ) ) ) );
-
-				if ( ! empty( $search ) ) {
-					$hay = strtolower( $label . ' ' . $class_name );
-					if ( false === strpos( $hay, strtolower( $search ) ) ) {
-						continue;
-					}
-				}
-
-				$enabled = ! in_array( $class_name, $disabled, true );
-				$enabled = apply_filters( 'wpshadow_treatment_enabled', $enabled, $class_name );
-
-				$items[] = array(
-					'class_name' => $class_name,
-					'label'      => $label,
-					'enabled'    => (bool) $enabled,
-				);
 			}
+
+			$enabled = ! in_array( $class_name, $disabled, true );
+			$enabled = apply_filters( 'wpshadow_treatment_enabled', $enabled, $class_name );
+
+			$items[] = array(
+				'class_name' => $class_name,
+				'label'      => $label,
+				'enabled'    => (bool) $enabled,
+			);
 		}
 
 		$total = count( $items );
@@ -108,6 +102,50 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 				'per_page' => $per_page,
 			)
 		);
+	}
+
+	/**
+	 * Build or retrieve cached treatment catalog.
+	 *
+	 * @since 1.6030.2148
+	 * @return array<int,array<string,string>>
+	 */
+	private static function get_treatments_catalog(): array {
+		$cache_key = self::TREATMENTS_CACHE_KEY . md5( (string) WPSHADOW_VERSION );
+		$catalog   = get_transient( $cache_key );
+
+		if ( is_array( $catalog ) ) {
+			return $catalog;
+		}
+
+		$catalog       = array();
+		$treatment_dir = plugin_dir_path( __FILE__ ) . '../../treatments';
+		$files         = glob( $treatment_dir . '/class-treatment-*.php' );
+
+		if ( $files ) {
+			foreach ( $files as $file ) {
+				$basename = basename( $file, '.php' );
+				$slug     = str_replace( 'class-treatment-', '', $basename );
+
+				// Convert file name to class name: class-treatment-foo-bar => Treatment_Foo_Bar.
+				$slug_parts = explode( '-', substr( $basename, strlen( 'class-' ) ) );
+				$slug_parts = array_map( 'ucfirst', $slug_parts );
+				$class_name = '\\WPShadow\\Treatments\\' . implode( '_', $slug_parts );
+
+				if ( ! class_exists( $class_name ) ) {
+					continue;
+				}
+
+				$catalog[] = array(
+					'class_name' => $class_name,
+					'label'      => implode( ' ', array_map( 'ucfirst', explode( '-', $slug ) ) ),
+				);
+			}
+		}
+
+		set_transient( $cache_key, $catalog, 12 * HOUR_IN_SECONDS );
+
+		return $catalog;
 	}
 }
 

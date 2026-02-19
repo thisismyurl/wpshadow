@@ -11,6 +11,7 @@
 declare(strict_types=1);
 
 use WPShadow\Core\Form_Param_Helper;
+use WPShadow\Reporting\Report_Snapshot_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,19 +38,14 @@ if ( ! function_exists( 'wpshadow_handle_seo_report_download' ) ) {
 			ob_end_clean();
 		}
 
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$snapshot   = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $snapshot_id ),
-			ARRAY_A
-		);
+		$snapshot = Report_Snapshot_Manager::get_snapshot_by_id( $snapshot_id );
 
-		if ( ! $snapshot || 'seo-report' !== $snapshot['report_id'] ) {
+		if ( ! is_array( $snapshot ) || 'seo-report' !== $snapshot['report_id'] ) {
 			wp_die( esc_html__( 'SEO report not found.', 'wpshadow' ) );
 		}
 
-		$snapshot_data     = json_decode( $snapshot['data'], true );
-		$snapshot_metadata = json_decode( $snapshot['metadata'], true );
+		$snapshot_data     = $snapshot['data'] ?? array();
+		$snapshot_metadata = $snapshot['metadata'] ?? array();
 
 		$download_payload = array(
 			'report'       => 'seo-report',

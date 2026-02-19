@@ -1352,3 +1352,7 @@
 body .wpshadow-findings-activity-fullwidth .wps-card {
 	width: 100%;
 }
+
+.wpshadow-hidden-finding {
+	display: none !important;
+}

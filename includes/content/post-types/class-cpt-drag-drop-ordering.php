@@ -94,12 +94,11 @@ class CPT_Drag_Drop_Ordering {
 		);
 
 		// Localize script with AJAX data.
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-cpt-drag-drop',
 			'wpShadowDragDrop',
+			'wpshadow_drag_drop_order',
 			array(
-				'nonce'    => wp_create_nonce( 'wpshadow_drag_drop_order' ),
-				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 				'postType' => $current_screen->post_type,
 			)
 		);
@@ -140,19 +139,18 @@ class CPT_Drag_Drop_Ordering {
 		}
 
 		// Update menu_order for each post.
-		global $wpdb;
 		$success = true;
 
 		foreach ( $order as $position => $post_id ) {
-			$result = $wpdb->update(
-				$wpdb->posts,
-				array( 'menu_order' => $position ),
-				array( 'ID' => $post_id ),
-				array( '%d' ),
-				array( '%d' )
+			$result = wp_update_post(
+				array(
+					'ID'         => (int) $post_id,
+					'menu_order' => (int) $position,
+				),
+				true
 			);
 
-			if ( false === $result ) {
+			if ( is_wp_error( $result ) ) {
 				$success = false;
 				break;
 			}
@@ -212,8 +210,6 @@ class CPT_Drag_Drop_Ordering {
 	 * @return string Modified ORDER BY clause.
 	 */
 	public static function posts_orderby( $orderby, $query ) {
-		global $wpdb;
-
 		// Only modify for our CPTs.
 		$post_type = $query->get( 'post_type' );
 		
@@ -227,7 +223,7 @@ class CPT_Drag_Drop_Ordering {
 		}
 
 		// Order by menu_order first, then date.
-		return "{$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_date DESC";
+		return 'menu_order ASC, post_date DESC';
 	}
 
 	/**
@@ -270,15 +266,12 @@ class CPT_Drag_Drop_Ordering {
 			return false;
 		}
 
-		global $wpdb;
-
 		foreach ( $order as $position => $post_id ) {
-			$wpdb->update(
-				$wpdb->posts,
-				array( 'menu_order' => $position ),
-				array( 'ID' => intval( $post_id ) ),
-				array( '%d' ),
-				array( '%d' )
+			wp_update_post(
+				array(
+					'ID'         => (int) $post_id,
+					'menu_order' => (int) $position,
+				)
 			);
 
 			clean_post_cache( $post_id );

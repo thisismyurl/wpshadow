@@ -149,9 +149,24 @@ class Icon_Analyzer {
 
 				// Check for SVG files
 				if ( $extension === 'svg' ) {
-					// Check if it's a sprite (contains multiple <symbol> tags)
-					$content = file_get_contents( $path );
-					if ( $content && preg_match_all( '/<symbol\s+/i', $content ) > 3 ) {
+					$svg_mtime = (string) $file->getMTime();
+					$cache_key = 'wpshadow_icon_svg_file_' . md5( $path . '|' . $svg_mtime );
+					$cached_svg = get_transient( $cache_key );
+
+					if ( is_array( $cached_svg ) && isset( $cached_svg['is_sprite'] ) ) {
+						$is_sprite = (bool) $cached_svg['is_sprite'];
+					} else {
+						// Check if it's a sprite (contains multiple <symbol> tags)
+						$content   = file_get_contents( $path );
+						$is_sprite = (bool) ( $content && preg_match_all( '/<symbol\s+/i', $content ) > 3 );
+						set_transient(
+							$cache_key,
+							array( 'is_sprite' => $is_sprite ),
+							12 * HOUR_IN_SECONDS
+						);
+					}
+
+					if ( $is_sprite ) {
 						++$results['svg_sprites'];
 					} else {
 						++$results['svg_inline'];

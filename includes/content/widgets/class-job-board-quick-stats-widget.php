@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Widgets;
 
 use WPShadow\Core\Hook_Subscriber_Base;
+use WPShadow\JobPostings\Job_Application_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -34,7 +35,28 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(
-			'wp_dashboard_setup' => 'register_widget',
+			'wp_dashboard_setup'    => 'register_widget',
+			'admin_enqueue_scripts' => 'enqueue_assets',
+		);
+	}
+
+	/**
+	 * Enqueue widget stylesheet on dashboard.
+	 *
+	 * @since 1.6050.0000
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_assets( $hook ) {
+		if ( 'index.php' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wpshadow-job-board-quick-stats-widget',
+			WPSHADOW_URL . 'assets/css/job-board-quick-stats-widget.css',
+			array(),
+			WPSHADOW_VERSION
 		);
 	}
 
@@ -57,17 +79,11 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 	 * @since 1.6050.0000
 	 */
 	public static function render_widget() {
-		global $wpdb;
-
 		// Get statistics
 		$active_jobs_count = wp_count_posts( 'wps_job_posting' )->publish ?? 0;
 		$draft_jobs_count = wp_count_posts( 'wps_job_posting' )->draft ?? 0;
-		$total_applications = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}wpshadow_job_applications"
-		);
-		$new_applications = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}wpshadow_job_applications WHERE status = 'new'"
-		);
+		$total_applications = Job_Application_Tracker::get_total_applications();
+		$new_applications   = Job_Application_Tracker::get_applications_count_by_status( 'new' );
 
 		?>
 		<div class="wpshadow-job-board-stats-widget">
@@ -92,7 +108,7 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 					<span class="wpshadow-stat-icon">🎯</span>
 					<div class="wpshadow-stat-info">
 						<p class="wpshadow-stat-label"><?php esc_html_e( 'New Applications', 'wpshadow' ); ?></p>
-						<p class="wpshadow-stat-number" style="color: <?php echo $new_applications > 0 ? '#d63638' : '#999'; ?>">
+						<p class="wpshadow-stat-number <?php echo $new_applications > 0 ? 'wpshadow-stat-number-has-new' : 'wpshadow-stat-number-zero-new'; ?>">
 							<?php echo absint( $new_applications ); ?>
 						</p>
 					</div>
@@ -107,7 +123,7 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 				</div>
 			</div>
 
-			<div class="wpshadow-widget-actions" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+			<div class="wpshadow-widget-actions">
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=wps_job_posting' ) ); ?>" class="button button-primary">
 						<?php esc_html_e( 'Post New Job', 'wpshadow' ); ?>
@@ -126,56 +142,6 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 				</p>
 			</div>
 		</div>
-
-		<style type="text/css">
-			.wpshadow-stats-grid {
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 10px;
-				margin-bottom: 10px;
-			}
-
-			.wpshadow-stat-box {
-				padding: 12px;
-				background: #f5f5f5;
-				border-radius: 4px;
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
-
-			.wpshadow-stat-icon {
-				font-size: 24px;
-			}
-
-			.wpshadow-stat-info {
-				flex: 1;
-			}
-
-			.wpshadow-stat-label {
-				margin: 0;
-				font-size: 12px;
-				color: #666;
-			}
-
-			.wpshadow-stat-number {
-				margin: 4px 0 0 0;
-				font-size: 18px;
-				font-weight: bold;
-				color: #333;
-			}
-
-			.wpshadow-widget-actions p {
-				margin: 8px 0;
-			}
-
-			.wpshadow-widget-actions a.button {
-				margin-right: 6px;
-				margin-bottom: 6px;
-				font-size: 12px;
-				padding: 4px 8px;
-			}
-		</style>
 		<?php
 	}
 }

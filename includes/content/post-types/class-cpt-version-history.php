@@ -198,13 +198,10 @@ class CPT_Version_History {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-version-history',
 			'wpShadowVersions',
-			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_version_history' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_version_history'
 		);
 
 		wp_enqueue_style(

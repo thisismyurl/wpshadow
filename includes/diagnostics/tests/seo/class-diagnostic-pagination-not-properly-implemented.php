@@ -63,24 +63,18 @@ class Diagnostic_Pagination_Not_Properly_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'implement_safe_pagination' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Pagination not properly implemented. Prevent offset overflow and implement cursor-based pagination for large datasets.',
-						'severity'   =>   'low',
-						'threat_level'   =>   15,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/pagination-not-properly-implemented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'implement_safe_pagination' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Pagination is not configured with safe patterns yet. Adding predictable page handling helps visitors browse large content collections more smoothly.', 'wpshadow' ),
+				'severity'    => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/pagination-not-properly-implemented',
+			);
+		}
+
+		return null;
 	}
 }

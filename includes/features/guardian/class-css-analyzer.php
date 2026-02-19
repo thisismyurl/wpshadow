@@ -236,6 +236,19 @@ class CSS_Analyzer {
 			'animation_count'     => 0,
 		);
 
+		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
+			return $results;
+		}
+
+		$mtime = (string) filemtime( $file_path );
+		if ( '' !== $mtime ) {
+			$file_cache_key = 'wpshadow_css_file_analysis_' . md5( $file_path . '|' . $mtime );
+			$cached_results = get_transient( $file_cache_key );
+			if ( is_array( $cached_results ) ) {
+				return $cached_results;
+			}
+		}
+
 		$content = file_get_contents( $file_path );
 		if ( empty( $content ) ) {
 			return $results;
@@ -298,6 +311,10 @@ class CSS_Analyzer {
 					);
 				}
 			}
+		}
+
+		if ( isset( $file_cache_key ) ) {
+			set_transient( $file_cache_key, $results, 12 * HOUR_IN_SECONDS );
 		}
 
 		return $results;

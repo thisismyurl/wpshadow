@@ -63,23 +63,18 @@ class Diagnostic_OWASP_Top_10_Compliance_Not_Verified extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('owasp_compliance_checked' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('OWASP Top 10 not verified. Test against OWASP Top 10 vulnerabilities: injection,
-						'severity'   =>   'high',
-						'threat_level'   =>   85,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/owasp-top-10-compliance-not-verified'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'owasp_compliance_checked' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'OWASP Top 10 coverage has not been verified yet. A regular review against common web risks helps keep your site security posture strong.', 'wpshadow' ),
+				'severity'    => 'high',
+				'threat_level' => 85,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/owasp-top-10-compliance-not-verified',
+			);
+		}
+
+		return null;
 	}
 }

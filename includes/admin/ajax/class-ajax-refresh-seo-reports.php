@@ -53,12 +53,7 @@ class Refresh_SEO_Reports_Handler extends AJAX_Handler_Base {
 			self::send_error( __( 'Report system not available', 'wpshadow' ) );
 		}
 
-		// Check if database table exists.
-		global $wpdb;
-		$table_name  = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$table_match = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
-
-		if ( $table_match !== $table_name ) {
+		if ( ! Report_Snapshot_Manager::has_snapshots_table() ) {
 			self::send_error( __( 'Report table not found', 'wpshadow' ) );
 		}
 
@@ -66,7 +61,7 @@ class Refresh_SEO_Reports_Handler extends AJAX_Handler_Base {
 		$past_reports_per_page = 10;
 		$past_reports_total    = Report_Snapshot_Manager::get_snapshots_count( 'seo-report' );
 		$past_reports_pages    = max( 1, (int) ceil( $past_reports_total / $past_reports_per_page ) );
-		$past_reports          = Report_Snapshot_Manager::get_snapshots( 'seo-report', $past_reports_per_page, 0 );
+		$past_reports          = Report_Snapshot_Manager::get_snapshots_paginated( 'seo-report', $past_reports_per_page, 0 );
 
 		// Build items array.
 		$past_reports_items = array();

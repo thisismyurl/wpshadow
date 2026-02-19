@@ -63,24 +63,18 @@ class Diagnostic_Traffic_Analysis_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_traffic_analysis' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Traffic analysis not prevented. Use uniform response sizes and avoid timing patterns in APIs to prevent inference attacks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   30,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/traffic-analysis-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_traffic_analysis' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Traffic analysis protections are not detected yet. Adding uniform response handling can reduce information leakage patterns.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 30,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/traffic-analysis-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

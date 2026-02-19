@@ -102,7 +102,7 @@ class Diagnostic_Content_No_Longform extends Diagnostic_Base {
 		// Check for competitor long-form presence
 		$competitors_longform = apply_filters( 'wpshadow_competitors_have_longform_advantage', false );
 		if ( $competitors_longform ) {
-			$issues[] = __( 'Competitors have long-form content; you\\'re at disadvantage for authority and backlinks', 'wpshadow' );
+			$issues[] = __( 'Competitors have long-form content; you\'re at disadvantage for authority and backlinks', 'wpshadow' );
 		}
 
 		// Check for content gap opportunity

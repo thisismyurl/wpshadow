@@ -51,14 +51,8 @@ function wpshadow_render_workflow_builder() {
 		require_once WPSHADOW_PATH . 'includes/ui/templates/automations-wizard.php';
 		return;
 	} else {
-		// Enqueue modal system for detail modal.
-		wp_enqueue_script(
-			'wpshadow-modal',
-			WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
+		// Enqueue shared modal system.
+		\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 
 		// Enqueue dashboard assets.
 		wp_enqueue_script(
@@ -70,12 +64,11 @@ function wpshadow_render_workflow_builder() {
 		);
 
 		// Localize script with data.
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-automations-dashboard',
 			'wpshadowAutomationsDashboard',
+			'wpshadow_automations',
 			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_automations' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'strings' => array(
 					'confirmDelete'        => __( 'Are you sure you want to delete this automation? This action cannot be undone.', 'wpshadow' ),
 					'deleteSuccess'        => __( 'Automation deleted successfully', 'wpshadow' ),
@@ -86,8 +79,10 @@ function wpshadow_render_workflow_builder() {
 					'toggleError'          => __( 'Failed to update automation status', 'wpshadow' ),
 					'noActivity'           => __( 'No activity recorded', 'wpshadow' ),
 					'errorLoadingActivity' => __( 'Error loading activity', 'wpshadow' ),
-					'loadingActivity'      => __( 'Loading activity...', 'wpshadow' ),					'createAutomation'     => __( 'Create Automation', 'wpshadow' ),
-					'createdSuccess'       => __( 'Automation created! Next suggestion loaded.', 'wpshadow' ),				),
+					'loadingActivity'      => __( 'Loading activity...', 'wpshadow' ),
+					'createAutomation'     => __( 'Create Automation', 'wpshadow' ),
+					'createdSuccess'       => __( 'Automation created! Next suggestion loaded.', 'wpshadow' ),
+				),
 			)
 		);
 

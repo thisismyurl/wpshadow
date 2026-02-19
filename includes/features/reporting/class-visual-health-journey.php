@@ -514,6 +514,23 @@ class Visual_Health_Journey {
 	 * @return string HTML output.
 	 */
 	public static function render_html( array $journey ): string {
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_style(
+			'wpshadow-visual-health-journey',
+			WPSHADOW_URL . 'assets/css/visual-health-journey.css',
+			array(),
+			$version
+		);
+
+		wp_enqueue_script(
+			'wpshadow-visual-health-journey',
+			WPSHADOW_URL . 'assets/js/visual-health-journey.js',
+			array(),
+			$version,
+			true
+		);
+
 		ob_start();
 		?>
 		<div class="wpshadow-health-journey">
@@ -542,7 +559,7 @@ class Visual_Health_Journey {
 				<h3><?php esc_html_e( 'Achievements', 'wpshadow' ); ?></h3>
 				<div class="achievements-grid">
 					<?php foreach ( $journey['achievements'] as $achievement ) : ?>
-					<div class="achievement-badge" style="border-color: <?php echo esc_attr( $achievement['badge_color'] ); ?>">
+					<div class="achievement-badge <?php echo esc_attr( self::get_achievement_badge_class( $achievement['id'] ?? '' ) ); ?>">
 						<span class="badge-icon"><?php echo esc_html( $achievement['icon'] ); ?></span>
 						<h4><?php echo esc_html( $achievement['title'] ); ?></h4>
 						<p><?php echo esc_html( $achievement['description'] ); ?></p>
@@ -554,7 +571,7 @@ class Visual_Health_Journey {
 
 			<!-- Timeline Visualization -->
 			<div class="timeline-visualization">
-				<canvas id="wpshadow-journey-chart" width="800" height="400"></canvas>
+				<canvas id="wpshadow-journey-chart" width="800" height="400" data-journey-visualization="<?php echo esc_attr( wp_json_encode( $journey['visualization'] ) ); ?>"></canvas>
 			</div>
 
 			<!-- Milestones -->
@@ -591,14 +608,25 @@ class Visual_Health_Journey {
 			</div>
 		</div>
 
-		<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			// Initialize chart visualization
-			const journeyData = <?php echo wp_json_encode( $journey['visualization'] ); ?>;
-			// Chart rendering would go here
-		});
-		</script>
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get achievement badge CSS class.
+	 *
+	 * @since  1.6030.2200
+	 * @param  string $achievement_id Achievement identifier.
+	 * @return string Badge class name.
+	 */
+	private static function get_achievement_badge_class( string $achievement_id ): string {
+		$classes = array(
+			'security_champion'  => 'achievement-badge--security',
+			'performance_master' => 'achievement-badge--performance',
+			'automation_expert'  => 'achievement-badge--automation',
+			'early_adopter'      => 'achievement-badge--early-adopter',
+		);
+
+		return $classes[ $achievement_id ] ?? 'achievement-badge--default';
 	}
 }

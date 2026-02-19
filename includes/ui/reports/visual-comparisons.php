@@ -36,12 +36,11 @@ wp_enqueue_script(
 );
 
 // Localize script settings
-wp_localize_script(
+\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 	'wpshadow-visual-comparisons',
 	'wpshadowVisualComparisons',
+	'wpshadow_visual_comparison',
 	array(
-		'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-		'nonce'      => wp_create_nonce( 'wpshadow_visual_comparison' ),
 		'defaultUrl' => home_url( '/' ),
 		'i18nCapturing' => __( 'Capturing screenshot...', 'wpshadow' ),
 		'i18nComparing' => __( 'Comparing screenshots...', 'wpshadow' ),

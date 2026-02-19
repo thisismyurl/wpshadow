@@ -39,6 +39,27 @@ class Cultural_Settings {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu_page' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+	}
+
+	/**
+	 * Enqueue cultural settings assets.
+	 *
+	 * @since 1.6035.1400
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_assets( string $hook ): void {
+		if ( 'settings_page_wpshadow-cultural' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wpshadow-cultural-settings',
+			WPSHADOW_URL . 'assets/css/cultural-settings.css',
+			array(),
+			WPSHADOW_VERSION
+		);
 	}
 
 	/**
@@ -234,12 +255,12 @@ class Cultural_Settings {
 								);
 								?>
 							</p>
-							<div class="wpshadow-example-box" style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-left: 4px solid #2271b1;">
+							<div class="wpshadow-example-box">
 								<strong><?php esc_html_e( 'Example:', 'wpshadow' ); ?></strong><br>
-								<span style="text-decoration: line-through; color: #d63638;">
+								<span class="wpshadow-example-old-text">
 									<?php esc_html_e( '"This feature is a piece of cake"', 'wpshadow' ); ?>
 								</span><br>
-								<span style="color: #00a32a;">
+								<span class="wpshadow-example-new-text">
 									<?php esc_html_e( '"This feature is easy to use"', 'wpshadow' ); ?>
 								</span>
 							</div>
@@ -267,25 +288,6 @@ class Cultural_Settings {
 			</div>
 		</div>
 
-		<style>
-			.wpshadow-settings-intro {
-				background: #fff;
-				border-left: 4px solid #2271b1;
-				padding: 20px;
-				margin: 20px 0;
-			}
-			.wpshadow-settings-intro h2 {
-				margin-top: 0;
-			}
-			.wpshadow-settings-footer {
-				margin-top: 40px;
-				padding-top: 20px;
-				border-top: 1px solid #c3c4c7;
-			}
-			.wpshadow-example-box {
-				font-family: monospace;
-			}
-		</style>
 		<?php
 	}
 }

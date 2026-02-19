@@ -74,12 +74,11 @@ class Lazy_Widget_Loader {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-lazy-widgets',
 			'wpshadowLazyWidgets',
+			'wpshadow_load_widget',
 			array(
-				'nonce'     => wp_create_nonce( 'wpshadow_load_widget' ),
-				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 				'widgets'   => self::get_lazy_widgets(),
 				'loadDelay' => 500, // ms after page render
 			)

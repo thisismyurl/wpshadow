@@ -139,3 +139,5 @@ public static function check() {
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/multisite-plugin-theme-security',
 		);
+	}
+}

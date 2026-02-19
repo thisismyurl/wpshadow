@@ -78,59 +78,14 @@ class Database_Migrator {
 	 * Schema Version 1: Initial tables
 	 *
 	 * Creates all base tables needed by WPShadow:
-	 * - wpshadow_workflow_logs: Temporary workflow execution logs
-	 * - wpshadow_activity_log: Guardian activity tracking (optional, uses options by default)
+	 * - wpshadow_exit_interviews: Exit interview responses
+	 *
+	 * Workflow and activity history are stored in WordPress options.
 	 *
 	 * @return void
 	 */
 	private static function schema_v1() {
 		global $wpdb;
-
-		// Table prefix
-		$table_logs = $wpdb->prefix . 'wpshadow_workflow_logs';
-
-		// SQL statement using WordPress coding standards
-		$sql = "CREATE TABLE {$table_logs} (
-			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-			workflow_id VARCHAR(100) NOT NULL,
-			execution_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			execution_time_ms INT UNSIGNED DEFAULT 0,
-			handler_name VARCHAR(255) NOT NULL,
-			status VARCHAR(50) NOT NULL,
-			message TEXT,
-			result_data LONGTEXT,
-			user_id BIGINT UNSIGNED,
-			INDEX (workflow_id),
-			INDEX (execution_date),
-			INDEX (status),
-			PRIMARY KEY (id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-
-		// Use dbDelta for safe table creation
-		// dbDelta returns array of queries executed, but we just need side effects
-		dbDelta( $sql );
-
-		// Optional: Create activity log table for Guardian
-		// Currently using wp_options with wpshadow_guardian_activity option
-		// This table can be added if performance metrics show need for it
-		// For now, keeping it commented to minimize schema complexity
-		/*
-		$table_activity = $wpdb->prefix . 'wpshadow_activity_log';
-		$sql_activity = "CREATE TABLE {$table_activity} (
-			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-			activity_type VARCHAR(100) NOT NULL,
-			activity_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			severity VARCHAR(50),
-			details TEXT,
-			user_id BIGINT UNSIGNED,
-			INDEX (activity_type),
-			INDEX (activity_date),
-			INDEX (severity),
-			PRIMARY KEY (id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-
-		dbDelta($sql_activity);
-		*/
 
 		// Exit interview table
 		$table_exit_interviews = $wpdb->prefix . 'wpshadow_exit_interviews';
@@ -222,7 +177,6 @@ class Database_Migrator {
 		global $wpdb;
 
 		return array(
-			$wpdb->prefix . 'wpshadow_workflow_logs',
 			$wpdb->prefix . 'wpshadow_exit_interviews',
 			$wpdb->prefix . 'wpshadow_exit_followups',
 		);

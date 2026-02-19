@@ -382,8 +382,6 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	private static function store_scan_results( $results, $execution_time ) {
-		global $wpdb;
-
 		$scan_data = array(
 			'scan_date'       => current_time( 'mysql' ),
 			'execution_time'  => round( $execution_time, 2 ),
@@ -394,14 +392,26 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 			'results'         => maybe_serialize( $results ),
 		);
 
-		// Insert into scans table (if it exists)
-		$table = $wpdb->prefix . 'wpshadow_scans';
-		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) === $table ) {
-			$wpdb->insert( $table, $scan_data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		}
-
 		// Also update option with latest scan
 		update_option( self::$settings_prefix . '_latest_results', $scan_data );
+
+		// Keep historical scan summaries in options.
+		$scan_history = get_option( 'wpshadow_scan_history', array() );
+		if ( ! is_array( $scan_history ) ) {
+			$scan_history = array();
+		}
+
+		array_unshift(
+			$scan_history,
+			array(
+				'timestamp'            => $scan_data['scan_date'],
+				'diagnostics_run'      => count( $results['diagnostics_run'] ?? array() ),
+				'findings'             => $scan_data['findings_count'],
+				'treatments_available' => 0,
+			)
+		);
+
+		update_option( 'wpshadow_scan_history', array_slice( $scan_history, 0, 30 ) );
 	}
 
 	/**
@@ -647,6 +657,22 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 
 		// Check if WP_DISABLE_CRON is true
 		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+			$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+			wp_enqueue_script(
+				'wpshadow-scan-scheduler-notice',
+				WPSHADOW_URL . 'assets/js/scan-scheduler-notice.js',
+				array( 'jquery' ),
+				$version,
+				true
+			);
+
+			\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+				'wpshadow-scan-scheduler-notice',
+				'wpsScanSchedulerNotice',
+				'wpshadow_dismiss_cron_disabled_notice'
+			);
+
 			?>
 			<div class="notice notice-info is-dismissible" id="wpshadow-cron-disabled-notice">
 				<p>
@@ -658,20 +684,6 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 					?>
 				</p>
 			</div>
-			<script>
-			jQuery(document).ready(function($) {
-				$('#wpshadow-cron-disabled-notice').on('click', '.notice-dismiss', function() {
-					$.ajax({
-						url: ajaxurl,
-						type: 'POST',
-						data: {
-							action: 'wpshadow_dismiss_cron_disabled_notice',
-							nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_dismiss_cron_disabled_notice' ) ); ?>'
-						}
-					});
-				});
-			});
-			</script>
 			<?php
 		}
 	}

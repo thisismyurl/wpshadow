@@ -50,11 +50,11 @@ class User_Search_Handler extends AJAX_Handler_Base {
 			self::send_success( array( 'users' => array() ) );
 		}
 
-		global $wpdb;
+		$search_term = str_replace( array( '*', '%', '_' ), '', $term );
 
 		$query = new \WP_User_Query(
 			array(
-				'search'         => '*' . $wpdb->esc_like( $term ) . '*',
+				'search'         => '*' . $search_term . '*',
 				'search_columns' => array( 'user_login', 'display_name', 'user_email' ),
 				'number'         => 20,
 				'orderby'        => 'display_name',

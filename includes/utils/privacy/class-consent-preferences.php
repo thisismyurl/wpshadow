@@ -153,20 +153,26 @@ class Consent_Preferences {
 	 * @return array Statistics.
 	 */
 	public static function get_consent_stats() {
-		global $wpdb;
-
 		$total_users = count_users();
 		$admin_users = count( get_users( array( 'role' => 'administrator' ) ) );
 
 		// Count users who have consented
-		$query = $wpdb->prepare(
-			"SELECT COUNT(DISTINCT user_id) as count FROM {$wpdb->usermeta} 
-			WHERE meta_key = %s AND meta_value LIKE %s",
-			'wpshadow_consent_preferences',
-			'%consented_at%'
+		$consented_query = new \WP_User_Query(
+			array(
+				'meta_query'  => array(
+					array(
+						'key'     => 'wpshadow_consent_preferences',
+						'value'   => 'consented_at',
+						'compare' => 'LIKE',
+					),
+				),
+				'fields'      => 'ID',
+				'number'      => 1,
+				'count_total' => true,
+			)
 		);
 
-		$consented = (int) $wpdb->get_var( $query );
+		$consented = (int) $consented_query->get_total();
 
 		return array(
 			'total_users'     => $total_users['total_users'],

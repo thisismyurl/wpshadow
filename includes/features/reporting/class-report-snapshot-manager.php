@@ -107,6 +107,55 @@ class Report_Snapshot_Manager {
 	}
 
 	/**
+	 * Check whether the snapshots table exists.
+	 *
+	 * @since  1.7039.1200
+	 * @return bool True when table exists.
+	 */
+	public static function has_snapshots_table() {
+		global $wpdb;
+
+		$table_name  = $wpdb->prefix . 'wpshadow_report_snapshots';
+		$table_match = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
+
+		return $table_match === $table_name;
+	}
+
+	/**
+	 * Get a snapshot by ID.
+	 *
+	 * @since  1.7039.1200
+	 * @param  int $snapshot_id Snapshot ID.
+	 * @return array|null Snapshot data or null when not found.
+	 */
+	public static function get_snapshot_by_id( $snapshot_id ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
+		$snapshot   = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", (int) $snapshot_id ),
+			ARRAY_A
+		);
+
+		if ( ! is_array( $snapshot ) ) {
+			return null;
+		}
+
+		$snapshot['data']     = json_decode( $snapshot['data'] ?? '', true );
+		$snapshot['metadata'] = json_decode( $snapshot['metadata'] ?? '', true );
+
+		if ( ! is_array( $snapshot['data'] ) ) {
+			$snapshot['data'] = array();
+		}
+
+		if ( ! is_array( $snapshot['metadata'] ) ) {
+			$snapshot['metadata'] = array();
+		}
+
+		return $snapshot;
+	}
+
+	/**
 	 * Get total snapshot count for a report.
 	 *
 	 * @since  1.7039.1200

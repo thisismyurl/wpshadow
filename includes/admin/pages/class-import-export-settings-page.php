@@ -326,11 +326,11 @@ class Import_Export_Settings_Page {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-import-export',
 			'wpShadowImportExport',
+			'wpshadow_import_export',
 			array(
-				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
 				'isRegistered'  => $is_registered,
 				'i18n'          => array(
 					'exporting'        => __( 'Exporting settings...', 'wpshadow' ),

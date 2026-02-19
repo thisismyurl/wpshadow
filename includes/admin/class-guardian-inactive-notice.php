@@ -87,6 +87,28 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 
 		$rendered = true;
 
+		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+
+		wp_enqueue_script(
+			'wpshadow-guardian-inactive-notice',
+			WPSHADOW_URL . 'assets/js/guardian-inactive-notice.js',
+			array( 'jquery' ),
+			$version,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-guardian-inactive-notice',
+			'wpsGuardianInactiveNotice',
+			array(
+				'dismissNonce'           => wp_create_nonce( 'wpshadow_dismiss_guardian_notice' ),
+				'activatingText'         => __( 'Activating...', 'wpshadow' ),
+				'activatedText'          => __( 'Guardian Activated!', 'wpshadow' ),
+				'activateFailedText'     => __( 'Failed to activate Guardian', 'wpshadow' ),
+				'activateErrorText'      => __( 'Error activating Guardian', 'wpshadow' ),
+			)
+		);
+
 		// Display the notice
 		?>
 		<div class="notice notice-info is-dismissible" id="wpshadow-guardian-notice">
@@ -103,61 +125,6 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 				</button>
 			</p>
 		</div>
-
-		<script>
-		jQuery(document).ready(function($) {
-			// Handle direct Guardian activation
-			$('#wpshadow-guardian-notice').on('click', '#wpshadow-activate-guardian-btn', function(e) {
-				e.preventDefault();
-				var $btn = $(this);
-				var originalText = $btn.text();
-
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Activating...', 'wpshadow' ) ); ?>');
-
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_activate_guardian_from_notice',
-						_wpnonce: $btn.attr('data-nonce')
-					},
-					success: function(response) {
-						if (response.success) {
-							$btn.text('<?php echo esc_js( __( 'Guardian Activated!', 'wpshadow' ) ); ?>').addClass('disabled');
-							setTimeout(function() {
-								$('#wpshadow-guardian-notice').fadeOut(300, function() {
-									$(this).remove();
-								});
-							}, 1500);
-						} else {
-							$btn.prop('disabled', false).text(originalText);
-							alert(response.data.message || '<?php echo esc_js( __( 'Failed to activate Guardian', 'wpshadow' ) ); ?>');
-						}
-					},
-					error: function() {
-						$btn.prop('disabled', false).text(originalText);
-						alert('<?php echo esc_js( __( 'Error activating Guardian', 'wpshadow' ) ); ?>');
-					}
-				});
-			});
-
-			// Handle dismiss
-			$('#wpshadow-guardian-notice').on('click', '.notice-dismiss, #wpshadow-dismiss-guardian-notice', function(e) {
-				if (e.target.id === 'wpshadow-dismiss-guardian-notice') {
-					e.preventDefault();
-				}
-
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_dismiss_guardian_notice',
-						_wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_dismiss_guardian_notice' ) ); ?>'
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 

@@ -137,22 +137,34 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 			return;
 		}
 
-		wp_enqueue_style( 'wp-components' );
+		wp_enqueue_style(
+			'wpshadow-first-activation-welcome',
+			WPSHADOW_URL . 'assets/css/first-activation-welcome.css',
+			array( 'wp-components' ),
+			WPSHADOW_VERSION
+		);
 
-		// Inline CSS for modal
-		wp_add_inline_style( 'wp-components', self::get_modal_css() );
-
-		// Inline JS for modal
-		wp_add_inline_script( 'jquery', self::get_modal_js() );
+		wp_enqueue_script(
+			'wpshadow-first-activation-welcome',
+			WPSHADOW_URL . 'assets/js/first-activation-welcome.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
 
 		// Localize script
-		wp_localize_script( 'jquery', 'wpshadowWelcome', array(
-			'nonce'       => wp_create_nonce( 'wpshadow_complete_welcome' ),
-			'ajax_url'    => admin_url( 'admin-ajax.php' ),
-			'strings'     => array(
-				'error' => __( 'Could not save preferences. Please try again.', 'wpshadow' ),
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+			'wpshadow-first-activation-welcome',
+			'wpshadowWelcome',
+			'wpshadow_complete_welcome',
+			array(
+				'strings' => array(
+					'error' => __( 'Could not save preferences. Please try again.', 'wpshadow' ),
+				),
 			),
-		) );
+			'nonce',
+			'ajax_url'
+		);
 	}
 
 	/**
@@ -310,298 +322,6 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 			</div>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Get modal CSS.
-	 *
-	 * @since  1.6004.0200
-	 * @return string CSS code.
-	 */
-	private static function get_modal_css() {
-		return <<<CSS
-.wpshadow-welcome-container {
-	position: relative;
-	background: white;
-	border-radius: 12px;
-	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-	max-width: 700px;
-	max-height: 90vh;
-	overflow: auto;
-	animation: wpshadowWelcomeSlideIn 0.3s ease-out;
-}
-
-@keyframes wpshadowWelcomeSlideIn {
-	from {
-		opacity: 0;
-		transform: translateY(30px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-.wpshadow-welcome-header {
-	text-align: center;
-	padding: 40px 40px 20px;
-	background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-	color: white;
-}
-
-.wpshadow-welcome-logo {
-	margin-bottom: 20px;
-}
-
-.wpshadow-welcome-header h1 {
-	margin: 0 0 10px;
-	font-size: 32px;
-	font-weight: 700;
-	color: white;
-}
-
-.wpshadow-welcome-subtitle {
-	margin: 0;
-	font-size: 16px;
-	opacity: 0.95;
-	color: white;
-}
-
-.wpshadow-welcome-content {
-	padding: 30px 40px;
-}
-
-.wpshadow-privacy-section h2 {
-	margin-top: 0;
-	font-size: 24px;
-	color: #1e1e1e;
-}
-
-.wpshadow-privacy-section > p {
-	font-size: 15px;
-	line-height: 1.6;
-	color: #3c434a;
-	margin-bottom: 24px;
-}
-
-.wpshadow-consent-options {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	margin-bottom: 24px;
-}
-
-.wpshadow-consent-item {
-	border: 2px solid #e0e0e0;
-	border-radius: 8px;
-	padding: 20px;
-	background: #fafafa;
-	transition: all 0.2s ease;
-}
-
-.wpshadow-consent-item:hover {
-	background: #f5f5f5;
-	border-color: #6366F1;
-}
-
-.wpshadow-consent-required {
-	background: #f0f9ff;
-	border-color: #0ea5e9;
-}
-
-.wpshadow-consent-optional:has(input:checked) {
-	background: #f0fdf4;
-	border-color: #22c55e;
-}
-
-.wpshadow-consent-header {
-	margin-bottom: 8px;
-}
-
-.wpshadow-consent-header label {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	cursor: pointer;
-	font-size: 16px;
-	margin: 0;
-}
-
-.wpshadow-consent-header label input[disabled] {
-	cursor: not-allowed;
-}
-
-.wpshadow-consent-checkbox {
-	width: 20px;
-	height: 20px;
-	margin: 0;
-}
-
-.wpshadow-badge {
-	display: inline-block;
-	padding: 2px 8px;
-	border-radius: 4px;
-	font-size: 11px;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-.wpshadow-badge-required {
-	background: #0ea5e9;
-	color: white;
-}
-
-.wpshadow-badge-optional {
-	background: #d1d5db;
-	color: #4b5563;
-}
-
-.wpshadow-consent-description {
-	margin: 8px 0;
-	font-size: 14px;
-	color: #6b7280;
-}
-
-.wpshadow-consent-details {
-	margin: 8px 0 0 30px;
-	font-size: 13px;
-	color: #6b7280;
-	list-style: disc;
-}
-
-.wpshadow-consent-details li {
-	margin: 4px 0;
-}
-
-.wpshadow-consent-promise {
-	margin-top: 12px;
-	padding: 12px;
-	background: white;
-	border-radius: 6px;
-	border-left: 3px solid #22c55e;
-}
-
-.wpshadow-consent-promise strong {
-	display: block;
-	margin-bottom: 6px;
-	color: #1e1e1e;
-}
-
-.wpshadow-consent-promise ul {
-	margin: 4px 0 0 20px;
-	font-size: 13px;
-	color: #6b7280;
-	list-style: disc;
-}
-
-.wpshadow-privacy-footer {
-	padding: 16px;
-	background: #f9fafb;
-	border-radius: 8px;
-	font-size: 13px;
-	color: #6b7280;
-}
-
-.wpshadow-privacy-footer a {
-	color: #6366F1;
-	text-decoration: none;
-	font-weight: 600;
-}
-
-.wpshadow-privacy-footer a:hover {
-	text-decoration: underline;
-}
-
-.wpshadow-welcome-footer {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 20px 40px;
-	border-top: 1px solid #e0e0e0;
-	background: #fafafa;
-}
-
-.wpshadow-welcome-footer .button-hero {
-	padding: 12px 24px;
-	font-size: 16px;
-}
-CSS;
-	}
-
-	/**
-	 * Get modal JavaScript.
-	 *
-	 * @since  1.6004.0200
-	 * @return string JavaScript code.
-	 */
-	private static function get_modal_js() {
-		return <<<JS
-jQuery(document).ready(function($) {
-	if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
-		window.WPShadowModal.openStatic('wpshadow-welcome-modal', { returnFocus: document.activeElement });
-	} else {
-		$('#wpshadow-welcome-modal').addClass('wpshadow-modal-show');
-	}
-
-	$('#wpshadow-welcome-continue, #wpshadow-welcome-skip').on('click', function(e) {
-		e.preventDefault();
-
-		var telemetry = $('#wpshadow-consent-telemetry').is(':checked');
-		var skipped = $(this).attr('id') === 'wpshadow-welcome-skip';
-
-		$.ajax({
-			url: wpshadowWelcome.ajax_url,
-			type: 'POST',
-			data: {
-				action: 'wpshadow_complete_welcome',
-				nonce: wpshadowWelcome.nonce,
-				anonymized_telemetry: telemetry ? '1' : '0',
-				skipped: skipped ? '1' : '0'
-			},
-			success: function(response) {
-				if (response.success) {
-					if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
-						window.WPShadowModal.closeStatic('wpshadow-welcome-modal');
-					} else {
-						$('#wpshadow-welcome-modal').removeClass('wpshadow-modal-show');
-					}
-
-					setTimeout(function() {
-						$('#wpshadow-welcome-modal').remove();
-					}, 300);
-
-					// Redirect to dashboard if not skipped
-					if (!skipped && response.data.redirect) {
-						window.location.href = response.data.redirect;
-					}
-				} else {
-					if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
-						window.WPShadowModal.alert({
-							title: 'Something Went Wrong',
-							message: wpshadowWelcome.strings.error,
-							type: 'danger'
-						});
-					} else {
-						window.alert(wpshadowWelcome.strings.error);
-					}
-				}
-			},
-			error: function() {
-				if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
-					window.WPShadowModal.alert({
-						title: 'Something Went Wrong',
-						message: wpshadowWelcome.strings.error,
-						type: 'danger'
-					});
-				} else {
-					window.alert(wpshadowWelcome.strings.error);
-				}
-			}
-		});
-	});
-});
-JS;
 	}
 
 	/**

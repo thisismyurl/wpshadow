@@ -151,15 +151,16 @@ class Content_Review_Manager {
 			WPSHADOW_VERSION
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-content-review',
 			'wpShadowReview',
+			'wpshadow_content_review',
 			array(
-				'nonce'                => wp_create_nonce( 'wpshadow_content_review' ),
-				'ajax_url'             => admin_url( 'admin-ajax.php' ),
 				'is_cloud_registered'  => Cloud_Service_Connector::is_registered(),
 				'cloud_nonce'          => wp_create_nonce( 'wpshadow_cloud_improvement' ),
-			)
+			),
+			'nonce',
+			'ajax_url'
 		);
 	}
 

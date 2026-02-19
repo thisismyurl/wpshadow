@@ -20,6 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array Help cards.
  */
 function wpshadow_get_help_cards() {
+	static $cards_cache = null;
+
+	if ( null !== $cards_cache ) {
+		return $cards_cache;
+	}
+
+	$cache_key    = 'wpshadow_help_cards_' . md5( (string) WPSHADOW_VERSION );
+	$cached_cards = get_transient( $cache_key );
+	if ( is_array( $cached_cards ) ) {
+		$cards_cache = $cached_cards;
+		return $cards_cache;
+	}
+
 	$cards = array();
 	$base  = WPSHADOW_PATH . 'includes/ui/help';
 	$dirs  = glob( $base . '/*', GLOB_ONLYDIR );
@@ -45,7 +58,10 @@ function wpshadow_get_help_cards() {
 		}
 	);
 
-	return $cards;
+	set_transient( $cache_key, $cards, 12 * HOUR_IN_SECONDS );
+	$cards_cache = $cards;
+
+	return $cards_cache;
 }
 
 /**

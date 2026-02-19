@@ -111,14 +111,13 @@ class Block_Registry {
 		);
 
 		// Localize script data.
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-blocks-editor',
 			'wpShadowBlocks',
+			'wpshadow_blocks',
 			array(
 				'blocks'      => array_keys( self::$blocks ),
 				'blockPrefix' => 'wpshadow',
-				'nonce'       => wp_create_nonce( 'wpshadow_blocks' ),
-				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
 			)
 		);
 	}

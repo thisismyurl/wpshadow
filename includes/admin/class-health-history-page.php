@@ -103,13 +103,10 @@ class Health_History_Page extends Hook_Subscriber_Base {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-health-history-charts',
 			'wpShadowHealthHistory',
-			array(
-				'nonce'  => wp_create_nonce( 'wpshadow_get_health_history' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_get_health_history'
 		);
 	}
 }

@@ -47,7 +47,7 @@ protected static $title = 'Digital Product Download Privacy';
  *
  * @var string
  */
-protected static $description = 'Verifies digital product downloads don't expose customer data';
+protected static $description = 'Verifies digital product downloads don\'t expose customer data';
 
 /**
  * The family this diagnostic belongs to
@@ -150,3 +150,5 @@ public static function check() {
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/digital-product-privacy',
 		);
+	}
+}

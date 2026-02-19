@@ -37,8 +37,45 @@ class Weekly_Tips_Widget extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(
-			'wp_dashboard_setup'                        => 'register_dashboard_widget',
-			'wp_ajax_wpshadow_mark_tip_helpful'         => 'ajax_mark_helpful',
+			'wp_dashboard_setup'                => 'register_dashboard_widget',
+			'admin_enqueue_scripts'             => 'enqueue_assets',
+			'wp_ajax_wpshadow_mark_tip_helpful' => 'ajax_mark_helpful',
+		);
+	}
+
+	/**
+	 * Enqueue widget assets on dashboard.
+	 *
+	 * @since 1.6004.0100
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_assets( $hook ) {
+		if ( 'index.php' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wpshadow-weekly-tips-widget',
+			WPSHADOW_URL . 'assets/css/weekly-tips-widget.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-weekly-tips-widget',
+			WPSHADOW_URL . 'assets/js/weekly-tips-widget.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-weekly-tips-widget',
+			'wpshadowWeeklyTipsWidget',
+			array(
+				'nonce' => wp_create_nonce( 'wpshadow_tip_feedback' ),
+			)
 		);
 	}
 
@@ -124,7 +161,7 @@ class Weekly_Tips_Widget extends Hook_Subscriber_Base {
 						<span class="dashicons dashicons-thumbs-up"></span>
 						<?php esc_html_e( 'This was helpful', 'wpshadow' ); ?>
 					</button>
-					<span class="wpshadow-tip-helpful-thanks" style="display:none;">
+					<span class="wpshadow-tip-helpful-thanks wpshadow-tip-helpful-thanks-hidden">
 						<?php esc_html_e( 'Thanks for the feedback!', 'wpshadow' ); ?>
 					</span>
 				</div>
@@ -147,90 +184,6 @@ class Weekly_Tips_Widget extends Hook_Subscriber_Base {
 				</small>
 			</div>
 		</div>
-
-		<style>
-		.wpshadow-weekly-tip {
-			font-size: 13px;
-		}
-		.wpshadow-weekly-tip__title {
-			margin: 0 0 10px;
-			font-size: 16px;
-			font-weight: 600;
-			color: #1d2327;
-		}
-		.wpshadow-weekly-tip__description {
-			margin: 0 0 15px;
-			color: #50575e;
-			line-height: 1.6;
-		}
-		.wpshadow-weekly-tip__points {
-			margin: 0 0 15px;
-			padding-left: 20px;
-		}
-		.wpshadow-weekly-tip__points li {
-			margin-bottom: 8px;
-			color: #1d2327;
-		}
-		.wpshadow-weekly-tip__actions {
-			display: flex;
-			gap: 10px;
-			margin-bottom: 15px;
-		}
-		.wpshadow-weekly-tip__actions .button {
-			display: inline-flex;
-			align-items: center;
-			gap: 5px;
-		}
-		.wpshadow-weekly-tip__actions .dashicons {
-			margin-top: 3px;
-		}
-		.wpshadow-weekly-tip__feedback {
-			margin-bottom: 15px;
-			padding-top: 15px;
-			border-top: 1px solid #ddd;
-		}
-		.wpshadow-tip-helpful {
-			background: none;
-			border: none;
-			padding: 5px 10px;
-			color: #2271b1;
-			cursor: pointer;
-			font-size: 13px;
-			display: inline-flex;
-			align-items: center;
-			gap: 5px;
-		}
-		.wpshadow-tip-helpful:hover {
-			color: #135e96;
-		}
-		.wpshadow-tip-helpful .dashicons {
-			font-size: 16px;
-		}
-		.wpshadow-weekly-tip__footer {
-			padding-top: 10px;
-			border-top: 1px solid #ddd;
-			color: #646970;
-		}
-		</style>
-
-		<script>
-		jQuery(document).ready(function($) {
-			$('.wpshadow-tip-helpful').on('click', function() {
-				var $btn = $(this);
-				var tipId = $btn.data('tip-id');
-
-				$.post(ajaxurl, {
-					action: 'wpshadow_mark_tip_helpful',
-					tip_id: tipId,
-					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_tip_feedback' ) ); ?>'
-				}, function() {
-					$btn.fadeOut(300, function() {
-						$('.wpshadow-tip-helpful-thanks').fadeIn(300);
-					});
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 

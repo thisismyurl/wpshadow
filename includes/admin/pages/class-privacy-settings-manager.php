@@ -109,6 +109,27 @@ class Privacy_Settings_Manager {
 	 */
 	public static function render_privacy_ui() {
 		$settings = self::get_all_settings();
+
+		wp_enqueue_script(
+			'wpshadow-privacy-settings-manager',
+			WPSHADOW_URL . 'assets/js/privacy-settings-manager.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'wpshadow-privacy-settings-manager',
+			'wpshadowPrivacySettings',
+			array(
+				'strings' => array(
+					'saving'                => __( 'Saving...', 'wpshadow' ),
+					'saved'                 => __( 'Saved', 'wpshadow' ),
+					'error'                 => __( 'Error', 'wpshadow' ),
+					'save_button'           => __( 'Save Privacy Settings', 'wpshadow' ),
+				),
+			)
+		);
 		?>
 		<div class="wps-privacy-container">
 			<!-- Consent Management -->
@@ -227,39 +248,6 @@ class Privacy_Settings_Manager {
 			</div>
 		</div>
 
-		<script>
-		jQuery(document).ready(function($) {
-			$('.wpshadow-privacy-form').on('submit', function(e) {
-				e.preventDefault();
-				var $form = $(this);
-				var $btn = $form.find('button[type="submit"]');
-				var $status = $('#wpshadow-privacy-status');
-				
-				var data = {
-					action: 'wpshadow_update_privacy_settings',
-					nonce: $form.find('input[name="_wpnonce"]').val(),
-					consent_required: $form.find('input[name="consent_required"]').prop('checked'),
-					collect_analytics: $form.find('input[name="collect_analytics"]').prop('checked'),
-					data_retention_days: $form.find('input[name="data_retention_days"]').val(),
-					export_user_data: $form.find('input[name="export_user_data"]').prop('checked'),
-					delete_user_data: $form.find('input[name="delete_user_data"]').prop('checked'),
-					anonymize_on_delete: $form.find('input[name="anonymize_on_delete"]').prop('checked'),
-				};
-				
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
-				$status.html('');
-				
-				$.post(ajaxurl, data, function(response) {
-					if (response.success) {
-						$status.html('<span class="wps-status-success">✓ <?php echo esc_js( __( 'Saved', 'wpshadow' ) ); ?></span>');
-					} else {
-						$status.html('<span class="wps-status-error">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error', 'wpshadow' ) ); ?>') + '</span>');
-					}
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Privacy Settings', 'wpshadow' ) ); ?>');
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 }

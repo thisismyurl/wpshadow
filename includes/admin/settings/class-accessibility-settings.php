@@ -364,36 +364,19 @@ class Accessibility_Settings {
 			return;
 		}
 
-		wp_add_inline_script(
-			'jquery',
-			"
-			jQuery(document).ready(function($) {
-				// Update font size display in real-time
-				$('#wpshadow_font_size_multiplier').on('input', function() {
-					$('#wpshadow_font_size_display').text($(this).val() + '×');
-				});
-			});
-			"
+		wp_enqueue_script(
+			'wpshadow-accessibility-settings',
+			WPSHADOW_URL . 'assets/js/accessibility-settings.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
 		);
 
-		wp_add_inline_style(
-			'wp-admin',
-			"
-			.wpshadow-settings-intro {
-				background: #f0f0f1;
-				border-left: 4px solid #2271b1;
-				padding: 20px;
-				margin: 20px 0;
-			}
-			.wpshadow-settings-intro ul {
-				margin-left: 20px;
-			}
-			.wpshadow-settings-footer {
-				margin-top: 30px;
-				padding-top: 20px;
-				border-top: 1px solid #ddd;
-			}
-			"
+		wp_enqueue_style(
+			'wpshadow-accessibility-settings',
+			WPSHADOW_URL . 'assets/css/accessibility-settings.css',
+			array(),
+			WPSHADOW_VERSION
 		);
 	}
 }

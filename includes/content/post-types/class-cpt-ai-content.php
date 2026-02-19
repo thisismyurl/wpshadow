@@ -173,13 +173,10 @@ class CPT_AI_Content {
 			true
 		);
 
-		wp_localize_script(
+		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
 			'wpshadow-ai-content',
 			'wpShadowAI',
-			array(
-				'nonce'   => wp_create_nonce( 'wpshadow_ai_content' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			)
+			'wpshadow_ai_content'
 		);
 
 		wp_enqueue_style(
