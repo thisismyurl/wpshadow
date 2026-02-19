@@ -217,4 +217,116 @@ class Tool_View_Base {
 		}
 		return true;
 	}
+
+	/**
+	 * Render cloud registration required notice card.
+	 *
+	 * Displays a consistent warning card with cloud registration call-to-action.
+	 *
+	 * @since  1.6037.0000
+	 * @param  string $description Description explaining why cloud access is required.
+	 * @param  string $free_tier   Optional. Free tier text.
+	 * @return void
+	 */
+	public static function render_cloud_registration_required_notice( string $description, string $free_tier = '' ): void {
+		?>
+		<div class="wps-card wps-card--warning">
+			<div class="wps-card-body">
+				<h3><?php esc_html_e( '🌐 Cloud Service Required', 'wpshadow' ); ?></h3>
+				<p><?php echo esc_html( $description ); ?></p>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=cloud-registration' ) ); ?>" class="wps-btn wps-btn--primary">
+					<span class="dashicons dashicons-cloud"></span>
+					<?php esc_html_e( 'Register for Free Cloud Access', 'wpshadow' ); ?>
+				</a>
+				<?php if ( '' !== $free_tier ) : ?>
+					<p class="wps-help-text" style="margin-top: 15px;">
+						<strong><?php esc_html_e( 'Free Tier:', 'wpshadow' ); ?></strong>
+						<?php echo esc_html( $free_tier ); ?>
+					</p>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render cloud request error notice card.
+	 *
+	 * Displays a consistent error card for cloud API request failures.
+	 *
+	 * @since  1.6037.0000
+	 * @param  string $message Error message to display.
+	 * @return void
+	 */
+	public static function render_cloud_request_error_notice( string $message ): void {
+		?>
+		<div class="wps-card wps-card--error">
+			<div class="wps-card-body">
+				<p><?php echo esc_html( $message ); ?></p>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render external servers info card.
+	 *
+	 * Displays a consistent informational card explaining why a feature runs
+	 * on external infrastructure.
+	 *
+	 * @since  1.6037.0000
+	 * @param  array  $reasons List of reason strings.
+	 * @param  string $title   Optional. Card title.
+	 * @return void
+	 */
+	public static function render_external_servers_info_card( array $reasons, string $title = '' ): void {
+		if ( '' === $title ) {
+			$title = __( 'Why This Runs on External Servers', 'wpshadow' );
+		}
+
+		?>
+		<div class="wps-card wps-mt-6 wps-card--info">
+			<div class="wps-card-body">
+				<h3><?php echo esc_html( $title ); ?></h3>
+				<ul style="list-style: disc; margin-left: 20px;">
+					<?php foreach ( $reasons as $reason ) : ?>
+						<li><?php echo esc_html( $reason ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render cloud status summary card.
+	 *
+	 * Displays a standard card with title, status line, and optional details.
+	 *
+	 * @since  1.6037.0000
+	 * @param  string $title        Card title.
+	 * @param  string $status_text  Status value text.
+	 * @param  string $details      Optional. Additional details.
+	 * @param  string $status_label Optional. Label before status text.
+	 * @return void
+	 */
+	public static function render_cloud_status_summary_card( string $title, string $status_text, string $details = '', string $status_label = '' ): void {
+		if ( '' === $status_label ) {
+			$status_label = __( 'Status:', 'wpshadow' );
+		}
+
+		?>
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title"><?php echo esc_html( $title ); ?></h3>
+			</div>
+			<div class="wps-card-body">
+				<p><strong><?php echo esc_html( $status_label ); ?></strong> <?php echo esc_html( $status_text ); ?></p>
+				<?php if ( ! empty( $details ) ) : ?>
+					<p class="wps-help-text"><?php echo esc_html( $details ); ?></p>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
 }

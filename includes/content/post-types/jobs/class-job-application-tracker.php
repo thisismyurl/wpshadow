@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Job_Application_Tracker extends Hook_Subscriber_Base {
 
-	const TABLE_APPLICATIONS = 'wpshadow_job_applications';
+	const POST_TYPE = 'wps_job_application';
 
 	/**
 	 * Get hooks to subscribe to.
@@ -38,46 +38,32 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(
-			'plugins_loaded' => 'create_applications_table',
+			'init' => 'register_post_type',
 			'wp_ajax_submit_job_application' => 'handle_application_submission',
 		);
 	}
 
 	/**
-	 * Create applications database table.
+	 * Register job application post type.
 	 *
 	 * @since 1.6050.0000
 	 */
-	public static function create_applications_table() {
-		global $wpdb;
-
-		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
-		$charset_collate = $wpdb->get_charset_collate();
-
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) !== $table ) {
-			$sql = "CREATE TABLE $table (
-				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				job_id bigint(20) unsigned NOT NULL,
-				applicant_name varchar(255) NOT NULL,
-				applicant_email varchar(255) NOT NULL,
-				applicant_phone varchar(20),
-				applicant_resume_url longtext,
-				cover_letter longtext,
-				status varchar(50) DEFAULT 'new',
-				rating int(2) DEFAULT 0,
-				notes longtext,
-				applied_at datetime DEFAULT CURRENT_TIMESTAMP,
-				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				PRIMARY KEY (id),
-				KEY job_id (job_id),
-				KEY applicant_email (applicant_email),
-				KEY status (status),
-				KEY applied_at (applied_at)
-			) $charset_collate;";
-
-			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-			dbDelta( $sql );
-		}
+	public static function register_post_type() {
+		register_post_type(
+			self::POST_TYPE,
+			array(
+				'labels'              => array(
+					'name'          => __( 'Job Applications', 'wpshadow' ),
+					'singular_name' => __( 'Job Application', 'wpshadow' ),
+				),
+				'public'              => false,
+				'show_ui'             => false,
+				'show_in_menu'        => false,
+				'supports'            => array( 'title' ),
+				'capability_type'     => 'post',
+				'map_meta_cap'        => true,
+			)
+		);
 	}
 
 	/**
@@ -118,25 +104,34 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 			}
 		}
 
-		// Insert application
-		global $wpdb;
-		$result = $wpdb->insert(
-			$wpdb->prefix . self::TABLE_APPLICATIONS,
+		$application_id = wp_insert_post(
 			array(
-				'job_id'           => $job_id,
-				'applicant_name'   => $applicant_name,
-				'applicant_email'  => $applicant_email,
-				'applicant_phone'  => $applicant_phone,
-				'applicant_resume_url' => $resume_url,
-				'cover_letter'     => $cover_letter,
-				'status'           => 'new',
-			),
-			array( '%d', '%s', '%s', '%s', '%s', '%s', '%s' )
+				'post_type'   => self::POST_TYPE,
+				'post_status' => 'publish',
+				'post_title'  => sprintf(
+					/* translators: %s: applicant name */
+					__( 'Application from %s', 'wpshadow' ),
+					$applicant_name
+				),
+				'post_parent' => $job_id,
+			)
 		);
 
-		if ( ! $result ) {
+		if ( is_wp_error( $application_id ) || ! $application_id ) {
 			wp_send_json_error( array( 'message' => __( 'Failed to submit application', 'wpshadow' ) ) );
 		}
+
+		update_post_meta( $application_id, 'wps_application_job_id', $job_id );
+		update_post_meta( $application_id, 'wps_application_applicant_name', $applicant_name );
+		update_post_meta( $application_id, 'wps_application_applicant_email', $applicant_email );
+		update_post_meta( $application_id, 'wps_application_applicant_phone', $applicant_phone );
+		update_post_meta( $application_id, 'wps_application_resume_url', $resume_url );
+		update_post_meta( $application_id, 'wps_application_cover_letter', $cover_letter );
+		update_post_meta( $application_id, 'wps_application_status', 'new' );
+		update_post_meta( $application_id, 'wps_application_rating', 0 );
+		update_post_meta( $application_id, 'wps_application_notes', '' );
+		update_post_meta( $application_id, 'wps_application_applied_at', current_time( 'mysql' ) );
+		update_post_meta( $application_id, 'wps_application_updated_at', current_time( 'mysql' ) );
 
 		// Send confirmation email to applicant
 		self::send_applicant_confirmation_email( $applicant_email, $applicant_name, $job_id );
@@ -156,8 +151,6 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 * @return array Array of applications.
 	 */
 	public static function get_job_applications( $job_id, $args = array() ) {
-		global $wpdb;
-
 		$defaults = array(
 			'status'    => '',
 			'limit'     => 50,
@@ -168,21 +161,39 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
-		$sql = "SELECT * FROM $table WHERE job_id = %d";
-		$params = array( $job_id );
+		$meta_query = array(
+			array(
+				'key'   => 'wps_application_job_id',
+				'value' => $job_id,
+				'type'  => 'NUMERIC',
+			),
+		);
 
 		if ( ! empty( $args['status'] ) ) {
-			$sql .= " AND status = %s";
-			$params[] = sanitize_text_field( $args['status'] );
+			$meta_query[] = array(
+				'key'   => 'wps_application_status',
+				'value' => sanitize_text_field( $args['status'] ),
+			);
 		}
 
-		$sql .= " ORDER BY " . sanitize_text_field( $args['orderby'] ) . " " . strtoupper( $args['order'] );
-		$sql .= " LIMIT %d OFFSET %d";
-		$params[] = absint( $args['limit'] );
-		$params[] = absint( $args['offset'] );
+		$query = new \WP_Query(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => absint( $args['limit'] ),
+				'offset'         => absint( $args['offset'] ),
+				'orderby'        => 'date',
+				'order'          => strtoupper( (string) $args['order'] ) === 'ASC' ? 'ASC' : 'DESC',
+				'meta_query'     => $meta_query,
+			)
+		);
 
-		return $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
+		$applications = array();
+		foreach ( $query->posts as $post ) {
+			$applications[] = self::map_post_to_application( $post->ID );
+		}
+
+		return array_filter( $applications );
 	}
 
 	/**
@@ -192,12 +203,12 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 * @return int Total applications.
 	 */
 	public static function get_total_applications() {
-		global $wpdb;
+		$count = wp_count_posts( self::POST_TYPE );
+		if ( ! $count ) {
+			return 0;
+		}
 
-		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
-		$total = $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" );
-
-		return (int) $total;
+		return (int) ( $count->publish ?? 0 );
 	}
 
 	/**
@@ -208,17 +219,22 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 * @return int Count for status.
 	 */
 	public static function get_applications_count_by_status( $status ) {
-		global $wpdb;
-
-		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
-		$count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table} WHERE status = %s",
-				sanitize_text_field( $status )
+		$query = new \WP_Query(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'   => 'wps_application_status',
+						'value' => sanitize_text_field( $status ),
+					),
+				),
 			)
 		);
 
-		return (int) $count;
+		return (int) $query->found_posts;
 	}
 
 	/**
@@ -229,22 +245,26 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 * @return array Recent applications.
 	 */
 	public static function get_recent_applications( $limit = 5 ) {
-		global $wpdb;
-
-		$table  = $wpdb->prefix . self::TABLE_APPLICATIONS;
-		$recent = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$table} ORDER BY applied_at DESC LIMIT %d",
-				absint( $limit )
+		$query = new \WP_Query(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => absint( $limit ),
+				'orderby'        => 'date',
+				'order'          => 'DESC',
 			)
 		);
 
-		if ( empty( $recent ) ) {
-			return array();
+		$recent = array();
+		foreach ( $query->posts as $post ) {
+			$mapped = self::map_post_to_application( $post->ID );
+			if ( null !== $mapped ) {
+				$recent[] = $mapped;
+			}
 		}
 
-		foreach ( $recent as $application ) {
-			$application->post_title = get_the_title( (int) $application->job_id );
+		if ( empty( $recent ) ) {
+			return array();
 		}
 
 		return $recent;
@@ -260,26 +280,22 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 * @return bool Success.
 	 */
 	public static function update_application_status( $application_id, $status, $notes = '' ) {
-		global $wpdb;
-
 		$valid_statuses = array( 'new', 'reviewing', 'shortlisted', 'rejected', 'interviewed', 'offered', 'hired' );
 
 		if ( ! in_array( $status, $valid_statuses, true ) ) {
 			return false;
 		}
 
-		$update = $wpdb->update(
-			$wpdb->prefix . self::TABLE_APPLICATIONS,
-			array(
-				'status' => $status,
-				'notes'  => $notes,
-			),
-			array( 'id' => $application_id ),
-			array( '%s', '%s' ),
-			array( '%d' )
-		);
+		$application_id = absint( $application_id );
+		if ( $application_id <= 0 || self::POST_TYPE !== get_post_type( $application_id ) ) {
+			return false;
+		}
 
-		return false !== $update;
+		update_post_meta( $application_id, 'wps_application_status', $status );
+		update_post_meta( $application_id, 'wps_application_notes', sanitize_textarea_field( $notes ) );
+		update_post_meta( $application_id, 'wps_application_updated_at', current_time( 'mysql' ) );
+
+		return true;
 	}
 
 	/**
@@ -347,22 +363,64 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	 * @return array Statistics array.
 	 */
 	public static function get_application_stats( $job_id ) {
-		global $wpdb;
-		$table = $wpdb->prefix . self::TABLE_APPLICATIONS;
+		$applications = self::get_job_applications(
+			$job_id,
+			array(
+				'limit'  => 9999,
+				'offset' => 0,
+			)
+		);
 
-		$total = $wpdb->get_var( $wpdb->prepare(
-			"SELECT COUNT(*) FROM $table WHERE job_id = %d",
-			$job_id
-		) );
+		$total    = count( $applications );
+		$statuses = array();
 
-		$statuses = $wpdb->get_results( $wpdb->prepare(
-			"SELECT status, COUNT(*) as count FROM $table WHERE job_id = %d GROUP BY status",
-			$job_id
-		), OBJECT_K );
+		foreach ( $applications as $application ) {
+			$status = (string) ( $application->status ?? 'new' );
+			if ( ! isset( $statuses[ $status ] ) ) {
+				$statuses[ $status ] = (object) array(
+					'status' => $status,
+					'count'  => 0,
+				);
+			}
+
+			$statuses[ $status ]->count++;
+		}
 
 		return array(
 			'total'      => $total,
 			'by_status'  => $statuses,
+		);
+	}
+
+	/**
+	 * Convert application post to legacy response shape.
+	 *
+	 * @since  1.7050.0000
+	 * @param  int $post_id Application post ID.
+	 * @return \stdClass|null Application object.
+	 */
+	private static function map_post_to_application( $post_id ) {
+		$post_id = absint( $post_id );
+		if ( $post_id <= 0 || self::POST_TYPE !== get_post_type( $post_id ) ) {
+			return null;
+		}
+
+		$job_id = (int) get_post_meta( $post_id, 'wps_application_job_id', true );
+
+		return (object) array(
+			'id'                   => $post_id,
+			'job_id'               => $job_id,
+			'applicant_name'       => (string) get_post_meta( $post_id, 'wps_application_applicant_name', true ),
+			'applicant_email'      => (string) get_post_meta( $post_id, 'wps_application_applicant_email', true ),
+			'applicant_phone'      => (string) get_post_meta( $post_id, 'wps_application_applicant_phone', true ),
+			'applicant_resume_url' => (string) get_post_meta( $post_id, 'wps_application_resume_url', true ),
+			'cover_letter'         => (string) get_post_meta( $post_id, 'wps_application_cover_letter', true ),
+			'status'               => (string) get_post_meta( $post_id, 'wps_application_status', true ),
+			'rating'               => (int) get_post_meta( $post_id, 'wps_application_rating', true ),
+			'notes'                => (string) get_post_meta( $post_id, 'wps_application_notes', true ),
+			'applied_at'           => (string) get_post_meta( $post_id, 'wps_application_applied_at', true ),
+			'updated_at'           => (string) get_post_meta( $post_id, 'wps_application_updated_at', true ),
+			'post_title'           => get_the_title( $job_id ),
 		);
 	}
 }

@@ -187,7 +187,7 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		);
 
 		$corruption_patterns = array(
-			'â€™' => ''',     // Common UTF-8 to Latin-1 corruption.
+			'â€™' => "'",     // Common UTF-8 to Latin-1 corruption.
 			'â€œ' => '"',
 			'â€'  => '"',
 			'â€"' => '–',

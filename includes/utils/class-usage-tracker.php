@@ -161,17 +161,8 @@ class Usage_Tracker {
 	 * @return array Filtered statistics.
 	 */
 	private static function filter_stats_by_period( $stats, $cutoff_time ) {
-		// Get activity logs for the period
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'wpshadow_activity';
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$activities = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT action, metadata FROM {$table_name} WHERE created_at >= %s",
-				gmdate( 'Y-m-d H:i:s', $cutoff_time )
-			)
-		);
+		$activity_result = Activity_Logger::get_activities( array(), 5000, 0 );
+		$activities      = $activity_result['activities'] ?? array();
 
 		// Recalculate stats for this period
 		$period_stats = array(
@@ -182,7 +173,14 @@ class Usage_Tracker {
 		);
 
 		foreach ( $activities as $activity ) {
-			$action = $activity->action;
+			if ( ! isset( $activity['timestamp'] ) || (int) $activity['timestamp'] < (int) $cutoff_time ) {
+				continue;
+			}
+
+			$action = $activity['action'] ?? '';
+			if ( '' === $action ) {
+				continue;
+			}
 
 			// Map to utility
 			$utility_map = array(

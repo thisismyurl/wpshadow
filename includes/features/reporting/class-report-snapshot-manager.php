@@ -25,6 +25,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.603.0200
  */
 class Report_Snapshot_Manager {
+	/**
+	 * Option key for next snapshot ID.
+	 *
+	 * @var string
+	 */
+	private const OPTION_NEXT_ID = 'wpshadow_report_snapshot_next_id';
+
+	/**
+	 * Option key for known report IDs.
+	 *
+	 * @var string
+	 */
+	private const OPTION_REPORTS = 'wpshadow_report_snapshot_reports';
 
 	/**
 	 * Save a report snapshot
@@ -36,28 +49,36 @@ class Report_Snapshot_Manager {
 	 * @return int|false Snapshot ID or false on failure.
 	 */
 	public static function save_snapshot( $report_id, $data, $metadata = array() ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		
-		// Ensure table exists
 		self::maybe_create_table();
-		
-		$snapshot_data = array(
-			'report_id'   => sanitize_key( $report_id ),
-			'data'        => wp_json_encode( $data ),
-			'metadata'    => wp_json_encode( $metadata ),
-			'created_at'  => current_time( 'mysql' ),
-			'findings_count' => isset( $data['findings'] ) ? count( $data['findings'] ) : 0,
+
+		$report_id   = sanitize_key( $report_id );
+		$snapshot_id = self::get_next_snapshot_id();
+		$snapshot    = array(
+			'id'             => $snapshot_id,
+			'report_id'      => $report_id,
+			'data'           => is_array( $data ) ? $data : array(),
+			'metadata'       => is_array( $metadata ) ? $metadata : array(),
+			'created_at'     => current_time( 'mysql' ),
+			'findings_count' => isset( $data['findings'] ) && is_array( $data['findings'] ) ? count( $data['findings'] ) : 0,
 		);
-		
-		$result = $wpdb->insert(
-			$table_name,
-			$snapshot_data,
-			array( '%s', '%s', '%s', '%s', '%d' )
-		);
-		
-		if ( $result ) {
+
+		if ( ! self::save_snapshot_record( $snapshot ) ) {
+			return false;
+		}
+
+		$report_snapshot_ids = self::get_report_snapshot_ids( $report_id );
+		array_unshift( $report_snapshot_ids, $snapshot_id );
+		self::set_report_snapshot_ids( $report_id, $report_snapshot_ids );
+
+		$known_reports = get_option( self::OPTION_REPORTS, array() );
+		if ( ! is_array( $known_reports ) ) {
+			$known_reports = array();
+		}
+		if ( ! in_array( $report_id, $known_reports, true ) ) {
+			$known_reports[] = $report_id;
+			update_option( self::OPTION_REPORTS, $known_reports, false );
+		}
+
 			/**
 			 * Fires after a report snapshot is saved.
 			 *
@@ -67,12 +88,9 @@ class Report_Snapshot_Manager {
 			 * @param string $report_id Report ID.
 			 * @param array  $data Report data.
 			 */
-			do_action( 'wpshadow_after_snapshot_saved', $wpdb->insert_id, $report_id, $data );
-			
-			return $wpdb->insert_id;
-		}
-		
-		return false;
+			do_action( 'wpshadow_after_snapshot_saved', $snapshot_id, $report_id, $data );
+
+			return $snapshot_id;
 	}
 
 	/**
@@ -84,26 +102,7 @@ class Report_Snapshot_Manager {
 	 * @return array Snapshots.
 	 */
 	public static function get_snapshots( $report_id, $limit = 10 ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		
-		$snapshots = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$table_name} WHERE report_id = %s ORDER BY created_at DESC LIMIT %d",
-				$report_id,
-				$limit
-			),
-			ARRAY_A
-		);
-		
-		// Decode JSON data
-		foreach ( $snapshots as &$snapshot ) {
-			$snapshot['data'] = json_decode( $snapshot['data'], true );
-			$snapshot['metadata'] = json_decode( $snapshot['metadata'], true );
-		}
-		
-		return $snapshots;
+		return self::get_snapshots_paginated( $report_id, $limit, 0 );
 	}
 
 	/**
@@ -113,12 +112,7 @@ class Report_Snapshot_Manager {
 	 * @return bool True when table exists.
 	 */
 	public static function has_snapshots_table() {
-		global $wpdb;
-
-		$table_name  = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$table_match = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
-
-		return $table_match === $table_name;
+		return true;
 	}
 
 	/**
@@ -129,27 +123,21 @@ class Report_Snapshot_Manager {
 	 * @return array|null Snapshot data or null when not found.
 	 */
 	public static function get_snapshot_by_id( $snapshot_id ) {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$snapshot   = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", (int) $snapshot_id ),
-			ARRAY_A
-		);
+		$snapshot = get_option( self::get_snapshot_option_key( (int) $snapshot_id ), null );
 
 		if ( ! is_array( $snapshot ) ) {
 			return null;
 		}
 
-		$snapshot['data']     = json_decode( $snapshot['data'] ?? '', true );
-		$snapshot['metadata'] = json_decode( $snapshot['metadata'] ?? '', true );
+		$snapshot['id']             = (int) ( $snapshot['id'] ?? 0 );
+		$snapshot['report_id']      = sanitize_key( $snapshot['report_id'] ?? '' );
+		$snapshot['data']           = is_array( $snapshot['data'] ?? null ) ? $snapshot['data'] : array();
+		$snapshot['metadata']       = is_array( $snapshot['metadata'] ?? null ) ? $snapshot['metadata'] : array();
+		$snapshot['created_at']     = (string) ( $snapshot['created_at'] ?? '' );
+		$snapshot['findings_count'] = (int) ( $snapshot['findings_count'] ?? 0 );
 
-		if ( ! is_array( $snapshot['data'] ) ) {
-			$snapshot['data'] = array();
-		}
-
-		if ( ! is_array( $snapshot['metadata'] ) ) {
-			$snapshot['metadata'] = array();
+		if ( $snapshot['id'] <= 0 || '' === $snapshot['report_id'] ) {
+			return null;
 		}
 
 		return $snapshot;
@@ -163,18 +151,7 @@ class Report_Snapshot_Manager {
 	 * @return int Snapshot count.
 	 */
 	public static function get_snapshots_count( $report_id ) {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-
-		$count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table_name} WHERE report_id = %s",
-				$report_id
-			)
-		);
-
-		return (int) $count;
+		return count( self::get_report_snapshot_ids( sanitize_key( $report_id ) ) );
 	}
 
 	/**
@@ -187,23 +164,16 @@ class Report_Snapshot_Manager {
 	 * @return array Snapshots.
 	 */
 	public static function get_snapshots_paginated( $report_id, $limit = 10, $offset = 0 ) {
-		global $wpdb;
+		$report_id = sanitize_key( $report_id );
+		$ids       = self::get_report_snapshot_ids( $report_id );
+		$ids       = array_slice( $ids, max( 0, (int) $offset ), max( 1, (int) $limit ) );
 
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-
-		$snapshots = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$table_name} WHERE report_id = %s ORDER BY created_at DESC LIMIT %d OFFSET %d",
-				$report_id,
-				$limit,
-				$offset
-			),
-			ARRAY_A
-		);
-
-		foreach ( $snapshots as &$snapshot ) {
-			$snapshot['data'] = json_decode( $snapshot['data'], true );
-			$snapshot['metadata'] = json_decode( $snapshot['metadata'], true );
+		$snapshots = array();
+		foreach ( $ids as $snapshot_id ) {
+			$snapshot = self::get_snapshot_by_id( (int) $snapshot_id );
+			if ( null !== $snapshot ) {
+				$snapshots[] = $snapshot;
+			}
 		}
 
 		return $snapshots;
@@ -220,29 +190,16 @@ class Report_Snapshot_Manager {
 	 * @return array Snapshots.
 	 */
 	public static function get_snapshots_for_user( $report_id, $user_id, $limit = 10, $offset = 0 ) {
-		global $wpdb;
+		$all_snapshots = self::get_snapshots_paginated( $report_id, PHP_INT_MAX, 0 );
+		$filtered      = array();
 
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$needle     = $wpdb->esc_like( '"user_id":' . (int) $user_id );
-		$like       = '%' . $needle . '%';
-
-		$snapshots = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$table_name} WHERE report_id = %s AND metadata LIKE %s ORDER BY created_at DESC LIMIT %d OFFSET %d",
-				$report_id,
-				$like,
-				$limit,
-				$offset
-			),
-			ARRAY_A
-		);
-
-		foreach ( $snapshots as &$snapshot ) {
-			$snapshot['data'] = json_decode( $snapshot['data'], true );
-			$snapshot['metadata'] = json_decode( $snapshot['metadata'], true );
+		foreach ( $all_snapshots as $snapshot ) {
+			if ( isset( $snapshot['metadata']['user_id'] ) && (int) $snapshot['metadata']['user_id'] === (int) $user_id ) {
+				$filtered[] = $snapshot;
+			}
 		}
 
-		return $snapshots;
+		return array_slice( $filtered, max( 0, (int) $offset ), max( 1, (int) $limit ) );
 	}
 
 	/**
@@ -254,21 +211,7 @@ class Report_Snapshot_Manager {
 	 * @return int Snapshot count.
 	 */
 	public static function get_snapshots_for_user_count( $report_id, $user_id ) {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$needle     = $wpdb->esc_like( '"user_id":' . (int) $user_id );
-		$like       = '%' . $needle . '%';
-
-		$count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table_name} WHERE report_id = %s AND metadata LIKE %s",
-				$report_id,
-				$like
-			)
-		);
-
-		return (int) $count;
+		return count( self::get_snapshots_for_user( $report_id, $user_id, PHP_INT_MAX, 0 ) );
 	}
 
 	/**
@@ -280,21 +223,36 @@ class Report_Snapshot_Manager {
 	 * @return int Number of snapshots deleted.
 	 */
 	public static function delete_snapshots_for_user( $report_id, $user_id ) {
-		global $wpdb;
+		$report_id = sanitize_key( $report_id );
+		$ids       = self::get_report_snapshot_ids( $report_id );
+		$deleted   = 0;
 
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$needle     = $wpdb->esc_like( '"user_id":' . (int) $user_id );
-		$like       = '%' . $needle . '%';
+		foreach ( $ids as $snapshot_id ) {
+			$snapshot = self::get_snapshot_by_id( (int) $snapshot_id );
+			if ( null === $snapshot ) {
+				continue;
+			}
 
-		$deleted = $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$table_name} WHERE report_id = %s AND metadata LIKE %s",
-				$report_id,
-				$like
-			)
-		);
+			if ( isset( $snapshot['metadata']['user_id'] ) && (int) $snapshot['metadata']['user_id'] === (int) $user_id ) {
+				delete_option( self::get_snapshot_option_key( (int) $snapshot_id ) );
+				$deleted++;
+			}
+		}
 
-		return (int) $deleted;
+		if ( $deleted > 0 ) {
+			$remaining_ids = array_values(
+				array_filter(
+					$ids,
+					function ( $snapshot_id ) {
+						return null !== self::get_snapshot_by_id( (int) $snapshot_id );
+					}
+				)
+			);
+
+			self::set_report_snapshot_ids( $report_id, $remaining_ids );
+		}
+
+		return $deleted;
 	}
 
 	/**
@@ -306,26 +264,15 @@ class Report_Snapshot_Manager {
 	 * @return array Comparison data.
 	 */
 	public static function compare_snapshots( $snapshot_id_1, $snapshot_id_2 ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		
-		$snapshot1 = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $snapshot_id_1 ),
-			ARRAY_A
-		);
-		
-		$snapshot2 = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $snapshot_id_2 ),
-			ARRAY_A
-		);
+		$snapshot1 = self::get_snapshot_by_id( (int) $snapshot_id_1 );
+		$snapshot2 = self::get_snapshot_by_id( (int) $snapshot_id_2 );
 		
 		if ( ! $snapshot1 || ! $snapshot2 ) {
 			return array( 'error' => 'Snapshots not found' );
 		}
 		
-		$data1 = json_decode( $snapshot1['data'], true );
-		$data2 = json_decode( $snapshot2['data'], true );
+		$data1 = $snapshot1['data'];
+		$data2 = $snapshot2['data'];
 		
 		$comparison = array(
 			'snapshot1' => array(
@@ -409,27 +356,32 @@ class Report_Snapshot_Manager {
 	 * @return array Trend data.
 	 */
 	public static function get_trend_data( $report_id, $days = 30 ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$cutoff_date = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
-		
-		$snapshots = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT created_at, findings_count FROM {$table_name} 
-				WHERE report_id = %s AND created_at >= %s 
-				ORDER BY created_at ASC",
-				$report_id,
-				$cutoff_date
-			),
-			ARRAY_A
+		$cutoff_time = strtotime( "-{$days} days" );
+		$snapshots   = self::get_snapshots_paginated( $report_id, PHP_INT_MAX, 0 );
+		$trend_rows  = array();
+
+		foreach ( $snapshots as $snapshot ) {
+			$created_time = strtotime( $snapshot['created_at'] );
+			if ( false !== $created_time && $created_time >= $cutoff_time ) {
+				$trend_rows[] = array(
+					'created_at'     => $snapshot['created_at'],
+					'findings_count' => (int) $snapshot['findings_count'],
+				);
+			}
+		}
+
+		usort(
+			$trend_rows,
+			function ( $left, $right ) {
+				return strcmp( $left['created_at'], $right['created_at'] );
+			}
 		);
 		
 		return array(
 			'report_id' => $report_id,
 			'period'    => $days . ' days',
-			'data'      => $snapshots,
-			'trend'     => self::calculate_trend( $snapshots ),
+			'data'      => $trend_rows,
+			'trend'     => self::calculate_trend( $trend_rows ),
 		);
 	}
 
@@ -467,18 +419,38 @@ class Report_Snapshot_Manager {
 	 * @return int Number of snapshots deleted.
 	 */
 	public static function cleanup_old_snapshots( $days = 90 ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$cutoff_date = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
-		
-		$deleted = $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$table_name} WHERE created_at < %s",
-				$cutoff_date
-			)
-		);
-		
+		$cutoff_time = strtotime( "-{$days} days" );
+		$deleted     = 0;
+		$report_ids  = get_option( self::OPTION_REPORTS, array() );
+
+		if ( ! is_array( $report_ids ) ) {
+			return 0;
+		}
+
+		foreach ( $report_ids as $report_id ) {
+			$report_id     = sanitize_key( (string) $report_id );
+			$snapshot_ids  = self::get_report_snapshot_ids( $report_id );
+			$remaining_ids = array();
+
+			foreach ( $snapshot_ids as $snapshot_id ) {
+				$snapshot = self::get_snapshot_by_id( (int) $snapshot_id );
+				if ( null === $snapshot ) {
+					continue;
+				}
+
+				$created_time = strtotime( $snapshot['created_at'] );
+				if ( false !== $created_time && $created_time < $cutoff_time ) {
+					delete_option( self::get_snapshot_option_key( (int) $snapshot_id ) );
+					$deleted++;
+					continue;
+				}
+
+				$remaining_ids[] = (int) $snapshot_id;
+			}
+
+			self::set_report_snapshot_ids( $report_id, $remaining_ids );
+		}
+
 		return $deleted;
 	}
 
@@ -489,28 +461,92 @@ class Report_Snapshot_Manager {
 	 * @return void
 	 */
 	private static function maybe_create_table() {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . 'wpshadow_report_snapshots';
-		$charset_collate = $wpdb->get_charset_collate();
-		
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
-			return;
+		if ( false === get_option( self::OPTION_NEXT_ID, false ) ) {
+			update_option( self::OPTION_NEXT_ID, 1, false );
 		}
-		
-		$sql = "CREATE TABLE {$table_name} (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			report_id varchar(100) NOT NULL,
-			data longtext NOT NULL,
-			metadata longtext,
-			findings_count int(11) DEFAULT 0,
-			created_at datetime NOT NULL,
-			PRIMARY KEY (id),
-			KEY report_id (report_id),
-			KEY created_at (created_at)
-		) {$charset_collate};";
-		
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $sql );
+
+		if ( false === get_option( self::OPTION_REPORTS, false ) ) {
+			update_option( self::OPTION_REPORTS, array(), false );
+		}
+	}
+
+	/**
+	 * Get the next snapshot ID.
+	 *
+	 * @since  1.7050.0000
+	 * @return int Next ID.
+	 */
+	private static function get_next_snapshot_id() {
+		$next_id = (int) get_option( self::OPTION_NEXT_ID, 1 );
+		if ( $next_id < 1 ) {
+			$next_id = 1;
+		}
+
+		update_option( self::OPTION_NEXT_ID, $next_id + 1, false );
+
+		return $next_id;
+	}
+
+	/**
+	 * Get option key for a single snapshot record.
+	 *
+	 * @since  1.7050.0000
+	 * @param  int $snapshot_id Snapshot ID.
+	 * @return string Option key.
+	 */
+	private static function get_snapshot_option_key( $snapshot_id ) {
+		return 'wpshadow_report_snapshot_' . absint( $snapshot_id );
+	}
+
+	/**
+	 * Get option key for report snapshot index.
+	 *
+	 * @since  1.7050.0000
+	 * @param  string $report_id Report ID.
+	 * @return string Option key.
+	 */
+	private static function get_report_index_option_key( $report_id ) {
+		return 'wpshadow_report_snapshot_ids_' . sanitize_key( $report_id );
+	}
+
+	/**
+	 * Persist snapshot record.
+	 *
+	 * @since  1.7050.0000
+	 * @param  array $snapshot Snapshot record.
+	 * @return bool True on success.
+	 */
+	private static function save_snapshot_record( array $snapshot ) {
+		return update_option( self::get_snapshot_option_key( (int) $snapshot['id'] ), $snapshot, false );
+	}
+
+	/**
+	 * Read report snapshot IDs in newest-first order.
+	 *
+	 * @since  1.7050.0000
+	 * @param  string $report_id Report ID.
+	 * @return array Snapshot IDs.
+	 */
+	private static function get_report_snapshot_ids( $report_id ) {
+		$ids = get_option( self::get_report_index_option_key( $report_id ), array() );
+
+		if ( ! is_array( $ids ) ) {
+			return array();
+		}
+
+		return array_values( array_map( 'absint', $ids ) );
+	}
+
+	/**
+	 * Save report snapshot IDs in newest-first order.
+	 *
+	 * @since  1.7050.0000
+	 * @param  string $report_id Report ID.
+	 * @param  array  $ids       Snapshot IDs.
+	 * @return void
+	 */
+	private static function set_report_snapshot_ids( $report_id, array $ids ) {
+		$normalized_ids = array_values( array_filter( array_map( 'absint', $ids ) ) );
+		update_option( self::get_report_index_option_key( $report_id ), $normalized_ids, false );
 	}
 }

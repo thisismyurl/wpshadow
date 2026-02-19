@@ -29,7 +29,7 @@ class Database_Migrator {
 	 * Current schema version
 	 * Increment when database schema changes
 	 */
-	const SCHEMA_VERSION = 2;
+	const SCHEMA_VERSION = 3;
 
 	/**
 	 * Database version option key
@@ -54,14 +54,9 @@ class Database_Migrator {
 		// Include wp_upgrade.php for dbDelta
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		// Version 0 -> 1: Initial schema
-		if ( $current_version < 1 ) {
-			self::schema_v1();
-		}
-
-		// Version 1 -> 2: Exit followup tables
-		if ( $current_version < 2 ) {
-			self::schema_v2();
+		// Version 0 -> 3: Remove legacy exit tables.
+		if ( $current_version < 3 ) {
+			self::remove_legacy_exit_tables();
 		}
 
 		// ============================================================================
@@ -75,97 +70,21 @@ class Database_Migrator {
 	}
 
 	/**
-	 * Schema Version 1: Initial tables
-	 *
-	 * Creates all base tables needed by WPShadow:
-	 * - wpshadow_exit_interviews: Exit interview responses
-	 *
-	 * Workflow and activity history are stored in WordPress options.
+	 * Remove legacy exit-related tables.
 	 *
 	 * @return void
 	 */
-	private static function schema_v1() {
+	private static function remove_legacy_exit_tables() {
 		global $wpdb;
 
-		// Exit interview table
-		$table_exit_interviews = $wpdb->prefix . 'wpshadow_exit_interviews';
-		$sql_exit_interviews   = "CREATE TABLE {$table_exit_interviews} (
-			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			reason varchar(50) NOT NULL,
-			details text,
-			allow_contact tinyint(1) DEFAULT 0,
-			contact_email varchar(255),
-			site_url varchar(255),
-			plugin_version varchar(20),
-			wp_version varchar(20),
-			php_version varchar(20),
-			created_at datetime NOT NULL,
-			interview_type varchar(20) DEFAULT 'deactivation',
-			PRIMARY KEY  (id),
-			KEY created_at (created_at),
-			KEY interview_type (interview_type)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+		$legacy_tables = array(
+			$wpdb->prefix . 'wpshadow_exit_interviews',
+			$wpdb->prefix . 'wpshadow_exit_followups',
+		);
 
-		dbDelta( $sql_exit_interviews );
-	}
-
-	/**
-	 * Schema Version 2: Exit followup tables
-	 *
-	 * Creates tables for exit interview followup feature:
-	 * - wpshadow_exit_interviews: Exit interview responses with contact permissions
-	 * - wpshadow_exit_followups: Scheduled followup contacts and surveys
-	 *
-	 * @since 1.6030.2148
-	 * @return void
-	 */
-	private static function schema_v2() {
-		global $wpdb;
-
-		// Exit interviews table - stores deactivation feedback
-		$table_interviews = $wpdb->prefix . 'wpshadow_exit_interviews';
-		$sql_interviews   = "CREATE TABLE {$table_interviews} (
-			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-			user_id BIGINT UNSIGNED NOT NULL,
-			site_url VARCHAR(255) NOT NULL,
-			exit_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			exit_reason VARCHAR(100),
-			detailed_feedback TEXT,
-			competitor_name VARCHAR(100),
-			features_needed TEXT,
-			contact_allowed TINYINT(1) NOT NULL DEFAULT 0,
-			contact_email VARCHAR(255),
-			usage_duration_days INT UNSIGNED,
-			features_used TEXT,
-			site_type VARCHAR(100),
-			INDEX (user_id),
-			INDEX (exit_date),
-			INDEX (contact_allowed),
-			PRIMARY KEY (id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-
-		// Followup schedules table - manages scheduled followup contacts
-		$table_followups = $wpdb->prefix . 'wpshadow_exit_followups';
-		$sql_followups   = "CREATE TABLE {$table_followups} (
-			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-			interview_id BIGINT UNSIGNED NOT NULL,
-			followup_type VARCHAR(50) NOT NULL,
-			scheduled_date DATETIME NOT NULL,
-			completed_date DATETIME,
-			status VARCHAR(50) NOT NULL DEFAULT 'pending',
-			survey_questions LONGTEXT,
-			survey_responses LONGTEXT,
-			contact_method VARCHAR(50) NOT NULL DEFAULT 'email',
-			notes TEXT,
-			INDEX (interview_id),
-			INDEX (scheduled_date),
-			INDEX (status),
-			PRIMARY KEY (id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-
-		// Use dbDelta for safe table creation
-		dbDelta( $sql_interviews );
-		dbDelta( $sql_followups );
+		foreach ( $legacy_tables as $table_name ) {
+			$wpdb->query( "DROP TABLE IF EXISTS {$table_name}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		}
 	}
 
 	/**
@@ -174,12 +93,7 @@ class Database_Migrator {
 	 * @return array List of table names
 	 */
 	public static function get_tables() {
-		global $wpdb;
-
-		return array(
-			$wpdb->prefix . 'wpshadow_exit_interviews',
-			$wpdb->prefix . 'wpshadow_exit_followups',
-		);
+		return array();
 	}
 
 	/**

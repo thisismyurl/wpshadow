@@ -139,9 +139,6 @@ require_once $ajax_path . 'get-visual-comparison-handler.php';
 // Utilities operations
 require_once $ajax_path . 'load-tool-handler.php';
 
-// Exit interview operations
-require_once $ajax_path . 'submit-exit-interview-handler.php';
-
 // Kanban operations (loaded separately in kanban-module.php)
 // - get-finding-family-handler.php
 // - apply-family-fix-handler.php
@@ -155,8 +152,6 @@ require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
 require_once $ajax_path . 'class-ajax-diagnostics-status.php';
 require_once $ajax_path . 'class-ajax-last-family-results.php';
 
-// Exit interview and followup operations
-require_once $ajax_path . 'exit-followup-handlers.php';
 // Test handler (temporary)
 require_once $ajax_path . 'test-ajax-handler.php';
 

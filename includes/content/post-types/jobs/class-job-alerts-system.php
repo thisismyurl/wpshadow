@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Job_Alerts_System extends Hook_Subscriber_Base {
 
-	const TABLE_ALERTS = 'wpshadow_job_alerts';
+	const USER_META_KEY = 'wpshadow_job_alerts';
 
 	/**
 	 * Get hooks to subscribe to.
@@ -36,44 +36,9 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	 */
 	protected static function get_hooks(): array {
 		return array(
-			'plugins_loaded'               => 'create_alerts_table',
 			'wp_ajax_subscribe_job_alert'  => 'handle_alert_subscription',
 			'publish_wps_job_posting'      => 'send_alerts_for_new_job',
 		);
-	}
-
-	/**
-	 * Create job alerts database table.
-	 *
-	 * @since 1.6050.0000
-	 */
-	public static function create_alerts_table() {
-		global $wpdb;
-
-		$table = $wpdb->prefix . self::TABLE_ALERTS;
-		$charset_collate = $wpdb->get_charset_collate();
-
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) !== $table ) {
-			$sql = "CREATE TABLE $table (
-				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				email varchar(255) NOT NULL,
-				job_category bigint(20),
-				job_type bigint(20),
-				location varchar(255),
-				keywords varchar(500),
-				status varchar(50) DEFAULT 'active',
-				frequency varchar(50) DEFAULT 'weekly',
-				created_at datetime DEFAULT CURRENT_TIMESTAMP,
-				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				PRIMARY KEY (id),
-				KEY email (email),
-				KEY status (status),
-				KEY job_category (job_category)
-			) $charset_collate;";
-
-			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-			dbDelta( $sql );
-		}
 	}
 
 	/**
@@ -95,36 +60,45 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 			wp_send_json_error( array( 'message' => __( 'Invalid email address', 'wpshadow' ) ) );
 		}
 
-		global $wpdb;
-
-		// Check if alert already exists
-		$existing = $wpdb->get_row( $wpdb->prepare(
-			"SELECT id FROM {$wpdb->prefix}" . self::TABLE_ALERTS . " WHERE email = %s AND job_category = %d AND job_type = %d",
-			$email,
-			$category,
-			$job_type
-		) );
-
-		if ( $existing ) {
-			wp_send_json_error( array( 'message' => __( 'You are already subscribed to this alert', 'wpshadow' ) ) );
+		$user = get_user_by( 'email', $email );
+		if ( ! $user ) {
+			wp_send_json_error( array( 'message' => __( 'Please use a registered account email for job alerts.', 'wpshadow' ) ) );
 		}
 
-		$result = $wpdb->insert(
-			$wpdb->prefix . self::TABLE_ALERTS,
-			array(
-				'email'        => $email,
-				'job_category' => $category > 0 ? $category : null,
-				'job_type'     => $job_type > 0 ? $job_type : null,
-				'location'     => $location,
-				'keywords'     => $keywords,
-				'frequency'    => $frequency,
-				'status'       => 'active',
-			),
-			array( '%s', '%d', '%d', '%s', '%s', '%s', '%s' )
+		$alerts = get_user_meta( (int) $user->ID, self::USER_META_KEY, true );
+		if ( ! is_array( $alerts ) ) {
+			$alerts = array();
+		}
+
+		foreach ( $alerts as $alert ) {
+			if ( ! is_array( $alert ) ) {
+				continue;
+			}
+
+			if ( ( $alert['status'] ?? 'active' ) !== 'active' ) {
+				continue;
+			}
+
+			if ( (int) ( $alert['job_category'] ?? 0 ) === $category && (int) ( $alert['job_type'] ?? 0 ) === $job_type ) {
+				wp_send_json_error( array( 'message' => __( 'You are already subscribed to this alert', 'wpshadow' ) ) );
+			}
+		}
+
+		$alerts[] = array(
+			'id'           => uniqid( 'alert_', true ),
+			'email'        => $email,
+			'job_category' => $category > 0 ? $category : 0,
+			'job_type'     => $job_type > 0 ? $job_type : 0,
+			'location'     => $location,
+			'keywords'     => $keywords,
+			'frequency'    => $frequency,
+			'status'       => 'active',
+			'created_at'   => current_time( 'mysql' ),
+			'updated_at'   => current_time( 'mysql' ),
 		);
 
-		if ( ! $result ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to create alert', 'wpshadow' ) ) );
+		if ( ! update_user_meta( (int) $user->ID, self::USER_META_KEY, $alerts ) ) {
+			wp_send_json_error( array( 'message' => __( 'You are already subscribed to this alert', 'wpshadow' ) ) );
 		}
 
 		// Send confirmation email
@@ -147,47 +121,55 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 			return;
 		}
 
-		global $wpdb;
-
 		// Get job details
 		$job_categories = wp_get_post_terms( $post_id, 'wps_job_category', array( 'fields' => 'ids' ) );
 		$job_types = wp_get_post_terms( $post_id, 'wps_job_type', array( 'fields' => 'ids' ) );
 		$job_location = get_post_meta( $post_id, 'wps_job_location', true );
-		$job_keywords = wp_strip_all_tags( $post->post_content );
+		$job_keywords = wp_strip_all_tags( $post->post_title . ' ' . $post->post_content );
 
-		// Find matching alerts
-		$sql = "SELECT DISTINCT email FROM {$wpdb->prefix}" . self::TABLE_ALERTS . " WHERE status = 'active' AND (";
-		$conditions = array();
-		$params = array();
+		$user_ids = get_users(
+			array(
+				'fields'   => 'ids',
+				'meta_key' => self::USER_META_KEY,
+			)
+		);
 
-		if ( ! empty( $job_categories ) ) {
-			$placeholders = implode( ',', array_fill( 0, count( $job_categories ), '%d' ) );
-			$conditions[] = "job_category IN ($placeholders)";
-			$params = array_merge( $params, $job_categories );
-		}
-
-		if ( ! empty( $job_types ) ) {
-			$placeholders = implode( ',', array_fill( 0, count( $job_types ), '%d' ) );
-			$conditions[] = "job_type IN ($placeholders)";
-			$params = array_merge( $params, $job_types );
-		}
-
-		if ( ! empty( $job_location ) ) {
-			$conditions[] = "location LIKE %s";
-			$params[] = '%' . $job_location . '%';
-		}
-
-		if ( empty( $conditions ) ) {
+		if ( empty( $user_ids ) ) {
 			return;
 		}
 
-		$sql .= implode( ' OR ', $conditions ) . ')';
+		$sent_to = array();
+		foreach ( $user_ids as $user_id ) {
+			$alerts = get_user_meta( (int) $user_id, self::USER_META_KEY, true );
+			if ( ! is_array( $alerts ) || empty( $alerts ) ) {
+				continue;
+			}
 
-		$alerts = $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
+			foreach ( $alerts as $alert ) {
+				if ( ! is_array( $alert ) ) {
+					continue;
+				}
 
-		// Send emails to matching subscribers
-		foreach ( $alerts as $alert ) {
-			self::send_job_alert_email( $alert->email, $post );
+				if ( 'active' !== ( $alert['status'] ?? 'active' ) ) {
+					continue;
+				}
+
+				if ( ! self::alert_matches_job( $alert, $job_categories, $job_types, (string) $job_location, $job_keywords ) ) {
+					continue;
+				}
+
+				$email = sanitize_email( $alert['email'] ?? '' );
+				if ( ! is_email( $email ) ) {
+					continue;
+				}
+
+				if ( in_array( $email, $sent_to, true ) ) {
+					continue;
+				}
+
+				self::send_job_alert_email( $email, $post );
+				$sent_to[] = $email;
+			}
 		}
 	}
 
@@ -251,11 +233,65 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	 * @return array Array of alerts.
 	 */
 	public static function get_subscriber_alerts( $email ) {
-		global $wpdb;
+		$user = get_user_by( 'email', sanitize_email( $email ) );
+		if ( ! $user ) {
+			return array();
+		}
 
-		return $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM {$wpdb->prefix}" . self::TABLE_ALERTS . " WHERE email = %s AND status = 'active'",
-			$email
-		) );
+		$alerts = get_user_meta( (int) $user->ID, self::USER_META_KEY, true );
+		if ( ! is_array( $alerts ) ) {
+			return array();
+		}
+
+		$active = array_filter(
+			$alerts,
+			function ( $alert ) {
+				return is_array( $alert ) && ( $alert['status'] ?? 'active' ) === 'active';
+			}
+		);
+
+		return array_map(
+			function ( $alert ) {
+				return (object) $alert;
+			},
+			array_values( $active )
+		);
+	}
+
+	/**
+	 * Determine if an alert matches a newly published job.
+	 *
+	 * @since  1.7050.0000
+	 * @param  array  $alert         Alert data.
+	 * @param  array  $job_categories Job category IDs.
+	 * @param  array  $job_types      Job type IDs.
+	 * @param  string $job_location   Job location.
+	 * @param  string $job_keywords   Job text keywords.
+	 * @return bool True when alert matches.
+	 */
+	private static function alert_matches_job( array $alert, array $job_categories, array $job_types, string $job_location, string $job_keywords ): bool {
+		$matches = false;
+
+		$alert_category = (int) ( $alert['job_category'] ?? 0 );
+		if ( $alert_category > 0 && in_array( $alert_category, $job_categories, true ) ) {
+			$matches = true;
+		}
+
+		$alert_type = (int) ( $alert['job_type'] ?? 0 );
+		if ( $alert_type > 0 && in_array( $alert_type, $job_types, true ) ) {
+			$matches = true;
+		}
+
+		$alert_location = sanitize_text_field( $alert['location'] ?? '' );
+		if ( '' !== $alert_location && '' !== $job_location && false !== stripos( $job_location, $alert_location ) ) {
+			$matches = true;
+		}
+
+		$alert_keywords = sanitize_text_field( $alert['keywords'] ?? '' );
+		if ( '' !== $alert_keywords && false !== stripos( $job_keywords, $alert_keywords ) ) {
+			$matches = true;
+		}
+
+		return $matches;
 	}
 }

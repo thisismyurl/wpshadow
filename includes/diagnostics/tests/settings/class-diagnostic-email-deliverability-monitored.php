@@ -225,6 +225,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	 */
 	private static function check_dmarc_configuration() {
 		$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
+		if ( ! function_exists( 'dns_get_record' ) ) {
 			return apply_filters( 'wpshadow_dmarc_configured', false );
 		}
 

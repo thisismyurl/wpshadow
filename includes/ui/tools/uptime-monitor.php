@@ -27,18 +27,9 @@ Tool_View_Base::render_header( __( 'Uptime Monitor', 'wpshadow' ) );
 $is_registered = Cloud_Service_Connector::is_registered();
 
 if ( ! $is_registered ) {
-	?>
-	<div class="wps-card wps-card--warning">
-		<div class="wps-card-body">
-			<h3><?php esc_html_e( '🌐 Cloud Service Required', 'wpshadow' ); ?></h3>
-			<p><?php esc_html_e( 'Uptime monitoring requires external servers to ping your site. If your site goes down, your own server can\'t detect it.', 'wpshadow' ); ?></p>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=cloud-registration' ) ); ?>" class="wps-btn wps-btn--primary">
-				<span class="dashicons dashicons-cloud"></span>
-				<?php esc_html_e( 'Register for Free Cloud Access', 'wpshadow' ); ?>
-			</a>
-		</div>
-	</div>
-	<?php
+	Tool_View_Base::render_cloud_registration_required_notice(
+		__( 'Uptime monitoring requires external servers to ping your site. If your site goes down, your own server can\'t detect it.', 'wpshadow' )
+	);
 	return;
 }
 
@@ -202,18 +193,18 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 <?php endif; ?>
 
 <!-- Why External Monitoring? -->
-<div class="wps-card wps-mt-6 wps-card--info">
-	<div class="wps-card-body">
-		<h3><?php esc_html_e( 'Why External Monitoring is Essential', 'wpshadow' ); ?></h3>
-		<ul style="list-style: disc; margin-left: 20px;">
-			<li><?php esc_html_e( 'Your server can\'t detect its own downtime - it\'s offline too!', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'External checks test as real visitors see your site', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Multiple geographic locations ensure accurate monitoring', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Instant alerts let you fix issues before customers complain', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Historical data helps identify patterns and hosting issues', 'wpshadow' ); ?></li>
-		</ul>
-	</div>
-</div>
+<?php
+Tool_View_Base::render_external_servers_info_card(
+	array(
+		__( 'Your server can\'t detect its own downtime - it\'s offline too!', 'wpshadow' ),
+		__( 'External checks test as real visitors see your site', 'wpshadow' ),
+		__( 'Multiple geographic locations ensure accurate monitoring', 'wpshadow' ),
+		__( 'Instant alerts let you fix issues before customers complain', 'wpshadow' ),
+		__( 'Historical data helps identify patterns and hosting issues', 'wpshadow' ),
+	),
+	__( 'Why External Monitoring is Essential', 'wpshadow' )
+);
+?>
 
 <script>
 jQuery(document).ready(function($) {

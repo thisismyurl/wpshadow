@@ -86,7 +86,7 @@ class Phase4_Settings_Page {
 		$alerts = Report_Alert_Manager::get_alerts();
 
 		?>
-		<div class="wps-page-container">
+		<div class="wrap wps-page-container">
 			<!-- Page Header -->
 			<?php
 			wpshadow_render_page_header(

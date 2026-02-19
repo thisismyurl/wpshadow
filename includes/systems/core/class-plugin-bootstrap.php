@@ -64,25 +64,22 @@ class Plugin_Bootstrap {
 		// 10. Load reporting and intelligence features
 		self::load_reporting_intelligence();
 
-		// 11. Load exit followup system
-		self::load_exit_followup_system();
-
-		// 12. Load content post types (KB, FAQ, etc.)
+		// 11. Load content post types (KB, FAQ, etc.)
 		self::load_content_types();
 
-		// 13. Load AJAX handlers for utilities
+		// 12. Load AJAX handlers for utilities
 		self::load_ajax_handlers();
 
-		// 14. Load guided onboarding system
+		// 13. Load guided onboarding system
 		self::load_guided_onboarding();
 
-		// 15. Load usage analytics
+		// 14. Load usage analytics
 		self::load_usage_analytics();
 
-		// 16. Load workflow recipes
+		// 15. Load workflow recipes
 		self::load_workflow_recipes();
 
-		// 17. Load smart recommendations
+		// 16. Load smart recommendations
 		self::load_smart_recommendations();
 
 		// 17. Load smart recommendations
@@ -285,7 +282,6 @@ class Plugin_Bootstrap {
 			'class-leaderboard-manager.php',
 			'class-badge-manager.php',
 			'class-milestone-notifier.php',
-			'class-exit-interview.php',
 		);
 
 		foreach ( $engage_classes as $file ) {
@@ -315,10 +311,6 @@ class Plugin_Bootstrap {
 			\WPShadow\Gamification\Milestone_Notifier::init();
 		}
 
-		// Initialize exit interview system
-		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) && method_exists( '\\WPShadow\\Engagement\\Exit_Interview', 'init' ) ) {
-			\WPShadow\Engagement\Exit_Interview::init();
-		}
 	}
 
 	/**
@@ -491,30 +483,6 @@ class Plugin_Bootstrap {
 		// Initialize real-time monitoring if enabled
 		if ( class_exists( '\\WPShadow\\Reporting\\Realtime_Monitoring' ) ) {
 			\WPShadow\Reporting\Realtime_Monitoring::init();
-		}
-	}
-
-	/**
-	 * Load exit followup system
-	 *
-	 * @return void
-	 */
-	private static function load_exit_followup_system() {
-		$engagement_path = WPSHADOW_PATH . 'includes/engagement/';
-		$screens_path    = WPSHADOW_PATH . 'includes/screens/';
-
-		// Load exit followup classes
-		if ( file_exists( $engagement_path . 'class-exit-followup-manager.php' ) ) {
-			require_once $engagement_path . 'class-exit-followup-manager.php';
-		}
-
-		if ( file_exists( $engagement_path . 'class-exit-survey-builder.php' ) ) {
-			require_once $engagement_path . 'class-exit-survey-builder.php';
-		}
-
-		// Load admin page
-		if ( file_exists( $screens_path . 'class-exit-followups-page.php' ) ) {
-			require_once $screens_path . 'class-exit-followups-page.php';
 		}
 	}
 

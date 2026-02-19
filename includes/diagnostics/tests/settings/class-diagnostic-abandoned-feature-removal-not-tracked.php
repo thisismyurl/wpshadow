@@ -63,24 +63,18 @@ class Diagnostic_Abandoned_Feature_Removal_Not_Tracked extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'track_abandoned_features' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Abandoned feature removal not tracked. Deprecate features gradually with notices before removal.',
-						'severity'   =>   'low',
-						'threat_level'   =>   5,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/abandoned-feature-removal-not-tracked'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'track_abandoned_features' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Abandoned feature removal tracking is not configured yet. Gradual deprecation tracking helps avoid sudden user impact.', 'wpshadow' ),
+				'severity'    => 'low',
+				'threat_level' => 5,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/abandoned-feature-removal-not-tracked',
+			);
+		}
+
+		return null;
 	}
 }

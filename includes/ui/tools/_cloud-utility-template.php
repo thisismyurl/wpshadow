@@ -28,33 +28,10 @@ Tool_View_Base::render_header( __( 'TOOL TITLE', 'wpshadow' ) ); // Replace with
 $is_registered = Cloud_Service_Connector::is_registered();
 
 if ( ! $is_registered ) {
-	?>
-	<div class="wps-card wps-card--warning">
-		<div class="wps-card-body">
-			<h3><?php esc_html_e( '🌐 Cloud Service Required', 'wpshadow' ); ?></h3>
-			<p>
-				<?php
-				/*
-				 * Explain WHY this tool requires external hosting.
-				 * Examples:
-				 * - "AI processing requires powerful GPUs and large language models that can't run on shared hosting."
-				 * - "External monitoring must ping from outside servers - your site can't monitor its own downtime."
-				 * - "Global performance testing requires servers in multiple continents."
-				 */
-				esc_html_e( '[WHY EXTERNAL EXPLANATION]', 'wpshadow' );
-				?>
-			</p>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=cloud-registration' ) ); ?>" class="wps-btn wps-btn--primary">
-				<span class="dashicons dashicons-cloud"></span>
-				<?php esc_html_e( 'Register for Free Cloud Access', 'wpshadow' ); ?>
-			</a>
-			<p class="wps-help-text" style="margin-top: 15px;">
-				<strong><?php esc_html_e( 'Free Tier:', 'wpshadow' ); ?></strong>
-				<?php esc_html_e( '[FREE TIER LIMITS]', 'wpshadow' ); ?>
-			</p>
-		</div>
-	</div>
-	<?php
+	Tool_View_Base::render_cloud_registration_required_notice(
+		__( '[WHY EXTERNAL EXPLANATION]', 'wpshadow' ),
+		__( '[FREE TIER LIMITS]', 'wpshadow' )
+	);
 	return;
 }
 
@@ -62,13 +39,7 @@ if ( ! $is_registered ) {
 $data = Cloud_Service_Connector::request( '[API-ENDPOINT]', array(), 'GET' );
 
 if ( ! $data['success'] ) {
-	?>
-	<div class="wps-card wps-card--error">
-		<div class="wps-card-body">
-			<p><?php echo esc_html( $data['message'] ); ?></p>
-		</div>
-	</div>
-	<?php
+	Tool_View_Base::render_cloud_request_error_notice( $data['message'] );
 	return;
 }
 
@@ -88,16 +59,15 @@ if ( ! $data['success'] ) {
 </div>
 
 <!-- Why External? Info Box -->
-<div class="wps-card wps-mt-6 wps-card--info">
-	<div class="wps-card-body">
-		<h3><?php esc_html_e( 'Why This Runs on External Servers', 'wpshadow' ); ?></h3>
-		<ul style="list-style: disc; margin-left: 20px;">
-			<li><?php esc_html_e( '[REASON 1]', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( '[REASON 2]', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( '[REASON 3]', 'wpshadow' ); ?></li>
-		</ul>
-	</div>
-</div>
+<?php
+Tool_View_Base::render_external_servers_info_card(
+	array(
+		__( '[REASON 1]', 'wpshadow' ),
+		__( '[REASON 2]', 'wpshadow' ),
+		__( '[REASON 3]', 'wpshadow' ),
+	)
+);
+?>
 
 <?php
 Tool_View_Base::render_footer();

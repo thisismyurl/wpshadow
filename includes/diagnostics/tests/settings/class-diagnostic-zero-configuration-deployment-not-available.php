@@ -63,23 +63,18 @@ class Diagnostic_Zero_Configuration_Deployment_Not_Available extends Diagnostic_
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('zero_config_deployment_enabled' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Zero-config deployment not available. Enable one-click deployments with auto-configuration to reduce operational overhead and deployment time.',
-						'severity'   =>   'low',
-						'threat_level'   =>   10,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/zero-configuration-deployment-not-available'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'zero_config_deployment_enabled' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Zero-configuration deployment is not enabled yet. Simplifying deployment setup can reduce manual steps and lower release risk.', 'wpshadow' ),
+				'severity'    => 'low',
+				'threat_level' => 10,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/zero-configuration-deployment-not-available',
+			);
+		}
+
+		return null;
 	}
 }

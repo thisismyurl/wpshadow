@@ -27,11 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Report_Annotation_Manager {
 
 	/**
-	 * Table name
+	 * Comment type used for report annotations.
 	 *
 	 * @var string
 	 */
-	private static $table_name = 'wpshadow_report_annotations';
+	private const COMMENT_TYPE = 'wpshadow_report_annotation';
 
 	/**
 	 * Maybe create table
@@ -40,29 +40,7 @@ class Report_Annotation_Manager {
 	 * @return void
 	 */
 	public static function maybe_create_table() {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . self::$table_name;
-		$charset_collate = $wpdb->get_charset_collate();
-		
-		$sql = "CREATE TABLE $table_name (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			report_id varchar(100) NOT NULL,
-			finding_id varchar(100) NOT NULL,
-			annotation_text longtext NOT NULL,
-			action_taken varchar(50) DEFAULT NULL,
-			status varchar(20) DEFAULT 'open',
-			user_id bigint(20) DEFAULT NULL,
-			created_at datetime NOT NULL,
-			updated_at datetime DEFAULT NULL,
-			PRIMARY KEY  (id),
-			KEY report_id (report_id),
-			KEY finding_id (finding_id),
-			KEY status (status)
-		) $charset_collate;";
-		
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $sql );
+		return;
 	}
 
 	/**
@@ -76,26 +54,26 @@ class Report_Annotation_Manager {
 	 * @return int|false Annotation ID or false.
 	 */
 	public static function add_annotation( $report_id, $finding_id, $text, $options = array() ) {
-		global $wpdb;
-		
 		self::maybe_create_table();
-		
-		$table_name = $wpdb->prefix . self::$table_name;
-		
-		$data = array(
-			'report_id'       => sanitize_key( $report_id ),
-			'finding_id'      => sanitize_key( $finding_id ),
-			'annotation_text' => wp_kses_post( $text ),
-			'action_taken'    => isset( $options['action_taken'] ) ? sanitize_text_field( $options['action_taken'] ) : null,
-			'status'          => isset( $options['status'] ) ? sanitize_key( $options['status'] ) : 'open',
-			'user_id'         => get_current_user_id(),
-			'created_at'      => current_time( 'mysql' ),
+
+		$annotation_id = wp_insert_comment(
+			array(
+				'comment_post_ID'      => 0,
+				'comment_content'      => wp_kses_post( $text ),
+				'user_id'              => get_current_user_id(),
+				'comment_author'       => wp_get_current_user()->display_name,
+				'comment_author_email' => wp_get_current_user()->user_email,
+				'comment_type'         => self::COMMENT_TYPE,
+				'comment_approved'     => 1,
+			)
 		);
-		
-		$result = $wpdb->insert( $table_name, $data );
-		
-		if ( $result ) {
-			$annotation_id = $wpdb->insert_id;
+
+		if ( $annotation_id ) {
+			update_comment_meta( $annotation_id, 'report_id', sanitize_key( $report_id ) );
+			update_comment_meta( $annotation_id, 'finding_id', sanitize_key( $finding_id ) );
+			update_comment_meta( $annotation_id, 'action_taken', isset( $options['action_taken'] ) ? sanitize_text_field( $options['action_taken'] ) : '' );
+			update_comment_meta( $annotation_id, 'status', isset( $options['status'] ) ? sanitize_key( $options['status'] ) : 'open' );
+			update_comment_meta( $annotation_id, 'updated_at', '' );
 			
 			/**
 			 * Fires after annotation is added.
@@ -123,20 +101,38 @@ class Report_Annotation_Manager {
 	 * @return array Annotations.
 	 */
 	public static function get_annotations( $report_id, $finding_id ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . self::$table_name;
-		
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM $table_name WHERE report_id = %s AND finding_id = %s ORDER BY created_at DESC",
-				$report_id,
-				$finding_id
-			),
-			ARRAY_A
+		$query = new \WP_Comment_Query();
+		$results = $query->query(
+			array(
+				'type'       => self::COMMENT_TYPE,
+				'status'     => 'approve',
+				'orderby'    => 'comment_date_gmt',
+				'order'      => 'DESC',
+				'number'     => 500,
+				'meta_query' => array(
+					'relation' => 'AND',
+					array(
+						'key'   => 'report_id',
+						'value' => sanitize_key( $report_id ),
+					),
+					array(
+						'key'   => 'finding_id',
+						'value' => sanitize_key( $finding_id ),
+					),
+				),
+			)
 		);
-		
-		return $results ? $results : array();
+
+		if ( empty( $results ) ) {
+			return array();
+		}
+
+		$annotations = array();
+		foreach ( $results as $comment ) {
+			$annotations[] = self::map_comment_to_annotation( $comment );
+		}
+
+		return $annotations;
 	}
 
 	/**
@@ -148,22 +144,15 @@ class Report_Annotation_Manager {
 	 * @return bool Success.
 	 */
 	public static function update_status( $annotation_id, $status ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . self::$table_name;
-		
-		$result = $wpdb->update(
-			$table_name,
-			array(
-				'status'     => sanitize_key( $status ),
-				'updated_at' => current_time( 'mysql' ),
-			),
-			array( 'id' => absint( $annotation_id ) ),
-			array( '%s', '%s' ),
-			array( '%d' )
-		);
-		
-		return $result !== false;
+		$annotation_id = absint( $annotation_id );
+		if ( $annotation_id <= 0 ) {
+			return false;
+		}
+
+		$meta_updated = update_comment_meta( $annotation_id, 'status', sanitize_key( $status ) );
+		update_comment_meta( $annotation_id, 'updated_at', current_time( 'mysql' ) );
+
+		return false !== $meta_updated;
 	}
 
 	/**
@@ -174,26 +163,32 @@ class Report_Annotation_Manager {
 	 * @return array Annotations grouped by finding.
 	 */
 	public static function get_report_annotations( $report_id ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . self::$table_name;
-		
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM $table_name WHERE report_id = %s ORDER BY created_at DESC",
-				$report_id
-			),
-			ARRAY_A
+		$query = new \WP_Comment_Query();
+		$results = $query->query(
+			array(
+				'type'       => self::COMMENT_TYPE,
+				'status'     => 'approve',
+				'orderby'    => 'comment_date_gmt',
+				'order'      => 'DESC',
+				'number'     => 500,
+				'meta_query' => array(
+					array(
+						'key'   => 'report_id',
+						'value' => sanitize_key( $report_id ),
+					),
+				),
+			)
 		);
 		
 		// Group by finding_id
 		$grouped = array();
 		foreach ( $results as $annotation ) {
-			$finding_id = $annotation['finding_id'];
+			$normalized = self::map_comment_to_annotation( $annotation );
+			$finding_id = $normalized['finding_id'];
 			if ( ! isset( $grouped[ $finding_id ] ) ) {
 				$grouped[ $finding_id ] = array();
 			}
-			$grouped[ $finding_id ][] = $annotation;
+			$grouped[ $finding_id ][] = $normalized;
 		}
 		
 		return $grouped;
@@ -207,16 +202,29 @@ class Report_Annotation_Manager {
 	 * @return bool Success.
 	 */
 	public static function delete_annotation( $annotation_id ) {
-		global $wpdb;
-		
-		$table_name = $wpdb->prefix . self::$table_name;
-		
-		$result = $wpdb->delete(
-			$table_name,
-			array( 'id' => absint( $annotation_id ) ),
-			array( '%d' )
+		return false !== wp_delete_comment( absint( $annotation_id ), true );
+	}
+
+	/**
+	 * Normalize comment record into legacy annotation array shape.
+	 *
+	 * @since  1.7050.0000
+	 * @param  \WP_Comment $comment Comment object.
+	 * @return array Annotation array.
+	 */
+	private static function map_comment_to_annotation( \WP_Comment $comment ) {
+		$updated_at = get_comment_meta( $comment->comment_ID, 'updated_at', true );
+
+		return array(
+			'id'              => (int) $comment->comment_ID,
+			'report_id'       => (string) get_comment_meta( $comment->comment_ID, 'report_id', true ),
+			'finding_id'      => (string) get_comment_meta( $comment->comment_ID, 'finding_id', true ),
+			'annotation_text' => (string) $comment->comment_content,
+			'action_taken'    => (string) get_comment_meta( $comment->comment_ID, 'action_taken', true ),
+			'status'          => (string) get_comment_meta( $comment->comment_ID, 'status', true ),
+			'user_id'         => (int) $comment->user_id,
+			'created_at'      => (string) $comment->comment_date,
+			'updated_at'      => ! empty( $updated_at ) ? (string) $updated_at : null,
 		);
-		
-		return $result !== false;
 	}
 }

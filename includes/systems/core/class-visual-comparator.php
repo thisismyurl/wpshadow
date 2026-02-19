@@ -28,6 +28,16 @@ class Visual_Comparator {
 	const TABLE_NAME = 'wpshadow_visual_comparisons';
 
 	/**
+	 * Option key for comparison ID index.
+	 */
+	const OPTION_COMPARISON_IDS = 'wpshadow_visual_comparison_ids';
+
+	/**
+	 * Option key for next comparison ID.
+	 */
+	const OPTION_NEXT_COMPARISON_ID = 'wpshadow_visual_comparison_next_id';
+
+	/**
 	 * Directory name for storing screenshots
 	 */
 	const SCREENSHOT_DIR = 'wpshadow-screenshots';
@@ -52,37 +62,13 @@ class Visual_Comparator {
 	 * @return void
 	 */
 	public static function maybe_create_table() {
-		global $wpdb;
-
-		$table_name      = $wpdb->prefix . self::TABLE_NAME;
-		$charset_collate = $wpdb->get_charset_collate();
-
-		// Check if table exists
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-		$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
-
-		if ( $table_exists === $table_name ) {
-			return;
+		if ( false === get_option( self::OPTION_COMPARISON_IDS, false ) ) {
+			update_option( self::OPTION_COMPARISON_IDS, array(), false );
 		}
 
-		$sql = "CREATE TABLE $table_name (
-			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			finding_id varchar(100) NOT NULL,
-			treatment_class varchar(255) NOT NULL,
-			before_url varchar(512) DEFAULT NULL,
-			after_url varchar(512) DEFAULT NULL,
-			before_path varchar(512) DEFAULT NULL,
-			after_path varchar(512) DEFAULT NULL,
-			page_url varchar(512) NOT NULL,
-			diff_data longtext DEFAULT NULL,
-			created_at datetime NOT NULL,
-			PRIMARY KEY  (id),
-			KEY finding_id (finding_id),
-			KEY created_at (created_at)
-		) $charset_collate;";
-
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $sql );
+		if ( false === get_option( self::OPTION_NEXT_COMPARISON_ID, false ) ) {
+			update_option( self::OPTION_NEXT_COMPARISON_ID, 1, false );
+		}
 	}
 
 	/**
@@ -276,8 +262,6 @@ class Visual_Comparator {
 	 * @return int|false Database insert ID on success, false on failure.
 	 */
 	private static function store_comparison( $finding_id, $treatment_class, $before_path, $after_path, $page_url ) {
-		global $wpdb;
-
 		$upload_dir     = wp_upload_dir();
 		$screenshot_dir = trailingslashit( $upload_dir['basedir'] ) . self::SCREENSHOT_DIR;
 
@@ -301,26 +285,34 @@ class Visual_Comparator {
 			)
 		);
 
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$result = $wpdb->insert(
-			$table_name,
-			array(
-				'finding_id'      => $finding_id,
-				'treatment_class' => $treatment_class,
-				'before_url'      => $before_url,
-				'after_url'       => $after_url,
-				'before_path'     => $before_path,
-				'after_path'      => $after_path,
-				'page_url'        => $page_url,
-				'diff_data'       => $diff_data,
-				'created_at'      => current_time( 'mysql' ),
-			),
-			array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )
+		$comparison_id = self::get_next_comparison_id();
+		$comparison    = array(
+			'id'              => $comparison_id,
+			'finding_id'      => sanitize_key( $finding_id ),
+			'treatment_class' => sanitize_text_field( $treatment_class ),
+			'before_url'      => esc_url_raw( $before_url ),
+			'after_url'       => esc_url_raw( $after_url ),
+			'before_path'     => $before_path,
+			'after_path'      => $after_path,
+			'page_url'        => esc_url_raw( $page_url ),
+			'diff_data'       => $diff_data,
+			'created_at'      => current_time( 'mysql' ),
 		);
 
-		return $result ? $wpdb->insert_id : false;
+		$saved = update_option( self::get_comparison_option_key( $comparison_id ), $comparison, false );
+		if ( ! $saved ) {
+			return false;
+		}
+
+		$ids = get_option( self::OPTION_COMPARISON_IDS, array() );
+		if ( ! is_array( $ids ) ) {
+			$ids = array();
+		}
+
+		array_unshift( $ids, $comparison_id );
+		update_option( self::OPTION_COMPARISON_IDS, array_values( array_unique( array_map( 'absint', $ids ) ) ), false );
+
+		return $comparison_id;
 	}
 
 	/**
@@ -330,8 +322,6 @@ class Visual_Comparator {
 	 * @return array Array of comparison records.
 	 */
 	public static function get_comparisons( $args = array() ) {
-		global $wpdb;
-
 		$defaults = array(
 			'limit'      => 50,
 			'offset'     => 0,
@@ -340,40 +330,47 @@ class Visual_Comparator {
 			'order'      => 'DESC',
 		);
 
-		$args       = wp_parse_args( $args, $defaults );
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
+		$args = wp_parse_args( $args, $defaults );
+		$ids  = get_option( self::OPTION_COMPARISON_IDS, array() );
 
-		$where_clause = '1=1';
-		$where_values = array();
-
-		if ( $args['finding_id'] ) {
-			$where_clause  .= ' AND finding_id = %s';
-			$where_values[] = $args['finding_id'];
-		}
-
-		$orderby = sanitize_sql_orderby( $args['orderby'] . ' ' . $args['order'] );
-		if ( ! $orderby ) {
-			$orderby = 'created_at DESC';
-		}
-
-		$where_values[] = $args['limit'];
-		$where_values[] = $args['offset'];
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant, orderby sanitized, where/limit properly prepared
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders created dynamically based on WHERE conditions
-				"SELECT * FROM $table_name WHERE $where_clause ORDER BY $orderby LIMIT %d OFFSET %d",
-				$where_values
-			),
-			ARRAY_A
-		);
-
-		if ( empty( $results ) ) {
+		if ( ! is_array( $ids ) || empty( $ids ) ) {
 			return array();
 		}
 
-		return $results;
+		$records = array();
+		foreach ( $ids as $comparison_id ) {
+			$record = self::get_comparison( (int) $comparison_id );
+			if ( null === $record ) {
+				continue;
+			}
+
+			if ( ! empty( $args['finding_id'] ) && $record['finding_id'] !== $args['finding_id'] ) {
+				continue;
+			}
+
+			$records[] = $record;
+		}
+
+		$allowed_orderby = array( 'created_at', 'id', 'finding_id' );
+		$orderby         = in_array( $args['orderby'], $allowed_orderby, true ) ? $args['orderby'] : 'created_at';
+		$order           = 'ASC' === strtoupper( (string) $args['order'] ) ? 'ASC' : 'DESC';
+
+		usort(
+			$records,
+			function ( $left, $right ) use ( $orderby, $order ) {
+				$left_value  = (string) ( $left[ $orderby ] ?? '' );
+				$right_value = (string) ( $right[ $orderby ] ?? '' );
+				$cmp         = strcmp( $left_value, $right_value );
+
+				if ( 'ASC' === $order ) {
+					return $cmp;
+				}
+
+				return -1 * $cmp;
+			}
+		);
+
+		return array_slice( $records, max( 0, (int) $args['offset'] ), max( 1, (int) $args['limit'] ) );
 	}
 
 	/**
@@ -383,19 +380,13 @@ class Visual_Comparator {
 	 * @return array|null Comparison record or null if not found.
 	 */
 	public static function get_comparison( $id ) {
-		global $wpdb;
+		$result = get_option( self::get_comparison_option_key( absint( $id ) ), null );
 
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
-		$result = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ),
-			ARRAY_A
-		);
-
-		if ( empty( $result ) ) {
+		if ( ! is_array( $result ) ) {
 			return null;
 		}
+
+		$result['id'] = (int) ( $result['id'] ?? 0 );
 
 		return $result;
 	}
@@ -407,20 +398,24 @@ class Visual_Comparator {
 	 * @return int Number of records deleted.
 	 */
 	public static function cleanup_old_comparisons( $days = 30 ) {
-		global $wpdb;
-
-		$table_name  = $wpdb->prefix . self::TABLE_NAME;
 		$cutoff_date = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
+		$ids         = get_option( self::OPTION_COMPARISON_IDS, array() );
+		$old_records = array();
 
-		// Get old records to delete files
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
-		$old_records = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM $table_name WHERE created_at < %s",
-				$cutoff_date
-			),
-			ARRAY_A
-		);
+		if ( ! is_array( $ids ) ) {
+			$ids = array();
+		}
+
+		foreach ( $ids as $comparison_id ) {
+			$record = self::get_comparison( (int) $comparison_id );
+			if ( null === $record ) {
+				continue;
+			}
+
+			if ( isset( $record['created_at'] ) && $record['created_at'] < $cutoff_date ) {
+				$old_records[] = $record;
+			}
+		}
 
 		// Delete screenshot files
 		foreach ( $old_records as $record ) {
@@ -432,16 +427,27 @@ class Visual_Comparator {
 			}
 		}
 
-		// Delete database records
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
-		$deleted = $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM $table_name WHERE created_at < %s",
-				$cutoff_date
-			)
-		);
+		$deleted       = 0;
+		$remaining_ids = array();
 
-		return (int) $deleted;
+		foreach ( $ids as $comparison_id ) {
+			$record = self::get_comparison( (int) $comparison_id );
+			if ( null === $record ) {
+				continue;
+			}
+
+			if ( isset( $record['created_at'] ) && $record['created_at'] < $cutoff_date ) {
+				delete_option( self::get_comparison_option_key( (int) $comparison_id ) );
+				$deleted++;
+				continue;
+			}
+
+			$remaining_ids[] = (int) $comparison_id;
+		}
+
+		update_option( self::OPTION_COMPARISON_IDS, $remaining_ids, false );
+
+		return $deleted;
 	}
 
 	/**
@@ -450,24 +456,46 @@ class Visual_Comparator {
 	 * @return array Statistics about comparisons.
 	 */
 	public static function get_statistics() {
-		global $wpdb;
+		$records       = self::get_comparisons( array( 'limit' => PHP_INT_MAX, 'offset' => 0 ) );
+		$total         = count( $records );
+		$cutoff        = gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
+		$last_30_days  = 0;
 
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
-		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
-		$last_30_days = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM $table_name WHERE created_at > %s",
-				gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) )
-			)
-		);
+		foreach ( $records as $record ) {
+			if ( isset( $record['created_at'] ) && $record['created_at'] > $cutoff ) {
+				$last_30_days++;
+			}
+		}
 
 		return array(
 			'total'        => (int) $total,
 			'last_30_days' => (int) $last_30_days,
 		);
+	}
+
+	/**
+	 * Get option key for a comparison record.
+	 *
+	 * @param  int $comparison_id Comparison ID.
+	 * @return string Option key.
+	 */
+	private static function get_comparison_option_key( $comparison_id ) {
+		return 'wpshadow_visual_comparison_' . absint( $comparison_id );
+	}
+
+	/**
+	 * Get next comparison ID.
+	 *
+	 * @return int Next ID.
+	 */
+	private static function get_next_comparison_id() {
+		$next_id = (int) get_option( self::OPTION_NEXT_COMPARISON_ID, 1 );
+		if ( $next_id < 1 ) {
+			$next_id = 1;
+		}
+
+		update_option( self::OPTION_NEXT_COMPARISON_ID, $next_id + 1, false );
+
+		return $next_id;
 	}
 }

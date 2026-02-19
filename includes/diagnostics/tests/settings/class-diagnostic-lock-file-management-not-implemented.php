@@ -63,24 +63,18 @@ class Diagnostic_Lock_File_Management_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'manage_lock_files' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Lock file management not implemented. Use lock files to prevent concurrent execution of critical operations like migrations.',
-						'severity'   =>   'low',
-						'threat_level'   =>   15,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/lock-file-management-not-implemented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'manage_lock_files' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Lock file management is not configured yet. Adding lock controls can prevent concurrent execution conflicts in critical operations.', 'wpshadow' ),
+				'severity'    => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/lock-file-management-not-implemented',
+			);
+		}
+
+		return null;
 	}
 }

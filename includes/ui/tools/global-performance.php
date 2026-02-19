@@ -27,35 +27,17 @@ Tool_View_Base::render_header( __( 'Global Performance Testing', 'wpshadow' ) );
 $is_registered = Cloud_Service_Connector::is_registered();
 
 if ( ! $is_registered ) {
-	?>
-	<div class="wps-card wps-card--warning">
-		<div class="wps-card-body">
-			<h3><?php esc_html_e( '🌐 Cloud Service Required', 'wpshadow' ); ?></h3>
-			<p><?php esc_html_e( 'Global testing requires servers in multiple regions to simulate real visitors.', 'wpshadow' ); ?></p>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=cloud-registration' ) ); ?>" class="wps-btn wps-btn--primary">
-				<span class="dashicons dashicons-cloud"></span>
-				<?php esc_html_e( 'Register for Free Cloud Access', 'wpshadow' ); ?>
-			</a>
-			<p class="wps-help-text" style="margin-top: 15px;">
-				<strong><?php esc_html_e( 'Free Tier:', 'wpshadow' ); ?></strong>
-				<?php esc_html_e( '5 locations, 3 tests per day', 'wpshadow' ); ?>
-			</p>
-		</div>
-	</div>
-	<?php
+	Tool_View_Base::render_cloud_registration_required_notice(
+		__( 'Global testing requires servers in multiple regions to simulate real visitors.', 'wpshadow' ),
+		__( '5 locations, 3 tests per day', 'wpshadow' )
+	);
 	return;
 }
 
 $summary = Cloud_Service_Connector::request( 'performance/summary', array(), 'GET' );
 
 if ( ! $summary['success'] ) {
-	?>
-	<div class="wps-card wps-card--error">
-		<div class="wps-card-body">
-			<p><?php echo esc_html( $summary['message'] ); ?></p>
-		</div>
-	</div>
-	<?php
+	Tool_View_Base::render_cloud_request_error_notice( $summary['message'] );
 	return;
 }
 
@@ -66,28 +48,17 @@ $details = $summary['data']['details'] ?? '';
 
 <p><?php esc_html_e( 'Test load times and TTFB from multiple cities to understand real-world performance.', 'wpshadow' ); ?></p>
 
-<div class="wps-card">
-	<div class="wps-card-header">
-		<h3 class="wps-card-title"><?php esc_html_e( 'Latest Performance Summary', 'wpshadow' ); ?></h3>
-	</div>
-	<div class="wps-card-body">
-		<p><strong><?php esc_html_e( 'Status:', 'wpshadow' ); ?></strong> <?php echo esc_html( $status_text ); ?></p>
-		<?php if ( ! empty( $details ) ) : ?>
-			<p class="wps-help-text"><?php echo esc_html( $details ); ?></p>
-		<?php endif; ?>
-	</div>
-</div>
+<?php Tool_View_Base::render_cloud_status_summary_card( __( 'Latest Performance Summary', 'wpshadow' ), $status_text, $details ); ?>
 
-<div class="wps-card wps-mt-6 wps-card--info">
-	<div class="wps-card-body">
-		<h3><?php esc_html_e( 'Why This Runs on External Servers', 'wpshadow' ); ?></h3>
-		<ul style="list-style: disc; margin-left: 20px;">
-			<li><?php esc_html_e( 'Performance varies by geography and network path.', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Distributed servers provide accurate regional metrics.', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Scheduled tests prevent load on your hosting.', 'wpshadow' ); ?></li>
-		</ul>
-	</div>
-</div>
+<?php
+Tool_View_Base::render_external_servers_info_card(
+	array(
+		__( 'Performance varies by geography and network path.', 'wpshadow' ),
+		__( 'Distributed servers provide accurate regional metrics.', 'wpshadow' ),
+		__( 'Scheduled tests prevent load on your hosting.', 'wpshadow' ),
+	)
+);
+?>
 
 <?php
 Tool_View_Base::render_footer();

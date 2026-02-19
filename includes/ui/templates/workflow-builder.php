@@ -22,7 +22,7 @@ $triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
 $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 ?>
 
-<div class="wps-page-container">
+<div class="wrap wps-page-container">
 	<!-- Screen Reader Announcements -->
 	<div id="wps-sr-live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 	<div id="wps-sr-alert-region" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>

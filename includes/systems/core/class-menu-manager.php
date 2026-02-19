@@ -190,7 +190,6 @@ class Menu_Manager {
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
 			'wpshadow-privacy'                => 'wpshadow-settings&tab=privacy-dashboard',
 			'wpshadow-tools'                  => 'wpshadow-utilities',
-			'wpshadow-exit-followups'         => 'wpshadow', // Redirect exit-followups to dashboard
 		);
 
 		if ( isset( $redirects[ $page ] ) ) {

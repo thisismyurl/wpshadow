@@ -152,11 +152,6 @@ class Hooks_Initializer {
 				array( 'version' => WPSHADOW_VERSION )
 			);
 		}
-
-		// Store deactivation timestamp for exit interview
-		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) ) {
-			\WPShadow\Engagement\Exit_Interview::on_deactivation();
-		}
 	}
 
 	/**
