@@ -36,32 +36,6 @@ class Treatment_Breadcrumb_Navigation extends Treatment_Base {
 	protected static $family = 'content';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add breadcrumbs to all interior pages', 'wpshadow' );
-		$issues[] = __( 'Show hierarchy: Home > Category > Subcategory > Page', 'wpshadow' );
-		$issues[] = __( 'Make breadcrumbs clickable (each level is link)', 'wpshadow' );
-		$issues[] = __( 'Use schema.org markup for SEO benefit', 'wpshadow' );
-		$issues[] = __( 'Keep breadcrumb style simple and consistent', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Breadcrumbs show users where they are in your site structure. This reduces confusion and makes it easy to navigate back up.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/breadcrumbs',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'seo_benefit'             => 'Google shows breadcrumbs in search results',
-					'user_benefit'            => 'Reduces clicks to navigate hierarchy',
-					'commandment'             => 'Commandment #1: Helpful Neighbor Experience',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Breadcrumb_Navigation' );
 	}
 }

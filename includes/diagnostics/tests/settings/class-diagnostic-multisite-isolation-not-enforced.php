@@ -63,23 +63,18 @@ class Diagnostic_Multisite_Isolation_Not_Enforced extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   is_multisite( ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Multisite isolation not enforced. Prevent cross-site data access and enforce role separation.',
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/multisite-isolation-not-enforced'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( is_multisite() ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Multisite isolation controls are not enforced yet. Strong site-to-site separation helps keep network data and permissions safely isolated.', 'wpshadow' ),
+				'severity'    => 'high',
+				'threat_level' => 75,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/multisite-isolation-not-enforced',
+			);
+		}
+
+		return null;
 	}
 }

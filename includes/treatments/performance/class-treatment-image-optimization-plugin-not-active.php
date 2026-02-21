@@ -125,19 +125,6 @@ class Treatment_Image_Optimization_Plugin_Not_Active extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for image optimization plugin
-		if ( ! is_plugin_active( 'imagify/imagify.php' ) && ! is_plugin_active( 'shortpixel-image-optimiser/wp-shortpixel.php' ) && ! is_plugin_active( 'ewww-image-optimizer/ewww-image-optimizer.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Image optimization plugin is not active. Use Imagify, ShortPixel, or EWWW Image Optimizer to reduce image file sizes without quality loss.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 35,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/image-optimization-plugin-not-active',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Image_Optimization_Plugin_Not_Active' );
 	}
 }

@@ -65,38 +65,7 @@ class Treatment_Mobile_JS_Execution_Time extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::detect_long_tasks();
-
-		if ( empty( $issues ) ) {
-			return null; // No long tasks detected
-		}
-
-		$threat = 70;
-		if ( count( $issues ) > 5 ) {
-			$threat = 85; // Critical - many long tasks
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of long tasks */
-				__( 'Found %d long-running JavaScript tasks', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'        => 'high',
-			'threat_level'    => $threat,
-			'long_tasks'      => array_slice( $issues, 0, 5 ),
-			'total_tasks'     => count( $issues ),
-			'recommendations' => array(
-				'Split long tasks into smaller chunks',
-				'Use requestIdleCallback for non-critical work',
-				'Defer heavy computations to Web Workers',
-			),
-			'user_impact'     => __( 'Long tasks cause INP delay (>200ms)', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/js-execution-time',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_JS_Execution_Time' );
 	}
 
 	/**

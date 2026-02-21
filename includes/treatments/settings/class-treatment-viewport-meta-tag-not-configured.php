@@ -63,19 +63,6 @@ class Treatment_Viewport_Meta_Tag_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for viewport meta tag in header
-		if ( ! has_filter( 'wp_head', 'add_viewport_meta_tag' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Viewport meta tag is not configured. Add <meta name="viewport" content="width=device-width, initial-scale=1"> to enable responsive design on mobile devices.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 50,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/viewport-meta-tag-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Viewport_Meta_Tag_Not_Configured' );
 	}
 }

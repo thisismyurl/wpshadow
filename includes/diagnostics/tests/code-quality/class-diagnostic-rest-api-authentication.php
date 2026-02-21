@@ -118,7 +118,7 @@ if (!is_ssl() && !in_array(\$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')))
 	exit;
 }",
 						'ssl_certificate_options' => array(
-							'Let\\'s Encrypt' => 'Free, auto-renews',
+							'Let\'s Encrypt' => 'Free, auto-renews',
 							'Comodo SSL' => 'Affordable, established',
 							'Cloudflare SSL' => 'Included with Cloudflare',
 							'DigiCert' => 'Premium, highly trusted',
@@ -334,7 +334,7 @@ register_rest_route('my-plugin/v1', '/posts', array(
 					'preventing_enumeration' => array(
 						'Restrict /wp/v2/users to authenticated',
 						'Hide author endpoints',
-						'Don\\'t expose user IDs in posts',
+						'Don\'t expose user IDs in posts',
 						'Use generic error messages',
 					),
 					'disable_user_endpoint' => "add_filter('rest_endpoints', function(\$endpoints) {

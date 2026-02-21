@@ -115,46 +115,7 @@ class Treatment_Mobile_Fid extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$blocking_tasks = self::find_blocking_scripts();
-
-		if ( empty( $blocking_tasks['tasks'] ) ) {
-			return null; // No blocking scripts detected
-		}
-
-		$total_blocking_time = $blocking_tasks['total_time'];
-		$estimated_fid = $blocking_tasks['estimated_fid'];
-
-		if ( $estimated_fid < 100 ) {
-			return null; // Within acceptable range
-		}
-
-		// Determine severity
-		if ( $estimated_fid > 300 ) {
-			$severity = 'critical';
-			$threat   = 75;
-		} else {
-			$severity = 'high';
-			$threat   = 65;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %s: FID time in milliseconds */
-				__( 'Mobile FID estimated at %dms (target: <100ms)', 'wpshadow' ),
-				$estimated_fid
-			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'current_fid'     => sprintf( '%dms', $estimated_fid ),
-			'target_fid'      => '<100ms',
-			'blocking_tasks'  => $blocking_tasks['tasks'],
-			'total_blocking_time' => sprintf( '%dms', $total_blocking_time ),
-			'user_impact'     => __( 'Unresponsive to taps/clicks during page load', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-fid',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Fid' );
 	}
 
 	/**

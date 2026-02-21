@@ -63,49 +63,7 @@ class Treatment_PHP_Memory_Limit extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$raw_limit = ini_get( 'memory_limit' );
-		$limit     = self::parse_size( $raw_limit );
-		$display   = $raw_limit ? $raw_limit : __( 'unknown', 'wpshadow' );
-
-		if ( $limit > 0 && $limit < 64 * 1024 * 1024 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %s: memory limit */
-					__( 'PHP memory limit is %s. Recommended minimum is 128M for stable operations.', 'wpshadow' ),
-					esc_html( $display )
-				),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit',
-				'meta'         => array(
-					'memory_limit' => $display,
-				),
-			);
-		}
-
-		if ( $limit > 0 && $limit < 128 * 1024 * 1024 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %s: memory limit */
-					__( 'PHP memory limit is %s. Consider raising to 256M for best results.', 'wpshadow' ),
-					esc_html( $display )
-				),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit',
-				'meta'         => array(
-					'memory_limit' => $display,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Php_Memory_Limit' );
 	}
 
 	/**

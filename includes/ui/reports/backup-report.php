@@ -277,26 +277,21 @@ foreach ( $all_diagnostics as $slug => $class ) {
 
 <script>
 jQuery(document).ready(function($) {
+	<?php echo \WPShadow\Views\Tool_View_Base::get_js_scan_state_helpers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	$('#run-backup-scan-btn').on('click', function() {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#backup-scan-results');
 		
-		$btn.prop('disabled', true).addClass('wps-loading');
-		$progress.removeClass('hidden');
-		$results.empty();
+		wpshadowReportScanStart( $btn, $progress, $results );
 		
 		// Run protection/backup diagnostics
-		wp.ajax.post('wpshadow_run_family_diagnostics', {
-			family: 'protection',
-			nonce: $btn.data('nonce')
-		}).done(function(response) {
+		wpshadowRunFamilyDiagnostics( 'protection', $btn.data('nonce') ).done(function(response) {
 			displayBackupResults(response);
 		}).fail(function(error) {
-			$results.html('<div class="notice notice-error"><p>' + error.message + '</p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_open_html() ); ?>' + error.message + '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_close_html() ); ?>');
 		}).always(function() {
-			$btn.prop('disabled', false).removeClass('wps-loading');
-			$progress.addClass('hidden');
+			wpshadowReportScanEnd( $btn, $progress );
 		});
 	});
 
@@ -313,7 +308,7 @@ jQuery(document).ready(function($) {
 		$('#backup-storage').text(hasBackupIssue ? '<?php echo esc_js( __( 'Check', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Cloud', 'wpshadow' ) ); ?>');
 		
 		if (findings.length === 0) {
-			$results.html('<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> <?php echo esc_js( __( 'Excellent! Your backup configuration is solid.', 'wpshadow' ) ); ?></p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your backup configuration is solid.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
 		
@@ -322,30 +317,33 @@ jQuery(document).ready(function($) {
 		const warning = findings.filter(f => f.severity === 'medium');
 		const info = findings.filter(f => f.severity === 'low');
 		
-		let html = '<div class="wps-card"><div class="wps-card-body">';
-		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'Backup Issues Found', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
+		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
+		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Backup Issues Found', 'wpshadow' ) ); ?>', findings.length );
 		
 		if (critical.length > 0) {
 			html += '<div class="wps-mb-4">';
-			html += '<h4 class="wps-font-semibold wps-mb-2 wps-text-error"><?php echo esc_js( __( 'Critical Issues', 'wpshadow' ) ); ?> (' + critical.length + ')</h4>';
+			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Critical Issues', 'wpshadow' ) ); ?>', critical.length, {
+				headingClass: 'wps-font-semibold wps-mb-2 wps-text-error'
+			} );
 			critical.forEach(function(finding) {
-				html += '<div class="wps-mb-2 wps-p-3 wps-border wps-border-error wps-rounded">';
-				html += '<div class="wps-flex wps-items-start wps-gap-3">';
-				html += '<span class="dashicons dashicons-warning wps-text-error"></span>';
-				html += '<div class="wps-flex-1">';
-				html += '<h5 class="wps-font-semibold wps-text-sm">' + finding.title + '</h5>';
-				html += '<p class="wps-text-muted wps-text-xs">' + finding.description + '</p>';
-				if (finding.auto_fixable) {
-					html += '<button class="wps-btn wps-btn-sm wps-btn-success wps-mt-1" data-finding="' + finding.id + '"><?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?></button>';
-				}
-				html += '</div></div></div>';
+				html += wpshadowRenderFindingCardStart( finding, {
+					severityClass: 'error',
+					iconClass: 'dashicons-warning',
+					containerClass: 'wps-mb-2 wps-p-3 wps-border wps-border-error wps-rounded',
+					titleClass: 'wps-font-semibold wps-text-sm',
+					descriptionClass: 'wps-text-muted wps-text-xs'
+				} );
+				html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?>', 'wps-btn wps-btn-sm wps-btn-success wps-mt-1' );
+				html += wpshadowRenderFindingCardEnd();
 			});
 			html += '</div>';
 		}
 		
 		if (warning.length > 0) {
 			html += '<div class="wps-mb-4">';
-			html += '<h4 class="wps-font-semibold wps-mb-2 wps-text-warning"><?php echo esc_js( __( 'Warnings', 'wpshadow' ) ); ?> (' + warning.length + ')</h4>';
+			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Warnings', 'wpshadow' ) ); ?>', warning.length, {
+				headingClass: 'wps-font-semibold wps-mb-2 wps-text-warning'
+			} );
 			warning.forEach(function(finding) {
 				html += '<div class="wps-mb-2 wps-p-3 wps-border wps-border-warning wps-rounded">';
 				html += '<div class="wps-flex wps-items-start wps-gap-3">';
@@ -360,7 +358,9 @@ jQuery(document).ready(function($) {
 		
 		if (info.length > 0) {
 			html += '<div class="wps-mb-4">';
-			html += '<h4 class="wps-font-semibold wps-mb-2"><?php echo esc_js( __( 'Recommendations', 'wpshadow' ) ); ?> (' + info.length + ')</h4>';
+			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Recommendations', 'wpshadow' ) ); ?>', info.length, {
+				headingClass: 'wps-font-semibold wps-mb-2'
+			} );
 			info.forEach(function(finding) {
 				html += '<div class="wps-mb-2 wps-p-3 wps-border wps-rounded">';
 				html += '<div class="wps-flex wps-items-start wps-gap-3">';
@@ -373,7 +373,7 @@ jQuery(document).ready(function($) {
 			html += '</div>';
 		}
 		
-		html += '</div></div>';
+		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}
 });
@@ -381,9 +381,7 @@ jQuery(document).ready(function($) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Want automated backup management?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro includes automated backup monitoring, restore testing, and premium backup service integration.', 'wpshadow' ),

@@ -37,80 +37,9 @@ class Database_Indexes {
 	 * @return void
 	 */
 	public static function create_all() {
-		global $wpdb;
-
-		// Define all indexes to create
-		$indexes = array(
-			// Activities table indexes
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_activities',
-				'column' => 'user_id',
-				'name'   => 'idx_user_id',
-			),
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_activities',
-				'column' => 'timestamp',
-				'name'   => 'idx_timestamp',
-			),
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_activities',
-				'column' => 'activity_type',
-				'name'   => 'idx_activity_type',
-			),
-			array(
-				'table'      => $wpdb->prefix . 'wpshadow_activities',
-				'columns'    => array( 'user_id', 'timestamp' ),
-				'name'       => 'idx_user_timestamp',
-				'is_composite' => true,
-			),
-
-			// Findings table indexes
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_findings',
-				'column' => 'status',
-				'name'   => 'idx_findings_status',
-			),
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_findings',
-				'column' => 'severity',
-				'name'   => 'idx_findings_severity',
-			),
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_findings',
-				'column' => 'created_at',
-				'name'   => 'idx_findings_created_at',
-			),
-			array(
-				'table'      => $wpdb->prefix . 'wpshadow_findings',
-				'columns'    => array( 'status', 'severity' ),
-				'name'       => 'idx_findings_status_severity',
-				'is_composite' => true,
-			),
-
-			// Followups table indexes
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_followups',
-				'column' => 'status',
-				'name'   => 'idx_followups_status',
-			),
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_followups',
-				'column' => 'scheduled_date',
-				'name'   => 'idx_followups_scheduled_date',
-			),
-
-			// Followup data table indexes
-			array(
-				'table'  => $wpdb->prefix . 'wpshadow_followup_data',
-				'column' => 'followup_id',
-				'name'   => 'idx_followup_data_followup_id',
-			),
-		);
-
-		// Create each index
-		foreach ( $indexes as $index ) {
-			self::maybe_create_index( $index );
-		}
+		// WPShadow now uses WordPress core tables and option/meta storage.
+		// No plugin-specific custom table indexes are required.
+		return;
 	}
 
 	/**

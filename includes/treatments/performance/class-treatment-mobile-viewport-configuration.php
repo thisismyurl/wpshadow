@@ -67,17 +67,6 @@ class Treatment_Mobile_Viewport_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		// WordPress automatically adds viewport meta tag in wp_head
-		// Check if theme is using modern responsive functions
-
-		$theme = wp_get_theme();
-
-		// Check if theme declares mobile support
-		$is_responsive = $theme->is_block_theme() || ! empty( $theme->get( 'Tags' ) );
-
-		// Generally WordPress handles this, so return null unless something is obviously wrong
-		// This is mostly for documentation purposes
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Viewport_Configuration' );
 	}
 }

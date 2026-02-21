@@ -126,21 +126,6 @@ class Treatment_Mobile_Responsiveness_Not_Optimized extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for viewport meta tag
-		global $wp_version;
-
-		if ( version_compare( $wp_version, '5.0', '<' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Mobile responsiveness is not optimized. Ensure your theme has a viewport meta tag and is fully responsive across devices.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 60,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/mobile-responsiveness-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Responsiveness_Not_Optimized' );
 	}
 }

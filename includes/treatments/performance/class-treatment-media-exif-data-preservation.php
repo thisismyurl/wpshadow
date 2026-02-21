@@ -64,51 +64,6 @@ class Treatment_Media_EXIF_Data_Preservation extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		if ( ! extension_loaded( 'exif' ) ) {
-			$issues[] = __( 'PHP EXIF extension is not enabled; camera metadata cannot be preserved', 'wpshadow' );
-		}
-
-		$attachments = get_posts(
-			array(
-				'post_type'      => 'attachment',
-				'post_mime_type' => 'image/jpeg',
-				'posts_per_page' => 5,
-				'post_status'    => 'inherit',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			)
-		);
-
-		$exif_found = 0;
-		foreach ( $attachments as $attachment ) {
-			$file = get_attached_file( $attachment->ID );
-			if ( empty( $file ) || ! file_exists( $file ) ) {
-				continue;
-			}
-			$metadata = wp_read_image_metadata( $file );
-			if ( ! empty( $metadata['camera'] ) || ! empty( $metadata['created_timestamp'] ) ) {
-				$exif_found++;
-			}
-		}
-
-		if ( ! empty( $attachments ) && 0 === $exif_found ) {
-			$issues[] = __( 'No EXIF metadata detected in recent JPEG uploads; EXIF data may be stripped during processing', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-exif-data-preservation',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_EXIF_Data_Preservation' );
 	}
 }

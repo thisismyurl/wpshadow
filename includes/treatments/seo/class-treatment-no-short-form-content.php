@@ -84,61 +84,6 @@ class Treatment_No_Short_Form_Content extends Treatment_Base {
 	 * @return array|null Finding array if no short-form content, null otherwise.
 	 */
 	public static function check() {
-		$posts = get_posts(
-			array(
-				'post_type'      => 'post',
-				'post_status'    => 'publish',
-				'posts_per_page' => 50,
-			)
-		);
-
-		if ( count( $posts ) < 10 ) {
-			return null; // Need sufficient sample size
-		}
-
-		$short_form_count = 0;
-		$medium_count = 0;
-		$long_form_count = 0;
-
-		foreach ( $posts as $post ) {
-			$word_count = str_word_count( wp_strip_all_tags( $post->post_content ) );
-
-			if ( $word_count < 600 ) {
-				$short_form_count++;
-			} elseif ( $word_count < 1500 ) {
-				$medium_count++;
-			} else {
-				$long_form_count++;
-			}
-		}
-
-		$short_form_percentage = ( $short_form_count / count( $posts ) ) * 100;
-
-		// Issue if < 15% short-form content
-		if ( $short_form_percentage >= 15 ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: %s: percentage of short-form content */
-				__( 'Only %s%% of content is short-form (< 600 words). Add quick-read posts to improve content mix and social sharing.', 'wpshadow' ),
-				number_format_i18n( $short_form_percentage, 1 )
-			),
-			'severity'     => 'low',
-			'threat_level' => 40,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/content-mix',
-			'details'      => array(
-				'short_form_count'      => $short_form_count,
-				'short_form_percentage' => round( $short_form_percentage, 1 ),
-				'medium_count'          => $medium_count,
-				'long_form_count'       => $long_form_count,
-				'total_posts'           => count( $posts ),
-				'recommendation'        => 'Aim for 30% short-form content',
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_No_Short_Form_Content' );
 	}
 }

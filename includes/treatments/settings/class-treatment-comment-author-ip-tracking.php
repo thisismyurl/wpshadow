@@ -24,50 +24,6 @@ class Treatment_Comment_Author_IP_Tracking extends Treatment_Base {
 	protected static $family = 'privacy';
 
 	public static function check() {
-		// Check if IPs are being stored using WordPress API
-		$comments_with_ip = get_comments(
-			array(
-				'number'       => 100,
-				'status'       => 'any',
-				'fields'       => 'ids',
-				'meta_query'   => array(
-					array(
-						'key'     => 'comment_author_IP',
-						'value'   => '',
-						'compare' => '!=',
-					),
-				),
-			)
-		);
-
-		$ip_count = count( $comments_with_ip );
-
-		if ( $ip_count > 0 ) {
-			// Check if privacy policy mentions IP logging.
-			$privacy_page_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
-			$mentions_ip     = false;
-
-			if ( $privacy_page_id > 0 ) {
-				$privacy_page = get_post( $privacy_page_id );
-				if ( $privacy_page ) {
-					$content     = strtolower( $privacy_page->post_content );
-					$mentions_ip = ( strpos( $content, 'ip address' ) !== false || strpos( $content, 'ip' ) !== false );
-				}
-			}
-
-			if ( ! $mentions_ip ) {
-				return array(
-					'id'           => self::$slug,
-					'title'        => self::$title,
-					'description'  => __( 'Site stores commenter IP addresses but privacy policy does not disclose this', 'wpshadow' ),
-					'severity'     => 'high',
-					'threat_level' => 55,
-					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-author-ip-tracking',
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Author_IP_Tracking' );
 	}
 }

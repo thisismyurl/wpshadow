@@ -125,19 +125,6 @@ class Treatment_Database_Query_Performance_Not_Optimized extends Treatment_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if query optimization plugin is active
-		if ( ! is_plugin_active( 'query-monitor/query-monitor.php' ) && ! is_plugin_active( 'wp-optimize/wp-optimize.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Database query performance is not optimized. Use Query Monitor, WP-Optimize, or similar tools to identify and optimize slow queries.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 45,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/database-query-performance-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Database_Query_Performance_Not_Optimized' );
 	}
 }

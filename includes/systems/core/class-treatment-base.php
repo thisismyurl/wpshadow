@@ -111,6 +111,28 @@ abstract class Treatment_Base implements Treatment_Interface {
 	abstract public static function apply();
 
 	/**
+	 * Proxy a treatment check to an existing diagnostic check implementation.
+	 *
+	 * This helper reduces duplicated detector logic between matching
+	 * diagnostic/treatment pairs while preserving identical finding output.
+	 *
+	 * @since  1.6035.2200
+	 * @param  string $diagnostic_class Fully-qualified diagnostic class name.
+	 * @return array|null Diagnostic finding array, or null if unavailable.
+	 */
+	protected static function proxy_diagnostic_check( string $diagnostic_class ) {
+		if ( ! class_exists( $diagnostic_class ) ) {
+			return null;
+		}
+
+		if ( ! method_exists( $diagnostic_class, 'check' ) ) {
+			return null;
+		}
+
+		return call_user_func( array( $diagnostic_class, 'check' ) );
+	}
+
+	/**
 	 * Execute treatment with hooks.
 	 *
 	 * Wraps apply() with before/after actions for extensibility.

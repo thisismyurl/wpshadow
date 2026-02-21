@@ -63,19 +63,6 @@ class Treatment_Sitemap_XML_Not_Submitted_To_Search_Engines extends Treatment_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if sitemap plugin or native support exists
-		if ( ! is_plugin_active( 'yoast-seo/wp-seo.php' ) && ! is_plugin_active( 'google-sitemap-generator/sitemap.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'XML sitemap is not submitted to search engines. Generate and submit your sitemap to Google Search Console for better indexing.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/sitemap-xml-not-submitted-to-search-engines',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Sitemap_XML_Not_Submitted_To_Search_Engines' );
 	}
 }

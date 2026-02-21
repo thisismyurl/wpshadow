@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses global $allowedtags (built-in WordPress variable)\n * - Checks both old $allowedtags and wp_kses_allowed_html filters\n * - Returns severity: critical (dangerous tag allowed), high (event handlers present)\n * - Non-fixable diagnostic (requires theme/plugin fix to correct whitelist)\n *
  * @since 1.6031.1300
- */\nclass Diagnostic_Comment_HTML_Tag_Whitelist extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_HTML_Tag_Whitelist extends Diagnostic_Base {
 
 	protected static $slug = 'comment-html-tag-whitelist';
 	protected static $title = 'Comment HTML Tag Whitelist';

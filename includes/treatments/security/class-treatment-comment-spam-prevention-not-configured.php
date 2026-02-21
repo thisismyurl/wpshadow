@@ -64,19 +64,6 @@ class Treatment_Comment_Spam_Prevention_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for spam prevention plugin
-		if ( ! is_plugin_active( 'akismet/akismet.php' ) && ! is_plugin_active( 'antispam-bee/antispam-bee.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Comment spam prevention is not configured. Enable Akismet or another spam filter to automatically block spam comments.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/comment-spam-prevention-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Spam_Prevention_Not_Configured' );
 	}
 }

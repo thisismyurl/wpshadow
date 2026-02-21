@@ -120,23 +120,11 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 	 * @return array Bounce statistics.
 	 */
 	private static function get_bounce_statistics(): array {
-		global $wpdb;
-
 		$period_days = 30;
 		$start_time = time() - ( $period_days * DAY_IN_SECONDS );
+		$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
 
-		// Query activity log for email events.
-		$activity_table = $wpdb->prefix . 'wpshadow_activity';
-
-		// Check if table exists.
-		$table_exists = $wpdb->get_var(
-			$wpdb->prepare(
-				'SHOW TABLES LIKE %s',
-				$activity_table
-			)
-		);
-
-		if ( ! $table_exists ) {
+		if ( ! is_array( $activity_log ) ) {
 			return array(
 				'total_sent'    => 0,
 				'total_bounced' => 0,
@@ -144,23 +132,23 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 			);
 		}
 
-		// Count total emails sent.
-		$total_sent = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$activity_table} WHERE action = %s AND created_at >= %d",
-				'email_sent',
-				$start_time
-			)
-		);
+		$total_sent    = 0;
+		$total_bounced = 0;
 
-		// Count bounced emails.
-		$total_bounced = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$activity_table} WHERE action = %s AND created_at >= %d",
-				'email_bounced',
-				$start_time
-			)
-		);
+		foreach ( $activity_log as $entry ) {
+			$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+			$action     = isset( $entry['action'] ) ? (string) $entry['action'] : '';
+
+			if ( $entry_time < $start_time ) {
+				continue;
+			}
+
+			if ( 'email_sent' === $action ) {
+				++$total_sent;
+			} elseif ( 'email_bounced' === $action ) {
+				++$total_bounced;
+			}
+		}
 
 		return array(
 			'total_sent'    => (int) $total_sent,
@@ -183,6 +171,8 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'email_bounced',
+				__( 'Email bounce detected', 'wpshadow' ),
+				'email',
 				array(
 					'recipient' => $email,
 					'reason'    => $reason,
@@ -205,6 +195,8 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'email_sent',
+				__( 'Email sent', 'wpshadow' ),
+				'email',
 				array(
 					'recipient' => $email,
 					'timestamp' => time(),

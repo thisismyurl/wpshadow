@@ -67,41 +67,6 @@ class Treatment_Plugin_Compatibility_Block_Editor extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		// Check if classic editor is being forced
-		$classic_editor_forced = false;
-
-		if ( is_plugin_active( 'classic-editor/classic-editor.php' ) ) {
-			$classic_editor_forced = true;
-		}
-
-		// Check for editor disable filters
-		if ( has_filter( 'block_editor_settings' ) || has_action( 'admin_init' ) ) {
-			// This is a basic check
-		}
-
-		if ( $classic_editor_forced ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Classic Editor plugin is active, disabling Gutenberg. The block editor is modern and has better performance.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 20,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/block-editor-compatibility',
-				'meta'          => array(
-					'classic_editor_active' => $classic_editor_forced,
-					'recommendation'        => 'Migrate to Gutenberg block editor. Classic Editor is deprecated and no longer maintained.',
-					'impact'                => 'Block editor loads faster and has better performance with modern features',
-					'benefits'              => array(
-						'Native block templates',
-						'Better page builder experience',
-						'Modern plugin ecosystem',
-						'Long-term support',
-					),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Plugin_Compatibility_Block_Editor' );
 	}
 }

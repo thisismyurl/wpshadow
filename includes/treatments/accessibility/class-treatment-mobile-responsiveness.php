@@ -84,39 +84,6 @@ class Treatment_Mobile_Responsiveness extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment - actual mobile testing requires device testing.
-		// We provide recommendations.
-
-		$issues = array();
-
-		$issues[] = __( 'Include viewport meta tag: <meta name="viewport" content="width=device-width, initial-scale=1">', 'wpshadow' );
-		$issues[] = __( 'Use responsive layouts: media queries, flexbox, grid (not fixed px widths)', 'wpshadow' );
-		$issues[] = __( 'Make buttons 44×44px minimum (touch-friendly)', 'wpshadow' );
-		$issues[] = __( 'Use 16px+ font size (readable on mobile)', 'wpshadow' );
-		$issues[] = __( 'Avoid horizontal scrolling (fits in viewport)', 'wpshadow' );
-		$issues[] = __( 'Collapse navigation menu on mobile (hamburger icon)', 'wpshadow' );
-		$issues[] = __( 'Test on actual devices, not just DevTools (they lie)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Most web users are on mobile devices. If the admin doesn\'t work on phones/tablets, site managers can\'t manage their site on the go.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 60,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-responsiveness',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'mobile_traffic'          => '~60% of web traffic is mobile',
-					'common_breakpoints'      => 'Mobile: 320px, Tablet: 768px, Desktop: 1024px+',
-					'testing_devices'         => 'iPhone 12 (390px), iPad (768px), Android phones (360-412px)',
-					'devtools_caveat'         => 'Chrome DevTools simulates mobile, but actual devices have lag/bugs',
-					'google_ranking'          => 'Mobile-friendly is a ranking factor for Google',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Responsiveness' );
 	}
 }

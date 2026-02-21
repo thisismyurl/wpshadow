@@ -123,19 +123,6 @@ class Treatment_Quantum_Computing_Readiness_Assessment_Not_Performed extends Tre
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if quantum-safe algorithms are considered
-		if ( ! get_option( 'quantum_readiness_assessment_date' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Quantum computing readiness has not been assessed. Plan for quantum-resistant cryptography and post-quantum algorithms as threat becomes realized.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 5,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/quantum-computing-readiness-assessment-not-performed',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Quantum_Computing_Readiness_Assessment_Not_Performed' );
 	}
 }

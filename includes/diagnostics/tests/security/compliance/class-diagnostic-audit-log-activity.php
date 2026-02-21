@@ -75,7 +75,7 @@ class Diagnostic_Audit_Log_Activity extends Diagnostic_Base {
      */
     public static function check() {
         // Check if audit logging is active
-        if ( ! function_exists( 'wpshadow_log_activity' ) && ! class_exists( 'WP_Activity_Log' ) ) {
+        if ( ! function_exists( 'wpshadow_log_activity' ) && ! class_exists( 'WP_Activity_Log' ) && ! class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
             return array(
                 'id'           => self::$slug,
                 'title'        => self::$title,
@@ -89,16 +89,12 @@ class Diagnostic_Audit_Log_Activity extends Diagnostic_Base {
             );
         }
 
-        // Check if logs are being created
-        global $wpdb;
-        $table = $wpdb->prefix . 'wpshadow_activity_log';
-
-        // Verify table exists
-        if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
+        // Check if logs are being created.
+        if ( ! class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
             return array(
                 'id'           => self::$slug,
                 'title'        => self::$title,
-                'description'  => __( 'Audit log table not found. Logging is not properly initialized.', 'wpshadow' ),
+            'description'  => __( 'Audit logger is not available. Logging is not properly initialized.', 'wpshadow' ),
                 'severity'     => 'critical',
                 'threat_level' => 95,
                 'auto_fixable' => false,
@@ -107,12 +103,31 @@ class Diagnostic_Audit_Log_Activity extends Diagnostic_Base {
             );
         }
 
-        // Check if recent logs exist (within last 24 hours)
-        $recent_logs = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT COUNT(*) FROM $table WHERE created_at > DATE_SUB(NOW(), INTERVAL 1 DAY)"
-            )
-        );
+        $activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
+
+        if ( ! is_array( $activity_log ) || empty( $activity_log ) ) {
+            return array(
+                'id'           => self::$slug,
+                'title'        => self::$title,
+                'description'  => __( 'No audit logs are currently stored. Check that logging is enabled and running.', 'wpshadow' ),
+                'severity'     => 'high',
+                'threat_level' => 80,
+                'auto_fixable' => false,
+                'kb_link'      => 'https://wpshadow.com/kb/audit-logging',
+                'personas'     => self::$personas,
+            );
+        }
+
+        // Check if recent logs exist (within last 24 hours).
+        $recent_logs = 0;
+        $cutoff      = time() - DAY_IN_SECONDS;
+
+        foreach ( $activity_log as $entry ) {
+            $entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+            if ( $entry_time > $cutoff ) {
+                ++$recent_logs;
+            }
+        }
 
         if ( ! $recent_logs ) {
             return array(

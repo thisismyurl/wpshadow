@@ -39,48 +39,6 @@ class Treatment_Mobile_Blockquote_Styling extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$response = wp_remote_get( home_url( '/' ) );
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-		if ( empty( $body ) ) {
-			return null;
-		}
-
-		libxml_use_internal_errors( true );
-		$dom = new \DOMDocument();
-		$dom->loadHTML( $body );
-		libxml_clear_errors();
-
-		$quotes = $dom->getElementsByTagName( 'blockquote' );
-		if ( $quotes->length < 1 ) {
-			return null;
-		}
-
-		$styled = false;
-		foreach ( $quotes as $quote ) {
-			$class = $quote->getAttribute( 'class' );
-			if ( strpos( $class, 'wp-block-quote' ) !== false ) {
-				$styled = true;
-				break;
-			}
-		}
-
-		if ( ! $styled ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Blockquotes found without block styling. Add blockquote styles so quotes remain readable on mobile.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 20,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-blockquote-styling',
-				'persona'      => 'publisher',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Blockquote_Styling' );
 	}
 }

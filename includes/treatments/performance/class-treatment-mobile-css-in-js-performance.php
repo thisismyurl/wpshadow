@@ -64,33 +64,7 @@ class Treatment_Mobile_CSS_In_JS_Performance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$analysis = self::analyze_css_in_js();
-
-		if ( empty( $analysis['detected'] ) ) {
-			return null; // No CSS-in-JS detected
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of CSS-in-JS libraries */
-				__( 'Detected %d CSS-in-JS libraries', 'wpshadow' ),
-				count( $analysis['detected'] )
-			),
-			'severity'        => 'high',
-			'threat_level'    => 65,
-			'libraries'       => $analysis['detected'],
-			'estimated_overhead' => '50-200ms runtime CSS generation',
-			'recommendations' => array(
-				'Extract critical CSS to <style> tag',
-				'Use Linaria or Astroturf for compile-time CSS',
-				'Implement critical CSS inlining',
-			),
-			'user_impact'     => __( 'CSS-in-JS adds 50-200ms FCP delay', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/css-in-js-perf',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_CSS_In_JS_Performance' );
 	}
 
 	/**

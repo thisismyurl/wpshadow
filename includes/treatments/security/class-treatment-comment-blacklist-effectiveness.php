@@ -25,58 +25,6 @@ class Treatment_Comment_Blacklist_Effectiveness extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$blacklist = get_option( 'disallowed_keys', '' );
-		$blacklist = get_option( 'blacklist_keys', $blacklist ); // Backwards compat.
-
-		$blacklist_count = empty( $blacklist ) ? 0 : count( explode( "\n", trim( $blacklist ) ) );
-
-		if ( $blacklist_count < 10 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					__( 'Comment blacklist has only %d entries - recommended: 50+ common spam keywords', 'wpshadow' ),
-					$blacklist_count
-				),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-blacklist-effectiveness',
-			);
-		}
-
-		// Check spam rate in recent comments.
-		global $wpdb;
-		$total_comments = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments}
-			WHERE comment_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
-		);
-
-		$spam_comments = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments}
-			WHERE comment_approved = 'spam'
-			AND comment_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
-		);
-
-		if ( $total_comments > 0 ) {
-			$spam_rate = ( $spam_comments / $total_comments ) * 100;
-
-			if ( $spam_rate > 50 ) {
-				return array(
-					'id'           => self::$slug,
-					'title'        => self::$title,
-					'description'  => sprintf(
-						__( 'High spam rate detected: %.1f%% - blacklist may be ineffective', 'wpshadow' ),
-						$spam_rate
-					),
-					'severity'     => 'high',
-					'threat_level' => 45,
-					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-blacklist-effectiveness',
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Blacklist_Effectiveness' );
 	}
 }

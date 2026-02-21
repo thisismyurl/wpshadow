@@ -63,18 +63,6 @@ class Treatment_Admin_Comment_Notifications_Disabled extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! get_option( 'comments_notify' ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Admin comment notification emails are disabled. This can delay moderation and responses.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 20,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-comment-notifications-disabled',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Admin_Comment_Notifications_Disabled' );
 	}
 }

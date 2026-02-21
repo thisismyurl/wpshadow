@@ -64,38 +64,7 @@ class Treatment_Gutenberg_Media_Block_Integration extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		// Check if Gutenberg is available
-		global $wp_version;
-		$has_gutenberg = version_compare( $wp_version, '5.0', '>=' ) || 
-			( function_exists( 'gutenberg_is_experiment_enabled' ) );
-
-		if ( ! $has_gutenberg ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Gutenberg block editor is not available. Update WordPress to 5.0 or newer.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 55,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-media-blocks',
-			);
-		}
-
-		// Check for media blocks registration
-		$media_blocks = self::check_media_blocks();
-		if ( empty( $media_blocks ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Media blocks are not properly registered in Gutenberg. Verify block editor configuration.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 55,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-media-blocks',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Gutenberg_Media_Block_Integration' );
 	}
 
 	/**

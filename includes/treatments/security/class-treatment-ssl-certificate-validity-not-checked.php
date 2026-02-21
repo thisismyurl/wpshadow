@@ -127,19 +127,6 @@ class Treatment_SSL_Certificate_Validity_Not_Checked extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if site is using HTTPS
-		if ( 'https' !== Treatment_URL_And_Pattern_Helper::get_scheme( home_url() ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'SSL certificate validity is not checked. Ensure your SSL certificate is valid and set up certificate expiration alerts to prevent security issues.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 75,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/ssl-certificate-validity-not-checked',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SSL_Certificate_Validity_Not_Checked' );
 	}
 }

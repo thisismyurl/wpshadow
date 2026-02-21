@@ -64,24 +64,18 @@ class Diagnostic_Broken_Access_Control_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'verify_access_control' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Broken access control not prevented. Always verify permissions at both function and data layer for all operations.',
-						'severity'   =>   'high',
-						'threat_level'   =>   85,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/broken-access-control-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'verify_access_control' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Access control verification is not enforced yet. Consistent permission checks help prevent unauthorized actions.', 'wpshadow' ),
+				'severity'    => 'high',
+				'threat_level' => 85,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/broken-access-control-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

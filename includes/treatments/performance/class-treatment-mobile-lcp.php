@@ -114,51 +114,7 @@ class Treatment_Mobile_Lcp extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for common LCP bottlenecks
-		$issues = self::identify_lcp_issues();
-
-		if ( empty( $issues['problems'] ) ) {
-			return null; // No issues detected
-		}
-
-		// Estimate LCP based on issues found
-		$estimated_lcp = self::estimate_lcp( $issues );
-
-		if ( $estimated_lcp < 2.5 ) {
-			return null; // Within target
-		}
-
-		// Determine severity
-		if ( $estimated_lcp > 4.0 ) {
-			$severity = 'critical';
-			$threat   = 80;
-		} else {
-			$severity = 'high';
-			$threat   = 70;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %s: LCP time in seconds */
-				__( 'Mobile LCP estimated at %.1fs (target: <2.5s)', 'wpshadow' ),
-				$estimated_lcp
-			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'current_lcp'     => sprintf( '%.1fs', $estimated_lcp ),
-			'target_lcp'      => '<2.5s',
-			'primary_issues'  => $issues['problems'],
-			'lcp_element'     => $issues['element'] ?? 'Hero image/video',
-			'estimated_improvement' => sprintf(
-				/* translators: %s: estimated LCP after optimization */
-				__( 'Reduce to %.1fs with optimization', 'wpshadow' ),
-				$estimated_lcp * 0.6
-			),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-lcp',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Lcp' );
 	}
 
 	/**

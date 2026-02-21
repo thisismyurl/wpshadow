@@ -64,51 +64,6 @@ class Treatment_Media_Caption_Functionality extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		if ( ! shortcode_exists( 'caption' ) ) {
-			$issues[] = __( 'Caption shortcode is not registered; image captions may not display', 'wpshadow' );
-		}
-
-		if ( ! has_filter( 'img_caption_shortcode' ) ) {
-			$issues[] = __( 'No custom caption handling detected; verify caption output in the theme', 'wpshadow' );
-		}
-
-		$attachments = get_posts(
-			array(
-				'post_type'      => 'attachment',
-				'post_mime_type' => 'image',
-				'posts_per_page' => 10,
-				'post_status'    => 'inherit',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			)
-		);
-
-		$caption_count = 0;
-		foreach ( $attachments as $attachment ) {
-			$caption = wp_get_attachment_caption( $attachment->ID );
-			if ( ! empty( $caption ) ) {
-				$caption_count++;
-			}
-		}
-
-		if ( 0 === $caption_count ) {
-			$issues[] = __( 'No recent images have captions; consider adding captions for context and accessibility', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'low',
-				'threat_level' => 30,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-caption-functionality',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Caption_Functionality' );
 	}
 }

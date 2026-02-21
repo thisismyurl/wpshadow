@@ -64,4 +64,6 @@ class Treatment_Weak_SSL_TLS_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Weak_SSL_TLS_Configuration' );
+	}
+}

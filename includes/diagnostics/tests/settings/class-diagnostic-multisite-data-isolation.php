@@ -47,7 +47,7 @@ protected static $title = 'Multisite Network Data Isolation';
  *
  * @var string
  */
-protected static $description = 'Verifies sub-sites cannot access each other's data';
+protected static $description = 'Verifies sub-sites cannot access each other\'s data';
 
 /**
  * The family this diagnostic belongs to
@@ -132,3 +132,5 @@ public static function check() {
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/multisite-data-isolation',
 		);
+	}
+}

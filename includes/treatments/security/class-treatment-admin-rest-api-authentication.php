@@ -93,58 +93,6 @@ class Treatment_Admin_Rest_Api_Authentication extends Treatment_Base {
 	protected static $family = 'admin-security';
 
 	public static function check() {
-		$issues = array();
-
-		// Check if REST API is exposed
-		$rest_enabled = get_option( 'rest_api_enabled', true );
-		if ( $rest_enabled ) {
-			// Check if REST API requires authentication
-			$is_rest_public = apply_filters( 'rest_authentication_errors', null );
-			if ( null === $is_rest_public ) {
-				$issues[] = __( 'REST API endpoints are publicly accessible without authentication', 'wpshadow' );
-			}
-		}
-
-		// Check for unprotected custom REST endpoints
-		global $wp_rest_server;
-		$endpoints = rest_get_endpoints();
-		$public_endpoints = 0;
-
-		foreach ( (array) $endpoints as $route => $endpoint ) {
-			if ( is_array( $endpoint ) && isset( $endpoint['methods'] ) ) {
-				// Check if GET is publicly accessible
-				if ( isset( $endpoint['methods']['GET'] ) ) {
-					$public_endpoints++;
-				}
-			}
-		}
-
-		if ( $public_endpoints > 10 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of endpoints */
-				__( '%d REST endpoints are publicly accessible', 'wpshadow' ),
-				$public_endpoints
-			);
-		}
-
-		if ( ! empty( $issues ) ) {
-			$finding = array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => implode( '. ', $issues ),
-				'severity'      => 'high',
-				'threat_level'  => 78,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/admin-rest-api-authentication',
-				'context'       => array(
-					'why'            => __( 'Public endpoints = user enumeration attack. Real scenario: Attacker queries /wp-json/wp/v2/users. Gets all usernames. Then brute force login. Unprotected endpoints = reconnaissance vector. Every public endpoint = potential attack surface. With auth: Only authenticated users see endpoints.', 'wpshadow' ),
-					'recommendation' => __( '1. Add permission_callback to every endpoint registration. 2. Check current_user_can(\'manage_options\') for admin endpoints. 3. Return 403 for unauthorized requests. 4. Audit all custom REST endpoints. 5. Test with unauthenticated user. 6. Document public vs private endpoints. 7. Use nonces for POST/DELETE. 8. Consider disabling REST API if unused. 9. Use role-based access control. 10. Monitor REST endpoint access in logs.', 'wpshadow' ),
-				),
-			);
-			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api-auth', 'admin-rest-api' );
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Admin_Rest_Api_Authentication' );
 	}
 }

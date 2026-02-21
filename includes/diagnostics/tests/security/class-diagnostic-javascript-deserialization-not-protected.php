@@ -64,24 +64,18 @@ class Diagnostic_JavaScript_Deserialization_Not_Protected extends Diagnostic_Bas
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'protect_js_deserialization' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('JavaScript deserialization not protected. Never eval() user input and use JSON.parse() with try-catch.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/javascript-deserialization-not-protected'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'protect_js_deserialization' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'JavaScript deserialization protections are not configured yet. Safer parsing practices can reduce script execution risks.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 70,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/javascript-deserialization-not-protected',
+			);
+		}
+
+		return null;
 	}
 }

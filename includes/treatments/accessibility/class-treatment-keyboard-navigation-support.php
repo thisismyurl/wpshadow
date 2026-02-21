@@ -84,37 +84,6 @@ class Treatment_Keyboard_Navigation_Support extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment - actual keyboard testing requires manual QA.
-		// We provide recommendations for keyboard support.
-
-		$issues = array();
-
-		$issues[] = __( 'All interactive elements (buttons, links, form fields) must be reachable via Tab key', 'wpshadow' );
-		$issues[] = __( 'Focus indicator must always be visible (don\'t remove outline/border)', 'wpshadow' );
-		$issues[] = __( 'Skip links should let users bypass repetitive navigation (e.g., admin menu)', 'wpshadow' );
-		$issues[] = __( 'Menus that appear on hover must also be accessible via keyboard', 'wpshadow' );
-		$issues[] = __( 'Modal dialogs should trap focus and support Escape to close', 'wpshadow' );
-		$issues[] = __( 'Form submission should work via Enter key (not just button click)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Keyboard-only users and people with motor disabilities cannot use mouse-dependent interfaces. Full keyboard support is essential.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 80,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/keyboard-navigation',
-				'details'      => array(
-					'recommendations'     => $issues,
-					'affected_population' => __( '~16% of adults have motor disabilities, many use keyboard only', 'wpshadow' ),
-					'wcag_standard'       => 'WCAG 2.1 Level A (2.1.1 Keyboard)',
-					'testing_method'      => 'Navigate entire admin using only Tab, Enter, Escape keys',
-					'power_user_benefit'  => 'Keyboard shortcuts are faster than mouse for power users',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Keyboard_Navigation_Support' );
 	}
 }

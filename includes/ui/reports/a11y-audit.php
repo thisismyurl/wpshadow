@@ -108,9 +108,7 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ) );
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Want to scan multiple URLs at once?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro lets you batch-scan entire sections of your site in one go.', 'wpshadow' ),

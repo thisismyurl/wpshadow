@@ -36,32 +36,6 @@ class Treatment_DNS_Prefetch_Configuration extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add dns-prefetch for CDNs: fonts.googleapis.com', 'wpshadow' );
-		$issues[] = __( 'Add dns-prefetch for analytics: google-analytics.com', 'wpshadow' );
-		$issues[] = __( 'Add dns-prefetch for social: facebook.net, twitter.com', 'wpshadow' );
-		$issues[] = __( 'Add preconnect for critical resources (includes TLS)', 'wpshadow' );
-		$issues[] = __( 'Limit to 4-6 domains (diminishing returns)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'DNS prefetch tells browsers to resolve domain names early, saving 20-120ms when resources are needed.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 35,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-prefetch',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'html_example'            => '<link rel="dns-prefetch" href="//fonts.googleapis.com">',
-					'preconnect_example'      => '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-					'latency_savings'         => '20-120ms per external domain',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_DNS_Prefetch_Configuration' );
 	}
 }

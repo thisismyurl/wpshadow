@@ -64,44 +64,6 @@ class Treatment_Performance_Baseline extends Treatment_Base {
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
-        // Check if WPShadow has recorded baseline metrics
-        $baseline = get_option( 'wpshadow_performance_baseline' );
-
-        if ( ! $baseline ) {
-            return array(
-                'id'            => self::$slug,
-                'title'         => self::$title,
-                'description'   => __( 'No performance baseline recorded. Record metrics to track improvements.', 'wpshadow' ),
-                'severity'      => 'low',
-                'threat_level'  => 20,
-                'auto_fixable'  => false,
-                'kb_link'       => 'https://wpshadow.com/kb/performance-baseline',
-                'persona'       => 'developer',
-            );
-        }
-
-        // Check if baseline is recent (within 30 days)
-        $baseline_time = (int) $baseline['timestamp'] ?? 0;
-        $current_time  = time();
-        $age_days      = floor( ( $current_time - $baseline_time ) / 86400 );
-
-        if ( $age_days > 30 ) {
-            return array(
-                'id'            => self::$slug,
-                'title'         => self::$title,
-                'description'   => sprintf(
-                    /* translators: %d: days */
-                    __( 'Performance baseline is %d days old. Consider refreshing for current metrics.', 'wpshadow' ),
-                    $age_days
-                ),
-                'severity'      => 'low',
-                'threat_level'  => 15,
-                'auto_fixable'  => false,
-                'kb_link'       => 'https://wpshadow.com/kb/performance-baseline',
-                'persona'       => 'developer',
-            );
-        }
-
-        return null; // No issue found
+    	return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Performance\Diagnostic_Performance_Baseline' );
     }
 }

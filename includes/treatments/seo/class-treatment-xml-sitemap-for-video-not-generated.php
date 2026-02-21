@@ -63,19 +63,6 @@ class Treatment_XML_Sitemap_For_Video_Not_Generated extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if video sitemap exists
-		if ( ! file_exists( WP_CONTENT_DIR . '/uploads/video-sitemap.xml' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Video XML sitemap is not generated. Create a video sitemap and submit it to Google Search Console for better video indexing.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/xml-sitemap-for-video-not-generated',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_XML_Sitemap_For_Video_Not_Generated' );
 	}
 }

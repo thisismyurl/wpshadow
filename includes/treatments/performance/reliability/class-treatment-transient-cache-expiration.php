@@ -36,32 +36,6 @@ class Treatment_Transient_Cache_Expiration extends Treatment_Base {
 	protected static $family = 'reliability';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'ALWAYS set expiration time on set_transient()', 'wpshadow' );
-		$issues[] = __( 'Short-lived data: 5-15 minutes (API responses)', 'wpshadow' );
-		$issues[] = __( 'Medium-lived data: 1-24 hours (RSS feeds)', 'wpshadow' );
-		$issues[] = __( 'Long-lived data: 7-30 days (expensive queries)', 'wpshadow' );
-		$issues[] = __( 'Clean up orphaned transients regularly', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Transients without expiration fill the database forever. Always set expiration times appropriate to the data freshness needs.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-expiration',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'correct_usage'           => 'set_transient( "key", $data, HOUR_IN_SECONDS );',
-					'wrong_usage'             => 'set_transient( "key", $data, 0 ); // NEVER EXPIRES!',
-					'cleanup_query'           => 'DELETE FROM wp_options WHERE option_name LIKE "_transient_%"',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Transient_Cache_Expiration' );
 	}
 }

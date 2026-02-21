@@ -65,36 +65,7 @@ class Treatment_Mobile_Image_Optimization_Score extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$analysis = self::analyze_image_optimization();
-
-		if ( $analysis['optimization_score'] >= 80 ) {
-			return null; // Images well optimized
-		}
-
-		$threat = 50;
-		if ( $analysis['optimization_score'] < 50 ) {
-			$threat = 75; // Critical - poor optimization
-		}
-
-		return array(
-			'id'                     => self::$slug,
-			'title'                  => self::$title,
-			'description'            => sprintf(
-				/* translators: %d: optimization score percentage */
-				__( 'Image optimization score: %d%% (ideal: >80%%)', 'wpshadow' ),
-				$analysis['optimization_score']
-			),
-			'severity'               => 'high',
-			'threat_level'           => $threat,
-			'optimization_score'     => $analysis['optimization_score'],
-			'issues'                 => $analysis['issues'],
-			'total_image_weight'     => size_format( $analysis['total_weight'], 1 ),
-			'savings_potential'      => size_format( $analysis['savings'], 1 ),
-			'format_recommendations' => $analysis['recommendations'] ?? array(),
-			'user_impact'            => __( 'Unoptimized images waste 30-50% of bandwidth', 'wpshadow' ),
-			'auto_fixable'           => true,
-			'kb_link'                => 'https://wpshadow.com/kb/image-optimization',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Image_Optimization_Score' );
 	}
 
 	/**

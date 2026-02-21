@@ -109,23 +109,6 @@ class Treatment_Feed_Redirects extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$feed_url = get_feed_link();
-		$response = wp_remote_get( $feed_url, array( 'timeout' => 5, 'redirection' => 0 ) );
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-		$code = wp_remote_retrieve_response_code( $response );
-		if ( in_array( $code, array( 301, 302, 307, 308 ), true ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed URL is being redirected.', 'wpshadow' ),
-				'severity'    => 'medium',
-				'threat_level'=> 50,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-redirects',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Redirects' );
 	}
 }

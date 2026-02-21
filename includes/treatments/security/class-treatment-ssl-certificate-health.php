@@ -63,30 +63,6 @@ class Treatment_SSL_Certificate_Health extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! wp_is_https_supported() ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'HTTPS is not supported or not properly configured. Install a valid SSL certificate.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 90,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-health',
-			);
-		}
-
-		if ( 0 !== strpos( home_url(), 'https://' ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Site URL is not using HTTPS. Update WordPress and site URL settings.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-health',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SSL_Certificate_Health' );
 	}
 }

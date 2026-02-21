@@ -63,38 +63,6 @@ class Treatment_Comment_Approval_Backlog_Age extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$pending = get_comments(
-			array(
-				'status'  => 'hold',
-				'number'  => 1,
-				'orderby' => 'comment_date_gmt',
-				'order'   => 'ASC',
-			)
-		);
-
-		if ( empty( $pending ) ) {
-			return null;
-		}
-
-		$oldest = $pending[0];
-		$age_seconds = time() - strtotime( $oldest->comment_date_gmt . ' GMT' );
-		$age_days = (int) floor( $age_seconds / DAY_IN_SECONDS );
-
-		if ( $age_days >= 7 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Some comments have been awaiting approval for more than 7 days.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 15,
-				'auto_fixable' => false,
-				'details'      => array(
-					'oldest_pending_days' => $age_days,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/comment-approval-backlog-age',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Approval_Backlog_Age' );
 	}
 }

@@ -66,28 +66,7 @@ class Treatment_Mobile_Form_Validation extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_validation_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of validation issues */
-				__( 'Found %d form validation accessibility issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'high',
-			'threat_level'    => 65,
-			'issues'          => $issues['all'],
-			'wcag_violation'  => '3.3.1 Error Identification (Level A)',
-			'user_impact'     => __( 'Users cannot see or understand form errors on mobile', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/form-validation',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Form_Validation' );
 	}
 
 	/**

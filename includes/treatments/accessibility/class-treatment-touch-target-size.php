@@ -36,33 +36,6 @@ class Treatment_Touch_Target_Size extends Treatment_Base {
 	protected static $family = 'accessibility';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Make all buttons at least 44×44 pixels', 'wpshadow' );
-		$issues[] = __( 'Add padding to links for larger click area', 'wpshadow' );
-		$issues[] = __( 'Space touch targets at least 8px apart', 'wpshadow' );
-		$issues[] = __( 'Test on actual mobile devices (not just browser)', 'wpshadow' );
-		$issues[] = __( 'Consider 48×48px for primary actions', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Touch targets smaller than 44×44px are hard to tap on mobile. This affects everyone, especially people with motor disabilities.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/touch-targets',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1 2.5.5 Target Size (Level AAA: 44×44px)',
-					'apple_guideline'         => 'Apple HIG: 44×44pt minimum',
-					'google_guideline'        => 'Material Design: 48×48dp minimum',
-					'affected_users'          => '60% mobile traffic, motor disabilities, elderly',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Touch_Target_Size' );
 	}
 }

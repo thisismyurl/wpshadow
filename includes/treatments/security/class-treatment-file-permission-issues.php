@@ -63,38 +63,6 @@ class Treatment_File_Permission_Issues extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$paths = array(
-			WP_CONTENT_DIR,
-			WP_CONTENT_DIR . '/plugins',
-			WP_CONTENT_DIR . '/themes',
-			WP_CONTENT_DIR . '/uploads',
-		);
-
-		$world_writable = array();
-		foreach ( $paths as $path ) {
-			if ( is_dir( $path ) ) {
-				$perms = fileperms( $path );
-				if ( false !== $perms && ( $perms & 0x0002 ) ) {
-					$world_writable[] = $path;
-				}
-			}
-		}
-
-		if ( ! empty( $world_writable ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'One or more directories are world-writable (777). Tighten permissions to reduce risk.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 80,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-permission-issues',
-				'meta'         => array(
-					'world_writable_paths' => $world_writable,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_File_Permission_Issues' );
 	}
 }

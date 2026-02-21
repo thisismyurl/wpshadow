@@ -127,19 +127,6 @@ class Treatment_Database_Performance_Index_Not_Optimized extends Treatment_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for database optimization
-		if ( ! is_plugin_active( 'wp-optimize/wp-optimize.php' ) && ! is_plugin_active( 'advanced-database-cleaner/advanced-database-cleaner.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Database indexes are not optimized. Add proper indexes to frequently queried columns to improve database performance.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/database-performance-index-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Database_Performance_Index_Not_Optimized' );
 	}
 }

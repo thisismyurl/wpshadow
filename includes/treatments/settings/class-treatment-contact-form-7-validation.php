@@ -63,54 +63,7 @@ class Treatment_Contact_Form_7_Validation extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if Contact Form 7 is active.
-		if ( ! class_exists( 'WPCF7' ) ) {
-			return null; // Plugin not active, no check needed.
-		}
-
-		$issues = array();
-
-		// Get all CF7 forms.
-		$forms = get_posts(
-			array(
-				'post_type'      => 'wpcf7_contact_form',
-				'posts_per_page' => -1,
-				'post_status'    => 'publish',
-			)
-		);
-
-		if ( empty( $forms ) ) {
-			return null; // No forms to check.
-		}
-
-		foreach ( $forms as $form ) {
-			$form_obj  = \WPCF7_ContactForm::get_instance( $form->ID );
-			$form_html = $form_obj->prop( 'form' );
-
-			$form_issues = self::analyze_form_security( $form->ID, $form_html, $form->post_title );
-			if ( ! empty( $form_issues ) ) {
-				$issues = array_merge( $issues, $form_issues );
-			}
-		}
-
-		if ( empty( $issues ) ) {
-			return null; // No issues found.
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: %d: number of security issues found */
-				__( 'Found %d security or validation issues in Contact Form 7 forms', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'     => 'high',
-			'threat_level' => 80,
-			'auto_fixable' => false,
-			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/contact-form-7-validation',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Contact_Form_7_Validation' );
 	}
 
 	/**

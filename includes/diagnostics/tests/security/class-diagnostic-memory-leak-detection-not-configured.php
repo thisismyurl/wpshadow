@@ -64,24 +64,18 @@ class Diagnostic_Memory_Leak_Detection_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'detect_memory_leaks' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Memory leak detection not configured. Monitor memory usage trends and implement tools like XDebug profiling to detect leaks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/memory-leak-detection-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'detect_memory_leaks' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Memory leak detection is not configured yet. Monitoring memory trends can help catch regressions before they affect site stability.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 40,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/memory-leak-detection-not-configured',
+			);
+		}
+
+		return null;
 	}
 }

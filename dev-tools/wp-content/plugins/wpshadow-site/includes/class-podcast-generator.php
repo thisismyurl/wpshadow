@@ -25,18 +25,24 @@ class WPShadow_Podcast_Generator {
 	private $podcast_dir;
 
 	/**
-	 * Queue table name.
+	 * Queue option name.
 	 *
 	 * @var string
 	 */
-	private $queue_table;
+	private $queue_option;
+
+	/**
+	 * Queue option key.
+	 *
+	 * @var string
+	 */
+	private const QUEUE_OPTION = 'wpshadow_podcast_queue';
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		global $wpdb;
-		$this->queue_table = $wpdb->prefix . 'wpshadow_podcast_queue';
+		$this->queue_option = self::QUEUE_OPTION;
 		$upload_dir         = wp_upload_dir();
 		$this->podcast_dir  = $upload_dir['basedir'] . '/wpshadow-podcasts';
 
@@ -96,29 +102,24 @@ class WPShadow_Podcast_Generator {
 	 * @param int $post_id Post ID.
 	 */
 	private function add_to_queue( $post_id ) {
-		global $wpdb;
+		$queue_items = $this->get_queue_items();
 
-		$existing = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT id FROM {$this->queue_table} WHERE post_id = %d AND status = %s",
-				$post_id,
-				'pending'
-			)
-		);
-
-		if ( $existing ) {
-			return; // Already queued.
+		foreach ( $queue_items as $item ) {
+			if ( (int) $item['post_id'] === (int) $post_id && 'pending' === $item['status'] ) {
+				return;
+			}
 		}
 
-		$wpdb->insert(
-			$this->queue_table,
-			array(
-				'post_id'    => $post_id,
-				'status'     => 'pending',
-				'created_at' => current_time( 'mysql' ),
-			),
-			array( '%d', '%s', '%s' )
+		$queue_items[] = array(
+			'id'            => $this->get_next_queue_id( $queue_items ),
+			'post_id'       => (int) $post_id,
+			'status'        => 'pending',
+			'created_at'    => current_time( 'mysql' ),
+			'updated_at'    => current_time( 'mysql' ),
+			'error_message' => '',
 		);
+
+		$this->save_queue_items( $queue_items );
 
 		// Schedule single cron event if not already scheduled.
 		if ( ! wp_next_scheduled( 'wpshadow_process_podcast_queue' ) ) {
@@ -132,36 +133,42 @@ class WPShadow_Podcast_Generator {
 	 * @param int $queue_id Optional. Specific queue item to process. If null, processes next pending item.
 	 */
 	public function process_queue_item( $queue_id = null ) {
-		global $wpdb;
+		$queue_items = $this->get_queue_items();
 
 		if ( null === $queue_id ) {
-			// Get the next pending item.
-			$queue_item = $wpdb->get_row(
-				$wpdb->prepare(
-					"SELECT id, post_id FROM {$this->queue_table} WHERE status = %s ORDER BY created_at ASC LIMIT 1",
-					'pending'
-				)
-			);
+			$queue_item = null;
 
-			if ( ! $queue_item ) {
+			foreach ( $queue_items as $item ) {
+				if ( 'pending' !== $item['status'] ) {
+					continue;
+				}
+
+				if ( null === $queue_item || strtotime( $item['created_at'] ) < strtotime( $queue_item['created_at'] ) ) {
+					$queue_item = $item;
+				}
+			}
+
+			if ( null === $queue_item ) {
 				return;
 			}
 
-			$queue_id = $queue_item->id;
-			$post_id  = $queue_item->post_id;
+			$queue_id = (int) $queue_item['id'];
+			$post_id  = (int) $queue_item['post_id'];
 		} else {
-			$queue_item = $wpdb->get_row(
-				$wpdb->prepare(
-					"SELECT id, post_id FROM {$this->queue_table} WHERE id = %d",
-					$queue_id
-				)
-			);
+			$queue_item = null;
 
-			if ( ! $queue_item ) {
+			foreach ( $queue_items as $item ) {
+				if ( (int) $item['id'] === (int) $queue_id ) {
+					$queue_item = $item;
+					break;
+				}
+			}
+
+			if ( null === $queue_item ) {
 				return;
 			}
 
-			$post_id = $queue_item->post_id;
+			$post_id = (int) $queue_item['post_id'];
 		}
 
 		$this->update_queue_status( $queue_id, 'processing' );
@@ -185,18 +192,24 @@ class WPShadow_Podcast_Generator {
 	 * @param string $message  Optional. Error message or details.
 	 */
 	private function update_queue_status( $queue_id, $status, $message = '' ) {
-		global $wpdb;
+		$queue_items = $this->get_queue_items();
 
-		$data = array(
-			'status'     => $status,
-			'updated_at' => current_time( 'mysql' ),
-		);
+		foreach ( $queue_items as $index => $item ) {
+			if ( (int) $item['id'] !== (int) $queue_id ) {
+				continue;
+			}
 
-		if ( $message ) {
-			$data['error_message'] = $message;
+			$queue_items[ $index ]['status']     = $status;
+			$queue_items[ $index ]['updated_at'] = current_time( 'mysql' );
+
+			if ( $message ) {
+				$queue_items[ $index ]['error_message'] = $message;
+			}
+
+			break;
 		}
 
-		$wpdb->update( $this->queue_table, $data, array( 'id' => $queue_id ), array( '%s', '%s', '%s' ), array( '%d' ) );
+		$this->save_queue_items( $queue_items );
 	}
 
 	/**
@@ -558,25 +571,23 @@ class WPShadow_Podcast_Generator {
 	 * Render podcast status in admin notices.
 	 */
 	public function render_podcast_status() {
-		global $wpdb;
-
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
-		$pending_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$this->queue_table} WHERE status = %s",
-				'pending'
-			)
-		);
+		$queue_items   = $this->get_queue_items();
+		$pending_count = 0;
+		$failed_count  = 0;
 
-		$failed_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$this->queue_table} WHERE status = %s",
-				'failed'
-			)
-		);
+		foreach ( $queue_items as $item ) {
+			if ( 'pending' === $item['status'] ) {
+				++$pending_count;
+			}
+
+			if ( 'failed' === $item['status'] ) {
+				++$failed_count;
+			}
+		}
 
 		if ( $pending_count > 0 ) {
 			echo '<div class="notice notice-info"><p>';
@@ -598,38 +609,56 @@ class WPShadow_Podcast_Generator {
 	}
 
 	/**
-	 * Create podcast queue table.
+	 * Ensure podcast queue option exists.
 	 */
 	public static function create_queue_table() {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'wpshadow_podcast_queue';
-		$charset    = $wpdb->get_charset_collate();
-
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			post_id bigint(20) NOT NULL,
-			status varchar(20) NOT NULL DEFAULT 'pending',
-			created_at datetime DEFAULT CURRENT_TIMESTAMP,
-			updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			error_message longtext,
-			PRIMARY KEY (id),
-			KEY post_id (post_id),
-			KEY status (status)
-		) $charset;";
-
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $sql );
+		if ( false === get_option( self::QUEUE_OPTION, false ) ) {
+			add_option( self::QUEUE_OPTION, array(), '', false );
+		}
 	}
 
 	/**
-	 * Drop podcast queue table on deactivation.
+	 * Remove podcast queue option on deactivation.
 	 */
 	public static function drop_queue_table() {
-		global $wpdb;
+		delete_option( self::QUEUE_OPTION );
+	}
 
-		$table_name = $wpdb->prefix . 'wpshadow_podcast_queue';
-		$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+	/**
+	 * Get queue items from option storage.
+	 *
+	 * @return array
+	 */
+	private function get_queue_items() {
+		$items = get_option( $this->queue_option, array() );
+
+		return is_array( $items ) ? $items : array();
+	}
+
+	/**
+	 * Save queue items to option storage.
+	 *
+	 * @param array $items Queue items.
+	 * @return void
+	 */
+	private function save_queue_items( array $items ) {
+		update_option( $this->queue_option, array_values( $items ), false );
+	}
+
+	/**
+	 * Get next queue item ID.
+	 *
+	 * @param array $items Queue items.
+	 * @return int
+	 */
+	private function get_next_queue_id( array $items ) {
+		$max_id = 0;
+
+		foreach ( $items as $item ) {
+			$max_id = max( $max_id, (int) ( $item['id'] ?? 0 ) );
+		}
+
+		return $max_id + 1;
 	}
 
 	/**

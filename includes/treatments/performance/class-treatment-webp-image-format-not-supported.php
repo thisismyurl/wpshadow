@@ -63,19 +63,6 @@ class Treatment_WebP_Image_Format_Not_Supported extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if WebP is supported in GD library
-		if ( extension_loaded( 'gd' ) && ! function_exists( 'imagewebp' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'WebP image format is not supported by your server. Enable WebP support in GD library to serve modern image formats and reduce file sizes.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/webp-image-format-not-supported',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_WebP_Image_Format_Not_Supported' );
 	}
 }

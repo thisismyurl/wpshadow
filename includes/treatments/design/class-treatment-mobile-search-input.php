@@ -65,28 +65,7 @@ class Treatment_Mobile_Search_Input extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_search_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null;
-		}
-
-		return array(
-			'id'             => self::$slug,
-			'title'          => self::$title,
-			'description'    => sprintf(
-				/* translators: %d: number of search optimization issues */
-				__( 'Found %d mobile search optimization issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'       => 'medium',
-			'threat_level'   => 50,
-			'issues'         => $issues['all'],
-			'has_search'     => $issues['has_search'] ?? false,
-			'user_impact'    => __( 'Search is difficult to use on mobile devices', 'wpshadow' ),
-			'auto_fixable'   => true,
-			'kb_link'        => 'https://wpshadow.com/kb/mobile-search',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Search_Input' );
 	}
 
 	/**

@@ -64,24 +64,18 @@ class Diagnostic_URL_Parameter_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_url_parameters' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('URL parameter injection not prevented. Whitelist allowed parameters and validate/sanitize all URL query strings.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/url-parameter-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'validate_url_parameters' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'URL parameter injection protections are not configured yet. Validating and sanitizing query parameters helps prevent malicious input.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/url-parameter-injection-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

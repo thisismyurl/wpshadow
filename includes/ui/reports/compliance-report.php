@@ -229,25 +229,18 @@ foreach ( $all_diagnostics as $slug => $class ) {
 
 <script>
 jQuery(document).ready(function($) {
+	<?php echo \WPShadow\Views\Tool_View_Base::get_js_scan_state_helpers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	$('#run-compliance-scan-btn').on('click', function() {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#compliance-scan-results');
 		
-		$btn.prop('disabled', true).addClass('wps-loading');
-		$progress.removeClass('hidden');
-		$results.empty();
+		wpshadowReportScanStart( $btn, $progress, $results );
 		
 		// Run both privacy and compliance diagnostics
 		Promise.all([
-			wp.ajax.post('wpshadow_run_family_diagnostics', {
-				family: 'privacy',
-				nonce: $btn.data('nonce')
-			}),
-			wp.ajax.post('wpshadow_run_family_diagnostics', {
-				family: 'compliance',
-				nonce: $btn.data('nonce')
-			})
+			wpshadowRunFamilyDiagnostics( 'privacy', $btn.data('nonce') ),
+			wpshadowRunFamilyDiagnostics( 'compliance', $btn.data('nonce') )
 		]).then(function(responses) {
 			const allFindings = [
 				...(responses[0].findings || []),
@@ -255,10 +248,9 @@ jQuery(document).ready(function($) {
 			];
 			displayComplianceResults({ findings: allFindings });
 		}).catch(function(error) {
-			$results.html('<div class="notice notice-error"><p>' + error.message + '</p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_open_html() ); ?>' + error.message + '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_close_html() ); ?>');
 		}).always(function() {
-			$btn.prop('disabled', false).removeClass('wps-loading');
-			$progress.addClass('hidden');
+			wpshadowReportScanEnd( $btn, $progress );
 		});
 	});
 
@@ -282,7 +274,7 @@ jQuery(document).ready(function($) {
 		$('#compliance-cookies').text(cookieCount > 0 ? cookieCount + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>' : '✓');
 		
 		if (findings.length === 0) {
-			$results.html('<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> <?php echo esc_js( __( 'Excellent! Your site meets major privacy and compliance requirements.', 'wpshadow' ) ); ?></p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your site meets major privacy and compliance requirements.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
 		
@@ -310,34 +302,36 @@ jQuery(document).ready(function($) {
 			}
 		});
 		
-		let html = '<div class="wps-card"><div class="wps-card-body">';
-		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'Compliance Issues Found', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
+		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
+		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Compliance Issues Found', 'wpshadow' ) ); ?>', findings.length );
 		
 		Object.keys(byRegulation).forEach(function(regulation) {
 			const regulationFindings = byRegulation[regulation];
 			if (regulationFindings.length === 0) return;
 			
 			html += '<div class="wps-mb-4">';
-			html += '<h4 class="wps-font-semibold wps-mb-2">' + regulation + ' (' + regulationFindings.length + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>)</h4>';
+			html += wpshadowRenderSectionHeading( regulation, regulationFindings.length, {
+				headingClass: 'wps-font-semibold wps-mb-2',
+				countSuffix: '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>'
+			} );
 			
 			regulationFindings.forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'error' : (finding.severity === 'medium' ? 'warning' : 'info');
-				html += '<div class="wps-mb-2 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded">';
-				html += '<div class="wps-flex wps-items-start wps-gap-3">';
-				html += '<span class="dashicons dashicons-shield wps-text-' + severityClass + '"></span>';
-				html += '<div class="wps-flex-1">';
-				html += '<h5 class="wps-font-semibold wps-text-sm">' + finding.title + '</h5>';
-				html += '<p class="wps-text-muted wps-text-xs">' + finding.description + '</p>';
-				if (finding.auto_fixable) {
-					html += '<button class="wps-btn wps-btn-sm wps-btn-success wps-mt-1" data-finding="' + finding.id + '"><?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?></button>';
-				}
-				html += '</div></div></div>';
+				html += wpshadowRenderFindingCardStart( finding, {
+					severityClass: severityClass,
+					iconClass: 'dashicons-shield',
+					containerClass: 'wps-mb-2 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded',
+					titleClass: 'wps-font-semibold wps-text-sm',
+					descriptionClass: 'wps-text-muted wps-text-xs'
+				} );
+				html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?>', 'wps-btn wps-btn-sm wps-btn-success wps-mt-1' );
+				html += wpshadowRenderFindingCardEnd();
 			});
 			
 			html += '</div>';
 		});
 		
-		html += '</div></div>';
+		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}
 });
@@ -345,9 +339,7 @@ jQuery(document).ready(function($) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Need help with compliance?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro includes automated compliance monitoring, GDPR consent management, and expert legal guidance.', 'wpshadow' ),

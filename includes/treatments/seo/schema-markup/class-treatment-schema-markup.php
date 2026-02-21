@@ -63,40 +63,6 @@ class Treatment_Schema_Markup extends Treatment_Base {
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
-        // Check if SEO plugin with schema support is active
-        $has_schema_plugin = (
-            function_exists( 'get_option' ) &&
-            (
-                defined( 'WPSEO_FILE' ) ||
-                defined( 'ALL_IN_ONE_SEO_PACK' ) ||
-                class_exists( 'RankMathPro' )
-            )
-        );
-
-        if ( ! $has_schema_plugin ) {
-            // Check if manually implemented (look for JSON-LD in filter)
-            $schema_hooked = has_action( 'wp_head', 'wp_print_json_ld_schema' ) ||
-                           has_action( 'wp_footer', 'wp_print_json_ld_schema' );
-
-            if ( ! $schema_hooked ) {
-                return array(
-                    'id'            => self::$slug,
-                    'title'         => self::$title,
-                    'description'   => __( 'No JSON-LD schema markup detected. Add structured data for better SEO.', 'wpshadow' ),
-                    'severity'      => 'medium',
-                    'threat_level'  => 45,
-                    'auto_fixable'  => false,
-                    'kb_link'       => 'https://wpshadow.com/kb/schema-markup',
-                    'persona'       => 'developer',
-                );
-            }
-        }
-
-        // Check for valid schema types (Organization, Article, Product, etc)
-        $homepage_url = home_url();
-        
-        // This would typically require fetching and parsing the homepage
-        // For now, return null as schemas are site-specific
-        return null;
+    	return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\SEO\Diagnostic_Schema_Markup' );
     }
 }

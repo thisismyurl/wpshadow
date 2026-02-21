@@ -78,43 +78,7 @@ class Treatment_Mobile_Text_Contrast extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$violations = self::find_contrast_violations();
-
-		if ( empty( $violations ) ) {
-			return null; // No issues found
-		}
-
-		$violation_count = count( $violations );
-
-		// Determine severity
-		if ( $violation_count > 10 ) {
-			$severity = 'critical';
-			$threat   = 75;
-		} elseif ( $violation_count > 5 ) {
-			$severity = 'high';
-			$threat   = 65;
-		} else {
-			$severity = 'medium';
-			$threat   = 55;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of violations */
-				__( 'Found %d instances of insufficient text contrast', 'wpshadow' ),
-				$violation_count
-			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'violations'      => array_slice( $violations, 0, 5 ),
-			'total_violations' => $violation_count,
-			'wcag_violation'  => '1.4.3 Contrast (Minimum) - Level AA',
-			'user_impact'     => __( 'Illegible outdoors, difficult for low-vision users', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/text-contrast',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Text_Contrast' );
 	}
 
 	/**

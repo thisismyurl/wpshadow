@@ -13,74 +13,54 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Treatments\Helpers\Treatment_HTML_Helper;
 use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-class-treatment-exit;
+	exit;
 }
 
+/**
+ * Mobile Anchor Link Performance Treatment.
+ *
+ * @since 1.602.1450
+ */
 class Treatment_Mobile_Anchor_Links extends Treatment_Base {
 
-class-treatment-protected static $slug = 'mobile-anchor-link-performance';
-class-treatment-protected static $title = 'Mobile Anchor Link Performance';
-class-treatment-protected static $description = 'Validates anchor links for mobile';
-class-treatment-protected static $family = 'navigation';
+	/**
+	 * The treatment slug.
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'mobile-anchor-link-performance';
 
-class-treatment-public static function check() {
-class-treatment-$html = self::get_page_html();
-class-treatment-if ( ! $html ) {
-class-treatment- null;
-class-treatment-}
+	/**
+	 * The treatment title.
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Mobile Anchor Link Performance';
 
-class-treatment-$issues = array();
+	/**
+	 * The treatment description.
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Validates anchor links for mobile';
 
-class-treatment-// Check for anchor links
-class-treatment-$anchor_count = preg_match_all( '/href\s*=\s*["\']#[^"\']+["\']/i', $html, $matches );
+	/**
+	 * The treatment family.
+	 *
+	 * @var string
+	 */
+	protected static $family = 'navigation';
 
-class-treatment-if ( $anchor_count === 0 ) {
-class-treatment- null; // No anchor links to check
-class-treatment-}
-
-class-treatment-// Check for smooth scroll CSS
-class-treatment-preg_match_all( '/<style[^>]*>(.*?)<\/style>/is', $html, $style_matches );
-class-treatment-$css = implode( "\n", $style_matches[1] ?? array() );
-
-class-treatment-$has_smooth_scroll = preg_match( '/scroll-behavior\s*:\s*smooth/i', $css );
-
-class-treatment-if ( ! $has_smooth_scroll ) {
-class-treatment-o-smooth-scroll',
-class-treatment-chor links jump instantly (no smooth scrolling)',
-class-treatment-\s*:\s*fixed.*?header|header.*?position\s*:\s*fixed/is', $css );
-
-class-treatment-if ( $has_fixed_header ) {
-class-treatment-g-top|scroll-margin-top/i', $css );
-
-class-treatment-o-scroll-offset',
-class-treatment-chor link targets',
-class-treatment-dling
-class-treatment-$has_js_scroll = preg_match( '/scrollIntoView|scrollTo\(|\.animate.*?scrollTop/i', $html );
-
-class-treatment-if ( ! $has_js_scroll && ! $has_smooth_scroll ) {
-class-treatment-o-scroll-implementation',
-class-treatment-o smooth scroll implementation detected',
-class-treatment- null;
-class-treatment-}
-
-class-treatment-return array(
-class-treatment-' => sprintf( __( 'Found %d anchor link issues', 'wpshadow' ), count( $issues ) ),
-class-treatment-chor_count' => $anchor_count,
-class-treatment-g anchor link behavior on mobile', 'wpshadow' ),
-class-treatment-k' => 'https://wpshadow.com/kb/anchor-links',
-class-treatment-);
-class-treatment-}
-
-class-treatment-private static function get_page_html(): ?string {
-class-treatment-return Treatment_HTML_Helper::fetch_homepage_html(
-class-treatment-	array(
-class-treatment-		'timeout'   => 5,
-class-treatment-		'sslverify' => false,
-class-treatment-	)
-class-treatment-);
-class-treatment-}
+	/**
+	 * Run the treatment check.
+	 *
+	 * @since  1.602.1450
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Anchor_Links' );
+	}
 }

@@ -79,45 +79,6 @@ class Treatment_OPcache_Enabled_Check extends Treatment_Base {
 	 * @return array|null Finding array if OPcache disabled, null if enabled.
 	 */
 	public static function check() {
-		// Check if OPcache extension is loaded
-		if ( ! extension_loaded( 'Zend OPcache' ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'PHP OPcache extension is not installed. Your server is recompiling PHP scripts on every request, wasting CPU resources.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-opcache-enabled',
-				'details'      => array(
-					'opcache_loaded' => false,
-					'php_version'    => PHP_VERSION,
-					'recommendation' => 'Contact your hosting provider to enable OPcache',
-				),
-			);
-		}
-
-		// Check if OPcache is enabled
-		$opcache_enabled = ini_get( 'opcache.enable' );
-		if ( ! $opcache_enabled || $opcache_enabled === '0' ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'PHP OPcache is installed but disabled. Enable it in php.ini for 40-60% better performance.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-opcache-enabled',
-				'details'      => array(
-					'opcache_loaded'  => true,
-					'opcache_enabled' => false,
-					'php_version'     => PHP_VERSION,
-					'fix'             => 'Set opcache.enable=1 in php.ini',
-				),
-			);
-		}
-
-		// OPcache is enabled - no issue
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_OPcache_Enabled_Check' );
 	}
 }

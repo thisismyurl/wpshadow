@@ -128,19 +128,6 @@ class Treatment_Link_Prefetching_Strategy_Not_Defined extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for link prefetch implementation
-		if ( ! has_filter( 'wp_head', 'add_prefetch_links' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Link prefetching strategy is not defined. Prefetch high-probability next links to reduce perceived navigation latency and improve user experience.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/link-prefetching-strategy-not-defined',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Link_Prefetching_Strategy_Not_Defined' );
 	}
 }

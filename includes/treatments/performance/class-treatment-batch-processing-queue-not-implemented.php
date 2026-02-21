@@ -123,19 +123,6 @@ class Treatment_Batch_Processing_Queue_Not_Implemented extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if batch processing queue is active
-		if ( ! has_filter( 'cron_schedules', 'add_batch_processing_schedule' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Batch processing queue is not implemented. Use a queue system for bulk operations to prevent timeout errors during large data imports.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 20,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/batch-processing-queue-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Batch_Processing_Queue_Not_Implemented' );
 	}
 }

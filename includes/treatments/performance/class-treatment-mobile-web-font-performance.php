@@ -65,34 +65,7 @@ class Treatment_Mobile_Web_Font_Performance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_font_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null; // Font strategy optimized
-		}
-
-		$threat = 60;
-		if ( count( $issues['all'] ) > 3 ) {
-			$threat = 75;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: count of font issues */
-				__( 'Found %d web font performance issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'medium',
-			'threat_level'    => $threat,
-			'issues'          => array_slice( $issues['all'], 0, 5 ),
-			'total_issues'    => count( $issues['all'] ),
-			'recommendations' => $issues['recommendations'] ?? array(),
-			'user_impact'     => __( 'Fonts block rendering by 100-400ms', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/web-font-performance',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Web_Font_Performance' );
 	}
 
 	/**

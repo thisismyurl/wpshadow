@@ -67,38 +67,6 @@ class Treatment_Product_Page_Information extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Show clear pricing (final price including tax/fees)', 'wpshadow' );
-		$issues[] = __( 'List what\'s included in purchase (features, benefits)', 'wpshadow' );
-		$issues[] = __( 'State delivery/fulfillment details (shipping time, digital delivery)', 'wpshadow' );
-		$issues[] = __( 'Include refund/guarantee policy ("30-day money-back guarantee")', 'wpshadow' );
-		$issues[] = __( 'Add comparison table (Basic vs Pro vs Enterprise)', 'wpshadow' );
-		$issues[] = __( 'Show customer reviews/testimonials', 'wpshadow' );
-		$issues[] = __( 'Answer: Who is this for? What problem does it solve?', 'wpshadow' );
-		$issues[] = __( 'Include FAQs addressing common objections', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Your product or service pages might leave visitors with unanswered questions, causing them to leave without purchasing. Research shows visitors abandon purchases when they can\'t find answers to: How much does this cost exactly? (including taxes, shipping, fees), What do I get for my money? (specific features and benefits), How long until I receive it? (shipping time or instant access), Can I get my money back if it doesn\'t work? (refund policy), Who else has bought this successfully? (social proof), Is this right for MY specific situation? (use cases, target audience). Each missing piece of information increases cart abandonment. Think of it like shopping in a store where nothing has a price tag and the staff disappeared—you\'d leave too.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/product-page-information',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'essential_elements'      => 'Price, features, delivery, refund policy, social proof',
-					'cart_abandonment_reason' => '27% abandon due to unclear total cost, 23% due to slow shipping',
-					'trust_signals'           => 'Reviews, guarantees, secure payment badges',
-					'comparison_benefit'      => 'Side-by-side comparisons increase conversions by 19%',
-					'faq_benefit'             => 'FAQs can answer objections automatically, reducing drop-off',
-					'mobile_consideration'    => 'All info must be accessible on mobile (60% of traffic)',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Product_Page_Information' );
 	}
 }

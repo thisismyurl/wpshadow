@@ -84,38 +84,6 @@ class Treatment_Accessible_Form_Labels extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment - actual form analysis requires visual/keyboard testing.
-		// We provide recommendations for form accessibility.
-
-		$issues = array();
-
-		$issues[] = __( 'Use <label for="field-id"> for all visible form labels', 'wpshadow' );
-		$issues[] = __( 'Use aria-label="Label text" for hidden labels', 'wpshadow' );
-		$issues[] = __( 'Link error messages with aria-describedby="error-id"', 'wpshadow' );
-		$issues[] = __( 'Mark required fields: aria-required="true"', 'wpshadow' );
-		$issues[] = __( 'Use <fieldset> + <legend> to group related fields', 'wpshadow' );
-		$issues[] = __( 'Make labels more descriptive: "Save Settings" not "Submit"', 'wpshadow' );
-		$issues[] = __( 'Ensure labels are clickable (click label = focus input)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Screen reader users navigate forms by reading labels. Without labels, they don\'t know what to enter in each field.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/form-labels',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1 1.3.1 Info and Relationships',
-					'css_pattern'             => 'label { display: block; margin-bottom: 5px; } /* Ensure space */',
-					'ux_benefit'              => 'Larger click area for labels helps mobile users and people with fine-motor issues',
-					'affected_population'     => 'Blind, low vision, motor disabilities, mobile users',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Accessible_Form_Labels' );
 	}
 }

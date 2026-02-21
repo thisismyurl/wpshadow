@@ -64,24 +64,18 @@ class Diagnostic_Text_Truncation_Attack_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_text_truncation' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Text truncation attack not prevented. Validate field lengths consistently across all layers.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/text-truncation-attack-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_text_truncation' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Text truncation protections are not configured yet. Consistent field length validation helps prevent data integrity issues.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 40,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/text-truncation-attack-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

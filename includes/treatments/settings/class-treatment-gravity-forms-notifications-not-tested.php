@@ -63,24 +63,6 @@ class Treatment_Gravity_Forms_Notifications_Not_Tested extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if Gravity Forms is active
-		if ( ! class_exists( 'GFCommon' ) ) {
-			return null;
-		}
-
-		// Check if notification tests are documented
-		if ( ! get_option( 'gf_notifications_tested_date' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Gravity Forms notifications have not been tested. Test all form notifications to ensure emails are being sent correctly to admins and users.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gravity-forms-notifications-not-tested',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Gravity_Forms_Notifications_Not_Tested' );
 	}
 }

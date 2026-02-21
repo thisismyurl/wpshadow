@@ -128,19 +128,6 @@ class Treatment_JavaScript_Loading_Strategy_Not_Optimized extends Treatment_Base
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if JS optimization is implemented
-		if ( ! has_filter( 'wp_enqueue_scripts', 'optimize_js_loading' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'JavaScript loading is not optimized. Use async/defer attributes, code splitting, and defer non-critical JavaScript to improve page speed.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/javascript-loading-strategy-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_JavaScript_Loading_Strategy_Not_Optimized' );
 	}
 }

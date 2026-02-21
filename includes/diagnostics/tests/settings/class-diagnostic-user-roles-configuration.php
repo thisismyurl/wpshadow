@@ -161,7 +161,8 @@ file_put_contents('role-backup-' . date('Y-m-d-His') . '.json',
 					'testing_in_staging' => __( 'Always test role changes in staging environment first', 'wpshadow' ),
 					'documentation' => __( 'Document why each capability change was made', 'wpshadow' ),
 					'recommendation' => __( 'Create backup of all role configurations before modifications', 'wpshadow' ),
-				);
+				),
+			);
 			}
 		}
 

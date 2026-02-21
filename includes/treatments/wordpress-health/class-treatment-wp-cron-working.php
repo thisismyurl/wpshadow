@@ -63,31 +63,6 @@ class Treatment_WP_Cron_Working extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( defined( 'DISABLE_WP_CRON' ) && true === DISABLE_WP_CRON ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'WP-Cron is disabled. Ensure a real cron job is configured to run scheduled tasks.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/wp-cron-working',
-			);
-		}
-
-		$cron = _get_cron_array();
-		if ( empty( $cron ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'No WP-Cron events found. Scheduled tasks may not be running.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/wp-cron-working',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_WP_Cron_Working' );
 	}
 }

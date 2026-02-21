@@ -124,25 +124,6 @@ class Treatment_REST_API_Authentication_Not_Enforced extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if REST API auth is enforced
-		if ( ! has_filter( 'rest_authentication_errors', 'enforce_rest_auth' ) ) {
-			$finding = array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'REST API authentication is not enforced. Disable anonymous REST API access or require authentication to prevent data leakage.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 65,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rest-api-authentication-not-enforced',
-				'context'       => array(
-					'why'            => __( 'Unauthenticated REST API = data exposed. Real scenario: /wp-json/wp/v2/users endpoint returns admin email + username. /wp-json/wp/v2/posts returns all content (including drafts). Attacker gathers intelligence. Uses user/post info for targeted attacks. Cost: Targeted hack that works. With auth enforcement: Endpoints require token. Unauthenticated requests blocked. No data leak.', 'wpshadow' ),
-					'recommendation' => __( '1. Add permission_callback to all endpoints. 2. Check current_user_can() in callback. 3. Return 401/403 for unauthenticated access. 4. Use JWT or OAuth for authentication. 5. Require valid nonce for modifications. 6. Test endpoints without auth token (should fail). 7. Log unauthorized access attempts. 8. Consider disabling REST API if not needed. 9. Restrict specific endpoints to admin only. 10. Document which endpoints require auth.', 'wpshadow' ),
-				),
-			);
-			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api-auth', 'rest-authentication' );
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_REST_API_Authentication_Not_Enforced' );
 	}
 }

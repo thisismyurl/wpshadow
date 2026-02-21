@@ -54,11 +54,6 @@ class Database_Migrator {
 		// Include wp_upgrade.php for dbDelta
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		// Version 0 -> 3: Remove legacy exit tables.
-		if ( $current_version < 3 ) {
-			self::remove_legacy_exit_tables();
-		}
-
 		// ============================================================================
 		// PHASE 1 OPTIMIZATION: Create Database Indexes
 		// Improves query performance by 10-15% on indexed queries
@@ -67,24 +62,6 @@ class Database_Migrator {
 
 		// Update version
 		update_option( self::VERSION_OPTION, self::SCHEMA_VERSION, false );
-	}
-
-	/**
-	 * Remove legacy exit-related tables.
-	 *
-	 * @return void
-	 */
-	private static function remove_legacy_exit_tables() {
-		global $wpdb;
-
-		$legacy_tables = array(
-			$wpdb->prefix . 'wpshadow_exit_interviews',
-			$wpdb->prefix . 'wpshadow_exit_followups',
-		);
-
-		foreach ( $legacy_tables as $table_name ) {
-			$wpdb->query( "DROP TABLE IF EXISTS {$table_name}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-		}
 	}
 
 	/**

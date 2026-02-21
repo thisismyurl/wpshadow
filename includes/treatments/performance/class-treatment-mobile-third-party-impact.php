@@ -64,38 +64,7 @@ class Treatment_Mobile_Third_Party_Script_Impact extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$scripts = self::analyze_third_party_scripts();
-
-		if ( empty( $scripts['issues'] ) ) {
-			return null; // No problematic third-party scripts
-		}
-
-		$total_impact = $scripts['total_impact'];
-		$threat = 60;
-		if ( $total_impact > 800 ) {
-			$threat = 85; // Critical - massive slowdown
-		} elseif ( $total_impact > 500 ) {
-			$threat = 75;
-		}
-
-		return array(
-			'id'                  => self::$slug,
-			'title'               => self::$title,
-			'description'         => sprintf(
-				/* translators: %dms: total blocking time */
-				__( 'Third-party scripts block %dms of main thread', 'wpshadow' ),
-				$total_impact
-			),
-			'severity'            => 'high',
-			'threat_level'        => $threat,
-			'total_impact_ms'     => $total_impact,
-			'script_count'        => count( $scripts['issues'] ),
-			'problematic_scripts' => array_slice( $scripts['issues'], 0, 5 ),
-			'optimization_potential' => 'Remove or defer ' . count( $scripts['issues'] ) . ' scripts',
-			'user_impact'         => __( 'Third-party scripts delay interaction by 200-800ms', 'wpshadow' ),
-			'auto_fixable'        => false,
-			'kb_link'             => 'https://wpshadow.com/kb/third-party-impact',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Third_Party_Script_Impact' );
 	}
 
 	/**

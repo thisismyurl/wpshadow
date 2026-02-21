@@ -64,77 +64,7 @@ class Treatment_Form_Abandonment_Tracking extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues         = array();
-		$tracking_score = 0;
-		$max_score      = 5;
-
-		// Check for form field interaction tracking.
-		$has_field_tracking = self::check_field_interaction_tracking();
-		if ( $has_field_tracking ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'form field interaction tracking';
-		}
-
-		// Check for abandonment point identification.
-		$has_abandonment_points = self::check_abandonment_points();
-		if ( $has_abandonment_points ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'abandonment point identification';
-		}
-
-		// Check for error message tracking.
-		$has_error_tracking = self::check_error_tracking();
-		if ( $has_error_tracking ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'error message tracking';
-		}
-
-		// Check for time-to-complete measurement.
-		$has_time_tracking = self::check_time_to_complete();
-		if ( $has_time_tracking ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'time-to-complete measurement';
-		}
-
-		// Check for field-level analytics.
-		$has_field_analytics = self::check_field_level_analytics();
-		if ( $has_field_analytics ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'field-level analytics';
-		}
-
-		$completion_percentage = ( $tracking_score / $max_score ) * 100;
-
-		if ( $completion_percentage >= 40 ) {
-			return null; // Form tracking present.
-		}
-
-		$severity     = $completion_percentage < 20 ? 'medium' : 'low';
-		$threat_level = $completion_percentage < 20 ? 50 : 30;
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: 1: completion percentage, 2: missing features */
-				__( 'Form analytics at %1$d%%. Missing: %2$s. Track where users abandon to fix friction points.', 'wpshadow' ),
-				(int) $completion_percentage,
-				implode( ', ', $issues )
-			),
-			'severity'     => $severity,
-			'threat_level' => $threat_level,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/form-abandonment-tracking',
-			'meta'         => array(
-				'completion_percentage' => $completion_percentage,
-				'missing_features'      => $issues,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Form_Abandonment_Tracking' );
 	}
 
 	/**

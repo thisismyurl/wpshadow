@@ -36,32 +36,6 @@ class Treatment_Critical_CSS_Inlining extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Inline critical CSS in <head> for above-fold content', 'wpshadow' );
-		$issues[] = __( 'Defer non-critical CSS with media="print" trick', 'wpshadow' );
-		$issues[] = __( 'Load full CSS asynchronously after page load', 'wpshadow' );
-		$issues[] = __( 'Keep critical CSS under 14KB (TCP slow start)', 'wpshadow' );
-		$issues[] = __( 'Use tools: Critical, Penthouse, or Lighthouse', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'External CSS blocks page rendering. Inlining critical CSS lets the browser display content immediately while loading the rest.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/critical-css',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'first_paint_improvement' => '500-1000ms faster First Contentful Paint',
-					'defer_pattern'           => '<link rel="stylesheet" href="style.css" media="print" onload="this.media=\'all\'">',
-					'14kb_limit'              => 'TCP slow start sends 14KB in first round trip',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Critical_CSS_Inlining' );
 	}
 }

@@ -64,64 +64,6 @@ class Treatment_Theme_Comment_Form_Support extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$theme = wp_get_theme();
-		$issues = array();
-
-		// Check for comments.php template.
-		$comments_template = locate_template( 'comments.php' );
-		if ( empty( $comments_template ) ) {
-			$issues[] = __( 'Theme missing comments.php template', 'wpshadow' );
-		}
-
-		// Check if theme supports comment forms (on a sample post).
-		$sample_post = get_posts( array(
-			'post_type'   => 'post',
-			'numberposts' => 1,
-			'post_status' => 'publish',
-		) );
-
-		if ( ! empty( $sample_post ) ) {
-			$post_id = $sample_post[0]->ID;
-
-			// Check if comments are open on this post.
-			if ( comments_open( $post_id ) ) {
-				// Try to get comment form HTML.
-				ob_start();
-				comment_form( array(), $post_id );
-				$form_html = ob_get_clean();
-
-				// Check for basic form elements.
-				if ( empty( $form_html ) || ! preg_match( '/<form[^>]*id=["\']commentform["\']/i', $form_html ) ) {
-					$issues[] = __( 'Theme may not properly render comment forms', 'wpshadow' );
-				}
-
-				// Check for accessibility attributes.
-				if ( ! preg_match( '/aria-required|required/i', $form_html ) ) {
-					$issues[] = __( 'Comment form may lack accessibility attributes', 'wpshadow' );
-				}
-			}
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => sprintf(
-					/* translators: %s: comma-separated list of issues */
-					__( 'Theme comment form issues detected: %s', 'wpshadow' ),
-					implode( ', ', $issues )
-				),
-				'severity'    => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'details'     => array(
-					'theme'  => $theme->get( 'Name' ),
-					'issues' => $issues,
-				),
-				'kb_link'     => 'https://wpshadow.com/kb/theme-comment-form-support',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Comment_Form_Support' );
 	}
 }

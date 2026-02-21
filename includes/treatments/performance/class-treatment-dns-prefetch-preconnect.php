@@ -66,66 +66,6 @@ class Treatment_Dns_Prefetch_Preconnect extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		global $wp_scripts, $wp_styles;
-
-		$prefetch_configured = false;
-		$preconnect_hints     = array();
-		$external_domains    = array();
-
-		// Check for wp_resource_hints filter
-		if ( has_filter( 'wp_resource_hints' ) ) {
-			$prefetch_configured = true;
-		}
-
-		// Detect external domains from enqueued scripts
-		if ( ! empty( $wp_scripts->queue ) ) {
-			foreach ( $wp_scripts->queue as $handle ) {
-				$script = $wp_scripts->registered[ $handle ] ?? null;
-				if ( $script && ! empty( $script->src ) ) {
-					$domain = Treatment_URL_And_Pattern_Helper::get_domain( $script->src );
-					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', Treatment_URL_And_Pattern_Helper::get_domain( home_url() ) ), true ) ) {
-						$external_domains[] = $domain;
-					}
-				}
-			}
-		}
-
-		if ( ! empty( $wp_styles->queue ) ) {
-			foreach ( $wp_styles->queue as $handle ) {
-				$style = $wp_styles->registered[ $handle ] ?? null;
-				if ( $style && ! empty( $style->src ) ) {
-					$domain = Treatment_URL_And_Pattern_Helper::get_domain( $style->src );
-					if ( $domain && ! in_array( $domain, array( $_SERVER['HTTP_HOST'] ?? '', Treatment_URL_And_Pattern_Helper::get_domain( home_url() ) ), true ) ) {
-						$external_domains[] = $domain;
-					}
-				}
-			}
-		}
-
-		$unique_domains = array_unique( $external_domains );
-
-		if ( ! $prefetch_configured && count( $unique_domains ) >= 2 ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
-					/* translators: %d: number of external domains detected */
-					__( 'DNS prefetch/preconnect headers are not configured. Detected %d external domains that could benefit from prefetch/preconnect hints.', 'wpshadow' ),
-					count( $unique_domains )
-				),
-				'severity'      => 'low',
-				'threat_level'  => 25,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/dns-prefetch-preconnect',
-				'meta'          => array(
-					'external_domains'     => array_slice( $unique_domains, 0, 5 ),
-					'domain_count'         => count( $unique_domains ),
-					'recommendation'       => 'Add to functions.php: add_filter( "wp_resource_hints", function( $hints ) { $hints[] = array( "href" => "https://example.com", "rel" => "preconnect" ); return $hints; } );',
-					'impact'               => 'Reduces connection time by 50-100ms per domain',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Dns_Prefetch_Preconnect' );
 	}
 }

@@ -65,31 +65,7 @@ class Treatment_Mobile_Submenu extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_submenu_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null; // No submenu issues detected
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of submenu issues */
-				__( 'Found %d submenu accessibility issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'high',
-			'threat_level'    => 70,
-			'issues'          => $issues['all'],
-			'has_submenus'    => $issues['has_submenus'] ?? false,
-			'submenus_hidden' => $issues['hidden_count'] ?? 0,
-			'hover_only'      => $issues['hover_only_count'] ?? 0,
-			'wcag_violation'  => '2.1.1 Keyboard (Level A)',
-			'user_impact'     => __( 'Touch users cannot access multi-level menus', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/submenu-interaction',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Submenu' );
 	}
 
 	/**

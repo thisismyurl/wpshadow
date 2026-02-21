@@ -64,26 +64,6 @@ class Treatment_Media_Mobile_Upload_Progress extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		global $wp_scripts;
-
-		// Check if plupload is available (handles upload progress)
-		$plupload_loaded = ( isset( $wp_scripts ) && $wp_scripts->query( 'plupload' ) );
-
-		// Check for mobile-responsive upload UI
-		$has_upload_ui = function_exists( 'wp_enqueue_media' ) && has_action( 'wp_enqueue_media' );
-
-		if ( ! $plupload_loaded && ! $has_upload_ui ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Mobile upload progress indicators are not properly enabled. Add plupload for progress feedback.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 35,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/mobile-upload-progress',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Mobile_Upload_Progress' );
 	}
 }

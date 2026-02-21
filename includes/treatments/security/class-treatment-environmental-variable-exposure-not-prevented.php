@@ -64,22 +64,8 @@ class Treatment_Environmental_Variable_Exposure_Not_Prevented extends Treatment_
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('wp_headers',
-						'hide_environment_variables' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Environment variables exposed. Never echo env variables in HTML/logs. Use .gitignore for .env files and set proper permissions on configuration files.',
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/environmental-variable-exposure-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Environmental_Variable_Exposure_Not_Prevented' );
+	}
 						return null;
 						}
 						return null;

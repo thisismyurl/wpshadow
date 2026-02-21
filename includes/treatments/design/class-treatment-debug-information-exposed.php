@@ -63,21 +63,8 @@ class Treatment_Debug_Information_Exposed extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   defined('WP_DEBUG' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Debug information exposed in production. Set WP_DEBUG to false and log errors to file,
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/debug-information-exposed'
-						);
-						);,
-						);
-						}
-						return null;
-						}
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Debug_Information_Exposed' );
+	}
 						return null;
 						}
 						return null;

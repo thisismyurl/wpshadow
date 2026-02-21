@@ -71,29 +71,7 @@ class Treatment_Mobile_Font_Size extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$small_text = self::find_small_text();
-
-		if ( empty( $small_text ) ) {
-			return null; // No issues found
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %s: current font size */
-				__( 'Body text is %s on mobile (minimum: 16px)', 'wpshadow' ),
-				$small_text['current_size']
-			),
-			'severity'        => 'high',
-			'threat_level'    => 60,
-			'current_size'    => $small_text['current_size'],
-			'recommended_size' => '16px minimum',
-			'small_text_locations' => $small_text['locations'],
-			'user_impact'     => __( 'Forces pinch-zoom to read, iOS auto-zooms on form focus (disrupts UX)', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-font-size',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Font_Size' );
 	}
 
 	/**

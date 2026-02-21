@@ -84,39 +84,6 @@ class Treatment_SQL_Injection_Protection extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment - actual SQL analysis requires code scanning.
-		// We provide recommendations and patterns.
-
-		$issues = array();
-
-		$issues[] = __( 'ALWAYS use $wpdb->prepare() for queries with variables', 'wpshadow' );
-		$issues[] = __( 'NEVER concatenate strings into SQL queries', 'wpshadow' );
-		$issues[] = __( 'NEVER use $_POST, $_GET, $_REQUEST directly in queries', 'wpshadow' );
-		$issues[] = __( 'Use %d for integers, %s for strings, %f for floats', 'wpshadow' );
-		$issues[] = __( 'Cast integers: (int) $id before using in queries', 'wpshadow' );
-		$issues[] = __( 'Use WordPress query APIs: WP_Query, get_posts(), get_user_by()', 'wpshadow' );
-		$issues[] = __( 'Table/column names cannot be prepared - use whitelist validation', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'SQL injection is the #1 web vulnerability. Attackers can read, modify, or delete entire databases through unprotected queries.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 95,
-				'auto_fixable' => false,  // Requires code audit
-				'kb_link'      => 'https://wpshadow.com/kb/sql-injection-protection',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'bad_example'             => '$wpdb->query( "SELECT * FROM {$wpdb->posts} WHERE ID = {$id}" )',
-					'good_example'            => '$wpdb->query( $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE ID = %d", $id ) )',
-					'attack_example'          => 'attacker sends: id=1 OR 1=1; DROP TABLE wp_posts;--',
-					'owasp_rank'              => 'A03:2021 Injection (was #1 for 13 years)',
-					'impact'                  => 'Complete database compromise, data theft, data loss',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SQL_Injection_Protection' );
 	}
 }

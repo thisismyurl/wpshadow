@@ -67,47 +67,6 @@ class Treatment_Seo_Meta_Tags_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		$seo_plugin_active = false;
-
-		// Check for SEO plugins
-		$seo_plugins = array(
-			'wordpress-seo/wp-seo.php'        => 'Yoast SEO',
-			'rank-math/rank-math.php'         => 'Rank Math',
-			'all-in-one-seo-pack/all_in_one_seo_pack.php' => 'All in One SEO',
-			'the-seo-framework/the-seo-framework.php' => 'The SEO Framework',
-		);
-
-		foreach ( $seo_plugins as $plugin_path => $plugin_name ) {
-			if ( is_plugin_active( $plugin_path ) ) {
-				$seo_plugin_active = true;
-				break;
-			}
-		}
-
-		if ( ! $seo_plugin_active ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'SEO plugin not detected. Installing an SEO plugin helps manage meta tags, sitemaps, and other SEO elements.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 20,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/seo-meta-tags',
-				'meta'          => array(
-					'seo_plugin'           => $seo_plugin_active ? 'Active' : 'Not active',
-					'recommendation'       => 'Install Rank Math or Yoast SEO for comprehensive SEO management',
-					'impact'               => 'Proper meta tags can improve click-through rate by 20-30% in search results',
-					'essential_tags'       => array(
-						'Title tags (50-60 chars)',
-						'Meta descriptions (120-160 chars)',
-						'Canonical URLs',
-						'Open Graph tags (social)',
-						'Structured data markup',
-					),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Seo_Meta_Tags_Configuration' );
 	}
 }

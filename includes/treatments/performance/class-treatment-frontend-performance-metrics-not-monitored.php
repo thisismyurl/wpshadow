@@ -127,19 +127,6 @@ class Treatment_Frontend_Performance_Metrics_Not_Monitored extends Treatment_Bas
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for performance monitoring
-		if ( ! is_plugin_active( 'perfmatrix/perfmatrix.php' ) && ! is_plugin_active( 'google-analytics-dashboard-for-wp/google-analytics-dashboard-for-wp.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Frontend performance metrics are not monitored. Set up continuous monitoring of Core Web Vitals and page load times.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 35,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/frontend-performance-metrics-not-monitored',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Frontend_Performance_Metrics_Not_Monitored' );
 	}
 }

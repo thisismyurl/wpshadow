@@ -147,13 +147,8 @@ class Diagnostic_Tool_Operation_Progress_Not_Persisted extends Diagnostic_Base {
 	 * @return bool True if progress persisted.
 	 */
 	private static function persists_to_database() {
-		global $wpdb;
-
-		// Check for progress table
-		$table = $wpdb->prefix . 'wpshadow_operation_progress';
-		$progress_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-
-		if ( $progress_table ) {
+		// Check for option-backed progress storage.
+		if ( false !== get_option( 'wpshadow_operation_progress', false ) ) {
 			return true;
 		}
 

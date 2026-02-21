@@ -67,22 +67,6 @@ class Treatment_Content_Security_Policy extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		// Check for CSP headers
-		$csp_configured = false;
-
-		// Look for CSP in wp-config or .htaccess via output buffering capture attempt
-		if ( function_exists( 'wp_remote_get' ) ) {
-			$response = wp_remote_get( home_url(), array( 'sslverify' => false ) );
-			if ( ! is_wp_error( $response ) ) {
-				$headers = wp_remote_retrieve_headers( $response );
-				if ( ! empty( $headers['content-security-policy'] ) || ! empty( $headers['content-security-policy-report-only'] ) ) {
-					$csp_configured = true;
-				}
-			}
-		}
-
-		// CSP is optional but recommended for security
-		// Not flagging as critical - this is more of a security enhancement
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Content_Security_Policy' );
 	}
 }

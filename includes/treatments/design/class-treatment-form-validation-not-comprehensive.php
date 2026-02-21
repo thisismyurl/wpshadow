@@ -63,22 +63,8 @@ class Treatment_Form_Validation_Not_Comprehensive extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('wp_head',
-						'validate_all_forms' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Form validation not comprehensive. Validate all input on both client and server side using HTML5 validation and backend checks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/form-validation-not-comprehensive'
-						);
-						);,
-						);
-						}
-						return null;
-						}
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Form_Validation_Not_Comprehensive' );
+	}
 						return null;
 						}
 						return null;

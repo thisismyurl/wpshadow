@@ -122,43 +122,6 @@ class Treatment_Login_URL_Not_Changed_From_Default extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if login URL has been customized
-		if ( ! has_filter( 'login_url', 'customize_login_url' ) ) {
-			$finding = array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Login URL is still the default wp-login.php. Change it to a custom URL to reduce brute force attacks on your login page.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/login-url-not-changed-from-default',
-				'context'      => array(
-					'why'            => __(
-						'The default WordPress login endpoints (/wp-login.php and /wp-admin/) are universally known and heavily targeted by automated scanners. Attackers routinely scan the internet for these endpoints and launch brute force and credential stuffing attacks. Changing the login URL does not replace proper security controls, but it removes your site from a large percentage of automated attack traffic and reduces noise in your logs. This lowers risk and improves performance by reducing malicious login attempts.',
-						'wpshadow'
-					),
-					'recommendation' => __(
-						'1. Install a login URL plugin: WPS Hide Login or similar.
-2. Choose a non-guessable login URL (avoid /login, /admin, /wp-admin).
-3. Ensure the old /wp-login.php returns 404 or redirects to a harmless page.
-4. Test login, password reset, and admin access with the new URL.
-5. Keep the URL documented in a secure password manager for admins.
-6. Combine with rate limiting and 2FA for full protection.',
-						'wpshadow'
-					),
-				),
-			);
-
-			$finding = Upgrade_Path_Helper::add_upgrade_path(
-				$finding,
-				'security',
-				'login-hardening',
-				'custom_login_url'
-			);
-
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Login_URL_Not_Changed_From_Default' );
 	}
 }

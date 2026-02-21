@@ -42,80 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Inspects REST API route handlers directly\n * - Checks both endpoint permission AND comment_registration setting\n * - Returns severity: high (endpoint open), critical (open + registration disabled)\n * - Auto-fixable treatment: require authentication on comment endpoints\n *
  * @since 1.6031.1500
- */\nclass Treatment_Comment_API_Endpoint_Security extends Treatment_Base {
+ */
+class Treatment_Comment_API_Endpoint_Security extends Treatment_Base {
 	protected static $slug = 'comment-api-endpoint-security';
 	protected static $title = 'Comment API Endpoint Security';
 	protected static $description = 'Verifies comment REST API endpoints are secure';
 	protected static $family = 'security';
 
 	public static function check() {
-		// Check if REST API is enabled.
-		$rest_enabled = get_option( 'rest_api_enabled', true );
-
-		if ( ! $rest_enabled ) {
-			return null; // REST API disabled, no security concerns.
-		}
-
-		$issues = array();
-
-		// Check if comments endpoint allows unauthenticated access.
-		$routes        = rest_get_server()->get_routes();
-		$comments_open = false;
-
-		if ( isset( $routes['/wp/v2/comments'] ) ) {
-			$route = $routes['/wp/v2/comments'];
-			foreach ( $route as $handler ) {
-				if ( isset( $handler['permission_callback'] ) ) {
-					if ( '__return_true' === $handler['permission_callback'] || is_null( $handler['permission_callback'] ) ) {
-						$comments_open = true;
-					}
-				}
-			}
-		}
-
-		// Check if comment creation requires authentication.
-		$require_auth = (int) get_option( 'comment_registration', 0 );
-
-		if ( ! $require_auth && $comments_open ) {
-			$issues[] = array(
-				'issue'       => 'open_api_endpoint',
-				'description' => __( 'Comment REST API endpoint allows unauthenticated access - potential spam vector', 'wpshadow' ),
-				'severity'    => 'high',
-			);
-		}
-
-		// Check for rate limiting.
-		$has_rate_limit = has_filter( 'rest_pre_dispatch' ) || class_exists( 'WP_REST_Rate_Limit' );
-
-		if ( ! $has_rate_limit ) {
-			$issues[] = array(
-				'issue'       => 'no_rate_limiting',
-				'description' => __( 'REST API has no rate limiting - vulnerable to abuse', 'wpshadow' ),
-				'severity'    => 'medium',
-			);
-		}
-
-		if ( empty( $issues ) ) {
-			return null;
-		}
-
-		$finding = array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				__( 'Found %d REST API security issues', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'     => 'high',
-			'threat_level' => 60,
-			'auto_fixable' => false,
-			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-api-endpoint-security',
-			'context'      => array(
-				'why'            => __( 'Unauthenticated REST comment endpoint = spam + private data leak. Attacker: submits spam comments programmatically (bulk attacks). Accesses comment data (email, IP, content) via public endpoint. Enumerates user accounts (test each with /wp-json/wp/v2/comments). Creates backdoor comments linking to malware. Business impact: moderation overload, spam liability, reputation damage, SEO penalties (malware links).', 'wpshadow' ),
-				'recommendation' => __( '1. Require authentication for comment endpoints (add capability check). 2. Disable comment REST endpoint if not needed. 3. Implement rate limiting on comment submission (max 5 per IP per hour). 4. Require CAPTCHA verification for unauthenticated comments. 5. Whitelist allowed comment properties (hide sensitive meta). 6. Add IP-based spam filtering (StopForumSpam integration). 7. Log all comment submissions in activity log. 8. Moderate first-time commenter posts (don\'t auto-approve). 9. Use Akismet or similar spam detection. 10. Monitor comment endpoint usage (detect abuse patterns).', 'wpshadow' ),
-			),
-		);
-		return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'api', 'comment-endpoint' );
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Comment_API_Endpoint_Security' );
 	}
 }

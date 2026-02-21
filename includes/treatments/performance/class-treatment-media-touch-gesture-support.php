@@ -64,36 +64,6 @@ class Treatment_Media_Touch_Gesture_Support extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		if ( ! function_exists( 'wp_enqueue_media' ) ) {
-			$issues[] = __( 'Media uploader is unavailable; touch gestures cannot be supported', 'wpshadow' );
-		}
-
-		if ( ! wp_script_is( 'media-views', 'registered' ) ) {
-			$issues[] = __( 'Media views script is not registered; touch interactions may fail', 'wpshadow' );
-		}
-
-		if ( ! wp_script_is( 'jquery-touch-punch', 'registered' ) && ! wp_script_is( 'jquery-ui-touch-punch', 'registered' ) ) {
-			$issues[] = __( 'No touch gesture helper scripts detected; swipe and pinch interactions may be limited', 'wpshadow' );
-		}
-
-		if ( ! has_filter( 'media_view_settings' ) ) {
-			$issues[] = __( 'No media view settings filter detected; touch-specific UI tweaks may be missing', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-touch-gesture-support',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Touch_Gesture_Support' );
 	}
 }

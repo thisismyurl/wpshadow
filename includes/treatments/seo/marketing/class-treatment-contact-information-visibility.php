@@ -64,73 +64,7 @@ class Treatment_Contact_Information_Visibility extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-		$stats  = array();
-
-		$contact_keywords = array(
-			'contact',
-			'contact us',
-			'get in touch',
-			'support',
-			'help',
-			'customer support',
-			'book a call',
-			'request a quote',
-			'schedule',
-		);
-
-		$contact_pages = self::find_pages_by_keywords( $contact_keywords );
-		$menu_links    = self::find_menu_contact_links( $contact_keywords );
-
-		$stats['contact_pages'] = ! empty( $contact_pages ) ? implode( ', ', $contact_pages ) : 'none';
-		$stats['menu_links']    = ! empty( $menu_links ) ? implode( ', ', $menu_links ) : 'none';
-
-		if ( empty( $contact_pages ) ) {
-			$issues[] = __( 'No contact page detected using common names (Contact, Support, Help)', 'wpshadow' );
-		}
-
-		if ( empty( $menu_links ) ) {
-			$issues[] = __( 'No contact link found in site navigation menus', 'wpshadow' );
-		}
-
-		$contact_plugins = array(
-			'contact-form-7/wp-contact-form-7.php' => 'Contact Form 7',
-			'wpforms-lite/wpforms.php'            => 'WPForms Lite',
-			'gravityforms/gravityforms.php'       => 'Gravity Forms',
-			'ninja-forms/ninja-forms.php'          => 'Ninja Forms',
-			'formidable/formidable.php'            => 'Formidable Forms',
-		);
-
-		$active_contact_plugins = array();
-		foreach ( $contact_plugins as $plugin_file => $plugin_name ) {
-			if ( is_plugin_active( $plugin_file ) ) {
-				$active_contact_plugins[] = $plugin_name;
-			}
-		}
-
-		$stats['contact_plugins'] = ! empty( $active_contact_plugins ) ? implode( ', ', $active_contact_plugins ) : 'none';
-
-		if ( empty( $active_contact_plugins ) ) {
-			$issues[] = __( 'No contact form plugin detected', 'wpshadow' );
-		}
-
-		if ( empty( $issues ) ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'Visitors need a clear way to reach you, like a front door on a shop. When contact details are hard to find, people often leave instead of asking a question or booking a service.', 'wpshadow' ),
-			'severity'     => 'medium',
-			'threat_level' => 55,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/contact-information-visibility',
-			'context'      => array(
-				'stats'  => $stats,
-				'issues' => $issues,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Contact_Information_Visibility' );
 	}
 
 	/**

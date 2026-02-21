@@ -63,47 +63,6 @@ class Treatment_Error_Logging extends Treatment_Base {
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
-        // Check if WP_DEBUG is enabled in production
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG && ! ( defined( 'WP_ENVIRONMENT_TYPE' ) && 'local' === WP_ENVIRONMENT_TYPE ) ) {
-            return array(
-                'id'            => self::$slug,
-                'title'         => self::$title,
-                'description'   => __( 'WP_DEBUG is enabled in production. This exposes sensitive information.', 'wpshadow' ),
-                'severity'      => 'high',
-                'threat_level'  => 65,
-                'auto_fixable'  => false,
-                'kb_link'       => 'https://wpshadow.com/kb/error-logging',
-                'persona'       => 'developer',
-            );
-        }
-
-        // Check if debug log exists but WP_DEBUG_LOG is enabled
-        if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-            $log_file = WP_CONTENT_DIR . '/debug.log';
-
-            if ( file_exists( $log_file ) ) {
-                $file_size = filesize( $log_file );
-
-                // Check if log file is growing (indicates ongoing issues)
-                if ( $file_size > 1000000 ) { // > 1MB
-                    return array(
-                        'id'            => self::$slug,
-                        'title'         => self::$title,
-                        'description'   => sprintf(
-                            /* translators: %s: file path */
-                            __( 'Debug log is very large (%s). Ensure this is in production if expected.', 'wpshadow' ),
-                            size_format( $file_size )
-                        ),
-                        'severity'      => 'medium',
-                        'threat_level'  => 40,
-                        'auto_fixable'  => false,
-                        'kb_link'       => 'https://wpshadow.com/kb/error-logging',
-                        'persona'       => 'developer',
-                    );
-                }
-            }
-        }
-
-        return null; // No issue found
+    	return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\WordPress_Health\Diagnostic_Error_Logging' );
     }
 }

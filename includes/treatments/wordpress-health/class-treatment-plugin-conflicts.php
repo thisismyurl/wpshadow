@@ -63,57 +63,6 @@ class Treatment_Plugin_Conflicts extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$categories = array(
-			'cache'    => array(
-				'wp-rocket/wp-rocket.php',
-				'w3-total-cache/w3-total-cache.php',
-				'wp-super-cache/wp-cache.php',
-				'litespeed-cache/litespeed-cache.php',
-			),
-			'security' => array(
-				'wordfence/wordfence.php',
-				'better-wp-security/better-wp-security.php',
-				'sucuri-scanner/sucuri.php',
-			),
-			'backup'   => array(
-				'updraftplus/updraftplus.php',
-				'backwpup/backwpup.php',
-				'jetpack/jetpack.php',
-			),
-		);
-
-		$conflicts = array();
-		foreach ( $categories as $label => $plugins ) {
-			$active = array();
-			foreach ( $plugins as $plugin ) {
-				if ( is_plugin_active( $plugin ) ) {
-					$active[] = $plugin;
-				}
-			}
-			if ( count( $active ) > 1 ) {
-				$conflicts[ $label ] = $active;
-			}
-		}
-
-		if ( ! empty( $conflicts ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Multiple plugins in the same category are active, which can cause conflicts.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 60,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-conflicts',
-				'meta'         => array(
-					'conflicts' => $conflicts,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Plugin_Conflicts' );
 	}
 }

@@ -79,66 +79,7 @@ class Treatment_No_Email_Opt_In_Forms extends Treatment_Base {
 	 * @return array|null Finding array if no email forms detected, null otherwise.
 	 */
 	public static function check() {
-		// Check for popular email marketing plugins
-		if ( self::has_email_marketing_plugin() ) {
-			return null;
-		}
-
-		// Check for email forms in widgets
-		if ( self::has_email_form_widget() ) {
-			return null;
-		}
-
-		// Check content for email signup shortcodes/blocks
-		$recent_posts = get_posts(
-			array(
-				'post_type'      => 'post',
-				'post_status'    => 'publish',
-				'posts_per_page' => 10,
-			)
-		);
-
-		$email_form_patterns = array(
-			'[mc4wp_form', // MailChimp
-			'[mailpoet',   // MailPoet
-			'[convertkit', // ConvertKit
-			'wp:mailchimp',
-			'wp:newsletter',
-		);
-
-		foreach ( $recent_posts as $post ) {
-			foreach ( $email_form_patterns as $pattern ) {
-				if ( strpos( $post->post_content, $pattern ) !== false ) {
-					return null; // Found email form in content
-				}
-			}
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'No email capture forms detected. You\'re losing every visitor who doesn\'t subscribe. Install an email marketing plugin to build your audience.', 'wpshadow' ),
-			'severity'     => 'high',
-			'threat_level' => 60,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/email-list-building',
-			'details'      => array(
-				'message'          => 'Install email marketing plugin and add opt-in forms',
-				'recommended_tools' => array(
-					'MailerLite (free up to 1000 subscribers)',
-					'MailPoet (WordPress native)',
-					'ConvertKit (creator focused)',
-					'Mailchimp for WordPress',
-				),
-				'placement_tips'   => array(
-					'Popup after 30 seconds',
-					'Inline form after introduction',
-					'Exit-intent popup',
-					'Sidebar widget',
-					'Footer signup',
-				),
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_No_Email_Opt_In_Forms' );
 	}
 
 	/**

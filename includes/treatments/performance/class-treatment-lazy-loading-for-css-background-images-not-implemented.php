@@ -127,19 +127,6 @@ class Treatment_Lazy_Loading_For_CSS_Background_Images_Not_Implemented extends T
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for background image lazy loading
-		if ( ! has_filter( 'wp_head', 'enable_bg_image_lazy_load' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'CSS background image lazy loading is not implemented. Use JavaScript to defer loading of CSS background images until they are visible in the viewport.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 12,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-for-css-background-images-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Lazy_Loading_For_CSS_Background_Images_Not_Implemented' );
 	}
 }

@@ -63,19 +63,6 @@ class Treatment_NextGen_Mobile_First_Design_Not_Implemented extends Treatment_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for mobile viewport meta tag
-		if ( ! has_filter( 'wp_head', 'add_mobile_viewport' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Mobile first design is not implemented. Ensure viewport meta tag and mobile-optimized CSS are in place for responsive design.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 60,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/nextgen-mobile-first-design-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_NextGen_Mobile_First_Design_Not_Implemented' );
 	}
 }

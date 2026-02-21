@@ -102,18 +102,6 @@ class Treatment_Feed_HTTPS_Enforcement extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$feed_url = get_feed_link();
-		if ( 0 !== strpos( $feed_url, 'https://' ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed URL is not served over HTTPS.', 'wpshadow' ),
-				'severity'    => 'high',
-				'threat_level'=> 70,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-https-enforcement',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_HTTPS_Enforcement' );
 	}
 }

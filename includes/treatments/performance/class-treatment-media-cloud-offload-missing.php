@@ -69,51 +69,7 @@ class Treatment_Media_Cloud_Offload_Missing extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Don't flag if Vault is already active.
-		if ( Upgrade_Path_Helper::has_pro_product( 'vault' ) ) {
-			return null;
-		}
-
-		// Check for existing cloud offload solutions.
-		if ( self::has_cloud_offload() ) {
-			return null;
-		}
-
-		// Calculate media library size.
-		$uploads_dir = wp_upload_dir();
-		if ( ! isset( $uploads_dir['basedir'] ) || ! is_dir( $uploads_dir['basedir'] ) ) {
-			return null;
-		}
-
-		$storage_gb = self::calculate_storage_size( $uploads_dir['basedir'] );
-
-		// Don't flag if media library is small (< 500MB).
-		if ( $storage_gb < 0.5 ) {
-			return null;
-		}
-
-		// Check if CDN is active.
-		$cdn_active = self::has_cdn();
-
-		// Estimate cost savings.
-		$estimated_savings = self::estimate_cost_savings( $storage_gb );
-
-		return array(
-			'id'                      => self::$slug,
-			'title'                   => self::$title,
-			'description'             => sprintf(
-				/* translators: %s: storage size in GB */
-				__( 'Your %s GB media library is stored entirely on your web server. Offloading to cloud storage reduces hosting costs and improves performance through CDN edge delivery.', 'wpshadow' ),
-				number_format( $storage_gb, 1 )
-			),
-			'severity'                => $storage_gb > 5 ? 'medium' : 'low',
-			'threat_level'            => min( 50, 20 + ( $storage_gb * 2 ) ),
-			'auto_fixable'            => false,
-			'local_storage_gb'        => $storage_gb,
-			'cdn_active'              => $cdn_active,
-			'estimated_monthly_savings' => $estimated_savings,
-			'kb_link'                 => 'https://wpshadow.com/kb/cloud-offload',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Cloud_Offload_Missing' );
 	}
 
 	/**

@@ -80,40 +80,7 @@ class Treatment_No_Content_Performance_Tracking extends Treatment_Base {
 	 * @return array|null Finding array if tracking not configured, null otherwise.
 	 */
 	public static function check() {
-		// Check if analytics is installed
-		if ( ! self::has_analytics_plugin() ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'No analytics tracking detected. Install Google Analytics or similar to track content performance.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 60,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/analytics-content-tracking',
-				'details'      => array(
-					'message'          => 'Install analytics to make data-driven content decisions',
-					'recommended_tool' => 'Site Kit by Google (includes Analytics)',
-				),
-			);
-		}
-
-		// Check if post-level tracking is configured
-		if ( ! self::has_post_level_tracking() ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Analytics is installed but post-level tracking isn\'t configured. Enable content grouping or custom dimensions.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/analytics-content-tracking',
-				'details'      => array(
-					'message' => 'Enable post-level tracking for better insights',
-				),
-			);
-		}
-
-		return null; // Tracking is configured
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_No_Content_Performance_Tracking' );
 	}
 
 	/**

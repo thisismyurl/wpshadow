@@ -39,52 +39,6 @@ class Treatment_Mobile_List_Formatting extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$response = wp_remote_get( home_url( '/' ) );
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-		if ( empty( $body ) ) {
-			return null;
-		}
-
-		libxml_use_internal_errors( true );
-		$dom = new \DOMDocument();
-		$dom->loadHTML( $body );
-		libxml_clear_errors();
-
-		$lists = array_merge(
-			iterator_to_array( $dom->getElementsByTagName( 'ul' ) ),
-			iterator_to_array( $dom->getElementsByTagName( 'ol' ) )
-		);
-
-		if ( empty( $lists ) ) {
-			return null;
-		}
-
-		$formatted = false;
-		foreach ( $lists as $list ) {
-			$class = $list->getAttribute( 'class' );
-			if ( strpos( $class, 'wp-block-list' ) !== false ) {
-				$formatted = true;
-				break;
-			}
-		}
-
-		if ( ! $formatted ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Lists found without block list styling. Ensure list spacing and markers are visible on mobile.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 20,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-list-formatting',
-				'persona'      => 'publisher',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_List_Formatting' );
 	}
 }

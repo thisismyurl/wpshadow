@@ -64,44 +64,6 @@ class Treatment_Security_Headers extends Treatment_Base {
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
-        $missing_headers = array();
-
-        // Check for critical security headers
-        $required_headers = array(
-            'X-Content-Type-Options'        => 'nosniff',
-            'X-Frame-Options'               => 'SAMEORIGIN|DENY',
-            'X-XSS-Protection'              => '1; mode=block',
-            'Referrer-Policy'               => 'strict-origin-when-cross-origin',
-        );
-
-        foreach ( $required_headers as $header => $expected_value ) {
-            // In WordPress, we check if headers should be set in wp-config or .htaccess
-            // This is a capability check rather than direct header verification
-            $option_key = 'wpshadow_security_header_' . sanitize_key( $header );
-            $header_set = get_option( $option_key );
-
-            if ( ! $header_set ) {
-                $missing_headers[] = $header;
-            }
-        }
-
-        if ( ! empty( $missing_headers ) ) {
-            return array(
-                'id'            => self::$slug,
-                'title'         => self::$title,
-                'description'   => sprintf(
-                    /* translators: %s: list of headers */
-                    __( 'Missing security headers: %s. Configure these in .htaccess or your server.', 'wpshadow' ),
-                    implode( ', ', $missing_headers )
-                ),
-                'severity'      => 'high',
-                'threat_level'  => 70,
-                'auto_fixable'  => false,
-                'kb_link'       => 'https://wpshadow.com/kb/security-headers',
-                'persona'       => 'developer',
-            );
-        }
-
-        return null; // No issue found
+    	return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Security_Headers' );
     }
 }

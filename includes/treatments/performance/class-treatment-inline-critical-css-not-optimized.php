@@ -127,19 +127,6 @@ class Treatment_Inline_Critical_CSS_Not_Optimized extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for critical CSS optimization
-		if ( ! has_filter( 'wp_head', 'inline_critical_css' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Critical CSS is not inlined. Extract and inline the minimum CSS needed to render above-the-fold content to improve First Contentful Paint (FCP) score.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 55,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/inline-critical-css-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Inline_Critical_CSS_Not_Optimized' );
 	}
 }

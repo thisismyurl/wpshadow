@@ -63,26 +63,6 @@ class Treatment_Plugin_Update_Status extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! function_exists( 'get_plugin_updates' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/update.php';
-		}
-
-		$updates = get_plugin_updates();
-		if ( ! empty( $updates ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Plugin updates are available. Outdated plugins can introduce security risks.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-update-status',
-				'meta'         => array(
-					'plugin_updates' => count( $updates ),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Plugin_Update_Status' );
 	}
 }

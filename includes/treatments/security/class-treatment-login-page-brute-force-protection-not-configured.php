@@ -80,47 +80,6 @@ class Treatment_Login_Page_Brute_Force_Protection_Not_Configured extends Treatme
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for brute force protection
-		if ( ! is_plugin_active( 'wordfence/wordfence.php' ) && ! is_plugin_active( 'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php' ) ) {
-			$finding = array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Login page brute force protection is not configured. Enable login attempt limits to prevent credential-based attacks.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/login-page-brute-force-protection-not-configured',
-				'context'      => array(
-					'why'            => __(
-						'Brute force attacks target the WordPress login page because it is predictable (/wp-login.php, /wp-admin). Without rate limiting, bots can attempt thousands of passwords per minute, eventually guessing weak or reused credentials. OWASP Top 10 2023 lists Identification and Authentication Failures as #07, and credential stuffing is a primary driver. Wordfence reports tens of millions of automated login attempts per day across WordPress sites. Without lockouts, attackers can also overwhelm the server, causing performance degradation for legitimate users. In regulated environments (PCI-DSS, HIPAA), weak authentication controls violate security requirements.',
-						'wpshadow'
-					),
-					'recommendation' => __(
-						'1. Install a brute force protection plugin: "Limit Login Attempts Reloaded" (free) or Wordfence (paid) are reliable.
-2. Configure lockout threshold: 5-10 failed attempts within 15 minutes triggers lockout.
-3. Set lockout duration: 30 minutes for first lockout, 24 hours after repeat offenses.
-4. Enable CAPTCHA after failures: Require CAPTCHA after 3 failed attempts to block bots.
-5. Limit password reset requests: Cap to 3 per hour per email to prevent reset abuse.
-6. Add IP throttling: Block IPs with repeated failures (10+ within 24 hours).
-7. Log failed logins: Track IP, username, timestamp, user-agent for forensics.
-8. Add 2FA for admins: Even if brute force succeeds, 2FA blocks access.
-9. Hide login URL (optional): Use a custom login URL plugin to reduce automated scanning.
-10. Monitor alerts: Configure email alerts for brute force activity so admins can respond quickly.',
-						'wpshadow'
-					),
-				),
-			);
-
-			$finding = Upgrade_Path_Helper::add_upgrade_path(
-				$finding,
-				'security',
-				'brute-force-protection',
-				'login_bruteforce_protection'
-			);
-
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Login_Page_Brute_Force_Protection_Not_Configured' );
 	}
 }

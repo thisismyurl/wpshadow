@@ -69,33 +69,7 @@ class Treatment_Media_Audit_Trail_Missing extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Don't flag if Vault is already active.
-		if ( Upgrade_Path_Helper::has_pro_product( 'vault' ) ) {
-			return null;
-		}
-
-		// Check for existing audit logging solutions.
-		if ( self::has_audit_logging() ) {
-			return null;
-		}
-
-		// Check if site has compliance requirements.
-		$compliance_requirement = self::has_compliance_requirements();
-
-		// Identify untracked operations.
-		$operations_untracked = array( 'upload', 'delete', 'modify', 'access' );
-
-		return array(
-			'id'                     => self::$slug,
-			'title'                  => self::$title,
-			'description'            => __( 'Media file uploads, deletions, and modifications are not logged. For accountability and compliance, enable audit journaling to track who changed what and when.', 'wpshadow' ),
-			'severity'               => $compliance_requirement ? 'medium' : 'low',
-			'threat_level'           => $compliance_requirement ? 35 : 25,
-			'auto_fixable'           => false,
-			'operations_untracked'   => $operations_untracked,
-			'compliance_requirement' => $compliance_requirement,
-			'kb_link'                => 'https://wpshadow.com/kb/media-audit-trail',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Audit_Trail_Missing' );
 	}
 
 	/**

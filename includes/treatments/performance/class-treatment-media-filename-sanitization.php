@@ -64,61 +64,6 @@ class Treatment_Media_Filename_Sanitization extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		$attachments = get_posts(
-			array(
-				'post_type'      => 'attachment',
-				'posts_per_page' => 10,
-				'post_status'    => 'inherit',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			)
-		);
-
-		$unsanitized = 0;
-		foreach ( $attachments as $attachment ) {
-			$file = get_attached_file( $attachment->ID );
-			if ( empty( $file ) ) {
-				continue;
-			}
-
-			$filename = basename( $file );
-			$sanitized = sanitize_file_name( $filename );
-			if ( $filename !== $sanitized ) {
-				$unsanitized++;
-			}
-		}
-
-		if ( $unsanitized > 0 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of files */
-				_n(
-					'%d recent file name contains special characters; sanitize uploads to ensure URL safety',
-					'%d recent file names contain special characters; sanitize uploads to ensure URL safety',
-					$unsanitized,
-					'wpshadow'
-				),
-				$unsanitized
-			);
-		}
-
-		if ( ! has_filter( 'sanitize_file_name' ) ) {
-			$issues[] = __( 'No filename sanitization filter detected; consider enforcing stricter file naming rules', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-filename-sanitization',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Filename_Sanitization' );
 	}
 }

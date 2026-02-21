@@ -46,34 +46,6 @@ class Treatment_Password_Strength_Enforcement extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$issues = array();
-
-		// Check if password strength enforcement exists
-		$issues[] = __( 'Require minimum 12 character passwords', 'wpshadow' );
-		$issues[] = __( 'Require mix of uppercase, lowercase, numbers, symbols', 'wpshadow' );
-		$issues[] = __( 'Block common passwords (password123, qwerty, etc)', 'wpshadow' );
-		$issues[] = __( 'Admin accounts should require stronger passwords', 'wpshadow' );
-		$issues[] = __( 'Show password strength meter during registration', 'wpshadow' );
-		$issues[] = __( 'Prevent password reuse (last 5 passwords)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Weak passwords are easily cracked. Strong password requirements prevent brute force attacks and account compromise.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/password-strength',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'minimum_length'          => '12 characters (NIST recommendation)',
-					'brute_force_time'        => '8 chars = hours, 12 chars = years, 16 chars = centuries',
-					'common_passwords'        => 'Over 100 million accounts use "123456"',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Password_Strength_Enforcement' );
 	}
 }

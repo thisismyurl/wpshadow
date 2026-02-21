@@ -156,18 +156,6 @@ class Treatment_Feed_Excerpt_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$excerpt = get_option( 'rss_use_excerpt', 0 );
-		if ( $excerpt ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed is set to excerpt. Consider switching to full content for better SEO and user experience.', 'wpshadow' ),
-				'severity'    => 'low',
-				'threat_level'=> 20,
-				'auto_fixable'=> true,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-excerpt-configuration',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Excerpt_Configuration' );
 	}
 }

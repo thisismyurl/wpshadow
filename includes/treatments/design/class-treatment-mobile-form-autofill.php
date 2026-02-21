@@ -66,29 +66,7 @@ class Treatment_Mobile_Form_Autofill extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_autofill_issues();
-
-		if ( empty( $issues ) ) {
-			return null;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of fields without autocomplete */
-				__( 'Found %d form fields without autocomplete attributes', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'        => 'medium',
-			'threat_level'    => 50,
-			'issues'          => array_slice( $issues, 0, 10 ),
-			'total_issues'    => count( $issues ),
-			'wcag_violation'  => '1.3.5 Identify Input Purpose (Level AA)',
-			'user_impact'     => __( 'Users must manually type all form data on mobile', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/form-autofill',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Form_Autofill' );
 	}
 
 	/**

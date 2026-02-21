@@ -81,24 +81,6 @@ class Treatment_Form_Auto_Save extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for forms on the site
-		// This would require checking the HTML of pages
-		// For now, provide informational finding
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'Long or complex forms should auto-save draft progress every 30 seconds to prevent data loss', 'wpshadow' ),
-			'severity'     => 'medium',
-			'threat_level' => 50,
-			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/form-auto-save',
-			'details'      => array(
-				'what_is_auto_save' => 'Periodically save form input to localStorage, allowing recovery if page closes',
-				'recommended_interval' => '30 seconds',
-				'user_benefit' => 'Users don\'t lose 10-minute form fills due to accidental navigation',
-				'implementation' => 'Use JavaScript setInterval() to serialize form data to localStorage',
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Form_Auto_Save' );
 	}
 }

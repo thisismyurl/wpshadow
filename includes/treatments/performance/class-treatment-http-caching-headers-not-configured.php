@@ -129,19 +129,6 @@ class Treatment_HTTP_Caching_Headers_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if cache headers are set
-		if ( ! has_action( 'wp_headers', 'set_cache_headers' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'HTTP caching headers are not configured. Set Cache-Control and ETag headers to enable browser and CDN caching.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 35,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/http-caching-headers-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_HTTP_Caching_Headers_Not_Configured' );
 	}
 }

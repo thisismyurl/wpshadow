@@ -132,37 +132,6 @@ class Treatment_Theme_Nonce_Verification extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$theme_dir = wp_get_theme()->get_stylesheet_directory();
-		$functions_file = $theme_dir . '/functions.php';
-
-		if ( ! file_exists( $functions_file ) ) {
-			return null;
-		}
-
-		$content = file_get_contents( $functions_file, false, null, 0, 60000 );
-		if ( false === $content ) {
-			return null;
-		}
-
-		if ( false !== strpos( $content, 'admin_post' ) || false !== strpos( $content, 'admin_init' ) ) {
-			if ( false === strpos( $content, 'check_admin_referer' ) && false === strpos( $content, 'wp_verify_nonce' ) ) {
-				return array(
-					'id'           => self::$slug,
-					'title'        => self::$title,
-					'description'  => __( 'Theme admin actions may be missing nonce verification', 'wpshadow' ),
-					'severity'     => 'high',
-					'threat_level' => 80,
-					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-nonce-verification',
-					'details'      => array(
-						'issues' => array(
-							__( 'Admin hooks detected without nonce verification', 'wpshadow' ),
-						),
-					),
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Nonce_Verification' );
 	}
 }

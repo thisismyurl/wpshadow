@@ -122,26 +122,15 @@ class Diagnostic_404_Error_Page_Functionality extends Diagnostic_Base {
 			$issues[] = __( '404 redirect plugin active (may hide broken links)', 'wpshadow' );
 		}
 
-		// Check recent 404 errors.
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'wpshadow_404_log';
+		// Check recent 404 errors from option-based metrics.
+		$recent_404s = (int) get_option( 'wpshadow_404_count_7d', 0 );
 
-		// Only check if log table exists.
-		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) === $table_name ) {
-			$recent_404s = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$table_name} WHERE date > DATE_SUB(NOW(), INTERVAL %d DAY)",
-					7
-				)
+		if ( $recent_404s > 100 ) {
+			$issues[] = sprintf(
+				/* translators: %d: number of 404 errors */
+				__( '%d 404 errors in the last 7 days (investigate broken links)', 'wpshadow' ),
+				$recent_404s
 			);
-
-			if ( $recent_404s > 100 ) {
-				$issues[] = sprintf(
-					/* translators: %d: number of 404 errors */
-					__( '%d 404 errors in the last 7 days (investigate broken links)', 'wpshadow' ),
-					$recent_404s
-				);
-			}
 		}
 
 		if ( ! empty( $issues ) ) {

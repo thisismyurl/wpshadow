@@ -63,48 +63,6 @@ class Treatment_Comments_Per_Page_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		$page_comments = get_option( 'page_comments', 0 );
-		if ( ! $page_comments ) {
-			return null; // Pagination disabled, setting doesn't apply.
-		}
-
-		$comments_per_page = get_option( 'comments_per_page', 50 );
-
-		// Check for extreme values.
-		if ( $comments_per_page < 5 ) {
-			$issues[] = __( 'Very low comments per page - excessive pagination', 'wpshadow' );
-		} elseif ( $comments_per_page < 20 ) {
-			$issues[] = __( 'Low comments per page may require frequent pagination', 'wpshadow' );
-		} elseif ( $comments_per_page > 100 ) {
-			$issues[] = __( 'High comments per page may slow page load time', 'wpshadow' );
-		} elseif ( $comments_per_page > 200 ) {
-			$issues[] = sprintf(
-				/* translators: %d: comments per page */
-				__( 'Extremely high comments per page (%d) will significantly impact performance', 'wpshadow' ),
-				$comments_per_page
-			);
-		}
-
-		// Recommended range: 20-50 comments per page.
-		if ( $comments_per_page >= 20 && $comments_per_page <= 50 ) {
-			// Optimal range - no issue.
-			return null;
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'low',
-				'threat_level' => 30,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comments-per-page-configuration',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comments_Per_Page_Configuration' );
 	}
 }

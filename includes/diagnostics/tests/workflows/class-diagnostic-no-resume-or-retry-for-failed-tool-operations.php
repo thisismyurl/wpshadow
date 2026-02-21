@@ -147,13 +147,8 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	 * @return bool True if retry implemented.
 	 */
 	private static function has_retry_mechanism() {
-		global $wpdb;
-
-		// Check for failed operations table
-		$table = $wpdb->prefix . 'wpshadow_failed_operations';
-		$operations_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-
-		if ( $operations_table ) {
+		// Check for option-backed failed operations.
+		if ( false !== get_option( 'wpshadow_failed_operations_log', false ) ) {
 			return true;
 		}
 
@@ -193,16 +188,6 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	 * @return bool True if tracking implemented.
 	 */
 	private static function has_failure_tracking() {
-		global $wpdb;
-
-		// Check for failure log table
-		$table = $wpdb->prefix . 'wpshadow_operation_failures';
-		$failure_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-
-		if ( $failure_table ) {
-			return true;
-		}
-
 		// Check for failure option
 		$failures = get_option( 'wpshadow_failed_operations_log' );
 		if ( ! empty( $failures ) ) {

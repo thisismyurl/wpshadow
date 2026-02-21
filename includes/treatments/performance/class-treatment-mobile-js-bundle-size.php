@@ -64,36 +64,7 @@ class Treatment_Mobile_JS_Bundle_Size extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$bundle_info = self::analyze_js_bundle();
-
-		if ( empty( $bundle_info['total_size'] ) || $bundle_info['total_size'] < 250 * 1024 ) {
-			return null; // Bundle within acceptable size
-		}
-
-		$threat = 70;
-		if ( $bundle_info['total_size'] > 500 * 1024 ) {
-			$threat = 85; // Critical - very large
-		}
-
-		return array(
-			'id'                     => self::$slug,
-			'title'                  => self::$title,
-			'description'            => sprintf(
-				/* translators: %s: bundle size in KB */
-				__( 'Total JavaScript bundle is %s KB (>250KB recommended)', 'wpshadow' ),
-				round( $bundle_info['total_size'] / 1024, 1 )
-			),
-			'severity'               => 'high',
-			'threat_level'           => $threat,
-			'total_js_size'          => $bundle_info['total_size'],
-			'total_js_size_formatted' => size_format( $bundle_info['total_size'], 1 ),
-			'script_count'           => $bundle_info['script_count'] ?? 0,
-			'largest_scripts'        => array_slice( $bundle_info['scripts'] ?? array(), 0, 5 ),
-			'optimization_potential' => round( ( $bundle_info['total_size'] - 250 * 1024 ) / 1024, 1 ) . ' KB savings possible',
-			'user_impact'            => __( 'Large bundles slow download on 3G (11s delay)', 'wpshadow' ),
-			'auto_fixable'           => false,
-			'kb_link'                => 'https://wpshadow.com/kb/js-bundle-size',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_JS_Bundle_Size' );
 	}
 
 	/**

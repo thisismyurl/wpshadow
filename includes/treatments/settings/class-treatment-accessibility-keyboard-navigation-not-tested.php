@@ -63,19 +63,6 @@ class Treatment_Accessibility_Keyboard_Navigation_Not_Tested extends Treatment_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if keyboard navigation testing is documented
-		if ( ! get_option( 'keyboard_nav_test_date' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Keyboard navigation is not tested. Test all interactive elements to ensure they can be accessed using Tab, Enter, and arrow keys.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/accessibility-keyboard-navigation-not-tested',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Accessibility_Keyboard_Navigation_Not_Tested' );
 	}
 }

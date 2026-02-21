@@ -230,26 +230,21 @@ foreach ( $all_diagnostics as $slug => $class ) {
 
 <script>
 jQuery(document).ready(function($) {
+	<?php echo \WPShadow\Views\Tool_View_Base::get_js_scan_state_helpers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	$('#run-seo-scan-btn').on('click', function() {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#seo-scan-results');
 		
-		$btn.prop('disabled', true).addClass('wps-loading');
-		$progress.removeClass('hidden');
-		$results.empty();
+		wpshadowReportScanStart( $btn, $progress, $results );
 		
 		// Run SEO diagnostics
-		wp.ajax.post('wpshadow_run_family_diagnostics', {
-			family: 'seo',
-			nonce: $btn.data('nonce')
-		}).done(function(response) {
+		wpshadowRunFamilyDiagnostics( 'seo', $btn.data('nonce') ).done(function(response) {
 			displaySEOResults(response);
 		}).fail(function(error) {
-			$results.html('<div class="notice notice-error"><p>' + error.message + '</p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_open_html() ); ?>' + error.message + '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_close_html() ); ?>');
 		}).always(function() {
-			$btn.prop('disabled', false).removeClass('wps-loading');
-			$progress.addClass('hidden');
+			wpshadowReportScanEnd( $btn, $progress );
 		});
 	});
 
@@ -273,7 +268,7 @@ jQuery(document).ready(function($) {
 		
 		// Display findings
 		if (findings.length === 0) {
-			$results.html('<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> <?php echo esc_js( __( 'Excellent! Your SEO is optimized.', 'wpshadow' ) ); ?></p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your SEO is optimized.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
 		
@@ -282,12 +277,14 @@ jQuery(document).ready(function($) {
 		const moderate = findings.filter(f => f.severity === 'medium');
 		const minor = findings.filter(f => f.severity === 'low');
 		
-		let html = '<div class="wps-card"><div class="wps-card-body">';
-		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'SEO Issues Found', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
+		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
+		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'SEO Issues Found', 'wpshadow' ) ); ?>', findings.length );
 		
 		// Display critical issues first
 		if (critical.length > 0) {
-			html += '<h4 class="wps-font-semibold wps-text-error wps-mb-2"><?php echo esc_js( __( 'Critical SEO Issues', 'wpshadow' ) ); ?> (' + critical.length + ')</h4>';
+			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Critical SEO Issues', 'wpshadow' ) ); ?>', critical.length, {
+				headingClass: 'wps-font-semibold wps-text-error wps-mb-2'
+			} );
 			critical.forEach(function(finding) {
 				html += renderSEOFinding(finding, 'error');
 			});
@@ -295,7 +292,9 @@ jQuery(document).ready(function($) {
 		
 		// Moderate issues
 		if (moderate.length > 0) {
-			html += '<h4 class="wps-font-semibold wps-text-warning wps-mt-4 wps-mb-2"><?php echo esc_js( __( 'Moderate SEO Issues', 'wpshadow' ) ); ?> (' + moderate.length + ')</h4>';
+			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Moderate SEO Issues', 'wpshadow' ) ); ?>', moderate.length, {
+				headingClass: 'wps-font-semibold wps-text-warning wps-mt-4 wps-mb-2'
+			} );
 			moderate.forEach(function(finding) {
 				html += renderSEOFinding(finding, 'warning');
 			});
@@ -303,23 +302,23 @@ jQuery(document).ready(function($) {
 		
 		// Minor issues
 		if (minor.length > 0) {
-			html += '<h4 class="wps-font-semibold wps-text-info wps-mt-4 wps-mb-2"><?php echo esc_js( __( 'Minor SEO Issues', 'wpshadow' ) ); ?> (' + minor.length + ')</h4>';
+			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Minor SEO Issues', 'wpshadow' ) ); ?>', minor.length, {
+				headingClass: 'wps-font-semibold wps-text-info wps-mt-4 wps-mb-2'
+			} );
 			minor.forEach(function(finding) {
 				html += renderSEOFinding(finding, 'info');
 			});
 		}
 		
-		html += '</div></div>';
+		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}
 
 	function renderSEOFinding(finding, severity) {
-		let html = '<div class="wps-mb-3 wps-p-3 wps-border wps-border-' + severity + ' wps-rounded">';
-		html += '<div class="wps-flex wps-items-start wps-gap-3">';
-		html += '<span class="dashicons dashicons-info wps-text-' + severity + '"></span>';
-		html += '<div class="wps-flex-1">';
-		html += '<h5 class="wps-font-semibold">' + finding.title + '</h5>';
-		html += '<p class="wps-text-muted wps-text-sm">' + finding.description + '</p>';
+		let html = wpshadowRenderFindingCardStart( finding, {
+			severityClass: severity,
+			iconClass: 'dashicons-info'
+		} );
 		
 		// Impact statement
 		if (finding.threat_level) {
@@ -329,13 +328,11 @@ jQuery(document).ready(function($) {
 			html += '<p class="wps-text-xs wps-text-muted wps-mt-1"><strong><?php echo esc_js( __( 'Impact:', 'wpshadow' ) ); ?></strong> ' + impact + '</p>';
 		}
 		
-		if (finding.auto_fixable) {
-			html += '<button class="wps-btn wps-btn-sm wps-btn-success wps-mt-2" data-finding="' + finding.id + '"><?php echo esc_js( __( 'Auto-Fix', 'wpshadow' ) ); ?></button>';
-		}
+		html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Auto-Fix', 'wpshadow' ) ); ?>' );
 		if (finding.kb_link) {
 			html += '<a href="' + finding.kb_link + '" target="_blank" class="wps-btn wps-btn-sm wps-btn-link wps-mt-2"><?php echo esc_js( __( 'Learn More', 'wpshadow' ) ); ?></a>';
 		}
-		html += '</div></div></div>';
+		html += wpshadowRenderFindingCardEnd();
 		return html;
 	}
 });
@@ -343,9 +340,7 @@ jQuery(document).ready(function($) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Want advanced SEO features?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro includes automated SEO optimization, keyword tracking, and competitor analysis to boost your rankings.', 'wpshadow' ),

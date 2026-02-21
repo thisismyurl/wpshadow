@@ -85,77 +85,7 @@ class Treatment_Not_Mobile_Friendly extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// Check #1: Viewport meta tag
-		$has_viewport = self::has_viewport_meta_tag();
-		if ( ! $has_viewport ) {
-			$issues[] = 'Missing viewport meta tag';
-		}
-
-		// Check #2: Responsive theme support
-		$responsive_support = current_theme_supports( 'responsive-embeds' ) || 
-		                      current_theme_supports( 'html5' );
-		if ( ! $responsive_support ) {
-			$issues[] = 'Theme lacks responsive design features';
-		}
-
-		// Check #3: Check for mobile-unfriendly plugins
-		$active_plugins = get_option( 'active_plugins', array() );
-		foreach ( $active_plugins as $plugin ) {
-			if ( stripos( $plugin, 'flash' ) !== false ) {
-				$issues[] = 'Flash plugin detected (not mobile-compatible)';
-				break;
-			}
-		}
-
-		// Check #4: Fixed-width content in posts
-		$posts = get_posts(
-			array(
-				'post_type'      => 'post',
-				'posts_per_page' => 10,
-				'post_status'    => 'publish',
-			)
-		);
-
-		$fixed_width_count = 0;
-		foreach ( $posts as $post ) {
-			if ( preg_match( '/width\s*[:=]\s*["\']?\d{4,}/', $post->post_content ) ) {
-				$fixed_width_count++;
-			}
-		}
-
-		if ( $fixed_width_count > 0 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of posts */
-				__( '%d post(s) contain fixed-width content', 'wpshadow' ),
-				$fixed_width_count
-			);
-		}
-
-		if ( empty( $issues ) ) {
-			return null; // Site appears mobile-friendly
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: %d: number of issues */
-				__( '%d mobile-friendliness issue(s) detected. Your site may not display correctly on smartphones and tablets.', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'     => 'high',
-			'threat_level' => 80,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-not-mobile-friendly',
-			'details'      => array(
-				'issues'                => $issues,
-				'has_viewport'          => $has_viewport,
-				'responsive_support'    => $responsive_support,
-				'fixed_width_posts'     => $fixed_width_count,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Not_Mobile_Friendly' );
 	}
 
 	/**

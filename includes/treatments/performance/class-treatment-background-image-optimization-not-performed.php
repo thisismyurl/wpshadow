@@ -122,19 +122,6 @@ class Treatment_Background_Image_Optimization_Not_Performed extends Treatment_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for background image optimization
-		if ( ! has_filter( 'wp_head', 'optimize_background_images' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Background image optimization is not performed. Use CSS srcset and picture element for responsive background images, compress WebP formats, and use lazy loading for below-fold backgrounds.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 20,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/background-image-optimization-not-performed',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Background_Image_Optimization_Not_Performed' );
 	}
 }

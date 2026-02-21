@@ -63,19 +63,6 @@ class Treatment_Error_Boundary_Components_Not_Implemented extends Treatment_Base
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for error boundary implementation
-		if ( ! has_filter( 'wp_footer', 'add_error_boundary_script' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Error boundary components are not implemented. Catch JavaScript errors in component trees to prevent full page crashes and show graceful fallback UIs to users.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 35,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/error-boundary-components-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Error_Boundary_Components_Not_Implemented' );
 	}
 }

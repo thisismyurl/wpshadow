@@ -36,33 +36,6 @@ class Treatment_Error_Message_Clarity extends Treatment_Base {
 	protected static $family = 'content';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Explain WHAT failed in plain language', 'wpshadow' );
-		$issues[] = __( 'Explain WHY it failed (invalid format, too long, etc)', 'wpshadow' );
-		$issues[] = __( 'Explain HOW to fix it (clear next steps)', 'wpshadow' );
-		$issues[] = __( 'Never show technical error codes without explanation', 'wpshadow' );
-		$issues[] = __( 'Provide link to help documentation', 'wpshadow' );
-		$issues[] = __( 'Use friendly tone: "Let\'s fix this" not "Error occurred"', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Error messages should be helpful neighbors, not cryptic warnings. Tell users what happened and how to fix it in plain language.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/error-messages',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'bad_example'             => '"Error 500" or "Invalid input"',
-					'good_example'            => '"Your password must be at least 12 characters. Try adding numbers and symbols."',
-					'commandment'             => 'Commandment #1: Helpful Neighbor Experience',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Error_Message_Clarity' );
 	}
 }

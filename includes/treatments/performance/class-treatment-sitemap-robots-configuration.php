@@ -67,52 +67,6 @@ class Treatment_Sitemap_Robots_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		$sitemap_available = false;
-		$robots_exists     = false;
-
-		// Check for XML sitemap
-		$response = wp_remote_get( home_url( '/sitemap.xml' ), array( 'sslverify' => false ) );
-		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
-			$sitemap_available = true;
-		}
-
-		// Check for robots.txt
-		$response = wp_remote_get( home_url( '/robots.txt' ), array( 'sslverify' => false ) );
-		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
-			$robots_exists = true;
-		}
-
-		// Check WordPress core sitemap support
-		if ( function_exists( 'wp_sitemaps_get_max_urls' ) ) {
-			$sitemap_available = true;
-		}
-
-		if ( ! $sitemap_available || ! $robots_exists ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
-					__( 'Sitemap: %s, Robots.txt: %s. Both are important for search engine crawling and indexing.', 'wpshadow' ),
-					$sitemap_available ? '✓' : '✗',
-					$robots_exists ? '✓' : '✗'
-				),
-				'severity'      => 'low',
-				'threat_level'  => 25,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/seo-sitemap-robots',
-				'meta'          => array(
-					'sitemap_available'    => $sitemap_available,
-					'robots_exists'        => $robots_exists,
-					'recommendation'       => 'Use WordPress core sitemaps (enabled by default), and ensure robots.txt exists',
-					'impact'               => 'Proper sitemap and robots.txt can improve indexation speed by 30-50%',
-					'setup'                => array(
-						'Sitemap: WordPress generates automatically in wp-sitemap.xml',
-						'Robots.txt: Create /robots.txt or use plugin for custom rules',
-					),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Sitemap_Robots_Configuration' );
 	}
 }

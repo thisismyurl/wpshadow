@@ -79,68 +79,6 @@ class Treatment_Plugin_Frontend_Performance_Impact extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$concerns = array();
-
-		// Get active plugins
-		$active_plugins = get_option( 'active_plugins', array() );
-
-		if ( empty( $active_plugins ) ) {
-			return null;
-		}
-
-		// Check for known frontend-heavy plugins without lazy loading
-		$frontend_heavy = array(
-			'jetpack' => 'Jetpack',
-			'akismet' => 'Akismet',
-			'yoast-seo' => 'Yoast SEO',
-			'elementor' => 'Elementor',
-			'woocommerce' => 'WooCommerce',
-			'contact-form-7' => 'Contact Form 7',
-			'wordfence' => 'Wordfence Security',
-		);
-
-		$heavy_plugins_active = array();
-		foreach ( $active_plugins as $plugin ) {
-			foreach ( $frontend_heavy as $key => $name ) {
-				if ( strpos( $plugin, $key ) !== false ) {
-					$heavy_plugins_active[] = $name;
-				}
-			}
-		}
-
-		if ( ! empty( $heavy_plugins_active ) ) {
-			$concerns[] = sprintf(
-				/* translators: %s: plugin names */
-				__( 'Active frontend-heavy plugins detected: %s. These typically add 500ms-2s to page load.', 'wpshadow' ),
-				implode( ', ', $heavy_plugins_active )
-			);
-		}
-
-		// Check for too many active plugins (>30 is problematic)
-		if ( count( $active_plugins ) > 30 ) {
-			$concerns[] = sprintf(
-				/* translators: %d: plugin count */
-				__( '%d plugins active. Each adds 20-50ms to page load. Consider consolidation.', 'wpshadow' ),
-				count( $active_plugins )
-			);
-		}
-
-		if ( ! empty( $concerns ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( ' ', $concerns ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'details'      => array(
-					'active_plugin_count' => count( $active_plugins ),
-					'heavy_plugins'       => $heavy_plugins_active,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-frontend-performance',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Plugin_Frontend_Performance_Impact' );
 	}
 }

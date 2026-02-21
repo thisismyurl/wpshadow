@@ -46,24 +46,7 @@ if ( ! $keep_data ) {
 	// Remove user meta
 	$wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'wpshadow_%'" );
 
-	// Remove custom tables
-	$tables = array(
-		$wpdb->prefix . 'wpshadow_activity_log',
-		$wpdb->prefix . 'wpshadow_findings',
-		$wpdb->prefix . 'wpshadow_finding_statuses',
-		$wpdb->prefix . 'wpshadow_kpis',
-		$wpdb->prefix . 'wpshadow_workflows',
-		$wpdb->prefix . 'wpshadow_workflow_executions',
-		$wpdb->prefix . 'wpshadow_notifications',
-		$wpdb->prefix . 'wpshadow_consent',
-		$wpdb->prefix . 'wpshadow_visual_comparisons',
-		$wpdb->prefix . 'wpshadow_exit_interviews',
-	);
-
-	foreach ( $tables as $table ) {
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names cannot be prepared.
-		$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
-	}
+	// No custom WPShadow tables are maintained.
 
 	// Clear scheduled events
 	$cron_hooks = array(

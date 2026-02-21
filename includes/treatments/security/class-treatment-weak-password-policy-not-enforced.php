@@ -64,21 +64,8 @@ class Treatment_Weak_Password_Policy_Not_Enforced extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('strong_password_policy_enabled' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Weak password policy not enforced. Require minimum 12 characters,
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/weak-password-policy-not-enforced'
-						);
-						);,
-						);
-						}
-						return null;
-						}
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Weak_Password_Policy_Not_Enforced' );
+	}
 						return null;
 						}
 						return null;

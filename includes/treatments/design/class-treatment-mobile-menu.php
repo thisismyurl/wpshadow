@@ -65,31 +65,7 @@ class Treatment_Mobile_Menu extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_menu_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null; // Mobile menu exists and is functional
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of menu issues */
-				__( 'Found %d mobile menu issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'high',
-			'threat_level'    => 75,
-			'issues'          => $issues['all'],
-			'has_mobile_menu' => $issues['has_mobile_menu'] ?? false,
-			'has_hamburger'   => $issues['has_hamburger'] ?? false,
-			'has_toggle'      => $issues['has_toggle'] ?? false,
-			'wcag_violation'  => '2.1.1 Keyboard (Level A)',
-			'user_impact'     => __( 'Mobile users cannot access navigation', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-menu',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Menu' );
 	}
 
 	/**

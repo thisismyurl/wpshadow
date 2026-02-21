@@ -80,19 +80,6 @@ class Treatment_Expired_SSL_Certificate_Check_Not_Scheduled extends Treatment_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if SSL expiration check is scheduled
-		if ( ! wp_next_scheduled( 'check_ssl_certificate_expiration' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'SSL certificate expiration monitoring is not scheduled. Schedule regular checks to receive notifications before your certificate expires.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 70,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/expired-ssl-certificate-check-not-scheduled',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Expired_SSL_Certificate_Check_Not_Scheduled' );
 	}
 }

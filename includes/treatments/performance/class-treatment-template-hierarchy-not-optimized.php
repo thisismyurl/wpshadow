@@ -129,19 +129,6 @@ class Treatment_Template_Hierarchy_Not_Optimized extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for template optimization
-		if ( ! has_filter( 'template_include', 'wp_optimize_template_selection' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Template hierarchy is not optimized. Use child themes and efficient template files to reduce load times.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/template-hierarchy-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Template_Hierarchy_Not_Optimized' );
 	}
 }

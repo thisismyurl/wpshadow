@@ -64,34 +64,6 @@ class Treatment_Media_Responsive_Image_Srcset extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		$image_sizes = wp_get_registered_image_subsizes();
-
-		if ( empty( $image_sizes ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'No responsive image sizes are registered. Add image sizes to generate srcset attributes.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 55,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/responsive-image-srcset',
-			);
-		}
-
-		// Check if images can generate srcset
-		$test_image = wp_get_attachment_image_srcset( 0 );
-		if ( empty( $test_image ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Srcset generation is not working properly. Verify image size configuration.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 55,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/responsive-image-srcset',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Responsive_Image_Srcset' );
 	}
 }

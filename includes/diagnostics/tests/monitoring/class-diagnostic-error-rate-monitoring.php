@@ -124,28 +124,28 @@ class Diagnostic_Error_Rate_Monitoring extends Diagnostic_Base {
 			}
 		}
 
-		// If no log data, try Activity Logger.
+		// If no log data, try Activity Logger option-backed records.
 		if ( $total_requests === 0 && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			global $wpdb;
-			$activity_table = $wpdb->prefix . 'wpshadow_activity';
+			$one_day_ago = time() - DAY_IN_SECONDS;
+			$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
 
-			if ( $wpdb->get_var( "SHOW TABLES LIKE '{$activity_table}'" ) === $activity_table ) {
-				$one_day_ago = time() - DAY_IN_SECONDS;
+			if ( is_array( $activity_log ) ) {
+				foreach ( $activity_log as $entry ) {
+					$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
 
-				$total_requests = $wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM {$activity_table} WHERE created_at > %d",
-						$one_day_ago
-					)
-				);
+					if ( $entry_time <= $one_day_ago ) {
+						continue;
+					}
 
-				$error_count = $wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM {$activity_table} WHERE created_at > %d AND action LIKE %s",
-						$one_day_ago,
-						'%error%'
-					)
-				);
+					++$total_requests;
+
+					$action  = isset( $entry['action'] ) ? (string) $entry['action'] : '';
+					$details = isset( $entry['details'] ) ? strtolower( (string) $entry['details'] ) : '';
+
+					if ( false !== strpos( $action, 'error' ) || false !== strpos( $details, 'error' ) || false !== strpos( $details, 'fatal' ) || false !== strpos( $details, 'warning' ) ) {
+						++$error_count;
+					}
+				}
 			}
 		}
 

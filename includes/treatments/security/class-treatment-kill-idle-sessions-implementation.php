@@ -80,42 +80,6 @@ class Treatment_Kill_Idle_Sessions_Implementation extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if idle session timeout is configured
-		if ( ! has_filter( 'auth_cookie_life', 'set_idle_session_timeout' ) ) {
-			$finding = array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Idle session termination is not implemented. Set session timeout to 30 minutes to automatically log out inactive users.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/kill-idle-sessions-implementation',
-				'context'      => array(
-					'why'            => __(
-						'Idle sessions are a common attack vector. Users often forget to log out on shared or public devices. Without idle timeouts, a stolen or abandoned session can be reused long after the user leaves. Many security standards (PCI-DSS, HIPAA) require automatic logout after 15 minutes of inactivity for sensitive systems. Implementing idle timeouts reduces the window for session hijacking and lowers exposure if a device is left unattended.',
-						'wpshadow'
-					),
-					'recommendation' => __(
-						'1. Implement idle timeout of 15-30 minutes for privileged users.
-2. Use WordPress hooks to track user activity and invalidate sessions after inactivity.
-3. Provide a grace warning before logout (e.g., 60-second countdown).
-4. For public kiosks or shared devices, use shorter timeouts (5-10 minutes).
-5. Combine with absolute session timeout to ensure sessions don\'t persist indefinitely.',
-						'wpshadow'
-					),
-				),
-			);
-
-			$finding = Upgrade_Path_Helper::add_upgrade_path(
-				$finding,
-				'security',
-				'session-hardening',
-				'idle_session_timeout'
-			);
-
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Kill_Idle_Sessions_Implementation' );
 	}
 }

@@ -16,72 +16,52 @@ namespace WPShadow\Treatments;
 use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-class-treatment-exit;
+	exit;
 }
 
+/**
+ * Mobile Filter/Sort Controls Treatment.
+ *
+ * @since 1.602.1450
+ */
 class Treatment_Mobile_Filter_Sort extends Treatment_Base {
 
-class-treatment-protected static $slug = 'mobile-filter-sort-controls';
-class-treatment-protected static $title = 'Mobile Filter/Sort Controls';
-class-treatment-protected static $description = 'Validates filters for mobile usability';
-class-treatment-protected static $family = 'navigation';
+	/**
+	 * The treatment slug.
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'mobile-filter-sort-controls';
 
-class-treatment-public static function check() {
-class-treatment-// Check if WooCommerce/EDD active
-class-treatment-if ( ! class_exists( 'WooCommerce' ) && ! class_exists( 'Easy_Digital_Downloads' ) ) {
-class-treatment- null; // Not applicable
-class-treatment-}
+	/**
+	 * The treatment title.
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Mobile Filter/Sort Controls';
 
-class-treatment-$html = self::get_shop_page_html();
-class-treatment-if ( ! $html ) {
-class-treatment- null;
-class-treatment-}
+	/**
+	 * The treatment description.
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Validates filters for mobile usability';
 
-class-treatment-$issues = array();
+	/**
+	 * The treatment family.
+	 *
+	 * @var string
+	 */
+	protected static $family = 'navigation';
 
-class-treatment-// Check for filter widgets
-class-treatment-$has_filters = preg_match( '/class\s*=\s*["\'][^"\']*(?:widget|filter|layered)[^"\']*["\']/i', $html );
+	/**
+	 * Run the treatment check.
+	 *
+	 * @since  1.602.1450
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Filter_Sort' );
+	}
 
-class-treatment-if ( ! $has_filters ) {
-class-treatment- null; // No filters to check
-class-treatment-}
-
-class-treatment-// Check for mobile-optimized filter UI
-class-treatment-$has_mobile_filter = preg_match( '/@media.*?max-width.*?(?:filter|widget)/i', $html );
-
-class-treatment-if ( ! $has_mobile_filter ) {
-class-treatment-o-mobile-filter-styles',
-class-treatment-ot optimized for mobile viewport',
-class-treatment- selects (better for mobile)
-class-treatment-$has_select = preg_match( '/<select[^>]*class\s*=\s*["\'][^"\']*(?:filter|sort)[^"\']*["\']/i', $html );
-
-class-treatment-if ( ! $has_select ) {
-class-treatment-o-select-filters',
-class-treatment-g checkboxes instead of mobile-friendly dropdowns',
-class-treatment-
-class-treatment-$has_apply_button = preg_match( '/<button[^>]*class\s*=\s*["\'][^"\']*(?:apply|filter)[^"\']*["\']/i', $html );
-
-class-treatment-if ( ! $has_apply_button ) {
-class-treatment-o-apply-button',
-class-treatment-g clear "Apply Filters" button',
-class-treatment- null;
-class-treatment-}
-
-class-treatment-return array(
-class-treatment-' => sprintf( __( 'Found %d filter/sort issues', 'wpshadow' ), count( $issues ) ),
-class-treatment-g difficult on mobile', 'wpshadow' ),
-class-treatment-k' => 'https://wpshadow.com/kb/mobile-filters',
-class-treatment-);
-class-treatment-}
-
-class-treatment-private static function get_shop_page_html(): ?string {
-class-treatment-if ( class_exists( 'WooCommerce' ) ) {
-class-treatment-k( wc_get_page_id( 'shop' ) );
-class-treatment-} else {
-class-treatment-se = wp_remote_get( $shop_url, array( 'timeout' => 5, 'sslverify' => false ) );
-class-treatment-if ( is_wp_error( $response ) ) {
-class-treatment- null;
-class-treatment-}
-class-treatment-return wp_remote_retrieve_body( $response );
-class-treatment-}
 }

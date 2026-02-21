@@ -64,25 +64,7 @@ class Treatment_Mobile_Text_Zoom extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_zoom_issues();
-
-		if ( empty( $issues ) ) {
-			return null; // No issues found
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => __( 'Viewport prevents zoom or 200% zoom causes horizontal scroll', 'wpshadow' ),
-			'severity'        => 'critical',
-			'threat_level'    => 80,
-			'issues'          => $issues,
-			'wcag_violation'  => '1.4.4 Resize Text (Level AA)',
-			'affected_users'  => __( 'Low-vision users, elderly users', 'wpshadow' ),
-			'user_impact'     => __( 'Cannot increase text size for readability', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/text-zoom',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Text_Zoom' );
 	}
 
 	/**

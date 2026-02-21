@@ -32,26 +32,29 @@ function wpshadow_podcast_test_suite() {
 		$all_pass = false;
 	}
 
-	// Test 2: Database table
-	echo '<h3>2. Database Setup</h3>';
+	// Test 2: Queue storage
+	echo '<h3>2. Queue Storage Setup</h3>';
 	global $wpdb;
-	$table = $wpdb->prefix . 'wpshadow_podcast_queue';
-	$exists = $wpdb->get_var( "SHOW TABLES LIKE '$table'" );
+	$queue = get_option( 'wpshadow_podcast_queue', array() );
 
-	if ( $exists ) {
-		echo '✅ Podcast queue table exists<br>';
+	if ( is_array( $queue ) ) {
+		echo '✅ Podcast queue option storage is available<br>';
 
-		// Count items
-		$count = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+		$count = count( $queue );
 		echo "   - Queue items: $count<br>";
 
-		// Check for failed items
-		$failed = $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE status = 'failed'" );
+		$failed = 0;
+		foreach ( $queue as $item ) {
+			if ( isset( $item['status'] ) && 'failed' === $item['status'] ) {
+				++$failed;
+			}
+		}
+
 		if ( $failed > 0 ) {
 			echo "   ⚠️  Failed items: $failed (check logs)<br>";
 		}
 	} else {
-		echo '❌ Podcast queue table NOT found<br>';
+		echo '❌ Podcast queue option storage is not configured correctly<br>';
 		echo '   Run: WPShadow_Podcast_Generator::create_queue_table()<br>';
 		$all_pass = false;
 	}
@@ -182,11 +185,19 @@ function wpshadow_podcast_test_suite() {
 	echo '<h3>10. Queue Status</h3>';
 	$statuses = array( 'pending' => '⏳', 'processing' => '🔄', 'completed' => '✅', 'failed' => '❌' );
 
+	$queue_items = get_option( 'wpshadow_podcast_queue', array() );
+	if ( ! is_array( $queue_items ) ) {
+		$queue_items = array();
+	}
+
 	foreach ( $statuses as $status => $icon ) {
-		$count = $wpdb->get_var( $wpdb->prepare(
-			"SELECT COUNT(*) FROM $table WHERE status = %s",
-			$status
-		) );
+		$count = 0;
+
+		foreach ( $queue_items as $item ) {
+			if ( isset( $item['status'] ) && $status === $item['status'] ) {
+				++$count;
+			}
+		}
 
 		if ( $count > 0 ) {
 			echo "$icon $status: $count<br>";

@@ -129,19 +129,6 @@ class Treatment_Site_Speed_Optimization_Goals_Not_Set extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if performance goals are set
-		if ( ! get_option( 'wpshadow_speed_goals' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Site speed optimization goals are not set. Set specific targets for page load time, Core Web Vitals, and other performance metrics.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/site-speed-optimization-goals-not-set',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Site_Speed_Optimization_Goals_Not_Set' );
 	}
 }

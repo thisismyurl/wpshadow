@@ -44,7 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses get_users() with role parameter for multisite compatibility\n * - Respects custom roles (doesn't assume WordPress defaults)\n * - Returns severity: critical (inactive admin), high (unexpected admin assignment)\n * - Auto-fixable treatment: downgrade identified over-privileged accounts\n *
  * @since 1.6032.1340
- */\nclass Diagnostic_User_Capability_Auditing extends Diagnostic_Base {
+ */
+class Diagnostic_User_Capability_Auditing extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

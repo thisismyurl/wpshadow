@@ -129,19 +129,6 @@ class Treatment_Load_Testing_Performance_Not_Validated extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if load test results are stored
-		if ( ! get_option( 'site_load_test_results' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Load testing performance is not validated. Run load tests using tools like Apache Bench or Gatling to identify bottlenecks.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 20,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/load-testing-performance-not-validated',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Load_Testing_Performance_Not_Validated' );
 	}
 }

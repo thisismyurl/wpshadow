@@ -121,64 +121,6 @@ class Treatment_Database_Table_Corruption_Check extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$core_tables = array(
-			$wpdb->posts,
-			$wpdb->postmeta,
-			$wpdb->users,
-			$wpdb->usermeta,
-			$wpdb->comments,
-			$wpdb->commentmeta,
-			$wpdb->options,
-			$wpdb->terms,
-			$wpdb->termmeta,
-		);
-
-		$corrupt = array();
-
-		foreach ( $core_tables as $table ) {
-			$results = $wpdb->get_results( "CHECK TABLE {$table}", ARRAY_A );
-			if ( empty( $results ) ) {
-				continue;
-			}
-
-			foreach ( $results as $row ) {
-				if ( isset( $row['Msg_text'], $row['Msg_type'] ) && 'OK' !== strtoupper( $row['Msg_text'] ) ) {
-					$corrupt[] = array(
-						'table'    => $table,
-						'status'   => $row['Msg_type'],
-						'message'  => $row['Msg_text'],
-					);
-				}
-			}
-		}
-
-		if ( ! empty( $corrupt ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %d: number of corrupt tables */
-					_n(
-						'%d database table has corruption and needs repair',
-						'%d database tables have corruption and need repair',
-						count( $corrupt ),
-						'wpshadow'
-					),
-					count( $corrupt )
-				),
-				'severity'     => 'critical',
-				'threat_level' => 90,
-				'auto_fixable' => true,
-				'details'      => array(
-					'corrupt_tables' => $corrupt,
-					'tables_affected' => array_column( $corrupt, 'table' ),
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/database-table-corruption-check',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Database_Table_Corruption_Check' );
 	}
 }

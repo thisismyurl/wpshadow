@@ -67,63 +67,6 @@ class Treatment_Render_Blocking_Resources extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		global $wp_styles, $wp_scripts;
-
-		$blocking_resources = array(
-			'stylesheets' => 0,
-			'scripts'     => 0,
-		);
-
-		// Count blocking stylesheets
-		if ( ! empty( $wp_styles->queue ) ) {
-			foreach ( $wp_styles->queue as $handle ) {
-				$style = $wp_styles->registered[ $handle ] ?? null;
-				if ( $style && in_array( $style->media ?? 'all', array( 'all', 'screen' ), true ) ) {
-					$blocking_resources['stylesheets']++;
-				}
-			}
-		}
-
-		// Count blocking scripts (in head tag, before defer/async)
-		if ( ! empty( $wp_scripts->queue ) ) {
-			foreach ( $wp_scripts->queue as $handle ) {
-				$script = $wp_scripts->registered[ $handle ] ?? null;
-				if ( $script && ! isset( $script->extra['async'] ) && ! isset( $script->extra['defer'] ) ) {
-					$blocking_resources['scripts']++;
-				}
-			}
-		}
-
-		$total_blocking = $blocking_resources['stylesheets'] + $blocking_resources['scripts'];
-
-		if ( $total_blocking >= 3 ) {
-			// Estimate impact: ~50-100ms per blocking resource
-			$estimated_impact = $total_blocking * 75; // milliseconds
-
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
-					/* translators: %d: total blocking resources, %d: estimated impact in ms */
-					__( 'Found %d render-blocking resources. This could delay FCP by ~%dms.', 'wpshadow' ),
-					$total_blocking,
-					$estimated_impact
-				),
-				'severity'      => $total_blocking >= 5 ? 'high' : 'medium',
-				'threat_level'  => $total_blocking >= 5 ? 70 : 50,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/render-blocking-resources',
-				'meta'          => array(
-					'blocking_stylesheets' => $blocking_resources['stylesheets'],
-					'blocking_scripts'     => $blocking_resources['scripts'],
-					'total_blocking'       => $total_blocking,
-					'estimated_fcp_delay'  => $estimated_impact . 'ms',
-					'recommendation'       => 'Inline critical CSS, defer non-critical CSS, use async/defer for scripts',
-					'impact'               => 'Removing blocking resources could improve FCP by ' . $estimated_impact . 'ms',
-			),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Render_Blocking_Resources' );
 	}
 }

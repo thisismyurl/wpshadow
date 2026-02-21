@@ -63,8 +63,6 @@ class Diagnostic_Activity_Logging_Disabled_Or_Sparse extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
 		$issues = array();
 
 		// Check if activity logging is enabled.
@@ -74,27 +72,30 @@ class Diagnostic_Activity_Logging_Disabled_Or_Sparse extends Diagnostic_Base {
 			$issues[] = __( 'Activity logging is not enabled - cannot track changes', 'wpshadow' );
 		}
 
-		// Check activity log table.
-		$log_table = $wpdb->prefix . 'wpshadow_activity_log';
-		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$log_table}'" );
+		$activity_log = get_option( 'wpshadow_activity_log', array() );
 
-		if ( empty( $table_exists ) ) {
-			$issues[] = __( 'Activity log table does not exist - logging not properly configured', 'wpshadow' );
+		if ( ! is_array( $activity_log ) ) {
+			$issues[] = __( 'Activity log data is unavailable - logging not properly configured', 'wpshadow' );
 		} else {
-			// Check if table has recent entries.
-			$recent_entries = $wpdb->get_var( "SELECT COUNT(*) FROM {$log_table} WHERE created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)" );
+			$recent_entries = 0;
+			$entry_count    = count( $activity_log );
+			$cutoff         = time() - DAY_IN_SECONDS;
 
-			if ( (int) $recent_entries === 0 ) {
-				$issues[] = __( 'No recent activity log entries - logging may be inactive', 'wpshadow' );
+			foreach ( $activity_log as $entry ) {
+				$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+				if ( $entry_time > $cutoff ) {
+					++$recent_entries;
+				}
 			}
 
-			// Check if table is getting too large.
-			$entry_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$log_table}" );
+			if ( 0 === $recent_entries ) {
+				$issues[] = __( 'No recent activity log entries - logging may be inactive', 'wpshadow' );
+			}
 
 			if ( $entry_count > 100000 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of log entries */
-					__( '%d activity log entries - table size may impact performance', 'wpshadow' ),
+					__( '%d activity log entries - log size may impact performance', 'wpshadow' ),
 					$entry_count
 				);
 			}

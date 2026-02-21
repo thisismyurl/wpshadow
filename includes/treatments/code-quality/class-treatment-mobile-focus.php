@@ -66,36 +66,7 @@ class Treatment_Mobile_Focus extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_focus_issues();
-
-		if ( empty( $issues ) ) {
-			return null; // No issues found
-		}
-
-		$threat = 70;
-		foreach ( $issues as $issue ) {
-			if ( 'missing-focus-indicator' === $issue['type'] ) {
-				$threat = 80; // Critical for keyboard users
-			}
-		}
-
-		return array(
-			'id'             => self::$slug,
-			'title'          => self::$title,
-			'description'    => sprintf(
-				/* translators: %d: number of focus issues */
-				__( 'Found %d focus management issues', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'       => 'high',
-			'threat_level'   => $threat,
-			'issues'         => array_slice( $issues, 0, 5 ),
-			'total_issues'   => count( $issues ),
-			'wcag_violation' => '2.4.3 Focus Order (Level A)',
-			'user_impact'    => __( 'Keyboard and screen reader users cannot navigate efficiently', 'wpshadow' ),
-			'auto_fixable'   => false,
-			'kb_link'        => 'https://wpshadow.com/kb/focus-management',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Focus' );
 	}
 
 	/**

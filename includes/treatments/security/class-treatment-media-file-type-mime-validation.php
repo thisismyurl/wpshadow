@@ -67,66 +67,7 @@ class Treatment_Media_File_Type_MIME_Validation extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// Check if mime type validation functions exist
-		if ( ! function_exists( 'mime_type_icon' ) ) {
-			$issues[] = __( 'mime_type_icon function not available', 'wpshadow' );
-		}
-
-		// Check for finfo functions (file info extension)
-		if ( ! function_exists( 'finfo_file' ) && ! function_exists( 'mime_content_type' ) ) {
-			$issues[] = __( 'PHP file information functions (finfo_file) not available - cannot validate MIME types', 'wpshadow' );
-		}
-
-		// Check if wp_check_filetype_and_ext is properly handling MIME validation
-		if ( ! function_exists( 'wp_check_filetype_and_ext' ) ) {
-			$issues[] = __( 'wp_check_filetype_and_ext function required for MIME validation not found', 'wpshadow' );
-		}
-
-		// Test MIME type validation
-		$mime_validation_issue = self::test_mime_validation();
-		if ( ! empty( $mime_validation_issue ) ) {
-			$issues[] = $mime_validation_issue;
-		}
-
-		// Check if upload_mimes filter is properly restricting dangerous types
-		$restricted_issue = self::check_mime_type_restrictions();
-		if ( ! empty( $restricted_issue ) ) {
-			$issues[] = $restricted_issue;
-		}
-
-		// Check for svgs and javascript in uploaded files
-		$dangerous_formats = self::check_dangerous_file_formats();
-		if ( ! empty( $dangerous_formats ) ) {
-			$issues[] = $dangerous_formats;
-		}
-
-		// Check real mime type validation by checking actual file content
-		$content_validation_issue = self::test_mime_content_validation();
-		if ( ! empty( $content_validation_issue ) ) {
-			$issues[] = $content_validation_issue;
-		}
-
-		if ( ! empty( $issues ) ) {
-			$finding = array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => implode( '. ', $issues ),
-				'severity'      => 'high',
-				'threat_level'  => 75,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/media-file-type-mime-validation',
-				'context'       => array(
-					'why'            => __( 'MIME validation prevents extension spoofing. Real scenario: Attacker uploads shell.php.jpg (file is actually PHP). No MIME validation = executes as PHP. Attacker gets shell. With validation: Check actual file bytes (magic number). PHP detected. Rejected. Attack blocked.', 'wpshadow' ),
-					'recommendation' => __( '1. Use wp_check_filetype_and_ext() for validation. 2. Check actual file content (not just extension). 3. Enable finfo_file() for magic number detection. 4. Whitelist specific MIME types only. 5. Block executable MIME types. 6. Block application/octet-stream (too generic). 7. Validate against signature (magic bytes). 8. Reject mismatched extension/MIME. 9. Store file outside web root. 10. Scan with malware detector.', 'wpshadow' ),
-				),
-			);
-			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-upload', 'mime-validation' );
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_File_Type_MIME_Validation' );
 	}
 
 	/**

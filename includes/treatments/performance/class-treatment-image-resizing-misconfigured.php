@@ -71,48 +71,7 @@ class Treatment_Image_Resizing_Misconfigured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$resize_config = self::get_resize_configuration();
-
-		if ( $resize_config['properly_configured'] ) {
-			// Image resizing is properly configured.
-			return null;
-		}
-
-		$description = '';
-		$severity = 'low';
-		$threat_level = 20;
-
-		if ( $resize_config['all_disabled'] ) {
-			$description = __( 'WordPress image resizing is completely disabled. All images are served at full resolution regardless of context, wasting bandwidth and slowing page loads. Enable at least medium and large image sizes to improve performance.', 'wpshadow' );
-			$severity = 'medium';
-			$threat_level = 40;
-		} elseif ( ! empty( $resize_config['issues'] ) ) {
-			$description = sprintf(
-				/* translators: %s: list of issues */
-				__( 'WordPress image resizing has configuration issues: %s. Properly configured image sizes ensure responsive images are served efficiently across devices.', 'wpshadow' ),
-				implode( ', ', $resize_config['issues'] )
-			);
-			$severity = 'low';
-			$threat_level = 25;
-		}
-
-		return array(
-			'id'                    => self::$slug,
-			'title'                 => self::$title,
-			'description'           => $description,
-			'severity'              => $severity,
-			'threat_level'          => $threat_level,
-			'auto_fixable'          => true,
-			'current_config'        => $resize_config['sizes'],
-			'recommended_config'    => array(
-				'thumbnail' => array( 'width' => 150, 'height' => 150, 'crop' => true ),
-				'medium'    => array( 'width' => 300, 'height' => 300, 'crop' => false ),
-				'large'     => array( 'width' => 1024, 'height' => 1024, 'crop' => false ),
-			),
-			'issues'                => $resize_config['issues'],
-			'expected_benefits'     => 'Reduce bandwidth by 50-80% for images viewed on mobile devices',
-			'kb_link'               => 'https://wpshadow.com/kb/wordpress-image-resizing',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Image_Resizing_Misconfigured' );
 	}
 
 	/**

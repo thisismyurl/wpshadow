@@ -100,24 +100,6 @@ class Treatment_Feed_Content_Encoding extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$feed_url = get_feed_link();
-		$response = wp_remote_get( $feed_url, array( 'timeout' => 5 ) );
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-		$headers = wp_remote_retrieve_headers( $response );
-		$encoding = isset( $headers['content-type'] ) ? $headers['content-type'] : '';
-		if ( false === stripos( $encoding, 'charset=utf-8' ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed content encoding is not set to UTF-8.', 'wpshadow' ),
-				'severity'    => 'medium',
-				'threat_level'=> 50,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-content-encoding',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Content_Encoding' );
 	}
 }

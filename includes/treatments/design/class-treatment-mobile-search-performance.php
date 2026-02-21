@@ -64,28 +64,7 @@ class Treatment_Mobile_Search_Performance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_search_performance_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of search performance issues */
-				__( 'Found %d mobile search performance issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'medium',
-			'threat_level'    => 55,
-			'issues'          => $issues['all'],
-			'response_time'   => $issues['response_time'] ?? null,
-			'user_impact'     => __( 'Search is slow on mobile, users may abandon', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/search-performance',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Search_Performance' );
 	}
 
 	/**

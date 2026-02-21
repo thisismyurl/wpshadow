@@ -63,24 +63,6 @@ class Treatment_Gravity_Forms_Logging_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if Gravity Forms is active
-		if ( ! class_exists( 'GFCommon' ) ) {
-			return null;
-		}
-
-		// Check if logging is enabled
-		if ( ! get_option( 'gf_logging_enabled' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Gravity Forms logging is not configured. Enable Gravity Forms logging to debug form submission issues and track user interactions.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gravity-forms-logging-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Gravity_Forms_Logging_Not_Configured' );
 	}
 }

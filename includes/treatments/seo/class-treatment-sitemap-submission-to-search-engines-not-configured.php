@@ -63,19 +63,6 @@ class Treatment_Sitemap_Submission_To_Search_Engines_Not_Configured extends Trea
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if sitemap is submitted to Google Search Console
-		if ( ! get_option( 'google_sitemap_submitted' ) && ! is_plugin_active( 'yoast-seo/wp-seo.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Sitemap submission to search engines is not configured. Submit your XML sitemap to Google Search Console, Bing, and other search engines for better indexing.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 30,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/sitemap-submission-to-search-engines-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Sitemap_Submission_To_Search_Engines_Not_Configured' );
 	}
 }

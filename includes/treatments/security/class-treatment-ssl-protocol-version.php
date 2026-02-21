@@ -63,71 +63,7 @@ class Treatment_SSL_Protocol_Version extends Treatment_Base {
 	 * @return array|null Finding array if protocol issue detected, null otherwise.
 	 */
 	public static function check() {
-		$cache_key = 'wpshadow_ssl_protocol';
-		$cached = get_transient( $cache_key );
-
-		if ( false !== $cached ) {
-			return $cached;
-		}
-
-		$site_url = get_site_url();
-		
-		// Only check if site is using HTTPS.
-		if ( strpos( $site_url, 'https://' ) !== 0 ) {
-			set_transient( $cache_key, null, DAY_IN_SECONDS );
-			return null;
-		}
-
-		$protocol_info = self::get_ssl_protocol( $site_url );
-
-		if ( ! $protocol_info || empty( $protocol_info['protocol'] ) ) {
-			set_transient( $cache_key, null, DAY_IN_SECONDS );
-			return null;
-		}
-
-		$protocol = $protocol_info['protocol'];
-		$result = null;
-
-		// Check for insecure protocols.
-		if ( in_array( $protocol, array( 'SSLv2', 'SSLv3' ), true ) ) {
-			$result = array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => sprintf(
-					/* translators: %s: protocol version */
-					__( 'Site is using insecure %s protocol. This has known security vulnerabilities.', 'wpshadow' ),
-					$protocol
-				),
-				'severity'    => 'critical',
-				'threat_level' => 100,
-				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/insecure-ssl-protocol',
-				'meta'        => array(
-					'protocol' => $protocol,
-				),
-			);
-		} elseif ( in_array( $protocol, array( 'TLSv1.0', 'TLSv1.1' ), true ) ) {
-			$result = array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => sprintf(
-					/* translators: %s: protocol version */
-					__( 'Site is using deprecated %s protocol. Upgrade to TLS 1.2 or 1.3 for better security.', 'wpshadow' ),
-					$protocol
-				),
-				'severity'    => 'medium',
-				'threat_level' => 65,
-				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upgrade-tls-protocol',
-				'meta'        => array(
-					'protocol' => $protocol,
-				),
-			);
-		}
-
-		set_transient( $cache_key, $result, DAY_IN_SECONDS );
-
-		return $result;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SSL_Protocol_Version' );
 	}
 
 	/**

@@ -36,32 +36,6 @@ class Treatment_Next_Generation_Image_Format extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Convert images to WebP format', 'wpshadow' );
-		$issues[] = __( 'WebP is 25% smaller than JPEG', 'wpshadow' );
-		$issues[] = __( 'Use <picture> to serve WebP with JPEG fallback', 'wpshadow' );
-		$issues[] = __( 'Tools: ImageMagick, FFmpeg, online converters', 'wpshadow' );
-		$issues[] = __( 'Consider AVIF for next-generation format', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'WebP and AVIF are newer image formats that compress better than JPEG and PNG. Modern browsers support them with graceful fallbacks.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/webp-format',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'compression'             => 'WebP: 25% smaller than JPEG, AVIF: 50% smaller',
-					'browser_support'         => 'WebP 94%, AVIF 75%',
-					'fallback_example'        => '<picture><source srcset="image.webp" type="image/webp"><img src="image.jpg"></picture>',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Next_Generation_Image_Format' );
 	}
 }

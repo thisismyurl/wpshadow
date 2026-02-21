@@ -67,58 +67,6 @@ class Treatment_Plugin_Update_Impact extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		// Get plugin updates
-		$plugin_updates = get_site_transient( 'update_plugins' );
-		$outdated_count = 0;
-		$security_plugins = array();
-
-		if ( ! empty( $plugin_updates ) && ! empty( $plugin_updates->response ) ) {
-			$outdated_count = count( $plugin_updates->response );
-
-			// Check for security plugins that need update
-			$security_plugin_files = array(
-				'wordfence/wordfence.php',
-				'jetpack/jetpack.php',
-				'sucuri-scanner/sucuri.php',
-				'iThemes-Security-Pro/iThemes-Security-Pro.php',
-			);
-
-			foreach ( $security_plugin_files as $plugin_file ) {
-				if ( is_plugin_active( $plugin_file ) && isset( $plugin_updates->response[ $plugin_file ] ) ) {
-					$security_plugins[] = $plugin_file;
-				}
-			}
-		}
-
-		if ( $outdated_count >= 3 || ! empty( $security_plugins ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
-					/* translators: %d: number of outdated plugins, %d: number of security plugins with updates */
-					__( 'You have %d outdated plugins. %s security plugins need updating.', 'wpshadow' ),
-					$outdated_count,
-					! empty( $security_plugins ) ? count( $security_plugins ) : 'No'
-				),
-				'severity'      => ! empty( $security_plugins ) ? 'high' : 'medium',
-				'threat_level'  => ! empty( $security_plugins ) ? 70 : 45,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/plugin-updates',
-				'meta'          => array(
-					'outdated_count'       => $outdated_count,
-					'security_updates'     => count( $security_plugins ),
-					'recommendation'       => 'Update all plugins, especially security and performance plugins',
-					'impact'               => 'Updates often include performance optimizations and security patches',
-					'priority_plugins'     => array(
-						'Wordfence (security)',
-						'Jetpack (security & performance)',
-						'WP Rocket (performance)',
-						'Autoptimize (performance)',
-					),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Plugin_Update_Impact' );
 	}
 }

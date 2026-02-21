@@ -57,33 +57,6 @@ class Treatment_Feed_XML_Validity extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$feed_url = get_feed_link();
-		$response = wp_remote_get( $feed_url, array( 'timeout' => 5 ) );
-		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed URL is not accessible.', 'wpshadow' ),
-				'severity'    => 'high',
-				'threat_level'=> 80,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-xml-validity',
-			);
-		}
-		$body = wp_remote_retrieve_body( $response );
-		libxml_use_internal_errors( true );
-		$xml = simplexml_load_string( $body );
-		if ( false === $xml ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed XML is not well-formed or valid.', 'wpshadow' ),
-				'severity'    => 'high',
-				'threat_level'=> 80,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-xml-validity',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_XML_Validity' );
 	}
 }

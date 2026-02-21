@@ -63,51 +63,6 @@ class Treatment_Spam_Comments_Ratio extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$counts = wp_count_comments();
-		if ( ! $counts ) {
-			return null;
-		}
-
-		$approved = (int) $counts->approved;
-		$spam     = (int) $counts->spam;
-		$total    = $approved + $spam;
-
-		if ( $total < 10 ) {
-			return null;
-		}
-
-		if ( $spam > $approved * 3 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Spam comments significantly outnumber approved comments. Review anti-spam settings.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/spam-comments-ratio',
-				'meta'         => array(
-					'spam'     => $spam,
-					'approved' => $approved,
-				),
-			);
-		}
-
-		if ( $spam > $approved ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Spam comments exceed approved comments. Consider tightening spam filters.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/spam-comments-ratio',
-				'meta'         => array(
-					'spam'     => $spam,
-					'approved' => $approved,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Spam_Comments_Ratio' );
 	}
 }

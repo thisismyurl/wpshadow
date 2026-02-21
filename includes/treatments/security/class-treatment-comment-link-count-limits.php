@@ -44,7 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses get_option() for portability across WordPress installations\n * - Safe threshold: 2-3 links (allows legitimate references)\n * - Risky threshold: 5+ links (enables spam)\n * - Returns severity: medium (easy fix, prevents spam)\n * - Auto-fixable treatment: set comment_max_links to 2\n *
  * @since 1.6031.1300
- */\nclass Treatment_Comment_Link_Count_Limits extends Treatment_Base {
+ */
+class Treatment_Comment_Link_Count_Limits extends Treatment_Base {
 
 	protected static $slug = 'comment-link-count-limits';
 	protected static $title = 'Comment Link Count Limits';
@@ -58,24 +59,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * @return array|null
 	 */
 	public static function check() {
-		$moderation_keys = get_option( 'comment_max_links', 2 );
-
-		if ( $moderation_keys > 5 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %d: maximum links allowed */
-					__( 'Comment link limit is set to %d - recommended: 2 or fewer to prevent spam', 'wpshadow' ),
-					$moderation_keys
-				),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-link-count-limits',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Comment_Link_Count_Limits' );
 	}
 }

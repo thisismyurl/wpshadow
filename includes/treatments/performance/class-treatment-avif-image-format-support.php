@@ -67,58 +67,6 @@ class Treatment_Avif_Image_Format_Support extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		$avif_support    = false;
-		$plugin_detected = false;
-
-		// Check ImageMagick support
-		if ( extension_loaded( 'imagick' ) ) {
-			try {
-				$imagick = new \Imagick();
-				$formats = $imagick->queryFormats();
-				if ( in_array( 'AVIF', $formats, true ) ) {
-					$avif_support = true;
-				}
-			} catch ( \Exception $e ) {
-				// Imagick not available
-			}
-		}
-
-		// Check for AVIF plugins
-		$avif_plugins = array(
-			'imagify/imagify.php'                                => 'Imagify',
-			'ewww-image-optimizer/ewww-image-optimizer.php'      => 'EWWW Image Optimizer',
-			'optimus/optimus.php'                                => 'Optimus',
-			'shortpixel-image-optimiser/wp-shortpixel.php'       => 'ShortPixel',
-		);
-
-		foreach ( $avif_plugins as $plugin_path => $plugin_name ) {
-			if ( is_plugin_active( $plugin_path ) ) {
-				$plugin_detected = true;
-				$avif_support    = true;
-				break;
-			}
-		}
-
-		if ( ! $avif_support ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'AVIF image format support is not available. AVIF provides 30-50%% better compression than WebP.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 25,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/avif-image-format',
-				'meta'          => array(
-					'avif_available'       => $avif_support,
-					'plugin_installed'     => $plugin_detected,
-					'recommendation'       => 'Install image optimizer plugin with AVIF support (Imagify, EWWW, ShortPixel)',
-					'impact'               => 'AVIF reduces image size by 30-50% compared to WebP',
-					'browser_support'      => '85% of browsers support AVIF with fallback to WebP/JPEG',
-					'best_practice'        => 'Use <picture> tag with AVIF first, then WebP, then JPEG fallback',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Avif_Image_Format_Support' );
 	}
 }

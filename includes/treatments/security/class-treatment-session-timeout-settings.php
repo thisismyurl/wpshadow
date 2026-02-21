@@ -87,70 +87,7 @@ class Treatment_Session_Timeout_Settings extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// Check 1: PHP session.gc_maxlifetime (default 1440 = 24 minutes, but often increased)
-		$php_session_lifetime = (int) ini_get( 'session.gc_maxlifetime' );
-		$hours = $php_session_lifetime / HOUR_IN_SECONDS;
-
-		if ( $php_session_lifetime > 86400 ) {  // More than 24 hours
-			$issues[] = sprintf(
-				/* translators: %s: hours */
-				__( 'PHP session timeout: %s hours (recommended: ≤24 hours)', 'wpshadow' ),
-				number_format_i18n( $hours, 1 )
-			);
-		}
-
-		// Check 2: WordPress auth cookie expiration (default 2 days)
-		$auth_cookie_expiration = (int) apply_filters( 'auth_cookie_expiration', 2 * DAY_IN_SECONDS );
-		$days = $auth_cookie_expiration / DAY_IN_SECONDS;
-
-		if ( $auth_cookie_expiration > 3 * DAY_IN_SECONDS ) {  // More than 3 days
-			$issues[] = sprintf(
-				/* translators: %s: days */
-				__( 'Auth cookie expires after %s days (recommended: ≤2 days)', 'wpshadow' ),
-				number_format_i18n( $days, 1 )
-			);
-		}
-
-		// Check 3: "Remember Me" duration (checked via filters)
-		$secure_auth_cookie_expiration = (int) apply_filters( 'secure_auth_cookie_expiration', 14 * DAY_IN_SECONDS );
-		$remember_days = $secure_auth_cookie_expiration / DAY_IN_SECONDS;
-
-		if ( $secure_auth_cookie_expiration > 14 * DAY_IN_SECONDS ) {
-			$issues[] = sprintf(
-				/* translators: %s: days */
-				__( '"Remember Me" duration: %s days (recommended: ≤14 days)', 'wpshadow' ),
-				number_format_i18n( $remember_days, 1 )
-			);
-		}
-
-		// Check 4: No custom idle timeout implementation
-		$has_idle_mechanism = self::check_custom_idle_timeout();
-		if ( ! $has_idle_mechanism ) {
-			$issues[] = __( 'No custom idle timeout mechanism detected (sessions persist with activity)', 'wpshadow' );
-		}
-
-		// If we found issues, return finding
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Session timeouts may be set too long, leaving compromised sessions valid indefinitely', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 75,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/session-timeout-security',
-				'details'       => array(
-					'findings'           => $issues,
-					'auth_cookie_hours'  => number_format_i18n( $hours, 1 ),
-					'recommended_hours'  => '24',
-					'security_principle' => 'Shorter session timeout = less time for stolen sessions to be exploited',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Session_Timeout_Settings' );
 	}
 
 	/**

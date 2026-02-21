@@ -63,52 +63,6 @@ class Treatment_Theme_Third_Party_Framework_Optimization extends Treatment_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$theme_dir = wp_get_theme()->get_stylesheet_directory();
-		$functions_file = $theme_dir . '/functions.php';
-
-		if ( ! file_exists( $functions_file ) ) {
-			return null;
-		}
-
-		$content = file_get_contents( $functions_file, false, null, 0, 60000 );
-		if ( false === $content ) {
-			return null;
-		}
-
-		$frameworks = array(
-			'bootstrap' => 'Bootstrap',
-			'fontawesome' => 'Font Awesome',
-			'foundation' => 'Foundation',
-		);
-
-		$found = array();
-		foreach ( $frameworks as $needle => $name ) {
-			if ( false !== stripos( $content, $needle ) ) {
-				$found[] = $name;
-			}
-		}
-
-		if ( empty( $found ) ) {
-			return null;
-		}
-
-		$has_defer = false !== strpos( $content, 'defer' ) || false !== strpos( $content, 'async' );
-
-		if ( ! $has_defer ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Third-party frameworks may be loaded without optimization', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-third-party-framework-optimization',
-				'details'      => array(
-					'frameworks' => $found,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Third_Party_Framework_Optimization' );
 	}
 }

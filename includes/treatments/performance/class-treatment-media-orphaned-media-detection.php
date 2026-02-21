@@ -64,54 +64,6 @@ class Treatment_Media_Orphaned_Media_Detection extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-		$issues = array();
-
-		$total = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
-		);
-		$unattached = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_parent = 0"
-		);
-
-		if ( $total > 0 ) {
-			$ratio = ( $unattached / $total ) * 100;
-			if ( $unattached > 1000 || $ratio > 20 ) {
-				$issues[] = sprintf(
-					/* translators: 1: unattached count, 2: percentage */
-					__( 'Found %1$s unattached media files (%2$s%% of library); consider cleaning up unused files', 'wpshadow' ),
-					number_format_i18n( $unattached ),
-					number_format( $ratio, 2 )
-				);
-			}
-		}
-
-		$missing_meta = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} p
-			LEFT JOIN {$wpdb->postmeta} m ON p.ID = m.post_id AND m.meta_key = '_wp_attached_file'
-			WHERE p.post_type = 'attachment' AND m.meta_id IS NULL"
-		);
-
-		if ( $missing_meta > 0 ) {
-			$issues[] = sprintf(
-				/* translators: %s: count */
-				__( '%s media items are missing attached file metadata; these may be orphaned records', 'wpshadow' ),
-				number_format_i18n( $missing_meta )
-			);
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-orphaned-media-detection',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Orphaned_Media_Detection' );
 	}
 }

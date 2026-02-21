@@ -148,19 +148,6 @@ class Treatment_Feed_Discovery_Links extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Use WordPress API to check if feed links are added
-		$has_feed_links = has_action( 'wp_head', 'feed_links', 2 ) || has_action( 'wp_head', 'feed_links_extra', 3 );
-		if ( ! $has_feed_links ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed discovery links are missing from the <head>.', 'wpshadow' ),
-				'severity'    => 'medium',
-				'threat_level'=> 40,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-discovery-links',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Discovery_Links' );
 	}
 }

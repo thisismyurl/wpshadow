@@ -66,35 +66,7 @@ class Treatment_Mobile_Reduce_Motion extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_motion_issues();
-
-		if ( empty( $issues['animation_count'] ) && ! empty( $issues['has_media_query'] ) ) {
-			return null; // No animations or already protected
-		}
-
-		$threat = 50;
-		if ( ! empty( $issues['has_media_query'] ) ) {
-			$threat = 40; // Media query exists but animations still run
-		}
-
-		return array(
-			'id'                   => self::$slug,
-			'title'                => self::$title,
-			'description'          => sprintf(
-				/* translators: %d: number of animations */
-				__( 'Found %d animations/transitions not respecting prefers-reduced-motion', 'wpshadow' ),
-				$issues['animation_count'] ?? 0
-			),
-			'severity'             => 'medium',
-			'threat_level'         => $threat,
-			'animation_count'      => $issues['animation_count'] ?? 0,
-			'has_media_query'      => ! empty( $issues['has_media_query'] ),
-			'problematic_effects'  => $issues['effects'] ?? array(),
-			'wcag_violation'       => '2.3.3 Animation from Interactions (Level AAA)',
-			'user_impact'          => __( 'Users with vestibular disorders may experience motion sickness', 'wpshadow' ),
-			'auto_fixable'         => true,
-			'kb_link'              => 'https://wpshadow.com/kb/reduce-motion',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Reduce_Motion' );
 	}
 
 	/**

@@ -67,23 +67,6 @@ class Treatment_Mobile_Friendly_Touch_Targets extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		// This treatment would require HTML parsing of the actual rendered page
-		// For now, we'll provide a general recommendation if mobile optimization isn't detected
-
-		global $wp_styles;
-
-		$mobile_css_found = false;
-
-		// Check for mobile-specific styles
-		foreach ( $wp_styles->queue as $handle ) {
-			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, 'mobile' ) !== false ) {
-				$mobile_css_found = true;
-				break;
-			}
-		}
-
-		// Generally modern themes handle this automatically
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Friendly_Touch_Targets' );
 	}
 }

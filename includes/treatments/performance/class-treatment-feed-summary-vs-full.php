@@ -95,18 +95,6 @@ class Treatment_Feed_Summary_vs_Full extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$show_full = get_option( 'rss_use_excerpt', 0 ) ? false : true;
-		if ( ! $show_full ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed is set to summary. Consider switching to full content for better user experience.', 'wpshadow' ),
-				'severity'    => 'low',
-				'threat_level'=> 20,
-				'auto_fixable'=> true,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-summary-vs-full',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Summary_vs_Full' );
 	}
 }

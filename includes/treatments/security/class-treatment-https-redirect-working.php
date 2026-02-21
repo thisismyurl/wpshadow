@@ -63,52 +63,6 @@ class Treatment_HTTPS_Redirect_Working extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! wp_is_https_supported() ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'HTTPS is not supported on this site. Install and configure SSL.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 80,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/https-redirect-working',
-			);
-		}
-
-		$http_url = preg_replace( '/^https:/i', 'http:', home_url( '/' ) );
-		$response = wp_remote_head(
-			$http_url,
-			array(
-				'timeout'     => 5,
-				'redirection' => 0,
-				'sslverify'   => false,
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-
-		$status  = (int) wp_remote_retrieve_response_code( $response );
-		$headers = wp_remote_retrieve_headers( $response );
-		$location = is_array( $headers ) && isset( $headers['location'] ) ? $headers['location'] : '';
-
-		if ( $status >= 300 && $status < 400 && is_string( $location ) && 0 === strpos( $location, 'https://' ) ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'HTTP requests are not redirecting to HTTPS. Enable a site-wide HTTPS redirect.', 'wpshadow' ),
-			'severity'     => 'medium',
-			'threat_level' => 60,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/https-redirect-working',
-			'meta'         => array(
-				'http_status' => $status,
-				'location'    => $location,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_HTTPS_Redirect_Working' );
 	}
 }

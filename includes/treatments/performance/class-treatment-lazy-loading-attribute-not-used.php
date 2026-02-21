@@ -127,19 +127,6 @@ class Treatment_Lazy_Loading_Attribute_Not_Used extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for native lazy loading implementation
-		if ( ! has_filter( 'img_tag_output', 'add_lazy_loading_attribute' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Lazy loading attribute is not used. Add loading="lazy" to images below the fold to defer loading and improve page speed and Core Web Vitals.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 50,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-attribute-not-used',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Lazy_Loading_Attribute_Not_Used' );
 	}
 }

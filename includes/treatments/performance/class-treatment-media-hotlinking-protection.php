@@ -64,31 +64,6 @@ class Treatment_Media_Hotlinking_Protection extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-		$upload_dir = wp_upload_dir();
-		$htaccess = trailingslashit( $upload_dir['basedir'] ) . '.htaccess';
-
-		if ( file_exists( $htaccess ) ) {
-			$contents = file_get_contents( $htaccess );
-			if ( false === $contents || ! preg_match( '/HTTP_REFERER/i', $contents ) ) {
-				$issues[] = __( 'Uploads .htaccess does not contain hotlinking rules; consider enabling referrer protection', 'wpshadow' );
-			}
-		} else {
-			$issues[] = __( 'Uploads .htaccess file not found; hotlinking protection may be missing', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-hotlinking-protection',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Hotlinking_Protection' );
 	}
 }

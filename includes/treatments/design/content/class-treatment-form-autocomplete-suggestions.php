@@ -36,32 +36,6 @@ class Treatment_Form_Autocomplete_Suggestions extends Treatment_Base {
 	protected static $family = 'content';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add autocomplete="name" to name fields', 'wpshadow' );
-		$issues[] = __( 'Add autocomplete="email" to email fields', 'wpshadow' );
-		$issues[] = __( 'Add autocomplete="tel" to phone fields', 'wpshadow' );
-		$issues[] = __( 'Add autocomplete="cc-number" to payment fields', 'wpshadow' );
-		$issues[] = __( 'Add autocomplete="street-address" to address fields', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Autocomplete attributes let browsers fill form fields automatically. Users can complete forms 50% faster with proper autocomplete.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/form-autocomplete',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'autofill_standard'       => 'HTML Standard autofill tokens',
-					'time_saved'              => 'Users fill forms 50% faster with autofill',
-					'mobile_benefit'          => 'Critical for mobile, where typing is slow',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Form_Autocomplete_Suggestions' );
 	}
 }

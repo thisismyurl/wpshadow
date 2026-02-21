@@ -65,63 +65,7 @@ class Treatment_Tool_Nonce_Validation_Failures extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// 1. Check for missing nonces in forms
-		$form_issue = self::check_form_nonces();
-		if ( $form_issue ) {
-			$issues[] = $form_issue;
-		}
-
-		// 2. Check AJAX nonce implementation
-		$ajax_issue = self::check_ajax_nonces();
-		if ( $ajax_issue ) {
-			$issues[] = $ajax_issue;
-		}
-
-		// 3. Check nonce regeneration
-		$regen_issue = self::check_nonce_regeneration();
-		if ( $regen_issue ) {
-			$issues[] = $regen_issue;
-		}
-
-		// 4. Check for replay attack prevention
-		$replay_issue = self::check_replay_attack_prevention();
-		if ( $replay_issue ) {
-			$issues[] = $replay_issue;
-		}
-
-		// 5. Check nonce time-to-live
-		$ttl_issue = self::check_nonce_ttl();
-		if ( $ttl_issue ) {
-			$issues[] = $ttl_issue;
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %d: number of nonce issues */
-					__( '%d nonce validation issues found', 'wpshadow' ),
-					count( $issues )
-				),
-				'severity'     => 'critical',
-				'threat_level' => 80,
-				'auto_fixable' => true,
-				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/nonce-validation-tools',
-				'recommendations' => array(
-					__( 'Ensure all form submissions include nonce field', 'wpshadow' ),
-					__( 'Verify nonce validation before processing requests', 'wpshadow' ),
-					__( 'Implement nonce failure handling with proper errors', 'wpshadow' ),
-					__( 'Test for replay attacks and nonce reuse', 'wpshadow' ),
-					__( 'Monitor and log nonce failures', 'wpshadow' ),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Tool_Nonce_Validation_Failures' );
 	}
 
 	/**

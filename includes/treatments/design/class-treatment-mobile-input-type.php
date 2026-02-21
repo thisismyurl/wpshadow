@@ -65,29 +65,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_input_type_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of input fields with incorrect types */
-				__( 'Found %d input fields using generic text type', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => count( $issues['all'] ) > 10 ? 'high' : 'medium',
-			'threat_level'    => 55,
-			'issues'          => array_slice( $issues['all'], 0, 10 ),
-			'total_issues'    => count( $issues['all'] ),
-			'field_types'     => $issues['field_types'] ?? array(),
-			'user_impact'     => __( 'Users get default keyboard instead of optimized email/phone/URL keyboards', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-input-types',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Input_Type' );
 	}
 
 	/**

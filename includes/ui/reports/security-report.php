@@ -205,26 +205,21 @@ foreach ( $all_diagnostics as $slug => $class ) {
 
 <script>
 jQuery(document).ready(function($) {
+	<?php echo \WPShadow\Views\Tool_View_Base::get_js_scan_state_helpers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	$('#run-security-scan-btn').on('click', function() {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#security-scan-results');
 		
-		$btn.prop('disabled', true).addClass('wps-loading');
-		$progress.removeClass('hidden');
-		$results.empty();
+		wpshadowReportScanStart( $btn, $progress, $results );
 		
 		// Run security diagnostics
-		wp.ajax.post('wpshadow_run_family_diagnostics', {
-			family: 'security',
-			nonce: $btn.data('nonce')
-		}).done(function(response) {
+		wpshadowRunFamilyDiagnostics( 'security', $btn.data('nonce') ).done(function(response) {
 			displaySecurityResults(response);
 		}).fail(function(error) {
-			$results.html('<div class="notice notice-error"><p>' + error.message + '</p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_open_html() ); ?>' + error.message + '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_close_html() ); ?>');
 		}).always(function() {
-			$btn.prop('disabled', false).removeClass('wps-loading');
-			$progress.addClass('hidden');
+			wpshadowReportScanEnd( $btn, $progress );
 		});
 	});
 
@@ -251,28 +246,26 @@ jQuery(document).ready(function($) {
 		
 		// Display findings
 		if (findings.length === 0) {
-			$results.html('<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> <?php echo esc_js( __( 'Excellent! No security issues found.', 'wpshadow' ) ); ?></p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! No security issues found.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
 		
-		let html = '<div class="wps-card"><div class="wps-card-body">';
-		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'Security Issues Found', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
+		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
+		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Security Issues Found', 'wpshadow' ) ); ?>', findings.length );
 		
 		findings.forEach(function(finding) {
 			const severityClass = finding.severity === 'critical' ? 'error' : finding.severity === 'high' ? 'warning' : 'info';
-			html += '<div class="wps-mb-3 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded">';
-			html += '<div class="wps-flex wps-items-start wps-gap-3">';
-			html += '<span class="dashicons dashicons-warning wps-text-' + severityClass + '"></span>';
-			html += '<div class="wps-flex-1">';
-			html += '<h4 class="wps-font-semibold">' + finding.title + '</h4>';
-			html += '<p class="wps-text-muted">' + finding.description + '</p>';
-			if (finding.auto_fixable) {
-				html += '<button class="wps-btn wps-btn-sm wps-btn-success wps-mt-2" data-finding="' + finding.id + '"><?php echo esc_js( __( 'Auto-Fix', 'wpshadow' ) ); ?></button>';
-			}
-			html += '</div></div></div>';
+			html += wpshadowRenderFindingCardStart( finding, {
+				severityClass: severityClass,
+				iconClass: 'dashicons-warning',
+				titleTag: 'h4',
+				descriptionClass: 'wps-text-muted'
+			} );
+			html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Auto-Fix', 'wpshadow' ) ); ?>' );
+			html += wpshadowRenderFindingCardEnd();
 		});
 		
-		html += '</div></div>';
+		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}
 });
@@ -280,9 +273,7 @@ jQuery(document).ready(function($) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Want advanced security monitoring?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro includes real-time threat detection, firewall protection, and automated security hardening.', 'wpshadow' ),

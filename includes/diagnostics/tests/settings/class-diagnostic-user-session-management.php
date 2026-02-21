@@ -194,10 +194,25 @@ add_action('wp_login', function(\$user_login, \$user) {
 			);
 		}
 
-		// Pattern 3: User activity not being logged
-		$activity_logs = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'wpshadow_activity' AND post_date > DATE_SUB(NOW(), INTERVAL 7 DAY)"
-		);
+		// Pattern 3: User activity not being logged.
+		$activity_logs = 0;
+		$activity_log  = get_option( 'wpshadow_activity_log', array() );
+
+		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
+			$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
+		}
+
+		if ( is_array( $activity_log ) ) {
+			$cutoff = time() - ( 7 * DAY_IN_SECONDS );
+
+			foreach ( $activity_log as $entry ) {
+				$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+
+				if ( $entry_time > $cutoff ) {
+					++$activity_logs;
+				}
+			}
+		}
 
 		if ( $activity_logs < 10 ) {
 			return array(

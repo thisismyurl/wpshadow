@@ -36,33 +36,6 @@ class Treatment_ARIA_Landmark_Roles extends Treatment_Base {
 	protected static $family = 'accessibility';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Use <header> or role="banner" for site header', 'wpshadow' );
-		$issues[] = __( 'Use <nav> or role="navigation" for menus', 'wpshadow' );
-		$issues[] = __( 'Use <main> or role="main" for primary content (one per page)', 'wpshadow' );
-		$issues[] = __( 'Use <aside> or role="complementary" for sidebars', 'wpshadow' );
-		$issues[] = __( 'Use <footer> or role="contentinfo" for site footer', 'wpshadow' );
-		$issues[] = __( 'Label landmarks: <nav aria-label="Main menu">', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'ARIA landmarks help screen reader users navigate page structure quickly. They can jump directly to main content, navigation, or footer.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/aria-landmarks',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1 1.3.1 Info and Relationships',
-					'landmark_types'          => 'banner, navigation, main, complementary, contentinfo, search, form',
-					'screen_reader_shortcut'  => 'NVDA: D key, JAWS: ; key',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_ARIA_Landmark_Roles' );
 	}
 }

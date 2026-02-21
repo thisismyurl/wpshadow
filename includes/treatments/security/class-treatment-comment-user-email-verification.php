@@ -42,53 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses WordPress require_name_email option\n * - Detects common spam patterns in email field\n * - Returns severity: medium (email not required), low (fake emails detected)\n * - Auto-fixable treatment: enable email requirement\n *
  * @since 1.6031.1400
- */\nclass Treatment_Comment_User_Email_Verification extends Treatment_Base {
+ */
+class Treatment_Comment_User_Email_Verification extends Treatment_Base {
 	protected static $slug = 'comment-user-email-verification';
 	protected static $title = 'Comment User Email Verification';
 	protected static $description = 'Verifies commenter email addresses when needed';
 	protected static $family = 'security';
 
 	public static function check() {
-		$require_email = (int) get_option( 'require_name_email', 1 );
-
-		if ( 0 === $require_email ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Email addresses not required for comments - allows anonymous spam', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-user-email-verification',
-			);
-		}
-
-		// Check for obviously fake emails in recent comments.
-		global $wpdb;
-		$fake_emails = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments}
-			WHERE comment_author_email LIKE '%noemail%'
-			OR comment_author_email LIKE '%fake%'
-			OR comment_author_email LIKE '%test@test%'
-			OR comment_author_email NOT LIKE '%@%.%'
-			LIMIT 10"
-		);
-
-		if ( $fake_emails > 5 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					__( 'Found %d comments with invalid/fake email addresses', 'wpshadow' ),
-					$fake_emails
-				),
-				'severity'     => 'low',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-user-email-verification',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Comment_User_Email_Verification' );
 	}
 }

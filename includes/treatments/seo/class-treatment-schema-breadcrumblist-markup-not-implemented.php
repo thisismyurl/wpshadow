@@ -63,19 +63,6 @@ class Treatment_Schema_BreadcrumbList_Markup_Not_Implemented extends Treatment_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for breadcrumb schema
-		if ( ! has_filter( 'wp_head', 'wp_add_breadcrumb_schema' ) && ! is_plugin_active( 'yoast-seo/wp-seo.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Schema BreadcrumbList markup is not implemented. Add breadcrumb schema for better search result presentation and site navigation clarity.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/schema-breadcrumblist-markup-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Schema_BreadcrumbList_Markup_Not_Implemented' );
 	}
 }

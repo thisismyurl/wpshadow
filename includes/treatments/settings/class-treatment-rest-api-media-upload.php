@@ -64,46 +64,6 @@ class Treatment_REST_API_Media_Upload extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		if ( ! rest_is_enabled() ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'REST API is not enabled. File uploads via REST API may not work.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 60,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rest-api-media-upload',
-			);
-		}
-
-		// Check upload size limits
-		$max_upload_size = wp_max_upload_size();
-		if ( $max_upload_size < 5242880 ) { // 5MB minimum
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Upload size limit is too small for REST API media uploads. Increase PHP upload limits.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 60,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rest-api-media-upload',
-			);
-		}
-
-		// Check file type restrictions
-		$allowed_types = get_allowed_mime_types();
-		if ( empty( $allowed_types ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'No MIME types are allowed for upload. Configure allowed file types.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 60,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rest-api-media-upload',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_REST_API_Media_Upload' );
 	}
 }

@@ -67,61 +67,6 @@ class Treatment_Theme_Performance_Analysis extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		global $wp_styles, $wp_scripts;
-
-		$current_theme = wp_get_theme();
-		$is_block_theme = $current_theme->is_block_theme();
-		$theme_stylesheet_count = 0;
-		$theme_script_count = 0;
-
-		// Count theme stylesheets
-		foreach ( $wp_styles->queue as $handle ) {
-			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, get_theme_file_uri() ) !== false ) {
-				$theme_stylesheet_count++;
-			}
-		}
-
-		// Count theme scripts
-		foreach ( $wp_scripts->queue as $handle ) {
-			$script = $wp_scripts->registered[ $handle ] ?? null;
-			if ( $script && strpos( $script->src ?? '', get_theme_file_uri() ) !== false ) {
-				$theme_script_count++;
-			}
-		}
-
-		// Flag if theme is loading too many assets
-		if ( ( $theme_stylesheet_count > 5 || $theme_script_count > 8 ) && ! $is_block_theme ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
-					/* translators: %d: stylesheets, %d: scripts */
-					__( 'Theme is loading %d stylesheets and %d scripts. This may indicate bloat. Consider a performance-optimized theme.', 'wpshadow' ),
-					$theme_stylesheet_count,
-					$theme_script_count
-				),
-				'severity'      => 'low',
-				'threat_level'  => 35,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/theme-performance',
-				'meta'          => array(
-					'current_theme'        => $current_theme->get( 'Name' ),
-					'is_block_theme'       => $is_block_theme,
-					'stylesheets'          => $theme_stylesheet_count,
-					'scripts'              => $theme_script_count,
-					'recommendation'       => 'Consider lightweight themes like: GeneratePress, Astra, Neve, or block-based themes',
-					'impact'               => 'Switching to lean theme can improve TTI by 500ms-1s',
-					'optimization'         => array(
-						'Combine theme CSS files',
-						'Minify and defer theme JS',
-						'Remove unused theme fonts',
-						'Use block theme for modern sites',
-					),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Performance_Analysis' );
 	}
 }

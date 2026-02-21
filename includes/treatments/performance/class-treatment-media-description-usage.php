@@ -64,47 +64,6 @@ class Treatment_Media_Description_Usage extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		$attachments = get_posts(
-			array(
-				'post_type'      => 'attachment',
-				'post_mime_type' => 'image',
-				'posts_per_page' => 10,
-				'post_status'    => 'inherit',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			)
-		);
-
-		$description_count = 0;
-		foreach ( $attachments as $attachment ) {
-			if ( ! empty( $attachment->post_content ) ) {
-				$description_count++;
-			}
-		}
-
-		if ( 0 === $description_count && ! empty( $attachments ) ) {
-			$issues[] = __( 'No recent media items include descriptions; consider adding descriptions for better SEO and accessibility', 'wpshadow' );
-		}
-
-		$attachment_template = locate_template( array( 'attachment.php', 'image.php' ) );
-		if ( empty( $attachment_template ) ) {
-			$issues[] = __( 'No attachment template detected; media descriptions may not be displayed on attachment pages', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'low',
-				'threat_level' => 25,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-description-usage',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Description_Usage' );
 	}
 }

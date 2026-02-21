@@ -63,20 +63,6 @@ class Treatment_XML_Sitemap_Optimization_Not_Performed extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if sitemap optimization is implemented
-		global $wp_rewrite;
-		if ( ! $wp_rewrite || ! $wp_rewrite->using_permalinks() ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'XML sitemap optimization is not performed. Limit sitemaps to 50,000 URLs per file, use compression, and set proper lastmod dates for faster indexing.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/xml-sitemap-optimization-not-performed',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_XML_Sitemap_Optimization_Not_Performed' );
 	}
 }

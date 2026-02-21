@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses global $allowedtags (built-in WordPress variable)\n * - Checks both old $allowedtags and wp_kses_allowed_html filters\n * - Returns severity: critical (dangerous tag allowed), high (event handlers present)\n * - Non-fixable treatment (requires theme/plugin fix to correct whitelist)\n *
  * @since 1.6031.1300
- */\nclass Treatment_Comment_HTML_Tag_Whitelist extends Treatment_Base {
+ */
+class Treatment_Comment_HTML_Tag_Whitelist extends Treatment_Base {
 
 	protected static $slug = 'comment-html-tag-whitelist';
 	protected static $title = 'Comment HTML Tag Whitelist';
@@ -57,65 +58,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * @return array|null
 	 */
 	public static function check() {
-		global $allowedtags;
-
-		$issues = array();
-
-		// Check for dangerous tags.
-		$dangerous_tags = array( 'script', 'iframe', 'object', 'embed', 'form', 'input' );
-		foreach ( $dangerous_tags as $tag ) {
-			if ( isset( $allowedtags[ $tag ] ) ) {
-				$issues[] = array(
-					'tag'         => $tag,
-					'description' => sprintf(
-						/* translators: %s: HTML tag name */
-						__( 'Dangerous HTML tag allowed in comments: <%s>', 'wpshadow' ),
-						$tag
-					),
-					'severity'    => 'critical',
-				);
-			}
-		}
-
-		// Check for overly permissive attributes.
-		$risky_attrs = array( 'onclick', 'onload', 'onerror', 'onmouseover', 'style' );
-		foreach ( $allowedtags as $tag => $attrs ) {
-			if ( is_array( $attrs ) ) {
-				foreach ( $risky_attrs as $attr ) {
-					if ( isset( $attrs[ $attr ] ) ) {
-						$issues[] = array(
-							'tag'         => $tag,
-							'attribute'   => $attr,
-							'description' => sprintf(
-								/* translators: 1: attribute name, 2: HTML tag */
-								__( 'Risky attribute %1$s allowed on <%2$s> tag in comments', 'wpshadow' ),
-								$attr,
-								$tag
-							),
-							'severity'    => 'high',
-						);
-					}
-				}
-			}
-		}
-
-		if ( empty( $issues ) ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: %d: number of issues */
-				__( 'Found %d comment HTML tag security issues', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'     => 'high',
-			'threat_level' => 50,
-			'auto_fixable' => false,
-			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-html-tag-whitelist',
-		);
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Comment_HTML_Tag_Whitelist' );
 	}
 }

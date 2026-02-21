@@ -63,19 +63,6 @@ class Treatment_Open_Graph_Tags_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for OG tags
-		if ( ! has_filter( 'wp_head', 'wp_add_og_tags' ) && ! is_plugin_active( 'yoast-seo/wp-seo.php' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Open Graph tags are not configured. Add og:title, og:description, and og:image tags for better social media sharing.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/open-graph-tags-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Open_Graph_Tags_Not_Configured' );
 	}
 }

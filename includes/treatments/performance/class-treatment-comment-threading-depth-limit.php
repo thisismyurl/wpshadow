@@ -94,22 +94,6 @@ class Treatment_Comment_Threading_Depth_Limit extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$thread_depth = (int) get_option( 'thread_comments_depth', 5 );
-
-		if ( $thread_depth > 10 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					__( 'Comment threading depth set to %d (recommended: 5-10) - may cause UI/performance issues', 'wpshadow' ),
-					$thread_depth
-				),
-				'severity'     => 'low',
-				'threat_level' => 35,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-threading-depth-limit',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Threading_Depth_Limit' );
 	}
 }

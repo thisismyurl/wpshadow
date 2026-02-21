@@ -63,24 +63,18 @@ class Diagnostic_Unicode_Normalization_Not_Applied extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'normalize_unicode_input' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Unicode normalization not applied. Use unicode normalization (NFC/NFD) to prevent homograph attacks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   35,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/unicode-normalization-not-applied'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'normalize_unicode_input' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Unicode normalization is not applied yet. Normalizing input can reduce spoofing risks and keep text handling consistent.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/unicode-normalization-not-applied',
+			);
+		}
+
+		return null;
 	}
 }

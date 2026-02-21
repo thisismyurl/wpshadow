@@ -82,37 +82,6 @@ class Treatment_Color_Contrast_Compliance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment. Actual color contrast testing requires visual analysis.
-		// We provide recommendations and tools.
-
-		$issues = array();
-
-		$issues[] = __( 'Normal text must have contrast ratio 4.5:1 (WCAG AA)', 'wpshadow' );
-		$issues[] = __( 'Large text (18pt+) must have contrast ratio 3:1 (WCAG AA)', 'wpshadow' );
-		$issues[] = __( 'Don\'t use red + green only combinations (colorblind users can\'t distinguish)', 'wpshadow' );
-		$issues[] = __( 'Don\'t communicate meaning through color alone (add text, icon, or pattern)', 'wpshadow' );
-		$issues[] = __( 'Use sufficient brightness difference, not just color difference', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'People with low vision and colorblind users struggle with low-contrast text. This affects about 250 million people globally (8% of males are colorblind).', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/color-contrast',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'wcag_aa_requirement'     => 'Contrast ratio 4.5:1 for normal text',
-					'wcag_aaa_standard'       => 'Contrast ratio 7:1 (gold standard)',
-					'testing_tools'           => 'WebAIM Contrast Checker, Chrome DevTools, Firefox Accessibility Inspector',
-					'colorblind_types'        => 'Deuteranopia (red-green), Protanopia (red-green), Tritanopia (blue-yellow)',
-					'affected_population'     => __( '~250 million colorblind or low vision users globally', 'wpshadow' ),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Color_Contrast_Compliance' );
 	}
 }

@@ -101,18 +101,6 @@ class Treatment_Feed_Pingback_Trackback extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$pingbacks = get_option( 'default_ping_status', 'open' );
-		if ( 'open' === $pingbacks ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Pingbacks and trackbacks are enabled in feeds. Consider disabling for security.', 'wpshadow' ),
-				'severity'    => 'medium',
-				'threat_level'=> 40,
-				'auto_fixable'=> true,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-pingback-trackback',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Pingback_Trackback' );
 	}
 }

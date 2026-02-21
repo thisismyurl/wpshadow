@@ -58,13 +58,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Custom Role Definition Audit Diagnostic Class
  *
- * Implements role configuration validation by querying $wp_roles global and inspecting\n * each role's capability list. Detection: compares custom role capabilities against\n * expected WordPress capabilities, flags roles with dangerous combos (delete_users without\n * manage_options), checks for conflicting definitions.\n *
+ * Implements role configuration validation by querying $wp_roles global and
+ * inspecting each role's capability list.
+ *
  * **Detection Pattern:**
- * 1. Query get_editable_roles() for all site roles\n * 2. Filter out built-in roles (administrator, editor, author, contributor, subscriber)\n * 3. For each custom role, iterate capabilities\n * 4. Check for dangerous capability: manage_options, unfiltered_html, delete_users (on author/contributor)\n * 5. Validate capabilities are registered in WordPress global \$wp_capabilities\n * 6. Return custom roles with flagged capabilities or naming issues\n *
+ * 1. Query get_editable_roles() for all site roles.
+ * 2. Filter out built-in roles.
+ * 3. For each custom role, iterate capabilities.
+ * 4. Check for dangerous capabilities.
+ * 5. Validate capabilities are registered.
+ * 6. Return custom roles with flagged issues.
+ *
  * **Real-World Scenario:**
- * Agency manages 50 WordPress sites. They created custom "author+" role for trusted clients.\n * Role definition accidentally included manage_options (copy-paste error from editor definition).\n * Six months later: compromised contractor account used to inject malware via admin panel.\n * Attacker had full access because \"author+\" role carried manage_options from 18 months ago.\n *
+ * Agency manages 50 WordPress sites. They created a custom role for trusted clients.
+ * A copy/paste error included `manage_options`. A compromised account later gained
+ * full admin-like access through that role.
+ *
  * **Implementation Notes:**
- * - Uses get_editable_roles() to safely retrieve all roles\n * - Compares against \$wp_roles->role_objects[\$role_name]->capabilities\n * - Returns severity: critical (dangerous capability detected), medium (naming anomaly)\n * - Non-fixable diagnostic (requires manual role audit/reconfiguration)\n *\n * @since 1.6032.1330\n */\nclass Diagnostic_Custom_Role_Definition_Audit extends Diagnostic_Base {
+ * - Uses get_editable_roles() to retrieve all roles.
+ * - Compares against role capability maps.
+ * - Non-fixable diagnostic (manual audit required).
+ *
+ * @since 1.6032.1330
+ */
+class Diagnostic_Custom_Role_Definition_Audit extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

@@ -251,28 +251,26 @@ foreach ( $all_diagnostics as $slug => $class ) {
 
 <script>
 jQuery(document).ready(function($) {
+	<?php echo \WPShadow\Views\Tool_View_Base::get_js_scan_state_helpers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	$('#run-ecommerce-scan-btn').on('click', function() {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#ecommerce-scan-results');
 		
-		$btn.prop('disabled', true).addClass('wps-loading');
-		$progress.removeClass('hidden');
-		$results.empty();
+		wpshadowReportScanStart( $btn, $progress, $results );
 		
 		// Run both ecommerce and e-commerce family diagnostics
 		Promise.all([
-			wp.ajax.post('wpshadow_run_family_diagnostics', { family: 'ecommerce', nonce: $btn.data('nonce') }),
-			wp.ajax.post('wpshadow_run_family_diagnostics', { family: 'e-commerce', nonce: $btn.data('nonce') })
+			wpshadowRunFamilyDiagnostics( 'ecommerce', $btn.data('nonce') ),
+			wpshadowRunFamilyDiagnostics( 'e-commerce', $btn.data('nonce') )
 		]).done(function(responses) {
 			// Merge findings from both families
 			const allFindings = [...(responses[0].findings || []), ...(responses[1].findings || [])];
 			displayEcommerceResults({ findings: allFindings, stats: responses[0].stats });
 		}).fail(function(error) {
-			$results.html('<div class="notice notice-error"><p>' + error.message + '</p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_open_html() ); ?>' + error.message + '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_close_html() ); ?>');
 		}).always(function() {
-			$btn.prop('disabled', false).removeClass('wps-loading');
-			$progress.addClass('hidden');
+			wpshadowReportScanEnd( $btn, $progress );
 		});
 	});
 
@@ -287,35 +285,31 @@ jQuery(document).ready(function($) {
 		$('#ecom-issues-count').text(findings.length);
 		
 		if (findings.length === 0) {
-			$results.html('<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> <?php echo esc_js( __( 'Excellent! Your store is healthy.', 'wpshadow' ) ); ?></p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your store is healthy.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
 		
 		// Render findings with revenue impact
-		let html = '<div class="wps-card"><div class="wps-card-body">';
-		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'Store Health Issues', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
+		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
+		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Store Health Issues', 'wpshadow' ) ); ?>', findings.length );
 		
 		findings.forEach(function(finding) {
 			const severityClass = finding.severity === 'critical' ? 'error' : finding.severity === 'high' ? 'warning' : 'info';
-			html += '<div class="wps-mb-3 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded">';
-			html += '<div class="wps-flex wps-items-start wps-gap-3">';
-			html += '<span class="dashicons dashicons-cart wps-text-' + severityClass + '"></span>';
-			html += '<div class="wps-flex-1">';
-			html += '<h5 class="wps-font-semibold">' + finding.title + '</h5>';
-			html += '<p class="wps-text-muted wps-text-sm">' + finding.description + '</p>';
+			html += wpshadowRenderFindingCardStart( finding, {
+				severityClass: severityClass,
+				iconClass: 'dashicons-cart'
+			} );
 			
 			// Add revenue impact estimate
 			if (finding.threat_level > 60) {
 				html += '<p class="wps-text-xs wps-text-error wps-mt-1"><strong><?php echo esc_js( __( 'Revenue Impact:', 'wpshadow' ) ); ?></strong> <?php echo esc_js( __( 'High - likely losing sales', 'wpshadow' ) ); ?></p>';
 			}
 			
-			if (finding.auto_fixable) {
-				html += '<button class="wps-btn wps-btn-sm wps-btn-success wps-mt-2" data-finding="' + finding.id + '"><?php echo esc_js( __( 'Fix Issue', 'wpshadow' ) ); ?></button>';
-			}
-			html += '</div></div></div>';
+			html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix Issue', 'wpshadow' ) ); ?>' );
+			html += wpshadowRenderFindingCardEnd();
 		});
 		
-		html += '</div></div>';
+		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}
 });
@@ -323,9 +317,7 @@ jQuery(document).ready(function($) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Want to maximize your store revenue?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro includes conversion rate optimization, abandoned cart recovery, and automated store health monitoring.', 'wpshadow' ),

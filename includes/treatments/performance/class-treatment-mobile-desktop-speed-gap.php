@@ -64,77 +64,7 @@ class Treatment_Mobile_Desktop_Speed_Gap extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues       = array();
-		$mobile_score = 0;
-		$max_score    = 5;
-
-		// Check mobile-specific optimizations.
-		$has_responsive_images = self::check_responsive_images();
-		if ( $has_responsive_images ) {
-			++$mobile_score;
-		} else {
-			$issues[] = 'responsive images serving smaller sizes';
-		}
-
-		// Check touch targets.
-		$has_touch_targets = self::check_touch_targets();
-		if ( $has_touch_targets ) {
-			++$mobile_score;
-		} else {
-			$issues[] = 'touch targets large enough (44x44px)';
-		}
-
-		// Check for mobile-only heavy resources.
-		$no_desktop_only = self::check_no_desktop_only_resources();
-		if ( $no_desktop_only ) {
-			++$mobile_score;
-		} else {
-			$issues[] = 'detecting desktop-only heavy resources';
-		}
-
-		// Check mobile optimization plugins.
-		$has_mobile_optimization = self::check_mobile_optimization();
-		if ( $has_mobile_optimization ) {
-			++$mobile_score;
-		} else {
-			$issues[] = 'mobile-specific optimization plugins';
-		}
-
-		// Check AMP or mobile theme.
-		$has_amp_or_mobile = self::check_amp_or_mobile_theme();
-		if ( $has_amp_or_mobile ) {
-			++$mobile_score;
-		} else {
-			$issues[] = 'AMP or dedicated mobile theme';
-		}
-
-		$completion_percentage = ( $mobile_score / $max_score ) * 100;
-
-		if ( $completion_percentage >= 60 ) {
-			return null; // Mobile optimized.
-		}
-
-		$severity     = $completion_percentage < 40 ? 'critical' : 'high';
-		$threat_level = $completion_percentage < 40 ? 85 : 65;
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: 1: completion percentage, 2: missing features */
-				__( 'Mobile optimization at %1$d%%. Missing: %2$s. Like having nice storefront but terrible drive-through—losing majority of customers.', 'wpshadow' ),
-				(int) $completion_percentage,
-				implode( ', ', $issues )
-			),
-			'severity'     => $severity,
-			'threat_level' => $threat_level,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-desktop-speed-gap',
-			'meta'         => array(
-				'completion_percentage' => $completion_percentage,
-				'missing_features'      => $issues,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Desktop_Speed_Gap' );
 	}
 
 	/**

@@ -130,19 +130,6 @@ class Treatment_Performance_Baseline_Metrics_Not_Established extends Treatment_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if performance metrics are being tracked
-		if ( ! get_option( 'wpshadow_performance_baseline' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Performance baseline metrics are not established. Set up performance monitoring to track page speed, server response time, and Core Web Vitals.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 30,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/performance-baseline-metrics-not-established',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Performance_Baseline_Metrics_Not_Established' );
 	}
 }

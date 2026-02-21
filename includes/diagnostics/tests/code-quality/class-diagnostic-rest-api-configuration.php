@@ -339,7 +339,8 @@ add_filter('rest_endpoints', function(\$endpoints) {
 					'cloudflare_integration' => __( 'Can implement rate limiting at Cloudflare level', 'wpshadow' ),
 					'monitoring_high_traffic' => __( 'Monitor for legitimate high-traffic patterns', 'wpshadow' ),
 					'recommendation' => __( 'Implement REST API rate limiting to protect against abuse', 'wpshadow' ),
-				);
+				),
+			);
 			}
 		}
 
@@ -487,7 +488,8 @@ function my_plugin_callback(\$request) {
 						'4. Test with different user roles',
 					),
 					'recommendation' => __( 'Add permission_callback to all custom REST endpoints', 'wpshadow' ),
-				);
+				),
+			);
 			}
 		}
 

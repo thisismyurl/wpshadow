@@ -101,18 +101,6 @@ class Treatment_Feed_Caching_Performance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$cache_enabled = defined( 'WP_CACHE' ) && WP_CACHE;
-		if ( ! $cache_enabled ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed caching is not enabled.', 'wpshadow' ),
-				'severity'    => 'medium',
-				'threat_level'=> 50,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-caching-performance',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Caching_Performance' );
 	}
 }

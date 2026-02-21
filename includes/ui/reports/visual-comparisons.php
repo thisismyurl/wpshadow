@@ -217,9 +217,7 @@ $statistics  = Visual_Comparator::get_statistics();
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Advanced Visual Testing with WPShadow Pro', 'wpshadow' ),
 		'description' => __( 'Upgrade to Pro for pixel-perfect difference detection, automated testing, and comprehensive visual reports.', 'wpshadow' ),

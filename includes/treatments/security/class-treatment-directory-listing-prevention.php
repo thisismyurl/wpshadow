@@ -36,31 +36,6 @@ class Treatment_Directory_Listing_Prevention extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add index.php to all plugin/theme directories', 'wpshadow' );
-		$issues[] = __( 'Add "Options -Indexes" to .htaccess', 'wpshadow' );
-		$issues[] = __( 'Prevent listing of wp-content/uploads/', 'wpshadow' );
-		$issues[] = __( 'Prevent listing of wp-includes/', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Directory listing reveals your file structure, backup files, configuration files, and helps attackers map your site for vulnerabilities.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/directory-listing',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'information_disclosed'   => 'Plugin versions, backup files, configuration',
-					'htaccess_directive'      => 'Options -Indexes',
-					'index_php_content'       => '<?php // Silence is golden',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Directory_Listing_Prevention' );
 	}
 }

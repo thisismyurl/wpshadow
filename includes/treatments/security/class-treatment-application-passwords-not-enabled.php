@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Checks WordPress version and REST API availability\n * - Tests app password creation/authentication flow\n * - Returns severity: medium (feature disabled/unavailable)\n * - Auto-fixable treatment: enable app passwords, provide setup guide\n *
  * @since 1.6030.2352
- */\nclass Treatment_Application_Passwords_Not_Enabled extends Treatment_Base {
+ */
+class Treatment_Application_Passwords_Not_Enabled extends Treatment_Base {
 
 	/**
 	 * The treatment slug
@@ -80,42 +81,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if application passwords are available
-		if ( ! function_exists( 'wp_is_application_passwords_available' ) || ! wp_is_application_passwords_available() ) {
-			$finding = array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Application passwords are not enabled. Enable app passwords for secure API authentication without exposing main user passwords.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/application-passwords-not-enabled',
-				'context'      => array(
-					'why'            => __(
-						'Application passwords provide scoped access for third-party integrations without exposing a user\'s main password. When app passwords are disabled, developers are forced to reuse primary credentials in mobile apps, automation services, and plugins. If any of those systems are compromised, attackers gain full account access. App passwords can be revoked per app, significantly reducing blast radius. This is a core least-privilege control for integrations and aligns with secure authentication practices.',
-						'wpshadow'
-					),
-					'recommendation' => __(
-						'1. Enable application passwords in WordPress 5.6+.
-2. Use app passwords for integrations (Zapier, IFTTT, mobile apps) instead of main passwords.
-3. Revoke unused app passwords regularly.
-4. Document which integrations use which app passwords.
-5. Combine with 2FA for primary accounts.',
-						'wpshadow'
-					),
-				),
-			);
-
-			$finding = Upgrade_Path_Helper::add_upgrade_path(
-				$finding,
-				'security',
-				'api-security',
-				'application_passwords'
-			);
-
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Application_Passwords_Not_Enabled' );
 	}
 }

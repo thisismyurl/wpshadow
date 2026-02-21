@@ -63,19 +63,6 @@ class Treatment_Keyboard_Shortcut_Accessibility_Not_Verified extends Treatment_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for documented keyboard shortcuts
-		if ( ! has_option( 'keyboard_shortcuts_documented' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Keyboard shortcut accessibility is not verified. Document all keyboard shortcuts and ensure they don\'t conflict with browser/OS shortcuts. Test with keyboard-only navigation.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/keyboard-shortcut-accessibility-not-verified',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Keyboard_Shortcut_Accessibility_Not_Verified' );
 	}
 }

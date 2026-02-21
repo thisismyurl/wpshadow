@@ -63,29 +63,6 @@ class Treatment_Theme_Render_Performance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$theme_dir = wp_get_theme()->get_stylesheet_directory();
-		$template_files = glob( $theme_dir . '/*.php' );
-
-		if ( false === $template_files ) {
-			return null;
-		}
-
-		$template_count = count( $template_files );
-		if ( $template_count < 60 ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'Theme includes many template files, which may impact render performance', 'wpshadow' ),
-			'severity'     => 'low',
-			'threat_level' => 30,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/theme-render-performance',
-			'details'      => array(
-				'template_count' => $template_count,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Render_Performance' );
 	}
 }

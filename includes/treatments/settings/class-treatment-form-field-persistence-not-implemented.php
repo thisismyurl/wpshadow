@@ -63,19 +63,6 @@ class Treatment_Form_Field_Persistence_Not_Implemented extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if form field persistence is active
-		if ( ! has_filter( 'wp_footer', 'enable_form_persistence' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Form field persistence is not implemented. Save form data in localStorage to recover incomplete entries if users navigate away.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/form-field-persistence-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Form_Field_Persistence_Not_Implemented' );
 	}
 }

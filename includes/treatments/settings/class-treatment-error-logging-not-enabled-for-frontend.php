@@ -63,19 +63,6 @@ class Treatment_Error_Logging_Not_Enabled_For_Frontend extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for frontend error logging
-		if ( ! get_option( 'enable_frontend_error_logging' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Frontend error logging is not enabled. Enable JavaScript error logging to catch and debug client-side errors.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/error-logging-not-enabled-for-frontend',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Error_Logging_Not_Enabled_For_Frontend' );
 	}
 }

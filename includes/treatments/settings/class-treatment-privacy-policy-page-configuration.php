@@ -63,46 +63,6 @@ class Treatment_Privacy_Policy_Page_Configuration extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$page_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
-		$issues  = array();
-		$details = array();
-
-		if ( 0 === $page_id ) {
-			$issues[] = __( 'Privacy policy page is not configured', 'wpshadow' );
-		} else {
-			$page = get_post( $page_id );
-			if ( empty( $page ) ) {
-				$issues[] = __( 'Configured privacy policy page not found', 'wpshadow' );
-			} else {
-				if ( 'publish' !== $page->post_status ) {
-					$issues[] = __( 'Privacy policy page is not published', 'wpshadow' );
-				}
-
-				$word_count = str_word_count( wp_strip_all_tags( $page->post_content ) );
-				$details['word_count'] = $word_count;
-				if ( $word_count < 150 ) {
-					$issues[] = __( 'Privacy policy content appears too short', 'wpshadow' );
-				}
-			}
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Privacy policy page configuration issues detected', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-page-configuration',
-				'details'      => array(
-					'issues'  => $issues,
-					'page_id' => $page_id,
-					'info'    => $details,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Privacy_Policy_Page_Configuration' );
 	}
 }

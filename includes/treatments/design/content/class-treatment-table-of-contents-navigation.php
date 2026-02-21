@@ -36,32 +36,6 @@ class Treatment_Table_Of_Contents_Navigation extends Treatment_Base {
 	protected static $family = 'content';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add table of contents to pages >1000 words', 'wpshadow' );
-		$issues[] = __( 'Link TOC entries to heading IDs (#section-name)', 'wpshadow' );
-		$issues[] = __( 'Make TOC sticky on scroll (always visible)', 'wpshadow' );
-		$issues[] = __( 'Add "Back to top" button for long pages', 'wpshadow' );
-		$issues[] = __( 'Show current section highlighted in TOC', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Long documentation is hard to navigate. Table of contents lets users jump directly to sections instead of scrolling through everything.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/table-of-contents',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'when_to_add'             => 'Pages >1000 words or >5 sections',
-					'accessibility'           => 'Screen readers announce landmarks',
-					'seo_benefit'             => 'Google uses TOC for jump-to links',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Table_Of_Contents_Navigation' );
 	}
 }

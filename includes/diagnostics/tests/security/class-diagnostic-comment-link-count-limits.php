@@ -44,7 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses get_option() for portability across WordPress installations\n * - Safe threshold: 2-3 links (allows legitimate references)\n * - Risky threshold: 5+ links (enables spam)\n * - Returns severity: medium (easy fix, prevents spam)\n * - Auto-fixable treatment: set comment_max_links to 2\n *
  * @since 1.6031.1300
- */\nclass Diagnostic_Comment_Link_Count_Limits extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_Link_Count_Limits extends Diagnostic_Base {
 
 	protected static $slug = 'comment-link-count-limits';
 	protected static $title = 'Comment Link Count Limits';

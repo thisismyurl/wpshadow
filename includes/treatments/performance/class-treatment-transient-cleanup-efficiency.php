@@ -63,32 +63,6 @@ class Treatment_Transient_Cleanup_Efficiency extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$now = time();
-		$expired = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(1) FROM {$wpdb->options} WHERE option_name LIKE %s AND option_value < %d",
-				'_transient_timeout_%',
-				$now
-			)
-		);
-
-		if ( $expired >= 50 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'A large number of expired transients were found. Cleanup can improve database performance.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 25,
-				'auto_fixable' => false,
-				'details'      => array(
-					'expired_transients' => $expired,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/transient-cleanup-efficiency',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Transient_Cleanup_Efficiency' );
 	}
 }

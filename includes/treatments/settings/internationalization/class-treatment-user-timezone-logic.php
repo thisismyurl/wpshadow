@@ -63,35 +63,6 @@ class Treatment_User_Timezone_Logic extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-		$stats  = array();
-
-		$timezone_string = (string) get_option( 'timezone_string', '' );
-		$gmt_offset      = (float) get_option( 'gmt_offset', 0 );
-
-		$stats['timezone_string'] = $timezone_string ? $timezone_string : 'not set';
-		$stats['gmt_offset']      = $gmt_offset;
-
-		if ( empty( $timezone_string ) && 0 === $gmt_offset ) {
-			$issues[] = __( 'No site timezone configured, which can confuse global visitors', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Clear timezones help customers understand deadlines and schedules. Using local time or showing the timezone avoids confusion.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-timezone-logic',
-				'context'      => array(
-					'stats'  => $stats,
-					'issues' => $issues,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_User_Timezone_Logic' );
 	}
 }

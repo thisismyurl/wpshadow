@@ -63,34 +63,6 @@ class Treatment_Comment_Notification_Rate_Limiting extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! get_option( 'comments_notify' ) ) {
-			return null;
-		}
-
-		global $wpdb;
-
-		$recent_count = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(1) FROM {$wpdb->comments} WHERE comment_date_gmt >= %s",
-				gmdate( 'Y-m-d H:i:s', time() - HOUR_IN_SECONDS )
-			)
-		);
-
-		if ( $recent_count > 50 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'High comment volume detected in the last hour. Consider adding rate limiting or batching for notification emails.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'details'      => array(
-					'comments_last_hour' => $recent_count,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/comment-notification-rate-limiting',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Notification_Rate_Limiting' );
 	}
 }

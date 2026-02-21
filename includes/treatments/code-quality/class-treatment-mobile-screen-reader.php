@@ -66,29 +66,7 @@ class Treatment_Mobile_Screen_Reader extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_screen_reader_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null; // No issues found
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of accessibility issues */
-				__( 'Found %d accessibility issues for screen readers', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'critical',
-			'threat_level'    => 70,
-			'issues'          => array_slice( $issues['all'], 0, 5 ),
-			'total_issues'    => count( $issues['all'] ),
-			'wcag_violation'  => '4.1.2 Name, Role, Value (Level A)',
-			'user_impact'     => __( 'Screen reader users cannot navigate site', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/screen-reader-compat',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Screen_Reader' );
 	}
 
 	/**

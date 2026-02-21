@@ -129,19 +129,6 @@ class Treatment_Performance_Budget_Not_Defined extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for performance budget definition
-		if ( ! get_option( 'performance_budget_defined' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Performance budget is not defined. Set targets for page load time (<3s), FCP (<1.8s), LCP (<2.5s), and CLS (<0.1) to maintain consistent performance.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/performance-budget-not-defined',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Performance_Budget_Not_Defined' );
 	}
 }

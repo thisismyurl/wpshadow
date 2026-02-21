@@ -116,44 +116,7 @@ class Treatment_Mobile_Cls extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$shift_sources = self::identify_shift_sources();
-
-		if ( empty( $shift_sources['sources'] ) ) {
-			return null; // No shift sources detected
-		}
-
-		$estimated_cls = $shift_sources['estimated_cls'];
-
-		if ( $estimated_cls < 0.1 ) {
-			return null; // Within acceptable range
-		}
-
-		// Determine severity
-		if ( $estimated_cls > 0.25 ) {
-			$severity = 'critical';
-			$threat   = 75;
-		} else {
-			$severity = 'high';
-			$threat   = 65;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %s: CLS score */
-				__( 'Mobile CLS score is %.2f (target: <0.1)', 'wpshadow' ),
-				$estimated_cls
-			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'current_cls'     => number_format( $estimated_cls, 2 ),
-			'target_cls'      => '<0.1',
-			'shift_sources'   => $shift_sources['sources'],
-			'user_impact'     => __( 'Content jumps cause accidental taps on wrong elements', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-cls',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Cls' );
 	}
 
 	/**

@@ -63,22 +63,8 @@ class Treatment_Cache_Poisoning_Not_Prevented extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_cache_poisoning' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Cache poisoning not prevented. Validate cache keys and use cache key namespacing to prevent collision attacks.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/cache-poisoning-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Cache_Poisoning_Not_Prevented' );
+	}
 						return null;
 						}
 						return null;

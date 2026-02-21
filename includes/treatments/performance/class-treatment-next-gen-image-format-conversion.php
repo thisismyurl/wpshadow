@@ -67,57 +67,6 @@ class Treatment_Next_Gen_Image_Format_Conversion extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		$conversion_active = false;
-
-		// Check for image optimization plugins with format conversion
-		$conversion_plugins = array(
-			'imagify/imagify.php'                                => 'Imagify',
-			'ewww-image-optimizer/ewww-image-optimizer.php'      => 'EWWW Image Optimizer',
-			'optimus/optimus.php'                                => 'Optimus',
-			'shortpixel-image-optimiser/wp-shortpixel.php'       => 'ShortPixel',
-		);
-
-		foreach ( $conversion_plugins as $plugin_path => $plugin_name ) {
-			if ( is_plugin_active( $plugin_path ) ) {
-				$conversion_active = true;
-				break;
-			}
-		}
-
-		if ( ! $conversion_active ) {
-			global $wpdb;
-
-			// Count images
-			$image_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-			if ( $image_count > 20 ) {
-				return array(
-					'id'            => self::$slug,
-					'title'         => self::$title,
-					'description'   => sprintf(
-						/* translators: %d: number of images */
-						__( 'Found %d images without next-gen format conversion. Converting to AVIF/WebP could reduce size by 30-50%%.', 'wpshadow' ),
-						$image_count
-					),
-					'severity'      => 'medium',
-					'threat_level'  => 50,
-					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/next-gen-image-formats',
-					'meta'          => array(
-						'image_count'          => $image_count,
-						'conversion_active'    => $conversion_active,
-						'recommendation'       => 'Install image optimizer with AVIF/WebP support (Imagify, EWWW, or ShortPixel)',
-						'impact'               => 'Next-gen formats reduce total image bytes by 30-50%',
-						'comparison'           => array(
-							'JPEG: 100% (baseline)',
-							'WebP: 60-70% (25-30% savings)',
-							'AVIF: 40-50% (50-60% savings)',
-						),
-					),
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Next_Gen_Image_Format_Conversion' );
 	}
 }

@@ -71,43 +71,7 @@ class Treatment_Png_Compression_Misconfigured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if image optimizer plugin is active.
-		$optimizer_config = self::get_optimizer_config();
-
-		if ( ! $optimizer_config ) {
-			// No optimizer plugin active, not relevant.
-			return null;
-		}
-
-		$plugin = $optimizer_config['plugin'];
-		$png_enabled = $optimizer_config['png_enabled'];
-		$png_level = $optimizer_config['png_level'];
-
-		// If PNG optimization is enabled and properly configured, no finding.
-		if ( $png_enabled && $png_level > 0 ) {
-			return null;
-		}
-
-		// Determine recommended setting based on plugin.
-		$recommended_setting = 5; // Mid-range compression (good balance).
-
-		return array(
-			'id'                   => self::$slug,
-			'title'                => self::$title,
-			'description'          => sprintf(
-				/* translators: %s: plugin name */
-				__( 'PNG compression is disabled or set to 0 in %s. Enabling PNG optimization provides 10-40%% file size reduction for graphics and transparent images, improving page load speed.', 'wpshadow' ),
-				$plugin
-			),
-			'severity'             => 'low',
-			'threat_level'         => 20,
-			'auto_fixable'         => true,
-			'current_setting'      => $png_level,
-			'recommended_setting'  => $recommended_setting,
-			'potential_savings'    => '10-40% file size reduction',
-			'plugin'               => $plugin,
-			'kb_link'              => 'https://wpshadow.com/kb/png-compression-optimization',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Png_Compression_Misconfigured' );
 	}
 
 	/**

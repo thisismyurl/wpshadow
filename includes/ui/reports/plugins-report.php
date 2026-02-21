@@ -236,30 +236,25 @@ $active_count = count( $active_plugins );
 
 <script>
 jQuery(document).ready(function($) {
+	<?php echo \WPShadow\Views\Tool_View_Base::get_js_scan_state_helpers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	$('#run-plugins-scan-btn').on('click', function() {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#plugins-scan-results');
 		
-		$btn.prop('disabled', true).addClass('wps-loading');
-		$progress.removeClass('hidden');
-		$results.empty();
+		wpshadowReportScanStart( $btn, $progress, $results );
 		
 		// Simulate plugin metrics
 		$('#plugins-updates').text('3');
 		$('#plugins-performance').text('Good');
 		
 		// Run plugin diagnostics
-		wp.ajax.post('wpshadow_run_family_diagnostics', {
-			family: 'plugins',
-			nonce: $btn.data('nonce')
-		}).done(function(response) {
+		wpshadowRunFamilyDiagnostics( 'plugins', $btn.data('nonce') ).done(function(response) {
 			displayPluginsResults(response);
 		}).fail(function(error) {
-			$results.html('<div class="notice notice-error"><p>' + error.message + '</p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_open_html() ); ?>' + error.message + '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_error_notice_close_html() ); ?>');
 		}).always(function() {
-			$btn.prop('disabled', false).removeClass('wps-loading');
-			$progress.addClass('hidden');
+			wpshadowReportScanEnd( $btn, $progress );
 		});
 	});
 
@@ -270,7 +265,7 @@ jQuery(document).ready(function($) {
 		$('#plugins-issues-count').text(findings.length);
 		
 		if (findings.length === 0) {
-			$results.html('<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> <?php echo esc_js( __( 'Excellent! Your plugins are well-configured.', 'wpshadow' ) ); ?></p></div>');
+			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your plugins are well-configured.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
 		
@@ -287,32 +282,34 @@ jQuery(document).ready(function($) {
 			byPlugin[pluginName].push(finding);
 		});
 		
-		let html = '<div class="wps-card"><div class="wps-card-body">';
-		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'Plugin Issues Found', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
+		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
+		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Plugin Issues Found', 'wpshadow' ) ); ?>', findings.length );
 		
 		Object.keys(byPlugin).forEach(function(pluginName) {
 			const pluginFindings = byPlugin[pluginName];
 			html += '<div class="wps-mb-4">';
-			html += '<h4 class="wps-font-semibold wps-mb-2">' + pluginName + ' (' + pluginFindings.length + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>)</h4>';
+			html += wpshadowRenderSectionHeading( pluginName, pluginFindings.length, {
+				headingClass: 'wps-font-semibold wps-mb-2',
+				countSuffix: '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>'
+			} );
 			
 			pluginFindings.forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'warning' : 'info';
-				html += '<div class="wps-mb-2 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded">';
-				html += '<div class="wps-flex wps-items-start wps-gap-3">';
-				html += '<span class="dashicons dashicons-admin-plugins wps-text-' + severityClass + '"></span>';
-				html += '<div class="wps-flex-1">';
-				html += '<h5 class="wps-font-semibold wps-text-sm">' + finding.title + '</h5>';
-				html += '<p class="wps-text-muted wps-text-xs">' + finding.description + '</p>';
-				if (finding.auto_fixable) {
-					html += '<button class="wps-btn wps-btn-sm wps-btn-success wps-mt-1" data-finding="' + finding.id + '"><?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?></button>';
-				}
-				html += '</div></div></div>';
+				html += wpshadowRenderFindingCardStart( finding, {
+					severityClass: severityClass,
+					iconClass: 'dashicons-admin-plugins',
+					containerClass: 'wps-mb-2 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded',
+					titleClass: 'wps-font-semibold wps-text-sm',
+					descriptionClass: 'wps-text-muted wps-text-xs'
+				} );
+				html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?>', 'wps-btn wps-btn-sm wps-btn-success wps-mt-1' );
+				html += wpshadowRenderFindingCardEnd();
 			});
 			
 			html += '</div>';
 		});
 		
-		html += '</div></div>';
+		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}
 });
@@ -320,9 +317,7 @@ jQuery(document).ready(function($) {
 
 <?php
 // Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
+Tool_View_Base::render_sales_widget(
 	array(
 		'title'       => __( 'Want automated plugin monitoring?', 'wpshadow' ),
 		'description' => __( 'WPShadow Pro tracks plugin vulnerabilities, monitors performance impact, and alerts you to conflicts automatically.', 'wpshadow' ),

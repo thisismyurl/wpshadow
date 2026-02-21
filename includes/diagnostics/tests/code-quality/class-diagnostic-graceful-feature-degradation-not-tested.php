@@ -63,24 +63,18 @@ class Diagnostic_Graceful_Feature_Degradation_Not_Tested extends Diagnostic_Base
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'test_feature_degradation' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Graceful feature degradation not tested. Ensure features degrade elegantly when dependencies fail.',
-						'severity'   =>   'low',
-						'threat_level'   =>   20,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/graceful-feature-degradation-not-tested'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'test_feature_degradation' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Graceful feature degradation testing is not in place yet. Verifying fallback behavior helps keep experiences stable when dependencies are unavailable.', 'wpshadow' ),
+				'severity'    => 'low',
+				'threat_level' => 20,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/graceful-feature-degradation-not-tested',
+			);
+		}
+
+		return null;
 	}
 }

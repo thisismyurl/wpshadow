@@ -171,13 +171,10 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	 * @return bool True if changes tracked.
 	 */
 	private static function tracks_changes() {
-		// Check for change log table
-		global $wpdb;
+		// Check for option-backed change tracking.
+		$change_log = get_option( 'wpshadow_import_changes_log', array() );
 
-		$table = $wpdb->prefix . 'wpshadow_import_changes';
-		$change_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-
-		if ( $change_table ) {
+		if ( ! empty( $change_log ) ) {
 			return true;
 		}
 

@@ -63,22 +63,6 @@ class Treatment_Noindex_For_Staging_Environment_Not_Configured extends Treatment
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if this is a staging environment
-		if ( strpos( $_SERVER['HTTP_HOST'] ?? '', 'staging' ) !== false || strpos( $_SERVER['HTTP_HOST'] ?? '', 'dev' ) !== false ) {
-			// Check if noindex is set for staging
-			if ( ! has_filter( 'wp_head', 'add_staging_noindex' ) ) {
-				return array(
-					'id'            => self::$slug,
-					'title'         => self::$title,
-					'description'   => __( 'Noindex for staging environment is not configured. Add noindex,nofollow meta robots tag to prevent staging sites from being indexed.', 'wpshadow' ),
-					'severity'      => 'high',
-					'threat_level'  => 75,
-					'auto_fixable'  => true,
-					'kb_link'       => 'https://wpshadow.com/kb/noindex-for-staging-environment-not-configured',
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Noindex_For_Staging_Environment_Not_Configured' );
 	}
 }

@@ -124,19 +124,6 @@ class Treatment_Content_Delivery_Network_Integration_Not_Tested extends Treatmen
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if CDN is configured and tested
-		if ( ! get_option( 'cdn_integration_test_date' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'CDN integration is not tested. Verify that static assets are being served from your CDN and that purge events work correctly.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/content-delivery-network-integration-not-tested',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Content_Delivery_Network_Integration_Not_Tested' );
 	}
 }

@@ -22,35 +22,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_API_Rate_Limiting_Not_Enforced Class
  *
- * Performs diagnostic check for Api Rate Limiting Not Enforced.
+ * Performs diagnostic check for API rate limiting enforcement.
  *
  * @since 1.6033.2033
  */
 class Diagnostic_API_Rate_Limiting_Not_Enforced extends Diagnostic_Base {
 
 	/**
-	 * The diagnostic slug
+	 * The diagnostic slug.
 	 *
 	 * @var string
 	 */
 	protected static $slug = 'api-rate-limiting-not-enforced';
 
 	/**
-	 * The diagnostic title
+	 * The diagnostic title.
 	 *
 	 * @var string
 	 */
 	protected static $title = 'API Rate Limiting Not Enforced';
 
 	/**
-	 * The diagnostic description
+	 * The diagnostic description.
 	 *
 	 * @var string
 	 */
 	protected static $description = 'Checks rate limiting';
 
 	/**
-	 * The family this diagnostic belongs to
+	 * The family this diagnostic belongs to.
 	 *
 	 * @var string
 	 */
@@ -63,24 +63,18 @@ class Diagnostic_API_Rate_Limiting_Not_Enforced extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('rest_dispatch_request',
-						'check_rate_limit' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('API rate limiting not enforced. Implement per-client request throttling to prevent abuse and DoS attacks.',
-						'severity'   =>   'high',
-						'threat_level'   =>   60,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/api-rate-limiting-not-enforced'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'rest_dispatch_request', 'check_rate_limit' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'API rate limiting is not enforced yet. Adding request throttling can reduce abuse and improve service stability.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 60,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/api-rate-limiting-not-enforced',
+			);
+		}
+
+		return null;
 	}
 }

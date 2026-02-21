@@ -63,19 +63,6 @@ class Treatment_Social_Media_Sharing_Buttons_Not_Configured extends Treatment_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for social sharing plugin
-		if ( ! is_plugin_active( 'social-snap/social-snap.php' ) && ! has_filter( 'the_content', 'add_social_sharing_buttons' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Social media sharing buttons are not configured. Add social sharing buttons to increase content reach and engagement.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/social-media-sharing-buttons-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Social_Media_Sharing_Buttons_Not_Configured' );
 	}
 }

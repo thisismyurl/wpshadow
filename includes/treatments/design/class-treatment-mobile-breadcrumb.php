@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Treatments\Helpers\Treatment_HTML_Helper;
 use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-class-treatment-exit;
+	exit;
 }
 
 /**
@@ -30,51 +29,41 @@ class-treatment-exit;
  */
 class Treatment_Mobile_Breadcrumb extends Treatment_Base {
 
-class-treatment-protected static $slug = 'mobile-breadcrumb-navigation';
-class-treatment-protected static $title = 'Mobile Breadcrumb Navigation';
-class-treatment-protected static $description = 'Validates breadcrumbs for mobile usability';
-class-treatment-protected static $family = 'navigation';
+	/**
+	 * The treatment slug.
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'mobile-breadcrumb-navigation';
 
-class-treatment-public static function check() {
-class-treatment-$html = self::get_page_html();
-class-treatment-if ( ! $html ) {
-class-treatment- null;
-class-treatment-}
+	/**
+	 * The treatment title.
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Mobile Breadcrumb Navigation';
 
-class-treatment-$issues = array();
+	/**
+	 * The treatment description.
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Validates breadcrumbs for mobile usability';
 
-class-treatment-// Check for breadcrumb existence
-class-treatment-$has_breadcrumb = preg_match( '/class\s*=\s*["\'][^"\']*breadcrumb[^"\']*["\']|typeof\s*=\s*["\']BreadcrumbList["\']/i', $html );
+	/**
+	 * The treatment family.
+	 *
+	 * @var string
+	 */
+	protected static $family = 'navigation';
 
-class-treatment-if ( ! $has_breadcrumb ) {
-class-treatment-o-breadcrumbs',
-class-treatment-o breadcrumb navigation detected',
-class-treatment-o-breadcrumb-schema',
-class-treatment-g schema.org markup',
-class-treatment-dly sizing
-class-treatment-preg_match_all( '/<style[^>]*>(.*?)<\/style>/is', $html, $style_matches );
-class-treatment-$css = implode( "\n", $style_matches[1] ?? array() );
-
-class-treatment-if ( preg_match( '/\.breadcrumb[^{]*{[^}]*font-size\s*:\s*([0-9]+)px/', $css, $size_match ) ) {
-class-treatment-t_size = (int) $size_match[1];
-class-treatment-t_size < 14 ) {
-class-treatment-t_size,
-class-treatment- null;
-class-treatment-}
-
-class-treatment-return array(
-class-treatment-' => sprintf( __( 'Found %d breadcrumb issues', 'wpshadow' ), count( $issues ) ),
-class-treatment-not easily navigate site hierarchy on mobile', 'wpshadow' ),
-class-treatment-k' => 'https://wpshadow.com/kb/breadcrumbs',
-class-treatment-);
-class-treatment-}
-
-class-treatment-private static function get_page_html(): ?string {
-class-treatment-return Treatment_HTML_Helper::fetch_homepage_html(
-class-treatment-	array(
-class-treatment-		'timeout'   => 5,
-class-treatment-		'sslverify' => false,
-class-treatment-	)
-class-treatment-);
-class-treatment-}
+	/**
+	 * Run the treatment check.
+	 *
+	 * @since  1.602.1450
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check() {
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Breadcrumb' );
+	}
 }

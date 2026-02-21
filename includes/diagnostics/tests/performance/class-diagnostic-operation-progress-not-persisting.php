@@ -63,8 +63,6 @@ class Diagnostic_Operation_Progress_Not_Persisting extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
 		$issues = array();
 
 		// Check transient persistence.
@@ -94,12 +92,9 @@ class Diagnostic_Operation_Progress_Not_Persisting extends Diagnostic_Base {
 			delete_option( $test_option );
 		}
 
-		// Check for progress storage table.
-		$progress_table = $wpdb->prefix . 'wpshadow_operation_progress';
-		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$progress_table}'" );
-
-		if ( empty( $table_exists ) ) {
-			$issues[] = __( 'No progress tracking table - cannot persist operation state', 'wpshadow' );
+		// Check for progress storage mechanism.
+		if ( false === has_filter( 'wpshadow_save_progress_to_option' ) && false === has_filter( 'wpshadow_save_progress_to_meta' ) ) {
+			$issues[] = __( 'No explicit progress persistence hooks found for options or metadata', 'wpshadow' );
 		}
 
 		// Check for object cache enabling progress.

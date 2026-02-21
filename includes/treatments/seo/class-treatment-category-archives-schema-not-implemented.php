@@ -63,19 +63,6 @@ class Treatment_Category_Archives_Schema_Not_Implemented extends Treatment_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for category archive schema
-		if ( ! has_filter( 'wp_head', 'output_category_archive_schema' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Category archive schema is not implemented. Add CollectionPage schema to category archive pages for better semantic understanding.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/category-archives-schema-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Category_Archives_Schema_Not_Implemented' );
 	}
 }

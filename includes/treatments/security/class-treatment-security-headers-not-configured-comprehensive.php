@@ -124,19 +124,6 @@ class Treatment_Security_Headers_Not_Configured_Comprehensive extends Treatment_
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for comprehensive security headers
-		if ( ! has_filter( 'wp_headers', 'add_security_headers' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Security headers are not comprehensively configured. Add X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Strict-Transport-Security, and Content-Security-Policy headers.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 80,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/security-headers-not-configured-comprehensive',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Security_Headers_Not_Configured_Comprehensive' );
 	}
 }

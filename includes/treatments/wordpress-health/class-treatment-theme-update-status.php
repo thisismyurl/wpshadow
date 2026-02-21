@@ -63,26 +63,6 @@ class Treatment_Theme_Update_Status extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! function_exists( 'get_theme_updates' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/update.php';
-		}
-
-		$updates = get_theme_updates();
-		if ( ! empty( $updates ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Theme updates are available. Outdated themes can introduce security risks.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 65,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-update-status',
-				'meta'         => array(
-					'theme_updates' => count( $updates ),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Update_Status' );
 	}
 }

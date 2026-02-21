@@ -126,19 +126,6 @@ class Treatment_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Treatment_
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for image dimension handling
-		if ( ! has_filter( 'wp_get_attachment_image' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/image-dimensions-not-set-causing-layout-shift',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift' );
 	}
 }

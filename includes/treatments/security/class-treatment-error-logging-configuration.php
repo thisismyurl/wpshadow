@@ -36,41 +36,6 @@ class Treatment_Error_Logging_Configuration extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$issues = array();
-
-		// Check debug configuration
-		if ( ! defined( 'WP_DEBUG_LOG' ) || ! WP_DEBUG_LOG ) {
-			$issues[] = __( 'Enable WP_DEBUG_LOG to capture errors', 'wpshadow' );
-		}
-
-		if ( defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ) {
-			$issues[] = __( 'Disable WP_DEBUG_DISPLAY in production (shows errors to users)', 'wpshadow' );
-		}
-
-		// Check if debug.log is accessible
-		$debug_log = WP_CONTENT_DIR . '/debug.log';
-		if ( file_exists( $debug_log ) ) {
-			$issues[] = __( 'Debug log exists and may be publicly accessible at /wp-content/debug.log', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Error logs help debug issues but must be server-side only. Public logs expose database structure, file paths, and vulnerabilities.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/error-logging',
-				'details'      => array(
-					'findings'                => $issues,
-					'recommended_config'      => 'WP_DEBUG_LOG=true, WP_DEBUG_DISPLAY=false',
-					'log_location'            => 'wp-content/debug.log (block via .htaccess)',
-					'htaccess_rule'           => '<Files debug.log>\n  Order allow,deny\n  Deny from all\n</Files>',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Error_Logging_Configuration' );
 	}
 }

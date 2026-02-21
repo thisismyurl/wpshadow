@@ -65,36 +65,7 @@ class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$violations = self::find_spacing_violations();
-
-		if ( empty( $violations ) ) {
-			return null; // No issues found
-		}
-
-		$threat = 50;
-		if ( count( $violations ) > 20 ) {
-			$threat = 70; // Many violations
-		} elseif ( count( $violations ) > 10 ) {
-			$threat = 60;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of spacing violations */
-				__( 'Found %d tap target spacing violations', 'wpshadow' ),
-				count( $violations )
-			),
-			'severity'        => count( $violations ) > 10 ? 'high' : 'medium',
-			'threat_level'    => $threat,
-			'violations'      => array_slice( $violations, 0, 10 ),
-			'total_violations' => count( $violations ),
-			'wcag_violation'  => '2.5.8 Target Size (Level AA)',
-			'user_impact'     => __( 'Users may accidentally tap wrong button while on mobile', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/tap-target-spacing',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Tap_Target_Spacing' );
 	}
 
 	/**

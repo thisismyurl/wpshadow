@@ -36,32 +36,6 @@ class Treatment_Gzip_Compression_Enabled extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Enable Gzip compression in server configuration', 'wpshadow' );
-		$issues[] = __( 'Compress HTML, CSS, JavaScript, XML, JSON', 'wpshadow' );
-		$issues[] = __( 'Do NOT compress images (already compressed)', 'wpshadow' );
-		$issues[] = __( 'Apache: mod_deflate or mod_gzip', 'wpshadow' );
-		$issues[] = __( 'Nginx: gzip on; gzip_types text/css text/javascript;', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Gzip reduces text file sizes by 70%. Without compression, pages load slower and waste bandwidth.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 65,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/gzip-compression',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'size_reduction'          => '70% smaller for text files',
-					'check_header'            => 'Content-Encoding: gzip',
-					'apache_htaccess'         => 'AddOutputFilterByType DEFLATE text/html text/css application/javascript',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Gzip_Compression_Enabled' );
 	}
 }

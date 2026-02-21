@@ -64,34 +64,7 @@ class Treatment_Mobile_Render_Blocking_CSS extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_render_blocking_css();
-
-		if ( empty( $issues ) ) {
-			return null; // No render-blocking CSS found
-		}
-
-		$threat = 75;
-		if ( count( $issues ) > 5 ) {
-			$threat = 85; // Critical - many blocking files
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: count of render-blocking resources */
-				__( 'Found %d render-blocking CSS files', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'        => 'high',
-			'threat_level'    => $threat,
-			'blocking_css'    => array_slice( $issues, 0, 5 ),
-			'total_blocking'  => count( $issues ),
-			'estimated_delay' => round( count( $issues ) * 400, 0 ) . ' ms FCP delay',
-			'user_impact'     => __( 'CSS blocks render by 400-1000ms on 3G', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/render-blocking-css',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Render_Blocking_CSS' );
 	}
 
 	/**

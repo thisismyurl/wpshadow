@@ -2,8 +2,6 @@
 /**
  * Open Redirect Not Prevented Treatment
  *
- * Checks open redirect.
- *
  * @package    WPShadow
  * @subpackage Treatments
  * @since      1.6033.2033
@@ -64,4 +62,6 @@ class Treatment_Open_Redirect_Not_Prevented extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Open_Redirect_Not_Prevented' );
+	}
+}

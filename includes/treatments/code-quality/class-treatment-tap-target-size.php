@@ -73,43 +73,7 @@ class Treatment_Tap_Target_Size extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$small_targets = self::find_small_tap_targets();
-
-		if ( empty( $small_targets ) ) {
-			return null; // No issues found
-		}
-
-		$violation_count = count( $small_targets );
-
-		// Determine severity
-		if ( $violation_count > 20 ) {
-			$severity = 'critical';
-			$threat   = 70;
-		} elseif ( $violation_count > 10 ) {
-			$severity = 'high';
-			$threat   = 65;
-		} else {
-			$severity = 'medium';
-			$threat   = 50;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of small tap targets */
-				__( 'Found %d interactive elements below 44×44px minimum', 'wpshadow' ),
-				$violation_count
-			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'small_targets'   => array_slice( $small_targets, 0, 10 ), // Show first 10
-			'total_violations' => $violation_count,
-			'wcag_violation'  => '2.5.5 Target Size (Level AAA)',
-			'user_impact'     => __( 'Difficult to tap correctly, frustration, mis-taps', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/tap-target-size',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Tap_Target_Size' );
 	}
 
 	/**

@@ -42,7 +42,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Inspects REST API route handlers directly\n * - Checks both endpoint permission AND comment_registration setting\n * - Returns severity: high (endpoint open), critical (open + registration disabled)\n * - Auto-fixable treatment: require authentication on comment endpoints\n *
  * @since 1.6031.1500
- */\nclass Diagnostic_Comment_API_Endpoint_Security extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_API_Endpoint_Security extends Diagnostic_Base {
 	protected static $slug = 'comment-api-endpoint-security';
 	protected static $title = 'Comment API Endpoint Security';
 	protected static $description = 'Verifies comment REST API endpoints are secure';

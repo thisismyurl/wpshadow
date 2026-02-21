@@ -63,25 +63,6 @@ class Treatment_Redis_Cache_Active extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$object_cache = wp_using_ext_object_cache();
-		$dropin       = WP_CONTENT_DIR . '/object-cache.php';
-
-		if ( ! $object_cache && ! file_exists( $dropin ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'No external object cache detected. Redis or Memcached can improve performance.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/redis-cache-active',
-				'meta'         => array(
-					'object_cache_enabled' => $object_cache,
-					'dropin_exists'        => file_exists( $dropin ),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Redis_Cache_Active' );
 	}
 }

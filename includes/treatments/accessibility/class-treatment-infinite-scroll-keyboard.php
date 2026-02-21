@@ -67,35 +67,6 @@ class Treatment_Infinite_Scroll_Keyboard extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Provide "Skip to footer" link before infinite content', 'wpshadow' );
-		$issues[] = __( 'Add "Load More" button instead of automatic loading', 'wpshadow' );
-		$issues[] = __( 'Show item count and total: "Showing 20 of 100"', 'wpshadow' );
-		$issues[] = __( 'Announce new items to screen readers (aria-live)', 'wpshadow' );
-		$issues[] = __( 'Ensure footer links remain accessible via keyboard', 'wpshadow' );
-		$issues[] = __( 'Provide pagination alternative for keyboard users', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Infinite scroll traps keyboard users in an endless content loop. Imagine trying to reach the footer (with contact links, privacy policy, etc.) but content keeps loading every time you get close—like trying to reach the end of a hallway that keeps extending. Mouse users can scroll past the content, but keyboard users must Tab through every single item before reaching the footer. If you have 100 posts, that\'s potentially 100+ Tab presses. The solution: provide a "Skip to footer" link before infinite content, or use a "Load More" button instead of automatic loading. This gives keyboard users control over when more content loads.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/infinite-scroll-keyboard',
-				'details'      => array(
-					'recommendations'       => $issues,
-					'wcag_requirement'      => 'WCAG 2.1 2.4.1 Bypass Blocks, 2.1.1 Keyboard',
-					'affected_users'        => 'Keyboard users, screen reader users, power users',
-					'better_pattern'        => 'Use "Load More" button instead of automatic infinite scroll',
-					'best_pattern'          => 'Provide pagination with infinite scroll as progressive enhancement',
-					'footer_trap_analogy'   => 'Like trying to reach the end of a hallway that keeps extending',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Infinite_Scroll_Keyboard' );
 	}
 }

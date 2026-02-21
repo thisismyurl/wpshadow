@@ -70,56 +70,7 @@ class Treatment_Media_Files_Unencrypted extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Don't flag if Vault is already active.
-		if ( Upgrade_Path_Helper::has_pro_product( 'vault' ) ) {
-			return null;
-		}
-
-		// Check for filesystem encryption (EncryptFS, LUKS, AWS EFS encryption).
-		if ( self::is_filesystem_encrypted() ) {
-			return null;
-		}
-
-		// Count media files and identify sensitive types.
-		$uploads_dir = wp_upload_dir();
-		if ( ! isset( $uploads_dir['basedir'] ) || ! is_dir( $uploads_dir['basedir'] ) ) {
-			return null;
-		}
-
-		$total_files     = self::count_media_files( $uploads_dir['basedir'] );
-		$sensitive_count = self::count_sensitive_files( $uploads_dir['basedir'] );
-
-		// If no files or no sensitive files, no finding.
-		if ( $total_files === 0 ) {
-			return null;
-		}
-
-		// Check if site handles compliance-sensitive data.
-		$compliance_concern = self::has_compliance_requirements();
-
-		// Only flag if there are sensitive files OR compliance requirements detected.
-		if ( $sensitive_count === 0 && ! $compliance_concern ) {
-			return null;
-		}
-
-		return array(
-			'id'                 => self::$slug,
-			'title'              => self::$title,
-			'description'        => sprintf(
-				/* translators: 1: total file count, 2: sensitive file count */
-				__( 'Your media library contains %1$d files stored in plaintext, including %2$d sensitive documents (PDFs, Office files). For compliance and security, encryption at rest is recommended.', 'wpshadow' ),
-				$total_files,
-				$sensitive_count
-			),
-			'severity'           => $sensitive_count > 50 ? 'high' : 'medium',
-			'threat_level'       => min( 80, 40 + ( $sensitive_count / 10 ) ),
-			'auto_fixable'       => false,
-			'total_files'        => $total_files,
-			'sensitive_types'    => array( 'pdf', 'docx', 'xlsx', 'doc', 'xls' ),
-			'sensitive_count'    => $sensitive_count,
-			'compliance_concern' => $compliance_concern,
-			'kb_link'            => 'https://wpshadow.com/kb/media-encryption-vault',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_Files_Unencrypted' );
 	}
 
 	/**

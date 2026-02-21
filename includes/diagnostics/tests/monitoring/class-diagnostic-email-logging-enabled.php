@@ -144,31 +144,17 @@ class Diagnostic_Email_Logging_Enabled extends Diagnostic_Base {
 
 		// Check if WPShadow Activity Logger is tracking emails.
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			global $wpdb;
-			$activity_table = $wpdb->prefix . 'wpshadow_activity';
-			
-			$table_exists = $wpdb->get_var(
-				$wpdb->prepare(
-					'SHOW TABLES LIKE %s',
-					$activity_table
-				)
-			);
+			$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
 
-			if ( $table_exists ) {
-				// Check if we have any email activity logged.
-				$email_logs = $wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM {$activity_table} WHERE action IN (%s, %s, %s) LIMIT 1",
-						'email_sent',
-						'email_bounced',
-						'email_test_success'
-					)
-				);
+			if ( is_array( $activity_log ) ) {
+				foreach ( $activity_log as $entry ) {
+					$action = isset( $entry['action'] ) ? (string) $entry['action'] : '';
 
-				if ( $email_logs > 0 ) {
-					$status['enabled'] = true;
-					$status['method'] = 'WPShadow Activity Logger';
-					return $status;
+					if ( in_array( $action, array( 'email_sent', 'email_bounced', 'email_test_success' ), true ) ) {
+						$status['enabled'] = true;
+						$status['method'] = 'WPShadow Activity Logger';
+						return $status;
+					}
 				}
 			}
 		}

@@ -67,47 +67,6 @@ class Treatment_OPcache_Enabled extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if OPcache extension is available
-		if ( ! function_exists( 'opcache_get_status' ) ) {
-			return array(
-				'id'           => 'opcache-not-available',
-				'title'        => __( 'OPcache Extension Not Available', 'wpshadow' ),
-				'description'  => __( 'PHP OPcache extension is not installed or enabled. OPcache significantly improves PHP performance by caching precompiled script bytecode, typically resulting in 30-50% performance improvement.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 80,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/opcache-installation',
-				'meta'         => array(
-					'php_version'      => PHP_VERSION,
-					'extension_loaded' => false,
-					'recommendation'   => 'Install and enable OPcache extension',
-				),
-			);
-		}
-		
-		// Get OPcache status
-		$status = @opcache_get_status( false );
-		
-		// Check if OPcache is enabled
-		if ( ! $status || empty( $status['opcache_enabled'] ) ) {
-			return array(
-				'id'           => 'opcache-not-enabled',
-				'title'        => __( 'OPcache Not Enabled', 'wpshadow' ),
-				'description'  => __( 'OPcache extension is installed but not enabled. Enable OPcache in php.ini to improve performance by 30-50%.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/opcache-configuration',
-				'meta'         => array(
-					'php_version'      => PHP_VERSION,
-					'extension_loaded' => true,
-					'opcache_enabled'  => false,
-					'recommendation'   => 'Set opcache.enable=1 in php.ini',
-				),
-			);
-		}
-		
-		// OPcache is available and enabled
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_OPcache_Enabled' );
 	}
 }

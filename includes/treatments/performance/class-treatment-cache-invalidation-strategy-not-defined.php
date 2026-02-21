@@ -124,19 +124,6 @@ class Treatment_Cache_Invalidation_Strategy_Not_Defined extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for cache invalidation on post save
-		if ( ! has_action( 'save_post', 'invalidate_post_cache' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Cache invalidation strategy is not defined. Implement automatic cache clearing on post updates, comment changes, and settings modifications to keep content fresh.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 40,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/cache-invalidation-strategy-not-defined',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Cache_Invalidation_Strategy_Not_Defined' );
 	}
 }

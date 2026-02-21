@@ -39,38 +39,6 @@ class Treatment_Optimizes_Site_Speed extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$performance_plugins = array(
-			'autoptimize/autoptimize.php',
-			'wp-rocket/wp-rocket.php',
-			'litespeed-cache/litespeed-cache.php',
-			'perfmatters/perfmatters.php',
-			'asset-cleanup/asset-cleanup.php',
-		);
-
-		foreach ( $performance_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				return null;
-			}
-		}
-
-		$manual_flag = get_option( 'wpshadow_speed_optimization_program' );
-		if ( $manual_flag ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'No speed optimization program detected. Use performance tools or audits to keep pages fast.', 'wpshadow' ),
-			'severity'     => 'medium',
-			'threat_level' => 40,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/speed-optimization-program',
-			'persona'      => 'publisher',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Optimizes_Site_Speed' );
 	}
 }

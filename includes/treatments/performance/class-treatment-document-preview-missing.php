@@ -69,73 +69,7 @@ class Treatment_Document_Preview_Missing extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Don't flag if Media-Document is already active.
-		if ( Upgrade_Path_Helper::has_pro_product( 'wpadmin-media-document' ) ) {
-			return null;
-		}
-
-		// Check for document preview plugins.
-		if ( self::has_preview_plugin() ) {
-			return null;
-		}
-
-		// Count documents in media library.
-		global $wpdb;
-		$document_mimes = array(
-			'application/pdf',
-			'application/msword',
-			'application/vnd.ms-excel',
-			'application/vnd.ms-powerpoint',
-			'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-			'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-		);
-
-		$mime_placeholders = implode( ',', array_fill( 0, count( $document_mimes ), '%s' ) );
-
-		$total_documents = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
-				AND post_mime_type IN ({$mime_placeholders})",
-				...$document_mimes
-			)
-		);
-
-		// Don't flag if no documents.
-		if ( $total_documents === 0 ) {
-			return null;
-		}
-
-		// Count PDFs vs Office documents.
-		$pdf_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
-				AND post_mime_type = %s",
-				'application/pdf'
-			)
-		);
-
-		$office_docs = $total_documents - $pdf_count;
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of documents */
-				__( 'Your %d documents require download to view. In-browser previews improve user experience, allow viewing sensitive documents without saving locally, and work on all devices.', 'wpshadow' ),
-				$total_documents
-			),
-			'severity'        => 'low',
-			'threat_level'    => 20,
-			'auto_fixable'    => false,
-			'total_documents' => (int) $total_documents,
-			'pdf_count'       => (int) $pdf_count,
-			'office_docs'     => $office_docs,
-			'preview_enabled' => false,
-			'kb_link'         => 'https://wpshadow.com/kb/document-preview',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Document_Preview_Missing' );
 	}
 
 	/**

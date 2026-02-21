@@ -65,71 +65,7 @@ class Treatment_Smtp_Authentication extends Treatment_Base {
 	 * @return array|null Finding array if authentication issues detected, null otherwise.
 	 */
 	public static function check() {
-		$smtp_config = self::get_smtp_authentication_config();
-
-		if ( ! $smtp_config ) {
-			// No SMTP configured - different treatment handles this.
-			return null;
-		}
-
-		$issues = array();
-
-		// Check if authentication is enabled.
-		if ( ! $smtp_config['auth_enabled'] ) {
-			$issues[] = __( 'SMTP authentication is disabled - most email servers require authentication', 'wpshadow' );
-		}
-
-		// Check if username/password are configured.
-		if ( $smtp_config['auth_enabled'] ) {
-			if ( empty( $smtp_config['username'] ) ) {
-				$issues[] = __( 'SMTP username is not configured', 'wpshadow' );
-			}
-
-			if ( empty( $smtp_config['password'] ) ) {
-				$issues[] = __( 'SMTP password is not configured', 'wpshadow' );
-			}
-		}
-
-		// Check authentication method compatibility.
-		if ( $smtp_config['auth_enabled'] && ! empty( $smtp_config['auth_type'] ) ) {
-			$supported_types = array( 'PLAIN', 'LOGIN', 'CRAM-MD5', 'XOAUTH2' );
-			if ( ! in_array( strtoupper( $smtp_config['auth_type'] ), $supported_types, true ) ) {
-				$issues[] = sprintf(
-					/* translators: 1: configured auth type, 2: supported types */
-					__( 'Authentication type "%1$s" may not be widely supported. Common types: %2$s', 'wpshadow' ),
-					$smtp_config['auth_type'],
-					implode( ', ', $supported_types )
-				);
-			}
-		}
-
-		// Check if test email authentication has failed recently.
-		$last_auth_test = get_transient( 'wpshadow_smtp_auth_test_result' );
-		if ( false !== $last_auth_test && 'auth_failed' === $last_auth_test ) {
-			$issues[] = __( 'Last SMTP authentication test failed - credentials may be incorrect', 'wpshadow' );
-		}
-
-		if ( empty( $issues ) ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'Your email server authentication isn\'t properly set up (like trying to log into your email without the right password). Email servers need authentication to verify you\'re authorized to send emails. Without proper credentials, your emails will be rejected. This usually happens when username/password are missing or incorrect.', 'wpshadow' ) . ' ' . implode( ' ', $issues ),
-			'severity'     => 'high',
-			'threat_level' => 85,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/smtp-authentication',
-			'context'      => array(
-				'auth_enabled'  => $smtp_config['auth_enabled'],
-				'username'      => $smtp_config['username'] ? '***' . substr( $smtp_config['username'], -3 ) : '',
-				'password_set'  => ! empty( $smtp_config['password'] ),
-				'auth_type'     => $smtp_config['auth_type'] ?? 'default',
-				'source'        => $smtp_config['source'],
-				'issues'        => $issues,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SMTP_Authentication' );
 	}
 
 	/**

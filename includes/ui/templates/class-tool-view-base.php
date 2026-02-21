@@ -115,6 +115,23 @@ class Tool_View_Base {
 	}
 
 	/**
+	 * Render the shared sales widget.
+	 *
+	 * Loads the sales widget component and renders it with provided args.
+	 *
+	 * @since  1.6037.0000
+	 * @param  array $args Sales widget arguments.
+	 * @return void
+	 */
+	public static function render_sales_widget( array $args ): void {
+		require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
+
+		if ( function_exists( 'wpshadow_render_sales_widget' ) ) {
+			\wpshadow_render_sales_widget( $args );
+		}
+	}
+
+	/**
 	 * Render a card panel with optional title
 	 *
 	 * Common card/panel structure used in tool UIs for grouping content.
@@ -328,5 +345,136 @@ class Tool_View_Base {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Get JavaScript-safe opening HTML for report result card body.
+	 *
+	 * Used by report templates that assemble result markup in JavaScript.
+	 *
+	 * @since  1.6037.0000
+	 * @return string Opening card/body HTML fragment.
+	 */
+	public static function get_js_result_card_open_html(): string {
+		return '<div class="wps-card"><div class="wps-card-body">';
+	}
+
+	/**
+	 * Get JavaScript-safe closing HTML for report result card body.
+	 *
+	 * Used by report templates that assemble result markup in JavaScript.
+	 *
+	 * @since  1.6037.0000
+	 * @return string Closing card/body HTML fragment.
+	 */
+	public static function get_js_result_card_close_html(): string {
+		return '</div></div>';
+	}
+
+	/**
+	 * Get JavaScript-safe success notice card HTML.
+	 *
+	 * @since  1.6037.0000
+	 * @param  string $message Success message text.
+	 * @return string Success notice card markup.
+	 */
+	public static function get_js_success_notice_html( string $message ): string {
+		return sprintf(
+			'<div class="notice notice-success wps-card"><p><span class="dashicons dashicons-yes-alt"></span> %s</p></div>',
+			esc_html( $message )
+		);
+	}
+
+	/**
+	 * Get JavaScript-safe opening HTML for a generic error notice.
+	 *
+	 * @since  1.6037.0000
+	 * @return string Opening error notice HTML fragment.
+	 */
+	public static function get_js_error_notice_open_html(): string {
+		return '<div class="notice notice-error"><p>';
+	}
+
+	/**
+	 * Get JavaScript-safe closing HTML for a generic error notice.
+	 *
+	 * @since  1.6037.0000
+	 * @return string Closing error notice HTML fragment.
+	 */
+	public static function get_js_error_notice_close_html(): string {
+		return '</p></div>';
+	}
+
+	/**
+	 * Get JavaScript helper functions for report scan lifecycle state.
+	 *
+	 * Includes functions to toggle loading/disabled states consistently
+	 * while scans are running.
+	 *
+	 * @since  1.6037.0000
+	 * @return string JavaScript function definitions.
+	 */
+	public static function get_js_scan_state_helpers(): string {
+		return "function wpshadowReportScanStart( \$btn, \$progress, \$results ) {\n"
+			. "\t\$btn.prop('disabled', true).addClass('wps-loading');\n"
+			. "\t\$progress.removeClass('hidden');\n"
+			. "\t\$results.empty();\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowReportScanEnd( \$btn, \$progress ) {\n"
+			. "\t\$btn.prop('disabled', false).removeClass('wps-loading');\n"
+			. "\t\$progress.addClass('hidden');\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowRunFamilyDiagnostics( family, nonce ) {\n"
+			. "\treturn wp.ajax.post('wpshadow_run_family_diagnostics', {\n"
+			. "\t\tfamily: family,\n"
+			. "\t\tnonce: nonce\n"
+			. "\t});\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowRenderAutoFixButton( finding, label, classes ) {\n"
+			. "\tif ( ! finding || ! finding.auto_fixable ) {\n"
+			. "\t\treturn '';\n"
+			. "\t}\n"
+			. "\tconst buttonClass = classes || 'wps-btn wps-btn-sm wps-btn-success wps-mt-2';\n"
+			. "\treturn '<button class=\"' + buttonClass + '\" data-finding=\"' + finding.id + '\">' + label + '</button>';\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowRenderFindingCardStart( finding, options ) {\n"
+			. "\tconst config = options || {};\n"
+			. "\tconst severityClass = config.severityClass || 'info';\n"
+			. "\tconst containerClass = config.containerClass || ('wps-mb-3 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded');\n"
+			. "\tconst iconClass = config.iconClass || 'dashicons-info';\n"
+			. "\tconst titleTag = config.titleTag || 'h5';\n"
+			. "\tconst titleClass = config.titleClass || 'wps-font-semibold';\n"
+			. "\tconst descriptionClass = config.descriptionClass || 'wps-text-muted wps-text-sm';\n"
+			. "\tlet html = '';\n"
+			. "\thtml += '<div class=\"' + containerClass + '\">';\n"
+			. "\thtml += '<div class=\"wps-flex wps-items-start wps-gap-3\">';\n"
+			. "\thtml += '<span class=\"dashicons ' + iconClass + ' wps-text-' + severityClass + '\"></span>';\n"
+			. "\thtml += '<div class=\"wps-flex-1\">';\n"
+			. "\thtml += '<' + titleTag + ' class=\"' + titleClass + '\">' + finding.title + '</' + titleTag + '>';\n"
+			. "\thtml += '<p class=\"' + descriptionClass + '\">' + finding.description + '</p>';\n"
+			. "\treturn html;\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowRenderFindingCardEnd() {\n"
+			. "\treturn '</div></div></div>';\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowRenderSectionHeading( title, count, options ) {\n"
+			. "\tconst config = options || {};\n"
+			. "\tconst headingTag = config.headingTag || 'h4';\n"
+			. "\tconst headingClass = config.headingClass || 'wps-font-semibold wps-mb-2';\n"
+			. "\tconst suffix = config.countSuffix ? (' ' + config.countSuffix) : '';\n"
+			. "\treturn '<' + headingTag + ' class=\"' + headingClass + '\">' + title + ' (' + count + suffix + ')</' + headingTag + '>';\n"
+			. "}\n"
+			. "\n"
+			. "function wpshadowRenderSummaryHeading( title, count, options ) {\n"
+			. "\tconst config = options || {};\n"
+			. "\tconst headingClass = config.headingClass || 'wps-text-lg wps-mb-3';\n"
+			. "\treturn '<h3 class=\"' + headingClass + '\">' + title + ' (' + count + ')</h3>';\n"
+			. "}\n";
 	}
 }

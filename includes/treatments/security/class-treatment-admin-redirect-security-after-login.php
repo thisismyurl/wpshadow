@@ -117,43 +117,6 @@ class Treatment_Admin_Redirect_Security_After_Login extends Treatment_Base {
 	protected static $family = 'admin-security';
 
 	public static function check() {
-		$issues = array();
-
-		// Check if login_url filter is used
-		$has_login_redirect = has_filter( 'login_url' );
-		if ( ! $has_login_redirect ) {
-			$issues[] = __( 'No login redirect filter detected - redirects may expose sensitive URLs', 'wpshadow' );
-		}
-
-		// Check if allowed_redirect_hosts filter is used
-		$has_redirect_validation = has_filter( 'allowed_redirect_hosts' );
-		if ( ! $has_redirect_validation ) {
-			$issues[] = __( 'Redirect validation filter not found - open redirect vulnerability possible', 'wpshadow' );
-		}
-
-		// Check for common redirect parameters
-		$redirect_param = isset( $_REQUEST['redirect_to'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['redirect_to'] ) ) : '';
-		if ( ! empty( $redirect_param ) && ! wp_http_validate_url( $redirect_param ) ) {
-			$issues[] = __( 'Invalid redirect parameter detected - potential open redirect attack', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			$finding = array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-redirect-security-after-login',
-				'context'      => array(
-					'why'            => __( 'Open Redirect after login enables sophisticated phishing. Attacker: (1) Sends email "Security update needed" linking to site.com/wp-login.php?redirect_to=evil.com/fake-login; (2) User clicks, logs in successfully (legitimate WordPress); (3) Gets redirected to evil.com looking identical to real site; (4) User logs in again to fake login; (5) Attacker steals credentials. Root cause: redirect_to parameter used without validation. OWASP Open Redirect = 5.3 score. Verizon: redirect exploits used in 28% of advanced phishing campaigns.', 'wpshadow' ),
-					'recommendation' => __( '1. Always validate redirect_to parameter before using. 2. Use wp_validate_redirect() - whitelists same-origin URLs only. 3. Never trust user input for redirects. 4. Use wp_safe_redirect() instead of wp_redirect(). 5. Remove redirect_to parameter from login form if not needed. 6. Log all redirect attempts in activity log (detect abuse patterns). 7. Use security header: X-Frame-Options: DENY (prevent clickjacking redirects). 8. Allow only whitelisted redirect destinations (e.g., admin_url()). 9. For custom redirects, whitelist allowed hosts (not protocols). 10. Test with POST redirect (prevent URL forgery in emails).', 'wpshadow' ),
-				),
-			);
-			return Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'authentication', 'redirect-security' );
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Admin_Redirect_Security_After_Login' );
 	}
 }

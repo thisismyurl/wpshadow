@@ -64,61 +64,6 @@ class Treatment_Media_GPS_Data_Removal extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		if ( ! extension_loaded( 'exif' ) ) {
-			$issues[] = __( 'PHP EXIF extension is not enabled; GPS metadata cannot be detected or removed', 'wpshadow' );
-		}
-
-		$attachments = get_posts(
-			array(
-				'post_type'      => 'attachment',
-				'post_mime_type' => 'image/jpeg',
-				'posts_per_page' => 5,
-				'post_status'    => 'inherit',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			)
-		);
-
-		$gps_found = 0;
-		foreach ( $attachments as $attachment ) {
-			$file = get_attached_file( $attachment->ID );
-			if ( empty( $file ) || ! file_exists( $file ) ) {
-				continue;
-			}
-
-			$metadata = wp_read_image_metadata( $file );
-			if ( ! empty( $metadata['latitude'] ) || ! empty( $metadata['longitude'] ) ) {
-				$gps_found++;
-			}
-		}
-
-		if ( $gps_found > 0 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of images */
-				_n(
-					'%d recent image contains GPS data; consider stripping location metadata for privacy',
-					'%d recent images contain GPS data; consider stripping location metadata for privacy',
-					$gps_found,
-					'wpshadow'
-				),
-				$gps_found
-			);
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( '. ', $issues ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-gps-data-removal',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Media_GPS_Data_Removal' );
 	}
 }

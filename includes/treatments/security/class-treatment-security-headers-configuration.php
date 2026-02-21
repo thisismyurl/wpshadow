@@ -36,34 +36,6 @@ class Treatment_Security_Headers_Configuration extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Content-Security-Policy: Restrict inline scripts and styles', 'wpshadow' );
-		$issues[] = __( 'X-Frame-Options: Prevent clickjacking attacks', 'wpshadow' );
-		$issues[] = __( 'X-Content-Type-Options: Prevent MIME type sniffing', 'wpshadow' );
-		$issues[] = __( 'Strict-Transport-Security: Force HTTPS connections', 'wpshadow' );
-		$issues[] = __( 'Referrer-Policy: Control referrer information', 'wpshadow' );
-		$issues[] = __( 'Permissions-Policy: Disable unused browser features', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'HTTP security headers provide defense-in-depth against XSS, clickjacking, and protocol downgrade attacks.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/security-headers',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'x_frame_options'         => 'X-Frame-Options: SAMEORIGIN',
-					'hsts_example'            => 'Strict-Transport-Security: max-age=31536000; includeSubDomains',
-					'csp_example'             => "Content-Security-Policy: default-src 'self'",
-					'security_score_tools'    => 'securityheaders.com, Mozilla Observatory',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Security_Headers_Configuration' );
 	}
 }

@@ -36,32 +36,6 @@ class Treatment_REST_API_Security_Headers extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Implement rate limiting: 100 requests per minute per IP', 'wpshadow' );
-		$issues[] = __( 'Require authentication for sensitive endpoints', 'wpshadow' );
-		$issues[] = __( 'Add CORS headers to restrict domains', 'wpshadow' );
-		$issues[] = __( 'Disable REST API discovery in HTML head', 'wpshadow' );
-		$issues[] = __( 'Monitor API usage for abuse patterns', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'The REST API is publicly accessible without limits. Rate limiting prevents brute force attacks and API abuse.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-security',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'attack_vectors'          => 'User enumeration, brute force, DoS',
-					'rate_limit_header'       => 'X-RateLimit-Limit: 100, X-RateLimit-Remaining: 99',
-					'disable_discovery'       => 'remove_action("wp_head", "rest_output_link_wp_head");',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_REST_API_Security_Headers' );
 	}
 }

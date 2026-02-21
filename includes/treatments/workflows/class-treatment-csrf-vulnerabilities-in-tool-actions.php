@@ -65,63 +65,7 @@ class Treatment_CSRF_Vulnerabilities_In_Tool_Actions extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// 1. Check import nonce protection
-		$import_issue = self::check_import_nonce_protection();
-		if ( $import_issue ) {
-			$issues[] = $import_issue;
-		}
-
-		// 2. Check export nonce protection
-		$export_issue = self::check_export_nonce_protection();
-		if ( $export_issue ) {
-			$issues[] = $export_issue;
-		}
-
-		// 3. Check AJAX action nonces
-		$ajax_issue = self::check_ajax_nonce_validation();
-		if ( $ajax_issue ) {
-			$issues[] = $ajax_issue;
-		}
-
-		// 4. Check referer validation
-		$referer_issue = self::check_referer_validation();
-		if ( $referer_issue ) {
-			$issues[] = $referer_issue;
-		}
-
-		// 5. Check for double-submit cookie protection
-		$cookie_issue = self::check_double_submit_cookie_pattern();
-		if ( $cookie_issue ) {
-			$issues[] = $cookie_issue;
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %d: number of CSRF issues */
-					__( '%d CSRF protection gaps found', 'wpshadow' ),
-					count( $issues )
-				),
-				'severity'     => 'critical',
-				'threat_level' => 85,
-				'auto_fixable' => true,
-				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/csrf-protection-tools',
-				'recommendations' => array(
-					__( 'Verify nonce present on all form submissions', 'wpshadow' ),
-					__( 'Check nonce validation in AJAX handlers', 'wpshadow' ),
-					__( 'Validate HTTP referer for state-changing actions', 'wpshadow' ),
-					__( 'Implement SameSite cookie attribute', 'wpshadow' ),
-					__( 'Test CSRF attacks against tool endpoints', 'wpshadow' ),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions' );
 	}
 
 	/**

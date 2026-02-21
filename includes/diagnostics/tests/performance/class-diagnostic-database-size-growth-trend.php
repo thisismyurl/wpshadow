@@ -78,6 +78,8 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'database_size_check',
+				__( 'Database size checked', 'wpshadow' ),
+				'database',
 				array(
 					'size' => $current_size,
 				)
@@ -146,29 +148,36 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 	 * @return int|null Previous database size or null if not found.
 	 */
 	private static function get_previous_database_size( int $days ): ?int {
-		global $wpdb;
-
 		if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			return null;
 		}
 
-		$activity_table = $wpdb->prefix . 'wpshadow_activity';
-		$start_time = time() - ( $days * DAY_IN_SECONDS );
+		$start_time   = time() - ( $days * DAY_IN_SECONDS );
+		$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
+		$oldest_match = null;
 
-		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT meta FROM {$activity_table} 
-				WHERE action = %s AND created_at <= %d 
-				ORDER BY created_at ASC LIMIT 1",
-				'database_size_check',
-				$start_time
-			)
-		);
+		if ( ! is_array( $activity_log ) ) {
+			return null;
+		}
 
-		if ( $result ) {
-			$meta = maybe_unserialize( $result );
-			if ( is_array( $meta ) && isset( $meta['size'] ) ) {
-				return (int) $meta['size'];
+		foreach ( $activity_log as $entry ) {
+			$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+			$action     = isset( $entry['action'] ) ? (string) $entry['action'] : '';
+
+			if ( 'database_size_check' !== $action || $entry_time > $start_time ) {
+				continue;
+			}
+
+			if ( null === $oldest_match || $entry_time < (int) $oldest_match['timestamp'] ) {
+				$oldest_match = $entry;
+			}
+		}
+
+		if ( is_array( $oldest_match ) ) {
+			$metadata = isset( $oldest_match['metadata'] ) && is_array( $oldest_match['metadata'] ) ? $oldest_match['metadata'] : array();
+
+			if ( isset( $metadata['size'] ) ) {
+				return (int) $metadata['size'];
 			}
 		}
 

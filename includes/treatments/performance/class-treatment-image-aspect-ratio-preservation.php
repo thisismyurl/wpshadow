@@ -67,56 +67,6 @@ class Treatment_Image_Aspect_Ratio_Preservation extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		// Count images with dimension metadata
-		$query      = "SELECT COUNT(*) as count FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_metadata'";
-		$total      = (int) $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$with_dims  = 0;
-
-		if ( $total > 10 ) {
-			$query   = "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_metadata' LIMIT 100";
-			$results = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-			foreach ( $results as $row ) {
-				$data = maybe_unserialize( $row->meta_value );
-				if ( is_array( $data ) && ! empty( $data['width'] ) && ! empty( $data['height'] ) ) {
-					$with_dims++;
-				}
-			}
-
-			$percent = intval( ( $with_dims / max( 1, count( $results ) ) ) * 100 );
-
-			if ( $percent < 70 ) {
-				return array(
-					'id'            => self::$slug,
-					'title'         => self::$title,
-					'description'   => sprintf(
-						/* translators: %d: percentage of images with dimensions */
-						__( 'Only %d%% of images have width/height defined. Missing dimensions cause Cumulative Layout Shift.', 'wpshadow' ),
-						$percent
-					),
-					'severity'      => 'medium',
-					'threat_level'  => 45,
-					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/image-aspect-ratio',
-					'meta'          => array(
-						'total_images'         => $total,
-						'images_with_dims'     => $with_dims,
-						'dimension_percent'    => $percent,
-						'recommendation'       => 'Always include width and height on <img> tags to reserve space',
-						'impact'               => 'Proper dimensions reduce CLS by 50-80%',
-						'best_practice'        => array(
-							'Add width/height to all images',
-							'Use CSS aspect-ratio for containers',
-							'Define container dimensions',
-							'Use lazy loading with proper sizing',
-						),
-					),
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Image_Aspect_Ratio_Preservation' );
 	}
 }

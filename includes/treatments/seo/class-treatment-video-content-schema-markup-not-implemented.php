@@ -63,19 +63,6 @@ class Treatment_Video_Content_Schema_Markup_Not_Implemented extends Treatment_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if videos are embedded with schema
-		if ( ! is_plugin_active( 'schema-and-structured-data-for-json-ld/schema-plugin.php' ) && ! has_filter( 'wp_embed_oembed_html', 'wp_video_schema' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Video content schema markup is not implemented. Add Video schema to embedded videos for better search visibility.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 30,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/video-content-schema-markup-not-implemented',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Video_Content_Schema_Markup_Not_Implemented' );
 	}
 }

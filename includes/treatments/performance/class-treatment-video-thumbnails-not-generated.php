@@ -69,54 +69,7 @@ class Treatment_Video_Thumbnails_Not_Generated extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Don't flag if Media-Video is already active.
-		if ( Upgrade_Path_Helper::has_pro_product( 'wpadmin-media-video' ) ) {
-			return null;
-		}
-
-		// Check for video thumbnail plugins.
-		if ( self::has_video_thumbnail_plugin() ) {
-			return null;
-		}
-
-		// Count videos in media library.
-		global $wpdb;
-		$total_videos = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
-			AND post_mime_type LIKE 'video/%'"
-		);
-
-		// Don't flag if no videos.
-		if ( $total_videos === 0 ) {
-			return null;
-		}
-
-		// Count videos with thumbnails (featured images).
-		$videos_with_thumbnails = self::count_videos_with_thumbnails();
-		$videos_without_thumbnails = $total_videos - $videos_with_thumbnails;
-
-		// Don't flag if most videos have thumbnails.
-		if ( $videos_without_thumbnails < 5 ) {
-			return null;
-		}
-
-		return array(
-			'id'                        => self::$slug,
-			'title'                     => self::$title,
-			'description'               => sprintf(
-				/* translators: %d: number of videos without thumbnails */
-				__( '%d videos lack thumbnails. Auto-generating thumbnails improves user experience, provides video previews, and eliminates manual thumbnail creation.', 'wpshadow' ),
-				$videos_without_thumbnails
-			),
-			'severity'                  => 'low',
-			'threat_level'              => 20,
-			'auto_fixable'              => false,
-			'total_videos'              => (int) $total_videos,
-			'videos_without_thumbnails' => $videos_without_thumbnails,
-			'manual_thumbnails'         => $videos_with_thumbnails,
-			'kb_link'                   => 'https://wpshadow.com/kb/video-thumbnails',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Video_Thumbnails_Not_Generated' );
 	}
 
 	/**

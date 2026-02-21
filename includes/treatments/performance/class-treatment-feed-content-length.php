@@ -59,23 +59,6 @@ class Treatment_Feed_Content_Length extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$feed_url = get_feed_link();
-		$response = wp_remote_get( $feed_url, array( 'timeout' => 5 ) );
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-		$body = wp_remote_retrieve_body( $response );
-		if ( strlen( $body ) > 1048576 ) { // 1MB
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Feed content length exceeds 1MB, which may cause issues with some feed readers.', 'wpshadow' ),
-				'severity'    => 'medium',
-				'threat_level'=> 50,
-				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-content-length',
-			);
-		}
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Feed_Content_Length' );
 	}
 }

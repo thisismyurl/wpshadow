@@ -124,25 +124,6 @@ class Treatment_XSS_Content_Security_Policy_Not_Configured extends Treatment_Bas
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if CSP headers are set
-		if ( ! has_action( 'send_headers', 'send_csp_headers' ) ) {
-			$finding = array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Content Security Policy is not configured. Add CSP headers to prevent cross-site scripting (XSS) attacks.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 65,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/xss-content-security-policy-not-configured',
-				'context'       => array(
-					'why'            => __( 'CSP = last-line XSS defense. Even if attacker finds XSS, CSP blocks injection. Without CSP, all inline scripts execute. Real scenario: CSP configured "script-src \'nonce-abc123\'". Attacker finds XSS, injects script - blocked (no nonce). Without CSP: injected script runs, sessions stolen. Cost: Prevented $1M+ breach. OWASP recommends CSP Level 3. Mozilla reports: only 1% of sites use CSP (huge missed opportunity).', 'wpshadow' ),
-					'recommendation' => __( '1. Add header in functions.php or .htaccess: "Content-Security-Policy: script-src \'self\'". 2. Use nonces for inline scripts: \'script-src "nonce-" . wp_create_nonce() . ""\'. 3. Disable unsafe-inline/unsafe-eval: Remove from policy. 4. Report violations: Add "report-uri /csp-report". 5. Start with report-only: "Content-Security-Policy-Report-Only" first. 6. Whitelist external sources: CDN URLs in script-src. 7. Object-src: Set to \'none\' to prevent plugins. 8. Test CSP: Browser console shows violations. 9. Monitor reports: Log violations to find issues. 10. Gradual enforcement: Report-only → enforce after testing.', 'wpshadow' ),
-				),
-			);
-			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'csp-configuration', 'content-security-policy' );
-			return $finding;
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_XSS_Content_Security_Policy_Not_Configured' );
 	}
 }

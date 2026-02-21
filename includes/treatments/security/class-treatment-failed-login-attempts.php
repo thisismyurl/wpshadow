@@ -63,57 +63,6 @@ class Treatment_Failed_Login_Attempts extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$monitoring_plugins = array(
-			'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php',
-			'wordfence/wordfence.php',
-			'wp-fail2ban/wp-fail2ban.php',
-		);
-
-		$has_monitoring = false;
-		foreach ( $monitoring_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				$has_monitoring = true;
-				break;
-			}
-		}
-
-		$failed_count = (int) get_option( 'wpshadow_failed_logins_24h', 0 );
-
-		if ( $failed_count >= 50 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'High number of failed login attempts detected in the last 24 hours.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 80,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/failed-login-attempts',
-				'meta'         => array(
-					'failed_logins_24h' => $failed_count,
-				),
-			);
-		}
-
-		if ( 0 === $failed_count && ! $has_monitoring ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Failed login attempts are not being monitored. Enable a login security plugin to detect brute-force activity.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/failed-login-attempts',
-				'meta'         => array(
-					'failed_logins_24h' => $failed_count,
-					'has_monitoring'    => $has_monitoring,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Failed_Login_Attempts' );
 	}
 }

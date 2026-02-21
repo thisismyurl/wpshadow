@@ -63,19 +63,6 @@ class Treatment_Link_Title_Attributes_Not_Added extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if title attribute filter is active
-		if ( ! has_filter( 'the_permalink', 'add_link_title_attributes' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Link title attributes are not added. Add descriptive title attributes to links for improved accessibility and user experience.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/link-title-attributes-not-added',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Link_Title_Attributes_Not_Added' );
 	}
 }

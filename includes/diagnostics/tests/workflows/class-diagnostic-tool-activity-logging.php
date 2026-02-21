@@ -88,17 +88,10 @@ class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 			);
 		}
 
-		// Check if activity log table exists.
-		global $wpdb;
-		$log_table = $wpdb->prefix . 'wpshadow_activity_log';
-		$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $log_table ) ) === $log_table;
+		$activity_log = get_option( 'wpshadow_activity_log', array() );
 
-		if ( ! $table_exists ) {
-			$issues[] = sprintf(
-				/* translators: %s: table name */
-				__( 'Activity log table (%s) does not exist; logging functionality may be broken', 'wpshadow' ),
-				$log_table
-			);
+		if ( ! is_array( $activity_log ) ) {
+			$issues[] = __( 'Activity log storage is not available; logging functionality may be broken', 'wpshadow' );
 		}
 
 		// Check if logging is enabled.
@@ -108,15 +101,20 @@ class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 		}
 
 		// Check if there are recent activity log entries for tool operations.
-		if ( $table_exists && $activity_logging_enabled ) {
-			$recent_logs = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM $log_table WHERE action LIKE %s AND created_at > DATE_SUB(NOW(), INTERVAL 30 DAY)",
-					'%tool%'
-				)
-			);
+		if ( is_array( $activity_log ) && $activity_logging_enabled ) {
+			$recent_logs = 0;
+			$cutoff      = time() - ( 30 * DAY_IN_SECONDS );
 
-			if ( $recent_logs === 0 || $recent_logs === null ) {
+			foreach ( $activity_log as $entry ) {
+				$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+				$action     = isset( $entry['action'] ) ? strtolower( (string) $entry['action'] ) : '';
+
+				if ( $entry_time > $cutoff && false !== strpos( $action, 'tool' ) ) {
+					++$recent_logs;
+				}
+			}
+
+			if ( 0 === $recent_logs ) {
 				$issues[] = __( 'No recent tool operation logs found in the past 30 days; check if logging is functioning', 'wpshadow' );
 			}
 		}
@@ -131,14 +129,16 @@ class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 			);
 		}
 
-		// Check if user attribution is being recorded (verify table structure).
-		if ( $table_exists ) {
-			$columns = $wpdb->get_col( "DESCRIBE $log_table" );
-			if ( ! in_array( 'user_id', $columns, true ) ) {
-				$issues[] = __( 'User ID field missing from activity log; user attribution cannot be tracked', 'wpshadow' );
+		// Check if user attribution and timestamps are present in stored log records.
+		if ( is_array( $activity_log ) && ! empty( $activity_log ) ) {
+			$sample = reset( $activity_log );
+
+			if ( ! is_array( $sample ) || ! isset( $sample['user_id'] ) ) {
+				$issues[] = __( 'User ID is missing from activity log records; user attribution cannot be tracked', 'wpshadow' );
 			}
-			if ( ! in_array( 'created_at', $columns, true ) ) {
-				$issues[] = __( 'Timestamp field missing from activity log; operation timing cannot be verified', 'wpshadow' );
+
+			if ( ! is_array( $sample ) || ! isset( $sample['timestamp'] ) ) {
+				$issues[] = __( 'Timestamp is missing from activity log records; operation timing cannot be verified', 'wpshadow' );
 			}
 		}
 

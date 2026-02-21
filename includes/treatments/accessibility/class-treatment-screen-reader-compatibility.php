@@ -85,39 +85,6 @@ class Treatment_Screen_Reader_Compatibility extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// This is a guidance treatment - actual screen reader testing requires manual QA.
-		// We provide recommendations for screen reader compatibility.
-
-		$issues = array();
-
-		$issues[] = __( 'Use semantic HTML: proper h1/h2/h3 heading hierarchy', 'wpshadow' );
-		$issues[] = __( 'Use proper form labels (label tag associated with input)', 'wpshadow' );
-		$issues[] = __( 'Add ARIA labels/descriptions to inputs without visible labels', 'wpshadow' );
-		$issues[] = __( 'Provide alt text for all images (describe purpose, not just "image")', 'wpshadow' );
-		$issues[] = __( 'Use ARIA live regions (role="status") for dynamic content updates', 'wpshadow' );
-		$issues[] = __( 'Use table headers (th) and proper table structure (thead/tbody)', 'wpshadow' );
-		$issues[] = __( 'Don\'t hide interactive elements from screen readers (except decorative)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Screen reader users navigate the web entirely through text-based interfaces. Without semantic HTML and proper ARIA markup, the admin interface is completely unusable.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 85,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/screen-reader-compatibility',
-				'details'      => array(
-					'recommendations'       => $issues,
-					'affected_population'   => __( 'Blind and low-vision users (~2% of population)', 'wpshadow' ),
-					'wcag_standard'         => 'WCAG 2.1 Level AA',
-					'screen_readers'        => 'JAWS, NVDA, VoiceOver, TalkBack',
-					'testing_tools'         => 'Use NVDA (Windows, free), JAWS (commercial), or VoiceOver (Mac)',
-					'common_issue'          => 'Divs used as buttons without ARIA role or keyboard support',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Screen_Reader_Compatibility' );
 	}
 }

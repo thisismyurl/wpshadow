@@ -36,32 +36,6 @@ class Treatment_Form_CSRF_Token_Verification extends Treatment_Base {
 	protected static $family = 'security';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add wp_nonce_field() to all forms', 'wpshadow' );
-		$issues[] = __( 'Verify nonce in handler: check_admin_referer( "action" )', 'wpshadow' );
-		$issues[] = __( 'Use unique nonce action for each form', 'wpshadow' );
-		$issues[] = __( 'AJAX requests: check_ajax_referer( "action" )', 'wpshadow' );
-		$issues[] = __( 'Re-verify after AJAX response (in JavaScript)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'CSRF (Cross-Site Request Forgery) attacks trick users into submitting forms. Nonces prevent this by verifying requests came from your site.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 90,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/csrf-protection',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'wordpress_function'      => 'wp_nonce_field( "my_action_name" );',
-					'verify_function'         => 'check_admin_referer( "my_action_name" );',
-					'attack_example'          => 'Attacker tricks admin into delete post action',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Form_CSRF_Token_Verification' );
 	}
 }

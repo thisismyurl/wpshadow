@@ -65,30 +65,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_hover_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null; // No issues found
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of hover-dependent elements */
-				__( 'Found %d hover-only interactive elements', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => count( $issues['all'] ) > 5 ? 'high' : 'medium',
-			'threat_level'    => 65,
-			'issues'          => array_slice( $issues['all'], 0, 5 ),
-			'total_issues'    => count( $issues['all'] ),
-			'categories'      => $issues['categories'] ?? array(),
-			'wcag_violation'  => 'WCAG 2.5.5 Target Size',
-			'user_impact'     => __( 'Touch users cannot access hidden hover elements', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/hover-functionality',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Hover_Functionality' );
 	}
 
 	/**

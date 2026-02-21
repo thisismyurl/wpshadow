@@ -83,70 +83,7 @@ class Treatment_Poor_Color_Contrast extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		$contrast_issues = array();
-
-		// Get theme colors from Customizer
-		$text_color       = get_theme_mod( 'text_color', '000000' );
-		$background_color = get_theme_mod( 'background_color', 'ffffff' );
-		$link_color       = get_theme_mod( 'link_color', '0073aa' );
-
-		// Check main text/background contrast
-		$main_contrast = self::calculate_contrast_ratio( $text_color, $background_color );
-		if ( $main_contrast < 4.5 ) {
-			$contrast_issues[] = array(
-				'element'  => 'Main text',
-				'ratio'    => round( $main_contrast, 2 ),
-				'required' => 4.5,
-				'colors'   => sprintf( '#%s on #%s', $text_color, $background_color ),
-			);
-		}
-
-		// Check link color contrast
-		$link_contrast = self::calculate_contrast_ratio( $link_color, $background_color );
-		if ( $link_contrast < 4.5 ) {
-			$contrast_issues[] = array(
-				'element'  => 'Links',
-				'ratio'    => round( $link_contrast, 2 ),
-				'required' => 4.5,
-				'colors'   => sprintf( '#%s on #%s', $link_color, $background_color ),
-			);
-		}
-
-		// Check for common problematic color combinations in custom CSS
-		$custom_css = wp_get_custom_css();
-		if ( ! empty( $custom_css ) ) {
-			// Look for light gray on white patterns
-			if ( preg_match( '/color\s*:\s*#([cdef][0-9a-f]{5})/i', $custom_css ) ) {
-				$contrast_issues[] = array(
-					'element'  => 'Custom CSS',
-					'ratio'    => '< 3.0',
-					'required' => 4.5,
-					'colors'   => 'Light gray detected in custom CSS',
-				);
-			}
-		}
-
-		if ( empty( $contrast_issues ) ) {
-			return null; // No contrast issues detected
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: %d: number of contrast issues */
-				__( '%d color contrast issue(s) detected. Text may be difficult or impossible to read for users with low vision.', 'wpshadow' ),
-				count( $contrast_issues )
-			),
-			'severity'     => 'high',
-			'threat_level' => 85,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/accessibility-poor-color-contrast',
-			'details'      => array(
-				'issues'       => $contrast_issues,
-				'wcag_standard' => 'Level AA requires 4.5:1 for normal text, 3:1 for large text',
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Poor_Color_Contrast' );
 	}
 
 	/**

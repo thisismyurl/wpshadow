@@ -64,77 +64,7 @@ class Treatment_Heat_Map_Session_Recording extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues         = array();
-		$tracking_score = 0;
-		$max_score      = 5;
-
-		// Check for heat mapping tool.
-		$has_heatmap = self::check_heatmap_tool();
-		if ( $has_heatmap ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'heat mapping tool';
-		}
-
-		// Check for session recording.
-		$has_recording = self::check_session_recording();
-		if ( $has_recording ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'session recording';
-		}
-
-		// Check for click tracking.
-		$has_click_tracking = self::check_click_tracking();
-		if ( $has_click_tracking ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'click tracking on key pages';
-		}
-
-		// Check for scroll depth analysis.
-		$has_scroll_tracking = self::check_scroll_depth();
-		if ( $has_scroll_tracking ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'scroll depth analysis';
-		}
-
-		// Check for privacy-compliant recording.
-		$has_privacy_compliance = self::check_privacy_compliance();
-		if ( $has_privacy_compliance ) {
-			++$tracking_score;
-		} else {
-			$issues[] = 'privacy-compliant recording (masked sensitive data)';
-		}
-
-		$completion_percentage = ( $tracking_score / $max_score ) * 100;
-
-		if ( $completion_percentage >= 40 ) {
-			return null; // Tracking tools present.
-		}
-
-		$severity     = $completion_percentage < 20 ? 'medium' : 'low';
-		$threat_level = $completion_percentage < 20 ? 45 : 25;
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => sprintf(
-				/* translators: 1: completion percentage, 2: missing features */
-				__( 'Visual analytics at %1$d%%. Missing: %2$s. Heat maps reveal where users click, scroll, and struggle.', 'wpshadow' ),
-				(int) $completion_percentage,
-				implode( ', ', $issues )
-			),
-			'severity'     => $severity,
-			'threat_level' => $threat_level,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/heat-map-session-recording',
-			'meta'         => array(
-				'completion_percentage' => $completion_percentage,
-				'missing_features'      => $issues,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Heat_Map_Session_Recording' );
 	}
 
 	/**

@@ -125,19 +125,6 @@ class Treatment_Homepage_Hero_Image_Not_Optimized extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for homepage
-		if ( is_home() ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Homepage hero image is not optimized. Compress hero images, use responsive sizing, and implement lazy loading for faster load times.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 15,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/homepage-hero-image-not-optimized',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Homepage_Hero_Image_Not_Optimized' );
 	}
 }

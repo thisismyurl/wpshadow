@@ -36,32 +36,6 @@ class Treatment_Unused_CSS_Removal extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Audit CSS files for unused rules', 'wpshadow' );
-		$issues[] = __( 'Use PurgeCSS or similar tool to find unused styles', 'wpshadow' );
-		$issues[] = __( 'Remove CSS for deactivated plugins', 'wpshadow' );
-		$issues[] = __( 'Remove old theme CSS (if theme changed)', 'wpshadow' );
-		$issues[] = __( 'Use CSS-in-JS or scoped styles to avoid bloat', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Unused CSS rules increase file size. Tools like PurgeCSS identify unused styles so they can be removed.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 35,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/unused-css',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'typical_impact'          => '30-60% of CSS is unused on average',
-					'tools'                   => 'PurgeCSS, UnCSS, Chrome DevTools Coverage tab',
-					'deactivated_plugins'     => 'Check .css files in wp-content/plugins/',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Unused_CSS_Removal' );
 	}
 }

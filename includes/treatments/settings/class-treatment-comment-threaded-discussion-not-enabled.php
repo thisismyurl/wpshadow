@@ -63,19 +63,6 @@ class Treatment_Comment_Threaded_Discussion_Not_Enabled extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if threaded comments are enabled
-		if ( ! get_option( 'thread_comments' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Threaded discussion for comments is not enabled. Enable comment threading to improve user engagement and discussion quality.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/comment-threaded-discussion-not-enabled',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Threaded_Discussion_Not_Enabled' );
 	}
 }

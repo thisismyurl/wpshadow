@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Detects multiple CAPTCHA solutions (plugin-agnostic)\n * - Checks for both reCAPTCHA v2 and v3\n * - Returns severity: high (no CAPTCHA), medium (CAPTCHA but accessibility concerns)\n * - Auto-fixable treatment: recommend CAPTCHA plugin, provide setup steps\n *
  * @since 1.6030.2352
- */\nclass Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

@@ -80,59 +80,6 @@ class Treatment_Duplicate_Comment_Meta_Keys extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		// Find comments with duplicate meta keys.
-		$duplicates = $wpdb->get_results(
-			"SELECT comment_id, meta_key, COUNT(*) as count
-			FROM {$wpdb->commentmeta}
-			GROUP BY comment_id, meta_key
-			HAVING count > 1
-			ORDER BY count DESC
-			LIMIT 50",
-			ARRAY_A
-		);
-
-		if ( ! empty( $duplicates ) ) {
-			$total_duplicates = count( $duplicates );
-			$total_excess = 0;
-			$most_duplicated = array();
-
-			foreach ( $duplicates as $duplicate ) {
-				$total_excess += ( $duplicate['count'] - 1 );
-				if ( count( $most_duplicated ) < 5 ) {
-					$most_duplicated[] = sprintf(
-						/* translators: 1: meta key, 2: comment ID, 3: count */
-						__( 'Key "%1$s" on comment #%2$d (%3$d copies)', 'wpshadow' ),
-						$duplicate['meta_key'],
-						$duplicate['comment_id'],
-						$duplicate['count']
-					);
-				}
-			}
-
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => sprintf(
-					/* translators: 1: number of comments affected, 2: total excess entries */
-					__( '%1$d comments have duplicate meta keys (%2$d excess entries)', 'wpshadow' ),
-					$total_duplicates,
-					$total_excess
-				),
-				'severity'    => 'medium',
-				'threat_level' => 50,
-				'auto_fixable' => true,
-				'details'     => array(
-					'affected_comments' => $total_duplicates,
-					'excess_entries'    => $total_excess,
-					'most_duplicated'   => $most_duplicated,
-					'sample_data'       => array_slice( $duplicates, 0, 10 ),
-				),
-				'kb_link'     => 'https://wpshadow.com/kb/duplicate-comment-meta-keys',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Duplicate_Comment_Meta_Keys' );
 	}
 }

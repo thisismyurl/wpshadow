@@ -63,35 +63,6 @@ class Treatment_Theme_Active_Valid extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$theme = wp_get_theme();
-
-		if ( ! $theme->exists() ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'The active theme is missing or invalid. This can break site rendering.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 90,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-active-valid',
-			);
-		}
-
-		if ( ! $theme->is_allowed() ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'The active theme is not allowed for this site. Verify theme permissions.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-active-valid',
-				'meta'         => array(
-					'theme' => $theme->get_stylesheet(),
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Active_Valid' );
 	}
 }

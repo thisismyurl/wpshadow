@@ -132,38 +132,47 @@ class Diagnostic_Device_Performance_Breakdown extends Diagnostic_Base {
 	private static function analyze_device_performance(): array {
 		$performance = array();
 
-		global $wpdb;
-
 		if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			return $performance;
 		}
 
-		$activity_table = $wpdb->prefix . 'wpshadow_activity';
+		$week_ago = time() - ( 7 * DAY_IN_SECONDS );
+		$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
+		$totals       = array();
+		$counts       = array();
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$activity_table}'" ) !== $activity_table ) {
+		if ( ! is_array( $activity_log ) ) {
 			return $performance;
 		}
 
-		$week_ago = time() - ( 7 * DAY_IN_SECONDS );
+		foreach ( $activity_log as $entry ) {
+			$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+			$action     = isset( $entry['action'] ) ? (string) $entry['action'] : '';
 
-		// Analyze by device type from Activity Logger data.
-		$result = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT 
-					JSON_EXTRACT(meta, '$.device_type') as device_type,
-					AVG(CAST(JSON_EXTRACT(meta, '$.load_time') AS DECIMAL(10,2))) as avg_load_time
-				FROM {$activity_table} 
-				WHERE action = %s AND created_at > %d
-				GROUP BY JSON_EXTRACT(meta, '$.device_type')",
-				'page_load_time_check',
-				$week_ago
-			)
-		);
+			if ( $entry_time <= $week_ago || 'page_load_time_check' !== $action ) {
+				continue;
+			}
 
-		if ( ! empty( $result ) ) {
-			foreach ( $result as $row ) {
-				$device = str_replace( '"', '', $row->device_type );
-				$performance[ $device ] = (float) $row->avg_load_time;
+			$metadata = isset( $entry['metadata'] ) && is_array( $entry['metadata'] ) ? $entry['metadata'] : array();
+			$device   = isset( $metadata['device_type'] ) ? sanitize_key( (string) $metadata['device_type'] ) : '';
+			$load     = isset( $metadata['load_time'] ) ? (float) $metadata['load_time'] : 0.0;
+
+			if ( '' === $device || $load <= 0 ) {
+				continue;
+			}
+
+			if ( ! isset( $totals[ $device ] ) ) {
+				$totals[ $device ] = 0.0;
+				$counts[ $device ] = 0;
+			}
+
+			$totals[ $device ] += $load;
+			++$counts[ $device ];
+		}
+
+		foreach ( $totals as $device => $total ) {
+			if ( ! empty( $counts[ $device ] ) ) {
+				$performance[ $device ] = $total / $counts[ $device ];
 			}
 		}
 

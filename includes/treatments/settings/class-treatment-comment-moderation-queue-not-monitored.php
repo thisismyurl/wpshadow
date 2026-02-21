@@ -63,21 +63,6 @@ class Treatment_Comment_Moderation_Queue_Not_Monitored extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for pending comments
-		$pending = wp_count_comments();
-
-		if ( ! empty( $pending->moderated ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Comment moderation queue is not monitored. Review pending comments regularly to maintain community quality and engagement.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/comment-moderation-queue-not-monitored',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Moderation_Queue_Not_Monitored' );
 	}
 }

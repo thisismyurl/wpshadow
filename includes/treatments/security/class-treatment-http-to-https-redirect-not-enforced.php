@@ -81,19 +81,6 @@ class Treatment_HTTP_To_HTTPS_Redirect_Not_Enforced extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if site is HTTPS
-		if ( 'https' !== Treatment_URL_And_Pattern_Helper::get_scheme( home_url() ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'HTTP to HTTPS redirect is not enforced. Add 301 redirects from HTTP to HTTPS in .htaccess or server configuration.', 'wpshadow' ),
-				'severity'      => 'high',
-				'threat_level'  => 75,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/http-to-https-redirect-not-enforced',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_HTTP_To_HTTPS_Redirect_Not_Enforced' );
 	}
 }

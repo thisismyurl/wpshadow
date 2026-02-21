@@ -65,34 +65,7 @@ class Treatment_Mobile_Form_Labels extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = self::find_label_issues();
-
-		if ( empty( $issues ) ) {
-			return null;
-		}
-
-		$threat = 60;
-		if ( count( $issues ) > 10 ) {
-			$threat = 75;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of unlabeled inputs */
-				__( 'Found %d form inputs without proper labels', 'wpshadow' ),
-				count( $issues )
-			),
-			'severity'        => count( $issues ) > 5 ? 'high' : 'medium',
-			'threat_level'    => $threat,
-			'issues'          => array_slice( $issues, 0, 10 ),
-			'total_issues'    => count( $issues ),
-			'wcag_violation'  => '3.3.2 Labels or Instructions (Level A)',
-			'user_impact'     => __( 'Users cannot identify form fields, especially with screen readers', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/form-labels',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Form_Labels' );
 	}
 
 	/**

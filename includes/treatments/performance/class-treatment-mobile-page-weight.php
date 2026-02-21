@@ -69,64 +69,7 @@ class Treatment_Mobile_Page_Weight extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Get current WordPress admin page for simulation
-		$current_page = sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) );
-
-		// Default to frontend home page if in admin
-		if ( strpos( $current_page, '/wp-admin/' ) !== false ) {
-			$test_url = home_url( '/' );
-		} else {
-			$test_url = home_url( '/' );
-		}
-
-		// Simulate mobile request to measure page weight
-		$response = self::measure_page_weight( $test_url );
-
-		if ( ! $response['success'] ) {
-			return null; // Cannot measure (may be local/unreachable)
-		}
-
-		$total_weight    = $response['total_size'];
-		$above_fold_weight = $response['above_fold_size'];
-		$breakdown      = $response['breakdown'];
-
-		// Check against thresholds
-		$threshold_total = 3 * 1024 * 1024; // 3MB
-		$threshold_above_fold = 500 * 1024; // 500KB
-		$threshold_initial = 1 * 1024 * 1024; // 1MB
-
-		// Determine severity based on weight
-		if ( $total_weight > $threshold_total * 1.5 ) {
-			$severity = 'critical';
-			$threat   = 80;
-		} elseif ( $total_weight > $threshold_total ) {
-			$severity = 'high';
-			$threat   = 70;
-		} elseif ( $above_fold_weight > $threshold_above_fold ) {
-			$severity = 'high';
-			$threat   = 65;
-		} else {
-			return null; // No issue
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %s: page weight in MB */
-				__( 'Mobile page weight is %.2f MB (recommended: <3MB)', 'wpshadow' ),
-				$total_weight / 1024 / 1024
-			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'current_weight'  => self::format_bytes( $total_weight ),
-			'recommended_weight' => '<3MB',
-			'above_fold_weight' => self::format_bytes( $above_fold_weight ),
-			'breakdown'       => $breakdown,
-			'user_impact'     => __( 'Consumes mobile data plans, slower load times on cellular networks', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-page-weight',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Page_Weight' );
 	}
 
 	/**

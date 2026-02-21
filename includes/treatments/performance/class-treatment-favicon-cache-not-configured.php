@@ -125,19 +125,6 @@ class Treatment_Favicon_Cache_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if favicon cache headers are set
-		if ( ! has_action( 'wp_head', 'set_favicon_cache_headers' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Favicon cache is not configured. Set long-term cache headers (1 year) for favicon files to reduce server requests.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/favicon-cache-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Favicon_Cache_Not_Configured' );
 	}
 }

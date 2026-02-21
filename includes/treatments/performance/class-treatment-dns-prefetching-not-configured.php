@@ -127,19 +127,6 @@ class Treatment_DNS_Prefetching_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check for DNS prefetch link tags
-		if ( ! has_filter( 'wp_head', 'add_dns_prefetch_links' ) ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'DNS prefetching is not configured. Add dns-prefetch hints for external domains to improve page load speed.', 'wpshadow' ),
-				'severity'      => 'low',
-				'threat_level'  => 10,
-				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/dns-prefetching-not-configured',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_DNS_Prefetching_Not_Configured' );
 	}
 }

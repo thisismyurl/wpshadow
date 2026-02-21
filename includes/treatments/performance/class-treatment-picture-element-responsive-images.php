@@ -36,32 +36,6 @@ class Treatment_Picture_Element_Responsive_Images extends Treatment_Base {
 	protected static $family = 'performance';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Use <picture> element for art direction', 'wpshadow' );
-		$issues[] = __( 'Serve different images for mobile/desktop', 'wpshadow' );
-		$issues[] = __( 'Use srcset for resolution switching (1x, 2x, 3x)', 'wpshadow' );
-		$issues[] = __( 'Serve WebP with fallback to JPEG/PNG', 'wpshadow' );
-		$issues[] = __( 'WordPress: wp_get_attachment_image() generates srcset', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Responsive images serve different sizes to different devices. Mobile phones download smaller images (faster), desktops get full resolution.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 55,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/responsive-images',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'bandwidth_savings'       => '60-80% smaller on mobile',
-					'example'                 => '<picture><source media="(max-width:600px)" srcset="small.jpg"><img src="large.jpg"></picture>',
-					'srcset_example'          => '<img srcset="small.jpg 480w, large.jpg 1200w" sizes="(max-width:600px) 100vw, 50vw">',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Picture_Element_Responsive_Images' );
 	}
 }

@@ -64,68 +64,7 @@ class Treatment_SSL_Certificate_Domain_Validity extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$domain = Treatment_URL_And_Pattern_Helper::get_domain( home_url() );
-		if ( empty( $domain ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Unable to determine site domain for SSL certificate validation.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
-			);
-		}
-
-		$cert_info = self::get_certificate_info( $domain );
-		if ( empty( $cert_info ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Unable to read SSL certificate details. Verify OpenSSL support and certificate installation.', 'wpshadow' ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
-			);
-		}
-
-		$names = self::get_certificate_domains( $cert_info );
-		if ( empty( $names ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'No valid SAN or CN entries found in the SSL certificate.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 70,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
-				'meta'         => array(
-					'domain' => $domain,
-				),
-			);
-		}
-
-		foreach ( $names as $name ) {
-			if ( self::domain_matches( $domain, $name ) ) {
-				return null;
-			}
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'SSL certificate does not match the site domain. Visitors will see a certificate warning in browsers.', 'wpshadow' ),
-			'severity'     => 'critical',
-			'threat_level' => 90,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
-			'meta'         => array(
-				'domain'         => $domain,
-				'certificate_cn' => $cert_info['subject']['CN'] ?? '',
-				'san_entries'    => $names,
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SSL_Certificate_Domain_Validity' );
 	}
 
 	/**

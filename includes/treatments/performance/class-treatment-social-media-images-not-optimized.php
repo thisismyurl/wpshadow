@@ -69,52 +69,7 @@ class Treatment_Social_Media_Images_Not_Optimized extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Don't flag if Media-Image is already active.
-		if ( Upgrade_Path_Helper::has_pro_product( 'wpadmin-media-image' ) ) {
-			return null;
-		}
-
-		// Don't flag if Yoast Premium or RankMath Pro (includes social image automation).
-		if ( defined( 'WPSEO_PREMIUM_FILE' ) || defined( 'RANK_MATH_PRO_FILE' ) ) {
-			return null;
-		}
-
-		// Count total published posts.
-		$total_posts = wp_count_posts( 'post' );
-		$published_posts = isset( $total_posts->publish ) ? (int) $total_posts->publish : 0;
-
-		// Don't flag if no posts.
-		if ( $published_posts === 0 ) {
-			return null;
-		}
-
-		// Count posts with social images.
-		$posts_with_social_images = self::count_posts_with_social_images();
-		$missing_og_images = $published_posts - $posts_with_social_images;
-
-		// Don't flag if most posts have social images (>80%).
-		if ( $missing_og_images < ( $published_posts * 0.2 ) ) {
-			return null;
-		}
-
-		return array(
-			'id'                        => self::$slug,
-			'title'                     => self::$title,
-			'description'               => sprintf(
-				/* translators: 1: posts with social images, 2: total posts */
-				__( 'Only %1$d of your %2$d posts have custom social images. Properly sized social images improve click-through rates by up to 40%% and ensure professional appearance on Facebook, Twitter, and LinkedIn.', 'wpshadow' ),
-				$posts_with_social_images,
-				$published_posts
-			),
-			'severity'                  => 'low',
-			'threat_level'              => 20,
-			'auto_fixable'              => false,
-			'total_posts'               => $published_posts,
-			'posts_with_social_images'  => $posts_with_social_images,
-			'missing_og_images'         => $missing_og_images,
-			'ctr_improvement_potential' => '40%',
-			'kb_link'                   => 'https://wpshadow.com/kb/social-image-optimization',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Social_Media_Images_Not_Optimized' );
 	}
 
 	/**

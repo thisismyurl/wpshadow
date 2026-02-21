@@ -63,45 +63,6 @@ class Treatment_Data_Encryption_At_Rest extends Treatment_Base {
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-		$stats  = array();
-
-		$encryption_plugins = array(
-			'wpdataencrypt/wpdataencrypt.php' => 'WP Data Encrypt',
-			'wp-encrypt/wp-encrypt.php'       => 'WP Encrypt',
-			'defender-security/wp-defender.php' => 'Defender Security',
-		);
-
-		$active_encryption = array();
-		foreach ( $encryption_plugins as $plugin_file => $plugin_name ) {
-			if ( is_plugin_active( $plugin_file ) ) {
-				$active_encryption[] = $plugin_name;
-			}
-		}
-
-		$stats['encryption_tools'] = ! empty( $active_encryption ) ? implode( ', ', $active_encryption ) : 'none';
-		$stats['sodium_available'] = extension_loaded( 'sodium' ) ? 'yes' : 'no';
-
-		if ( empty( $active_encryption ) ) {
-			$issues[] = __( 'No encryption-at-rest tools detected for sensitive data', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Encrypting sensitive data at rest protects people if a database is ever copied or leaked. It is like keeping valuables in a locked safe instead of a drawer.', 'wpshadow' ),
-				'severity'     => 'critical',
-				'threat_level' => 85,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/data-encryption-at-rest',
-				'context'      => array(
-					'stats'  => $stats,
-					'issues' => $issues,
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Data_Encryption_At_Rest' );
 	}
 }

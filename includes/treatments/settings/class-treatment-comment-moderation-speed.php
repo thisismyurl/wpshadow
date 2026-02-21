@@ -24,42 +24,6 @@ class Treatment_Comment_Moderation_Speed extends Treatment_Base {
 	protected static $family = 'functionality';
 
 	public static function check() {
-		global $wpdb;
-
-		// Check for comments pending moderation.
-		$pending_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved = '0'"
-		);
-
-		if ( $pending_count > 100 ) {
-			// Check average time to approve.
-			$avg_time = $wpdb->get_var(
-				"SELECT AVG(TIMESTAMPDIFF(HOUR, c1.comment_date, c2.comment_date))
-				FROM {$wpdb->comments} c1
-				JOIN {$wpdb->comments} c2 ON c1.comment_post_ID = c2.comment_post_ID
-				WHERE c1.comment_approved = '1'
-				AND c2.comment_approved = '1'
-				AND c1.comment_date < c2.comment_date
-				LIMIT 100"
-			);
-
-			if ( $avg_time > 48 ) {
-				return array(
-					'id'           => self::$slug,
-					'title'        => self::$title,
-					'description'  => sprintf(
-						__( '%d comments pending moderation with average approval time of %.0f hours', 'wpshadow' ),
-						$pending_count,
-						$avg_time
-					),
-					'severity'     => 'low',
-					'threat_level' => 40,
-					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-speed',
-				);
-			}
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Moderation_Speed' );
 	}
 }

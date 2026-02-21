@@ -68,35 +68,6 @@ class Treatment_Icon_Buttons_Unnamed extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add aria-label to icon-only buttons', 'wpshadow' );
-		$issues[] = __( 'Use aria-labelledby to reference visible text nearby', 'wpshadow' );
-		$issues[] = __( 'Add descriptive text with .screen-reader-text class', 'wpshadow' );
-		$issues[] = __( 'Avoid empty or generic labels like "button" or "icon"', 'wpshadow' );
-		$issues[] = __( 'Test with screen reader—what does it announce?', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Your icon-only buttons might be silent to screen readers. When a screen reader user encounters a "🔍" icon button, it might announce nothing, "graphic", or just "button"—like having a door with no label. Sighted users see a magnifying glass and know it\'s search, but screen reader users hear nothing useful. Adding aria-label="Search" makes the button announce "Search button" so everyone knows what it does. This affects blind users (2% of population) and keyboard-only users who navigate by hearing button names.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/icon-buttons',
-				'details'      => array(
-					'recommendations'      => $issues,
-					'wcag_requirement'     => 'WCAG 2.1 4.1.2 Name, Role, Value (Level A)',
-					'affected_users'       => 'Blind users (2%), screen reader users, keyboard-only users',
-					'aria_label_example'   => '<button aria-label="Search"><i class="icon-search"></i></button>',
-					'screen_reader_text'   => '<button><span class="screen-reader-text">Search</span><i class="icon-search" aria-hidden="true"></i></button>',
-					'bad_example'          => '<button><i class="fa fa-search"></i></button> <!-- Announces "button" -->',
-					'common_icons'         => 'Search, Menu, Close, Edit, Delete, Share, Download, Upload',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\\WPShadow\\Diagnostics\\Diagnostic_Icon_Buttons_Unnamed' );
 	}
 }

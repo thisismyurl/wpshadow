@@ -127,29 +127,6 @@ class Treatment_Orphaned_Comment_Meta_Cleanup extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$orphaned = (int) $wpdb->get_var(
-			"SELECT COUNT(1) FROM {$wpdb->commentmeta} cm
-			LEFT JOIN {$wpdb->comments} c ON cm.comment_id = c.comment_ID
-			WHERE c.comment_ID IS NULL"
-		);
-
-		if ( $orphaned >= 100 ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Orphaned comment metadata from deleted comments was found. Cleaning it up can improve performance.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 25,
-				'auto_fixable' => false,
-				'details'      => array(
-					'orphaned_count' => $orphaned,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/orphaned-comment-meta-cleanup',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Orphaned_Comment_Meta_Cleanup' );
 	}
 }

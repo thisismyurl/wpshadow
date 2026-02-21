@@ -63,25 +63,6 @@ class Treatment_Theme_Prefetching_Preloading extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$has_resource_hints = has_filter( 'wp_resource_hints' );
-
-		if ( $has_resource_hints ) {
-			return null;
-		}
-
-		return array(
-			'id'           => self::$slug,
-			'title'        => self::$title,
-			'description'  => __( 'Theme does not configure resource hints for performance', 'wpshadow' ),
-			'severity'     => 'low',
-			'threat_level' => 30,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/theme-prefetching-preloading',
-			'details'      => array(
-				'issues' => array(
-					__( 'Add preconnect/preload hints for fonts and critical assets', 'wpshadow' ),
-				),
-			),
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_Prefetching_Preloading' );
 	}
 }

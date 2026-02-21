@@ -64,32 +64,7 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		// Check if WooCommerce or EDD is active
-		if ( ! self::has_ecommerce_plugin() ) {
-			return null; // Not applicable
-		}
-
-		$issues = self::find_checkout_issues();
-
-		if ( empty( $issues['all'] ) ) {
-			return null;
-		}
-
-		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
-				/* translators: %d: number of checkout optimization issues */
-				__( 'Found %d mobile checkout optimization issues', 'wpshadow' ),
-				count( $issues['all'] )
-			),
-			'severity'        => 'high',
-			'threat_level'    => 70,
-			'issues'          => $issues['all'],
-			'user_impact'     => __( 'Mobile users abandon checkout due to usability issues', 'wpshadow' ),
-			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/mobile-checkout',
-		);
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Checkout_Form' );
 	}
 
 	/**

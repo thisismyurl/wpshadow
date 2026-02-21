@@ -63,20 +63,6 @@ class Treatment_Encryption_At_Rest extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$enabled = (bool) get_option( 'wpshadow_encryption_at_rest_enabled', false );
-
-		if ( ! $enabled ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Encryption at rest is not configured. Enable database or disk encryption for compliance.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/encryption-at-rest',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Encryption_At_Rest' );
 	}
 }

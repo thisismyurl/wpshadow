@@ -124,44 +124,6 @@ class Treatment_Database_Table_Optimization_Status extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$tables = $wpdb->get_col( "SHOW TABLES LIKE '{$wpdb->prefix}%'" );
-		$tables_needing_optimization = array();
-
-		foreach ( array_slice( $tables, 0, 20 ) as $table ) {
-			$status = $wpdb->get_results( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', basename( $table ) ), ARRAY_A );
-			if ( empty( $status ) ) {
-				continue;
-			}
-
-			$row = $status[0];
-			if ( isset( $row['Data_free'] ) && $row['Data_free'] > 0 ) {
-				$free_mb = round( $row['Data_free'] / 1024 / 1024, 2 );
-				if ( $free_mb >= 1.0 ) {
-					$tables_needing_optimization[] = array(
-						'table' => $table,
-						'free_mb' => $free_mb,
-					);
-				}
-			}
-		}
-
-		if ( ! empty( $tables_needing_optimization ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Some database tables have unused space and can be optimized.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 20,
-				'auto_fixable' => false,
-				'details'      => array(
-					'tables' => array_slice( $tables_needing_optimization, 0, 10 ),
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/database-table-optimization-status',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Database_Table_Optimization_Status' );
 	}
 }

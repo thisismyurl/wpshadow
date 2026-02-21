@@ -63,22 +63,8 @@ class Treatment_Rate_Limiting_On_Forms_Not_Configured extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('wp_authenticate',
-						'check_login_rate_limit' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Form rate limiting not configured. Limit login attempts to 5 per minute per IP to prevent brute force attacks on login,
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/rate-limiting-on-forms-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Rate_Limiting_On_Forms_Not_Configured' );
+	}
 						return null;
 						}
 						return null;

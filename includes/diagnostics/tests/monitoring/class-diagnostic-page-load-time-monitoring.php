@@ -80,8 +80,11 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'page_load_time_check',
+				__( 'Page load time measured', 'wpshadow' ),
+				'performance',
 				array(
-					'load_time' => $homepage_load_time,
+					'load_time'   => $homepage_load_time,
+					'device_type' => wp_is_mobile() ? 'mobile' : 'desktop',
 				)
 			);
 		}
@@ -172,31 +175,41 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	 * @return float|null Baseline load time or null.
 	 */
 	private static function get_baseline_load_time(): ?float {
-		global $wpdb;
-
 		if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			return null;
 		}
 
-		$activity_table = $wpdb->prefix . 'wpshadow_activity';
+		// Get average from past 7 days.
+		$week_ago     = time() - ( 7 * DAY_IN_SECONDS );
+		$activity_log = get_option( \WPShadow\Core\Activity_Logger::OPTION_NAME, array() );
+		$total        = 0.0;
+		$count        = 0;
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$activity_table}'" ) !== $activity_table ) {
+		if ( ! is_array( $activity_log ) ) {
 			return null;
 		}
 
-		// Get average from past 7 days.
-		$week_ago = time() - ( 7 * DAY_IN_SECONDS );
+		foreach ( $activity_log as $entry ) {
+			$entry_time = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : 0;
+			$action     = isset( $entry['action'] ) ? (string) $entry['action'] : '';
 
-		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT AVG(CAST(JSON_EXTRACT(meta, '$.load_time') AS DECIMAL(10,2))) 
-				FROM {$activity_table} 
-				WHERE action = %s AND created_at > %d",
-				'page_load_time_check',
-				$week_ago
-			)
-		);
+			if ( $entry_time <= $week_ago || 'page_load_time_check' !== $action ) {
+				continue;
+			}
 
-		return $result ? (float) $result : null;
+			$metadata  = isset( $entry['metadata'] ) && is_array( $entry['metadata'] ) ? $entry['metadata'] : array();
+			$load_time = isset( $metadata['load_time'] ) ? (float) $metadata['load_time'] : 0.0;
+
+			if ( $load_time > 0 ) {
+				$total += $load_time;
+				++$count;
+			}
+		}
+
+		if ( 0 === $count ) {
+			return null;
+		}
+
+		return $total / $count;
 	}
 }

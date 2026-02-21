@@ -63,24 +63,18 @@ class Diagnostic_Unused_CSS_Not_Removed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('wp_head',
-						'remove_unused_css' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Unused CSS not removed. Use PurgeCSS or similar tools to remove unused styles and reduce CSS file sizes by 50-80%.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/unused-css-not-removed'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'wp_head', 'remove_unused_css' ) ) {
+			return array(
+				'id'          => self::$slug,
+				'title'       => self::$title,
+				'description' => __( 'Unused CSS removal is not configured yet. Trimming unused styles can reduce payload size and improve page speed.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'threat_level' => 40,
+				'auto_fixable' => false,
+				'kb_link'     => 'https://wpshadow.com/kb/unused-css-not-removed',
+			);
+		}
+
+		return null;
 	}
 }

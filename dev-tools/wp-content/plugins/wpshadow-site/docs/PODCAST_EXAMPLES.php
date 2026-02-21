@@ -103,25 +103,34 @@ function my_custom_podcast_generation( $post_id ) {
 // ============================================================================
 
 function get_podcast_generation_status( $post_id ) {
-	global $wpdb;
+	$queue_items = get_option( 'wpshadow_podcast_queue', array() );
 
-	$status = $wpdb->get_row(
-		$wpdb->prepare(
-			"SELECT status, error_message, created_at, updated_at 
-			FROM {$wpdb->prefix}wpshadow_podcast_queue 
-			WHERE post_id = %d 
-			ORDER BY created_at DESC 
-			LIMIT 1",
-			$post_id
-		)
+	if ( ! is_array( $queue_items ) ) {
+		return null;
+	}
+
+	$latest = null;
+
+	foreach ( $queue_items as $item ) {
+		if ( (int) ( $item['post_id'] ?? 0 ) !== (int) $post_id ) {
+			continue;
+		}
+
+		if ( null === $latest || strtotime( (string) $item['created_at'] ) > strtotime( (string) $latest['created_at'] ) ) {
+			$latest = $item;
+		}
+	}
+
+	if ( null === $latest ) {
+		return null;
+	}
+
+	return array(
+		'status'  => (string) ( $latest['status'] ?? '' ),
+		'error'   => (string) ( $latest['error_message'] ?? '' ),
+		'created' => (string) ( $latest['created_at'] ?? '' ),
+		'updated' => (string) ( $latest['updated_at'] ?? '' ),
 	);
-
-	return $status ? array(
-		'status'  => $status->status,
-		'error'   => $status->error_message,
-		'created' => $status->created_at,
-		'updated' => $status->updated_at,
-	) : null;
 }
 
 // Usage:
@@ -228,12 +237,25 @@ if ( class_exists( 'WP_CLI' ) ) {
 		 * wp podcast status
 		 */
 		public function status() {
-			global $wpdb;
+			$queue_items = get_option( 'wpshadow_podcast_queue', array() );
+			if ( ! is_array( $queue_items ) ) {
+				$queue_items = array();
+			}
 
-			$table = $wpdb->prefix . 'wpshadow_podcast_queue';
+			$pending = 0;
+			$failed  = 0;
 
-			$pending = $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE status = 'pending'" );
-			$failed  = $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE status = 'failed'" );
+			foreach ( $queue_items as $item ) {
+				$status = isset( $item['status'] ) ? $item['status'] : '';
+
+				if ( 'pending' === $status ) {
+					++$pending;
+				}
+
+				if ( 'failed' === $status ) {
+					++$failed;
+				}
+			}
 
 			WP_CLI::log( "Pending: $pending" );
 			WP_CLI::log( "Failed: $failed" );
@@ -315,16 +337,25 @@ function my_safe_podcast_call( $post_id ) {
 // Send email when podcast is ready:
 
 add_action( 'wpshadow_process_podcast_queue', function() {
-	global $wpdb;
+	$queue_items = get_option( 'wpshadow_podcast_queue', array() );
 
-	$recently_completed = $wpdb->get_results(
-		"SELECT post_id FROM {$wpdb->prefix}wpshadow_podcast_queue 
-		WHERE status = 'completed' 
-		AND updated_at > DATE_SUB( NOW(), INTERVAL 5 MINUTE )"
-	);
+	if ( ! is_array( $queue_items ) ) {
+		return;
+	}
 
-	foreach ( $recently_completed as $item ) {
-		$post = get_post( $item->post_id );
+	$cutoff = time() - ( 5 * MINUTE_IN_SECONDS );
+
+	foreach ( $queue_items as $item ) {
+		if ( 'completed' !== ( $item['status'] ?? '' ) ) {
+			continue;
+		}
+
+		$updated_at = isset( $item['updated_at'] ) ? strtotime( (string) $item['updated_at'] ) : 0;
+		if ( $updated_at < $cutoff ) {
+			continue;
+		}
+
+		$post = get_post( (int) ( $item['post_id'] ?? 0 ) );
 
 		if ( ! $post ) {
 			continue;

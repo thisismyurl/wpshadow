@@ -36,32 +36,6 @@ class Treatment_Twitter_Card_Tags extends Treatment_Base {
 	protected static $family = 'content';
 
 	public static function check() {
-		$issues = array();
-
-		$issues[] = __( 'Add twitter:card (summary, summary_large_image, player)', 'wpshadow' );
-		$issues[] = __( 'Add twitter:title (page title)', 'wpshadow' );
-		$issues[] = __( 'Add twitter:description (preview text)', 'wpshadow' );
-		$issues[] = __( 'Add twitter:image (thumbnail)', 'wpshadow' );
-		$issues[] = __( 'Add twitter:creator (author\'s Twitter handle)', 'wpshadow' );
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Twitter Cards control how content appears when shared on Twitter/X. Without them, shares are plain and boring.', 'wpshadow' ),
-				'severity'     => 'low',
-				'threat_level' => 30,
-				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/twitter-cards',
-				'details'      => array(
-					'recommendations'         => $issues,
-					'example'                 => '<meta name="twitter:card" content="summary_large_image">',
-					'card_types'              => 'summary, summary_large_image, app, player',
-					'benefits'                => 'Better visual appearance on Twitter/X',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Twitter_Card_Tags' );
 	}
 }

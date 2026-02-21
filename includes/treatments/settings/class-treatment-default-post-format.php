@@ -69,46 +69,6 @@ class Treatment_Default_Post_Format extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// Check if post formats are supported.
-		$post_formats = get_theme_support( 'post-formats' );
-
-		if ( false === $post_formats ) {
-			// Post formats are not supported, which is fine for many sites.
-			return null;
-		}
-
-		// If post formats are supported, check if they're being used.
-		if ( is_array( $post_formats[0] ) && ! empty( $post_formats[0] ) ) {
-			// Theme supports post formats.
-			$supported = $post_formats[0];
-
-			// Check if any posts use custom post formats.
-			global $wpdb;
-			$custom_formats = $wpdb->get_var(
-				"SELECT COUNT(*) FROM {$wpdb->term_relationships} tr
-				INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-				WHERE tt.taxonomy = 'post_format'"
-			);
-
-			if ( 0 === $custom_formats ) {
-				// No posts using custom formats - that's ok if "Standard" is being used.
-			}
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => implode( '. ', $issues ),
-				'severity'    => 'low',
-				'threat_level' => 10,
-				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/default-post-format',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Default_Post_Format' );
 	}
 }

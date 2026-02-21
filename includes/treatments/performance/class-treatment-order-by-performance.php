@@ -62,66 +62,6 @@ class Treatment_Order_By_Performance extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$issues = array();
-
-		// Check for posts with many revisions (ORDER BY gets expensive)
-		$high_revision_posts = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_parent) FROM {$wpdb->posts}
-			WHERE post_type = 'revision'
-			GROUP BY post_parent
-			HAVING COUNT(*) > 100"
-		);
-
-		if ( $high_revision_posts > 0 ) {
-			$issues[] = __( 'Posts with 100+ revisions detected. Ordering revision queries is expensive.', 'wpshadow' );
-		}
-
-		// Check for ordering by post_title (varchar field - slow)
-		$posts_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts}" );
-		if ( $posts_count > 10000 ) {
-			$issues[] = __( 'Large post count (10,000+). Ordering by post_title or post_content is inefficient.', 'wpshadow' );
-		}
-
-		// Check for meta queries with ORDER BY
-		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->postmeta}" );
-		if ( $meta_count > 100000 ) {
-			$issues[] = sprintf(
-				/* translators: %d: count of meta entries */
-				__( '%d post meta entries. ORDER BY meta queries will use filesort.', 'wpshadow' ),
-				$meta_count
-			);
-		}
-
-		// Check for comments with high ordering activity
-		$comment_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments}" );
-		if ( $comment_count > 50000 ) {
-			$issues[] = sprintf(
-				/* translators: %d: comment count */
-				__( '%d comments. Ordering comment queries is expensive.', 'wpshadow' ),
-				$comment_count
-			);
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => implode( ' ', $issues ),
-				'severity'     => 'medium',
-				'threat_level' => 45,
-				'auto_fixable' => false,
-				'details'      => array(
-					'posts_with_high_revisions' => $high_revision_posts ?? 0,
-					'total_posts'               => $posts_count ?? 0,
-					'total_meta_entries'        => $meta_count ?? 0,
-					'total_comments'            => $comment_count ?? 0,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/order-by-performance',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Order_By_Performance' );
 	}
 }

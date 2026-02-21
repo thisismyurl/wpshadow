@@ -63,38 +63,6 @@ class Treatment_File_Upload_Success extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$uploads = wp_get_upload_dir();
-		if ( ! empty( $uploads['error'] ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %s: error message */
-					__( 'Uploads directory error: %s', 'wpshadow' ),
-					esc_html( $uploads['error'] )
-				),
-				'severity'     => 'high',
-				'threat_level' => 80,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-upload-success',
-			);
-		}
-
-		if ( empty( $uploads['basedir'] ) || ! is_writable( $uploads['basedir'] ) ) {
-			return array(
-				'id'           => self::$slug,
-				'title'        => self::$title,
-				'description'  => __( 'Uploads directory is not writable. Media uploads may fail.', 'wpshadow' ),
-				'severity'     => 'high',
-				'threat_level' => 75,
-				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-upload-success',
-				'meta'         => array(
-					'uploads_dir' => $uploads['basedir'],
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_File_Upload_Success' );
 	}
 }

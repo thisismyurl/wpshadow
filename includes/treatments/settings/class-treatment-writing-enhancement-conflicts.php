@@ -69,56 +69,6 @@ class Treatment_Writing_Enhancement_Conflicts extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// Check if using block editor.
-		$use_block_editor = get_option( 'use_blocks', true );
-
-		// Check for editor-related plugins that might conflict.
-		$editor_plugins = array(
-			'gutenberg/gutenberg.php'              => 'Gutenberg',
-			'classic-editor/classic-editor.php'    => 'Classic Editor',
-			'page-builders-anywhere/plugin.php'    => 'Page Builders Anywhere',
-		);
-
-		$active_editor_plugins = array();
-		foreach ( $editor_plugins as $plugin => $name ) {
-			if ( is_plugin_active( $plugin ) ) {
-				$active_editor_plugins[] = $name;
-			}
-		}
-
-		if ( count( $active_editor_plugins ) > 1 ) {
-			$issues[] = sprintf(
-				/* translators: %s: comma-separated list of editor plugins */
-				__( 'Multiple editor plugins are active which may conflict: %s', 'wpshadow' ),
-				implode( ', ', $active_editor_plugins )
-			);
-		}
-
-		// Check autosave settings.
-		if ( ! defined( 'AUTOSAVE_INTERVAL' ) ) {
-			// Using default (60 seconds) - this is ok.
-		}
-
-		// Check for revision settings.
-$wp_post_revisions = WP_POST_REVISIONS;
-		if ( false === $wp_post_revisions ) {
-			$issues[] = __( 'Post revisions are disabled; you cannot recover previous versions of posts', 'wpshadow' );
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => implode( '. ', $issues ),
-				'severity'    => 'medium',
-				'threat_level' => 40,
-				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/writing-enhancement-conflicts',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Writing_Enhancement_Conflicts' );
 	}
 }

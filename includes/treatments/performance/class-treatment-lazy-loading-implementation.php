@@ -69,60 +69,6 @@ class Treatment_Lazy_Loading_Implementation extends Treatment_Base {
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
-		global $wp_version;
-
-		$lazy_loading_status = 'not-enabled';
-		$plugin_detected     = false;
-		$native_support      = version_compare( $wp_version, '5.5.0', '>=' );
-
-		// Check for lazy loading plugins
-		$lazy_plugins = array(
-			'lazy-load-xt/lazy-load-xt.php'              => 'Lazy Load XT',
-			'a3-lazy-load/a3-lazy-load.php'              => 'A3 Lazy Load',
-			'ewww-image-optimizer/ewww-image-optimizer.php' => 'EWWW Image Optimizer',
-			'imagify/imagify.php'                        => 'Imagify',
-			'wp-smush/wp-smush.php'                      => 'WP Smush',
-			'jetpack/jetpack.php'                        => 'Jetpack (with lazy-load)',
-		);
-
-		foreach ( $lazy_plugins as $plugin_path => $plugin_name ) {
-			if ( is_plugin_active( $plugin_path ) ) {
-				$plugin_detected     = true;
-				$lazy_loading_status = 'plugin-enabled';
-				break;
-			}
-		}
-
-		// Check if WordPress core lazy loading is available
-		if ( $native_support ) {
-			// WordPress 5.5+ has native lazy loading support
-			$lazy_loading_status = 'native-available';
-		}
-
-		// Check if lazy loading filtering is active
-		if ( has_filter( 'wp_content_img_tag' ) || has_filter( 'wp_img_tag_add_loading_attr' ) ) {
-			$lazy_loading_status = 'custom-enabled';
-		}
-
-		if ( 'not-enabled' === $lazy_loading_status ) {
-			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => __( 'Lazy loading is not enabled. Deferred image loading reduces initial page load time by 20-30%%.', 'wpshadow' ),
-				'severity'      => 'medium',
-				'threat_level'  => 45,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading',
-				'meta'          => array(
-					'native_support'     => $native_support,
-					'plugin_installed'   => $plugin_detected,
-					'wordpress_version'  => $wp_version,
-					'recommendation'     => 'Enable lazy loading: (1) Update to WordPress 5.5+ for native support, (2) Or install a lazy loading plugin',
-					'impact'             => 'Reduces LCP by 15-25%, improves initial load time',
-				),
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Lazy_Loading_Implementation' );
 	}
 }

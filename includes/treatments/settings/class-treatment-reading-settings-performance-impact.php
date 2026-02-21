@@ -69,54 +69,6 @@ class Treatment_Reading_Settings_Performance_Impact extends Treatment_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
-
-		// Get posts per page.
-		$posts_per_page = (int) get_option( 'posts_per_page', 10 );
-
-		if ( $posts_per_page > 50 ) {
-			$issues[] = sprintf(
-				/* translators: %d: posts per page */
-				__( 'Posts per page (%d) is very high; this may impact performance', 'wpshadow' ),
-				$posts_per_page
-			);
-		} elseif ( $posts_per_page < 2 ) {
-			$issues[] = __( 'Posts per page is very low; consider increasing for better UX', 'wpshadow' );
-		}
-
-		// Get RSS posts count.
-		$posts_rss = (int) get_option( 'posts_per_rss', 10 );
-
-		if ( $posts_rss > 100 ) {
-			$issues[] = sprintf(
-				/* translators: %d: RSS feed posts */
-				__( 'RSS feed item count (%d) is very high; this increases bandwidth usage', 'wpshadow' ),
-				$posts_rss
-			);
-		}
-
-		// Check if showing full content or excerpt in feeds.
-		$rss_use_excerpt = (int) get_option( 'rss_use_excerpt', 0 );
-
-		if ( 0 === $rss_use_excerpt ) {
-			// Showing full content in feeds.
-			if ( $posts_rss > 20 ) {
-				$issues[] = __( 'Full post content is shown in RSS feeds with high item count; consider using excerpts instead', 'wpshadow' );
-			}
-		}
-
-		if ( ! empty( $issues ) ) {
-			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => implode( '. ', $issues ),
-				'severity'    => 'low',
-				'threat_level' => 30,
-				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/reading-settings-performance-impact',
-			);
-		}
-
-		return null;
+		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Reading_Settings_Performance_Impact' );
 	}
 }
