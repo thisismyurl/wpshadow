@@ -63,24 +63,18 @@ class Diagnostic_Rate_Limiting_On_Forms_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('wp_authenticate',
-						'check_login_rate_limit' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Form rate limiting not configured. Limit login attempts to 5 per minute per IP to prevent brute force attacks on login,
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/rate-limiting-on-forms-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'wp_authenticate', 'check_login_rate_limit' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Rate limiting on form-related authentication does not appear configured. Limiting repeated attempts helps reduce brute-force abuse.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/rate-limiting-on-forms-not-configured',
+			);
+		}
+
+		return null;
 	}
 }

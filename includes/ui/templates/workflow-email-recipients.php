@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Require email manager
-require_once WPSHADOW_INCLUDES . 'workflow/class-email-recipient-manager.php';
+require_once WPSHADOW_PATH . 'includes/systems/workflow/class-email-recipient-manager.php';
 
 use WPShadow\Workflow\Email_Recipient_Manager;
 
@@ -22,10 +22,12 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 ?>
 
 <div class="wrap wpshadow-email-recipients wps-page-container">
-	<?php wpshadow_render_page_header(
+	<?php
+	wpshadow_render_page_header(
 		__( 'Workflow Email Recipients', 'wpshadow' ),
 		__( 'Manage approved email recipients that can be used when sending emails from workflows. All emails must be verified or approved by an admin before they can be used.', 'wpshadow' )
-	); ?>
+	);
+	?>
 
 	<!-- Add New Recipient Form -->
 	<div class="card">

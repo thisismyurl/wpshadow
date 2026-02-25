@@ -132,6 +132,12 @@ class Workflow_Examples {
 		);
 	}
 
+	/**
+	 * Get featured workflow examples for quick-start cards.
+	 *
+	 * @since  1.6047.1200
+	 * @return array Featured example definitions keyed by example slug.
+	 */
 	public static function get_featured_examples() {
 		$all_examples  = self::get_all_examples();
 		$featured_keys = array( 'daily_health_check', 'security_alert', 'ssl_monitor' );

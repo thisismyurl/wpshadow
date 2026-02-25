@@ -2,800 +2,977 @@
  * WPShadow Report Styles
  * Consolidated styles for report builder, renderer, and display
  * Extracted from inline styles in report PHP classes
- * 
+ *
  * @package WPShadow
  */
 
 /* ============================================================================
-   Report Builder Styles
-   ============================================================================ */
+	Report Builder Styles
+	============================================================================ */
 
 .wps-report-builder {
-    background: white;
-    border-radius: var(--wps-radius-lg);
-    padding: var(--wps-space-6);
+	background: white;
+	border-radius: var(--wps-radius-lg);
+	padding: var(--wps-space-6);
 }
 
 /* Report type selector */
 .wps-report-types {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--wps-space-4);
-    margin-bottom: var(--wps-space-6);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: var(--wps-space-4);
+	margin-bottom: var(--wps-space-6);
 }
 
 .wps-report-type-option {
-    padding: var(--wps-space-4);
-    border: 2px solid var(--wps-gray-200);
-    border-radius: var(--wps-radius-md);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: white;
-    text-align: center;
+	padding: var(--wps-space-4);
+	border: 2px solid var(--wps-gray-200);
+	border-radius: var(--wps-radius-md);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	background: white;
+	text-align: center;
 }
 
 .wps-report-type-option:hover {
-    border-color: var(--wps-primary);
-    background: var(--wps-primary-light);
+	border-color: var(--wps-primary);
+	background: var(--wps-primary-light);
 }
 
 .wps-report-type-option.selected {
-    border-color: var(--wps-primary);
-    background: var(--wps-primary);
-    color: white;
+	border-color: var(--wps-primary);
+	background: var(--wps-primary);
+	color: white;
 }
 
 .wps-report-type-icon {
-    font-size: 32px;
-    margin-bottom: var(--wps-space-2);
+	font-size: 32px;
+	margin-bottom: var(--wps-space-2);
 }
 
 .wps-report-type-name {
-    font-weight: var(--wps-font-semibold);
-    margin-bottom: var(--wps-space-1);
+	font-weight: var(--wps-font-semibold);
+	margin-bottom: var(--wps-space-1);
 }
 
 .wps-report-type-description {
-    font-size: var(--wps-text-xs);
-    opacity: 0.8;
+	font-size: var(--wps-text-xs);
+	opacity: 0.8;
 }
 
 /* Report form elements */
 .wps-report-form-section {
-    border-bottom: 1px solid var(--wps-gray-200);
-    padding-bottom: var(--wps-space-4);
-    margin-bottom: var(--wps-space-4);
+	border-bottom: 1px solid var(--wps-gray-200);
+	padding-bottom: var(--wps-space-4);
+	margin-bottom: var(--wps-space-4);
 }
 
 .wps-report-form-section:last-child {
-    border-bottom: none;
+	border-bottom: none;
 }
 
 .wps-form-group-label {
-    display: block;
-    font-weight: var(--wps-font-semibold);
-    margin-bottom: var(--wps-space-2);
-    color: var(--wps-gray-900);
+	display: block;
+	font-weight: var(--wps-font-semibold);
+	margin-bottom: var(--wps-space-2);
+	color: var(--wps-gray-900);
 }
 
 .wps-form-group-label span {
-    font-size: var(--wps-text-sm);
-    font-weight: var(--wps-font-normal);
-    color: var(--wps-gray-600);
-    margin-left: var(--wps-space-1);
+	font-size: var(--wps-text-sm);
+	font-weight: var(--wps-font-normal);
+	color: var(--wps-gray-600);
+	margin-left: var(--wps-space-1);
 }
 
 .wps-preset-buttons {
-    display: flex;
-    gap: var(--wps-space-2);
-    flex-wrap: wrap;
-    margin-bottom: var(--wps-space-3);
+	display: flex;
+	gap: var(--wps-space-2);
+	flex-wrap: wrap;
+	margin-bottom: var(--wps-space-3);
 }
 
 .wps-preset-btn {
-    padding: var(--wps-space-2) var(--wps-space-4);
-    background: var(--wps-gray-100);
-    border: 1px solid var(--wps-gray-300);
-    border-radius: var(--wps-radius-md);
-    cursor: pointer;
-    font-size: var(--wps-text-sm);
-    transition: all 0.2s ease;
-    font-weight: var(--wps-font-medium);
+	padding: var(--wps-space-2) var(--wps-space-4);
+	background: var(--wps-gray-100);
+	border: 1px solid var(--wps-gray-300);
+	border-radius: var(--wps-radius-md);
+	cursor: pointer;
+	font-size: var(--wps-text-sm);
+	transition: all 0.2s ease;
+	font-weight: var(--wps-font-medium);
 }
 
 .wps-preset-btn:hover {
-    background: var(--wps-gray-200);
-    border-color: var(--wps-gray-400);
+	background: var(--wps-gray-200);
+	border-color: var(--wps-gray-400);
 }
 
 .wps-preset-btn.selected {
-    background: var(--wps-primary);
-    color: white;
-    border-color: var(--wps-primary);
+	background: var(--wps-primary);
+	color: white;
+	border-color: var(--wps-primary);
 }
 
 /* Date range picker */
 .wps-date-range-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--wps-space-3);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--wps-space-3);
 }
 
 .wps-date-input-group {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .wps-date-input-group label {
-    font-size: var(--wps-text-sm);
-    margin-bottom: var(--wps-space-1);
-    font-weight: var(--wps-font-medium);
+	font-size: var(--wps-text-sm);
+	margin-bottom: var(--wps-space-1);
+	font-weight: var(--wps-font-medium);
 }
 
 .wps-date-input-group input {
-    padding: var(--wps-space-2);
-    border: 1px solid var(--wps-gray-300);
-    border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-2);
+	border: 1px solid var(--wps-gray-300);
+	border-radius: var(--wps-radius-md);
 }
 
 /* Checkboxes and toggles */
 .wps-checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--wps-space-2);
+	display: flex;
+	flex-direction: column;
+	gap: var(--wps-space-2);
 }
 
 .wps-checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-2);
-    cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	cursor: pointer;
 }
 
 .wps-checkbox-item input[type="checkbox"] {
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
+	cursor: pointer;
+	width: 18px;
+	height: 18px;
 }
 
 .wps-checkbox-item label {
-    cursor: pointer;
-    margin: 0;
+	cursor: pointer;
+	margin: 0;
 }
 
 /* Report format options */
 .wps-format-options {
-    display: flex;
-    gap: var(--wps-space-2);
-    flex-wrap: wrap;
+	display: flex;
+	gap: var(--wps-space-2);
+	flex-wrap: wrap;
 }
 
 .wps-format-option {
-    padding: var(--wps-space-2) var(--wps-space-4);
-    background: var(--wps-gray-100);
-    border: 1px solid var(--wps-gray-300);
-    border-radius: var(--wps-radius-md);
-    cursor: pointer;
-    transition: all 0.2s ease;
+	padding: var(--wps-space-2) var(--wps-space-4);
+	background: var(--wps-gray-100);
+	border: 1px solid var(--wps-gray-300);
+	border-radius: var(--wps-radius-md);
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 .wps-format-option:hover {
-    background: var(--wps-gray-200);
+	background: var(--wps-gray-200);
 }
 
 .wps-format-option.active {
-    background: var(--wps-primary);
-    color: white;
-    border-color: var(--wps-primary);
+	background: var(--wps-primary);
+	color: white;
+	border-color: var(--wps-primary);
 }
 
 .wps-format-option .dashicons {
-    margin-right: var(--wps-space-1);
+	margin-right: var(--wps-space-1);
 }
 
 /* ============================================================================
-   Report Renderer Styles
-   ============================================================================ */
+	Report Renderer Styles
+	============================================================================ */
 
 .wps-report-output {
-    background: white;
-    border-radius: var(--wps-radius-lg);
-    padding: var(--wps-space-6);
-    margin-top: var(--wps-space-4);
+	background: white;
+	border-radius: var(--wps-radius-lg);
+	padding: var(--wps-space-6);
+	margin-top: var(--wps-space-4);
 }
 
 .wps-report-title {
-    font-size: var(--wps-text-3xl);
-    font-weight: var(--wps-font-bold);
-    color: #0073aa;
-    margin: 0 0 var(--wps-space-2) 0;
+	font-size: var(--wps-text-3xl);
+	font-weight: var(--wps-font-bold);
+	color: #0073aa;
+	margin: 0 0 var(--wps-space-2) 0;
 }
 
 .wps-report-meta {
-    font-size: var(--wps-text-sm);
-    color: var(--wps-gray-600);
-    margin-bottom: var(--wps-space-6);
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
+	margin-bottom: var(--wps-space-6);
 }
 
 .wps-report-meta-item {
-    display: inline-block;
-    margin-right: var(--wps-space-4);
+	display: inline-block;
+	margin-right: var(--wps-space-4);
 }
 
 /* Report content cards */
 .wps-report-card {
-    background: white;
-    border-radius: var(--wps-radius-md);
-    padding: var(--wps-space-4);
-    margin-bottom: var(--wps-space-4);
-    border-left: 4px solid var(--wps-primary);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+	background: white;
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-4);
+	margin-bottom: var(--wps-space-4);
+	border-left: 4px solid var(--wps-primary);
+	box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .wps-report-card.info {
-    border-left-color: #2563eb;
-    background: #f0f9ff;
+	border-left-color: #2563eb;
+	background: #f0f9ff;
 }
 
 .wps-report-card.success {
-    border-left-color: #10b981;
-    background: #ecfdf5;
+	border-left-color: #10b981;
+	background: #ecfdf5;
 }
 
 .wps-report-card.warning {
-    border-left-color: #f59e0b;
-    background: #fffbeb;
+	border-left-color: #f59e0b;
+	background: #fffbeb;
 }
 
 .wps-report-card.error {
-    border-left-color: #dc2626;
-    background: #fef2f2;
+	border-left-color: #dc2626;
+	background: #fef2f2;
 }
 
 .wps-report-card-title {
-    font-weight: var(--wps-font-semibold);
-    margin: 0 0 var(--wps-space-2) 0;
+	font-weight: var(--wps-font-semibold);
+	margin: 0 0 var(--wps-space-2) 0;
 }
 
 .wps-report-card-content {
-    font-size: var(--wps-text-sm);
-    line-height: 1.6;
-    color: var(--wps-gray-800);
+	font-size: var(--wps-text-sm);
+	line-height: 1.6;
+	color: var(--wps-gray-800);
 }
 
 /* Data visualization cards */
 .wps-data-card {
-    background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
-    color: white;
-    padding: var(--wps-space-4);
-    border-radius: var(--wps-radius-md);
-    margin-bottom: var(--wps-space-3);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
+	color: white;
+	padding: var(--wps-space-4);
+	border-radius: var(--wps-radius-md);
+	margin-bottom: var(--wps-space-3);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .wps-data-card-label {
-    font-size: var(--wps-text-sm);
-    opacity: 0.9;
+	font-size: var(--wps-text-sm);
+	opacity: 0.9;
 }
 
 .wps-data-card-value {
-    font-size: 24px;
-    font-weight: var(--wps-font-bold);
-    line-height: 1;
+	font-size: 24px;
+	font-weight: var(--wps-font-bold);
+	line-height: 1;
 }
 
 .wps-data-card-icon {
-    font-size: 32px;
-    opacity: 0.7;
+	font-size: 32px;
+	opacity: 0.7;
 }
 
 /* Recommendation boxes */
 .wps-recommendation-box {
-    background: white;
-    border-radius: var(--wps-radius-md);
-    padding: var(--wps-space-4);
-    margin-bottom: var(--wps-space-3);
-    display: flex;
-    gap: var(--wps-space-4);
-    border-left: 4px solid;
+	background: white;
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-4);
+	margin-bottom: var(--wps-space-3);
+	display: flex;
+	gap: var(--wps-space-4);
+	border-left: 4px solid;
 }
 
 .wps-recommendation-box.priority-high {
-    border-left-color: #dc2626;
-    background: #fef2f2;
+	border-left-color: #dc2626;
+	background: #fef2f2;
 }
 
 .wps-recommendation-box.priority-medium {
-    border-left-color: #f59e0b;
-    background: #fffbeb;
+	border-left-color: #f59e0b;
+	background: #fffbeb;
 }
 
 .wps-recommendation-box.priority-low {
-    border-left-color: #10b981;
-    background: #ecfdf5;
+	border-left-color: #10b981;
+	background: #ecfdf5;
 }
 
 .wps-recommendation-icon {
-    flex-shrink: 0;
-    font-size: 24px;
+	flex-shrink: 0;
+	font-size: 24px;
 }
 
 .wps-recommendation-text h4 {
-    margin: 0 0 var(--wps-space-1) 0;
-    font-weight: var(--wps-font-semibold);
+	margin: 0 0 var(--wps-space-1) 0;
+	font-weight: var(--wps-font-semibold);
 }
 
 .wps-recommendation-text p {
-    margin: 0;
-    font-size: var(--wps-text-sm);
-    color: var(--wps-gray-700);
+	margin: 0;
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-700);
 }
 
 .wps-recommendation-action {
-    display: inline-block;
-    margin-top: var(--wps-space-2);
+	display: inline-block;
+	margin-top: var(--wps-space-2);
 }
 
 .wps-recommendation-action a {
-    color: #0073aa;
-    text-decoration: none;
-    font-weight: var(--wps-font-semibold);
-    font-size: var(--wps-text-sm);
+	color: #0073aa;
+	text-decoration: none;
+	font-weight: var(--wps-font-semibold);
+	font-size: var(--wps-text-sm);
 }
 
 .wps-recommendation-action a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* Report tables */
 .wps-report-table-container {
-    overflow-x: auto;
-    margin-bottom: var(--wps-space-4);
+	overflow-x: auto;
+	margin-bottom: var(--wps-space-4);
 }
 
 .wps-report-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
+	width: 100%;
+	border-collapse: collapse;
+	background: white;
 }
 
 .wps-report-table thead {
-    background: var(--wps-gray-100);
-    border-bottom: 2px solid var(--wps-gray-300);
+	background: var(--wps-gray-100);
+	border-bottom: 2px solid var(--wps-gray-300);
 }
 
 .wps-report-table th {
-    padding: var(--wps-space-3);
-    text-align: left;
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	padding: var(--wps-space-3);
+	text-align: left;
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 .wps-report-table td {
-    padding: var(--wps-space-3);
-    border-bottom: 1px solid var(--wps-gray-200);
+	padding: var(--wps-space-3);
+	border-bottom: 1px solid var(--wps-gray-200);
 }
 
 .wps-report-table tbody tr:hover {
-    background: var(--wps-gray-50);
+	background: var(--wps-gray-50);
 }
 
 .wps-report-table tbody tr:nth-child(odd) {
-    background: white;
+	background: white;
 }
 
 .wps-report-table tbody tr:nth-child(even) {
-    background: var(--wps-gray-50);
+	background: var(--wps-gray-50);
 }
 
 /* Report stats grid */
 .wps-report-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--wps-space-4);
-    margin-bottom: var(--wps-space-6);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: var(--wps-space-4);
+	margin-bottom: var(--wps-space-6);
 }
 
 .wps-stat-item {
-    background: white;
-    padding: var(--wps-space-4);
-    border-radius: var(--wps-radius-md);
-    border: 1px solid var(--wps-gray-200);
+	background: white;
+	padding: var(--wps-space-4);
+	border-radius: var(--wps-radius-md);
+	border: 1px solid var(--wps-gray-200);
 }
 
 .wps-stat-icon {
-    font-size: 28px;
-    color: var(--wps-primary);
-    margin-bottom: var(--wps-space-2);
+	font-size: 28px;
+	color: var(--wps-primary);
+	margin-bottom: var(--wps-space-2);
 }
 
 .wps-stat-title {
-    font-size: var(--wps-text-sm);
-    color: var(--wps-gray-600);
-    margin-bottom: var(--wps-space-1);
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
+	margin-bottom: var(--wps-space-1);
 }
 
 .wps-stat-value {
-    font-size: var(--wps-text-2xl);
-    font-weight: var(--wps-font-bold);
-    color: var(--wps-gray-900);
+	font-size: var(--wps-text-2xl);
+	font-weight: var(--wps-font-bold);
+	color: var(--wps-gray-900);
 }
 
 /* Export/Email section */
 .wps-report-actions {
-    display: flex;
-    gap: var(--wps-space-3);
-    margin-top: var(--wps-space-6);
-    padding-top: var(--wps-space-6);
-    border-top: 1px solid var(--wps-gray-200);
+	display: flex;
+	gap: var(--wps-space-3);
+	margin-top: var(--wps-space-6);
+	padding-top: var(--wps-space-6);
+	border-top: 1px solid var(--wps-gray-200);
 }
 
 @media (max-width: 768px) {
-    .wps-date-range-group {
-        grid-template-columns: 1fr;
-    }
+	.wps-date-range-group {
+		grid-template-columns: 1fr;
+	}
 
-    .wps-report-stats-grid {
-        grid-template-columns: 1fr;
-    }
+	.wps-report-stats-grid {
+		grid-template-columns: 1fr;
+	}
 
-    .wps-recommendation-box {
-        flex-direction: column;
-    }
+	.wps-recommendation-box {
+		flex-direction: column;
+	}
 
-    .wps-data-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+	.wps-data-card {
+		flex-direction: column;
+		align-items: flex-start;
+	}
 }
 
 /* A11Y Audit Report Styles */
 .wpshadow-a11y-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	margin-bottom: 20px;
 }
 
 .wpshadow-a11y-progress {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .wpshadow-a11y-progress-container {
-    background: #f0f0f1;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 10px;
+	background: #f0f0f1;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 10px;
 }
 
 .wpshadow-a11y-progress-bar {
-    height: 24px;
-    background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
-    width: 0%;
-    transition: width 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
+	height: 24px;
+	background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
+	width: 0%;
+	transition: width 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 12px;
+	font-weight: 600;
 }
 
 .wpshadow-a11y-progress-status {
-    font-size: 13px;
-    color: #50575e;
-    text-align: center;
+	font-size: 13px;
+	color: #50575e;
+	text-align: center;
 }
 
 .wpshadow-a11y-pill {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 600;
-    display: inline-block;
-    gap: 15px;
+	padding: 8px 16px;
+	border-radius: 4px;
+	font-weight: 600;
+	display: inline-block;
+	gap: 15px;
 }
 
 .wpshadow-a11y-pill.is-pass {
-    background: #f0f6f2;
-    color: #28a745;
+	background: #f0f6f2;
+	color: #28a745;
 }
 
 .wpshadow-a11y-pill.is-warn {
-    background: #fffbf0;
-    color: #d98300;
+	background: #fffbf0;
+	color: #d98300;
 }
 
 .wpshadow-a11y-pill.is-fail {
-    background: #fdf7f7;
-    color: #dc3545;
+	background: #fdf7f7;
+	color: #dc3545;
 }
 
 .wpshadow-a11y-summary {
-    display: flex;
-    gap: 15px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+	display: flex;
+	gap: 15px;
+	margin: 20px 0;
+	flex-wrap: wrap;
 }
 
 .wpshadow-a11y-results {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 /* Mobile Friendliness Report Styles */
 .wpshadow-mobile-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	margin-bottom: 20px;
 }
 
 .wpshadow-mobile-progress {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .wpshadow-mobile-progress-container {
-    background: #f0f0f1;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 10px;
+	background: #f0f0f1;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 10px;
 }
 
 .wpshadow-mobile-progress-bar {
-    height: 24px;
-    background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
-    width: 0%;
-    transition: width 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
+	height: 24px;
+	background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
+	width: 0%;
+	transition: width 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 12px;
+	font-weight: 600;
 }
 
 .wpshadow-mobile-progress-status {
-    font-size: 13px;
-    color: #50575e;
-    text-align: center;
+	font-size: 13px;
+	color: #50575e;
+	text-align: center;
 }
 
 .wpshadow-mobile-pill {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 600;
-    display: inline-block;
+	padding: 8px 16px;
+	border-radius: 4px;
+	font-weight: 600;
+	display: inline-block;
 }
 
 .wpshadow-mobile-pill.is-pass {
-    background: #f0f6f2;
-    color: #28a745;
+	background: #f0f6f2;
+	color: #28a745;
 }
 
 .wpshadow-mobile-pill.is-warn {
-    background: #fffbf0;
-    color: #d98300;
+	background: #fffbf0;
+	color: #d98300;
 }
 
 .wpshadow-mobile-pill.is-fail {
-    background: #fdf7f7;
-    color: #dc3545;
+	background: #fdf7f7;
+	color: #dc3545;
 }
 
 .wpshadow-mobile-summary {
-    display: flex;
-    gap: 15px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+	display: flex;
+	gap: 15px;
+	margin: 20px 0;
+	flex-wrap: wrap;
 }
 
 .wpshadow-mobile-results {
-    margin-top: 20px;
+	margin-top: 20px;
+}
+
+/* Broken Links Report Styles */
+.wpshadow-link-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	margin-bottom: 20px;
+}
+
+.wpshadow-link-progress {
+	margin-top: 20px;
+}
+
+.wpshadow-link-progress-container {
+	background: #f0f0f1;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.wpshadow-link-progress-bar {
+	height: 24px;
+	background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
+	width: 0%;
+	transition: width 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.wpshadow-link-progress-status {
+	font-size: 13px;
+	color: #50575e;
+	text-align: center;
+}
+
+.wpshadow-link-pill {
+	padding: 8px 16px;
+	border-radius: 4px;
+	font-weight: 600;
+	display: inline-block;
+}
+
+.wpshadow-link-pill.is-pass {
+	background: #f0f6f2;
+	color: #28a745;
+}
+
+.wpshadow-link-pill.is-warn {
+	background: #fffbf0;
+	color: #d98300;
+}
+
+.wpshadow-link-pill.is-fail {
+	background: #fdf7f7;
+	color: #dc3545;
+}
+
+.wpshadow-link-summary {
+	display: flex;
+	gap: 15px;
+	margin: 20px 0;
+	flex-wrap: wrap;
+}
+
+.wpshadow-link-results {
+	margin-top: 20px;
+}
+
+/* Visual Comparisons Report Styles */
+.wpshadow-visual-progress {
+	margin-top: 20px;
+}
+
+.wpshadow-visual-progress-container {
+	background: #f0f0f1;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.wpshadow-visual-progress-bar {
+	height: 24px;
+	background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
+	width: 0%;
+	transition: width 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.wpshadow-visual-progress-status {
+	font-size: 13px;
+	color: #50575e;
+	text-align: center;
+}
+
+.wpshadow-visual-preview {
+	margin-top: 20px;
+}
+
+.wpshadow-visual-stats-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 15px;
+}
+
+.wpshadow-visual-stat-card {
+	text-align: center;
+	padding: 20px;
+}
+
+.wpshadow-visual-stat-value {
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.wpshadow-visual-stat-value-total {
+	color: #0073aa;
+}
+
+.wpshadow-visual-stat-value-month {
+	color: #46b450;
+}
+
+.wpshadow-visual-stat-value-pages {
+	color: #d98300;
+}
+
+.wpshadow-visual-stat-label {
+	color: #50575e;
+	margin-top: 5px;
+}
+
+.wpshadow-visual-url-badge {
+	display: inline-block;
+	background: #f8f9fa;
+	padding: 4px 8px;
+	border-radius: 3px;
+	font-family: monospace;
+	font-size: 12px;
+}
+
+.wpshadow-visual-url-host {
+	color: #666;
+}
+
+.wpshadow-visual-url-path {
+	color: #333;
+}
+
+.wpshadow-visual-view-all-wrap {
+	margin-top: 15px;
+}
+
+.wpshadow-visual-empty-state {
+	text-align: center;
+	color: #50575e;
+	padding: 40px 20px;
+}
+
+.wpshadow-visual-empty-icon {
+	font-size: 48px;
+	color: #dcdcde;
+	display: block;
+	margin-bottom: 10px;
 }
 
 /* Site DNA Report Styles */
 .wpshadow-dna-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	margin-bottom: 20px;
 }
 
 .wpshadow-dna-progress {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .wpshadow-dna-progress-container {
-    background: #f0f0f1;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 10px;
+	background: #f0f0f1;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 10px;
 }
 
 .wpshadow-dna-progress-bar {
-    height: 24px;
-    background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
-    width: 0%;
-    transition: width 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
+	height: 24px;
+	background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
+	width: 0%;
+	transition: width 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 12px;
+	font-weight: 600;
 }
 
 .wpshadow-dna-progress-status {
-    font-size: 13px;
-    color: #50575e;
-    text-align: center;
+	font-size: 13px;
+	color: #50575e;
+	text-align: center;
 }
 
 .wpshadow-dna-results {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .wpshadow-dna-viz-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    display: flex;
-    justify-content: center;
+	position: relative;
+	width: 100%;
+	max-width: 800px;
+	margin: 20px auto;
+	display: flex;
+	justify-content: center;
 }
 
 .wpshadow-dna-viz-container canvas {
-    max-width: 100%;
-    height: auto;
+	max-width: 100%;
+	height: auto;
 }
 
 .wpshadow-dna-score-display {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #0073aa;
+	text-align: center;
+	margin-top: 20px;
+	font-size: 18px;
+	font-weight: 600;
+	color: #0073aa;
 }
 
 /* URL Display Box (Common across reports) */
 .wpshadow-url-display {
-    display: inline-block;
-    background: #f8f9fa;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-family: monospace;
+	display: inline-block;
+	background: #f8f9fa;
+	padding: 6px 10px;
+	border-radius: 4px;
+	font-family: monospace;
+}
+
+.wpshadow-report-results-meta {
+	margin-bottom: 15px;
 }
 
 /* Common List Styles for Reports */
 .wpshadow-report-list {
-    list-style: disc;
-    margin-left: 18px;
+	list-style: disc;
+	margin-left: 18px;
 }
 
 /* Spin animation for loading states */
 @keyframes wps-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .wps-spin {
-    animation: wps-spin 1s linear infinite;
-    display: inline-block;
+	animation: wps-spin 1s linear infinite;
+	display: inline-block;
 }
 
 /* Site DNA Additional Styles */
 .wpshadow-dna-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	margin-bottom: 20px;
 }
 
 .wpshadow-dna-viz-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 400px;
+	background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+	border-radius: 8px;
+	padding: 20px;
+	margin: 20px 0;
 }
 
 .wpshadow-dna-score-display {
-    text-align: center;
-    padding: 30px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	text-align: center;
+	padding: 30px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .wpshadow-dna-overall-score {
-    font-size: 72px;
-    font-weight: 700;
-    color: #0073aa;
-    margin: 0;
-    line-height: 1;
+	font-size: 72px;
+	font-weight: 700;
+	color: #0073aa;
+	margin: 0;
+	line-height: 1;
 }
 
 .wpshadow-dna-categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 15px;
+	margin-top: 15px;
 }
 
 .wpshadow-dna-category {
-    background: #f5f7fa;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    border: 2px solid #e0e5ea;
-    transition: all 0.3s ease;
+	background: #f5f7fa;
+	padding: 20px;
+	border-radius: 8px;
+	text-align: center;
+	border: 2px solid #e0e5ea;
+	transition: all 0.3s ease;
 }
 
 .wpshadow-dna-category:hover {
-    border-color: #0073aa;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,115,170,0.1);
+	border-color: #0073aa;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0,115,170,0.1);
 }
 
 .wpshadow-dna-category-score {
-    font-size: 42px;
-    font-weight: 700;
-    margin: 10px 0;
+	font-size: 42px;
+	font-weight: 700;
+	margin: 10px 0;
 }
 
 .wpshadow-dna-category-label {
-    font-size: 14px;
-    color: #50575e;
-    margin-top: 5px;
+	font-size: 14px;
+	color: #50575e;
+	margin-top: 5px;
 }
 
 .wps-badge-new {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: linear-gradient(135deg, #00a32a 0%, #008a20 100%);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: linear-gradient(135deg, #00a32a 0%, #008a20 100%);
+	color: white;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
 }
 
 .wps-card.has-badge {
-    position: relative;
+	position: relative;
 }
 
 .wps-button-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: #0073aa;
-    font-weight: 600;
-    transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	color: #0073aa;
+	font-weight: 600;
+	transition: all 0.2s ease;
 }
 
 .wps-card-hover:hover .wps-button-link {
-    gap: 10px;
-    color: #005177;
+	gap: 10px;
+	color: #005177;
 }
 
 .wps-card-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+	transform: translateY(-2px);
+	box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 768px) {
-    .wpshadow-dna-grid {
-        grid-template-columns: 1fr;
-    }
+	.wpshadow-dna-grid {
+		grid-template-columns: 1fr;
+	}
 }

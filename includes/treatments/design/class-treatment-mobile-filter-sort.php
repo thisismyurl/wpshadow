@@ -63,5 +63,4 @@ class Treatment_Mobile_Filter_Sort extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Filter_Sort' );
 	}
-
 }

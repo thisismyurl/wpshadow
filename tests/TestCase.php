@@ -26,7 +26,7 @@ abstract class TestCase extends PHPUnit_TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		
+
 		// Reset any static caches
 		$this->resetCaches();
 	}
@@ -38,7 +38,7 @@ abstract class TestCase extends PHPUnit_TestCase {
 	 */
 	protected function tearDown(): void {
 		parent::tearDown();
-		
+
 		// Reset any static caches
 		$this->resetCaches();
 	}

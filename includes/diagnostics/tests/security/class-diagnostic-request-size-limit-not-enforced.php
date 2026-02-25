@@ -64,24 +64,18 @@ class Diagnostic_Request_Size_Limit_Not_Enforced extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'enforce_request_size_limit' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Request size limit not enforced. Set max upload size and POST size limits to prevent resource exhaustion.',
-						'severity'   =>   'high',
-						'threat_level'   =>   60,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/request-size-limit-not-enforced'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'enforce_request_size_limit' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Request size limit not enforced. Set max upload size and POST size limits to prevent resource exhaustion.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 60,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/request-size-limit-not-enforced',
+			);
+		}
+
+		return null;
 	}
 }

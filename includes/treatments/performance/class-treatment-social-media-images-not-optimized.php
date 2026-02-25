@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,73 +69,5 @@ class Treatment_Social_Media_Images_Not_Optimized extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Social_Media_Images_Not_Optimized' );
-	}
-
-	/**
-	 * Count posts with social images.
-	 *
-	 * @since  1.6033.1430
-	 * @return int Number of posts with social images.
-	 */
-	private static function count_posts_with_social_images() {
-		global $wpdb;
-
-		// Check for Yoast SEO og:image meta.
-		$yoast_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT p.ID) 
-				FROM {$wpdb->posts} p
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type = %s 
-				AND p.post_status = %s
-				AND pm.meta_key = %s
-				AND pm.meta_value != ''",
-				'post',
-				'publish',
-				'_yoast_wpseo_opengraph-image'
-			)
-		);
-
-		if ( $yoast_count > 0 ) {
-			return (int) $yoast_count;
-		}
-
-		// Check for RankMath Facebook image.
-		$rankmath_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT p.ID) 
-				FROM {$wpdb->posts} p
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type = %s 
-				AND p.post_status = %s
-				AND pm.meta_key = %s
-				AND pm.meta_value != ''",
-				'post',
-				'publish',
-				'rank_math_facebook_image'
-			)
-		);
-
-		if ( $rankmath_count > 0 ) {
-			return (int) $rankmath_count;
-		}
-
-		// Check for generic og:image post meta.
-		$generic_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT p.ID) 
-				FROM {$wpdb->posts} p
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type = %s 
-				AND p.post_status = %s
-				AND pm.meta_key = %s
-				AND pm.meta_value != ''",
-				'post',
-				'publish',
-				'og_image'
-			)
-		);
-
-		return (int) $generic_count;
 	}
 }

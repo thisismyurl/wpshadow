@@ -47,7 +47,7 @@ class FeatureIntegrationTest extends TestCase {
 	 */
 	public function testPluginVersionFormat(): void {
 		$version = $this->getPluginVersion();
-		
+
 		// Version should match format: 1.YDDD.HHMM (1.{last year digit}{julian day}.{hour}{minute} in Toronto time)
 		$this->assertMatchesRegularExpression(
 			'/^1\.\d{3,4}\.\d{4}$/',
@@ -78,7 +78,7 @@ class FeatureIntegrationTest extends TestCase {
 
 		// Should have reasonable number of diagnostics
 		$this->assertGreaterThan( 0, $diagnostic_count, 'Should have diagnostics' );
-		
+
 		// Should have reasonable number of treatments
 		$this->assertGreaterThan( 0, $treatment_count, 'Should have treatments' );
 
@@ -145,7 +145,7 @@ class FeatureIntegrationTest extends TestCase {
 	 */
 	public function testNamespacesAreConsistent(): void {
 		$includes_dir = $this->getPluginPath() . '/includes';
-		
+
 		if ( ! is_dir( $includes_dir ) ) {
 			$this->markTestSkipped( 'Includes directory not found' );
 		}
@@ -155,7 +155,7 @@ class FeatureIntegrationTest extends TestCase {
 			new \RecursiveDirectoryIterator( $includes_dir )
 		);
 
-		$namespace_count = 0;
+		$namespace_count         = 0;
 		$correct_namespace_count = 0;
 
 		foreach ( $files as $file ) {
@@ -164,14 +164,14 @@ class FeatureIntegrationTest extends TestCase {
 			}
 
 			$content = file_get_contents( $file->getPathname() );
-			
+
 			// Check if file has namespace
 			if ( preg_match( '/namespace\s+(.*?);/', $content, $matches ) ) {
-				$namespace_count++;
-				
+				++$namespace_count;
+
 				// Should start with WPShadow
 				if ( strpos( $matches[1], 'WPShadow' ) === 0 ) {
-					$correct_namespace_count++;
+					++$correct_namespace_count;
 				}
 			}
 		}
@@ -197,7 +197,7 @@ class FeatureIntegrationTest extends TestCase {
 		$this->assertFileExists( $composer_file, 'composer.json must exist' );
 
 		$composer_data = json_decode( file_get_contents( $composer_file ), true );
-		
+
 		$this->assertArrayHasKey(
 			'autoload',
 			$composer_data,
@@ -224,7 +224,7 @@ class FeatureIntegrationTest extends TestCase {
 	 */
 	public function testDocumentationExists(): void {
 		$docs_dir = $this->getPluginPath() . '/docs';
-		
+
 		if ( ! is_dir( $docs_dir ) ) {
 			$this->markTestSkipped( 'Documentation directory not found' );
 		}
@@ -273,20 +273,20 @@ class FeatureIntegrationTest extends TestCase {
 	 */
 	public function testCSSFilesAreValid(): void {
 		$css_dir = $this->getPluginPath() . '/assets/css';
-		
+
 		if ( ! is_dir( $css_dir ) ) {
 			$this->markTestSkipped( 'CSS directory not found' );
 		}
 
 		$css_files = glob( $css_dir . '/*.css' );
-		
+
 		foreach ( $css_files as $file ) {
 			$content = file_get_contents( $file );
-			
+
 			// Basic CSS syntax checks
-			$open_braces = substr_count( $content, '{' );
+			$open_braces  = substr_count( $content, '{' );
 			$close_braces = substr_count( $content, '}' );
-			
+
 			$this->assertEquals(
 				$open_braces,
 				$close_braces,

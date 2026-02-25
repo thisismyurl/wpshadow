@@ -63,23 +63,18 @@ class Diagnostic_Theme_Compatibility_Not_Tested extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('theme_compatibility_test_date' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Theme compatibility not tested. Test plugins with all active themes to ensure compatibility and prevent conflicts or display issues.',
-						'severity'   =>   'low',
-						'threat_level'   =>   15,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/theme-compatibility-not-tested'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'theme_compatibility_test_date' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Theme compatibility has not been tested recently. Verify key pages and plugin features across active themes to avoid display or functionality conflicts.', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 15,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility-not-tested',
+			);
+		}
+
+		return null;
 	}
 }

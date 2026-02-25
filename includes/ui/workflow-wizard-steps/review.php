@@ -27,10 +27,7 @@ $back_url = admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workf
 ?>
 
 <div class="wps-page-container">
-	<a href="<?php echo esc_url( $back_url ); ?>" class="wps-btn wps-btn--ghost wpshadow-workflow-back-button">
-		<span class="dashicons dashicons-arrow-left-alt2 wpshadow-icon-compact"></span>
-		<?php esc_html_e( 'Back to Actions', 'wpshadow' ); ?>
-	</a>
+	<?php wpshadow_render_wizard_back_button( $back_url, __( 'Back to Actions', 'wpshadow' ) ); ?>
 
 	<?php
 	wpshadow_render_page_header(

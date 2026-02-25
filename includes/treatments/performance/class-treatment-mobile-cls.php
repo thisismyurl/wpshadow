@@ -60,7 +60,6 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Treatments\Helpers\Treatment_HTML_Helper;
 use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -117,90 +116,5 @@ class Treatment_Mobile_Cls extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Cls' );
-	}
-
-	/**
-	 * Identify sources of layout shifts.
-	 *
-	 * @since  1.602.1430
-	 * @return array {
-	 *     Shift sources found.
-	 *
-	 *     @type array $sources       List of shift sources with impact scores.
-	 *     @type float $estimated_cls Estimated CLS score.
-	 * }
-	 */
-	private static function identify_shift_sources(): array {
-		$sources       = array();
-		$estimated_cls = 0;
-
-		// Check for images without dimensions
-		$html = self::get_page_html();
-		if ( $html ) {
-			// Look for img tags without width/height
-			$img_count = preg_match_all( '/<img[^>]*(?<!width|height)[^>]*>/i', $html, $matches );
-			if ( $img_count > 0 ) {
-				$shift_amount = min( 0.22, $img_count * 0.05 );
-				$sources[] = sprintf(
-					/* translators: %d: number of images */
-					__( 'Images without dimensions: %.2f shift', 'wpshadow' ),
-					$shift_amount
-				);
-				$estimated_cls += $shift_amount;
-			}
-		}
-
-		// Check for web fonts (FOIT/FOUT causes shift)
-		global $wp_styles;
-		if ( isset( $wp_styles ) && ! empty( $wp_styles->queue ) ) {
-			foreach ( $wp_styles->queue as $handle ) {
-				if ( strpos( strtolower( $handle ), 'google-fonts' ) !== false ) {
-					$sources[] = __( 'Web fonts loading: 0.09 shift', 'wpshadow' );
-					$estimated_cls += 0.09;
-					break;
-				}
-			}
-		}
-
-		// Check for ads (common layout shift source)
-		if ( function_exists( 'do_action' ) ) {
-			// Estimate if ad network is active
-			$has_ads = has_action( 'wp_footer', 'wpshadow_render_ads' ) || 
-					   has_action( 'wp_footer', 'render_ads' );
-			if ( $has_ads ) {
-				$sources[] = __( 'Dynamic ad insertion: 0.07 shift', 'wpshadow' );
-				$estimated_cls += 0.07;
-			}
-		}
-
-		// If no sources detected but still under threshold, return empty
-		if ( empty( $sources ) && $estimated_cls < 0.05 ) {
-			return array(
-				'sources'      => array(),
-				'estimated_cls' => 0,
-			);
-		}
-
-		return array(
-			'sources'      => $sources,
-			'estimated_cls' => $estimated_cls,
-		);
-	}
-
-	/**
-	 * Get page HTML for analysis.
-	 *
-	 * @since  1.602.1430
-	 * @return string|null Page HTML or null.
-	 */
-	private static function get_page_html(): ?string {
-		return Treatment_HTML_Helper::fetch_homepage_html_cached(
-			'wpshadow_page_html_cache',
-			HOUR_IN_SECONDS,
-			array(
-				'timeout'   => 5,
-				'sslverify' => false,
-			)
-		);
 	}
 }

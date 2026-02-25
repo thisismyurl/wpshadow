@@ -64,23 +64,18 @@ class Diagnostic_Version_Control_Not_Isolated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !file_exists(ABSPATH.'.gitignore' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Version control not isolated. Exclude sensitive files (.env,
-						'severity'   =>   'high',
-						'threat_level'   =>   80,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/version-control-not-isolated'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! file_exists( ABSPATH . '.gitignore' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Version control may not be isolated correctly. Ensure sensitive files such as environment secrets are excluded from repository tracking.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 80,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/version-control-not-isolated',
+			);
+		}
+
+		return null;
 	}
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Treatments\Helpers\Treatment_HTML_Helper;
 use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -66,69 +65,5 @@ class Treatment_Mobile_JS_Execution_Time extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_JS_Execution_Time' );
-	}
-
-	/**
-	 * Detect long-running JavaScript tasks.
-	 *
-	 * @since  1.602.1600
-	 * @return array Issues found.
-	 */
-	private static function detect_long_tasks(): array {
-		$html = self::get_page_html();
-		if ( ! $html ) {
-			return array();
-		}
-
-		$issues = array();
-
-		// Check for blocking loops
-		preg_match_all( '/for\s*\([^)]+\s*\d+\d+[^)]*\)\s*{/', $html, $loops );
-		if ( ! empty( $loops[0] ) ) {
-			foreach ( array_slice( $loops[0], 0, 3 ) as $loop ) {
-				$issues[] = array(
-					'type'    => 'blocking-loop',
-					'issue'   => 'Tight loop may block main thread',
-					'pattern' => substr( $loop, 0, 50 ),
-				);
-			}
-		}
-
-		// Check for inefficient DOM queries
-		preg_match_all( '/querySelector|getElementById|getElementsByClass/i', $html, $queries );
-		if ( count( $queries[0] ) > 20 ) {
-			$issues[] = array(
-				'type'    => 'dom-queries',
-				'count'   => count( $queries[0] ),
-				'issue'   => 'Many DOM queries can block rendering',
-				'fix'     => 'Cache selectors or batch DOM access',
-			);
-		}
-
-		// Check for synchronous XHR
-		if ( preg_match( '/XMLHttpRequest|\?async\s*=\s*false|open\(.*false\)/i', $html ) ) {
-			$issues[] = array(
-				'type'    => 'sync-xhr',
-				'issue'   => 'Synchronous XHR blocks main thread',
-				'fix'     => 'Use async: true or fetch API',
-			);
-		}
-
-		return $issues;
-	}
-
-	/**
-	 * Get page HTML for analysis.
-	 *
-	 * @since  1.602.1600
-	 * @return string|null HTML content.
-	 */
-	private static function get_page_html(): ?string {
-		return Treatment_HTML_Helper::fetch_homepage_html(
-			array(
-				'timeout'   => 5,
-				'sslverify' => false,
-			)
-		);
 	}
 }

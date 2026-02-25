@@ -64,23 +64,18 @@ class Diagnostic_Weak_Password_Policy_Not_Enforced extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('strong_password_policy_enabled' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Weak password policy not enforced. Require minimum 12 characters,
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/weak-password-policy-not-enforced'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'strong_password_policy_enabled' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Weak password policy not enforced. Require stronger passwords and enforce complexity to reduce account takeover risk.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 75,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/weak-password-policy-not-enforced',
+			);
+		}
+
+		return null;
 	}
 }

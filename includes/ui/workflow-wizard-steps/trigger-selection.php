@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 ?>
 
-<div class="wps-page-container">
 	<?php
 	wpshadow_render_page_header(
 		__( 'Choose a Trigger', 'wpshadow' ),
@@ -105,6 +104,10 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 							}
 						}
 
+						$has_config_fields = ! empty(
+							\WPShadow\Workflow\Workflow_Wizard::get_trigger_config( $trigger_id )
+						);
+
 						// Build the URL for trigger config
 						$trigger_url = admin_url( 'admin.php?page=wpshadow-automations' );
 						if ( ! empty( $workflow ) && ! empty( $workflow['id'] ) ) {
@@ -112,7 +115,7 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 						} else {
 							$trigger_url .= '&action=create';
 						}
-						$trigger_url .= '&step=trigger-config&trigger=' . $trigger_id;
+						$trigger_url .= $has_config_fields ? '&step=trigger-config&trigger=' . $trigger_id : '&step=action-selection&trigger=' . $trigger_id;
 						?>
 						<a href="<?php echo esc_url( $trigger_url ); ?>" class="trigger-option <?php echo $is_current ? 'trigger-option-current' : ''; ?>">
 							<?php if ( $is_current ) : ?>
@@ -172,7 +175,6 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 		<?php
 	}
 	?>
-</div>
 
 <style>
 /* Trigger Option Cards - Custom Styling */
@@ -294,6 +296,13 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 	width: 20px;
 	height: 20px;
 	font-size: 20px;
+}
+
+/* Keep header content stacked on separate lines. */
+.wps-page-header {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
 .current-badge {

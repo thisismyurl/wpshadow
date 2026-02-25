@@ -64,24 +64,18 @@ class Diagnostic_JavaScript_Source_Map_Exposure extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_source_map_exposure' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('JavaScript source map exposed in production. Disable source maps on production or require authentication.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   40,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/javascript-source-map-exposure'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_source_map_exposure' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'JavaScript source map exposed in production. Disable source maps on production or require authentication.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 40,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/javascript-source-map-exposure',
+			);
+		}
+
+		return null;
 	}
 }

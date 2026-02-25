@@ -1399,10 +1399,10 @@ apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 **Documentation:**
 - [Core Philosophy](../docs/CORE_PHILOSOPHY.md) - The 12 Commandments & 5 CANON Pillars
 - [Product Family](../docs/PRODUCT_FAMILY.md) - Ecosystem, pricing, product alignment
-- [Coding Standards](../docs/CODING_STANDARDS.md) - Naming conventions
-- [Architecture](../docs/ARCHITECTURE.md) - System design
-- [Feature Matrix](../docs/FEATURE_MATRIX_DIAGNOSTICS.md) - All diagnostics
-- [Admin Diagnostics Optimization](../docs/ADMIN_DIAGNOSTICS_OPTIMIZATION_COMPLETE.md) - Performance case study
+- [Features](../docs/FEATURES.md) - Core feature overview and coverage
+- [Customer Facing Pages](../docs/CUSTOMER_FACING_PAGES.md) - User-facing page structure and messaging
+- [Milestones](../docs/MILESTONES.md) - Delivery roadmap and phase tracking
+- [Business Model](../docs/BUSINESS_MODEL.md) - Product strategy and value model
 
 **External Resources:**
 - [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/)

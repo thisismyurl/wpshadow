@@ -8,249 +8,278 @@
  * @since      1.6034.1200
  */
 
-(function($) {
-    'use strict';
+(function ($) {
+	'use strict';
 
-    let currentChart = null;
+	let currentChart = null;
 
-    /**
-     * Initialize analytics dashboard
-     */
-    function initAnalytics() {
-        if (!$('.wpshadow-analytics-page').length) {
-            return;
-        }
+	/**
+	 * Initialize analytics dashboard
+	 */
+	function initAnalytics() {
+		if ( ! $( '.wpshadow-analytics-page' ).length) {
+			return;
+		}
 
-        bindEvents();
-        loadAnalytics();
-    }
+		bindEvents();
+		loadAnalytics();
+	}
 
-    /**
-     * Bind event handlers
-     */
-    function bindEvents() {
-        // Filter changes
-        $(document).on('change', '#wpshadow-analytics-post-type, #wpshadow-analytics-period', function() {
-            loadAnalytics();
-        });
+	/**
+	 * Bind event handlers
+	 */
+	function bindEvents() {
+		// Filter changes
+		$( document ).on(
+			'change',
+			'#wpshadow-analytics-post-type, #wpshadow-analytics-period',
+			function () {
+				loadAnalytics();
+			}
+		);
 
-        // Export button
-        $(document).on('click', '.wpshadow-export-analytics', handleExport);
+		// Export button
+		$( document ).on( 'click', '.wpshadow-export-analytics', handleExport );
 
-        // Refresh button
-        $(document).on('click', '.wpshadow-refresh-analytics', function(e) {
-            e.preventDefault();
-            loadAnalytics();
-        });
-    }
+		// Refresh button
+		$( document ).on(
+			'click',
+			'.wpshadow-refresh-analytics',
+			function (e) {
+				e.preventDefault();
+				loadAnalytics();
+			}
+		);
+	}
 
-    /**
-     * Load analytics data
-     */
-    function loadAnalytics() {
-        const postType = $('#wpshadow-analytics-post-type').val();
-        const period = $('#wpshadow-analytics-period').val();
+	/**
+	 * Load analytics data
+	 */
+	function loadAnalytics() {
+		const postType = $( '#wpshadow-analytics-post-type' ).val();
+		const period   = $( '#wpshadow-analytics-period' ).val();
 
-        showLoadingIndicator();
+		showLoadingIndicator();
 
-        $.ajax({
-            url: wpShadowAnalytics.ajaxUrl,
-            type: 'POST',
-            data: {
-                action: 'wpshadow_get_cpt_analytics',
-                nonce: wpShadowAnalytics.nonce,
-                post_type: postType,
-                period: period
-            },
-            success: function(response) {
-                if (response.success) {
-                    renderAnalytics(response.data);
-                } else {
-                    showError(response.data.message || wpShadowAnalytics.i18n.loadFailed);
-                }
-            },
-            error: function() {
-                showError(wpShadowAnalytics.i18n.loadFailed);
-            },
-            complete: function() {
-                hideLoadingIndicator();
-            }
-        });
-    }
+		$.ajax(
+			{
+				url: wpShadowAnalytics.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'wpshadow_get_cpt_analytics',
+					nonce: wpShadowAnalytics.nonce,
+					post_type: postType,
+					period: period
+				},
+				success: function (response) {
+					if (response.success) {
+						renderAnalytics( response.data );
+					} else {
+						showError( response.data.message || wpShadowAnalytics.i18n.loadFailed );
+					}
+				},
+				error: function () {
+					showError( wpShadowAnalytics.i18n.loadFailed );
+				},
+				complete: function () {
+					hideLoadingIndicator();
+				}
+			}
+		);
+	}
 
-    /**
-     * Render analytics data
-     */
-    function renderAnalytics(data) {
-        renderSummaryCards(data.summary);
-        renderTopPosts(data.top_posts);
-        renderChart(data.daily_views);
-    }
+	/**
+	 * Render analytics data
+	 */
+	function renderAnalytics(data) {
+		renderSummaryCards( data.summary );
+		renderTopPosts( data.top_posts );
+		renderChart( data.daily_views );
+	}
 
-    /**
-     * Render summary cards
-     */
-    function renderSummaryCards(summary) {
-        $('.wpshadow-stat-total-views .wpshadow-stat-value').text(formatNumber(summary.total_views));
-        $('.wpshadow-stat-avg-views .wpshadow-stat-value').text(formatNumber(summary.average_views));
-        $('.wpshadow-stat-top-post .wpshadow-stat-value').text(summary.top_post_views);
-        $('.wpshadow-stat-total-posts .wpshadow-stat-value').text(formatNumber(summary.total_posts));
-    }
+	/**
+	 * Render summary cards
+	 */
+	function renderSummaryCards(summary) {
+		$( '.wpshadow-stat-total-views .wpshadow-stat-value' ).text( formatNumber( summary.total_views ) );
+		$( '.wpshadow-stat-avg-views .wpshadow-stat-value' ).text( formatNumber( summary.average_views ) );
+		$( '.wpshadow-stat-top-post .wpshadow-stat-value' ).text( summary.top_post_views );
+		$( '.wpshadow-stat-total-posts .wpshadow-stat-value' ).text( formatNumber( summary.total_posts ) );
+	}
 
-    /**
-     * Render top posts table
-     */
-    function renderTopPosts(posts) {
-        const $tbody = $('.wpshadow-top-posts tbody');
-        $tbody.empty();
+	/**
+	 * Render top posts table
+	 */
+	function renderTopPosts(posts) {
+		const $tbody = $( '.wpshadow-top-posts tbody' );
+		$tbody.empty();
 
-        if (!posts || posts.length === 0) {
-            $tbody.html('<tr><td colspan="3" class="wpshadow-no-data">' + 
-                       wpShadowAnalytics.i18n.noPosts + '</td></tr>');
-            return;
-        }
+		if ( ! posts || posts.length === 0) {
+			$tbody.html(
+				'<tr><td colspan="3" class="wpshadow-no-data">' +
+						wpShadowAnalytics.i18n.noPosts + '</td></tr>'
+			);
+			return;
+		}
 
-        posts.forEach(function(post, index) {
-            const $row = $('<tr>')
-                .append($('<td>').text(index + 1))
-                .append($('<td>').html('<a href="' + post.edit_url + '">' + 
-                                      escapeHtml(post.title) + '</a>'))
-                .append($('<td>').text(formatNumber(post.views)));
-            
-            $tbody.append($row);
-        });
-    }
+		posts.forEach(
+			function (post, index) {
+				const $row = $( '<tr>' )
+				.append( $( '<td>' ).text( index + 1 ) )
+				.append(
+					$( '<td>' ).html(
+						'<a href="' + post.edit_url + '">' +
+										escapeHtml( post.title ) + '</a>'
+					)
+				)
+				.append( $( '<td>' ).text( formatNumber( post.views ) ) );
 
-    /**
-     * Render views chart
-     */
-    function renderChart(dailyViews) {
-        const canvas = document.getElementById('wpshadow-views-chart');
-        
-        if (!canvas) {
-            return;
-        }
+				$tbody.append( $row );
+			}
+		);
+	}
 
-        const ctx = canvas.getContext('2d');
+	/**
+	 * Render views chart
+	 */
+	function renderChart(dailyViews) {
+		const canvas = document.getElementById( 'wpshadow-views-chart' );
 
-        // Destroy existing chart
-        if (currentChart) {
-            currentChart.destroy();
-        }
+		if ( ! canvas) {
+			return;
+		}
 
-        const labels = Object.keys(dailyViews);
-        const data = Object.values(dailyViews);
+		const ctx = canvas.getContext( '2d' );
 
-        currentChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: wpShadowAnalytics.i18n.views,
-                    data: data,
-                    borderColor: '#2271b1',
-                    backgroundColor: 'rgba(34, 113, 177, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14
-                        },
-                        bodyFont: {
-                            size: 13
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
-            }
-        });
-    }
+		// Destroy existing chart
+		if (currentChart) {
+			currentChart.destroy();
+		}
 
-    /**
-     * Handle export
-     */
-    function handleExport(e) {
-        e.preventDefault();
+		const labels = Object.keys( dailyViews );
+		const data   = Object.values( dailyViews );
 
-        const postType = $('#wpshadow-analytics-post-type').val();
-        const period = $('#wpshadow-analytics-period').val();
+		currentChart = new Chart(
+			ctx,
+			{
+				type: 'line',
+				data: {
+					labels: labels,
+					datasets: [{
+						label: wpShadowAnalytics.i18n.views,
+						data: data,
+						borderColor: '#2271b1',
+						backgroundColor: 'rgba(34, 113, 177, 0.1)',
+						borderWidth: 2,
+						fill: true,
+						tension: 0.4
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						},
+						tooltip: {
+							backgroundColor: 'rgba(0, 0, 0, 0.8)',
+							padding: 12,
+							titleFont: {
+								size: 14
+							},
+							bodyFont: {
+								size: 13
+							}
+						}
+					},
+					scales: {
+						y: {
+							beginAtZero: true,
+							ticks: {
+								precision: 0
+							}
+						}
+					}
+				}
+			}
+		);
+	}
 
-        const url = wpShadowAnalytics.ajaxUrl + 
-                   '?action=wpshadow_export_analytics' +
-                   '&nonce=' + wpShadowAnalytics.nonce +
-                   '&post_type=' + encodeURIComponent(postType) +
-                   '&period=' + encodeURIComponent(period);
+	/**
+	 * Handle export
+	 */
+	function handleExport(e) {
+		e.preventDefault();
 
-        window.location.href = url;
-    }
+		const postType = $( '#wpshadow-analytics-post-type' ).val();
+		const period   = $( '#wpshadow-analytics-period' ).val();
 
-    /**
-     * Show loading indicator
-     */
-    function showLoadingIndicator() {
-        $('.wpshadow-analytics-content').addClass('loading');
-    }
+		const url = wpShadowAnalytics.ajaxUrl +
+					'?action=wpshadow_export_analytics' +
+					'&nonce=' + wpShadowAnalytics.nonce +
+					'&post_type=' + encodeURIComponent( postType ) +
+					'&period=' + encodeURIComponent( period );
 
-    /**
-     * Hide loading indicator
-     */
-    function hideLoadingIndicator() {
-        $('.wpshadow-analytics-content').removeClass('loading');
-    }
+		window.location.href = url;
+	}
 
-    /**
-     * Show error message
-     */
-    function showError(message) {
-        const $error = $('<div class="notice notice-error is-dismissible">' +
-                       '<p>' + message + '</p>' +
-                       '</div>');
-        $('.wpshadow-analytics-filters').after($error);
-    }
+	/**
+	 * Show loading indicator
+	 */
+	function showLoadingIndicator() {
+		$( '.wpshadow-analytics-content' ).addClass( 'loading' );
+	}
 
-    /**
-     * Format number with commas
-     */
-    function formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
+	/**
+	 * Hide loading indicator
+	 */
+	function hideLoadingIndicator() {
+		$( '.wpshadow-analytics-content' ).removeClass( 'loading' );
+	}
 
-    /**
-     * Escape HTML
-     */
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
+	/**
+	 * Show error message
+	 */
+	function showError(message) {
+		const $error = $(
+			'<div class="notice notice-error is-dismissible">' +
+						'<p>' + message + '</p>' +
+						'</div>'
+		);
+		$( '.wpshadow-analytics-filters' ).after( $error );
+	}
 
-    // Initialize when DOM is ready
-    $(document).ready(function() {
-        initAnalytics();
-    });
+	/**
+	 * Format number with commas
+	 */
+	function formatNumber(num) {
+		return num.toString().replace( /\B(?=(\d{3})+(?!\d))/g, ',' );
+	}
 
-})(jQuery);
+	/**
+	 * Escape HTML
+	 */
+	function escapeHtml(text) {
+		const map = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#039;'
+		};
+		return text.replace(
+			/[&<>"']/g,
+			function (m) {
+				return map[m]; }
+		);
+	}
+
+	// Initialize when DOM is ready
+	$( document ).ready(
+		function () {
+			initAnalytics();
+		}
+	);
+
+})( jQuery );

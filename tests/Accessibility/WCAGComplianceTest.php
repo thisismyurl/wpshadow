@@ -82,7 +82,7 @@ class WCAGComplianceTest extends TestCase {
 	 */
 	public function testWorkflowBuilderTemplateAccessibility(): void {
 		$template_file = $this->getPluginPath() . '/includes/views/workflow-builder.php';
-		
+
 		if ( ! file_exists( $template_file ) ) {
 			$this->markTestSkipped( 'Workflow builder template file not found' );
 		}
@@ -138,18 +138,18 @@ class WCAGComplianceTest extends TestCase {
 	public function testFormAccessibility(): void {
 		// Test that forms have proper labels
 		$views_dir = $this->getPluginPath() . '/includes/views';
-		
+
 		if ( ! is_dir( $views_dir ) ) {
 			$this->markTestSkipped( 'Views directory not found' );
 		}
 
-		$view_files = glob( $views_dir . '/*.php' );
-		$forms_with_labels = 0;
+		$view_files           = glob( $views_dir . '/*.php' );
+		$forms_with_labels    = 0;
 		$forms_without_labels = 0;
 
 		foreach ( $view_files as $file ) {
 			$content = file_get_contents( $file );
-			
+
 			// Count input fields
 			preg_match_all( '/<input[^>]*>/', $content, $inputs );
 			$input_count = count( $inputs[0] );
@@ -160,9 +160,9 @@ class WCAGComplianceTest extends TestCase {
 
 			if ( $input_count > 0 ) {
 				if ( $label_count >= $input_count ) {
-					$forms_with_labels++;
+					++$forms_with_labels;
 				} else {
-					$forms_without_labels++;
+					++$forms_without_labels;
 				}
 			}
 		}
@@ -263,7 +263,7 @@ class WCAGComplianceTest extends TestCase {
 	 */
 	public function testButtonTouchTargets(): void {
 		$css_file = $this->getPluginPath() . '/assets/css/workflow-builder.css';
-		
+
 		if ( ! file_exists( $css_file ) ) {
 			$this->markTestSkipped( 'CSS file not found' );
 		}
@@ -290,7 +290,7 @@ class WCAGComplianceTest extends TestCase {
 	 */
 	public function testReducedMotionSupport(): void {
 		$css_file = $this->getPluginPath() . '/assets/css/workflow-builder.css';
-		
+
 		if ( ! file_exists( $css_file ) ) {
 			$this->markTestSkipped( 'CSS file not found' );
 		}
@@ -317,7 +317,7 @@ class WCAGComplianceTest extends TestCase {
 	 */
 	public function testWorkflowBuilderSkipLinks(): void {
 		$view_file = $this->getPluginPath() . '/includes/views/workflow-builder.php';
-		
+
 		if ( ! file_exists( $view_file ) ) {
 			$this->markTestSkipped( 'Workflow builder view not found' );
 		}

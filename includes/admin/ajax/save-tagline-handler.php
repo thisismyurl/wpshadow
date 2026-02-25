@@ -17,6 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Save_Tagline_Handler extends AJAX_Handler_Base {
+	/**
+	 * Handle site tagline save requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_save_tagline', 'manage_options', 'nonce' );
 

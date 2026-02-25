@@ -10,238 +10,238 @@
 
 /* Version History Meta Box */
 .wpshadow-version-history-box {
-    padding: 12px;
+	padding: 12px;
 }
 
 .wpshadow-vault-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: #fff;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-left: 8px;
+	display: inline-block;
+	padding: 2px 8px;
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+	color: #fff;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-left: 8px;
 }
 
 /* Version List */
 .wpshadow-version-list {
-    margin: 12px 0 0 0;
+	margin: 12px 0 0 0;
 }
 
 .wpshadow-no-versions {
-    padding: 20px;
-    text-align: center;
-    color: #646970;
-    font-size: 13px;
-    background-color: #f6f7f7;
-    border-radius: 4px;
+	padding: 20px;
+	text-align: center;
+	color: #646970;
+	font-size: 13px;
+	background-color: #f6f7f7;
+	border-radius: 4px;
 }
 
 /* Version Item */
 .wpshadow-version-item {
-    margin-bottom: 8px;
-    border: 1px solid #c3c4c7;
-    border-radius: 4px;
-    background-color: #fff;
-    transition: all 0.2s ease;
-    cursor: pointer;
+	margin-bottom: 8px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background-color: #fff;
+	transition: all 0.2s ease;
+	cursor: pointer;
 }
 
 .wpshadow-version-item:hover {
-    border-color: #2271b1;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+	border-color: #2271b1;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .wpshadow-version-item.expanded {
-    border-color: #2271b1;
+	border-color: #2271b1;
 }
 
 .wpshadow-version-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px;
 }
 
 .wpshadow-version-info {
-    flex: 1;
+	flex: 1;
 }
 
 .wpshadow-version-date {
-    font-weight: 600;
-    font-size: 13px;
-    color: #1e1e1e;
-    margin-bottom: 4px;
+	font-weight: 600;
+	font-size: 13px;
+	color: #1e1e1e;
+	margin-bottom: 4px;
 }
 
 .wpshadow-version-meta {
-    font-size: 12px;
-    color: #646970;
+	font-size: 12px;
+	color: #646970;
 }
 
 .wpshadow-version-actions {
-    display: flex;
-    gap: 6px;
+	display: flex;
+	gap: 6px;
 }
 
 .wpshadow-restore-version,
 .wpshadow-delete-version,
 .wpshadow-compare-versions {
-    padding: 6px 12px;
-    font-size: 12px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
+	padding: 6px 12px;
+	font-size: 12px;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	white-space: nowrap;
 }
 
 .wpshadow-restore-version {
-    background-color: #2271b1;
-    color: #fff;
-    border: 1px solid #2271b1;
+	background-color: #2271b1;
+	color: #fff;
+	border: 1px solid #2271b1;
 }
 
 .wpshadow-restore-version:hover:not(:disabled) {
-    background-color: #135e96;
-    border-color: #135e96;
+	background-color: #135e96;
+	border-color: #135e96;
 }
 
 .wpshadow-restore-version:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .wpshadow-delete-version {
-    background-color: #fff;
-    color: #d63638;
-    border: 1px solid #c3c4c7;
+	background-color: #fff;
+	color: #d63638;
+	border: 1px solid #c3c4c7;
 }
 
 .wpshadow-delete-version:hover:not(:disabled) {
-    background-color: #d63638;
-    color: #fff;
-    border-color: #d63638;
+	background-color: #d63638;
+	color: #fff;
+	border-color: #d63638;
 }
 
 .wpshadow-compare-versions {
-    background-color: #fff;
-    color: #2271b1;
-    border: 1px solid #c3c4c7;
+	background-color: #fff;
+	color: #2271b1;
+	border: 1px solid #c3c4c7;
 }
 
 .wpshadow-compare-versions:hover {
-    background-color: #f6f7f7;
-    border-color: #2271b1;
+	background-color: #f6f7f7;
+	border-color: #2271b1;
 }
 
 /* Version Details (Collapsed by default) */
 .wpshadow-version-details {
-    display: none;
-    padding: 0 12px 12px 12px;
-    border-top: 1px solid #dcdcde;
+	display: none;
+	padding: 0 12px 12px 12px;
+	border-top: 1px solid #dcdcde;
 }
 
 .wpshadow-version-content {
-    margin-top: 12px;
-    padding: 12px;
-    background-color: #f6f7f7;
-    border-radius: 3px;
-    font-size: 12px;
-    line-height: 1.6;
-    max-height: 200px;
-    overflow-y: auto;
+	margin-top: 12px;
+	padding: 12px;
+	background-color: #f6f7f7;
+	border-radius: 3px;
+	font-size: 12px;
+	line-height: 1.6;
+	max-height: 200px;
+	overflow-y: auto;
 }
 
 .wpshadow-version-title {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #1e1e1e;
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: #1e1e1e;
 }
 
 .wpshadow-version-excerpt {
-    color: #646970;
-    font-style: italic;
+	color: #646970;
+	font-style: italic;
 }
 
 /* Version Count Badge */
 .wpshadow-version-count {
-    display: inline-block;
-    padding: 2px 8px;
-    background-color: #646970;
-    color: #fff;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-left: 8px;
+	display: inline-block;
+	padding: 2px 8px;
+	background-color: #646970;
+	color: #fff;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 8px;
 }
 
 /* RTL Support */
 body.rtl .wpshadow-vault-badge {
-    margin-left: 0;
-    margin-right: 8px;
+	margin-left: 0;
+	margin-right: 8px;
 }
 
 body.rtl .wpshadow-version-count {
-    margin-left: 0;
-    margin-right: 8px;
+	margin-left: 0;
+	margin-right: 8px;
 }
 
 body.rtl .wpshadow-version-header {
-    flex-direction: row-reverse;
+	flex-direction: row-reverse;
 }
 
 body.rtl .wpshadow-version-actions {
-    flex-direction: row-reverse;
+	flex-direction: row-reverse;
 }
 
 /* Accessibility */
 .wpshadow-version-item:focus-within {
-    outline: 2px solid #2271b1;
-    outline-offset: 2px;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
 }
 
 .wpshadow-restore-version:focus,
 .wpshadow-delete-version:focus,
 .wpshadow-compare-versions:focus {
-    outline: 2px solid #2271b1;
-    outline-offset: 2px;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
 }
 
 /* Mobile Responsiveness */
 @media screen and (max-width: 782px) {
-    .wpshadow-version-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-    }
-    
-    .wpshadow-version-actions {
-        justify-content: stretch;
-    }
-    
-    .wpshadow-restore-version,
-    .wpshadow-delete-version,
-    .wpshadow-compare-versions {
-        flex: 1;
-        text-align: center;
-    }
+	.wpshadow-version-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+	}
+
+	.wpshadow-version-actions {
+		justify-content: stretch;
+	}
+
+	.wpshadow-restore-version,
+	.wpshadow-delete-version,
+	.wpshadow-compare-versions {
+		flex: 1;
+		text-align: center;
+	}
 }
 
 /* Animation */
 @keyframes slideDown {
-    from {
-        opacity: 0;
-        max-height: 0;
-    }
-    to {
-        opacity: 1;
-        max-height: 300px;
-    }
+	from {
+		opacity: 0;
+		max-height: 0;
+	}
+	to {
+		opacity: 1;
+		max-height: 300px;
+	}
 }
 
 .wpshadow-version-details {
-    animation: slideDown 0.3s ease-out;
+	animation: slideDown 0.3s ease-out;
 }

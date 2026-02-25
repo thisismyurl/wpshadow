@@ -64,24 +64,18 @@ class Diagnostic_XPATH_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'sanitize_xpath_queries' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('XPATH injection not prevented. Sanitize all XPATH queries and use parameterized queries to prevent injection attacks on XML processing.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/xpath-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'sanitize_xpath_queries' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'XPATH injection not prevented. Sanitize all XPATH queries and use parameterized queries to prevent injection attacks on XML processing.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/xpath-injection-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

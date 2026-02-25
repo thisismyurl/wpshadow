@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,73 +84,5 @@ class Treatment_Concurrent_Session_Control extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Concurrent_Session_Control' );
-	}
-
-	/**
-	 * Check for session limit implementation.
-	 *
-	 * @since  1.2033.2106
-	 * @return bool True if limits exist.
-	 */
-	private static function check_session_limit_implementation() {
-		// Check for hooks that limit sessions.
-		return has_filter( 'attach_session_information' ) || 
-		       has_filter( 'session_token_manager' );
-	}
-
-	/**
-	 * Check if sessions invalidate on password change.
-	 *
-	 * @since  1.2033.2106
-	 * @return bool True if invalidation occurs.
-	 */
-	private static function check_password_change_invalidation() {
-		// WordPress 4.0+ automatically destroys sessions on password reset.
-		// Check if this is being disabled.
-		return ! has_filter( 'send_password_change_email', '__return_false' );
-	}
-
-	/**
-	 * Check for session revocation capability.
-	 *
-	 * @since  1.2033.2106
-	 * @return bool True if revocation exists.
-	 */
-	private static function check_session_revocation() {
-		// WordPress has built-in session destruction.
-		return function_exists( 'wp_destroy_other_sessions' ) && 
-		       function_exists( 'wp_destroy_all_sessions' );
-	}
-
-	/**
-	 * Find users with excessive active sessions.
-	 *
-	 * @since  1.2033.2106
-	 * @return array User IDs with excessive sessions.
-	 */
-	private static function find_users_with_excessive_sessions() {
-		global $wpdb;
-
-		$excessive = array();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$users_with_sessions = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT user_id, meta_value FROM {$wpdb->usermeta} 
-				WHERE meta_key = %s 
-				LIMIT 100",
-				'session_tokens'
-			),
-			ARRAY_A
-		);
-
-		foreach ( $users_with_sessions as $row ) {
-			$sessions = maybe_unserialize( $row['meta_value'] );
-			if ( is_array( $sessions ) && count( $sessions ) > 10 ) {
-				$excessive[] = (int) $row['user_id'];
-			}
-		}
-
-		return $excessive;
 	}
 }

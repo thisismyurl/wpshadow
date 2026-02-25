@@ -64,24 +64,18 @@ class Diagnostic_Key_Management_Not_Implemented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'manage_encryption_keys' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Key management not implemented. Rotate encryption keys regularly and store them securely outside code.',
-						'severity'   =>   'high',
-						'threat_level'   =>   85,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/key-management-not-implemented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'manage_encryption_keys' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Key management not implemented. Rotate encryption keys regularly and store them securely outside code.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 85,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/key-management-not-implemented',
+			);
+		}
+
+		return null;
 	}
 }

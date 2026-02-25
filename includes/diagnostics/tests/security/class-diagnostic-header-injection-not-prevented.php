@@ -64,24 +64,18 @@ class Diagnostic_Header_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'sanitize_http_headers' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Header injection not prevented. Never include user input in HTTP headers without sanitization.',
-						'severity'   =>   'high',
-						'threat_level'   =>   65,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/header-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'sanitize_http_headers' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Header injection not prevented. Never include user input in HTTP headers without sanitization.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/header-injection-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

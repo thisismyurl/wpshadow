@@ -89,31 +89,4 @@ class Treatment_Session_Timeout_Settings extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Session_Timeout_Settings' );
 	}
-
-	/**
-	 * Check if custom idle timeout is implemented
-	 *
-	 * @since  1.6050.0000
-	 * @return bool True if idle timeout mechanism exists.
-	 */
-	private static function check_custom_idle_timeout(): bool {
-		// Check if there's an idle timeout implementation
-		// This would be a custom plugin or configuration
-		// Look for common patterns
-
-		// Check if filter exists
-		$idle_timeout = apply_filters( 'wp_idle_session_timeout', false );
-
-		// Check for common idle timeout plugins
-		if ( class_exists( 'Idle_Session_Timeout' ) ) {
-			return true;
-		}
-
-		// Check if wp-config has custom idle settings
-		if ( defined( 'WP_IDLE_SESSION_TIMEOUT' ) ) {
-			return true;
-		}
-
-		return false !== $idle_timeout;
-	}
 }

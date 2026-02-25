@@ -64,24 +64,18 @@ class Diagnostic_Race_Condition_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_race_conditions' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Race condition not prevented. Use atomic database operations and locks for critical sections.',
-						'severity'   =>   'high',
-						'threat_level'   =>   70,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/race-condition-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_race_conditions' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Race condition not prevented. Use atomic database operations and locks for critical sections.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 70,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/race-condition-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

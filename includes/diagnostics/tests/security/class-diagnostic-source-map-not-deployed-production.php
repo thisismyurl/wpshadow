@@ -64,23 +64,18 @@ class Diagnostic_Source_Map_Not_Deployed_Production extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   file_exists(ABSPATH.'js/app.js.map' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Source maps deployed to production. Remove .map files from production to prevent source code exposure and reduce file sizes.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   35,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/source-map-not-deployed-production'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( file_exists( ABSPATH . 'js/app.js.map' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Source maps are present in production output. Removing exposed map files can reduce code disclosure risk.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 35,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/source-map-not-deployed-production',
+			);
+		}
+
+		return null;
 	}
 }

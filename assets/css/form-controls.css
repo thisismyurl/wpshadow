@@ -14,8 +14,8 @@
  */
 
 /* ============================================================================
-   1. FORM FIELD WRAPPER - Consistent spacing for all form fields
-   ============================================================================ */
+	1. FORM FIELD WRAPPER - Consistent spacing for all form fields
+	============================================================================ */
 
 .wps-form-field {
 	display: flex;
@@ -34,8 +34,8 @@
 }
 
 /* ============================================================================
-   2. LABELS AND HELPER TEXT
-   ============================================================================ */
+	2. LABELS AND HELPER TEXT
+	============================================================================ */
 
 .wps-field-label,
 .wps-toggle-label,
@@ -77,8 +77,8 @@
 }
 
 /* ============================================================================
-   3. TOGGLE SWITCHES - Replace checkboxes
-   ============================================================================ */
+	3. TOGGLE SWITCHES - Replace checkboxes
+	============================================================================ */
 
 .wps-toggle[role="switch"] {
 	position: relative;
@@ -173,8 +173,8 @@
 }
 
 /* ============================================================================
-   4. SLIDERS - Replace number inputs
-   ============================================================================ */
+	4. SLIDERS - Replace number inputs
+	============================================================================ */
 
 .wps-slider-container {
 	display: flex;
@@ -297,8 +297,8 @@
 }
 
 /* ============================================================================
-   5. STYLED DROPDOWNS - Replace select elements
-   ============================================================================ */
+	5. STYLED DROPDOWNS - Replace select elements
+	============================================================================ */
 
 .wps-dropdown {
 	position: relative;
@@ -410,8 +410,8 @@
 }
 
 /* ============================================================================
-   6. BUTTON GROUPS / SEGMENTED CONTROLS - Replace radio buttons
-   ============================================================================ */
+	6. BUTTON GROUPS / SEGMENTED CONTROLS - Replace radio buttons
+	============================================================================ */
 
 .wps-button-group {
 	display: inline-flex;
@@ -467,8 +467,8 @@
 }
 
 /* ============================================================================
-   7. MODERN STYLED TEXTAREAS
-   ============================================================================ */
+	7. MODERN STYLED TEXTAREAS
+	============================================================================ */
 
 .wps-textarea {
 	width: 100%;
@@ -515,8 +515,8 @@
 }
 
 /* ============================================================================
-   8. ACCESSIBILITY - Reduced Motion Support
-   ============================================================================ */
+	8. ACCESSIBILITY - Reduced Motion Support
+	============================================================================ */
 
 @media (prefers-reduced-motion: reduce) {
 	.wps-toggle,
@@ -536,29 +536,29 @@
 }
 
 /* ============================================================================
-   9. RESPONSIVE DESIGN - Mobile Optimizations
-   ============================================================================ */
+	9. RESPONSIVE DESIGN - Mobile Optimizations
+	============================================================================ */
 
 @media (max-width: 640px) {
 	.wps-form-field-inline {
 		flex-direction: column;
 		align-items: flex-start;
 	}
-	
+
 	.wps-slider-container {
 		flex-direction: column;
 		align-items: stretch;
 	}
-	
+
 	.wps-slider-value {
 		width: 100%;
 		justify-content: center;
 	}
-	
+
 	.wps-button-group {
 		width: 100%;
 	}
-	
+
 	.wps-btn-group-item {
 		flex: 1;
 		justify-content: center;
@@ -566,8 +566,8 @@
 }
 
 /* ============================================================================
-   10. TOUCH TARGET MINIMUM SIZE (44x44px)
-   ============================================================================ */
+	10. TOUCH TARGET MINIMUM SIZE (44x44px)
+	============================================================================ */
 
 @media (pointer: coarse) {
 	.wps-toggle {
@@ -577,21 +577,21 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.wps-slider::-webkit-slider-thumb {
 		width: 24px;
 		height: 24px;
 	}
-	
+
 	.wps-slider::-moz-range-thumb {
 		width: 24px;
 		height: 24px;
 	}
-	
+
 	.wps-btn-group-item {
 		min-height: 44px;
 	}
-	
+
 	.wps-dropdown-list li {
 		min-height: 44px;
 		display: flex;

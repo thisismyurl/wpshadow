@@ -64,24 +64,18 @@ class Diagnostic_Container_Security_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'verify_container_security' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Container security not configured. Scan container images for vulnerabilities and enforce resource limits.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   45,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/container-security-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'verify_container_security' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Container security checks are not configured yet. Enabling image and runtime hardening checks helps reduce risk.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 45,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
+		return null;
 	}
 }

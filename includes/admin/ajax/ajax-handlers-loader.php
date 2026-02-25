@@ -77,6 +77,7 @@ require_once $ajax_path . 'delete-workflow-handler.php';
 require_once $ajax_path . 'toggle-workflow-handler.php';
 require_once $ajax_path . 'automations-dashboard-handler.php';
 require_once $ajax_path . 'get-next-suggestion-handler.php';
+require_once $ajax_path . 'class-workflow-diagnostic-search.php';
 
 // Activity tracking operations
 require_once $ajax_path . 'class-get-activities-handler.php';
@@ -186,7 +187,7 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Refresh_Privacy_Reports_Handler' ) 
 // Register privacy report runner for AJAX snapshot generation.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_Privacy_Report_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Run_Privacy_Report_Handler::register();
-	
+
 }
 
 // Register SEO reports refresh handler for live list updates.

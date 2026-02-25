@@ -2,432 +2,432 @@
  * WPShadow Guardian Dashboard Styles
  * Consolidated styles for Guardian system components
  * Extracted from inline styles in class-guardian-dashboard.php
- * 
+ *
  * @package WPShadow
  */
 
 /* ============================================================================
-   Guardian Dashboard Container
-   ============================================================================ */
+	Guardian Dashboard Container
+	============================================================================ */
 
 .wps-guardian-dashboard {
-    background: white;
-    border-radius: var(--wps-radius-lg);
-    padding: var(--wps-space-6);
+	background: white;
+	border-radius: var(--wps-radius-lg);
+	padding: var(--wps-space-6);
 }
 
 /* Guardian header section */
 .wps-guardian-header {
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-4);
-    margin-bottom: var(--wps-space-6);
-    padding-bottom: var(--wps-space-6);
-    border-bottom: 2px solid var(--wps-gray-200);
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-4);
+	margin-bottom: var(--wps-space-6);
+	padding-bottom: var(--wps-space-6);
+	border-bottom: 2px solid var(--wps-gray-200);
 }
 
 .wps-guardian-icon {
-    font-size: 40px;
-    color: var(--wps-primary);
-    flex-shrink: 0;
+	font-size: 40px;
+	color: var(--wps-primary);
+	flex-shrink: 0;
 }
 
 .wps-guardian-title {
-    margin: 0;
-    color: var(--wps-gray-900);
-    font-size: var(--wps-text-2xl);
-    font-weight: var(--wps-font-bold);
+	margin: 0;
+	color: var(--wps-gray-900);
+	font-size: var(--wps-text-2xl);
+	font-weight: var(--wps-font-bold);
 }
 
 .wps-guardian-subtitle {
-    margin: var(--wps-space-2) 0 0 0;
-    color: var(--wps-gray-600);
-    font-size: var(--wps-text-sm);
+	margin: var(--wps-space-2) 0 0 0;
+	color: var(--wps-gray-600);
+	font-size: var(--wps-text-sm);
 }
 
 /* ============================================================================
-   Guardian Status Indicators
-   ============================================================================ */
+	Guardian Status Indicators
+	============================================================================ */
 
 .wps-guardian-status {
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-3);
-    padding: var(--wps-space-4);
-    background: var(--wps-gray-50);
-    border-radius: var(--wps-radius-md);
-    margin-bottom: var(--wps-space-4);
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-3);
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-md);
+	margin-bottom: var(--wps-space-4);
 }
 
 .wps-guardian-status-badge {
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-2);
-    padding: var(--wps-space-2) var(--wps-space-4);
-    background: white;
-    border-radius: 20px;
-    font-weight: var(--wps-font-semibold);
-    font-size: var(--wps-text-sm);
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	padding: var(--wps-space-2) var(--wps-space-4);
+	background: white;
+	border-radius: 20px;
+	font-weight: var(--wps-font-semibold);
+	font-size: var(--wps-text-sm);
 }
 
 .wps-guardian-status-badge.active {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
+	background: #d1fae5;
+	color: #065f46;
+	border: 1px solid #a7f3d0;
 }
 
 .wps-guardian-status-badge.inactive {
-    background: #fee2e2;
-    color: #7f1d1d;
-    border: 1px solid #fecaca;
+	background: #fee2e2;
+	color: #7f1d1d;
+	border: 1px solid #fecaca;
 }
 
 .wps-guardian-status-badge.running {
-    background: #e0e7ff;
-    color: #3730a3;
-    border: 1px solid #c7d2fe;
+	background: #e0e7ff;
+	color: #3730a3;
+	border: 1px solid #c7d2fe;
 }
 
 .wps-guardian-status-badge .dashicons {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 /* Status message */
 .wps-guardian-message {
-    flex-grow: 1;
+	flex-grow: 1;
 }
 
 .wps-guardian-message-text {
-    margin: 0;
-    color: var(--wps-gray-900);
+	margin: 0;
+	color: var(--wps-gray-900);
 }
 
 .wps-guardian-message-time {
-    font-size: var(--wps-text-xs);
-    color: var(--wps-gray-600);
-    margin-top: var(--wps-space-1);
+	font-size: var(--wps-text-xs);
+	color: var(--wps-gray-600);
+	margin-top: var(--wps-space-1);
 }
 
 /* ============================================================================
-   Guardian Toggle Switch
-   ============================================================================ */
+	Guardian Toggle Switch
+	============================================================================ */
 
 .wps-guardian-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-3);
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-3);
 }
 
 .wps-toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 30px;
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 30px;
 }
 
 .wps-toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 .wps-toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .3s;
-    border-radius: 30px;
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	transition: .3s;
+	border-radius: 30px;
 }
 
 .wps-toggle-slider:before {
-    position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .3s;
-    border-radius: 50%;
+	position: absolute;
+	content: "";
+	height: 22px;
+	width: 22px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	transition: .3s;
+	border-radius: 50%;
 }
 
 input:checked + .wps-toggle-slider {
-    background-color: var(--wps-primary);
+	background-color: var(--wps-primary);
 }
 
 input:checked + .wps-toggle-slider:before {
-    transform: translateX(30px);
+	transform: translateX(30px);
 }
 
 input:disabled + .wps-toggle-slider {
-    opacity: 0.5;
-    cursor: not-allowed;
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
 /* ============================================================================
-   Guardian Scan Progress
-   ============================================================================ */
+	Guardian Scan Progress
+	============================================================================ */
 
 .wps-guardian-scan-progress {
-    background: white;
-    border-radius: var(--wps-radius-md);
-    padding: var(--wps-space-4);
-    margin-bottom: var(--wps-space-4);
-    border: 1px solid var(--wps-gray-200);
+	background: white;
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-4);
+	margin-bottom: var(--wps-space-4);
+	border: 1px solid var(--wps-gray-200);
 }
 
 .wps-scan-progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--wps-space-3);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: var(--wps-space-3);
 }
 
 .wps-scan-progress-title {
-    margin: 0;
-    color: var(--wps-gray-900);
-    font-weight: var(--wps-font-semibold);
+	margin: 0;
+	color: var(--wps-gray-900);
+	font-weight: var(--wps-font-semibold);
 }
 
 .wps-scan-progress-percent {
-    font-size: var(--wps-text-2xl);
-    font-weight: var(--wps-font-bold);
-    color: var(--wps-primary);
+	font-size: var(--wps-text-2xl);
+	font-weight: var(--wps-font-bold);
+	color: var(--wps-primary);
 }
 
 .wps-scan-progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--wps-gray-200);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: var(--wps-space-3);
+	width: 100%;
+	height: 8px;
+	background: var(--wps-gray-200);
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: var(--wps-space-3);
 }
 
 .wps-scan-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--wps-primary) 0%, #0073aa 100%);
-    width: 0%;
-    transition: width 0.3s ease;
+	height: 100%;
+	background: linear-gradient(90deg, var(--wps-primary) 0%, #0073aa 100%);
+	width: 0%;
+	transition: width 0.3s ease;
 }
 
 .wps-scan-progress-details {
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--wps-text-xs);
-    color: var(--wps-gray-600);
+	display: flex;
+	justify-content: space-between;
+	font-size: var(--wps-text-xs);
+	color: var(--wps-gray-600);
 }
 
 /* ============================================================================
-   Guardian Issue Grid
-   ============================================================================ */
+	Guardian Issue Grid
+	============================================================================ */
 
 .wps-guardian-issues {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--wps-space-4);
-    margin-bottom: var(--wps-space-6);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: var(--wps-space-4);
+	margin-bottom: var(--wps-space-6);
 }
 
 .wps-guardian-issue-card {
-    background: white;
-    border-radius: var(--wps-radius-md);
-    padding: var(--wps-space-4);
-    border-left: 4px solid;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    transition: all 0.2s ease;
+	background: white;
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-4);
+	border-left: 4px solid;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+	transition: all 0.2s ease;
 }
 
 .wps-guardian-issue-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+	transform: translateY(-2px);
 }
 
 .wps-guardian-issue-card.critical {
-    border-left-color: #dc2626;
-    background: #fef2f2;
+	border-left-color: #dc2626;
+	background: #fef2f2;
 }
 
 .wps-guardian-issue-card.high {
-    border-left-color: #f59e0b;
-    background: #fffbeb;
+	border-left-color: #f59e0b;
+	background: #fffbeb;
 }
 
 .wps-guardian-issue-card.medium {
-    border-left-color: #3b82f6;
-    background: #f0f9ff;
+	border-left-color: #3b82f6;
+	background: #f0f9ff;
 }
 
 .wps-guardian-issue-card.low {
-    border-left-color: #10b981;
-    background: #ecfdf5;
+	border-left-color: #10b981;
+	background: #ecfdf5;
 }
 
 .wps-guardian-issue-icon {
-    font-size: 32px;
-    margin-bottom: var(--wps-space-2);
+	font-size: 32px;
+	margin-bottom: var(--wps-space-2);
 }
 
 .wps-guardian-issue-title {
-    margin: 0 0 var(--wps-space-2) 0;
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	margin: 0 0 var(--wps-space-2) 0;
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 .wps-guardian-issue-count {
-    display: inline-block;
-    padding: var(--wps-space-1) var(--wps-space-2);
-    background: rgba(0,0,0,0.1);
-    border-radius: 4px;
-    font-size: var(--wps-text-sm);
-    font-weight: var(--wps-font-bold);
+	display: inline-block;
+	padding: var(--wps-space-1) var(--wps-space-2);
+	background: rgba(0,0,0,0.1);
+	border-radius: 4px;
+	font-size: var(--wps-text-sm);
+	font-weight: var(--wps-font-bold);
 }
 
 .wps-guardian-issue-description {
-    font-size: var(--wps-text-sm);
-    color: var(--wps-gray-600);
-    margin: var(--wps-space-2) 0;
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
+	margin: var(--wps-space-2) 0;
 }
 
 .wps-guardian-issue-action {
-    display: flex;
-    gap: var(--wps-space-2);
-    margin-top: var(--wps-space-3);
+	display: flex;
+	gap: var(--wps-space-2);
+	margin-top: var(--wps-space-3);
 }
 
 .wps-guardian-issue-action a {
-    display: inline-block;
-    padding: var(--wps-space-2) var(--wps-space-3);
-    background: var(--wps-primary);
-    color: white;
-    text-decoration: none;
-    border-radius: var(--wps-radius-sm);
-    font-size: var(--wps-text-xs);
-    font-weight: var(--wps-font-semibold);
-    transition: background 0.2s ease;
+	display: inline-block;
+	padding: var(--wps-space-2) var(--wps-space-3);
+	background: var(--wps-primary);
+	color: white;
+	text-decoration: none;
+	border-radius: var(--wps-radius-sm);
+	font-size: var(--wps-text-xs);
+	font-weight: var(--wps-font-semibold);
+	transition: background 0.2s ease;
 }
 
 .wps-guardian-issue-action a:hover {
-    background: var(--wps-primary-dark);
-    text-decoration: none;
+	background: var(--wps-primary-dark);
+	text-decoration: none;
 }
 
 /* ============================================================================
-   Guardian Actions and Buttons
-   ============================================================================ */
+	Guardian Actions and Buttons
+	============================================================================ */
 
 .wps-guardian-actions {
-    display: flex;
-    gap: var(--wps-space-3);
-    flex-wrap: wrap;
-    margin-top: var(--wps-space-6);
-    padding-top: var(--wps-space-6);
-    border-top: 1px solid var(--wps-gray-200);
+	display: flex;
+	gap: var(--wps-space-3);
+	flex-wrap: wrap;
+	margin-top: var(--wps-space-6);
+	padding-top: var(--wps-space-6);
+	border-top: 1px solid var(--wps-gray-200);
 }
 
 .wps-guardian-btn {
-    padding: var(--wps-space-3) var(--wps-space-5);
-    border: none;
-    border-radius: var(--wps-radius-md);
-    cursor: pointer;
-    font-weight: var(--wps-font-semibold);
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-2);
+	padding: var(--wps-space-3) var(--wps-space-5);
+	border: none;
+	border-radius: var(--wps-radius-md);
+	cursor: pointer;
+	font-weight: var(--wps-font-semibold);
+	transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-2);
 }
 
 .wps-guardian-btn.primary {
-    background: var(--wps-primary);
-    color: white;
+	background: var(--wps-primary);
+	color: white;
 }
 
 .wps-guardian-btn.primary:hover {
-    background: var(--wps-primary-dark);
+	background: var(--wps-primary-dark);
 }
 
 .wps-guardian-btn.secondary {
-    background: var(--wps-gray-100);
-    color: var(--wps-gray-900);
-    border: 1px solid var(--wps-gray-300);
+	background: var(--wps-gray-100);
+	color: var(--wps-gray-900);
+	border: 1px solid var(--wps-gray-300);
 }
 
 .wps-guardian-btn.secondary:hover {
-    background: var(--wps-gray-200);
+	background: var(--wps-gray-200);
 }
 
 .wps-guardian-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
 .wps-guardian-btn .dashicons {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 /* ============================================================================
-   Guardian Settings/Config
-   ============================================================================ */
+	Guardian Settings/Config
+	============================================================================ */
 
 .wps-guardian-settings {
-    background: var(--wps-gray-50);
-    border-radius: var(--wps-radius-md);
-    padding: var(--wps-space-4);
-    margin-top: var(--wps-space-6);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-4);
+	margin-top: var(--wps-space-6);
 }
 
 .wps-guardian-settings-title {
-    margin: 0 0 var(--wps-space-4) 0;
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	margin: 0 0 var(--wps-space-4) 0;
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 .wps-guardian-setting-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--wps-space-3);
-    background: white;
-    border-radius: var(--wps-radius-sm);
-    margin-bottom: var(--wps-space-2);
-    border: 1px solid var(--wps-gray-200);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--wps-space-3);
+	background: white;
+	border-radius: var(--wps-radius-sm);
+	margin-bottom: var(--wps-space-2);
+	border: 1px solid var(--wps-gray-200);
 }
 
 .wps-guardian-setting-label {
-    font-weight: var(--wps-font-medium);
-    color: var(--wps-gray-900);
+	font-weight: var(--wps-font-medium);
+	color: var(--wps-gray-900);
 }
 
 .wps-guardian-setting-value {
-    color: var(--wps-gray-600);
-    font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
+	font-size: var(--wps-text-sm);
 }
 
 /* ============================================================================
-   Responsive Design
-   ============================================================================ */
+	Responsive Design
+	============================================================================ */
 
 @media (max-width: 768px) {
-    .wps-guardian-header {
-        flex-direction: column;
-        text-align: center;
-    }
+	.wps-guardian-header {
+		flex-direction: column;
+		text-align: center;
+	}
 
-    .wps-guardian-issues {
-        grid-template-columns: 1fr;
-    }
+	.wps-guardian-issues {
+		grid-template-columns: 1fr;
+	}
 
-    .wps-guardian-actions {
-        flex-direction: column;
-    }
+	.wps-guardian-actions {
+		flex-direction: column;
+	}
 
-    .wps-guardian-actions > * {
-        width: 100%;
-    }
+	.wps-guardian-actions > * {
+		width: 100%;
+	}
 }

@@ -19,10 +19,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Schedule_Overnight_Fix_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Register AJAX hooks for overnight fix scheduling.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_schedule_overnight_fix', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle overnight fix scheduling requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_kanban', 'manage_options', 'nonce' );
 

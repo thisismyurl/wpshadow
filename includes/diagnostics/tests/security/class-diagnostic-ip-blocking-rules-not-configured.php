@@ -64,23 +64,18 @@ class Diagnostic_IP_Blocking_Rules_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('ip_blocklist_configured' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('IP blocking rules not configured. Block known bad IP ranges and implement adaptive IP blocking to prevent brute force and DDoS attacks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   50,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/ip-blocking-rules-not-configured'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'ip_blocklist_configured' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'IP blocking rules not configured. Block known bad IP ranges and implement adaptive IP blocking to prevent brute force and DDoS attacks.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 50,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/ip-blocking-rules-not-configured',
+			);
+		}
+
+		return null;
 	}
 }

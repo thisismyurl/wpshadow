@@ -162,7 +162,8 @@ $workflows           = array_filter(
 
 <div class="wps-page-container wpshadow-automations-dashboard">
 	<!-- Page Header -->
-	<?php wpshadow_render_page_header(
+	<?php
+	wpshadow_render_page_header(
 		__( 'Automations', 'wpshadow' ),
 		sprintf(
 			/* translators: %s: link to knowledge base article */
@@ -170,7 +171,8 @@ $workflows           = array_filter(
 			'<a href="https://wpshadow.com/kb/workflows" target="_blank">' . __( 'Learn about automations →', 'wpshadow' ) . '</a>'
 		),
 		'dashicons-update'
-	); ?>
+	);
+	?>
 
 	<!-- Add Automation Card -->
 	<div class="wps-card wpshadow-add-automation-card">
@@ -371,10 +373,6 @@ $workflows           = array_filter(
 
 <style>
 /* Automations Dashboard Styles */
-.wpshadow-automations-dashboard {
-	/* Uses default wps-page-container max-width of 1400px */
-}
-
 /* Add Automation Card */
 .wpshadow-add-automation-card {
 	background: linear-gradient(135deg, #2271b1 0%, #1e5a96 100%);

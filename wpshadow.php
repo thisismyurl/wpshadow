@@ -72,7 +72,7 @@ add_action(
  *
  * Auto-discover and subscribe all Hook_Subscriber_Base classes.
  * This runs at priority 5, after classes are loaded.
- * 
+ *
  * Phase 6: All 45+ Hook_Subscriber_Base classes are auto-subscribed.
  * Zero manual ::init() calls required!
  */
@@ -80,7 +80,7 @@ add_action(
 	'plugins_loaded',
 	function () {
 		\WPShadow\Core\Hook_Registry::init();
-		
+
 		// Manually subscribe Guardian_Inactive_Notice
 		// (not discovered by Hook_Registry due to file naming)
 		if ( class_exists( '\WPShadow\Admin\Guardian_Inactive_Notice' ) ) {

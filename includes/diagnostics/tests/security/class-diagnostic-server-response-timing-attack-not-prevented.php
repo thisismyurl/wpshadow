@@ -64,24 +64,18 @@ class Diagnostic_Server_Response_Timing_Attack_Not_Prevented extends Diagnostic_
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_timing_attacks' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Server response timing attack not prevented. Use constant-time comparison functions like hash_equals() for sensitive data.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   45,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/server-response-timing-attack-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_timing_attacks' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Server response timing attack not prevented. Use constant-time comparison functions like hash_equals() for sensitive data.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 45,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/server-response-timing-attack-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

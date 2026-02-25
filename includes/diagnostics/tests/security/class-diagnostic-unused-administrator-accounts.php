@@ -15,6 +15,7 @@
  * **Learn More:**
  * Admin account management: https://wpshadow.com/kb/admin-account-audit
  * Video: User access governance (10min): https://wpshadow.com/training/user-management\n *
+ *
  * @package    WPShadow
  * @subpackage Diagnostics
  * @since      1.6032.1340
@@ -40,8 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Web development agency manages 200 client sites. Each site has 1-2 admin accounts.\n * Freelancer left company 8 months ago, nobody removed their admin account.\n * Freelancer's laptop compromised with malware (password manager breach). Attacker\n * uses freelancer's password to access 50 agency client sites via these old accounts.\n * Damage: cleanup costs $100K, client notifications $50K, reputation damage.\n * Prevention: quarterly admin account review (1 hour), catch unused accounts immediately.\n *
  * **Implementation Notes:**
  * - Queries WordPress user roles and meta efficiently\n * - Checks both single-site and multisite installations\n * - Returns severity: critical (inactive 6+ months), high (inactive 2-6 months)\n * - Auto-fixable treatment: disable/delete identified unused accounts\n *
+ *
  * @since 1.6032.1340
- */\nclass Diagnostic_Unused_Administrator_Accounts extends Diagnostic_Base {
+ */
+class Diagnostic_Unused_Administrator_Accounts extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
@@ -132,7 +135,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $never_logged_in ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of admins */
-				__( '%d administrator(s) have never logged in: %s', 'wpshadow' ),
+				__( '%1$d administrator(s) have never logged in: %2$s', 'wpshadow' ),
 				count( $never_logged_in ),
 				implode( ', ', $never_logged_in )
 			);
@@ -141,7 +144,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $inactive_admins ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of admins */
-				__( '%d administrator(s) inactive for %d+ days: %s', 'wpshadow' ),
+				__( '%1$d administrator(s) inactive for %2$d+ days: %3$s', 'wpshadow' ),
 				count( $inactive_admins ),
 				$inactivity_days,
 				implode( ', ', $inactive_admins )
@@ -161,7 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $suspicious ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of admins */
-				__( '%d administrator(s) have weak usernames: %s', 'wpshadow' ),
+				__( '%1$d administrator(s) have weak usernames: %2$s', 'wpshadow' ),
 				count( $suspicious ),
 				implode( ', ', $suspicious )
 			);
@@ -179,7 +182,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $invalid_emails ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of admins */
-				__( '%d administrator(s) have invalid email addresses: %s', 'wpshadow' ),
+				__( '%1$d administrator(s) have invalid email addresses: %2$s', 'wpshadow' ),
 				count( $invalid_emails ),
 				implode( ', ', $invalid_emails )
 			);

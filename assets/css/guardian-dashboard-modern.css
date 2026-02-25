@@ -1,23 +1,23 @@
 /**
  * Modern Guardian Dashboard Styles
  * Phase 2: UI/UX Modernization (Epic #685, Issue #667)
- * 
+ *
  * Provides clean, modern styling for the Guardian Dashboard with:
  * - Enhanced KPI cards with trends and visual hierarchy
  * - Modern activity timeline with icons and colors
  * - Improved responsive design
  * - WCAG AA accessibility compliance
- * 
+ *
  * Philosophy: Inspire Confidence (#8), Show Value (#9)
  * CANON: Accessibility First
- * 
+ *
  * @package WPShadow
  * @since 1.6030.2148
  */
 
 /* ============================================================================
-   Enhanced KPI Cards
-   ============================================================================ */
+	Enhanced KPI Cards
+	============================================================================ */
 
 .wps-kpi-card {
 	background: #ffffff;
@@ -142,8 +142,8 @@
 }
 
 /* ============================================================================
-   Modern Activity Timeline
-   ============================================================================ */
+	Modern Activity Timeline
+	============================================================================ */
 
 .wps-activity-timeline {
 	display: flex;
@@ -232,8 +232,8 @@
 }
 
 /* ============================================================================
-   Responsive Design
-   ============================================================================ */
+	Responsive Design
+	============================================================================ */
 
 @media (max-width: 768px) {
 	.wps-kpi-card {
@@ -276,8 +276,8 @@
 }
 
 /* ============================================================================
-   Accessibility Enhancements
-   ============================================================================ */
+	Accessibility Enhancements
+	============================================================================ */
 
 /* Focus indicators (WCAG 2.1 Level AA) */
 .wps-kpi-card:focus-within {
@@ -316,8 +316,8 @@
 }
 
 /* ============================================================================
-   Status Check Items
-   ============================================================================ */
+	Status Check Items
+	============================================================================ */
 
 .wps-status-check-item {
 	display: flex;
@@ -337,4 +337,3 @@
 	font-size: var(--wps-text-xs, 0.75rem);
 	font-weight: var(--wps-font-semibold, 600);
 }
-

@@ -64,24 +64,18 @@ class Diagnostic_XML_Bomb_Attack_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_xml_bombs' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('XML bomb attack not prevented. Disable XML external entities (XXE) and limit entity expansion in XML parsing.',
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/xml-bomb-attack-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_xml_bombs' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'XML bomb attack not prevented. Disable XML external entities (XXE) and limit entity expansion in XML parsing.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 75,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/xml-bomb-attack-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

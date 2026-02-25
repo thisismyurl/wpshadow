@@ -38,10 +38,11 @@ foreach ( $trigger_categories as $category ) {
 ?>
 
 <div class="wps-page-container">
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost wps-action-back-button">
-		<span class="dashicons dashicons-arrow-left-alt2 wps-action-back-icon"></span>
-		<?php esc_html_e( 'Back', 'wpshadow' ); ?>
-	</a>
+	<?php
+	wpshadow_render_wizard_back_button(
+		admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id )
+	);
+	?>
 	<?php
 	wpshadow_render_page_header(
 		__( 'Choose Actions', 'wpshadow' ),

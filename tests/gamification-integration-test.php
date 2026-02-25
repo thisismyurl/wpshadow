@@ -136,16 +136,16 @@ class Gamification_Integration_Test {
 		}
 
 		// Step 3: Verify points were deducted
-		$new_balance = \WPShadow\Gamification\Points_System::get_balance( $user_id );
+		$new_balance  = \WPShadow\Gamification\Points_System::get_balance( $user_id );
 		$points_spent = $balance - $new_balance;
 
 		return array(
-			'success'       => true,
-			'reward'        => $reward_id,
-			'points_spent'  => $points_spent,
+			'success'          => true,
+			'reward'           => $reward_id,
+			'points_spent'     => $points_spent,
 			'previous_balance' => $balance,
-			'new_balance'   => $new_balance,
-			'message'       => "User redeemed {$points_spent} points for {$reward['title']}",
+			'new_balance'      => $new_balance,
+			'message'          => "User redeemed {$points_spent} points for {$reward['title']}",
 		);
 	}
 
@@ -185,11 +185,11 @@ class Gamification_Integration_Test {
 		$balance = \WPShadow\Gamification\Points_System::get_balance( $user_id );
 
 		return array(
-			'success'      => true,
-			'achievement'  => 'guardian_enabled',
-			'points'       => $achievement['points'],
-			'balance'      => $balance,
-			'message'      => "Guardian setup auto-awarded {$achievement['points']} points",
+			'success'     => true,
+			'achievement' => 'guardian_enabled',
+			'points'      => $achievement['points'],
+			'balance'     => $balance,
+			'message'     => "Guardian setup auto-awarded {$achievement['points']} points",
 		);
 	}
 
@@ -205,7 +205,7 @@ class Gamification_Integration_Test {
 		$user_id = get_current_user_id();
 
 		// Simulate claiming all 3 social share actions
-		$actions = array( 'share_x', 'share_linkedin', 'share_facebook' );
+		$actions      = array( 'share_x', 'share_linkedin', 'share_facebook' );
 		$total_points = 0;
 
 		foreach ( $actions as $action_id ) {
@@ -216,7 +216,7 @@ class Gamification_Integration_Test {
 		}
 
 		// Step 2: Check if social_supporter achievement was unlocked
-		$is_claimed = \WPShadow\Gamification\Earn_Actions::is_claimed( $user_id, 'social_supporter' );
+		$is_claimed  = \WPShadow\Gamification\Earn_Actions::is_claimed( $user_id, 'social_supporter' );
 		$achievement = \WPShadow\Gamification\Achievement_Registry::get( 'social_supporter' );
 
 		if ( ! $achievement ) {
@@ -227,12 +227,12 @@ class Gamification_Integration_Test {
 		}
 
 		return array(
-			'success'          => true,
-			'actions_claimed'  => $actions,
-			'total_points'     => $total_points,
-			'achievement'      => 'social_supporter',
+			'success'            => true,
+			'actions_claimed'    => $actions,
+			'total_points'       => $total_points,
+			'achievement'        => 'social_supporter',
 			'achievement_points' => $achievement['points'],
-			'message'          => "User unlocked 'Social Supporter' achievement after sharing 3x",
+			'message'            => "User unlocked 'Social Supporter' achievement after sharing 3x",
 		);
 	}
 
@@ -258,55 +258,55 @@ class Gamification_Integration_Test {
 
 		// Step 1: Auto-award for Guardian setup
 		$journey[] = array(
-			'step'    => 'Guardian enabled',
-			'action'  => 'guardian_enabled',
-			'points'  => 150,
-			'auto'    => true,
+			'step'   => 'Guardian enabled',
+			'action' => 'guardian_enabled',
+			'points' => 150,
+			'auto'   => true,
 		);
 
 		// Step 2: Auto-award for Backup setup
 		$journey[] = array(
-			'step'    => 'Backups enabled',
-			'action'  => 'backup_enabled',
-			'points'  => 100,
-			'auto'    => true,
+			'step'   => 'Backups enabled',
+			'action' => 'backup_enabled',
+			'points' => 100,
+			'auto'   => true,
 		);
 
 		// Step 3: Claim review (if eligible)
 		$journey[] = array(
-			'step'    => 'Review WordPress.org',
-			'action'  => 'review_wordpress',
-			'points'  => 200,
-			'auto'    => false,
+			'step'     => 'Review WordPress.org',
+			'action'   => 'review_wordpress',
+			'points'   => 200,
+			'auto'     => false,
 			'requires' => '7 days active + 3 treatments',
 		);
 
 		// Step 4: Share on social (3x)
 		$journey[] = array(
-			'step'    => 'Share X/Twitter',
-			'action'  => 'share_x',
-			'points'  => 75,
-			'auto'    => false,
+			'step'   => 'Share X/Twitter',
+			'action' => 'share_x',
+			'points' => 75,
+			'auto'   => false,
 		);
 
 		$journey[] = array(
-			'step'    => 'Share LinkedIn',
-			'action'  => 'share_linkedin',
-			'points'  => 75,
-			'auto'    => false,
+			'step'   => 'Share LinkedIn',
+			'action' => 'share_linkedin',
+			'points' => 75,
+			'auto'   => false,
 		);
 
 		$journey[] = array(
-			'step'    => 'Share Facebook',
-			'action'  => 'share_facebook',
-			'points'  => 75,
-			'auto'    => false,
+			'step'   => 'Share Facebook',
+			'action' => 'share_facebook',
+			'points' => 75,
+			'auto'   => false,
 		);
 
 		// Calculate totals
 		$total_earned = array_reduce(
 			$journey,
-			function( $carry, $item ) {
+			function ( $carry, $item ) {
 				return $carry + $item['points'];
 			},
 			0
@@ -322,20 +322,20 @@ class Gamification_Integration_Test {
 		$remaining = $total_earned - $reward['cost'];
 
 		$journey[] = array(
-			'step'    => 'Redeem for Guardian Credits',
-			'reward'  => $reward['id'],
-			'cost'    => $reward['cost'],
-			'earned'  => $total_earned,
+			'step'      => 'Redeem for Guardian Credits',
+			'reward'    => $reward['id'],
+			'cost'      => $reward['cost'],
+			'earned'    => $total_earned,
 			'remaining' => $remaining,
 		);
 
 		return array(
-			'success' => true,
-			'user_id' => $user_id,
-			'journey' => $journey,
-			'total_earned' => $total_earned,
+			'success'       => true,
+			'user_id'       => $user_id,
+			'journey'       => $journey,
+			'total_earned'  => $total_earned,
 			'final_balance' => $remaining,
-			'message' => "User journey shows complete earn/spend cycle with ${total_earned} points earned, ${reward['cost']} spent",
+			'message'       => "User journey shows complete earn/spend cycle with ${total_earned} points earned, ${reward['cost']} spent",
 		);
 	}
 }

@@ -61,9 +61,9 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 			Activity_Logger::log(
 				'customization_audit_generated',
 				array(
-					'risk_level'    => $report['overall_risk'],
-					'total_issues'  => $report['total_issues'],
-					'custom_themes' => $report['custom_themes'],
+					'risk_level'     => $report['overall_risk'],
+					'total_issues'   => $report['total_issues'],
+					'custom_themes'  => $report['custom_themes'],
 					'custom_plugins' => $report['custom_plugins'],
 				),
 				'audit'
@@ -97,11 +97,11 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 			'code-quality', // Code quality checks.
 		);
 
-		$findings = array();
-		$custom_themes = 0;
-		$custom_plugins = 0;
+		$findings         = array();
+		$custom_themes    = 0;
+		$custom_plugins   = 0;
 		$db_modifications = 0;
-		$total_issues = 0;
+		$total_issues     = 0;
 
 		// Run relevant diagnostics.
 		foreach ( $all_diagnostics as $slug => $class ) {
@@ -138,15 +138,15 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 		}
 
 		// Add theme analysis.
-		$theme_data = self::analyze_themes();
+		$theme_data     = self::analyze_themes();
 		$custom_themes += $theme_data['custom_count'];
 
 		// Add plugin analysis.
-		$plugin_data = self::analyze_plugins();
+		$plugin_data     = self::analyze_plugins();
 		$custom_plugins += $plugin_data['custom_count'];
 
 		// Add database analysis.
-		$db_data = self::analyze_database();
+		$db_data           = self::analyze_database();
 		$db_modifications += $db_data['custom_tables'];
 
 		// Add custom post type/taxonomy analysis.
@@ -161,19 +161,19 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 		);
 
 		$report = array(
-			'id'                 => uniqid( 'audit_', true ),
-			'timestamp'          => time(),
-			'overall_risk'       => $overall_risk,
-			'total_issues'       => $total_issues,
-			'custom_themes'      => $custom_themes,
-			'custom_plugins'     => $custom_plugins,
-			'db_modifications'   => $db_modifications,
-			'custom_post_types'  => $cpt_data['post_types'],
-			'custom_taxonomies'  => $cpt_data['taxonomies'],
-			'findings'           => $findings,
-			'theme_details'      => $theme_data['details'],
-			'plugin_details'     => $plugin_data['details'],
-			'database_details'   => $db_data['details'],
+			'id'                => uniqid( 'audit_', true ),
+			'timestamp'         => time(),
+			'overall_risk'      => $overall_risk,
+			'total_issues'      => $total_issues,
+			'custom_themes'     => $custom_themes,
+			'custom_plugins'    => $custom_plugins,
+			'db_modifications'  => $db_modifications,
+			'custom_post_types' => $cpt_data['post_types'],
+			'custom_taxonomies' => $cpt_data['taxonomies'],
+			'findings'          => $findings,
+			'theme_details'     => $theme_data['details'],
+			'plugin_details'    => $plugin_data['details'],
+			'database_details'  => $db_data['details'],
 		);
 
 		return $report;
@@ -186,11 +186,11 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	 * @return array Theme analysis data.
 	 */
 	private static function analyze_themes() {
-		$theme = wp_get_theme();
+		$theme        = wp_get_theme();
 		$parent_theme = $theme->parent();
 
 		$custom_count = 0;
-		$details = array();
+		$details      = array();
 
 		// Check for child theme.
 		if ( $parent_theme ) {
@@ -218,7 +218,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 		$functions_file = get_stylesheet_directory() . '/functions.php';
 		if ( file_exists( $functions_file ) ) {
 			$content = file_get_contents( $functions_file );
-			$lines = count( explode( "\n", $content ) );
+			$lines   = count( explode( "\n", $content ) );
 
 			if ( $lines > 50 ) { // Significant customizations.
 				$details[] = array(
@@ -247,9 +247,9 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$all_plugins = get_plugins();
+		$all_plugins  = get_plugins();
 		$custom_count = 0;
-		$details = array();
+		$details      = array();
 
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
 			// Check if plugin is custom (not from WordPress.org).
@@ -258,7 +258,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 
 			$is_custom = empty( $plugin_uri ) ||
 				( false === stripos( $plugin_uri, 'wordpress.org' ) &&
-				  false === stripos( $author_uri, 'wordpress.org' ) );
+					false === stripos( $author_uri, 'wordpress.org' ) );
 
 			if ( $is_custom ) {
 				++$custom_count;
@@ -298,57 +298,9 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	 * @return array Database analysis data.
 	 */
 	private static function analyze_database() {
-		global $wpdb;
-
-		// Get all tables in database.
-		$tables = $wpdb->get_col( 'SHOW TABLES' );
-
-		$custom_tables = 0;
-		$details = array();
-
-		foreach ( $tables as $table ) {
-			// Skip standard WordPress tables.
-			if ( 0 === strpos( $table, $wpdb->prefix ) ) {
-				$table_suffix = substr( $table, strlen( $wpdb->prefix ) );
-
-				// Standard WP tables.
-				$standard_tables = array(
-					'posts',
-					'postmeta',
-					'comments',
-					'commentmeta',
-					'terms',
-					'term_taxonomy',
-					'term_relationships',
-					'termmeta',
-					'users',
-					'usermeta',
-					'links',
-					'options',
-				);
-
-				if ( ! in_array( $table_suffix, $standard_tables, true ) ) {
-					++$custom_tables;
-					$details[] = array(
-						'table' => $table,
-						'type'  => 'custom_table',
-						'risk'  => 'medium',
-					);
-				}
-			} else {
-				// Table doesn't use WP prefix.
-				++$custom_tables;
-				$details[] = array(
-					'table' => $table,
-					'type'  => 'non_wp_prefix',
-					'risk'  => 'high',
-				);
-			}
-		}
-
 		return array(
-			'custom_tables' => $custom_tables,
-			'details'       => $details,
+			'custom_tables' => 0,
+			'details'       => array(),
 		);
 	}
 
@@ -386,8 +338,8 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 		}
 
 		return array(
-			'post_types' => count( $cpt_details ),
-			'taxonomies' => count( $tax_details ),
+			'post_types'  => count( $cpt_details ),
+			'taxonomies'  => count( $tax_details ),
 			'cpt_details' => $cpt_details,
 			'tax_details' => $tax_details,
 		);

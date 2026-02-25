@@ -64,23 +64,18 @@ class Diagnostic_Sensitive_Data_Exposure_In_Logs extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !get_option('log_sanitization_enabled' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Sensitive data exposed in logs. Mask passwords,
-						'severity'   =>   'high',
-						'threat_level'   =>   80,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/sensitive-data-exposure-in-logs'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! get_option( 'log_sanitization_enabled' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Sensitive data may be exposed in logs. Ensure secrets, passwords, and personal data are masked before writing log entries.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 80,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/sensitive-data-exposure-in-logs',
+			);
+		}
+
+		return null;
 	}
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Treatments\Helpers\Treatment_URL_And_Pattern_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -65,63 +64,5 @@ class Treatment_SSL_Certificate_Expiration extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_SSL_Certificate_Expiration' );
-	}
-
-	/**
-	 * Get SSL certificate info for a domain.
-	 *
-	 * @since  1.6035.0900
-	 * @param  string $domain Domain name.
-	 * @return array SSL certificate info array.
-	 */
-	private static function get_certificate_info( string $domain ): array {
-		$cache_key = 'wpshadow_ssl_cert_info_' . md5( $domain );
-		$cached = get_transient( $cache_key );
-		if ( is_array( $cached ) ) {
-			return $cached;
-		}
-
-		if ( ! function_exists( 'openssl_x509_parse' ) ) {
-			return array();
-		}
-
-		$context = stream_context_create(
-			array(
-				'ssl' => array(
-					'capture_peer_cert' => true,
-					'verify_peer'       => false,
-					'verify_peer_name'  => false,
-				),
-			)
-		);
-
-		$client = @stream_socket_client(
-			'ssl://' . $domain . ':443',
-			$errno,
-			$errstr,
-			10,
-			STREAM_CLIENT_CONNECT,
-			$context
-		);
-
-		if ( ! $client ) {
-			return array();
-		}
-
-		$params = stream_context_get_params( $client );
-		$cert = $params['options']['ssl']['peer_certificate'] ?? null;
-
-		if ( ! $cert ) {
-			return array();
-		}
-
-		$info = openssl_x509_parse( $cert );
-		if ( ! is_array( $info ) ) {
-			return array();
-		}
-
-		set_transient( $cache_key, $info, 12 * HOUR_IN_SECONDS );
-
-		return $info;
 	}
 }

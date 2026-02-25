@@ -18,10 +18,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Save_Tip_Prefs_Handler extends AJAX_Handler_Base {
+	/**
+	 * Register AJAX hooks for tip preference saves.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_save_tip_prefs', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle tip preference save requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_tip_prefs', 'read', 'nonce' );
 

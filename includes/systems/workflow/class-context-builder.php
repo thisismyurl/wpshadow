@@ -158,7 +158,10 @@ class Context_Builder {
 		return array(
 			'trigger_type'  => 'diagnostic_run',
 			'diagnostic_id' => $activity['diagnostic_id'] ?? '',
+			'diagnostic'    => $activity['diagnostic_id'] ?? '',
+			'source'        => $activity['source'] ?? 'manual',
 			'result'        => $activity['result'] ?? '',
+			'found_issue'   => ! empty( $activity['found_issue'] ),
 			'threat_level'  => $activity['threat_level'] ?? 0,
 			'timestamp'     => $activity['timestamp'] ?? current_time( 'mysql' ),
 		);

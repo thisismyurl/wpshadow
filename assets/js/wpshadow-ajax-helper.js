@@ -8,7 +8,7 @@
  * @since   1.6031.1500
  */
 
-(function($, window) {
+(function ($, window) {
 	'use strict';
 
 	/**
@@ -41,79 +41,84 @@
 		 * @param {number} options.timeout - Request timeout in milliseconds
 		 * @returns {jqXHR} jQuery XHR object
 		 */
-		post: function(action, data, options) {
-			options = $.extend({}, this.defaults, options || {});
+		post: function (action, data, options) {
+			options = $.extend( {}, this.defaults, options || {} );
 
 			// Ensure action is prefixed
-			if (action.indexOf('wpshadow_') !== 0) {
+			if (action.indexOf( 'wpshadow_' ) !== 0) {
 				action = 'wpshadow_' + action;
 			}
 
 			// Add nonce if available
-			var requestData = $.extend({
-				action: action,
-				nonce: this.getNonce()
-			}, data || {});
+			var requestData = $.extend(
+				{
+					action: action,
+					nonce: this.getNonce()
+				},
+				data || {}
+			);
 
-			var self = this;
+			var self           = this;
 			var loadingElement = options.loadingElement || null;
 
-			return $.ajax({
-				url: ajaxurl || window.ajaxurl,
-				type: 'POST',
-				data: requestData,
-				timeout: options.timeout,
-				beforeSend: function(jqXHR, settings) {
-					if (options.showLoading && loadingElement) {
-						self.showLoading(loadingElement);
-					}
-					if (options.beforeSend) {
-						return options.beforeSend(jqXHR, settings);
-					}
-				},
-				success: function(response, textStatus, jqXHR) {
-					if (response && response.success) {
-						if (options.success) {
-							options.success(response.data || {}, response, textStatus, jqXHR);
+			return $.ajax(
+				{
+					url: ajaxurl || window.ajaxurl,
+					type: 'POST',
+					data: requestData,
+					timeout: options.timeout,
+					beforeSend: function (jqXHR, settings) {
+						if (options.showLoading && loadingElement) {
+							self.showLoading( loadingElement );
 						}
-					} else {
-						var errorMsg = response && response.data && response.data.message
+						if (options.beforeSend) {
+							return options.beforeSend( jqXHR, settings );
+						}
+					},
+					success: function (response, textStatus, jqXHR) {
+						if (response && response.success) {
+							if (options.success) {
+								options.success( response.data || {}, response, textStatus, jqXHR );
+							}
+						} else {
+							var errorMsg = response && response.data && response.data.message
 							? response.data.message
 							: options.errorMessage;
 
+							if (options.error) {
+								options.error( errorMsg, response );
+							} else if (options.showErrors) {
+								self.showError( errorMsg );
+							}
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						var errorMsg = options.errorMessage;
+
+						if (textStatus === 'timeout') {
+							errorMsg = 'Request timed out. Please try again.';
+						} else if (jqXHR.status === 403) {
+							errorMsg = 'Permission denied. Please refresh the page and try again.';
+						} else if (jqXHR.status === 500) {
+							errorMsg = 'Server error occurred. Please try again later.';
+						}
+
 						if (options.error) {
-							options.error(errorMsg, response);
+							options.error( errorMsg, jqXHR, textStatus, errorThrown );
 						} else if (options.showErrors) {
-							self.showError(errorMsg);
+							self.showError( errorMsg );
+						}
+					},
+					complete: function (jqXHR, textStatus) {
+						if (options.showLoading && loadingElement) {
+							self.hideLoading( loadingElement );
+						}
+						if (options.complete) {
+							options.complete( jqXHR, textStatus );
 						}
 					}
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					var errorMsg = options.errorMessage;
-
-					if (textStatus === 'timeout') {
-						errorMsg = 'Request timed out. Please try again.';
-					} else if (jqXHR.status === 403) {
-						errorMsg = 'Permission denied. Please refresh the page and try again.';
-					} else if (jqXHR.status === 500) {
-						errorMsg = 'Server error occurred. Please try again later.';
-					}
-
-					if (options.error) {
-						options.error(errorMsg, jqXHR, textStatus, errorThrown);
-					} else if (options.showErrors) {
-						self.showError(errorMsg);
-					}
-				},
-				complete: function(jqXHR, textStatus) {
-					if (options.showLoading && loadingElement) {
-						self.hideLoading(loadingElement);
-					}
-					if (options.complete) {
-						options.complete(jqXHR, textStatus);
-					}
 				}
-			});
+			);
 		},
 
 		/**
@@ -124,12 +129,12 @@
 		 * @param {Object} options - Configuration options
 		 * @returns {jqXHR} jQuery XHR object
 		 */
-		get: function(action, data, options) {
-			options = options || {};
+		get: function (action, data, options) {
+			options          = options || {};
 			var originalType = options.type;
-			options.type = 'GET';
+			options.type     = 'GET';
 
-			var result = this.post(action, data, options);
+			var result = this.post( action, data, options );
 
 			// Restore original type if it was set
 			if (originalType) {
@@ -144,7 +149,7 @@
 		 *
 		 * @returns {string} Nonce value
 		 */
-		getNonce: function() {
+		getNonce: function () {
 			// Try multiple possible nonce locations
 			if (window.wpShadowData && window.wpShadowData.nonce) {
 				return window.wpShadowData.nonce;
@@ -155,7 +160,7 @@
 			if (window.wpshadowAjax && window.wpshadowAjax.nonce) {
 				return window.wpshadowAjax.nonce;
 			}
-			console.warn('WPShadow AJAX Helper: No nonce found in localized data');
+			console.warn( 'WPShadow AJAX Helper: No nonce found in localized data' );
 			return '';
 		},
 
@@ -164,27 +169,27 @@
 		 *
 		 * @param {jQuery|string} element - Element to show loading on
 		 */
-		showLoading: function(element) {
-			var $element = $(element);
+		showLoading: function (element) {
+			var $element = $( element );
 
 			// Save original state
-			if (!$element.data('wpshadow-original-html')) {
-				$element.data('wpshadow-original-html', $element.html());
+			if ( ! $element.data( 'wpshadow-original-html' )) {
+				$element.data( 'wpshadow-original-html', $element.html() );
 			}
-			if (!$element.data('wpshadow-original-disabled')) {
-				$element.data('wpshadow-original-disabled', $element.prop('disabled'));
+			if ( ! $element.data( 'wpshadow-original-disabled' )) {
+				$element.data( 'wpshadow-original-disabled', $element.prop( 'disabled' ) );
 			}
 
 			// Add loading class and disable
-			$element.addClass('wpshadow-loading');
-			if ($element.is('button, input, select, textarea')) {
-				$element.prop('disabled', true);
+			$element.addClass( 'wpshadow-loading' );
+			if ($element.is( 'button, input, select, textarea' )) {
+				$element.prop( 'disabled', true );
 			}
 
 			// Add spinner if button
-			if ($element.is('button') || $element.hasClass('button')) {
+			if ($element.is( 'button' ) || $element.hasClass( 'button' )) {
 				var spinnerHtml = '<span class="spinner is-active" style="float: none; margin: 0 5px 0 0;"></span>';
-				$element.html(spinnerHtml + $element.text());
+				$element.html( spinnerHtml + $element.text() );
 			}
 		},
 
@@ -193,23 +198,23 @@
 		 *
 		 * @param {jQuery|string} element - Element to hide loading from
 		 */
-		hideLoading: function(element) {
-			var $element = $(element);
+		hideLoading: function (element) {
+			var $element = $( element );
 
 			// Restore original state
-			var originalHtml = $element.data('wpshadow-original-html');
-			var originalDisabled = $element.data('wpshadow-original-disabled');
+			var originalHtml     = $element.data( 'wpshadow-original-html' );
+			var originalDisabled = $element.data( 'wpshadow-original-disabled' );
 
-			$element.removeClass('wpshadow-loading');
+			$element.removeClass( 'wpshadow-loading' );
 
 			if (originalHtml) {
-				$element.html(originalHtml);
-				$element.removeData('wpshadow-original-html');
+				$element.html( originalHtml );
+				$element.removeData( 'wpshadow-original-html' );
 			}
 
-			if ($element.is('button, input, select, textarea')) {
-				$element.prop('disabled', originalDisabled || false);
-				$element.removeData('wpshadow-original-disabled');
+			if ($element.is( 'button, input, select, textarea' )) {
+				$element.prop( 'disabled', originalDisabled || false );
+				$element.removeData( 'wpshadow-original-disabled' );
 			}
 		},
 
@@ -219,26 +224,31 @@
 		 * @param {string} message - Error message
 		 * @param {Object} options - Display options
 		 */
-		showError: function(message, options) {
-			options = $.extend({
-				type: 'error',
-				dismissible: true,
-				duration: 5000
-			}, options || {});
+		showError: function (message, options) {
+			options = $.extend(
+				{
+					type: 'error',
+					dismissible: true,
+					duration: 5000
+				},
+				options || {}
+			);
 
 			// Use WordPress admin notice if available
-			if ($('.wrap').length) {
-				this.showAdminNotice(message, options);
+			if ($( '.wrap' ).length) {
+				this.showAdminNotice( message, options );
 			} else {
 				// Fallback to modal
 				if (window.WPShadowModal && typeof window.WPShadowModal.alert === 'function') {
-					window.WPShadowModal.alert({
-						title: 'Notification',
-						message: message,
-						type: options.type === 'error' ? 'danger' : 'info'
-					});
+					window.WPShadowModal.alert(
+						{
+							title: 'Notification',
+							message: message,
+							type: options.type === 'error' ? 'danger' : 'info'
+						}
+					);
 				} else {
-					window.alert(message);
+					window.alert( message );
 				}
 			}
 		},
@@ -249,14 +259,17 @@
 		 * @param {string} message - Success message
 		 * @param {Object} options - Display options
 		 */
-		showSuccess: function(message, options) {
-			options = $.extend({
-				type: 'success',
-				dismissible: true,
-				duration: 3000
-			}, options || {});
+		showSuccess: function (message, options) {
+			options = $.extend(
+				{
+					type: 'success',
+					dismissible: true,
+					duration: 3000
+				},
+				options || {}
+			);
 
-			this.showAdminNotice(message, options);
+			this.showAdminNotice( message, options );
 		},
 
 		/**
@@ -265,27 +278,32 @@
 		 * @param {string} message - Notice message
 		 * @param {Object} options - Display options
 		 */
-		showAdminNotice: function(message, options) {
+		showAdminNotice: function (message, options) {
 			var noticeClass = 'notice notice-' + options.type;
 			if (options.dismissible) {
 				noticeClass += ' is-dismissible';
 			}
 
-			var $notice = $('<div class="' + noticeClass + '"><p>' + message + '</p></div>');
-			var $slot = $('#wpshadow-page-notices');
+			var $notice = $( '<div class="' + noticeClass + '"><p>' + message + '</p></div>' );
+			var $slot   = $( '#wpshadow-page-notices' );
 			if ($slot.length) {
-				$slot.append($notice);
-			} else if ($('.wrap').length) {
-				$('.wrap').first().prepend($notice);
+				$slot.append( $notice );
+			} else if ($( '.wrap' ).length) {
+				$( '.wrap' ).first().prepend( $notice );
 			}
 
 			// Auto dismiss after duration
 			if (options.duration > 0) {
-				setTimeout(function() {
-					$notice.fadeOut(function() {
-						$(this).remove();
-					});
-				}, options.duration);
+				setTimeout(
+					function () {
+						$notice.fadeOut(
+							function () {
+								$( this ).remove();
+							}
+						);
+					},
+					options.duration
+				);
 			}
 
 			// Initialize WordPress dismiss button
@@ -301,25 +319,27 @@
 		 * @param {Function} callback - Callback if confirmed
 		 * @returns {boolean} True if confirmed
 		 */
-		confirm: function(message, callback) {
+		confirm: function (message, callback) {
 			if (window.WPShadowModal && typeof window.WPShadowModal.confirm === 'function') {
-				window.WPShadowModal.confirm({
-					title: 'Please Confirm',
-					message: message,
-					confirmText: 'Continue',
-					cancelText: 'Cancel',
-					type: 'warning',
-					onConfirm: function() {
-						if (callback) {
-							callback();
-						}
-					},
-					onCancel: function() {}
-				});
+				window.WPShadowModal.confirm(
+					{
+						title: 'Please Confirm',
+						message: message,
+						confirmText: 'Continue',
+						cancelText: 'Cancel',
+						type: 'warning',
+						onConfirm: function () {
+							if (callback) {
+								callback();
+							}
+						},
+						onCancel: function () {}
+					}
+				);
 				return true;
 			}
 
-			var confirmed = window.confirm(message);
+			var confirmed = window.confirm( message );
 			if (confirmed && callback) {
 				callback();
 			}
@@ -330,4 +350,4 @@
 	// Alias for backward compatibility
 	window.wpsAjax = window.wpShadowAjax;
 
-})(jQuery, window);
+})( jQuery, window );

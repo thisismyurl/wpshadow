@@ -1,24 +1,24 @@
 /**
  * Modern Kanban Board Enhancements
  * Phase 2: UI/UX Modernization (Epic #685, Issue #667)
- * 
+ *
  * Enhances the existing kanban-board.css with:
  * - Replit-inspired modern card design
  * - Improved drag-and-drop visual feedback
  * - Enhanced keyboard navigation
  * - Better animations and interactions
  * - WCAG AA accessibility compliance
- * 
+ *
  * Philosophy: Inspire Confidence (#8), Effortless task management
  * CANON: Accessibility First with keyboard navigation
- * 
+ *
  * @package WPShadow
  * @since 1.6030.2148
  */
 
 /* ============================================================================
-   Enhanced Kanban Container
-   ============================================================================ */
+	Enhanced Kanban Container
+	============================================================================ */
 
 .wpshadow-kanban-container {
 	margin-top: var(--wps-space-6, 1.5rem);
@@ -44,8 +44,8 @@
 }
 
 /* ============================================================================
-   Enhanced Kanban Board Grid
-   ============================================================================ */
+	Enhanced Kanban Board Grid
+	============================================================================ */
 
 .wpshadow-kanban-board {
 	display: grid;
@@ -70,8 +70,8 @@
 }
 
 /* ============================================================================
-   Modern Column Design
-   ============================================================================ */
+	Modern Column Design
+	============================================================================ */
 
 .kanban-column {
 	background: #ffffff;
@@ -160,8 +160,8 @@
 }
 
 /* ============================================================================
-   Enhanced Finding Cards (Replit-inspired)
-   ============================================================================ */
+	Enhanced Finding Cards (Replit-inspired)
+	============================================================================ */
 
 .finding-card {
 	background: #ffffff;
@@ -316,8 +316,8 @@
 }
 
 /* ============================================================================
-   Enhanced Drag & Drop States
-   ============================================================================ */
+	Enhanced Drag & Drop States
+	============================================================================ */
 
 .kanban-column.drag-over {
 	background: var(--wps-info-light, #dbeafe);
@@ -348,8 +348,8 @@
 }
 
 /* ============================================================================
-   Enhanced Keyboard Navigation
-   ============================================================================ */
+	Enhanced Keyboard Navigation
+	============================================================================ */
 
 .finding-card:focus,
 .finding-card:focus-visible {
@@ -437,8 +437,8 @@
 }
 
 /* ============================================================================
-   Accessibility Enhancements
-   ============================================================================ */
+	Accessibility Enhancements
+	============================================================================ */
 
 /* Screen reader only text */
 .wps-sr-only {

@@ -173,37 +173,25 @@ class Diagnostic_Plugin_File_Upload_Security extends Diagnostic_Base {
 
 		if ( ! empty( $upload_concerns ) ) {
 			$finding = array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
 					/* translators: %d: concern count, %s: details */
-					__( '%d file upload security concerns detected: %s', 'wpshadow' ),
+					__( '%1$d file upload security concerns detected: %2$s', 'wpshadow' ),
 					count( $upload_concerns ),
 					implode( ', ', array_slice( $upload_concerns, 0, 3 ) )
 				),
-				'severity'      => 'critical',
-				'threat_level'  => 90,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/plugin-file-upload-security',
-				'context'       => array(
+				'severity'     => 'critical',
+				'threat_level' => 90,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-file-upload-security',
+				'context'      => array(
 					'why'            => __( 'Plugins with unvalidated file uploads = guaranteed RCE. Real scenario: Popular form plugin doesn\'t validate file type. Attacker uploads shell.php. Visits /wp-content/uploads/plugin/shell.php. Full compromise. Installed on 100K+ sites. Cost: $4.29M/breach. With validation: Shell rejected. Attack prevented.', 'wpshadow' ),
 					'recommendation' => __( '1. Review vulnerable plugins: disable or update. 2. Check plugin code for move_uploaded_file(). 3. Verify extension whitelist exists (JPG/PNG/PDF only). 4. Ensure MIME type validation: wp_check_filetype(). 5. Check file size limits enforced. 6. Verify uploads outside web root or execution disabled. 7. Use wp_handle_upload() function (built-in validation). 8. Test with malicious filename: shell.php (should reject). 9. Scan existing uploads for .php/.exe files. 10. Disable File Edit in wp-config.php: DISALLOW_FILE_EDIT=true.', 'wpshadow' ),
 				),
 			);
 			$finding = Upgrade_Path_Helper::add_upgrade_path( $finding, 'security', 'file-upload', 'plugin-upload-security' );
 			return $finding;
-		}
-					count( $upload_concerns ),
-					implode( ' ', array_slice( $upload_concerns, 0, 3 ) )
-				),
-				'severity'     => 'high',
-				'threat_level' => 85,
-				'auto_fixable' => false,
-				'details'      => array(
-					'concerns' => $upload_concerns,
-				),
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-file-upload-security',
-			);
 		}
 
 		return null;

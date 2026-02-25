@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,65 +85,5 @@ class Treatment_Password_Storage_Security extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Password_Storage_Security' );
-	}
-
-	/**
-	 * Determine the password hash type.
-	 *
-	 * @since  1.6034.1200
-	 * @param  string $hash Password hash value.
-	 * @return string Hash type identifier.
-	 */
-	private static function get_hash_type( $hash ) {
-		if ( preg_match( '/^[a-f0-9]{32}$/i', $hash ) ) {
-			return 'md5';
-		}
-
-		if ( preg_match( '/^[a-f0-9]{40}$/i', $hash ) ) {
-			return 'sha1';
-		}
-
-		if ( str_starts_with( $hash, '$argon2' ) ) {
-			return 'argon2';
-		}
-
-		if ( preg_match( '/^\$2[abxy]\$/', $hash ) ) {
-			return 'bcrypt';
-		}
-
-		if ( str_starts_with( $hash, '$P$' ) || str_starts_with( $hash, '$H$' ) ) {
-			return 'phpass';
-		}
-
-		if ( ! str_starts_with( $hash, '$' ) && ! preg_match( '/^[a-f0-9]+$/i', $hash ) && strlen( $hash ) < 60 ) {
-			return 'plaintext';
-		}
-
-		return 'unknown';
-	}
-
-	/**
-	 * Get the normalized source file for a function.
-	 *
-	 * @since  1.6034.1200
-	 * @param  string $function_name Function name.
-	 * @return string Normalized file path or empty string.
-	 */
-	private static function get_function_file( $function_name ) {
-		if ( ! function_exists( $function_name ) ) {
-			return '';
-		}
-
-		try {
-			$reflection = new \ReflectionFunction( $function_name );
-			$filename   = $reflection->getFileName();
-			if ( $filename ) {
-				return wp_normalize_path( $filename );
-			}
-		} catch ( \ReflectionException $exception ) {
-			return '';
-		}
-
-		return '';
 	}
 }

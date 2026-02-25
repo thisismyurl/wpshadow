@@ -20,10 +20,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Revoke_Magic_Link_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Register AJAX hooks for magic-link revocation.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_revoke_magic_link', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle magic-link revocation requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_magic_link_nonce', 'manage_options', 'nonce' );
 

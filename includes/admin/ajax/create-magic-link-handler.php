@@ -20,24 +20,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Register AJAX hooks for magic-link creation.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_create_magic_link', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle magic-link creation requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_magic_link_nonce', 'manage_options', 'nonce' );
 
 		// Support both old (developer_*) and new (user_*) parameter names for backward compatibility
-		$user_name  = self::get_post_param( 'user_name', 'text', '' );
+		$user_name = self::get_post_param( 'user_name', 'text', '' );
 		if ( empty( $user_name ) ) {
 			$user_name = self::get_post_param( 'developer_name', 'text', '', true );
 		}
-		
+
 		$user_email = self::get_post_param( 'user_email', 'email', '' );
 		if ( empty( $user_email ) ) {
 			$user_email = self::get_post_param( 'developer_email', 'email', '', true );
 		}
-		
+
 		$user_role      = self::get_post_param( 'user_role', 'text', 'editor' );
 		$duration_hours = self::get_post_param( 'duration', 'int', 24 );
 
@@ -59,7 +71,7 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 		// Hash token before storage (security best practice)
 		$token_hash = Security_Hardening::hash_token( $token );
 
-		$magic_links             = Options_Manager::get_array( 'wpshadow_magic_links', array() );
+		$magic_links                = Options_Manager::get_array( 'wpshadow_magic_links', array() );
 		$magic_links[ $token_hash ] = array(
 			'user_name'       => $user_name,
 			'user_email'      => $user_email,

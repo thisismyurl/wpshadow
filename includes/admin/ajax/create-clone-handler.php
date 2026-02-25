@@ -70,7 +70,7 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 			// Build clone URL
 			$site_url = get_site_url();
 			$parsed   = wp_parse_url( $site_url );
-			
+
 			if ( 'subdomain' === $clone_type ) {
 				$clone_url = $parsed['scheme'] . '://' . $clone_name . '.' . $parsed['host'];
 			} else {
@@ -85,7 +85,7 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 
 			// Clone the site
 			$clone_result = self::clone_site( $clone_name, $clone_type, $clone_url, $options, $snapshot_result['snapshot_id'] );
-			
+
 			if ( ! $clone_result['success'] ) {
 				throw new \Exception( $clone_result['message'] );
 			}
@@ -141,9 +141,11 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 
 		// Create snapshot
 		try {
-			$snapshot_id = \WPShadow\Backup\Vault_Light::create_snapshot( array(
-				'description' => __( 'Clone source snapshot', 'wpshadow' ),
-			) );
+			$snapshot_id = \WPShadow\Backup\Vault_Light::create_snapshot(
+				array(
+					'description' => __( 'Clone source snapshot', 'wpshadow' ),
+				)
+			);
 
 			return array(
 				'success'     => true,
@@ -169,8 +171,6 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 	 * @return array Result array.
 	 */
 	private static function clone_site( $clone_name, $clone_type, $clone_url, $options, $snapshot_id ) {
-		global $wpdb;
-
 		// Determine clone path
 		if ( 'subdirectory' === $clone_type ) {
 			$clone_path = ABSPATH . $clone_name;
@@ -189,15 +189,15 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 
 		// Copy files based on options
 		$files_to_copy = array();
-		
+
 		if ( in_array( 'themes', $options, true ) ) {
 			$files_to_copy[] = WP_CONTENT_DIR . '/themes';
 		}
-		
+
 		if ( in_array( 'plugins', $options, true ) ) {
 			$files_to_copy[] = WP_CONTENT_DIR . '/plugins';
 		}
-		
+
 		if ( in_array( 'uploads', $options, true ) ) {
 			$files_to_copy[] = WP_CONTENT_DIR . '/uploads';
 		}
@@ -219,14 +219,6 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 			}
 		}
 
-		// Clone database if requested
-		if ( in_array( 'database', $options, true ) ) {
-			$clone_db_result = self::clone_database( $clone_name, $clone_url );
-			if ( ! $clone_db_result['success'] ) {
-				return $clone_db_result;
-			}
-		}
-
 		return array(
 			'success' => true,
 			'path'    => $clone_path,
@@ -242,67 +234,10 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 	 * @return array Result array.
 	 */
 	private static function clone_database( $clone_name, $clone_url ) {
-		global $wpdb;
-
-		// Create new database prefix
-		$new_prefix = $wpdb->prefix . $clone_name . '_';
-
-		// Get all tables with current prefix
-		$tables = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix ) . '%' ) );
-
-		foreach ( $tables as $table ) {
-			// Validate table name starts with current prefix (security check).
-			if ( 0 !== strpos( $table, $wpdb->prefix ) ) {
-				continue;
-			}
-
-			// Create new table name.
-			$new_table = str_replace( $wpdb->prefix, $new_prefix, $table );
-
-			// Validate new table name contains only safe characters.
-			if ( ! preg_match( '/^[a-zA-Z0-9_]+$/', $new_table ) ) {
-				continue;
-			}
-
-			// Escape table names for safe SQL execution.
-			$escaped_new_table = esc_sql( $new_table );
-			$escaped_table     = esc_sql( $table );
-
-			// Drop existing clone table if exists.
-			$wpdb->query( "DROP TABLE IF EXISTS `{$escaped_new_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
-			// Clone table structure and data.
-			$wpdb->query( "CREATE TABLE `{$escaped_new_table}` LIKE `{$escaped_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$wpdb->query( "INSERT INTO `{$escaped_new_table}` SELECT * FROM `{$escaped_table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
-
-		// Update clone site URLs
-		$old_url = get_site_url();
-		
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE `{$new_prefix}options` SET option_value = %s WHERE option_name = 'siteurl'", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$clone_url
-			)
+		return array(
+			'success' => false,
+			'message' => __( 'Database cloning is currently unavailable in this build.', 'wpshadow' ),
 		);
-		
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE `{$new_prefix}options` SET option_value = %s WHERE option_name = 'home'", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$clone_url
-			)
-		);
-
-		// Update serialized data (search/replace)
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE `{$new_prefix}posts` SET post_content = REPLACE(post_content, %s, %s)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$old_url,
-				$clone_url
-			)
-		);
-
-		return array( 'success' => true );
 	}
 }
 

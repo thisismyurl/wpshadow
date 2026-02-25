@@ -1,21 +1,21 @@
 /**
  * WPShadow Utility Styles - Consolidated
- * 
+ *
  * Merged from small utility files:
  * - mobile-friendliness.css (91 lines)
  * - site-health-explanations.css (79 lines)
  * - safety-warnings.css (60 lines)
  * - scan-tools.css (44 lines)
- * 
+ *
  * Lightweight utility and feature-specific styling for various plugin systems.
- * 
+ *
  * @package WPShadow
  * @since 1.6030.2148
  */
 
 /* ============================================================================
-   Mobile Friendliness Styles
-   ============================================================================ */
+	Mobile Friendliness Styles
+	============================================================================ */
 
 /* Styles for the Mobile Friendliness Checker tool */
 .wpshadow-mobile-grid {
@@ -110,8 +110,8 @@
 }
 
 /* ============================================================================
-   Site Health Explanations
-   ============================================================================ */
+	Site Health Explanations
+	============================================================================ */
 
 /* WPShadow Site Health Explanations Styling */
 
@@ -194,8 +194,8 @@
 }
 
 /* ============================================================================
-   Safety Warnings
-   ============================================================================ */
+	Safety Warnings
+	============================================================================ */
 
 /**
  * WPShadow Safety Warning Styles
@@ -203,64 +203,64 @@
  */
 
 .wpshadow-safety-warning {
-    display: block;
-    padding: 16px 20px 16px 20px;
-    margin: 20px 0;
-    background-color: #fafafa;
-    border-left: 6px solid #ffc107;
-    border-radius: 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	display: block;
+	padding: 16px 20px 16px 20px;
+	margin: 20px 0;
+	background-color: #fafafa;
+	border-left: 6px solid #ffc107;
+	border-radius: 0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .wpshadow-safety-warning .wpshadow-warning-icon {
-    display: none;
+	display: none;
 }
 
 .wpshadow-safety-warning p {
-    margin: 0;
-    padding-left: 12px;
-    color: #333;
-    line-height: 1.6;
+	margin: 0;
+	padding-left: 12px;
+	color: #333;
+	line-height: 1.6;
 }
 
 .wpshadow-safety-warning p strong {
-    color: #f57f17;
-    font-weight: 600;
+	color: #f57f17;
+	font-weight: 600;
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-    .wpshadow-safety-warning {
-        background-color: #2a2a2a;
-        border-left-color: #fdd835;
-    }
-    
-    .wpshadow-safety-warning p {
-        color: #e0e0e0;
-    }
-    
-    .wpshadow-safety-warning p strong {
-        color: #fdd835;
-    }
+	.wpshadow-safety-warning {
+		background-color: #2a2a2a;
+		border-left-color: #fdd835;
+	}
+
+	.wpshadow-safety-warning p {
+		color: #e0e0e0;
+	}
+
+	.wpshadow-safety-warning p strong {
+		color: #fdd835;
+	}
 }
 
 /* Mobile responsive */
 @media (max-width: 600px) {
-    .wpshadow-safety-warning {
-        padding: 12px 16px 12px 16px;
-        border-left-width: 5px;
-    }
-    
-    .wpshadow-safety-warning p {
-        padding-left: 8px;
-        font-size: 14px;
-    }
+	.wpshadow-safety-warning {
+		padding: 12px 16px 12px 16px;
+		border-left-width: 5px;
+	}
+
+	.wpshadow-safety-warning p {
+		padding-left: 8px;
+		font-size: 14px;
+	}
 }
 
 
 /* ============================================================================
-   Scan Tools
-   ============================================================================ */
+	Scan Tools
+	============================================================================ */
 
 /**
  * Scan Tools Styles

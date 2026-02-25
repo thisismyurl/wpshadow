@@ -19,10 +19,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Change_Finding_Status_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Register AJAX hooks for finding status changes.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_change_finding_status', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle finding status change requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_kanban', 'manage_options', 'nonce' );
 

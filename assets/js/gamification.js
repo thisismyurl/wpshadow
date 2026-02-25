@@ -7,14 +7,14 @@
  * @since   1.6004.0400
  */
 
-(function($) {
+(function ($) {
 	'use strict';
 
 	const WPShadowGamification = {
 		/**
 		 * Initialize gamification features
 		 */
-		init: function() {
+		init: function () {
 			if ( typeof wpShadowGamification === 'undefined' ) {
 				return;
 			}
@@ -27,129 +27,146 @@
 		/**
 		 * Handle achievement category tabs
 		 */
-		achievementTabs: function() {
-			$('.tab-button').on('click keydown', function(e) {
-				// Support both click and keyboard (Enter/Space) activation
-				if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') {
-					return;
-				}
-				
-				e.preventDefault();
+		achievementTabs: function () {
+			$( '.tab-button' ).on(
+				'click keydown',
+				function (e) {
+					// Support both click and keyboard (Enter/Space) activation
+					if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') {
+						return;
+					}
 
-				const category = $(this).data('category');
-				$('.achievement-card').hide();
-				$(`.achievement-card[data-category="${category}"]`).show();
-			});
+					e.preventDefault();
+
+					const category = $( this ).data( 'category' );
+					$( '.achievement-card' ).hide();
+					$( `.achievement - card[data - category = "${category}"]` ).show();
+				}
+			);
 		},
 
 		/**
 		 * Handle reward redemption
 		 */
-		rewardRedemption: function() {
-			$('.redeem-reward').on('click', function(e) {
-				e.preventDefault();
+		rewardRedemption: function () {
+			$( '.redeem-reward' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
 
-				const button = $(this);
-				const rewardId = button.data('reward-id');
+					const button   = $( this );
+					const rewardId = button.data( 'reward-id' );
 
-				WPShadowModal.confirm({
-					title: 'Redeem Reward',
-					message: 'Are you sure you want to redeem this reward?',
-					confirmText: 'Redeem',
-					cancelText: 'Cancel',
-					type: 'info',
-					onCancel: function() {
-						return;
-					},
-					onConfirm: function() {
-						$.ajax({
-							url: wpShadowGamification.ajaxurl,
-							method: 'POST',
-							data: {
-								action: 'wpshadow_redeem_reward',
-								nonce: wpShadowGamification.nonce,
-								reward_id: rewardId
+					WPShadowModal.confirm(
+						{
+							title: 'Redeem Reward',
+							message: 'Are you sure you want to redeem this reward?',
+							confirmText: 'Redeem',
+							cancelText: 'Cancel',
+							type: 'info',
+							onCancel: function () {
+								return;
 							},
-							success: function(response) {
-								if (response.success) {
-									WPShadowGamification.showNotice('success', response.data.message || 'Reward redeemed.');
-									window.location.reload();
-								} else {
-									WPShadowGamification.showNotice('error', response.data.message || 'Unable to redeem reward.');
-									button.prop('disabled', false).text('Redeem');
-								}
-							},
-							error: function() {
-								WPShadowGamification.showNotice('error', 'Network error. Please try again.');
-								button.prop('disabled', false).text('Redeem');
+							onConfirm: function () {
+								$.ajax(
+									{
+										url: wpShadowGamification.ajaxurl,
+										method: 'POST',
+										data: {
+											action: 'wpshadow_redeem_reward',
+											nonce: wpShadowGamification.nonce,
+											reward_id: rewardId
+										},
+										success: function (response) {
+											if (response.success) {
+												WPShadowGamification.showNotice( 'success', response.data.message || 'Reward redeemed.' );
+												window.location.reload();
+											} else {
+												WPShadowGamification.showNotice( 'error', response.data.message || 'Unable to redeem reward.' );
+												button.prop( 'disabled', false ).text( 'Redeem' );
+											}
+										},
+										error: function () {
+											WPShadowGamification.showNotice( 'error', 'Network error. Please try again.' );
+											button.prop( 'disabled', false ).text( 'Redeem' );
+										}
+									}
+								);
 							}
-						});
-					}
-				});
-			});
+						}
+					);
+				}
+			);
 		},
 
 		/**
 		 * Handle earn-action claims
 		 */
-		earnActions: function() {
-			$('.wpshadow-earn-action').on('click', function(e) {
-				e.preventDefault();
+		earnActions: function () {
+			$( '.wpshadow-earn-action' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
 
-				const button = $(this);
-				const actionId = button.data('action-id');
-				const actionUrl = button.data('action-url');
+					const button    = $( this );
+					const actionId  = button.data( 'action-id' );
+					const actionUrl = button.data( 'action-url' );
 
-				if (actionUrl) {
-					window.open(actionUrl, '_blank', 'noopener');
-				}
-
-				button.prop('disabled', true).text('Claiming...');
-
-				$.ajax({
-					url: wpShadowGamification.ajaxurl,
-					method: 'POST',
-					data: {
-						action: 'wpshadow_claim_earn_action',
-						nonce: wpShadowGamification.nonce,
-						action_id: actionId
-					},
-					success: function(response) {
-						if (response.success) {
-							WPShadowGamification.showNotice('success', response.data.message || 'Points awarded.');
-							button.text('Claimed');
-						} else {
-							WPShadowGamification.showNotice('error', response.data.message || 'Unable to claim points.');
-							button.prop('disabled', false).text('Claim Points');
-						}
-					},
-					error: function() {
-						WPShadowGamification.showNotice('error', 'Network error. Please try again.');
-						button.prop('disabled', false).text('Claim Points');
+					if (actionUrl) {
+						window.open( actionUrl, '_blank', 'noopener' );
 					}
-				});
-			});
+
+					button.prop( 'disabled', true ).text( 'Claiming...' );
+
+					$.ajax(
+						{
+							url: wpShadowGamification.ajaxurl,
+							method: 'POST',
+							data: {
+								action: 'wpshadow_claim_earn_action',
+								nonce: wpShadowGamification.nonce,
+								action_id: actionId
+							},
+							success: function (response) {
+								if (response.success) {
+									WPShadowGamification.showNotice( 'success', response.data.message || 'Points awarded.' );
+									button.text( 'Claimed' );
+								} else {
+									WPShadowGamification.showNotice( 'error', response.data.message || 'Unable to claim points.' );
+									button.prop( 'disabled', false ).text( 'Claim Points' );
+								}
+							},
+							error: function () {
+								WPShadowGamification.showNotice( 'error', 'Network error. Please try again.' );
+								button.prop( 'disabled', false ).text( 'Claim Points' );
+							}
+						}
+					);
+				}
+			);
 		},
 
 		/**
 		 * Display admin notice
 		 */
-		showNotice: function(type, message) {
+		showNotice: function (type, message) {
 			const noticeClass = type === 'success' ? 'notice-success' : 'notice-error';
-			const notice = `<div class="notice ${noticeClass} is-dismissible"><p>${message}</p></div>`;
-			const $slot = $('#wpshadow-page-notices');
+			const notice      = ` < div class = "notice ${noticeClass} is-dismissible" > < p > ${message} < / p > < / div > `;
+			const $slot                       = $( '#wpshadow-page-notices' );
 			if ($slot.length) {
-				$slot.append(notice);
-			} else if ($('.wrap').length) {
-				$('.wrap').first().prepend(notice);
+				$slot.append( notice );
+			} else if ($( '.wrap' ).length) {
+				$( '.wrap' ).first().prepend( notice );
 			} else {
-				$('body').prepend(notice);
+				$( 'body' ).prepend( notice );
 			}
 		}
 	};
 
-	$(document).ready(function() {
-		WPShadowGamification.init();
-	});
+	$( document ).ready(
+		function () {
+			WPShadowGamification.init();
+		}
+	);
 
-})(jQuery);
+})( jQuery );

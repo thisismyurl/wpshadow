@@ -14,6 +14,7 @@ use WPShadow\Core\Form_Param_Helper;
 $trigger_id   = Form_Param_Helper::get( 'trigger', 'key', '' );
 $workflow_id  = Form_Param_Helper::get( 'workflow', 'key', '' );
 $action_index = Form_Param_Helper::get( 'action_index', 'int', 0 );
+$action_id    = Form_Param_Helper::get( 'action_id', 'key', '' );
 
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {
@@ -23,13 +24,12 @@ if ( empty( $trigger_id ) ) {
 	}
 	exit;
 }
+
+$back_url = admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action-selection&trigger=' . $trigger_id );
 ?>
 
 <div class="wps-page-container">
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action-selection&trigger=' . $trigger_id ) ); ?>" class="wps-btn wps-btn--ghost" style="margin-right: var(--wps-space-3);">
-		<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 18px;"></span>
-		<?php esc_html_e( 'Back', 'wpshadow' ); ?>
-	</a>
+	<?php wpshadow_render_wizard_back_button( $back_url ); ?>
 	<?php
 	wpshadow_render_page_header(
 		__( 'Configure Action', 'wpshadow' ),
@@ -38,7 +38,7 @@ if ( empty( $trigger_id ) ) {
 	);
 	?>
 
-	<div class="wps-card" style="margin-top: var(--wps-space-6);">
+	<div class="wps-card wps-wizard-step-card">
 		<div class="wps-card-body" id="action-config-content"></div>
 	</div>
 </div>
@@ -47,17 +47,28 @@ if ( empty( $trigger_id ) ) {
 jQuery(document).ready(function($) {
 	const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
 	const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
-	const actionIndex = <?php echo wp_json_encode( $action_index ); ?>;
+	let actionIndex = <?php echo wp_json_encode( $action_index ); ?>;
 	const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-automations&action=create' ) ); ?>';
+	const actionIdParam = <?php echo wp_json_encode( $action_id ); ?>;
+	const selectedActions = JSON.parse(window.sessionStorage ? window.sessionStorage.getItem('workflow_actions') : '[]') || [];
+	let actions = selectedActions;
 	
-	// Load actions from sessionStorage
+	if ((!actions || actions.length === 0) && actionIdParam) {
+		actions = [{
+			id: actionIdParam,
+			label: actionIdParam,
+			config: {}
+		}];
+		actionIndex = 0;
+	}
+
 	if (!actions || actions.length === 0) {
 		window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
+		return;
 	}
 	
 	if (!actions[actionIndex]) {
-		window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
-		return;
+		actionIndex = 0;
 	}
 	
 	const currentAction = actions[actionIndex];
@@ -72,31 +83,35 @@ jQuery(document).ready(function($) {
 		action_id: currentAction.id
 	}, function(response) {
 		if (!response.success) {
-			// No config needed, move to next action or review
-				moveToNextStep(); // Call to move to the next step
+			renderNoConfig('<?php echo esc_js( __( 'This action does not need additional configuration.', 'wpshadow' ) ); ?>');
 			return;
 		}
 		
 		const fields = response.data.fields;
 		
 		if (fields.length === 0) {
-			// No config needed
-				moveToNextStep(); // Call to move to the next step
+			renderNoConfig('<?php echo esc_js( __( 'This action does not need additional configuration.', 'wpshadow' ) ); ?>');
 			return;
 		}
 		
 		// Build form
 		const $form = $('<form id="action-config-form" class="wps-form">');
+		const fieldLookup = {};
+		fields.forEach(function(field) {
+			if (field && field.id) {
+				fieldLookup[field.id] = field;
+			}
+		});
 		
 		fields.forEach(function(field) {
 			const $fieldDiv = $('<div class="wps-form-group">');
-			
-			// Label
-			const $label = $('<label class="wps-form-label">').attr('for', 'field_' + field.id).text(field.label);
-			if (field.required) {
-				$label.append('<span class="wps-text-danger">*</span>');
+			if (field.type !== 'checkbox' && field.type !== 'checkbox_group' && field.type !== 'hidden') {
+				const $label = $('<label class="wps-form-label">').attr('for', 'field_' + field.id).text(field.label);
+				if (field.required) {
+					$label.append('<span class="wps-text-danger">*</span>');
+				}
+				$fieldDiv.append($label);
 			}
-			$fieldDiv.append($label);
 			
 			// Input
 			let $input;
@@ -119,6 +134,12 @@ jQuery(document).ready(function($) {
 						min: field.min,
 						max: field.max
 					}).val(field.default || '').addClass('wps-input').css('max-width', '150px');
+					break;
+
+				case 'hidden':
+					$input = $('<input type="hidden">').attr({
+						name: field.id
+					}).val(field.default || '');
 					break;
 					
 				case 'textarea':
@@ -144,18 +165,111 @@ jQuery(document).ready(function($) {
 						);
 					});
 					break;
+
+				case 'checkbox':
+					{
+						const isChecked = field.default === true || field.default === '1' || field.default === 1;
+						const $wrapper = $('<label class="wps-checkbox-wrapper">');
+						$input = $('<input type="checkbox">').attr({
+							id: 'field_' + field.id,
+							name: field.id,
+							value: '1'
+						}).addClass('wps-checkbox');
+						if (isChecked) {
+							$input.prop('checked', true);
+						}
+						$wrapper.append($input, $('<span class="wps-checkbox-label">').text(field.label));
+						$fieldDiv.append($wrapper);
+						$input = null;
+					}
+					break;
+
+				case 'checkbox_group':
+					{
+						const defaults = Array.isArray(field.default) ? field.default.map(String) : [];
+						const $fieldset = $('<fieldset class="wps-checkbox-group">');
+						$fieldset.append($('<legend>').text(field.label));
+						Object.entries(field.options || {}).forEach(([value, label]) => {
+							const $wrapper = $('<label class="wps-checkbox-wrapper">');
+							const $checkbox = $('<input type="checkbox">').attr({
+								name: field.id + '[]',
+								value: value
+							}).addClass('wps-checkbox');
+							if (defaults.includes(String(value))) {
+								$checkbox.prop('checked', true);
+							}
+							$wrapper.append($checkbox, $('<span class="wps-checkbox-label">').text(label));
+							$fieldset.append($wrapper);
+						});
+						$fieldDiv.append($fieldset);
+						$input = null;
+					}
+					break;
+
+				case 'treatment_search':
+					$input = $('<input type="text">').attr({
+						id: 'field_' + field.id,
+						placeholder: field.placeholder || '',
+						autocomplete: 'off'
+					}).addClass('wps-input');
+
+					const $hidden = $('<input type="hidden">').attr({
+						name: field.id,
+						required: field.required || false
+					});
+					const $results = $('<div class="wps-layout-stack wps-layout-stack-sm">').css({
+						'margin-top': 'var(--wps-space-2)'
+					});
+
+					let searchTimer = null;
+					$input.on('input', function() {
+						const query = $(this).val().trim();
+						clearTimeout(searchTimer);
+						if (query.length < 2) {
+							$results.empty();
+							return;
+						}
+						searchTimer = setTimeout(function() {
+							$.post(ajaxurl, {
+								action: field.ajax_action,
+								nonce: field.nonce,
+								search: query
+							}, function(searchResponse) {
+								$results.empty();
+								if (!searchResponse.success || !searchResponse.data.items || searchResponse.data.items.length === 0) {
+									$results.append('<div class="wps-text-sm wps-text-muted"><?php echo esc_js( __( 'No treatments found.', 'wpshadow' ) ); ?></div>');
+									return;
+								}
+								searchResponse.data.items.forEach(function(item) {
+									const $button = $('<button type="button" class="wps-btn wps-btn--secondary wps-btn--sm">').text(item.label);
+									$button.on('click', function() {
+										$hidden.val(item.class_name);
+										$input.val(item.label);
+										$results.empty();
+									});
+									$results.append($button);
+								});
+							});
+						}, 300);
+					});
+
+					$fieldDiv.append($input, $hidden, $results);
+					$input = null;
+					break;
 			}
 			
-			$fieldDiv.append($input);
+			if ($input) {
+				$fieldDiv.append($input);
+			}
+
+			if (field.note) {
+				$fieldDiv.append($('<p class="wps-help-text">').text(field.note));
+			}
 			$form.append($fieldDiv);
 		});
 		
 		// Submit button
-		const $actions = $('<div class="wps-form-actions">').css({
-			'margin-top': 'var(--wps-space-6)',
-			'padding-top': 'var(--wps-space-4)',
-			'border-top': '1px solid var(--wps-border-color)'
-		});
+		const $actions = $('<div class="wps-form-actions wps-wizard-form-actions">');
 		const $submitBtn = $('<button type="submit" class="wps-btn wps-btn--primary">');
 		
 		if (actionIndex < actions.length - 1) {
@@ -175,8 +289,28 @@ jQuery(document).ready(function($) {
 			
 			// Save config
 			const formData = {};
+			fields.forEach(function(field) {
+				if (!field || !field.id) {
+					return;
+				}
+				if (field.type === 'checkbox_group') {
+					formData[field.id] = [];
+					return;
+				}
+				if (field.type === 'checkbox') {
+					formData[field.id] = '0';
+					return;
+				}
+				formData[field.id] = field.default || '';
+			});
+
 			$(this).serializeArray().forEach(function(field) {
-				formData[field.name] = field.value;
+				const name = field.name.replace(/\[\]$/, '');
+				if (Object.prototype.hasOwnProperty.call(formData, name) && Array.isArray(formData[name])) {
+					formData[name].push(field.value);
+					return;
+				}
+				formData[name] = field.value;
 			});
 			
 			actions[actionIndex].config = formData;
@@ -187,10 +321,32 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	function renderNoConfig(message) {
+		const $container = $('#action-config-content');
+		$container.empty();
+
+		const $notice = $('<div class="wps-alert wps-alert--info">').text(message);
+		const $actions = $('<div class="wps-form-actions wps-wizard-form-actions">');
+		const $submitBtn = $('<button type="button" class="wps-btn wps-btn--primary">');
+
+		if (actionIndex < actions.length - 1) {
+			$submitBtn.html('<?php echo esc_js( __( 'Next Action', 'wpshadow' ) ); ?> <span class="dashicons dashicons-arrow-right-alt2"></span>');
+		} else {
+			$submitBtn.html('<?php echo esc_js( __( 'Continue to Review', 'wpshadow' ) ); ?> <span class="dashicons dashicons-arrow-right-alt2"></span>');
+		}
+
+		$submitBtn.on('click', function() {
+			moveToNextStep();
+		});
+
+		$actions.append($submitBtn);
+		$container.append($notice, $actions);
+	}
+
 	function moveToNextStep() {
 		if (actionIndex < actions.length - 1) {
 			// Next action config - preserve workflow ID if editing
-			window.location.href = baseUrl + '&step=action-config&trigger=' + triggerId + '&action_index=' + (actionIndex + 1);
+			window.location.href = baseUrl + '&step=action-config&trigger=' + triggerId + '&action_index=' + (actionIndex + 1) + '&action_id=' + encodeURIComponent(actions[actionIndex + 1].id);
 		} else {
 			// Review - preserve workflow ID if editing
 			window.location.href = baseUrl + '&step=review&trigger=' + triggerId;

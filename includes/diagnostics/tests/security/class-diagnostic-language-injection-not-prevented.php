@@ -64,24 +64,18 @@ class Diagnostic_Language_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'prevent_language_injection' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Language injection not prevented. Validate language codes and prevent invalid locale selection attacks.',
-						'severity'   =>   'medium',
-						'threat_level'   =>   30,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/language-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'prevent_language_injection' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Language injection not prevented. Validate language codes and prevent invalid locale selection attacks.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 30,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/language-injection-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

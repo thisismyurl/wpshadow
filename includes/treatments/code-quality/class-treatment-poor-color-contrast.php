@@ -85,49 +85,4 @@ class Treatment_Poor_Color_Contrast extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Poor_Color_Contrast' );
 	}
-
-	/**
-	 * Calculate WCAG contrast ratio between two colors
-	 *
-	 * Formula: (L1 + 0.05) / (L2 + 0.05) where L is relative luminance.
-	 *
-	 * @since  1.6034.2145
-	 * @param  string $color1 Hex color code (with or without #).
-	 * @param  string $color2 Hex color code (with or without #).
-	 * @return float Contrast ratio.
-	 */
-	private static function calculate_contrast_ratio( $color1, $color2 ) {
-		$lum1 = self::get_relative_luminance( $color1 );
-		$lum2 = self::get_relative_luminance( $color2 );
-
-		$lighter = max( $lum1, $lum2 );
-		$darker  = min( $lum1, $lum2 );
-
-		return ( $lighter + 0.05 ) / ( $darker + 0.05 );
-	}
-
-	/**
-	 * Calculate relative luminance for a color
-	 *
-	 * @since  1.6034.2145
-	 * @param  string $hex Hex color code.
-	 * @return float Relative luminance (0-1).
-	 */
-	private static function get_relative_luminance( $hex ) {
-		// Remove # if present
-		$hex = ltrim( $hex, '#' );
-
-		// Convert to RGB
-		$r = hexdec( substr( $hex, 0, 2 ) ) / 255;
-		$g = hexdec( substr( $hex, 2, 2 ) ) / 255;
-		$b = hexdec( substr( $hex, 4, 2 ) ) / 255;
-
-		// Apply gamma correction
-		$r = ( $r <= 0.03928 ) ? $r / 12.92 : pow( ( $r + 0.055 ) / 1.055, 2.4 );
-		$g = ( $g <= 0.03928 ) ? $g / 12.92 : pow( ( $g + 0.055 ) / 1.055, 2.4 );
-		$b = ( $b <= 0.03928 ) ? $b / 12.92 : pow( ( $b + 0.055 ) / 1.055, 2.4 );
-
-		// Calculate luminance
-		return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
-	}
 }

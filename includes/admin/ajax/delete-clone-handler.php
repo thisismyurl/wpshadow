@@ -57,9 +57,6 @@ class AJAX_Delete_Clone extends AJAX_Handler_Base {
 				self::delete_directory( $clone_data['path'] );
 			}
 
-			// Delete database tables
-			self::delete_clone_database( $clone_name );
-
 			// Remove from clones list
 			unset( $existing_clones[ $clone_name ] );
 			update_option( 'wpshadow_site_clones', $existing_clones );
@@ -113,14 +110,7 @@ class AJAX_Delete_Clone extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	private static function delete_clone_database( $clone_name ) {
-		global $wpdb;
-
-		$clone_prefix = $wpdb->prefix . $clone_name . '_';
-		$tables       = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $clone_prefix ) . '%' ) );
-
-		foreach ( $tables as $table ) {
-			$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
+		unset( $clone_name );
 	}
 }
 

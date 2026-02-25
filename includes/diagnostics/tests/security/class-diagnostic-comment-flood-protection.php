@@ -41,12 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * News site with comments enabled, no flood protection configured. July 2024: attacker\n * runs comment spam bot targeting pharmaceutical links. Bot submits 300 comments/minute.\n * Within 5 minutes: 1,500 comments queued. Moderation system breaks, legitimate comments\n * lost in spam noise. Editor spends entire day cleaning up. Post-attack: implements flood\n * protection, subsequent attack attempts blocked automatically.\n *
  * **Implementation Notes:**
  * - Queries recent comments efficiently (last 1000, filters by date)\n * - Groups by IP address (primary indicator)\n * - Configurable threshold (3 comments per 15 sec is default)\n * - Returns severity: critical (active flooding detected), medium (threshold too high)\n * - Auto-fixable treatment: adjust flood protection thresholds\n *
+ *
  * @since 1.6031.1400
- */\nclass Diagnostic_Comment_Flood_Protection extends Diagnostic_Base {
-	protected static $slug = 'comment-flood-protection';
-	protected static $title = 'Comment Flood Protection';
+ */
+class Diagnostic_Comment_Flood_Protection extends Diagnostic_Base {
+	protected static $slug        = 'comment-flood-protection';
+	protected static $title       = 'Comment Flood Protection';
 	protected static $description = 'Checks if rate limiting prevents comment spam floods';
-	protected static $family = 'security';
+	protected static $family      = 'security';
 
 	public static function check() {
 		// WordPress has built-in flood protection, but check if it's been disabled.
@@ -56,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$flood_threshold = apply_filters( 'comment_flood_filter_time', 15 );
 
 		// Get recent comments (within flood threshold)
-		$flood_time = gmdate( 'Y-m-d H:i:s', time() - $flood_threshold );
+		$flood_time      = gmdate( 'Y-m-d H:i:s', time() - $flood_threshold );
 		$recent_comments = get_comments(
 			array(
 				'post_status' => 'any',
@@ -65,9 +67,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'after' => $flood_time,
 					),
 				),
-				'status'  => 'any',
-				'number'  => 500,
-				'fields'  => 'ids',
+				'status'      => 'any',
+				'number'      => 500,
+				'fields'      => 'ids',
 			)
 		);
 
@@ -76,15 +78,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		foreach ( $recent_comments as $comment_id ) {
 			$comment = get_comment( $comment_id );
 			if ( $comment && ! empty( $comment->comment_author_IP ) ) {
-				$ip = $comment->comment_author_IP;
+				$ip               = $comment->comment_author_IP;
 				$flood_ips[ $ip ] = isset( $flood_ips[ $ip ] ) ? $flood_ips[ $ip ] + 1 : 1;
 			}
 		}
 
 		// Check for IPs with more than 3 comments in the flood threshold window
-		$recent_floods = array_filter( $flood_ips, function( $count ) {
-			return $count > 3;
-		});
+		$recent_floods = array_filter(
+			$flood_ips,
+			function ( $count ) {
+				return $count > 3;
+			}
+		);
 
 		if ( ! empty( $recent_floods ) || ! $has_flood_filter ) {
 			return array(

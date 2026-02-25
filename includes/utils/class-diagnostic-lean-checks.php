@@ -1,4 +1,13 @@
 <?php
+/**
+ * Lean Diagnostic Checks Utility.
+ *
+ * Provides lightweight baseline checks used by fast diagnostic paths.
+ *
+ * @package WPShadow\Core
+ * @since   1.6047.1200
+ */
+
 declare(strict_types=1);
 
 namespace WPShadow\Core;
@@ -11,6 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Diagnostic_Lean_Checks {
 	/**
 	 * Map a family slug to a plain-English category.
+	 *
+	 * @since  1.6047.1200
+	 * @param  string $family Diagnostic family slug.
+	 * @return string Canonical category slug.
 	 */
 	public static function family_to_category( string $family ): string {
 		$map = array(
@@ -28,6 +41,9 @@ class Diagnostic_Lean_Checks {
 
 	/**
 	 * Very lean security baseline signal.
+	 *
+	 * @since  1.6047.1200
+	 * @return bool True when a baseline security issue is detected.
 	 */
 	public static function security_basics_issue(): bool {
 		// Flag if file editing in wp-admin is not disabled (common hardening step).
@@ -39,6 +55,9 @@ class Diagnostic_Lean_Checks {
 
 	/**
 	 * Very lean SEO baseline signal.
+	 *
+	 * @since  1.6047.1200
+	 * @return bool True when a baseline SEO issue is detected.
 	 */
 	public static function seo_basics_issue(): bool {
 		// Blog set to discourage search engines?
@@ -51,6 +70,9 @@ class Diagnostic_Lean_Checks {
 
 	/**
 	 * Very lean performance baseline signal.
+	 *
+	 * @since  1.6047.1200
+	 * @return bool True when a baseline performance issue is detected.
 	 */
 	public static function performance_basics_issue(): bool {
 		// Object cache in use? If not (and function exists), flag as opportunity.
@@ -63,6 +85,9 @@ class Diagnostic_Lean_Checks {
 
 	/**
 	 * Very lean code-quality baseline signal.
+	 *
+	 * @since  1.6047.1200
+	 * @return bool True when a baseline code-quality issue is detected.
 	 */
 	public static function code_basics_issue(): bool {
 		// Displaying errors in production is risky.
@@ -74,6 +99,9 @@ class Diagnostic_Lean_Checks {
 
 	/**
 	 * Very lean configuration baseline signal.
+	 *
+	 * @since  1.6047.1200
+	 * @return bool True when a baseline configuration issue is detected.
 	 */
 	public static function config_basics_issue(): bool {
 		if ( function_exists( 'get_option' ) ) {
@@ -85,6 +113,16 @@ class Diagnostic_Lean_Checks {
 
 	/**
 	 * Build a standard finding array using minimal inputs.
+	 *
+	 * @since  1.6047.1200
+	 * @param  string $id Finding identifier.
+	 * @param  string $title Finding title.
+	 * @param  string $description Finding description.
+	 * @param  string $family Finding family slug.
+	 * @param  string $severity Finding severity.
+	 * @param  int    $threat_level Threat level score.
+	 * @param  string $kb_slug KB article slug.
+	 * @return array Standardized finding payload.
 	 */
 	public static function build_finding(
 		string $id,

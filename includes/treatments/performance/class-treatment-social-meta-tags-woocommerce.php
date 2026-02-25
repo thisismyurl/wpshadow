@@ -64,32 +64,4 @@ class Treatment_Social_Meta_Tags_WooCommerce extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Social_Meta_Tags_WooCommerce' );
 	}
-
-	/**
-	 * Check if SEO plugin with WooCommerce support is installed.
-	 *
-	 * @since  1.6030.2148
-	 * @return bool True if SEO plugin active.
-	 */
-	private static function has_seo_plugin() {
-		$seo_plugins = array(
-			'wordpress-seo-premium/wp-seo-premium.php',
-			'wordpress-seo/wp-seo.php',
-			'seo-by-rank-math-pro/rank-math.php',
-			'seo-by-rank-math/rank-math.php',
-			'all-in-one-seo-pack-pro/all_in_one_seo_pack.php',
-			'all-in-one-seo-pack/all_in_one_seo_pack.php',
-			'the-seo-framework/the-seo-framework.php',
-			'seopress-pro/seopress.php',
-			'seopress/seopress.php',
-		);
-
-		foreach ( $seo_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 }

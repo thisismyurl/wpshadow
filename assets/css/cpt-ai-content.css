@@ -10,194 +10,194 @@
 
 /* AI Meta Box */
 .wpshadow-ai-content-box {
-    padding: 12px;
+	padding: 12px;
 }
 
 .wpshadow-ai-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-left: 8px;
+	display: inline-block;
+	padding: 2px 8px;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-left: 8px;
 }
 
 /* AI Options */
 .wpshadow-ai-options {
-    margin: 16px 0;
+	margin: 16px 0;
 }
 
 .wpshadow-ai-option {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 12px;
-    padding: 10px;
-    background-color: #f6f7f7;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 12px;
+	padding: 10px;
+	background-color: #f6f7f7;
+	border-radius: 4px;
+	transition: background-color 0.2s ease;
 }
 
 .wpshadow-ai-option:hover {
-    background-color: #f0f0f1;
+	background-color: #f0f0f1;
 }
 
 .wpshadow-ai-option input[type="radio"] {
-    margin-top: 3px;
-    margin-right: 10px;
+	margin-top: 3px;
+	margin-right: 10px;
 }
 
 .wpshadow-ai-option-content {
-    flex: 1;
+	flex: 1;
 }
 
 .wpshadow-ai-option label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 4px;
-    cursor: pointer;
+	display: block;
+	font-weight: 600;
+	margin-bottom: 4px;
+	cursor: pointer;
 }
 
 .wpshadow-ai-option-desc {
-    font-size: 12px;
-    color: #646970;
-    line-height: 1.4;
+	font-size: 12px;
+	color: #646970;
+	line-height: 1.4;
 }
 
 /* Generate Button */
 .wpshadow-ai-generate {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    justify-content: center;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	justify-content: center;
+	padding: 10px 20px;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: opacity 0.2s ease;
 }
 
 .wpshadow-ai-generate:hover:not(:disabled) {
-    opacity: 0.9;
+	opacity: 0.9;
 }
 
 .wpshadow-ai-generate:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .wpshadow-ai-generate .dashicons {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
 }
 
 /* Suggestion Box */
 .wpshadow-ai-suggestion {
-    display: none;
-    margin-top: 16px;
-    padding: 16px;
-    background-color: #f0f6fc;
-    border: 1px solid #0071a1;
-    border-radius: 4px;
+	display: none;
+	margin-top: 16px;
+	padding: 16px;
+	background-color: #f0f6fc;
+	border: 1px solid #0071a1;
+	border-radius: 4px;
 }
 
 .wpshadow-ai-suggestion-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    color: #0071a1;
-    margin-bottom: 12px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	color: #0071a1;
+	margin-bottom: 12px;
 }
 
 .wpshadow-ai-suggestion-text {
-    padding: 12px;
-    background-color: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 3px;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-bottom: 12px;
-    max-height: 300px;
-    overflow-y: auto;
+	padding: 12px;
+	background-color: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	font-size: 13px;
+	line-height: 1.6;
+	margin-bottom: 12px;
+	max-height: 300px;
+	overflow-y: auto;
 }
 
 .wpshadow-ai-suggestion-actions {
-    display: flex;
-    gap: 8px;
+	display: flex;
+	gap: 8px;
 }
 
 .wpshadow-ai-apply,
 .wpshadow-ai-dismiss {
-    flex: 1;
-    padding: 8px 16px;
-    border-radius: 3px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
+	flex: 1;
+	padding: 8px 16px;
+	border-radius: 3px;
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-align: center;
 }
 
 .wpshadow-ai-apply {
-    background-color: #2271b1;
-    color: #fff;
-    border: 1px solid #2271b1;
+	background-color: #2271b1;
+	color: #fff;
+	border: 1px solid #2271b1;
 }
 
 .wpshadow-ai-apply:hover {
-    background-color: #135e96;
-    border-color: #135e96;
+	background-color: #135e96;
+	border-color: #135e96;
 }
 
 .wpshadow-ai-dismiss {
-    background-color: #fff;
-    color: #646970;
-    border: 1px solid #c3c4c7;
+	background-color: #fff;
+	color: #646970;
+	border: 1px solid #c3c4c7;
 }
 
 .wpshadow-ai-dismiss:hover {
-    background-color: #f6f7f7;
+	background-color: #f6f7f7;
 }
 
 /* RTL Support */
 body.rtl .wpshadow-ai-badge {
-    margin-left: 0;
-    margin-right: 8px;
+	margin-left: 0;
+	margin-right: 8px;
 }
 
 body.rtl .wpshadow-ai-option input[type="radio"] {
-    margin-right: 0;
-    margin-left: 10px;
+	margin-right: 0;
+	margin-left: 10px;
 }
 
 /* Accessibility */
 .wpshadow-ai-option:focus-within {
-    outline: 2px solid #2271b1;
-    outline-offset: 2px;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
 }
 
 .wpshadow-ai-generate:focus {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
+	outline: 2px solid #fff;
+	outline-offset: 2px;
 }
 
 /* Mobile Responsiveness */
 @media screen and (max-width: 782px) {
-    .wpshadow-ai-suggestion-actions {
-        flex-direction: column;
-    }
-    
-    .wpshadow-ai-apply,
-    .wpshadow-ai-dismiss {
-        width: 100%;
-    }
+	.wpshadow-ai-suggestion-actions {
+		flex-direction: column;
+	}
+
+	.wpshadow-ai-apply,
+	.wpshadow-ai-dismiss {
+		width: 100%;
+	}
 }

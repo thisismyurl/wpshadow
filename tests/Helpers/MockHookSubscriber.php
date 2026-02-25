@@ -52,17 +52,17 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	 */
 	public static function get_hooks() {
 		return array(
-			'init'           => 'handle_init',
-			'admin_init'     => array(
+			'init'       => 'handle_init',
+			'admin_init' => array(
 				'callback' => 'handle_admin_init',
 				'priority' => 20,
 			),
-			'wp_loaded'      => array(
+			'wp_loaded'  => array(
 				'callback' => 'handle_loaded',
 				'priority' => 5,
 				'args'     => 2,
 			),
-			'admin_menu'     => array(
+			'admin_menu' => array(
 				array(
 					'callback' => 'handle_menu_early',
 					'priority' => 5,
@@ -142,7 +142,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 		}
 
 		self::$called_hooks[ $hook ][] = $args;
-		self::$call_counts[ $hook ]++;
+		++self::$call_counts[ $hook ];
 	}
 
 	/**

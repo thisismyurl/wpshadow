@@ -16,10 +16,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Generate_Password_Handler extends AJAX_Handler_Base {
+	/**
+	 * Register AJAX hooks for password generation.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_generate_password', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle password generation requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_generate_password', 'create_users', 'nonce' );
 

@@ -1,8 +1,8 @@
 /* Guardian Dashboard & Settings Styles */
 
 /* ========================================
-   Dashboard Container & Layout
-   ======================================== */
+	Dashboard Container & Layout
+	======================================== */
 
 .wpshadow-guardian-dashboard {
 	max-width: 1200px;
@@ -27,8 +27,8 @@
 }
 
 /* ========================================
-   Status Row
-   ======================================== */
+	Status Row
+	======================================== */
 
 .guardian-status-row {
 	display: flex;
@@ -86,8 +86,8 @@
 }
 
 /* ========================================
-   KPI Cards
-   ======================================== */
+	KPI Cards
+	======================================== */
 
 .guardian-kpi-cards {
 	display: grid;
@@ -155,8 +155,8 @@
 }
 
 /* ========================================
-   Main Content Layout
-   ======================================== */
+	Main Content Layout
+	======================================== */
 
 .guardian-main-content {
 	display: grid;
@@ -179,8 +179,8 @@
 }
 
 /* ========================================
-   Widget Styles
-   ======================================== */
+	Widget Styles
+	======================================== */
 
 .guardian-widget {
 	background: white;
@@ -383,8 +383,8 @@
 }
 
 /* ========================================
-   Settings Styles
-   ======================================== */
+	Settings Styles
+	======================================== */
 
 .wpshadow-guardian-settings {
 	max-width: 1000px;
@@ -521,8 +521,8 @@
 }
 
 /* ========================================
-   Report Form Styles
-   ======================================== */
+	Report Form Styles
+	======================================== */
 
 .wpshadow-report-form-container {
 	background: white;
@@ -637,8 +637,8 @@
 }
 
 /* ========================================
-   Modal Styles
-   ======================================== */
+	Modal Styles
+	======================================== */
 
 .email-modal {
 	display: none !important;
@@ -720,8 +720,8 @@
 }
 
 /* ========================================
-   Notification Preferences
-   ======================================== */
+	Notification Preferences
+	======================================== */
 
 .wpshadow-notification-preferences {
 	max-width: 800px;
@@ -887,39 +887,39 @@
 }
 
 /* ========================================
-   Responsive Design
-   ======================================== */
+	Responsive Design
+	======================================== */
 
 @media (max-width: 768px) {
 	.guardian-status-row {
 		flex-direction: column;
 		align-items: stretch;
 	}
-	
+
 	.guardian-quick-actions {
 		flex-direction: column;
 	}
-	
+
 	.guardian-quick-actions .button {
 		width: 100%;
 	}
-	
+
 	.guardian-kpi-cards {
 		grid-template-columns: 1fr;
 	}
-	
+
 	.form-row {
 		grid-template-columns: 1fr;
 	}
-	
+
 	.stats-grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	
+
 	.add-subscription {
 		flex-direction: column;
 	}
-	
+
 	.add-subscription input,
 	.add-subscription select,
 	.add-subscription .button {
@@ -931,25 +931,25 @@
 	.guardian-header h1 {
 		font-size: 24px;
 	}
-	
+
 	.guardian-kpi-card {
 		flex-direction: column;
 		text-align: center;
 	}
-	
+
 	.card-content {
 		width: 100%;
 	}
-	
+
 	.nav-tab {
 		padding: 10px 12px;
 		font-size: 13px;
 	}
-	
+
 	.alert-types-grid {
 		grid-template-columns: 1fr;
 	}
-	
+
 	.stats-grid {
 		grid-template-columns: 1fr;
 	}

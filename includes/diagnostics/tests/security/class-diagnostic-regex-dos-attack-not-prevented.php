@@ -64,24 +64,18 @@ class Diagnostic_Regex_DoS_Attack_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_regex_patterns' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Regex DoS attack not prevented. Avoid complex nested quantifiers and use timeouts on regex operations.',
-						'severity'   =>   'high',
-						'threat_level'   =>   55,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/regex-dos-attack-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'validate_regex_patterns' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Regex DoS attack not prevented. Avoid complex nested quantifiers and use timeouts on regex operations.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 55,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/regex-dos-attack-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

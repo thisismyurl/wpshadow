@@ -148,11 +148,6 @@ class Workflow_Wizard {
 						'description' => 'When SSL configuration issues are found',
 						'icon'        => 'lock',
 					),
-					'too_many_plugins'  => array(
-						'label'       => 'Too Many Plugins',
-						'description' => 'When plugin count exceeds a threshold',
-						'icon'        => 'admin-plugins',
-					),
 					'ip_banned'         => array(
 						'label'       => 'Banned IP Detected',
 						'description' => 'When a banned IP tries to access the site',
@@ -203,8 +198,38 @@ class Workflow_Wizard {
 			return $all_actions;
 		}
 
+		// Normalize trigger ids to action filter keys.
+		$trigger_map = array(
+			'time_daily'                => 'schedule',
+			'page_load_trigger'         => 'page_load',
+			'post_status_changed'       => 'post_status',
+			'pre_publish_review'        => 'pre_publish_review',
+			'comment_posted'            => 'comment',
+			'plugin_update_trigger'     => 'plugin_update',
+			'backup_completion_trigger' => 'backup_completion',
+			'plugin_state_changed'      => 'plugin',
+			'theme_switched'            => 'theme',
+			'user_login'                => 'user_login',
+			'user_register'             => 'user_register',
+			'high_memory'               => 'memory',
+			'debug_mode_on'             => 'debug',
+			'ssl_issue'                 => 'ssl',
+			'too_many_plugins'          => 'plugins',
+			'ip_banned'                 => 'ip_ban',
+			'database_trigger'          => 'database',
+			'error_log_trigger'         => 'error_log',
+			'diagnostic_run_trigger'    => 'diagnostic_run',
+			'manual_cron_trigger'       => 'manual',
+		);
+
+		$filter_key = isset( $trigger_map[ $trigger_type ] ) ? $trigger_map[ $trigger_type ] : $trigger_type;
+
 		// Filter and order actions based on trigger type
-		$filtered_actions = self::filter_actions_by_trigger( $all_actions, $trigger_type );
+		$filtered_actions = self::filter_actions_by_trigger( $all_actions, $filter_key );
+
+		if ( empty( $filtered_actions ) ) {
+			return $all_actions;
+		}
 
 		return $filtered_actions;
 	}
@@ -220,6 +245,17 @@ class Workflow_Wizard {
 		}
 
 		self::$all_actions = array(
+			'treatments'              => array(
+				'label'   => 'Treatments',
+				'icon'    => 'admin-tools',
+				'actions' => array(
+					'run_treatment' => array(
+						'label'       => 'Run a Treatment',
+						'description' => 'Apply a specific fix from the treatment list',
+						'icon'        => 'admin-tools',
+					),
+				),
+			),
 			'diagnostics'             => array(
 				'label'   => 'Diagnostics',
 				'icon'    => 'search',
@@ -704,6 +740,7 @@ class Workflow_Wizard {
 			// Schedule: maintenance, diagnostics, backups, monitoring - things that should run automatically
 			'schedule'                  => array(
 				'priority'           => array(
+					'treatments',
 					'monitoring_alerts',
 					'backup_recovery',
 					'site_maintenance',
@@ -712,6 +749,7 @@ class Workflow_Wizard {
 					'content_management',
 				),
 				'allowed'            => array(
+					'treatments',
 					'monitoring_alerts',
 					'backup_recovery',
 					'site_maintenance',
@@ -739,6 +777,7 @@ class Workflow_Wizard {
 			// Page Load: frontend optimization, diagnostics, caching - things that run per-page
 			'page_load'                 => array(
 				'priority'           => array(
+					'treatments',
 					'performance',
 					'diagnostics',
 					'security',
@@ -747,6 +786,7 @@ class Workflow_Wizard {
 					'notifications',
 				),
 				'allowed'            => array(
+					'treatments',
 					'performance',
 					'diagnostics',
 					'security',
@@ -1204,7 +1244,9 @@ class Workflow_Wizard {
 		);
 
 		// Get the config group key for this trigger
-		$config_key = isset( $trigger_to_config[ $trigger_id ] ) ? $trigger_to_config[ $trigger_id ] : $trigger_id;
+		$config_key   = isset( $trigger_to_config[ $trigger_id ] ) ? $trigger_to_config[ $trigger_id ] : $trigger_id;
+		$manual_token = bin2hex( random_bytes( 16 ) );
+		$manual_url   = add_query_arg( 'wpshadow_trigger', $manual_token, home_url( '/' ) );
 
 		$configs = array(
 			'schedule'          => array(
@@ -1255,35 +1297,37 @@ class Workflow_Wizard {
 			),
 			'page_load'         => array(
 				array(
-					'id'       => 'page_type',
-					'type'     => 'select',
+					'id'       => 'page_targets',
+					'type'     => 'checkbox_group',
 					'label'    => 'Which pages?',
-					'options'  => array(
-						'all'      => 'All Pages (Frontend & Admin)',
-						'frontend' => 'Frontend Pages Only',
-						'admin'    => 'Admin Pages Only',
-						'single'   => 'Single Posts/Pages',
-						'archive'  => 'Archive/Category Pages',
-						'home'     => 'Homepage Only',
-					),
-					'default'  => 'all',
+					'options'  => self::get_page_load_options(),
+					'default'  => array( 'all_frontend' ),
 					'required' => true,
 				),
+			),
+			'post_status'       => array(
 				array(
 					'id'       => 'post_types',
 					'type'     => 'checkbox_group',
-					'label'    => 'Which post types?',
-					'options'  => array(
-						'post' => 'Posts',
-						'page' => 'Pages',
-						'all'  => 'All Types',
-					),
-					'default'  => array( 'all' ),
-					'required' => false,
-					'show_if'  => array(
-						'field' => 'page_type',
-						'value' => array( 'frontend', 'single' ),
-					),
+					'label'    => __( 'Which post types?', 'wpshadow' ),
+					'options'  => self::get_public_post_type_options(),
+					'required' => true,
+				),
+				array(
+					'id'       => 'old_status',
+					'type'     => 'select',
+					'label'    => __( 'From status', 'wpshadow' ),
+					'options'  => self::get_post_status_options(),
+					'default'  => 'any',
+					'required' => true,
+				),
+				array(
+					'id'       => 'new_status',
+					'type'     => 'select',
+					'label'    => __( 'To status', 'wpshadow' ),
+					'options'  => self::get_post_status_options(),
+					'default'  => 'any',
+					'required' => true,
 				),
 			),
 			'plugin_update'     => array(
@@ -1329,9 +1373,11 @@ class Workflow_Wizard {
 			'user_login'        => array(
 				array(
 					'id'          => 'user_id',
-					'type'        => 'text',
-					'label'       => 'Specific user ID? (optional)',
-					'placeholder' => 'Leave blank for any user',
+					'type'        => 'user_search',
+					'label'       => __( 'Specific user (optional)', 'wpshadow' ),
+					'placeholder' => __( 'Search by name or email', 'wpshadow' ),
+					'ajax_action' => 'wpshadow_user_search',
+					'nonce'       => wp_create_nonce( 'wpshadow_user_search' ),
 					'default'     => '',
 					'required'    => false,
 				),
@@ -1426,28 +1472,81 @@ class Workflow_Wizard {
 					'required' => true,
 				),
 			),
+			'manual'            => array(
+				array(
+					'id'       => 'trigger_url',
+					'type'     => 'text',
+					'label'    => __( 'Trigger URL', 'wpshadow' ),
+					'default'  => $manual_url,
+					'required' => true,
+					'readonly' => true,
+					'note'     => __( 'Copy this URL and use it in your CRON job or external service.', 'wpshadow' ),
+				),
+				array(
+					'id'       => 'trigger_token',
+					'type'     => 'text',
+					'label'    => __( 'Trigger token', 'wpshadow' ),
+					'default'  => $manual_token,
+					'required' => true,
+					'note'     => __( 'This is the security key used in the URL.', 'wpshadow' ),
+				),
+				array(
+					'id'       => 'require_auth',
+					'type'     => 'select',
+					'label'    => __( 'Require login?', 'wpshadow' ),
+					'options'  => array(
+						'1' => __( 'Yes, only logged-in users', 'wpshadow' ),
+						'0' => __( 'No, allow public requests', 'wpshadow' ),
+					),
+					'default'  => '1',
+					'required' => true,
+				),
+				array(
+					'id'          => 'allowed_ips',
+					'type'        => 'textarea',
+					'label'       => __( 'Allowed IPs (optional)', 'wpshadow' ),
+					'placeholder' => __( '192.0.2.10, 203.0.113.7', 'wpshadow' ),
+					'rows'        => 3,
+					'note'        => __( 'Comma-separated list. Leave empty to allow any IP.', 'wpshadow' ),
+				),
+			),
 			'diagnostic_run'    => array(
 				array(
 					'id'       => 'source',
 					'type'     => 'select',
-					'label'    => 'Which diagnostic runs?',
+					'label'    => __( 'Which diagnostic runs?', 'wpshadow' ),
 					'options'  => array(
-						'any'        => 'Any source',
-						'quick_scan' => 'Quick Scan',
-						'deep_scan'  => 'Deep Scan',
-						'guardian'   => 'Guardian',
-						'manual'     => 'Manual',
+						'any'        => __( 'Any source', 'wpshadow' ),
+						'quick_scan' => __( 'Quick Scan', 'wpshadow' ),
+						'deep_scan'  => __( 'Deep Scan', 'wpshadow' ),
+						'guardian'   => __( 'Guardian', 'wpshadow' ),
+						'manual'     => __( 'Manual', 'wpshadow' ),
+					),
+					'default'  => 'any',
+					'required' => true,
+				),
+				array(
+					'id'       => 'result',
+					'type'     => 'select',
+					'label'    => __( 'When should this run?', 'wpshadow' ),
+					'options'  => array(
+						'any'  => __( 'Pass or fail', 'wpshadow' ),
+						'pass' => __( 'Only when it passes', 'wpshadow' ),
+						'fail' => __( 'Only when it fails', 'wpshadow' ),
 					),
 					'default'  => 'any',
 					'required' => true,
 				),
 				array(
 					'id'          => 'specific_diagnostic',
-					'type'        => 'text',
-					'label'       => 'Specific diagnostic (optional)',
+					'type'        => 'diagnostic_search',
+					'label'       => __( 'Choose a diagnostic (optional)', 'wpshadow' ),
 					'default'     => '',
 					'required'    => false,
-					'placeholder' => 'e.g., Diagnostic_SSL',
+					'placeholder' => __( 'Search diagnostics', 'wpshadow' ),
+					'ajax_action' => 'wpshadow_workflow_search_diagnostics',
+					'nonce'       => wp_create_nonce( 'wpshadow_workflow' ),
+					'popular'     => self::get_popular_diagnostics(),
 				),
 				array(
 					'id'      => 'issues_only',
@@ -1462,6 +1561,190 @@ class Workflow_Wizard {
 	}
 
 	/**
+	 * Get a short list of popular diagnostics for quick selection.
+	 *
+	 * @return array Array of popular diagnostic items.
+	 */
+	private static function get_popular_diagnostics(): array {
+		$class_name = __NAMESPACE__ . '\\Workflow_Discovery';
+		if ( ! class_exists( $class_name ) ) {
+			$discovery_path = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH . 'includes/systems/workflow/class-workflow-discovery.php' : '';
+			if ( $discovery_path && file_exists( $discovery_path ) ) {
+				require_once $discovery_path;
+			}
+		}
+
+		if ( ! class_exists( $class_name ) ) {
+			return array();
+		}
+
+		$diagnostics = $class_name::discover_diagnostics();
+		if ( empty( $diagnostics ) ) {
+			return array();
+		}
+
+		uasort(
+			$diagnostics,
+			function ( $a, $b ) {
+				$label_a = $a['label'] ?? '';
+				$label_b = $b['label'] ?? '';
+				return strcasecmp( $label_a, $label_b );
+			}
+		);
+
+		$popular = array_slice( $diagnostics, 0, 6, true );
+		$items   = array();
+		foreach ( $popular as $slug => $diagnostic ) {
+			$items[] = array(
+				'slug'  => $slug,
+				'label' => $diagnostic['label'] ?? $slug,
+			);
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Build page load target options for the trigger config.
+	 *
+	 * @return array Page target options.
+	 */
+	private static function get_page_load_options() {
+		$options = array(
+			'all_frontend' => __( 'All frontend pages', 'wpshadow' ),
+			'all_admin'    => __( 'All admin screens', 'wpshadow' ),
+			'front_page'   => __( 'Homepage', 'wpshadow' ),
+			'blog_index'   => __( 'Blog index', 'wpshadow' ),
+			'search'       => __( 'Search results', 'wpshadow' ),
+			'error_404'    => __( '404 not found page', 'wpshadow' ),
+		);
+
+		$post_types = get_post_types(
+			array(
+				'public' => true,
+			),
+			'objects'
+		);
+
+		foreach ( $post_types as $post_type => $object ) {
+			if ( empty( $object->show_ui ) ) {
+				continue;
+			}
+
+			$singular = $object->labels->singular_name ?? $object->label ?? $post_type;
+			$plural   = $object->labels->name ?? $singular;
+
+			$options[ 'single_' . $post_type ] = sprintf(
+				/* translators: %s: post type singular label */
+				__( 'Single %s', 'wpshadow' ),
+				$singular
+			);
+
+			if ( ! empty( $object->has_archive ) ) {
+				$options[ 'archive_' . $post_type ] = sprintf(
+					/* translators: %s: post type plural label */
+					__( '%s archive', 'wpshadow' ),
+					$plural
+				);
+			}
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Build plugin options for trigger config.
+	 *
+	 * @return array
+	 */
+	private static function get_plugin_options() {
+		$options = array(
+			'any' => __( 'Any plugin', 'wpshadow' ),
+		);
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$plugins = get_plugins();
+		if ( empty( $plugins ) || ! is_array( $plugins ) ) {
+			return $options;
+		}
+
+		foreach ( $plugins as $plugin_file => $plugin_data ) {
+			$plugin_name = isset( $plugin_data['Name'] ) ? $plugin_data['Name'] : $plugin_file;
+			$label       = sanitize_text_field( $plugin_name );
+			if ( $label !== $plugin_file ) {
+				$label .= ' (' . $plugin_file . ')';
+			}
+			$options[ $plugin_file ] = $label;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Get public post type options.
+	 *
+	 * @since  1.7035.1410
+	 * @return array Post type options.
+	 */
+	private static function get_public_post_type_options(): array {
+		$options    = array();
+		$post_types = get_post_types(
+			array(
+				'public' => true,
+			),
+			'objects'
+		);
+
+		foreach ( $post_types as $post_type => $object ) {
+			if ( empty( $object->show_ui ) ) {
+				continue;
+			}
+			$label                 = $object->labels->singular_name ?? $object->label ?? $post_type;
+			$options[ $post_type ] = $label;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Get post status options.
+	 *
+	 * @since  1.7035.1410
+	 * @return array Post status options.
+	 */
+	private static function get_post_status_options(): array {
+		$options = array(
+			'any' => __( 'Any status', 'wpshadow' ),
+		);
+
+		$statuses = get_post_stati( array( 'show_in_admin_all_list' => true ), 'objects' );
+		foreach ( $statuses as $status => $object ) {
+			$options[ $status ] = $object->label ?? $status;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Get comment status options.
+	 *
+	 * @since  1.7035.1410
+	 * @return array Comment status options.
+	 */
+	private static function get_comment_status_options(): array {
+		return array(
+			'any'   => __( 'Any status', 'wpshadow' ),
+			'1'     => __( 'Approved', 'wpshadow' ),
+			'0'     => __( 'Pending', 'wpshadow' ),
+			'spam'  => __( 'Spam', 'wpshadow' ),
+			'trash' => __( 'Trash', 'wpshadow' ),
+		);
+	}
+
+	/**
 	 * Get configuration fields for a specific action
 	 *
 	 * @param string $action_id Action ID
@@ -1469,7 +1752,7 @@ class Workflow_Wizard {
 	 */
 	public static function get_action_config( $action_id ) {
 		// Load the email recipient manager
-		require_once WPSHADOW_INCLUDES . 'workflow/class-email-recipient-manager.php';
+		require_once WPSHADOW_PATH . 'includes/systems/workflow/class-email-recipient-manager.php';
 
 		$configs = array(
 			'send_email'                   => array(
@@ -1502,22 +1785,30 @@ class Workflow_Wizard {
 			),
 			'send_notification'            => array(
 				array(
-					'id'          => 'message',
+					'id'          => 'notification_title',
 					'type'        => 'text',
-					'label'       => 'Notification message',
-					'placeholder' => 'Action completed successfully',
+					'label'       => __( 'Notification title', 'wpshadow' ),
+					'placeholder' => __( 'WPShadow Notification', 'wpshadow' ),
+					'default'     => __( 'WPShadow Notification', 'wpshadow' ),
+					'required'    => true,
+				),
+				array(
+					'id'          => 'notification_message',
+					'type'        => 'text',
+					'label'       => __( 'Notification message', 'wpshadow' ),
+					'placeholder' => __( 'Action completed successfully', 'wpshadow' ),
 					'default'     => '',
 					'required'    => true,
 				),
 				array(
-					'id'       => 'type',
+					'id'       => 'notification_type',
 					'type'     => 'select',
-					'label'    => 'Notification type',
+					'label'    => __( 'Notification type', 'wpshadow' ),
 					'options'  => array(
-						'success' => 'Success',
-						'warning' => 'Warning',
-						'error'   => 'Error',
-						'info'    => 'Info',
+						'success' => __( 'Success', 'wpshadow' ),
+						'warning' => __( 'Warning', 'wpshadow' ),
+						'error'   => __( 'Error', 'wpshadow' ),
+						'info'    => __( 'Info', 'wpshadow' ),
 					),
 					'default'  => 'success',
 					'required' => true,
@@ -1525,12 +1816,23 @@ class Workflow_Wizard {
 			),
 			'log_activity'                 => array(
 				array(
-					'id'          => 'message',
+					'id'          => 'log_message',
 					'type'        => 'text',
 					'label'       => 'Log message',
 					'placeholder' => 'What happened?',
 					'default'     => '',
 					'required'    => true,
+				),
+			),
+			'run_treatment'                => array(
+				array(
+					'id'          => 'specific_treatment',
+					'type'        => 'treatment_search',
+					'label'       => 'Choose a treatment',
+					'placeholder' => 'Search treatments',
+					'required'    => true,
+					'ajax_action' => 'wpshadow_workflow_search_treatments',
+					'nonce'       => wp_create_nonce( 'wpshadow_workflow' ),
 				),
 			),
 			'block_ip'                     => array(
@@ -1757,14 +2059,50 @@ class Workflow_Wizard {
 				array(
 					'id'       => 'minimum_version',
 					'type'     => 'text',
-					'label'    => 'Minimum PHP Version (e.g., 8.1)',
+					'label'    => __( 'Minimum PHP Version (e.g., 8.1)', 'wpshadow' ),
 					'default'  => PHP_VERSION,
 					'required' => true,
 				),
 				array(
 					'id'    => 'alert_if_below',
 					'type'  => 'checkbox',
-					'label' => 'Alert if version is below minimum',
+					'label' => __( 'Alert if version is below minimum', 'wpshadow' ),
+				),
+				array(
+					'id'       => 'notify_method',
+					'type'     => 'select',
+					'label'    => __( 'How should we notify you?', 'wpshadow' ),
+					'options'  => array(
+						'none'         => __( 'No notification', 'wpshadow' ),
+						'email'        => __( 'Email', 'wpshadow' ),
+						'notification' => __( 'In-app notice', 'wpshadow' ),
+					),
+					'default'  => 'email',
+					'required' => true,
+				),
+				array(
+					'id'       => 'notify_recipient',
+					'type'     => 'select',
+					'label'    => __( 'Email recipient', 'wpshadow' ),
+					'options'  => self::get_approved_email_options(),
+					'default'  => 'admin',
+					'required' => false,
+				),
+				array(
+					'id'          => 'notify_subject',
+					'type'        => 'text',
+					'label'       => __( 'Email subject', 'wpshadow' ),
+					'placeholder' => __( 'PHP version alert', 'wpshadow' ),
+					'default'     => __( 'PHP version alert', 'wpshadow' ),
+					'required'    => false,
+				),
+				array(
+					'id'          => 'notify_message',
+					'type'        => 'textarea',
+					'label'       => __( 'Notification message', 'wpshadow' ),
+					'placeholder' => __( 'Your site is running PHP {php_version}. Recommended: {minimum_php_version}.', 'wpshadow' ),
+					'rows'        => 4,
+					'required'    => false,
 				),
 			),
 			'optimize_database'            => array(
@@ -2031,6 +2369,11 @@ class Workflow_Wizard {
 			),
 			'run_tool_a11y_audit'          => array(
 				array(
+					'id'      => 'tool',
+					'type'    => 'hidden',
+					'default' => 'a11y-audit',
+				),
+				array(
 					'id'       => 'scan_mode',
 					'type'     => 'select',
 					'label'    => 'Scan Mode',
@@ -2085,6 +2428,11 @@ class Workflow_Wizard {
 			),
 			'run_tool_broken_links'        => array(
 				array(
+					'id'      => 'tool',
+					'type'    => 'hidden',
+					'default' => 'broken-links',
+				),
+				array(
 					'id'       => 'scan_mode',
 					'type'     => 'select',
 					'label'    => 'Scan Mode',
@@ -2110,6 +2458,11 @@ class Workflow_Wizard {
 				),
 			),
 			'run_tool_mobile_friendliness' => array(
+				array(
+					'id'      => 'tool',
+					'type'    => 'hidden',
+					'default' => 'mobile-friendliness',
+				),
 				array(
 					'id'       => 'scan_mode',
 					'type'     => 'select',
@@ -2137,6 +2490,11 @@ class Workflow_Wizard {
 			),
 			'run_tool_simple_cache'        => array(
 				array(
+					'id'      => 'tool',
+					'type'    => 'hidden',
+					'default' => 'simple-cache',
+				),
+				array(
 					'id'       => 'action',
 					'type'     => 'select',
 					'label'    => 'Cache Action',
@@ -2160,6 +2518,11 @@ class Workflow_Wizard {
 				),
 			),
 			'run_tool_magic_link_support'  => array(
+				array(
+					'id'      => 'tool',
+					'type'    => 'hidden',
+					'default' => 'magic-link-support',
+				),
 				array(
 					'id'       => 'action',
 					'type'     => 'select',
@@ -2208,9 +2571,65 @@ class Workflow_Wizard {
 					),
 				),
 			),
+			'run_tool_dark_mode'           => array(
+				array(
+					'id'      => 'tool',
+					'type'    => 'hidden',
+					'default' => 'dark-mode',
+				),
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => __( 'Confirm syncing dark mode preference', 'wpshadow' ),
+				),
+			),
 		);
 
-		return isset( $configs[ $action_id ] ) ? $configs[ $action_id ] : array();
+		if ( isset( $configs[ $action_id ] ) ) {
+			return $configs[ $action_id ];
+		}
+
+		return self::get_default_action_config( $action_id );
+	}
+
+	/**
+	 * Get a default action configuration when none is defined.
+	 *
+	 * @param string $action_id Action ID.
+	 * @return array Default config fields.
+	 */
+	private static function get_default_action_config( $action_id ): array {
+		$action = self::get_action_metadata( $action_id );
+		$label  = isset( $action['label'] ) ? $action['label'] : $action_id;
+
+		return array(
+			array(
+				'id'    => 'confirm',
+				'type'  => 'checkbox',
+				'label' => sprintf( __( 'Confirm "%s" should run', 'wpshadow' ), $label ),
+				'note'  => __( 'This is a simple safety check to prevent accidental runs.', 'wpshadow' ),
+			),
+		);
+	}
+
+	/**
+	 * Find action metadata by ID.
+	 *
+	 * @param string $action_id Action ID.
+	 * @return array Action metadata.
+	 */
+	private static function get_action_metadata( $action_id ): array {
+		$actions = self::get_all_actions();
+		foreach ( $actions as $category ) {
+			if ( empty( $category['actions'] ) ) {
+				continue;
+			}
+			if ( isset( $category['actions'][ $action_id ] ) ) {
+				return $category['actions'][ $action_id ];
+			}
+		}
+
+		return array();
 	}
 
 	/**
@@ -2303,6 +2722,7 @@ class Workflow_Wizard {
 			'check_ssl'            => 'run_diagnostic',
 			'check_plugins'        => 'run_diagnostic',
 			'check_security'       => 'run_diagnostic',
+			'run_treatment'        => 'apply_treatment',
 			'block_external_fonts' => 'apply_treatment',
 			'increase_memory'      => 'apply_treatment',
 			'disable_debug'        => 'apply_treatment',
@@ -2418,7 +2838,7 @@ class Workflow_Wizard {
 	 * @return array Options array for select field
 	 */
 	private static function get_approved_email_options() {
-		require_once WPSHADOW_INCLUDES . 'workflow/class-email-recipient-manager.php';
+		require_once WPSHADOW_PATH . 'includes/systems/workflow/class-email-recipient-manager.php';
 
 		$recipients = Email_Recipient_Manager::get_approved_recipients();
 		$options    = array();

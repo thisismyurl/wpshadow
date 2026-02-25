@@ -83,17 +83,42 @@ class Workflow_Discovery {
 			return self::$treatments_cache;
 		}
 
-		$files = glob( $treatments_dir . 'class-treatment-*.php' );
+		$files    = array();
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $treatments_dir, \FilesystemIterator::SKIP_DOTS )
+		);
 
-		if ( ! $files ) {
+		foreach ( $iterator as $file_info ) {
+			/** @var \SplFileInfo $file_info */
+			if ( ! $file_info->isFile() ) {
+				continue;
+			}
+
+			if ( 'php' !== $file_info->getExtension() ) {
+				continue;
+			}
+
+			if ( 0 !== strpos( $file_info->getFilename(), 'class-treatment-' ) ) {
+				continue;
+			}
+
+			$files[] = $file_info->getPathname();
+		}
+
+		if ( empty( $files ) ) {
 			return self::$treatments_cache;
 		}
+
+		sort( $files );
 
 		foreach ( $files as $file ) {
 			$action_data = self::extract_treatment_data( $file );
 
 			if ( $action_data ) {
-				$slug                            = $action_data['slug'];
+				$slug = $action_data['slug'];
+				if ( isset( self::$treatments_cache[ $slug ] ) ) {
+					continue;
+				}
 				self::$treatments_cache[ $slug ] = $action_data;
 			}
 		}

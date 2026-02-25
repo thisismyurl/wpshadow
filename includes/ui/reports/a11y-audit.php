@@ -85,7 +85,7 @@ Tool_View_Base::render_header( __( 'Accessibility Audit', 'wpshadow' ) );
 	<!-- Results Section (Full Width) -->
 	<div class="wpshadow-a11y-results wps-none wps-card" id="wpshadow-a11y-results" role="region" aria-live="polite" aria-labelledby="wpshadow-a11y-results-heading">
 		<h3 id="wpshadow-a11y-results-heading"><?php esc_html_e( 'Scan Results', 'wpshadow' ); ?></h3>
-		<p style="margin-bottom: 15px;">
+		<p class="wpshadow-report-results-meta">
 			<strong><?php esc_html_e( 'Checked URL:', 'wpshadow' ); ?></strong>
 			<span class="wpshadow-url-display">
 				<span id="wpshadow-a11y-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span><span id="wpshadow-a11y-last-url"></span>

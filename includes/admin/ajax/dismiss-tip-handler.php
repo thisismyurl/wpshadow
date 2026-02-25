@@ -16,10 +16,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Dismiss_Tip_Handler extends AJAX_Handler_Base {
+	/**
+	 * Register AJAX hooks for tip dismissals.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_dismiss_tip', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle tip dismissal requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_tip_dismiss', 'read', 'nonce' );
 

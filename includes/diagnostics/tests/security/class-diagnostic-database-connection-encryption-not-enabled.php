@@ -64,24 +64,18 @@ class Diagnostic_Database_Connection_Encryption_Not_Enabled extends Diagnostic_B
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'verify_db_encryption' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Database connection encryption not enabled. Use SSL/TLS for all database connections to prevent eavesdropping.',
-						'severity'   =>   'high',
-						'threat_level'   =>   80,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/database-connection-encryption-not-enabled'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'verify_db_encryption' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Database connection encryption checks are not enabled. Verifying TLS on database connections improves data protection in transit.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 80,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/' . self::$slug,
+			);
+		}
+
+		return null;
 	}
 }

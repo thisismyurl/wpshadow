@@ -104,7 +104,7 @@ class BootstrapAutoloaderTest extends TestCase {
 
 		foreach ( $feature_classes as $class ) {
 			if ( class_exists( $class ) ) {
-				$discovered_count++;
+				++$discovered_count;
 			}
 		}
 
@@ -129,7 +129,7 @@ class BootstrapAutoloaderTest extends TestCase {
 
 		// Test with includes/admin directory.
 		$admin_dir = WPSHADOW_PATH . 'includes/admin';
-		
+
 		if ( is_dir( $admin_dir ) ) {
 			$discovered_files = $method->invoke( null, $admin_dir );
 
@@ -301,7 +301,7 @@ class BootstrapAutoloaderTest extends TestCase {
 
 		foreach ( $feature_directories as $dir => $class ) {
 			if ( class_exists( $class ) ) {
-				$loaded_dirs++;
+				++$loaded_dirs;
 			}
 		}
 

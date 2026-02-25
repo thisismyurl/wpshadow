@@ -157,6 +157,62 @@
 	margin-bottom: 20px;
 }
 
+/* Shared Wizard Utilities */
+.wps-wizard-back-button {
+	margin-bottom: var(--wps-space-3);
+}
+
+.wps-wizard-back-icon {
+	font-size: 18px;
+}
+
+.wps-wizard-step-card {
+	margin-top: var(--wps-space-6);
+}
+
+.wps-wizard-form-actions {
+	margin-top: var(--wps-space-6);
+	padding-top: var(--wps-space-4);
+	border-top: 1px solid var(--wps-border-color);
+}
+
+.wps-wizard-input-sm {
+	max-width: 150px;
+}
+
+.wps-wizard-input-md {
+	max-width: 220px;
+}
+
+.wps-wizard-trigger-alert {
+	margin-bottom: var(--wps-space-6);
+}
+
+.wps-wizard-empty-card {
+	text-align: center;
+}
+
+.wps-wizard-empty-card-body {
+	padding: var(--wps-space-8);
+}
+
+.wps-wizard-inline-icon {
+	font-size: 16px;
+	margin-left: var(--wps-space-1);
+}
+
+.wps-wizard-popular-list {
+	margin-top: var(--wps-space-2);
+}
+
+.wps-wizard-popular-label {
+	margin-bottom: var(--wps-space-1);
+}
+
+.wps-wizard-results-spacing {
+	margin-top: var(--wps-space-2);
+}
+
 /* Form Groups */
 .wpshadow-form-group {
 	margin-bottom: 20px;

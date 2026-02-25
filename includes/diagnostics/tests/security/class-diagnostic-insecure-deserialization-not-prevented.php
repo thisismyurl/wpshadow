@@ -64,24 +64,18 @@ class Diagnostic_Insecure_Deserialization_Not_Prevented extends Diagnostic_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'validate_deserialization' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Insecure deserialization not prevented. Never unserialize() data from user input or untrusted sources.',
-						'severity'   =>   'high',
-						'threat_level'   =>   80,
-						'auto_fixable'   =>   false,
-						'kb_link'   =>   'https://wpshadow.com/kb/insecure-deserialization-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'validate_deserialization' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Insecure deserialization not prevented. Never unserialize() data from user input or untrusted sources.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 80,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/insecure-deserialization-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }

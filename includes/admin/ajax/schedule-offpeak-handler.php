@@ -19,10 +19,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Schedule_Offpeak_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Register AJAX hooks for off-peak scheduling.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_schedule_offpeak', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle off-peak scheduling requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_offpeak', 'manage_options', 'nonce' );
 

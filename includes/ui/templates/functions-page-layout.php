@@ -59,14 +59,37 @@ function wpshadow_render_page_notice_slot() {
 }
 
 /**
+ * Render a standardized back button for wizard steps.
+ *
+ * @since  1.7052.1200
+ * @param  string $url   Back link URL.
+ * @param  string $label Optional. Button label. Default 'Back'.
+ * @param  string $class Optional. Additional CSS class names.
+ * @return void
+ */
+function wpshadow_render_wizard_back_button( string $url, string $label = '', string $class = '' ) {
+	if ( '' === $label ) {
+		$label = __( 'Back', 'wpshadow' );
+	}
+
+	$button_class = trim( 'wps-btn wps-btn--ghost wps-wizard-back-button ' . $class );
+	?>
+	<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $button_class ); ?>">
+		<span class="dashicons dashicons-arrow-left-alt2 wps-wizard-back-icon" aria-hidden="true"></span>
+		<?php echo esc_html( $label ); ?>
+	</a>
+	<?php
+}
+
+/**
  * Load and render page-specific activities component
  *
-	 * Includes the page-activities component file which provides functions for
-	 * rendering real-time activity displays with AJAX auto-refresh.
-	 *
-	 * @since  1.6030.2148
-	 * @return void
-	 */
+ * Includes the page-activities component file which provides functions for
+ * rendering real-time activity displays with AJAX auto-refresh.
+ *
+ * @since  1.6030.2148
+ * @return void
+ */
 function wpshadow_load_page_activities_component() {
 	// First, attempt to move the file from temp location if needed
 	if ( file_exists( WPSHADOW_PATH . 'includes/views/move-activities-component.php' ) ) {

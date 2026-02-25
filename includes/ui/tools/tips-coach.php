@@ -14,15 +14,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPShadow\Views\Tool_View_Base;
-
 require WPSHADOW_PATH . 'includes/views/class-tool-view-base.php';
 
 // Verify access
-Tool_View_Base::verify_access( 'read' );
+\WPShadow\Views\Tool_View_Base::verify_access( 'read' );
 
 // Enqueue assets
-Tool_View_Base::enqueue_assets( 'tips-coach' );
+\WPShadow\Views\Tool_View_Base::enqueue_assets( 'tips-coach' );
+
+wp_enqueue_script(
+	'wpshadow-tips-coach',
+	WPSHADOW_URL . 'assets/js/tips-coach.js',
+	array( 'jquery' ),
+	WPSHADOW_VERSION,
+	true
+);
+
+wp_localize_script(
+	'wpshadow-tips-coach',
+	'wpshadowTipsCoach',
+	array(
+		'nonce'              => wp_create_nonce( 'wpshadow_tip_prefs' ),
+		'msgEnabled'         => __( 'Tip category enabled!', 'wpshadow' ),
+		'msgDisabled'        => __( 'Tip category disabled!', 'wpshadow' ),
+		'msgSaveError'       => __( 'Error saving preference.', 'wpshadow' ),
+		'msgConnectionError' => __( 'Connection error.', 'wpshadow' ),
+	)
+);
 
 if ( ! current_user_can( 'read' ) ) {
 	wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
@@ -47,7 +65,7 @@ foreach ( $catalog as $tip ) {
 }
 
 // Render header
-Tool_View_Base::render_header( __( 'Tips & Guidance', 'wpshadow' ), __( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ) );
+\WPShadow\Views\Tool_View_Base::render_header( __( 'Tips & Guidance', 'wpshadow' ), __( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ) );
 ?>
 
 	<div class="wpshadow-tips-toolbar wps-m-20">
@@ -110,7 +128,7 @@ Tool_View_Base::render_header( __( 'Tips & Guidance', 'wpshadow' ), __( 'Configu
 		<h3 style="margin-top: 0;"><?php esc_html_e( 'How Tips Work', 'wpshadow' ); ?></h3>
 		<ul class="wps-m-10">
 			<li><?php esc_html_e( 'Enabled tips appear as helpful hover tooltips when you move your mouse over menu items, buttons, and other admin elements.', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Each tip can be dismissed individually by clicking the X button, and won\'t reappear for you.', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'Each tip can be dismissed individually by clicking the X button, and it will not reappear for you.', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Disabling a category hides all tips in that category from appearing in wp-admin.', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'These settings apply only to your user account; other users have their own preferences.', 'wpshadow' ); ?></li>
 		</ul>
@@ -118,102 +136,4 @@ Tool_View_Base::render_header( __( 'Tips & Guidance', 'wpshadow' ), __( 'Configu
 
 </div>
 
-<script>
-	(function($) {
-		'use strict';
-
-		var wpshadowTipsPage = {
-			nonce: <?php echo json_encode( wp_create_nonce( 'wpshadow_tip_prefs' ) ); ?>,
-
-			init: function() {
-				$(' . wpshadow - category - toggle').on('change', this.onToggleCategory.bind(this));
-				$('#wpshadow-enable-all-tips').on('click', this.enableAllCategories.bind(this));
-				$('#wpshadow-disable-all-tips') {
-					.on('click', this.disableAllCategories.bind(this));
-				}
-			},
-
-			onToggleCategory: function(e) {
-				var $checkbox = $(e.target);
-				var category = $checkbox.data('category');
-				var isEnabled = $checkbox.is(':checked');
-
-				this.updateCategory(category, isEnabled);
-			},
-
-			updateCategory: function(category, isEnabled) {
-				var self = this;
-				var disabledCategories = array();
-
-				// Collect all disabled categories
-				$('.wpshadow-category-toggle:not(:checked)').each(
-					function() {
-						disabledCategories.push($(this).data('category'));
-					}
-				);
-
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_save_tip_prefs',
-						nonce: this.nonce,
-						disabled_categories: disabledCategories,
-					},
-					success: function(response) {
-						if (response.success) {
-							self.showMessage(
-								isEnabled ?
-								< ? php echo json_encode(__('Tip category enabled!', 'wpshadow')); ?
-								>
-								:
-								<?php echo json_encode( __( 'Tip category disabled!', 'wpshadow' ) ); ?>,
-								'success'
-							);
-						} else {
-							self.showMessage(<?php echo json_encode( __( 'Error saving preference.', 'wpshadow' ) ); ?>, 'error');
-						}
-					},
-					error: function() {
-						self.showMessage(<?php echo json_encode( __( 'Connection error.', 'wpshadow' ) ); ?>, 'error');
-					},
-				});
-			},
-
-			enableAllCategories: function(e) {
-				e.preventDefault();
-				$('.wpshadow-category-toggle').prop('checked', true).first().trigger('change');
-			},
-
-			disableAllCategories: function(e) {
-				e.preventDefault();
-				$('.wpshadow-category-toggle').prop('checked', false).first().trigger('change');
-			},
-
-			showMessage: function(message, type) {
-				var $message = $('#wpshadow-tips-message');
-				var bgColor = type === 'success' ? '#d4edda' : '#f8d7da';
-				var textColor = type === 'success' ? '#155724' : '#721c24';
-				var borderColor = type === 'success' ? '#c3e6cb' : '#f5c6cb';
-
-				$message
-					.css({
-						background: bgColor,
-						color: textColor,
-						borderColor: borderColor
-					})
-					.text(message)
-					.show();
-
-				setTimeout(function() {
-					$message.fadeOut();
-				}, 3000);
-			},
-		};
-
-		$(function() {
-			wpshadowTipsPage.init();
-		});
-	})(jQuery);
-</script>
-<?php Tool_View_Base::render_footer(); ?>
+<?php \WPShadow\Views\Tool_View_Base::render_footer(); ?>

@@ -88,9 +88,9 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 				array(
 					'settings' => $settings,
 					'metadata' => array(
-						'exported_at' => current_time( 'mysql' ),
-						'site_url'    => get_site_url(),
-						'wp_version'  => get_bloginfo( 'version' ),
+						'exported_at'    => current_time( 'mysql' ),
+						'site_url'       => get_site_url(),
+						'wp_version'     => get_bloginfo( 'version' ),
 						'plugin_version' => WPSHADOW_VERSION,
 					),
 				)
@@ -223,7 +223,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 
 			self::send_success(
 				array(
-					'message' => __( 'Settings synced to cloud successfully', 'wpshadow' ),
+					'message'   => __( 'Settings synced to cloud successfully', 'wpshadow' ),
 					'synced_at' => current_time( 'mysql' ),
 				)
 			);
@@ -352,21 +352,14 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	 * @return array Settings array
 	 */
 	private static function get_all_settings(): array {
-		global $wpdb;
-
-		// Get all wpshadow_ prefixed options
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
-				'wpshadow_%'
-			),
-			ARRAY_A
-		);
+		$all_options = wp_load_alloptions();
 
 		$settings = array();
 
-		foreach ( $results as $row ) {
-			$option_name = $row['option_name'];
+		foreach ( $all_options as $option_name => $option_value ) {
+			if ( 0 !== strpos( (string) $option_name, 'wpshadow_' ) ) {
+				continue;
+			}
 
 			// Skip excluded settings (sensitive data)
 			if ( in_array( $option_name, self::$excluded_settings, true ) ) {
@@ -378,7 +371,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 				continue;
 			}
 
-			$settings[ $option_name ] = maybe_unserialize( $row['option_value'] );
+			$settings[ $option_name ] = maybe_unserialize( $option_value );
 		}
 
 		return $settings;
@@ -407,7 +400,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 
 			// Update option
 			update_option( $option_name, $option_value, false );
-			$imported++;
+			++$imported;
 		}
 
 		return $imported;
@@ -420,7 +413,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	 * @return array Backup info
 	 */
 	private static function create_settings_backup(): array {
-		$settings = self::get_all_settings();
+		$settings  = self::get_all_settings();
 		$backup_id = 'backup_' . time();
 
 		$backup_data = array(
@@ -430,7 +423,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 		);
 
 		// Store backup (keep last 5 backups)
-		$backups = get_option( 'wpshadow_settings_backups', array() );
+		$backups               = get_option( 'wpshadow_settings_backups', array() );
 		$backups[ $backup_id ] = $backup_data;
 
 		// Keep only last 5 backups

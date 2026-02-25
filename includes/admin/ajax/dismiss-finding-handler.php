@@ -19,6 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Dismiss_Finding_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Handle finding dismissal requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_dismiss_finding', 'manage_options', 'nonce' );
 

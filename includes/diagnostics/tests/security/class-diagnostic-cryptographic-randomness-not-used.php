@@ -64,24 +64,18 @@ class Diagnostic_Cryptographic_Randomness_Not_Used extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'use_cryptographic_random' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Cryptographic randomness not used. Use random_bytes() or wp_generate_password() for security tokens,
-						'severity'   =>   'high',
-						'threat_level'   =>   75,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/cryptographic-randomness-not-used'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'use_cryptographic_random' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Cryptographic randomness protections are not configured yet. Using secure random sources helps protect tokens and sensitive workflows.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 75,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/cryptographic-randomness-not-used',
+			);
+		}
+
+		return null;
 	}
 }

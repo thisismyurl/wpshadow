@@ -16,10 +16,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Allow_All_Autofixes_Handler extends AJAX_Handler_Base {
+	/**
+	 * Register AJAX hooks for global auto-fix permission changes.
+	 *
+	 * @since  1.6047.1200
+	 * @return void
+	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_allow_all_autofixes', array( __CLASS__, 'handle' ) );
 	}
 
+	/**
+	 * Handle global auto-fix permission change requests.
+	 *
+	 * @since 1.6047.1200
+	 * @return void Sends JSON response and exits.
+	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_allow_all_autofixes', 'manage_options', 'nonce' );
 

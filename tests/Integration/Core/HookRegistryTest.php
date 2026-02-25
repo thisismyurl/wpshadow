@@ -138,9 +138,9 @@ class HookRegistryTest extends TestCase {
 	public function test_handles_classes_without_get_hooks() {
 		// This should not throw an error even if a class doesn't implement get_hooks.
 		// Hook_Registry should gracefully skip such classes.
-		
+
 		$this->expectNotToPerformAssertions();
-		
+
 		// Initialize should complete without errors.
 		Hook_Registry::init();
 	}
@@ -156,16 +156,16 @@ class HookRegistryTest extends TestCase {
 
 		// Check classes from different directories are discovered.
 		$directories_with_subscribers = array(
-			'Admin'    => 'WPShadow\Admin\AJAX_Handler',
-			'Content'  => 'WPShadow\Content\KB_Post_Type',
-			'Systems'  => 'WPShadow\Core\Error_Handler',
+			'Admin'   => 'WPShadow\Admin\AJAX_Handler',
+			'Content' => 'WPShadow\Content\KB_Post_Type',
+			'Systems' => 'WPShadow\Core\Error_Handler',
 		);
 
 		$discovered_count = 0;
 
 		foreach ( $directories_with_subscribers as $dir => $class ) {
 			if ( class_exists( $class ) && is_subclass_of( $class, 'WPShadow\Core\Hook_Subscriber_Base' ) ) {
-				$discovered_count++;
+				++$discovered_count;
 			}
 		}
 
@@ -273,7 +273,7 @@ class HookRegistryTest extends TestCase {
 	public function test_logs_discovered_classes_in_debug_mode() {
 		// Enable WP_DEBUG for this test.
 		$original_debug = defined( 'WP_DEBUG' ) ? WP_DEBUG : false;
-		
+
 		if ( ! defined( 'WP_DEBUG' ) ) {
 			define( 'WP_DEBUG', true );
 		}

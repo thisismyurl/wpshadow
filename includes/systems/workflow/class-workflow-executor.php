@@ -233,7 +233,7 @@ class Workflow_Executor {
 			'post_status'  => $post->post_status,
 		);
 
-		self::execute_matching_workflows( 'event_trigger', $context );
+		self::execute_matching_workflows( 'pre_publish_review', $context );
 	}
 
 	/**
@@ -253,13 +253,20 @@ class Workflow_Executor {
 	 * Handle comment posted event
 	 */
 	public static function handle_comment_posted( $comment_id ) {
+		$comment = get_comment( $comment_id );
+		$post_id = $comment ? (int) $comment->comment_post_ID : 0;
+		$post    = $post_id ? get_post( $post_id ) : null;
+
 		$context = array(
-			'trigger_type' => 'event',
-			'event_type'   => 'comment_posted',
-			'comment_id'   => $comment_id,
+			'trigger_type'   => 'event',
+			'event_type'     => 'comment_posted',
+			'comment_id'     => $comment_id,
+			'comment_status' => $comment ? $comment->comment_approved : '0',
+			'post_id'        => $post_id,
+			'post_type'      => $post ? $post->post_type : '',
 		);
 
-		self::execute_matching_workflows( 'event_trigger', $context );
+		self::execute_matching_workflows( 'comment_posted', $context );
 	}
 
 	/**
@@ -306,6 +313,57 @@ class Workflow_Executor {
 		switch ( $trigger_id ) {
 			case 'page_load_trigger':
 				return self::page_load_matches( $config, $context );
+
+			case 'post_status_changed':
+				if ( ! empty( $config['post_types'] ) && is_array( $config['post_types'] ) ) {
+					if ( empty( $context['post_type'] ) || ! in_array( $context['post_type'], $config['post_types'], true ) ) {
+						return false;
+					}
+				}
+
+				if ( ! empty( $config['old_status'] ) && 'any' !== $config['old_status'] ) {
+					if ( empty( $context['old_status'] ) || $config['old_status'] !== $context['old_status'] ) {
+						return false;
+					}
+				}
+
+				if ( ! empty( $config['new_status'] ) && 'any' !== $config['new_status'] ) {
+					if ( empty( $context['new_status'] ) || $config['new_status'] !== $context['new_status'] ) {
+						return false;
+					}
+				}
+
+				return true;
+
+			case 'pre_publish_review':
+				if ( ! empty( $config['post_types'] ) && is_array( $config['post_types'] ) ) {
+					if ( empty( $context['post_type'] ) || ! in_array( $context['post_type'], $config['post_types'], true ) ) {
+						return false;
+					}
+				}
+
+				if ( ! empty( $config['post_status'] ) && 'any' !== $config['post_status'] ) {
+					if ( empty( $context['post_status'] ) || $config['post_status'] !== $context['post_status'] ) {
+						return false;
+					}
+				}
+
+				return true;
+
+			case 'comment_posted':
+				if ( ! empty( $config['post_types'] ) && is_array( $config['post_types'] ) ) {
+					if ( empty( $context['post_type'] ) || ! in_array( $context['post_type'], $config['post_types'], true ) ) {
+						return false;
+					}
+				}
+
+				if ( ! empty( $config['comment_status'] ) && 'any' !== $config['comment_status'] ) {
+					if ( empty( $context['comment_status'] ) || $config['comment_status'] !== $context['comment_status'] ) {
+						return false;
+					}
+				}
+
+				return true;
 
 			case 'event_trigger':
 				if ( ! isset( $config['event_type'], $context['event_type'] ) ) {
@@ -545,6 +603,14 @@ class Workflow_Executor {
 		$source_filter = isset( $config['source'] ) ? $config['source'] : 'any';
 		$specific      = isset( $config['specific_diagnostic'] ) ? trim( (string) $config['specific_diagnostic'] ) : '';
 		$issues_only   = ! empty( $config['issues_only'] );
+		$result_filter = isset( $config['result'] ) ? $config['result'] : 'any';
+		$context_diag  = '';
+
+		if ( ! empty( $context['diagnostic'] ) ) {
+			$context_diag = (string) $context['diagnostic'];
+		} elseif ( ! empty( $context['diagnostic_id'] ) ) {
+			$context_diag = (string) $context['diagnostic_id'];
+		}
 
 		if ( 'any' !== $source_filter ) {
 			if ( empty( $context['source'] ) || $source_filter !== $context['source'] ) {
@@ -553,12 +619,20 @@ class Workflow_Executor {
 		}
 
 		if ( '' !== $specific ) {
-			if ( empty( $context['diagnostic'] ) || $context['diagnostic'] !== $specific ) {
+			if ( '' === $context_diag || $context_diag !== $specific ) {
 				return false;
 			}
 		}
 
 		if ( $issues_only && empty( $context['found_issue'] ) ) {
+			return false;
+		}
+
+		if ( 'pass' === $result_filter && ! empty( $context['found_issue'] ) ) {
+			return false;
+		}
+
+		if ( 'fail' === $result_filter && empty( $context['found_issue'] ) ) {
 			return false;
 		}
 
@@ -622,6 +696,9 @@ class Workflow_Executor {
 
 			case 'apply_treatment':
 				return self::execute_treatment( $config, $context );
+
+			case 'check_php_version':
+				return self::execute_php_version_check( $config, $context );
 
 			case 'send_email':
 				return self::execute_email( $config, $context );
@@ -719,7 +796,12 @@ class Workflow_Executor {
 
 		// If specific treatment is set, apply just that one
 		if ( ! empty( $specific_treatment ) ) {
-			$class_name = self::get_treatment_class( $specific_treatment );
+			$class_name = $specific_treatment;
+			if ( false !== strpos( $class_name, '\\' ) ) {
+				$class_name = '\\' . ltrim( $class_name, '\\' );
+			} else {
+				$class_name = self::get_treatment_class( $specific_treatment );
+			}
 
 			if ( ! class_exists( $class_name ) ) {
 				return array(
@@ -743,6 +825,67 @@ class Workflow_Executor {
 		return array(
 			'success' => false,
 			'message' => 'No specific treatment specified.',
+		);
+	}
+
+	/**
+	 * Execute a PHP version check with optional notification.
+	 */
+	private static function execute_php_version_check( $config, $context ) {
+		$minimum_version = isset( $config['minimum_version'] ) ? sanitize_text_field( $config['minimum_version'] ) : PHP_VERSION;
+		$alert_if_below  = ! empty( $config['alert_if_below'] );
+		$notify_method   = isset( $config['notify_method'] ) ? $config['notify_method'] : 'email';
+		$notify_to       = isset( $config['notify_recipient'] ) ? $config['notify_recipient'] : 'admin';
+		$notify_subject  = isset( $config['notify_subject'] ) ? sanitize_text_field( $config['notify_subject'] ) : 'PHP version alert';
+		$notify_message  = isset( $config['notify_message'] ) ? $config['notify_message'] : 'Your site is running PHP {php_version}. Recommended: {minimum_php_version}.';
+
+		$context = array_merge(
+			$context,
+			array(
+				'php_version'         => PHP_VERSION,
+				'minimum_php_version' => $minimum_version,
+			)
+		);
+
+		if ( ! $alert_if_below ) {
+			return array(
+				'success' => true,
+				'message' => __( 'PHP version check completed. Alerts are disabled.', 'wpshadow' ),
+			);
+		}
+
+		if ( version_compare( PHP_VERSION, $minimum_version, '>=' ) ) {
+			return array(
+				'success' => true,
+				'message' => __( 'PHP version is at or above the minimum.', 'wpshadow' ),
+			);
+		}
+
+		if ( 'email' === $notify_method ) {
+			return self::execute_email(
+				array(
+					'recipient' => $notify_to,
+					'subject'   => $notify_subject,
+					'message'   => $notify_message,
+				),
+				$context
+			);
+		}
+
+		if ( 'notification' === $notify_method ) {
+			return self::execute_notification(
+				array(
+					'notification_title'   => $notify_subject,
+					'notification_message' => $notify_message,
+					'notification_type'    => 'warning',
+				),
+				$context
+			);
+		}
+
+		return array(
+			'success' => true,
+			'message' => __( 'PHP version is below the minimum, but no notification was requested.', 'wpshadow' ),
 		);
 	}
 

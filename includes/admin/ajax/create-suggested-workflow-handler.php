@@ -2,8 +2,13 @@
 /**
  * AJAX Handler: Create Suggested Workflow
  *
+ * Creates workflows from Smart Suggestions shown on the automations dashboard.
+ * Handles nonce validation, payload normalization, trigger/action mapping,
+ * workflow persistence, and response payload for inline UI updates.
+ *
  * @package WPShadow
  * @subpackage Admin\Ajax
+ * @since   1.6030.2148
  */
 
 namespace WPShadow\Admin\Ajax;
@@ -18,19 +23,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Handle creation of workflows from suggestions
+ * Create_Suggested_Workflow_Handler class.
+ *
+ * @since 1.6030.2148
  */
 class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 
 	/**
-	 * Register AJAX hook
+	 * Register the AJAX action for creating a suggested workflow.
+	 *
+	 * @since  1.6030.2148
+	 * @return void
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_create_suggested_workflow', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
-	 * Handle AJAX request to create workflow from suggestion
+	 * Create a workflow from a Smart Suggestion payload.
+	 *
+	 * Validates nonce/capability, converts suggestion fields into workflow
+	 * blocks, stores the workflow, logs activity, and returns response data
+	 * for both redirect and inline dashboard rendering.
+	 *
+	 * @since  1.6030.2148
+	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
 		// Security check (accept automations or workflow nonces from different UIs)
@@ -108,9 +125,10 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get a friendly trigger summary.
 	 *
-	 * @param string $trigger_slug Trigger identifier.
-	 * @param array  $trigger_block Trigger block config.
-	 * @return string
+	 * @since  1.6047.1200
+	 * @param  string $trigger_slug  Trigger identifier.
+	 * @param  array  $trigger_block Trigger block config.
+	 * @return string Human-readable trigger label for dashboard cards.
 	 */
 	private static function get_trigger_summary( string $trigger_slug, array $trigger_block ): string {
 		switch ( $trigger_slug ) {
@@ -150,8 +168,9 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get a friendly action summary from workflow blocks.
 	 *
-	 * @param array $blocks Workflow blocks.
-	 * @return string
+	 * @since  1.6047.1200
+	 * @param  array $blocks Workflow blocks.
+	 * @return string Human-readable action label for dashboard cards.
 	 */
 	private static function get_action_summary( array $blocks ): string {
 		$actions = Block_Registry::get_actions();
@@ -175,11 +194,12 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Render an automation card for the dashboard list.
 	 *
-	 * @param string $workflow_id Workflow ID.
-	 * @param string $title Workflow title.
-	 * @param string $trigger_label Trigger summary label.
-	 * @param string $action_label Action summary label.
-	 * @return string
+	 * @since  1.6047.1200
+	 * @param  string $workflow_id   Workflow ID.
+	 * @param  string $title         Workflow title.
+	 * @param  string $trigger_label Trigger summary label.
+	 * @param  string $action_label  Action summary label.
+	 * @return string Rendered HTML card markup.
 	 */
 	private static function render_workflow_card( string $workflow_id, string $title, string $trigger_label, string $action_label ): string {
 		$card_class = 'enabled';
@@ -244,8 +264,9 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Render the automations section wrapper with a single card.
 	 *
-	 * @param string $card_html Rendered card HTML.
-	 * @return string
+	 * @since  1.6047.1200
+	 * @param  string $card_html Rendered card HTML.
+	 * @return string Rendered section HTML markup.
 	 */
 	private static function render_workflow_section( string $card_html ): string {
 		ob_start();
@@ -266,8 +287,9 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map suggestion trigger slug into workflow trigger block
 	 *
-	 * @param string $trigger_slug Trigger identifier from suggestion
-	 * @return array|null Trigger block or null on failure
+	 * @since  1.6030.2148
+	 * @param  string $trigger_slug Trigger identifier from suggestion.
+	 * @return array|null Trigger block structure.
 	 */
 	private static function map_trigger( string $trigger_slug ): ?array {
 		$trigger_slug = sanitize_key( $trigger_slug );
@@ -333,9 +355,10 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map suggestion action slugs into workflow action blocks
 	 *
-	 * @param array  $actions Action slugs
-	 * @param string $title   Workflow title for messaging
-	 * @return array
+	 * @since  1.6030.2148
+	 * @param  array  $actions Action slugs.
+	 * @param  string $title   Workflow title for messaging.
+	 * @return array Workflow action blocks, including a Kanban note action.
 	 */
 	private static function map_actions( array $actions, string $title ): array {
 		$blocks = array();

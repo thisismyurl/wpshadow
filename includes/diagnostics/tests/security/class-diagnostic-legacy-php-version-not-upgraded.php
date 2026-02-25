@@ -42,8 +42,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SaaS company selling WordPress sites to clients. January 2024: host announces\n * PHP 7.4 deprecated on Feb 1. Company must support 50 customer sites. Many use\n * plugins incompatible with PHP 8.0. Emergency compatibility work costs $20K.\n * Prevention: upgrade cycle monitoring 12 months before EOL.\n *
  * **Implementation Notes:**
  * - Uses phpversion() function (requires PHP access)\n * - Checks against official PHP support timeline\n * - Returns severity: high (EOL version), medium (version nearing EOL)\n * - Non-fixable diagnostic (requires hosting provider support)\n *
+ *
  * @since 1.6030.2352
- */\nclass Diagnostic_Legacy_PHP_Version_Not_Upgraded extends Diagnostic_Base {
+ */
+class Diagnostic_Legacy_PHP_Version_Not_Upgraded extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
@@ -83,17 +85,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 		// Check PHP version - 7.2 is the minimum recommended for WordPress
 		if ( version_compare( PHP_VERSION, '7.2', '<' ) ) {
 			return array(
-				'id'            => self::$slug,
-				'title'         => self::$title,
-				'description'   => sprintf(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
 					/* translators: %s: current PHP version */
 					__( 'PHP version %s is outdated. Upgrade to PHP 8.1 or higher for better performance and security.', 'wpshadow' ),
 					PHP_VERSION
 				),
-				'severity'      => 'high',
-				'threat_level'  => 75,
-				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/legacy-php-version-not-upgraded',
+				'severity'     => 'high',
+				'threat_level' => 75,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/legacy-php-version-not-upgraded',
 			);
 		}
 

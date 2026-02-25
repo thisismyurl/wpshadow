@@ -64,24 +64,18 @@ class Diagnostic_Email_Header_Injection_Not_Prevented extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		if (   !has_filter('init',
-						'sanitize_email_headers' ) {
-						return array(
-						'id'   =>   self::$slug,
-						'title'   =>   self::$title,
-						'description'   =>   __('Email header injection not prevented. Validate email addresses and never concatenate user input into email headers.',
-						'severity'   =>   'high',
-						'threat_level'   =>   60,
-						'auto_fixable'   =>   true,
-						'kb_link'   =>   'https://wpshadow.com/kb/email-header-injection-not-prevented'
-						);
-						);,
-						);
-						}
-						return null;
-						}
-						return null;
-						}
-						return null;
+		if ( ! has_filter( 'init', 'sanitize_email_headers' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Email header injection protections are not configured yet. Sanitizing header values helps prevent abuse in outbound mail flows.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 60,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/email-header-injection-not-prevented',
+			);
+		}
+
+		return null;
 	}
 }
