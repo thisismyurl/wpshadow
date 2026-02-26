@@ -66,21 +66,21 @@ class Diagnostic_WCAG_Form_Error_Identification extends Diagnostic_Base {
 
 		// Check for accessible form plugins.
 		$form_plugins = array(
-			'contact-form-7/wp-contact-form-7.php'         => 'Contact Form 7',
-			'wpforms-lite/wpforms.php'                     => 'WPForms',
-			'gravityforms/gravityforms.php'                => 'Gravity Forms',
-			'ninja-forms/ninja-forms.php'                  => 'Ninja Forms',
-			'formidable/formidable.php'                    => 'Formidable Forms',
-			'wpforms/wpforms.php'                          => 'WPForms Pro',
+			'contact-form-7/wp-contact-form-7.php' => 'Contact Form 7',
+			'wpforms-lite/wpforms.php'             => 'WPForms',
+			'gravityforms/gravityforms.php'        => 'Gravity Forms',
+			'ninja-forms/ninja-forms.php'          => 'Ninja Forms',
+			'formidable/formidable.php'            => 'Formidable Forms',
+			'wpforms/wpforms.php'                  => 'WPForms Pro',
 		);
 
-		$active_plugins   = get_option( 'active_plugins', array() );
-		$has_form_plugin  = false;
+		$active_plugins      = get_option( 'active_plugins', array() );
+		$has_form_plugin     = false;
 		$active_form_plugins = array();
 
 		foreach ( $form_plugins as $plugin => $name ) {
 			if ( in_array( $plugin, $active_plugins, true ) ) {
-				$has_form_plugin = true;
+				$has_form_plugin       = true;
 				$active_form_plugins[] = $name;
 			}
 		}
@@ -125,9 +125,7 @@ class Diagnostic_WCAG_Form_Error_Identification extends Diagnostic_Base {
 		}
 
 		// Check WordPress core comment form.
-		if ( current_theme_supports( 'html5', array( 'comment-form' ) ) ) {
-			// HTML5 comment form has better validation.
-		} else {
+		if ( ! current_theme_supports( 'html5', array( 'comment-form' ) ) ) {
 			$issues[] = __( 'Theme should add HTML5 support for comment forms: add_theme_support(\'html5\', array(\'comment-form\'))', 'wpshadow' );
 		}
 

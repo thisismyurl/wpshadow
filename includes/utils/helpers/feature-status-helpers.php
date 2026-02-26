@@ -3,7 +3,7 @@
  * Feature Status Helper Functions
  *
  * Determines feature availability based on @since version tags.
- * Supports showing "Coming Soon" badges for features launching within 65 days.
+ * Non-live features are hidden from UI listings.
  *
  * @package    WPShadow
  * @subpackage Utils
@@ -96,11 +96,11 @@ function wpshadow_get_feature_status( string $since_version ): array {
  *
  * @since  1.6037.1900
  * @param  string $since_version Version string from @since tag.
- * @return bool True if feature should be shown, false if hidden.
+ * @return bool True if feature is live and should be shown.
  */
 function wpshadow_should_show_feature( string $since_version ): bool {
 	$status = wpshadow_get_feature_status( $since_version );
-	return 'hidden' !== $status['status'];
+	return 'active' === $status['status'];
 }
 
 /**
@@ -143,7 +143,7 @@ function wpshadow_get_feature_badge( string $since_version ): string {
  *
  * @since  1.6037.1900
  * @param  array $items Array of items with 'since' keys.
- * @return array Filtered items (excludes hidden features).
+ * @return array Filtered items (includes only live features).
  */
 function wpshadow_filter_features_by_status( array $items ): array {
 	return array_filter( $items, function( $item ) {

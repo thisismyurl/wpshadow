@@ -140,24 +140,33 @@ class Menu_Manager {
 		);
 
 		// Academy (moved above Help priority)
-		add_submenu_page(
-			'wpshadow',
-			__( 'WPShadow Academy', 'wpshadow' ),
-			__( 'Academy', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-academy',
-			array( 'WPShadow\Academy\Academy_UI', 'render_academy_page' )
-		);
+		$academy_available = true;
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) ) {
+			$academy_available = \WPShadow\Academy\Academy_Release_Gate::is_available();
+		}
+
+		if ( $academy_available ) {
+			add_submenu_page(
+				'wpshadow',
+				__( 'WPShadow Academy', 'wpshadow' ),
+				__( 'Academy', 'wpshadow' ),
+				'manage_options',
+				'wpshadow-academy',
+				array( 'WPShadow\\Academy\\Academy_UI', 'render_academy_page' )
+			);
+		}
 
 		// Achievements (with Leaderboard & Rewards as submenus)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Achievements', 'wpshadow' ),
-			__( 'Achievements', 'wpshadow' ),
-			'read',
-			'wpshadow-achievements',
-			array( 'WPShadow\Gamification\Gamification_UI', 'render_achievements_page' )
-		);
+		if ( class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+			add_submenu_page(
+				'wpshadow',
+				__( 'Achievements', 'wpshadow' ),
+				__( 'Achievements', 'wpshadow' ),
+				'read',
+				'wpshadow-achievements',
+				array( 'WPShadow\Gamification\Gamification_UI', 'render_achievements_page' )
+			);
+		}
 
 		// Help & Documentation
 		add_submenu_page(
@@ -184,6 +193,21 @@ class Menu_Manager {
 		}
 
 		$page      = Form_Param_Helper::get( 'page', 'text', '' );
+
+		if ( 'wpshadow-academy' === $page && class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! \WPShadow\Academy\Academy_Release_Gate::is_available() ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				exit;
+			}
+		}
+
+		if ( in_array( $page, array( 'wpshadow-achievements', 'wpshadow-leaderboard', 'wpshadow-rewards' ), true ) && class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+			if ( current_user_can( 'read' ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				exit;
+			}
+		}
+
 		$redirects = array(
 			'wpshadow-guardian-reports'       => 'wpshadow-reports',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',

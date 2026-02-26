@@ -66,39 +66,39 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 	public static function check() {
 		global $wpdb;
 
-		$issues    = array();
-		$warnings  = array();
-		$stats     = array();
+		$issues   = array();
+		$warnings = array();
+		$stats    = array();
 
 		// Get database size.
 		$db_size_query = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
+				'SELECT 
 					SUM(data_length + index_length) as size 
 				FROM information_schema.TABLES 
-				WHERE table_schema = %s",
+				WHERE table_schema = %s',
 				DB_NAME
 			)
 		);
 
-		$db_size = ! empty( $db_size_query ) ? (int) $db_size_query[0]->size : 0;
-		$stats['database_size'] = size_format( $db_size );
+		$db_size                      = ! empty( $db_size_query ) ? (int) $db_size_query[0]->size : 0;
+		$stats['database_size']       = size_format( $db_size );
 		$stats['database_size_bytes'] = $db_size;
 
 		// Check for table overhead (fragmentation).
 		$overhead_query = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
+				'SELECT 
 					table_name, 
 					data_free 
 				FROM information_schema.TABLES 
 				WHERE table_schema = %s 
-				AND data_free > 0",
+				AND data_free > 0',
 				DB_NAME
 			)
 		);
 
-		$total_overhead = 0;
+		$total_overhead       = 0;
 		$tables_with_overhead = array();
 
 		if ( ! empty( $overhead_query ) ) {
@@ -110,7 +110,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 			}
 		}
 
-		$stats['overhead'] = size_format( $total_overhead );
+		$stats['overhead']       = size_format( $total_overhead );
 		$stats['overhead_bytes'] = $total_overhead;
 
 		if ( $total_overhead > 10 * 1024 * 1024 ) { // 10MB.
@@ -183,7 +183,8 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 
 		$has_meta_key_index = false;
 		foreach ( $postmeta_indexes as $index ) {
-			if ( $index->Column_name === 'meta_key' ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- MySQL SHOW INDEX field name.
+			if ( 'meta_key' === $index->Column_name ) {
 				$has_meta_key_index = true;
 				break;
 			}
@@ -250,7 +251,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		$has_optimization_plugin = false;
 		foreach ( $optimization_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_optimization_plugin = true;
+				$has_optimization_plugin      = true;
 				$stats['optimization_plugin'] = dirname( $plugin );
 				break;
 			}
@@ -270,23 +271,23 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Check database charset.
 		$charset_query = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
+				'SELECT 
 					CCSA.character_set_name 
 				FROM information_schema.TABLES T,
 					information_schema.COLLATION_CHARACTER_SET_APPLICABILITY CCSA
 				WHERE CCSA.collation_name = T.table_collation
 				AND T.table_schema = %s
-				AND T.table_name = %s",
+				AND T.table_name = %s',
 				DB_NAME,
 				$wpdb->posts
 			)
 		);
 
 		if ( ! empty( $charset_query ) ) {
-			$charset = $charset_query[0]->character_set_name;
+			$charset          = $charset_query[0]->character_set_name;
 			$stats['charset'] = $charset;
 
-			if ( $charset !== 'utf8mb4' && $charset !== 'utf8' ) {
+			if ( 'utf8mb4' !== $charset && 'utf8' !== $charset ) {
 				$issues[] = sprintf(
 					/* translators: %s: charset name */
 					__( 'Database charset is %s - recommend utf8mb4', 'wpshadow' ),
@@ -306,11 +307,11 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/database-optimization',
 				'context'      => array(
-					'stats'                      => $stats,
-					'has_optimization_plugin'    => $has_optimization_plugin,
-					'tables_with_overhead'       => $tables_with_overhead,
-					'issues'                     => $issues,
-					'warnings'                   => $warnings,
+					'stats'                   => $stats,
+					'has_optimization_plugin' => $has_optimization_plugin,
+					'tables_with_overhead'    => $tables_with_overhead,
+					'issues'                  => $issues,
+					'warnings'                => $warnings,
 				),
 			);
 		}
@@ -326,10 +327,10 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/database-optimization',
 				'context'      => array(
-					'stats'                      => $stats,
-					'has_optimization_plugin'    => $has_optimization_plugin,
-					'tables_with_overhead'       => $tables_with_overhead,
-					'warnings'                   => $warnings,
+					'stats'                   => $stats,
+					'has_optimization_plugin' => $has_optimization_plugin,
+					'tables_with_overhead'    => $tables_with_overhead,
+					'warnings'                => $warnings,
 				),
 			);
 		}

@@ -76,7 +76,7 @@ class Diagnostic_WCAG_Language_Of_Page extends Diagnostic_Base {
 			}
 
 			// Check for hardcoded English on non-English sites.
-			$site_locale = get_locale();
+			$site_locale   = get_locale();
 			$expected_lang = substr( $site_locale, 0, 2 ); // 'en_US' -> 'en'.
 
 			if ( 'en' !== $expected_lang && preg_match( '/<html[^>]+lang=["\']en["\']/', $content ) ) {

@@ -70,22 +70,22 @@ class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 		$warnings  = array();
 
 		// Check for accessibility-ready tag.
-		$tags = $theme->get( 'Tags' );
+		$tags                   = $theme->get( 'Tags' );
 		$is_accessibility_ready = is_array( $tags ) && in_array( 'accessibility-ready', $tags, true );
 
 		// Check for skip link in header.
 		$header_file = $theme_dir . '/header.php';
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
-			
+
 			if ( strpos( $header_content, 'skip-link' ) === false &&
-				 strpos( $header_content, 'skip-to-content' ) === false ) {
+				strpos( $header_content, 'skip-to-content' ) === false ) {
 				$issues[] = __( 'Missing skip-to-content link in header', 'wpshadow' );
 			}
-			
+
 			// Check for proper language attribute.
-			if ( strpos( $header_content, 'lang=' ) === false && 
-				 strpos( $header_content, 'language_attributes()' ) === false ) {
+			if ( strpos( $header_content, 'lang=' ) === false &&
+				strpos( $header_content, 'language_attributes()' ) === false ) {
 				$issues[] = __( 'Missing language attribute in HTML tag', 'wpshadow' );
 			}
 		}
@@ -101,8 +101,8 @@ class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 		foreach ( $template_files as $file ) {
 			if ( file_exists( $file ) ) {
 				$content = file_get_contents( $file );
-				if ( strpos( $content, 'role=' ) !== false || 
-					 strpos( $content, 'aria-label' ) !== false ) {
+				if ( strpos( $content, 'role=' ) !== false ||
+					strpos( $content, 'aria-label' ) !== false ) {
 					$has_aria_landmarks = true;
 					break;
 				}
@@ -122,9 +122,9 @@ class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 		}
 
 		// Check for keyboard navigation support in CSS.
-		$style_files = glob( $theme_dir . '/*.css' );
+		$style_files      = glob( $theme_dir . '/*.css' );
 		$has_focus_styles = false;
-		
+
 		foreach ( $style_files as $style_file ) {
 			$content = file_get_contents( $style_file );
 			if ( strpos( $content, ':focus' ) !== false ) {
@@ -146,9 +146,9 @@ class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 		if ( ! empty( $form_files ) ) {
 			foreach ( $form_files as $file ) {
 				$content = file_get_contents( $file );
-				if ( strpos( $content, '<input' ) !== false && 
-					 strpos( $content, '<label' ) === false && 
-					 strpos( $content, 'aria-label' ) === false ) {
+				if ( strpos( $content, '<input' ) !== false &&
+					strpos( $content, '<label' ) === false &&
+					strpos( $content, 'aria-label' ) === false ) {
 					$warnings[] = __( 'Form inputs should have associated labels or ARIA labels', 'wpshadow' );
 					break;
 				}
@@ -156,13 +156,13 @@ class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 		}
 
 		// Check if theme declares accessibility support.
-		$functions_php = $theme_dir . '/functions.php';
+		$functions_php         = $theme_dir . '/functions.php';
 		$declares_a11y_support = false;
-		
+
 		if ( file_exists( $functions_php ) ) {
 			$functions_content = file_get_contents( $functions_php );
 			if ( strpos( $functions_content, 'accessibility' ) !== false ||
-				 strpos( $functions_content, 'a11y' ) !== false ) {
+				strpos( $functions_content, 'a11y' ) !== false ) {
 				$declares_a11y_support = true;
 			}
 		}

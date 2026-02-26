@@ -67,11 +67,11 @@ class Diagnostic_Login_Page_Accessibility extends Diagnostic_Base {
 
 		// Check for login page plugins that might affect accessibility
 		$accessibility_plugins = array(
-			'wpaccess/wp-access.php'             => 'WP Access',
+			'wpaccess/wp-access.php'                  => 'WP Access',
 			'wp-login-redirect/wp-login-redirect.php' => 'WP Login Redirect',
 		);
 
-		$active_plugins = get_option( 'active_plugins', array() );
+		$active_plugins   = get_option( 'active_plugins', array() );
 		$has_custom_login = false;
 
 		foreach ( $accessibility_plugins as $plugin => $name ) {
@@ -160,10 +160,10 @@ class Diagnostic_Login_Page_Accessibility extends Diagnostic_Base {
 			$description = __( 'Login page accessibility and UX issues detected', 'wpshadow' );
 
 			$details = array(
-				'issues'              => $issues,
-				'custom_login'        => $has_custom_login,
+				'issues'               => $issues,
+				'custom_login'         => $has_custom_login,
 				'filter_modifications' => $filter_count,
-				'ssl_enabled'         => is_ssl(),
+				'ssl_enabled'          => is_ssl(),
 			);
 
 			return array(

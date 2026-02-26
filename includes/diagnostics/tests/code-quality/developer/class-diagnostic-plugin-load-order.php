@@ -64,8 +64,8 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 	 * @return array|null Finding array if load order issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues     = array();
-		$warnings   = array();
+		$issues      = array();
+		$warnings    = array();
 		$plugin_list = array();
 
 		// Get list of active plugins.
@@ -80,7 +80,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 
 		foreach ( $active_plugins as $plugin ) {
 			$plugin_file = WP_PLUGIN_DIR . '/' . $plugin;
-			
+
 			if ( ! file_exists( $plugin_file ) ) {
 				$issues[] = sprintf(
 					/* translators: %s: plugin file */
@@ -90,15 +90,15 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 				continue;
 			}
 
-			$plugin_data = get_plugin_data( $plugin_file, false, false );
+			$plugin_data             = get_plugin_data( $plugin_file, false, false );
 			$plugins_data[ $plugin ] = $plugin_data;
-			$plugin_list[] = $plugin_data['Name'];
+			$plugin_list[]           = $plugin_data['Name'];
 		}
 
 		// Check for known dependency issues.
 		$dependency_map = array(
 			// If plugin A requires plugin B to load first.
-			'wordpress-seo/wp-seo.php' => array( 'jetpack/jetpack.php' ),
+			'wordpress-seo/wp-seo.php'          => array( 'jetpack/jetpack.php' ),
 			'w3-total-cache/w3-total-cache.php' => array( 'query-monitor/query-monitor.php' ),
 		);
 
@@ -108,7 +108,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 					if ( in_array( $dependency, $active_plugins, true ) ) {
 						// Check load order.
 						$plugin_pos = array_search( $plugin, $active_plugins, true );
-						$dep_pos = array_search( $dependency, $active_plugins, true );
+						$dep_pos    = array_search( $dependency, $active_plugins, true );
 
 						if ( $plugin_pos < $dep_pos ) {
 							$warnings[] = sprintf(
@@ -127,7 +127,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 		$mu_plugins_dir = WPMU_PLUGIN_DIR;
 		if ( is_dir( $mu_plugins_dir ) ) {
 			$mu_plugins = glob( $mu_plugins_dir . '/*.php' );
-			
+
 			if ( ! empty( $mu_plugins ) ) {
 				$warnings[] = sprintf(
 					/* translators: %d: number of mu-plugins */
@@ -184,7 +184,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 
 		// Check for too many plugins (performance indicator).
 		$plugin_count = count( $active_plugins );
-		
+
 		if ( $plugin_count > 50 ) {
 			$warnings[] = sprintf(
 				/* translators: %d: number of plugins */
@@ -205,23 +205,23 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 
 		// Check for proper plugin initialization hooks.
 		$plugins_with_init = 0;
-		
+
 		foreach ( $active_plugins as $plugin ) {
 			$plugin_file = WP_PLUGIN_DIR . '/' . $plugin;
 			if ( file_exists( $plugin_file ) ) {
 				$content = file_get_contents( $plugin_file, false, null, 0, 1024 );
-				
+
 				if ( strpos( $content, 'do_action' ) !== false ||
-					 strpos( $content, 'add_action' ) !== false ) {
-					$plugins_with_init++;
+					strpos( $content, 'add_action' ) !== false ) {
+					++$plugins_with_init;
 				}
 			}
 		}
 
 		$stats = array(
-			'total_plugins'          => $plugin_count,
-			'plugins_with_hooks'     => $plugins_with_init,
-			'plugin_count'           => $plugin_count,
+			'total_plugins'      => $plugin_count,
+			'plugins_with_hooks' => $plugins_with_init,
+			'plugin_count'       => $plugin_count,
 		);
 
 		// If critical issues found.

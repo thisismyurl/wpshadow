@@ -69,36 +69,4 @@ class Treatment_Memory_Limit_Exceeded_During_Export extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Memory_Limit_Exceeded_During_Export' );
 	}
-
-	/**
-	 * Convert memory string to bytes.
-	 *
-	 * @since  1.7033.1200
-	 * @param  string $value Memory limit string (e.g., "128M", "2G").
-	 * @return int Memory in bytes.
-	 */
-	private static function convert_to_bytes( $value ) {
-		if ( -1 === (int) $value ) {
-			return PHP_INT_MAX; // Unlimited.
-		}
-
-		$value = trim( $value );
-		$last = strtolower( $value[ strlen( $value ) - 1 ] ?? '' );
-
-		$value = (int) $value;
-
-		switch ( $last ) {
-			case 'g':
-				$value *= 1024 * 1024 * 1024;
-				break;
-			case 'm':
-				$value *= 1024 * 1024;
-				break;
-			case 'k':
-				$value *= 1024;
-				break;
-		}
-
-		return $value;
-	}
 }

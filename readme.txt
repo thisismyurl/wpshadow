@@ -1,8 +1,8 @@
 === WPShadow ===
 Contributors: thisismyurl
-Tags: diagnostics, health, backup, recovery, emergency, documentation, maintenance, plugin-audit, error-log, accessibility, performance, security, compliance, inclusive
+Tags: security, performance, diagnostics, site-health, accessibility
 Requires at least: 6.4
-Requires PHP: 8.1.29
+Requires PHP: 8.1
 Tested up to: 6.6
 Stable tag: 1.6035.2150
 License: GPL v2 or later
@@ -30,7 +30,7 @@ WPShadow is a philosophy-first WordPress plugin that provides comprehensive heal
 = Requirements =
 
 * WordPress 6.4+
-* PHP 8.1.29+
+* PHP 8.1+
 
 == Installation ==
 
@@ -61,7 +61,7 @@ Yes. WPShadow includes full multisite support.
 
 = What PHP versions are supported? =
 
-WPShadow requires PHP 8.1.29 or higher.
+WPShadow requires PHP 8.1 or higher.
 
 == Key Principles ==
 

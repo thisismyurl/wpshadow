@@ -105,12 +105,12 @@ class Diagnostic_Zoom_Text_Scaling_Support extends Diagnostic_Base {
 				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/zoom-support',
 				'details'      => array(
-					'recommendations'       => $issues,
-					'wcag_requirement'      => 'WCAG 2.1 1.4.4 Resize text (at least 200%)',
-					'testing_method'        => 'Press Ctrl/Cmd + multiple times to zoom to 200%, navigate entire interface',
-					'common_issue'          => 'Sidebar collapses or hidden at small viewports (breaking desktop zoom)',
-					'affected_population'   => 'Low vision users (~8% of population)',
-					'mobile_benefit'        => 'Improves mobile experience for all users',
+					'recommendations'     => $issues,
+					'wcag_requirement'    => 'WCAG 2.1 1.4.4 Resize text (at least 200%)',
+					'testing_method'      => 'Press Ctrl/Cmd + multiple times to zoom to 200%, navigate entire interface',
+					'common_issue'        => 'Sidebar collapses or hidden at small viewports (breaking desktop zoom)',
+					'affected_population' => 'Low vision users (~8% of population)',
+					'mobile_benefit'      => 'Improves mobile experience for all users',
 				),
 			);
 		}

@@ -49,6 +49,10 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
+		if ( ! defined( 'WPSHADOW_AUTO_DEPLOY' ) || ! WPSHADOW_AUTO_DEPLOY ) {
+			return array();
+		}
+
 		return array(
 			'init'          => 'register_webhook_endpoint',
 			'parse_request' => 'handle_webhook_request',
@@ -193,54 +197,11 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 * @return array Result with success status and message.
 	 */
 	private static function execute_git_pull(): array {
-		// Get plugin directory
-		$plugin_dir = dirname( dirname( dirname( __FILE__ ) ) );
-
-		// Change to plugin directory
-		$old_dir = getcwd();
-		chdir( $plugin_dir );
-
-		// Execute git pull
-		$output = array();
-		$return_var = 0;
-
-		// First, fetch latest changes
-		exec( 'git fetch origin main 2>&1', $output, $return_var );
-
-		if ( $return_var !== 0 ) {
-			chdir( $old_dir );
-			return array(
-				'success' => false,
-				'message' => 'Git fetch failed',
-				'output'  => implode( "\n", $output ),
-			);
-		}
-
-		// Then, pull changes
-		$output = array();
-		exec( 'git pull origin main 2>&1', $output, $return_var );
-
-		// Restore directory
-		chdir( $old_dir );
-
-		if ( $return_var === 0 ) {
-			// Clear any opcache to ensure new code is loaded
-			if ( function_exists( 'opcache_reset' ) ) {
-				opcache_reset();
-			}
-
-			return array(
-				'success' => true,
-				'message' => 'Successfully pulled latest code from GitHub',
-				'output'  => implode( "\n", $output ),
-			);
-		} else {
-			return array(
-				'success' => false,
-				'message' => 'Git pull failed',
-				'output'  => implode( "\n", $output ),
-			);
-		}
+		return array(
+			'success' => false,
+			'message' => __( 'Auto-deploy command execution is disabled in this build.', 'wpshadow' ),
+			'output'  => '',
+		);
 	}
 
 	/**

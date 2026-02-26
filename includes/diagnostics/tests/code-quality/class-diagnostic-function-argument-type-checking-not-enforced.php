@@ -65,13 +65,13 @@ class Diagnostic_Function_Argument_Type_Checking_Not_Enforced extends Diagnostic
 	public static function check() {
 		if ( ! has_filter( 'init', 'enforce_type_hints' ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Function argument type checking is not enforced yet. Adding type hints can improve reliability and reduce runtime mistakes.', 'wpshadow' ),
-				'severity'    => 'low',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Function argument type checking is not enforced yet. Adding type hints can improve reliability and reduce runtime mistakes.', 'wpshadow' ),
+				'severity'     => 'low',
 				'threat_level' => 10,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/function-argument-type-checking-not-enforced',
+				'kb_link'      => 'https://wpshadow.com/kb/function-argument-type-checking-not-enforced',
 			);
 		}
 

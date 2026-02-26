@@ -65,31 +65,4 @@ class Treatment_Pr_Media_Outreach extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Pr_Media_Outreach' );
 	}
-
-	/**
-	 * Find pages or posts by keyword search.
-	 *
-	 * @since  1.6035.1400
-	 * @param  array $keywords Keywords to search for.
-	 * @return array List of matching page titles.
-	 */
-	private static function find_pages_by_keywords( array $keywords ): array {
-		$matches = array();
-
-		foreach ( $keywords as $keyword ) {
-			$results = get_posts(
-				array(
-					's'              => $keyword,
-					'post_type'      => array( 'page', 'post' ),
-					'posts_per_page' => 5,
-				)
-			);
-
-			foreach ( $results as $post ) {
-				$matches[ $post->ID ] = get_the_title( $post );
-			}
-		}
-
-		return array_values( $matches );
-	}
 }

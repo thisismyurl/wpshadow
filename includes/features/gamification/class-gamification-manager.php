@@ -88,6 +88,10 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 * @return     void
 	 */
 	public static function init() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		$manager = self::get_instance();
 
 		// Register hooks
@@ -103,6 +107,10 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public function setup_hooks() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		// Diagnostic events
 		add_action( 'wpshadow_after_diagnostic_check', array( $this, 'handle_diagnostic_run' ), 10, 3 );
 
@@ -397,6 +405,10 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public function register_dashboard_widgets() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -579,6 +591,10 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		if ( ! str_contains( $hook, 'wpshadow' ) ) {
 			return;
 		}
@@ -620,6 +636,17 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 * @return array Summary data.
 	 */
 	public static function get_user_summary( $user_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array(
+				'points'             => 0,
+				'badges'             => array(),
+				'achievements'       => array(),
+				'rank'               => null,
+				'next_milestone'     => null,
+				'redeemable_rewards' => array(),
+			);
+		}
+
 		return array(
 			'points'              => Points_System::get_balance( $user_id ),
 			'badges'              => Badge_System::get_earned_badges( $user_id ),

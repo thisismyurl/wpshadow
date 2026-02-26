@@ -72,7 +72,7 @@ class Diagnostic_CPT_Menu_Visibility extends Diagnostic_Base {
 		$post_types = get_post_types( array(), 'objects' );
 
 		// Filter to only custom post types (exclude built-in).
-		$built_in = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
+		$built_in          = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
 		$custom_post_types = array_filter(
 			$post_types,
 			function ( $pt ) use ( $built_in ) {
@@ -227,13 +227,13 @@ class Diagnostic_CPT_Menu_Visibility extends Diagnostic_Base {
 
 		if ( ! empty( $issues ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => implode( '. ', $issues ),
-				'severity'    => 'high',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => implode( '. ', $issues ),
+				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cpt-menu-visibility',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-menu-visibility',
 			);
 		}
 

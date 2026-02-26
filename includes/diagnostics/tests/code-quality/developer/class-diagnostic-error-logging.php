@@ -64,24 +64,24 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 	 * @return array|null Finding array if logging issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues    = array();
-		$warnings  = array();
-		$config    = array();
+		$issues   = array();
+		$warnings = array();
+		$config   = array();
 
 		// Check WP_DEBUG.
-		$wp_debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
+		$wp_debug           = defined( 'WP_DEBUG' ) && WP_DEBUG;
 		$config['WP_DEBUG'] = $wp_debug;
 
 		// Check WP_DEBUG_LOG.
-		$wp_debug_log = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
+		$wp_debug_log           = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
 		$config['WP_DEBUG_LOG'] = $wp_debug_log;
 
 		// Check WP_DEBUG_DISPLAY.
-		$wp_debug_display = defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY;
+		$wp_debug_display           = defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY;
 		$config['WP_DEBUG_DISPLAY'] = $wp_debug_display;
 
 		// Check SCRIPT_DEBUG.
-		$script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+		$script_debug           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 		$config['SCRIPT_DEBUG'] = $script_debug;
 
 		// Determine environment (production vs development).
@@ -107,14 +107,17 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 			$debug_log = WP_CONTENT_DIR . '/debug.log';
 			if ( file_exists( $debug_log ) ) {
 				$config['debug_log_exists'] = true;
-				$config['debug_log_size'] = filesize( $debug_log );
-				
+				$config['debug_log_size']   = filesize( $debug_log );
+
 				// Check if log is publicly accessible.
 				$debug_log_url = content_url( '/debug.log' );
-				$response = wp_remote_head( $debug_log_url, array(
-					'timeout'   => 5,
-					'sslverify' => false,
-				) );
+				$response      = wp_remote_head(
+					$debug_log_url,
+					array(
+						'timeout'   => 5,
+						'sslverify' => false,
+					)
+				);
 
 				if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 					$issues[] = __( 'debug.log is publicly accessible - security risk', 'wpshadow' );
@@ -143,34 +146,34 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 		}
 
 		// Check PHP error logging.
-		$php_error_log = ini_get( 'error_log' );
+		$php_error_log           = ini_get( 'error_log' );
 		$config['php_error_log'] = $php_error_log;
 
-		if ( empty( $php_error_log ) || $php_error_log === 'syslog' ) {
+		if ( empty( $php_error_log ) || 'syslog' === $php_error_log ) {
 			$warnings[] = __( 'PHP error_log not configured to file', 'wpshadow' );
 		}
 
 		// Check error reporting level.
-		$error_reporting = error_reporting();
+		$error_reporting           = error_reporting();
 		$config['error_reporting'] = $error_reporting;
 
-		if ( ! $is_local && $error_reporting === E_ALL ) {
+		if ( ! $is_local && E_ALL === $error_reporting ) {
 			$warnings[] = __( 'Error reporting set to E_ALL in production - consider reducing', 'wpshadow' );
 		}
 
 		// Check display_errors.
-		$display_errors = ini_get( 'display_errors' );
+		$display_errors           = ini_get( 'display_errors' );
 		$config['display_errors'] = $display_errors;
 
-		if ( ! $is_local && $display_errors === '1' ) {
+		if ( ! $is_local && '1' === $display_errors ) {
 			$issues[] = __( 'PHP display_errors enabled in production - security risk', 'wpshadow' );
 		}
 
 		// Check log_errors.
-		$log_errors = ini_get( 'log_errors' );
+		$log_errors           = ini_get( 'log_errors' );
 		$config['log_errors'] = $log_errors;
 
-		if ( $log_errors !== '1' ) {
+		if ( '1' !== $log_errors ) {
 			$warnings[] = __( 'PHP log_errors disabled - errors not being logged', 'wpshadow' );
 		}
 
@@ -184,7 +187,7 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 		$has_error_monitoring = false;
 		foreach ( $error_monitoring_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_error_monitoring = true;
+				$has_error_monitoring       = true;
 				$config['error_monitoring'] = dirname( $plugin );
 				break;
 			}
@@ -198,9 +201,9 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 		$wp_config_file = ABSPATH . 'wp-config.php';
 		if ( file_exists( $wp_config_file ) && is_readable( $wp_config_file ) ) {
 			$wp_config_content = file_get_contents( $wp_config_file );
-			
+
 			// Check if constants are defined in wp-config.
-			$has_debug_config = strpos( $wp_config_content, 'WP_DEBUG' ) !== false;
+			$has_debug_config           = strpos( $wp_config_content, 'WP_DEBUG' ) !== false;
 			$config['has_debug_config'] = $has_debug_config;
 
 			if ( ! $has_debug_config ) {

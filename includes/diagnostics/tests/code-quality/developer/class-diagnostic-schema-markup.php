@@ -64,10 +64,10 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 	 * @return array|null Finding array if schema issues detected, null otherwise.
 	 */
 	public static function check() {
-		$theme     = wp_get_theme();
-		$theme_dir = $theme->get_stylesheet_directory();
-		$issues    = array();
-		$warnings  = array();
+		$theme         = wp_get_theme();
+		$theme_dir     = $theme->get_stylesheet_directory();
+		$issues        = array();
+		$warnings      = array();
 		$found_schemas = array();
 
 		// Common schema types to check for.
@@ -85,12 +85,12 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 		$header_file = $theme_dir . '/header.php';
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
-			
+
 			// Check for itemscope/itemtype (Microdata).
 			if ( strpos( $header_content, 'itemscope' ) !== false ) {
 				$found_schemas[] = 'Microdata';
 			}
-			
+
 			// Check for JSON-LD script tags.
 			if ( strpos( $header_content, 'application/ld+json' ) !== false ) {
 				$found_schemas[] = 'JSON-LD';
@@ -108,18 +108,18 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 		foreach ( $template_files as $file ) {
 			if ( file_exists( $file ) ) {
 				$content = file_get_contents( $file );
-				
+
 				// Check for schema.org types.
 				foreach ( $schema_types as $type ) {
 					if ( strpos( $content, 'schema.org/' . $type ) !== false ||
-						 strpos( $content, '"@type": "' . $type . '"' ) !== false ) {
+						strpos( $content, '"@type": "' . $type . '"' ) !== false ) {
 						$found_schemas[] = $type;
 					}
 				}
-				
+
 				// Check for itemscope/itemtype.
-				if ( strpos( $content, 'itemscope' ) !== false && 
-					 ! in_array( 'Microdata', $found_schemas, true ) ) {
+				if ( strpos( $content, 'itemscope' ) !== false &&
+					! in_array( 'Microdata', $found_schemas, true ) ) {
 					$found_schemas[] = 'Microdata';
 				}
 			}
@@ -129,11 +129,11 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 		$functions_php = $theme_dir . '/functions.php';
 		if ( file_exists( $functions_php ) ) {
 			$functions_content = file_get_contents( $functions_php );
-			
+
 			// Check for schema-related functions.
 			if ( strpos( $functions_content, 'schema' ) !== false ||
-				 strpos( $functions_content, 'structured_data' ) !== false ||
-				 strpos( $functions_content, 'json_ld' ) !== false ) {
+				strpos( $functions_content, 'structured_data' ) !== false ||
+				strpos( $functions_content, 'json_ld' ) !== false ) {
 				$found_schemas[] = 'Custom Implementation';
 			}
 		}
@@ -146,22 +146,22 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 			$issues[] = __( 'No Schema.org structured data detected', 'wpshadow' );
 		} else {
 			// Check for essential schema types.
-			$has_article_schema = false;
+			$has_article_schema      = false;
 			$has_organization_schema = false;
-			
+
 			foreach ( $found_schemas as $schema ) {
 				if ( in_array( $schema, array( 'Article', 'BlogPosting' ), true ) ) {
 					$has_article_schema = true;
 				}
-				if ( $schema === 'Organization' || $schema === 'WebSite' ) {
+				if ( 'Organization' === $schema || 'WebSite' === $schema ) {
 					$has_organization_schema = true;
 				}
 			}
-			
+
 			if ( ! $has_article_schema ) {
 				$warnings[] = __( 'Missing Article/BlogPosting schema for blog posts', 'wpshadow' );
 			}
-			
+
 			if ( ! $has_organization_schema ) {
 				$warnings[] = __( 'Missing Organization/WebSite schema for site identity', 'wpshadow' );
 			}
@@ -172,7 +172,7 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 		foreach ( glob( $theme_dir . '/*.php' ) as $file ) {
 			$content = file_get_contents( $file );
 			if ( strpos( $content, 'BreadcrumbList' ) !== false ||
-				 strpos( $content, 'breadcrumb' ) !== false ) {
+				strpos( $content, 'breadcrumb' ) !== false ) {
 				$breadcrumb_found = true;
 				break;
 			}
@@ -208,11 +208,11 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/schema-markup',
 				'context'      => array(
-					'theme_name'      => $theme->get( 'Name' ),
-					'found_schemas'   => $found_schemas,
-					'has_seo_plugin'  => $has_seo_plugin,
-					'issues'          => $issues,
-					'warnings'        => $warnings,
+					'theme_name'     => $theme->get( 'Name' ),
+					'found_schemas'  => $found_schemas,
+					'has_seo_plugin' => $has_seo_plugin,
+					'issues'         => $issues,
+					'warnings'       => $warnings,
 				),
 			);
 		}
@@ -228,10 +228,10 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/schema-markup',
 				'context'      => array(
-					'theme_name'      => $theme->get( 'Name' ),
-					'found_schemas'   => $found_schemas,
-					'has_seo_plugin'  => $has_seo_plugin,
-					'warnings'        => $warnings,
+					'theme_name'     => $theme->get( 'Name' ),
+					'found_schemas'  => $found_schemas,
+					'has_seo_plugin' => $has_seo_plugin,
+					'warnings'       => $warnings,
 				),
 			);
 		}

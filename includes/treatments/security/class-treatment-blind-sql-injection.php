@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,66 +82,5 @@ class Treatment_Blind_SQL_Injection extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Blind_SQL_Injection' );
-	}
-
-	/**
-	 * Scan a directory for PHP files.
-	 *
-	 * @since  1.2033.2102
-	 * @param  string $dir Directory to scan.
-	 * @param  int    $limit Maximum number of files to scan.
-	 * @return array Array of file paths.
-	 */
-	private static function scan_directory_for_php_files( $dir, $limit = 50 ) {
-		$files = array();
-		$count = 0;
-
-		if ( ! is_dir( $dir ) ) {
-			return $files;
-		}
-
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator( $dir, \RecursiveDirectoryIterator::SKIP_DOTS ),
-			\RecursiveIteratorIterator::SELF_FIRST
-		);
-
-		foreach ( $iterator as $file ) {
-			if ( $count >= $limit ) {
-				break;
-			}
-
-			if ( $file->isFile() && 'php' === $file->getExtension() ) {
-				$files[] = $file->getPathname();
-				$count++;
-			}
-		}
-
-		return $files;
-	}
-
-	/**
-	 * Scan a file for dangerous patterns.
-	 *
-	 * @since  1.2033.2102
-	 * @param  string $file File path.
-	 * @param  array  $patterns Array of regex patterns to search for.
-	 * @return array Array of violations found.
-	 */
-	private static function scan_file_for_patterns( $file, $patterns ) {
-		$violations = array();
-
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( $file );
-		if ( false === $content ) {
-			return $violations;
-		}
-
-		foreach ( $patterns as $pattern => $description ) {
-			if ( preg_match( $pattern, $content ) ) {
-				$violations[] = $description;
-			}
-		}
-
-		return $violations;
 	}
 }

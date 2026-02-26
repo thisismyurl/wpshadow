@@ -98,11 +98,11 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 			);
 		}
 
-		$registry = WP_Block_Patterns_Registry::get_instance();
+		$registry            = WP_Block_Patterns_Registry::get_instance();
 		$registered_patterns = $registry->get_all_registered();
 
 		// Count patterns by prefix.
-		$pattern_counts = array();
+		$pattern_counts   = array();
 		$missing_prefixes = array();
 
 		foreach ( self::$expected_pattern_prefixes as $prefix ) {
@@ -124,12 +124,15 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 			$description = sprintf(
 				/* translators: %s: comma-separated list of pattern prefixes */
 				__( 'No block patterns found for the following content types: %s. ', 'wpshadow' ),
-				implode( ', ', array_map(
-					function( $prefix ) {
-						return str_replace( 'wpshadow/', '', $prefix );
-					},
-					$missing_prefixes
-				) )
+				implode(
+					', ',
+					array_map(
+						function ( $prefix ) {
+							return str_replace( 'wpshadow/', '', $prefix );
+						},
+						$missing_prefixes
+					)
+				)
 			);
 
 			$description .= __( 'Block patterns provide pre-designed layouts for faster content creation. Without them, users must build layouts from scratch.', 'wpshadow' );
@@ -160,9 +163,9 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 			return 0;
 		}
 
-		$registry = WP_Block_Patterns_Registry::get_instance();
+		$registry            = WP_Block_Patterns_Registry::get_instance();
 		$registered_patterns = $registry->get_all_registered();
-		$count = 0;
+		$count               = 0;
 
 		foreach ( $registered_patterns as $pattern ) {
 			if ( isset( $pattern['name'] ) && strpos( $pattern['name'], 'wpshadow/' ) === 0 ) {

@@ -65,13 +65,13 @@ class Diagnostic_Graceful_Feature_Degradation_Not_Tested extends Diagnostic_Base
 	public static function check() {
 		if ( ! has_filter( 'init', 'test_feature_degradation' ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Graceful feature degradation testing is not in place yet. Verifying fallback behavior helps keep experiences stable when dependencies are unavailable.', 'wpshadow' ),
-				'severity'    => 'low',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Graceful feature degradation testing is not in place yet. Verifying fallback behavior helps keep experiences stable when dependencies are unavailable.', 'wpshadow' ),
+				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/graceful-feature-degradation-not-tested',
+				'kb_link'      => 'https://wpshadow.com/kb/graceful-feature-degradation-not-tested',
 			);
 		}
 

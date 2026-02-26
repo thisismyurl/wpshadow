@@ -126,10 +126,21 @@ if ($configExtra = getenv_docker('WORDPRESS_CONFIG_EXTRA', '')) {
 	eval($configExtra);
 }
 
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', __DIR__ . '/wp-content/debug.log' );
-define( 'WP_DEBUG_DISPLAY', true );
-define( 'WP_DISABLE_FATAL_ERROR_HANDLER', true );
+if ( ! defined( 'WP_DEBUG' ) ) {
+	define( 'WP_DEBUG', true );
+}
+
+if ( ! defined( 'WP_DEBUG_LOG' ) ) {
+	define( 'WP_DEBUG_LOG', __DIR__ . '/wp-content/debug.log' );
+}
+
+if ( ! defined( 'WP_DEBUG_DISPLAY' ) ) {
+	define( 'WP_DEBUG_DISPLAY', true );
+}
+
+if ( ! defined( 'WP_DISABLE_FATAL_ERROR_HANDLER' ) ) {
+	define( 'WP_DISABLE_FATAL_ERROR_HANDLER', true );
+}
 
 /* That's all, stop editing! Happy publishing. */
 

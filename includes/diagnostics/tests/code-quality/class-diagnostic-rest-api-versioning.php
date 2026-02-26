@@ -90,10 +90,10 @@ class Diagnostic_REST_API_Versioning extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning',
 				'details'      => array(
-					'issue' => 'unversioned_endpoints',
-					'unversioned_count' => count( $unversioned ),
-					'endpoints' => array_slice( $unversioned, 0, 10 ),
-					'message' => sprintf(
+					'issue'                  => 'unversioned_endpoints',
+					'unversioned_count'      => count( $unversioned ),
+					'endpoints'              => array_slice( $unversioned, 0, 10 ),
+					'message'                => sprintf(
 						/* translators: %d: number of endpoints */
 						__( '%d REST API endpoints lack version numbers', 'wpshadow' ),
 						count( $unversioned )
@@ -104,19 +104,19 @@ class Diagnostic_REST_API_Versioning extends Diagnostic_Base {
 						'Support multiple clients',
 						'Deprecate old versions',
 					),
-					'versioning_benefits' => array(
+					'versioning_benefits'    => array(
 						'v1 used by legacy clients' => 'Old apps continue working',
-						'v2 with new structure' => 'New apps get improved API',
-						'Parallel versions' => 'No breaking changes for existing users',
-						'Deprecation timeline' => 'Clear path to migration',
+						'v2 with new structure'     => 'New apps get improved API',
+						'Parallel versions'         => 'No breaking changes for existing users',
+						'Deprecation timeline'      => 'Clear path to migration',
 					),
-					'semantic_versioning' => array(
-						'v1' => 'Major version 1',
-						'v2' => 'Major version 2 (breaking changes)',
-						'v1.1' => 'Minor update (compatible)',
+					'semantic_versioning'    => array(
+						'v1'     => 'Major version 1',
+						'v2'     => 'Major version 2 (breaking changes)',
+						'v1.1'   => 'Minor update (compatible)',
 						'v1.1.1' => 'Patch (bug fix)',
 					),
-					'version_in_namespace' => "register_rest_route('my-plugin/v1', '/items', array(
+					'version_in_namespace'   => "register_rest_route('my-plugin/v1', '/items', array(
 	// Namespace includes version number
 	'methods' => 'GET',
 	'callback' => 'get_items',
@@ -125,28 +125,28 @@ class Diagnostic_REST_API_Versioning extends Diagnostic_Base {
 
 // Not this:
 register_rest_route('my-plugin', '/items', ...); // ❌ No version",
-					'deprecation_strategy' => array(
+					'deprecation_strategy'   => array(
 						'1. Announce v1 deprecation',
 						'2. Support v1 for 6-12 months',
 						'3. Provide migration guide',
 						'4. Remove v1 endpoint',
 					),
-					'deprecation_notice' => "add_filter('rest_post_dispatch', function(\$response, \$server) {
+					'deprecation_notice'     => "add_filter('rest_post_dispatch', function(\$response, \$server) {
 	header('Deprecation: true');
 	header('Sunset: ' . gmdate('r', strtotime('+6 months')));
 	header('Link: <https://docs.example.com/migration>; rel=\"deprecation\"');
 	
 	return \$response;
 }, 10, 2);",
-					'api_documentation' => __( 'Always document versioning strategy and migration paths', 'wpshadow' ),
-					'client_awareness' => __( 'Clients should be aware of API version they depend on', 'wpshadow' ),
-					'testing_versions' => array(
+					'api_documentation'      => __( 'Always document versioning strategy and migration paths', 'wpshadow' ),
+					'client_awareness'       => __( 'Clients should be aware of API version they depend on', 'wpshadow' ),
+					'testing_versions'       => array(
 						'Test v1 with legacy clients',
 						'Test v2 with new clients',
 						'Verify backward compatibility',
 						'Check deprecation headers',
 					),
-					'recommendation' => __( 'Use version numbers in all custom REST API namespaces', 'wpshadow' ),
+					'recommendation'         => __( 'Use version numbers in all custom REST API namespaces', 'wpshadow' ),
 				),
 			);
 		}
@@ -154,14 +154,14 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 		// Pattern 2: Deprecated WordPress REST API endpoints still in use
 		$deprecated_endpoints = array(
 			'/wp/v2/posts/(?P<id>[\\d]+)/revisions' => '5.0',
-			'/wp/v2/media/(?P<id>[\\d]+)/post' => '5.4',
+			'/wp/v2/media/(?P<id>[\\d]+)/post'      => '5.4',
 		);
 
 		$using_deprecated = array();
 		foreach ( $deprecated_endpoints as $endpoint => $version ) {
 			if ( isset( $routes[ $endpoint ] ) ) {
 				$using_deprecated[] = array(
-					'endpoint' => $endpoint,
+					'endpoint'         => $endpoint,
 					'deprecated_since' => $version,
 				);
 			}
@@ -177,35 +177,35 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning',
 				'details'      => array(
-					'issue' => 'deprecated_endpoints',
-					'deprecated_endpoints' => $using_deprecated,
-					'message' => sprintf(
+					'issue'                   => 'deprecated_endpoints',
+					'deprecated_endpoints'    => $using_deprecated,
+					'message'                 => sprintf(
 						/* translators: %d: number of endpoints */
 						__( '%d deprecated REST API endpoints detected', 'wpshadow' ),
 						count( $using_deprecated )
 					),
-					'what_are_deprecated' => __( 'Endpoints planned for removal in future WordPress versions', 'wpshadow' ),
-					'risks' => array(
+					'what_are_deprecated'     => __( 'Endpoints planned for removal in future WordPress versions', 'wpshadow' ),
+					'risks'                   => array(
 						'Future WordPress updates may break',
 						'No security updates for deprecated code',
 						'Performance not optimized',
 						'Possible data loss',
 					),
-					'migration_required' => __( 'Update code to use current endpoints before deprecation removal', 'wpshadow' ),
-					'finding_usage' => array(
+					'migration_required'      => __( 'Update code to use current endpoints before deprecation removal', 'wpshadow' ),
+					'finding_usage'           => array(
 						'1. Search codebase for endpoint URLs',
 						'2. Check plugin integrations',
 						'3. Review third-party API calls',
 						'4. Update to current equivalents',
 					),
-					'common_deprecations' => array(
-						'Revisions endpoint' => 'Changed structure in v2',
+					'common_deprecations'     => array(
+						'Revisions endpoint'       => 'Changed structure in v2',
 						'Post attachment endpoint' => 'Consolidated in newer versions',
-						'Comment endpoints' => 'Evolved in WordPress 5.1+',
+						'Comment endpoints'        => 'Evolved in WordPress 5.1+',
 					),
-					'migration_planning' => __( 'Schedule endpoint migration during next plugin/theme update', 'wpshadow' ),
+					'migration_planning'      => __( 'Schedule endpoint migration during next plugin/theme update', 'wpshadow' ),
 					'testing_after_migration' => __( 'Test all API calls after updating endpoints', 'wpshadow' ),
-					'recommendation' => __( 'Update code to use non-deprecated REST API endpoints', 'wpshadow' ),
+					'recommendation'          => __( 'Update code to use non-deprecated REST API endpoints', 'wpshadow' ),
 				),
 			);
 		}
@@ -228,9 +228,9 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning',
 				'details'      => array(
-					'issue' => 'undocumented_endpoints',
-					'custom_endpoint_count' => count( $custom_routes ),
-					'message' => sprintf(
+					'issue'                     => 'undocumented_endpoints',
+					'custom_endpoint_count'     => count( $custom_routes ),
+					'message'                   => sprintf(
 						/* translators: %d: number of custom endpoints */
 						__( '%d custom REST API endpoints - documentation recommended', 'wpshadow' ),
 						count( $custom_routes )
@@ -241,19 +241,19 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 						'Parameter documentation',
 						'Error response documentation',
 					),
-					'documentation_includes' => array(
-						'Endpoint URL' => '/my-plugin/v1/items',
-						'Supported methods' => 'GET, POST, PUT, DELETE',
+					'documentation_includes'    => array(
+						'Endpoint URL'            => '/my-plugin/v1/items',
+						'Supported methods'       => 'GET, POST, PUT, DELETE',
 						'Authentication required' => 'Yes/No, required capability',
-						'Parameters' => 'Type, required, description',
-						'Response format' => 'Example JSON response',
-						'Errors' => 'Possible error codes and meanings',
+						'Parameters'              => 'Type, required, description',
+						'Response format'         => 'Example JSON response',
+						'Errors'                  => 'Possible error codes and meanings',
 					),
-					'documentation_tools' => array(
-						'OpenAPI/Swagger' => 'Industry standard',
-						'README file' => 'Simple markdown',
+					'documentation_tools'       => array(
+						'OpenAPI/Swagger'        => 'Industry standard',
+						'README file'            => 'Simple markdown',
 						'API documentation site' => 'Dedicated site like Postman',
-						'Inline comments' => 'In PHP code',
+						'Inline comments'        => 'In PHP code',
 					),
 					'adding_schema_to_endpoint' => "register_rest_route('my-plugin/v1', '/items', array(
 	'methods' => 'GET',
@@ -276,15 +276,15 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 		),
 	),
 ));",
-					'swagger_documentation' => __( 'Auto-generate Swagger docs from schema definitions', 'wpshadow' ),
-					'postman_collection' => __( 'Export endpoints as Postman collection for testing', 'wpshadow' ),
-					'readme_format' => array(
+					'swagger_documentation'     => __( 'Auto-generate Swagger docs from schema definitions', 'wpshadow' ),
+					'postman_collection'        => __( 'Export endpoints as Postman collection for testing', 'wpshadow' ),
+					'readme_format'             => array(
 						'# My Plugin REST API',
 						'## Endpoints',
 						'### GET /my-plugin/v1/items',
 						'Description, parameters, response examples',
 					),
-					'recommendation' => __( 'Document all custom REST API endpoints for developers', 'wpshadow' ),
+					'recommendation'            => __( 'Document all custom REST API endpoints for developers', 'wpshadow' ),
 				),
 			);
 		}

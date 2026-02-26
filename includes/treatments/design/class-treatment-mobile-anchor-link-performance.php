@@ -69,64 +69,6 @@ class Treatment_Mobile_Anchor_Link_Performance extends Treatment_Base {
 	}
 
 	/**
-	 * Check anchor link implementation.
-	 *
-	 * @since  1.602.1250
-	 * @return array Check results.
-	 */
-	private static function check_anchor_links() {
-		$issues = array();
-
-		// Capture homepage to check for anchor links and fixed header.
-		$html = self::capture_page_html( home_url( '/' ) );
-		if ( empty( $html ) ) {
-			return array( 'issues' => $issues );
-		}
-
-		// Check for fixed header.
-		$has_fixed_header = preg_match( '/position:\s*fixed|position:\s*sticky/i', $html );
-
-		// Check for anchor links.
-		$has_anchor_links = preg_match_all( '/<a[^>]*href=["\']#[^"\']+["\']/', $html, $anchor_matches );
-
-		if ( ! $has_anchor_links ) {
-			// No anchor links, no issues to report.
-			return array( 'issues' => $issues );
-		}
-
-		// Check for smooth scroll.
-		$has_smooth_scroll = preg_match( '/scroll-behavior:\s*smooth/i', $html );
-
-		if ( ! $has_smooth_scroll ) {
-			$issues[] = array(
-				'issue_type'  => 'no_smooth_scroll',
-				'severity'    => 'low',
-				'description' => 'Anchor links detected but smooth scrolling not enabled',
-				'impact'      => 'Instant jumps are jarring on mobile',
-			);
-		}
-
-		// Check for scroll offset with fixed header.
-		if ( $has_fixed_header ) {
-			$has_scroll_offset = preg_match( '/scroll-padding-top|scroll-margin-top/i', $html );
-
-			if ( ! $has_scroll_offset ) {
-				$issues[] = array(
-					'issue_type'  => 'fixed_header_no_offset',
-					'severity'    => 'medium',
-					'description' => 'Fixed header detected but no scroll offset configured',
-					'impact'      => 'Anchor links will hide content under fixed header',
-				);
-			}
-		}
-
-		// Check for JavaScript smooth scroll implementation.
-		$has_js_scroll = preg_match( '/scrollTo|scrollIntoView|smooth.*scroll/i', $html );
-
-		return array( 'issues' => $issues );
-	}
-
-	/**
 	 * Capture page HTML.
 	 *
 	 * @since  1.602.1250

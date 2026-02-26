@@ -63,14 +63,14 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
+		$issues            = array();
 		$exit_intent_score = 0;
-		$max_score = 6;
+		$max_score         = 6;
 
 		// Check for exit-intent technology.
 		$exit_tech = self::check_exit_intent_tech();
 		if ( $exit_tech ) {
-			$exit_intent_score++;
+			++$exit_intent_score;
 		} else {
 			$issues[] = __( 'No exit-intent popup technology installed', 'wpshadow' );
 		}
@@ -78,7 +78,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 		// Check for valuable offers.
 		$valuable_offers = self::check_valuable_offers();
 		if ( $valuable_offers ) {
-			$exit_intent_score++;
+			++$exit_intent_score;
 		} else {
 			$issues[] = __( 'Exit popups lack compelling offers (discounts, free shipping)', 'wpshadow' );
 		}
@@ -86,7 +86,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 		// Check for frequency controls.
 		$frequency_control = self::check_frequency_control();
 		if ( $frequency_control ) {
-			$exit_intent_score++;
+			++$exit_intent_score;
 		} else {
 			$issues[] = __( 'No frequency limits (users see same popup repeatedly)', 'wpshadow' );
 		}
@@ -94,7 +94,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 		// Check for page targeting.
 		$page_targeting = self::check_page_targeting();
 		if ( $page_targeting ) {
-			$exit_intent_score++;
+			++$exit_intent_score;
 		} else {
 			$issues[] = __( 'Exit popups not targeted by page type or value', 'wpshadow' );
 		}
@@ -102,7 +102,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 		// Check for mobile experience.
 		$mobile_friendly = self::check_mobile_friendly();
 		if ( $mobile_friendly ) {
-			$exit_intent_score++;
+			++$exit_intent_score;
 		} else {
 			$issues[] = __( 'Exit popups may interfere with mobile experience', 'wpshadow' );
 		}
@@ -110,7 +110,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 		// Check for A/B testing.
 		$ab_testing = self::check_ab_testing();
 		if ( $ab_testing ) {
-			$exit_intent_score++;
+			++$exit_intent_score;
 		} else {
 			$issues[] = __( 'Exit popups not tested for effectiveness', 'wpshadow' );
 		}
@@ -119,10 +119,10 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 		$exit_intent_percentage = ( $exit_intent_score / $max_score ) * 100;
 
 		if ( $exit_intent_percentage < 30 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 20;
 		} elseif ( $exit_intent_percentage < 60 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 10;
 		} else {
 			return null;
@@ -181,7 +181,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	 */
 	private static function check_valuable_offers() {
 		$offer_keywords = array( 'discount', 'coupon', 'free shipping', 'special offer', 'save' );
-		$offers_found = 0;
+		$offers_found   = 0;
 
 		foreach ( $offer_keywords as $keyword ) {
 			$query = new \WP_Query(
@@ -193,7 +193,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 				)
 			);
 			if ( $query->have_posts() ) {
-				$offers_found++;
+				++$offers_found;
 			}
 		}
 
@@ -209,7 +209,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	private static function check_frequency_control() {
 		// Most popup plugins include frequency controls.
 		if ( is_plugin_active( 'optinmonster/optin-monster-wp-api.php' ) ||
-			 is_plugin_active( 'popup-maker/popup-maker.php' ) ) {
+			is_plugin_active( 'popup-maker/popup-maker.php' ) ) {
 			return true; // Assume properly configured.
 		}
 
@@ -225,7 +225,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	private static function check_page_targeting() {
 		// Advanced popup plugins support targeting.
 		if ( is_plugin_active( 'optinmonster/optin-monster-wp-api.php' ) ||
-			 is_plugin_active( 'convertpro/convertpro.php' ) ) {
+			is_plugin_active( 'convertpro/convertpro.php' ) ) {
 			return true;
 		}
 
@@ -241,7 +241,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	private static function check_mobile_friendly() {
 		// Modern popup plugins are mobile-friendly.
 		if ( is_plugin_active( 'popup-maker/popup-maker.php' ) ||
-			 is_plugin_active( 'optinmonster/optin-monster-wp-api.php' ) ) {
+			is_plugin_active( 'optinmonster/optin-monster-wp-api.php' ) ) {
 			return true;
 		}
 
@@ -258,7 +258,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	private static function check_ab_testing() {
 		// Check for A/B testing plugins.
 		if ( is_plugin_active( 'google-analytics-for-wordpress/googleanalytics.php' ) ||
-			 is_plugin_active( 'optinmonster/optin-monster-wp-api.php' ) ) {
+			is_plugin_active( 'optinmonster/optin-monster-wp-api.php' ) ) {
 			return true;
 		}
 

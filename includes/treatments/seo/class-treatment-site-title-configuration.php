@@ -67,26 +67,4 @@ class Treatment_Site_Title_Configuration extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Site_Title_Configuration' );
 	}
-
-	/**
-	 * Check for keyword diversity.
-	 *
-	 * @since  1.6030.2148
-	 * @param  string $title Site title.
-	 * @return bool True if keywords detected.
-	 */
-	private static function has_keyword_diversity( $title ) {
-		// Check if title contains multiple words
-		$words = array_filter( explode( ' ', $title ) );
-		if ( count( $words ) >= 2 ) {
-			return true;
-		}
-
-		// Check for separator indicating category/type
-		if ( strpos( $title, '|' ) !== false || strpos( $title, '-' ) !== false ) {
-			return true;
-		}
-
-		return false;
-	}
 }

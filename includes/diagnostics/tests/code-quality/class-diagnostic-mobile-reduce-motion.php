@@ -78,22 +78,22 @@ class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'                   => self::$slug,
-			'title'                => self::$title,
-			'description'          => sprintf(
+			'id'                  => self::$slug,
+			'title'               => self::$title,
+			'description'         => sprintf(
 				/* translators: %d: number of animations */
 				__( 'Found %d animations/transitions not respecting prefers-reduced-motion', 'wpshadow' ),
 				$issues['animation_count'] ?? 0
 			),
-			'severity'             => 'medium',
-			'threat_level'         => $threat,
-			'animation_count'      => $issues['animation_count'] ?? 0,
-			'has_media_query'      => ! empty( $issues['has_media_query'] ),
-			'problematic_effects'  => $issues['effects'] ?? array(),
-			'wcag_violation'       => '2.3.3 Animation from Interactions (Level AAA)',
-			'user_impact'          => __( 'Users with vestibular disorders may experience motion sickness', 'wpshadow' ),
-			'auto_fixable'         => true,
-			'kb_link'              => 'https://wpshadow.com/kb/reduce-motion',
+			'severity'            => 'medium',
+			'threat_level'        => $threat,
+			'animation_count'     => $issues['animation_count'] ?? 0,
+			'has_media_query'     => ! empty( $issues['has_media_query'] ),
+			'problematic_effects' => $issues['effects'] ?? array(),
+			'wcag_violation'      => '2.3.3 Animation from Interactions (Level AAA)',
+			'user_impact'         => __( 'Users with vestibular disorders may experience motion sickness', 'wpshadow' ),
+			'auto_fixable'        => true,
+			'kb_link'             => 'https://wpshadow.com/kb/reduce-motion',
 		);
 	}
 
@@ -126,11 +126,11 @@ class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 		);
 
 		// Check for animations
-		$animation_count = preg_match_all( '/animation\s*:/i', $css, $matches );
+		$animation_count           = preg_match_all( '/animation\s*:/i', $css, $matches );
 		$issues['animation_count'] = (int) $animation_count;
 
 		// Check for transitions
-		$transition_count = preg_match_all( '/transition\s*:/i', $css, $matches );
+		$transition_count           = preg_match_all( '/transition\s*:/i', $css, $matches );
 		$issues['animation_count'] += (int) $transition_count;
 
 		// Find specific animation types
@@ -140,13 +140,13 @@ class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 
 		// Check for parallax effect (scroll-based animation)
 		if ( preg_match( '/transform.*translate|scroll.*event|parallax/i', $html ) ) {
-			$issues['animation_count']++;
+			++$issues['animation_count'];
 			$issues['effects'][] = 'Parallax scroll effect';
 		}
 
 		// Check for AOS (Animate On Scroll) library
 		if ( preg_match( '/aos\.js|data-aos/i', $html ) ) {
-			$issues['animation_count']++;
+			++$issues['animation_count'];
 			$issues['effects'][] = 'Animate On Scroll (AOS)';
 		}
 

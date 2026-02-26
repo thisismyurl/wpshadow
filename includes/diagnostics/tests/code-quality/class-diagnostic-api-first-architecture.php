@@ -63,7 +63,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
+		$issues    = array();
 		$api_score = 0;
 		$max_score = 7;
 
@@ -72,13 +72,13 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 		if ( ! $rest_enabled ) {
 			$issues[] = __( 'WordPress REST API is disabled', 'wpshadow' );
 		} else {
-			$api_score++;
+			++$api_score;
 		}
 
 		// Check for custom API endpoints.
 		$custom_endpoints = self::count_custom_api_endpoints();
 		if ( $custom_endpoints > 0 ) {
-			$api_score++;
+			++$api_score;
 		} else {
 			$issues[] = __( 'No custom API endpoints registered', 'wpshadow' );
 		}
@@ -86,7 +86,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 		// Check for API authentication.
 		$has_authentication = self::check_api_authentication();
 		if ( $has_authentication ) {
-			$api_score++;
+			++$api_score;
 		} else {
 			$issues[] = __( 'No API authentication method configured', 'wpshadow' );
 		}
@@ -94,7 +94,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 		// Check for API documentation.
 		$has_documentation = self::check_api_documentation();
 		if ( $has_documentation ) {
-			$api_score++;
+			++$api_score;
 		} else {
 			$issues[] = __( 'No API documentation available for developers', 'wpshadow' );
 		}
@@ -102,7 +102,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 		// Check for API versioning.
 		$has_versioning = self::check_api_versioning();
 		if ( $has_versioning ) {
-			$api_score++;
+			++$api_score;
 		} else {
 			$issues[] = __( 'API versioning not implemented', 'wpshadow' );
 		}
@@ -110,7 +110,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 		// Check for rate limiting.
 		$has_rate_limiting = self::check_rate_limiting();
 		if ( $has_rate_limiting ) {
-			$api_score++;
+			++$api_score;
 		} else {
 			$issues[] = __( 'No API rate limiting to prevent abuse', 'wpshadow' );
 		}
@@ -118,7 +118,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 		// Check for CORS configuration.
 		$has_cors = self::check_cors_configuration();
 		if ( $has_cors ) {
-			$api_score++;
+			++$api_score;
 		} else {
 			$issues[] = __( 'CORS not configured for cross-origin API requests', 'wpshadow' );
 		}
@@ -128,11 +128,11 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 
 		if ( $api_percentage < 30 ) {
 			// Minimal or no API implementation.
-			$severity = 'medium';
+			$severity     = 'medium';
 			$threat_level = 50;
 		} elseif ( $api_percentage < 60 ) {
 			// Basic API implementation.
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 30;
 		} else {
 			// Good API implementation - no issue.
@@ -191,7 +191,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 			rest_get_server();
 		}
 
-		$routes = rest_get_server()->get_routes();
+		$routes           = rest_get_server()->get_routes();
 		$custom_endpoints = 0;
 
 		// Count non-core endpoints.
@@ -200,7 +200,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 			if ( strpos( $route, '/wp/' ) === 0 || strpos( $route, '/wp-' ) === 0 ) {
 				continue;
 			}
-			$custom_endpoints++;
+			++$custom_endpoints;
 		}
 
 		return apply_filters( 'wpshadow_custom_api_endpoint_count', $custom_endpoints );

@@ -79,46 +79,4 @@ class Treatment_Theme_External_Resource_Dependencies extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Theme_External_Resource_Dependencies' );
 	}
-
-	/**
-	 * Check if a URL is external.
-	 *
-	 * @since  1.6032.1200
-	 * @param  string $url URL to check.
-	 * @return bool True if external, false otherwise.
-	 */
-	private static function is_external_url( $url ) {
-		$site_url = site_url();
-		$home_url = home_url();
-
-		return ( 0 !== strpos( $url, $site_url ) && 0 !== strpos( $url, $home_url ) && ( 0 === strpos( $url, 'http://' ) || 0 === strpos( $url, 'https://' ) || 0 === strpos( $url, '//' ) ) );
-	}
-
-	/**
-	 * Get all PHP files in theme directory.
-	 *
-	 * @since  1.6032.1200
-	 * @param  string $dir Directory to scan.
-	 * @return array Array of file paths.
-	 */
-	private static function get_theme_files( $dir ) {
-		$files = array();
-		$items = scandir( $dir );
-
-		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item ) {
-				continue;
-			}
-
-			$path = $dir . '/' . $item;
-
-			if ( is_dir( $path ) ) {
-				$files = array_merge( $files, self::get_theme_files( $path ) );
-			} elseif ( is_file( $path ) && preg_match( '/\.(php|js|css)$/', $item ) ) {
-				$files[] = $path;
-			}
-		}
-
-		return $files;
-	}
 }

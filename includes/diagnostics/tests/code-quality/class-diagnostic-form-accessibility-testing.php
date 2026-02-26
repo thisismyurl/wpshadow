@@ -106,21 +106,21 @@ class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 		}
 
 		// Check comment form for accessibility.
-		$comment_form_file = get_template_directory() . '/comments.php';
+		$comment_form_file       = get_template_directory() . '/comments.php';
 		$comment_form_accessible = false;
 
 		if ( file_exists( $comment_form_file ) ) {
-			$comment_content = file_get_contents( $comment_form_file );
+			$comment_content         = file_get_contents( $comment_form_file );
 			$comment_form_accessible = ( strpos( $comment_content, '<label' ) !== false ) &&
-									 ( strpos( $comment_content, 'for=' ) !== false );
+									( strpos( $comment_content, 'for=' ) !== false );
 		}
 
 		// Check search form.
-		$searchform_file = get_template_directory() . '/searchform.php';
+		$searchform_file        = get_template_directory() . '/searchform.php';
 		$search_form_accessible = false;
 
 		if ( file_exists( $searchform_file ) ) {
-			$search_content = file_get_contents( $searchform_file );
+			$search_content         = file_get_contents( $searchform_file );
 			$search_form_accessible = ( strpos( $search_content, '<label' ) !== false ) ||
 									( strpos( $search_content, 'aria-label' ) !== false );
 		}
@@ -128,32 +128,32 @@ class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 		// Check for required field indicators.
 		$has_required_indicators = false;
 		if ( file_exists( $searchform_file ) ) {
-			$search_content = file_get_contents( $searchform_file );
+			$search_content          = file_get_contents( $searchform_file );
 			$has_required_indicators = ( strpos( $search_content, 'required' ) !== false ) ||
-									 ( strpos( $search_content, 'aria-required' ) !== false );
+									( strpos( $search_content, 'aria-required' ) !== false );
 		}
 
 		// Check for error message styling.
-		$style_css = get_stylesheet_directory() . '/style.css';
+		$style_css        = get_stylesheet_directory() . '/style.css';
 		$has_error_styles = false;
 
 		if ( file_exists( $style_css ) ) {
-			$style_content = file_get_contents( $style_css );
+			$style_content    = file_get_contents( $style_css );
 			$has_error_styles = ( strpos( $style_content, '.error' ) !== false ) ||
-							  ( strpos( $style_content, 'aria-invalid' ) !== false );
+								( strpos( $style_content, 'aria-invalid' ) !== false );
 		}
 
 		// Check for fieldset grouping.
 		$uses_fieldsets = false;
 		if ( $has_form_plugin && file_exists( $comment_form_file ) ) {
 			$comment_content = file_get_contents( $comment_form_file );
-			$uses_fieldsets = ( strpos( $comment_content, '<fieldset' ) !== false );
+			$uses_fieldsets  = ( strpos( $comment_content, '<fieldset' ) !== false );
 		}
 
 		// Check autocomplete attributes.
 		$uses_autocomplete = false;
 		if ( file_exists( $comment_form_file ) ) {
-			$comment_content = file_get_contents( $comment_form_file );
+			$comment_content   = file_get_contents( $comment_form_file );
 			$uses_autocomplete = ( strpos( $comment_content, 'autocomplete=' ) !== false );
 		}
 

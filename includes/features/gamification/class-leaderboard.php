@@ -36,6 +36,10 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		return array(
 			'init' => 'schedule_leaderboard_refresh',
 		);
@@ -59,6 +63,10 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * @return     void
 	 */
 	public static function init() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		self::subscribe();
 	}
 
@@ -69,6 +77,10 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function schedule_leaderboard_refresh() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		if ( ! wp_next_scheduled( 'wpshadow_refresh_leaderboard' ) ) {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_refresh_leaderboard' );
 		}
@@ -84,6 +96,10 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * @return bool True if opted in.
 	 */
 	public static function is_opted_in( $user_id = null ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return false;
+		}
+
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
@@ -101,6 +117,10 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function set_optin( $user_id, $optin ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		update_user_meta( $user_id, 'wpshadow_leaderboard_optin', (bool) $optin );
 
 		// Refresh cache when optin changes
@@ -150,6 +170,10 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * @return array Leaderboard data.
 	 */
 	public static function get_global( $period = 'all_time', $limit = 50 ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		$cache_key = "wpshadow_leaderboard_{$period}_{$limit}";
 		$cached = \WPShadow\Core\Cache_Manager::get(
 			$cache_key,

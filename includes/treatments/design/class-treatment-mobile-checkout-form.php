@@ -68,44 +68,6 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	}
 
 	/**
-	 * Check if ecommerce plugin is active.
-	 *
-	 * @since  1.602.1445
-	 * @return bool Has ecommerce plugin.
-	 */
-	private static function has_ecommerce_plugin(): bool {
-		return class_exists( 'WooCommerce' ) || class_exists( 'Easy_Digital_Downloads' );
-	}
-
-	/**
-	 * Find checkout form issues.
-	 *
-	 * @since  1.602.1445
-	 * @return array Issues found.
-	 */
-	private static function find_checkout_issues(): array {
-		$issues = array();
-
-		// Check field count
-		$field_issues = self::check_field_count();
-		$issues = array_merge( $issues, $field_issues );
-
-		// Check payment methods
-		$payment_issues = self::check_payment_methods();
-		$issues = array_merge( $issues, $payment_issues );
-
-		// Check guest checkout
-		$guest_issues = self::check_guest_checkout();
-		$issues = array_merge( $issues, $guest_issues );
-
-		// Check mobile payment options
-		$mobile_payment_issues = self::check_mobile_payments();
-		$issues = array_merge( $issues, $mobile_payment_issues );
-
-		return array( 'all' => $issues );
-	}
-
-	/**
 	 * Check checkout field count.
 	 *
 	 * @since  1.602.1445

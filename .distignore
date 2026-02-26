@@ -127,6 +127,13 @@ test-x-robots-results.md
 # Development config files
 .htaccess
 .dockerignore
+.env
+.deploy-password
+
+# Root debug/maintenance entry scripts (not for distribution)
+clear-opcache.php
+debug-findings.php
+run-manual-scan.php
 
 # Composer lock file (optional - include for reproducible builds)
 # composer.lock

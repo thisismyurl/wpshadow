@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,50 +69,5 @@ class Treatment_Video_Thumbnails_Not_Generated extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Video_Thumbnails_Not_Generated' );
-	}
-
-	/**
-	 * Check if video thumbnail plugin is already active.
-	 *
-	 * @since  1.6033.1430
-	 * @return bool True if video thumbnail plugin detected.
-	 */
-	private static function has_video_thumbnail_plugin() {
-		$thumbnail_plugins = array(
-			'video-thumbnails/video-thumbnails.php',
-			'automatic-video-thumbnails/automatic-video-thumbnails.php',
-			'auto-post-thumbnail/auto-post-thumbnail.php',
-		);
-
-		foreach ( $thumbnail_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Count videos with thumbnails.
-	 *
-	 * @since  1.6033.1430
-	 * @return int Number of videos with thumbnails.
-	 */
-	private static function count_videos_with_thumbnails() {
-		global $wpdb;
-
-		// Check for thumbnail attachment meta.
-		$count = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT p.ID) 
-			FROM {$wpdb->posts} p
-			INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-			WHERE p.post_type = 'attachment' 
-			AND p.post_mime_type LIKE 'video/%'
-			AND pm.meta_key = '_thumbnail_id'
-			AND pm.meta_value != ''"
-		);
-
-		return (int) $count;
 	}
 }

@@ -71,49 +71,6 @@ class Treatment_Mobile_Form_Validation_Feedback extends Treatment_Base {
 	}
 
 	/**
-	 * Check for common form validation patterns.
-	 *
-	 * @since  1.602.1210
-	 * @return array Status and issues found.
-	 */
-	private static function check_form_validation_patterns() {
-		$result = array(
-			'has_validation' => false,
-			'issues'         => array(),
-		);
-
-		// Check active plugins for form handling.
-		$active_plugins = get_option( 'active_plugins', array() );
-
-		// Check for Contact Form 7 (popular but often misconfigured).
-		if ( in_array( 'contact-form-7/wp-contact-form-7.php', $active_plugins, true ) ) {
-			// Check if CF7 validation is properly configured.
-			$cf7_config = self::check_cf7_validation();
-			if ( ! empty( $cf7_config['issues'] ) ) {
-				$result['issues'] = array_merge( $result['issues'], $cf7_config['issues'] );
-			}
-		}
-
-		// Check for Gravity Forms.
-		if ( in_array( 'gravityforms/gravityforms.php', $active_plugins, true ) ) {
-			$gf_config = self::check_gravity_forms_validation();
-			if ( ! empty( $gf_config['issues'] ) ) {
-				$result['issues'] = array_merge( $result['issues'], $gf_config['issues'] );
-			}
-		}
-
-		// Check WooCommerce checkout validation.
-		if ( function_exists( 'WC' ) ) {
-			$wc_config = self::check_woocommerce_validation();
-			if ( ! empty( $wc_config['issues'] ) ) {
-				$result['issues'] = array_merge( $result['issues'], $wc_config['issues'] );
-			}
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Check Contact Form 7 validation configuration.
 	 *
 	 * @since  1.602.1210
@@ -221,51 +178,6 @@ class Treatment_Mobile_Form_Validation_Feedback extends Treatment_Base {
 		return array( 'issues' => $issues );
 	}
 
-	/**
-	 * Check JavaScript validation patterns in theme/plugins.
-	 *
-	 * @since  1.602.1210
-	 * @return array Issues found.
-	 */
-	private static function check_javascript_validation() {
-		$issues = array();
-
-		// Check theme JavaScript files for validation patterns.
-		$theme_path = get_stylesheet_directory();
-		$js_files   = array(
-			$theme_path . '/assets/js/main.js',
-			$theme_path . '/js/scripts.js',
-			$theme_path . '/js/custom.js',
-		);
-
-		foreach ( $js_files as $js_file ) {
-			if ( ! file_exists( $js_file ) ) {
-				continue;
-			}
-
-			$content = file_get_contents( $js_file );
-
-			// Check for validation without ARIA attributes.
-			if ( preg_match( '/\.addClass\s*\(\s*["\']error["\']/', $content ) && ! preg_match( '/aria-invalid/', $content ) ) {
-				$issues[] = array(
-					'location'    => str_replace( WP_CONTENT_DIR, '', $js_file ),
-					'issue_type'  => 'missing_aria_validation',
-					'description' => 'JavaScript validation adds error class but doesn\'t set aria-invalid',
-				);
-			}
-
-			// Check for alerts (bad UX on mobile).
-			if ( preg_match( '/\balert\s*\(/', $content ) ) {
-				$issues[] = array(
-					'location'    => str_replace( WP_CONTENT_DIR, '', $js_file ),
-					'issue_type'  => 'uses_alert',
-					'description' => 'Form uses alert() for validation - poor mobile UX',
-				);
-			}
-		}
-
-		return $issues;
-	}
 
 	/**
 	 * Capture HTML for page.

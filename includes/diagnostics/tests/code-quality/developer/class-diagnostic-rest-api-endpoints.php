@@ -75,25 +75,25 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 
 		// Get REST API index.
 		$rest_index = rest_get_server();
-		
+
 		if ( null === $rest_index ) {
 			$warnings[] = __( 'REST server not properly initialized', 'wpshadow' );
 			return null;
 		}
 
 		// Get registered routes.
-		$routes = $rest_index->get_routes();
+		$routes                = $rest_index->get_routes();
 		$stats['total_routes'] = count( $routes );
 
 		// Check for public endpoints without authentication.
-		$public_endpoints = array();
+		$public_endpoints    = array();
 		$protected_endpoints = array();
 
 		foreach ( $routes as $route => $endpoint ) {
 			if ( isset( $endpoint[0]['methods'] ) ) {
 				// Check if endpoint requires authentication.
 				$needs_auth = isset( $endpoint[0]['permission_callback'] ) &&
-							  $endpoint[0]['permission_callback'] !== '__return_true';
+								'__return_true' !== $endpoint[0]['permission_callback'];
 
 				if ( in_array( 'GET', (array) $endpoint[0]['methods'], true ) ) {
 					if ( ! $needs_auth ) {
@@ -105,12 +105,12 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 			}
 		}
 
-		$stats['public_endpoints'] = count( $public_endpoints );
+		$stats['public_endpoints']    = count( $public_endpoints );
 		$stats['protected_endpoints'] = count( $protected_endpoints );
 
 		// Check for overly permissive endpoints.
 		$exposed_sensitive_routes = array();
-		$sensitive_keywords = array( 'users', 'comments', 'settings' );
+		$sensitive_keywords       = array( 'users', 'comments', 'settings' );
 
 		foreach ( $public_endpoints as $route ) {
 			foreach ( $sensitive_keywords as $keyword ) {
@@ -134,7 +134,7 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 		}
 
 		// Check for custom endpoints.
-		$custom_endpoints = 0;
+		$custom_endpoints       = 0;
 		$core_endpoint_prefixes = array( '/wp/v2/', '/wp-site-health/v1/' );
 
 		foreach ( $routes as $route => $endpoint ) {
@@ -146,8 +146,8 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 				}
 			}
 
-			if ( ! $is_core && strpos( $route, '/wp/' ) === 0 ) {
-				$custom_endpoints++;
+			if ( ! $is_core && 0 === strpos( $route, '/wp/' ) ) {
+				++$custom_endpoints;
 			}
 		}
 
@@ -201,16 +201,16 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 		// Check user endpoints security.
 		$users_route_found = false;
 		foreach ( $routes as $route => $endpoint ) {
-			if ( strpos( $route, '/wp/v2/users' ) === 0 ) {
+			if ( 0 === strpos( $route, '/wp/v2/users' ) ) {
 				$users_route_found = true;
-				
+
 				// Check if users endpoint requires authentication.
-				if ( isset( $endpoint[0]['methods'] ) && 
-					 in_array( 'GET', (array) $endpoint[0]['methods'], true ) ) {
-					
+				if ( isset( $endpoint[0]['methods'] ) &&
+					in_array( 'GET', (array) $endpoint[0]['methods'], true ) ) {
+
 					$needs_auth = isset( $endpoint[0]['permission_callback'] ) &&
-								  $endpoint[0]['permission_callback'] !== '__return_true';
-					
+									'__return_true' !== $endpoint[0]['permission_callback'];
+
 					if ( ! $needs_auth ) {
 						$issues[] = __( 'Users REST endpoint is publicly accessible', 'wpshadow' );
 					}
@@ -220,14 +220,14 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 
 		// Check settings endpoint.
 		foreach ( $routes as $route => $endpoint ) {
-			if ( strpos( $route, '/wp/v2/settings' ) === 0 ) {
+			if ( 0 === strpos( $route, '/wp/v2/settings' ) ) {
 				// Settings should always require authentication.
-				if ( isset( $endpoint[0]['methods'] ) && 
-					 in_array( 'GET', (array) $endpoint[0]['methods'], true ) ) {
-					
+				if ( isset( $endpoint[0]['methods'] ) &&
+					in_array( 'GET', (array) $endpoint[0]['methods'], true ) ) {
+
 					$needs_auth = isset( $endpoint[0]['permission_callback'] ) &&
-								  $endpoint[0]['permission_callback'] !== '__return_true';
-					
+									'__return_true' !== $endpoint[0]['permission_callback'];
+
 					if ( ! $needs_auth ) {
 						$issues[] = __( 'Settings REST endpoint is publicly accessible', 'wpshadow' );
 					}
@@ -246,11 +246,11 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/rest-api-endpoints',
 				'context'      => array(
-					'stats'                      => $stats,
-					'exposed_sensitive_routes'   => array_slice( $exposed_sensitive_routes, 0, 5 ),
-					'public_endpoints_count'     => count( $public_endpoints ),
-					'issues'                     => $issues,
-					'warnings'                   => $warnings,
+					'stats'                    => $stats,
+					'exposed_sensitive_routes' => array_slice( $exposed_sensitive_routes, 0, 5 ),
+					'public_endpoints_count'   => count( $public_endpoints ),
+					'issues'                   => $issues,
+					'warnings'                 => $warnings,
 				),
 			);
 		}

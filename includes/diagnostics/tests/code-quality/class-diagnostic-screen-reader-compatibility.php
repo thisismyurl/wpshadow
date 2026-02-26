@@ -96,17 +96,17 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 			$content = $post['post_content'];
 			// Check if h3 appears before h2 (heading hierarchy violation).
 			if ( strpos( $content, '<h3' ) !== false && strpos( $content, '<h2' ) === false ) {
-				$heading_issues++;
+				++$heading_issues;
 			}
 		}
 
 		// Check template files for semantic HTML.
-		$header_file = get_template_directory() . '/header.php';
+		$header_file        = get_template_directory() . '/header.php';
 		$uses_semantic_html = false;
 
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
-			$semantic_tags = array( '<header', '<nav', '<main', '<article', '<section', '<aside', '<footer' );
+			$semantic_tags  = array( '<header', '<nav', '<main', '<article', '<section', '<aside', '<footer' );
 			foreach ( $semantic_tags as $tag ) {
 				if ( strpos( $header_content, $tag ) !== false ) {
 					$uses_semantic_html = true;
@@ -118,19 +118,19 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 		// Check for ARIA labels on forms.
 		$has_aria_labels = false;
 		if ( file_exists( $header_file ) ) {
-			$header_content = file_get_contents( $header_file );
+			$header_content  = file_get_contents( $header_file );
 			$has_aria_labels = ( strpos( $header_content, 'aria-label' ) !== false ) ||
-							 ( strpos( $header_content, 'aria-labelledby' ) !== false );
+							( strpos( $header_content, 'aria-labelledby' ) !== false );
 		}
 
 		// Check for screen reader text class.
-		$style_css = get_stylesheet_directory() . '/style.css';
+		$style_css         = get_stylesheet_directory() . '/style.css';
 		$has_sr_text_class = false;
 
 		if ( file_exists( $style_css ) ) {
-			$style_content = file_get_contents( $style_css );
+			$style_content     = file_get_contents( $style_css );
 			$has_sr_text_class = ( strpos( $style_content, 'screen-reader-text' ) !== false ) ||
-							   ( strpos( $style_content, 'sr-only' ) !== false );
+								( strpos( $style_content, 'sr-only' ) !== false );
 		}
 
 		// Check for empty links.
@@ -146,15 +146,15 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 		foreach ( $recent_posts as $post ) {
 			$content = $post['post_content'];
 			if ( strpos( $content, '>click here<' ) !== false ||
-				 strpos( $content, '>read more<' ) !== false ||
-				 strpos( $content, '>here<' ) !== false ) {
+				strpos( $content, '>read more<' ) !== false ||
+				strpos( $content, '>here<' ) !== false ) {
 				$generic_link_text = true;
 				break;
 			}
 		}
 
 		// Check for language attribute.
-		$lang_attribute = get_bloginfo( 'language' );
+		$lang_attribute     = get_bloginfo( 'language' );
 		$has_lang_attribute = ! empty( $lang_attribute );
 
 		// Check for issues.
@@ -226,41 +226,41 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/screen-reader-compatibility',
 				'details'      => array(
-					'total_images'            => absint( $total_images ),
-					'images_without_alt'      => absint( $images_without_alt ),
-					'alt_text_coverage'       => round( $alt_text_coverage, 1 ) . '%',
-					'heading_issues'          => $heading_issues,
-					'uses_semantic_html'      => $uses_semantic_html,
-					'has_aria_labels'         => $has_aria_labels,
-					'has_sr_text_class'       => $has_sr_text_class,
-					'empty_links'             => $empty_links,
-					'generic_link_text'       => $generic_link_text,
-					'has_lang_attribute'      => $has_lang_attribute,
-					'issues_detected'         => $issues,
-					'recommendation'          => __( 'Add alt text to images, use semantic HTML, add ARIA labels, fix heading hierarchy', 'wpshadow' ),
-					'wcag_requirements'       => array(
+					'total_images'           => absint( $total_images ),
+					'images_without_alt'     => absint( $images_without_alt ),
+					'alt_text_coverage'      => round( $alt_text_coverage, 1 ) . '%',
+					'heading_issues'         => $heading_issues,
+					'uses_semantic_html'     => $uses_semantic_html,
+					'has_aria_labels'        => $has_aria_labels,
+					'has_sr_text_class'      => $has_sr_text_class,
+					'empty_links'            => $empty_links,
+					'generic_link_text'      => $generic_link_text,
+					'has_lang_attribute'     => $has_lang_attribute,
+					'issues_detected'        => $issues,
+					'recommendation'         => __( 'Add alt text to images, use semantic HTML, add ARIA labels, fix heading hierarchy', 'wpshadow' ),
+					'wcag_requirements'      => array(
 						'WCAG 1.1.1' => 'Non-text Content - All images need alt text',
 						'WCAG 1.3.1' => 'Info and Relationships - Use semantic HTML',
 						'WCAG 2.4.6' => 'Headings and Labels - Descriptive headings',
 						'WCAG 2.4.4' => 'Link Purpose - Descriptive link text',
 						'WCAG 4.1.2' => 'Name, Role, Value - ARIA labels for custom controls',
 					),
-					'alt_text_guidelines'     => array(
-						'Decorative images' => 'Use empty alt="" ',
+					'alt_text_guidelines'    => array(
+						'Decorative images'  => 'Use empty alt="" ',
 						'Informative images' => 'Describe the content/function',
-						'Complex images'    => 'Provide detailed description in text',
-						'Links with images' => 'Describe destination, not image',
+						'Complex images'     => 'Provide detailed description in text',
+						'Links with images'  => 'Describe destination, not image',
 					),
-					'screen_reader_text_css'  => '.screen-reader-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); }',
-					'semantic_html_examples'  => array(
-						'<header>' => 'Site header',
-						'<nav>'    => 'Navigation menus',
-						'<main>'   => 'Main content',
+					'screen_reader_text_css' => '.screen-reader-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); }',
+					'semantic_html_examples' => array(
+						'<header>'  => 'Site header',
+						'<nav>'     => 'Navigation menus',
+						'<main>'    => 'Main content',
 						'<article>' => 'Independent content',
-						'<aside>'  => 'Sidebar content',
-						'<footer>' => 'Site footer',
+						'<aside>'   => 'Sidebar content',
+						'<footer>'  => 'Site footer',
 					),
-					'screen_reader_usage'     => '7.3% of internet users rely on screen readers',
+					'screen_reader_usage'    => '7.3% of internet users rely on screen readers',
 				),
 			);
 		}

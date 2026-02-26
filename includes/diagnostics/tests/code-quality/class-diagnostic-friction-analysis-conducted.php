@@ -63,14 +63,14 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
+		$issues         = array();
 		$friction_score = 0;
-		$max_score = 7;
+		$max_score      = 7;
 
 		// Check form length.
 		$form_friction = self::check_form_friction();
 		if ( $form_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Forms may have too many fields causing friction', 'wpshadow' );
 		}
@@ -78,7 +78,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		// Check checkout steps.
 		$checkout_friction = self::check_checkout_friction();
 		if ( $checkout_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Checkout process may have unnecessary steps', 'wpshadow' );
 		}
@@ -86,7 +86,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		// Check site speed.
 		$speed_friction = self::check_speed_friction();
 		if ( $speed_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Slow page speed creates friction (no caching detected)', 'wpshadow' );
 		}
@@ -94,7 +94,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		// Check trust signals.
 		$trust_friction = self::check_trust_friction();
 		if ( $trust_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Missing trust signals (security badges, testimonials)', 'wpshadow' );
 		}
@@ -102,7 +102,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		// Check navigation clarity.
 		$navigation_friction = self::check_navigation_friction();
 		if ( $navigation_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Complex navigation may confuse users', 'wpshadow' );
 		}
@@ -110,7 +110,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		// Check required account creation.
 		$account_friction = self::check_account_friction();
 		if ( $account_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Forced account creation adds friction (consider guest checkout)', 'wpshadow' );
 		}
@@ -118,7 +118,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		// Check mobile experience.
 		$mobile_friction = self::check_mobile_friction();
 		if ( $mobile_friction ) {
-			$friction_score++;
+			++$friction_score;
 		} else {
 			$issues[] = __( 'Mobile experience may have friction points', 'wpshadow' );
 		}
@@ -127,10 +127,10 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		$friction_percentage = ( $friction_score / $max_score ) * 100;
 
 		if ( $friction_percentage < 40 ) {
-			$severity = 'medium';
+			$severity     = 'medium';
 			$threat_level = 35;
 		} elseif ( $friction_percentage < 70 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 25;
 		} else {
 			return null;
@@ -166,7 +166,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	private static function check_form_friction() {
 		// Check for form optimization plugins.
 		if ( is_plugin_active( 'wpforms-lite/wpforms.php' ) ||
-			 is_plugin_active( 'formidable/formidable.php' ) ) {
+			is_plugin_active( 'formidable/formidable.php' ) ) {
 			return true; // Assume properly configured.
 		}
 
@@ -183,7 +183,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 		if ( class_exists( 'WooCommerce' ) ) {
 			// Check for one-page/multi-step checkout.
 			if ( is_plugin_active( 'woocommerce-one-page-checkout/woocommerce-one-page-checkout.php' ) ||
-				 is_plugin_active( 'woocommerce-multistep-checkout/woocommerce-multistep-checkout.php' ) ) {
+				is_plugin_active( 'woocommerce-multistep-checkout/woocommerce-multistep-checkout.php' ) ) {
 				return true;
 			}
 
@@ -227,7 +227,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	 */
 	private static function check_trust_friction() {
 		$trust_keywords = array( 'secure', 'ssl', 'guarantee', 'testimonial', 'review' );
-		$trust_found = 0;
+		$trust_found    = 0;
 
 		foreach ( $trust_keywords as $keyword ) {
 			$query = new \WP_Query(
@@ -239,7 +239,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 				)
 			);
 			if ( $query->have_posts() ) {
-				$trust_found++;
+				++$trust_found;
 			}
 		}
 
@@ -294,7 +294,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	private static function check_mobile_friction() {
 		// Check for AMP or mobile optimization.
 		if ( is_plugin_active( 'amp/amp.php' ) ||
-			 wp_is_mobile() ) {
+			wp_is_mobile() ) {
 			return true;
 		}
 

@@ -27,6 +27,10 @@ class Achievement_System {
 	 * @return array Achievement definitions
 	 */
 	public static function get_all_achievements(): array {
+		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		$cached = \WPShadow\Core\Cache_Manager::get(
 			'achievements_cached',
 			'wpshadow_engagement'
@@ -185,6 +189,10 @@ class Achievement_System {
 	 * @return bool Success status
 	 */
 	public static function unlock( $user_id, $achievement_id ): bool {
+		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+			return false;
+		}
+
 		$achievements = self::get_all_achievements();
 
 		if ( ! isset( $achievements[ $achievement_id ] ) ) {
@@ -231,6 +239,10 @@ class Achievement_System {
 	 * @return array User's achievements
 	 */
 	public static function get_user_achievements( $user_id ): array {
+		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		return get_user_meta( $user_id, self::USER_ACHIEVEMENTS_KEY, true ) ?: array();
 	}
 

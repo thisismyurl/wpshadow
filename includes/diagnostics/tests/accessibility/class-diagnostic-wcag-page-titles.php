@@ -99,8 +99,8 @@ class Diagnostic_WCAG_Page_Titles extends Diagnostic_Base {
 
 		foreach ( $posts as $post ) {
 			$title = get_the_title( $post->ID );
-			if ( empty( $title ) || $title === $site_name || $title === 'Home' ) {
-				$generic_count++;
+			if ( empty( $title ) || $site_name === $title || 'Home' === $title ) {
+				++$generic_count;
 			}
 		}
 

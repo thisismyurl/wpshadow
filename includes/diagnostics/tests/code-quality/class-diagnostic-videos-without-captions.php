@@ -104,11 +104,11 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 					// Check if captions are explicitly enabled
 					if ( strpos( $youtube_url, 'cc_load_policy=1' ) === false && strpos( $youtube_url, '&cc=1' ) === false ) {
 						$videos_without_captions[] = array(
-							'post_id'   => $post->ID,
+							'post_id'    => $post->ID,
 							'post_title' => $post->post_title,
-							'type'      => 'YouTube embed',
-							'url'       => $youtube_url,
-							'issue'     => 'No cc_load_policy=1 parameter',
+							'type'       => 'YouTube embed',
+							'url'        => $youtube_url,
+							'issue'      => 'No cc_load_policy=1 parameter',
 						);
 					}
 				}
@@ -119,11 +119,11 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 				foreach ( $vimeo_matches[1] as $vimeo_url ) {
 					if ( strpos( $vimeo_url, 'texttrack=' ) === false ) {
 						$videos_without_captions[] = array(
-							'post_id'   => $post->ID,
+							'post_id'    => $post->ID,
 							'post_title' => $post->post_title,
-							'type'      => 'Vimeo embed',
-							'url'       => $vimeo_url,
-							'issue'     => 'No texttrack parameter',
+							'type'       => 'Vimeo embed',
+							'url'        => $vimeo_url,
+							'issue'      => 'No texttrack parameter',
 						);
 					}
 				}
@@ -134,11 +134,11 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 				foreach ( $video_matches[0] as $video_html ) {
 					if ( stripos( $video_html, '<track' ) === false ) {
 						$videos_without_captions[] = array(
-							'post_id'   => $post->ID,
+							'post_id'    => $post->ID,
 							'post_title' => $post->post_title,
-							'type'      => 'HTML5 video',
-							'url'       => '',
-							'issue'     => 'Missing <track> element',
+							'type'       => 'HTML5 video',
+							'url'        => '',
+							'issue'      => 'Missing <track> element',
 						);
 					}
 				}
@@ -160,11 +160,11 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 			$caption_file = get_post_meta( $video->ID, '_wp_attachment_video_caption', true );
 			if ( empty( $caption_file ) ) {
 				$videos_without_captions[] = array(
-					'post_id'   => $video->ID,
+					'post_id'    => $video->ID,
 					'post_title' => $video->post_title,
-					'type'      => 'Video attachment',
-					'url'       => wp_get_attachment_url( $video->ID ),
-					'issue'     => 'No caption file metadata',
+					'type'       => 'Video attachment',
+					'url'        => wp_get_attachment_url( $video->ID ),
+					'issue'      => 'No caption file metadata',
 				);
 			}
 		}
@@ -188,8 +188,8 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/accessibility-videos-without-captions',
 			'details'      => array(
-				'video_count'    => $count,
-				'sample_videos'  => array_slice( $videos_without_captions, 0, 10 ),
+				'video_count'      => $count,
+				'sample_videos'    => array_slice( $videos_without_captions, 0, 10 ),
 				'wcag_requirement' => 'Level A: Success Criterion 1.2.2 (Captions Prerecorded)',
 			),
 		);

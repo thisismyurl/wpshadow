@@ -82,45 +82,45 @@ class Diagnostic_Post_Type_Relationships extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
 				'details'      => array(
-					'issue' => 'orphaned_term_relationships',
-					'orphaned_count' => $orphaned_relationships,
-					'message' => sprintf(
+					'issue'                           => 'orphaned_term_relationships',
+					'orphaned_count'                  => $orphaned_relationships,
+					'message'                         => sprintf(
 						/* translators: %d: number of orphaned relationships */
 						__( '%d orphaned term relationships in database', 'wpshadow' ),
 						$orphaned_relationships
 					),
 					'what_are_orphaned_relationships' => __( 'Term relationships pointing to deleted posts', 'wpshadow' ),
-					'how_this_happens' => array(
+					'how_this_happens'                => array(
 						'Posts deleted without cleanup',
 						'Direct database manipulation',
 						'Plugin/theme deactivation',
 						'Import/export issues',
 						'Database corruption',
 					),
-					'impact' => array(
+					'impact'                          => array(
 						'Wastes database space',
 						'Inflates term counts',
 						'Slows taxonomy queries',
 						'Confuses analytics',
 					),
-					'database_bloat' => sprintf(
+					'database_bloat'                  => sprintf(
 						/* translators: %d: estimated size in KB */
 						__( 'Approximately %d KB wasted database space', 'wpshadow' ),
 						intval( $orphaned_relationships * 0.1 )
 					),
-					'cleanup_query' => "-- BACKUP DATABASE FIRST!
+					'cleanup_query'                   => "-- BACKUP DATABASE FIRST!
 DELETE tr FROM {$wpdb->prefix}term_relationships tr
 LEFT JOIN {$wpdb->prefix}posts p ON tr.object_id = p.ID
 WHERE p.ID IS NULL;",
-					'wp_cli_command' => 'wp term recount $(wp taxonomy list --field=name)',
-					'prevention' => array(
+					'wp_cli_command'                  => 'wp term recount $(wp taxonomy list --field=name)',
+					'prevention'                      => array(
 						'Use wp_delete_post()' => 'WordPress function handles cleanup',
 						'Avoid direct queries' => 'Use WordPress APIs',
-						'Regular maintenance' => 'Run cleanup periodically',
+						'Regular maintenance'  => 'Run cleanup periodically',
 					),
-					'term_count_update' => __( 'After cleanup, recalculate term counts with wp_update_term_count_now()', 'wpshadow' ),
-					'testing_recommendation' => __( 'Test cleanup query on staging first', 'wpshadow' ),
-					'recommendation' => __( 'Clean up orphaned term relationships to improve performance', 'wpshadow' ),
+					'term_count_update'               => __( 'After cleanup, recalculate term counts with wp_update_term_count_now()', 'wpshadow' ),
+					'testing_recommendation'          => __( 'Test cleanup query on staging first', 'wpshadow' ),
+					'recommendation'                  => __( 'Clean up orphaned term relationships to improve performance', 'wpshadow' ),
 				),
 			);
 		}
@@ -148,27 +148,27 @@ WHERE p.ID IS NULL;",
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
 				'details'      => array(
-					'issue' => 'unused_terms',
-					'unused_terms' => $unused_terms,
-					'total_unused' => count( $unused_terms ),
-					'message' => sprintf(
+					'issue'                => 'unused_terms',
+					'unused_terms'         => $unused_terms,
+					'total_unused'         => count( $unused_terms ),
+					'message'              => sprintf(
 						/* translators: %d: number of unused terms */
 						__( '%d taxonomy terms assigned to no posts', 'wpshadow' ),
 						count( $unused_terms )
 					),
-					'why_this_happens' => array(
+					'why_this_happens'     => array(
 						'Posts deleted but terms kept',
 						'Terms created but never used',
 						'Import cleanup incomplete',
 						'Taxonomy reorganization',
 					),
-					'impact' => array(
+					'impact'               => array(
 						'Database clutter',
 						'Confusing admin dropdowns',
 						'Harder term management',
 						'Longer load times',
 					),
-					'when_to_keep_terms' => array(
+					'when_to_keep_terms'   => array(
 						'Planned for future use',
 						'Part of taxonomy structure',
 						'Historical reference',
@@ -180,7 +180,7 @@ WHERE p.ID IS NULL;",
 						'No longer relevant',
 						'Post type discontinued',
 					),
-					'safe_deletion_check' => "// Check if term truly unused
+					'safe_deletion_check'  => "// Check if term truly unused
 \$term = get_term(\$term_id, 'category');
 if (\$term && \$term->count === 0) {
 	// No posts assigned
@@ -191,12 +191,12 @@ if (\$term && \$term->count === 0) {
 	}
 }",
 					'bulk_deletion_wp_cli' => array(
-						'List unused' => 'wp term list category --count=0 --format=ids',
+						'List unused'   => 'wp term list category --count=0 --format=ids',
 						'Delete unused' => 'wp term delete category $(wp term list category --count=0 --format=ids)',
 					),
-					'caution' => __( 'Hierarchical taxonomies: keep parent terms even if no direct assignments', 'wpshadow' ),
-					'best_practice' => __( 'Regular term audits prevent buildup of unused terms', 'wpshadow' ),
-					'recommendation' => __( 'Review and delete truly unused taxonomy terms', 'wpshadow' ),
+					'caution'              => __( 'Hierarchical taxonomies: keep parent terms even if no direct assignments', 'wpshadow' ),
+					'best_practice'        => __( 'Regular term audits prevent buildup of unused terms', 'wpshadow' ),
+					'recommendation'       => __( 'Review and delete truly unused taxonomy terms', 'wpshadow' ),
 				),
 			);
 		}
@@ -224,21 +224,21 @@ if (\$term && \$term->count === 0) {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
 				'details'      => array(
-					'issue' => 'term_count_mismatch',
-					'mismatched_terms' => $count_mismatches,
-					'message' => sprintf(
+					'issue'                  => 'term_count_mismatch',
+					'mismatched_terms'       => $count_mismatches,
+					'message'                => sprintf(
 						/* translators: %d: number of terms */
 						__( '%d taxonomy terms have incorrect counts', 'wpshadow' ),
 						count( $count_mismatches )
 					),
-					'what_are_term_counts' => __( 'Cached counts of how many posts use each term', 'wpshadow' ),
-					'why_counts_matter' => array(
+					'what_are_term_counts'   => __( 'Cached counts of how many posts use each term', 'wpshadow' ),
+					'why_counts_matter'      => array(
 						'Used in admin category lists',
 						'Shown in tag clouds',
 						'Filter empty terms',
 						'Analytics and reports',
 					),
-					'how_mismatches_happen' => array(
+					'how_mismatches_happen'  => array(
 						'Direct database edits',
 						'Bulk post deletions',
 						'Plugin conflicts',
@@ -246,7 +246,7 @@ if (\$term && \$term->count === 0) {
 						'Database corruption',
 					),
 					'user_experience_impact' => __( 'Admin sees "5 posts" but clicking shows 3 posts', 'wpshadow' ),
-					'recalculating_counts' => "// Recalculate all terms in a taxonomy
+					'recalculating_counts'   => "// Recalculate all terms in a taxonomy
 wp_update_term_count_now(array(\$term_id), 'category');
 
 // Or for all taxonomies
@@ -259,24 +259,24 @@ foreach (\$taxonomies as \$taxonomy) {
 	\$term_ids = wp_list_pluck(\$terms, 'term_id');
 	wp_update_term_count_now(\$term_ids, \$taxonomy);
 }",
-					'wp_cli_command' => 'wp term recount category',
-					'automatic_recounting' => __( 'WordPress recalculates on post save, but bulk operations can skip this', 'wpshadow' ),
-					'when_to_recount' => array(
+					'wp_cli_command'         => 'wp term recount category',
+					'automatic_recounting'   => __( 'WordPress recalculates on post save, but bulk operations can skip this', 'wpshadow' ),
+					'when_to_recount'        => array(
 						'After import/export',
 						'After bulk deletions',
 						'After plugin deactivation',
 						'Periodically (monthly)',
 					),
-					'performance_note' => __( 'Recounting large taxonomies can take time; run during low-traffic periods', 'wpshadow' ),
-					'prevention' => __( 'Always use wp_delete_post() instead of direct database queries', 'wpshadow' ),
-					'recommendation' => __( 'Recalculate term counts for accurate reporting', 'wpshadow' ),
+					'performance_note'       => __( 'Recounting large taxonomies can take time; run during low-traffic periods', 'wpshadow' ),
+					'prevention'             => __( 'Always use wp_delete_post() instead of direct database queries', 'wpshadow' ),
+					'recommendation'         => __( 'Recalculate term counts for accurate reporting', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 4: Custom post types without taxonomy assignments
 		global $wp_post_types;
-		$built_in_types = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
+		$built_in_types           = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
 		$types_without_taxonomies = array();
 
 		foreach ( $wp_post_types as $type => $type_obj ) {
@@ -298,35 +298,35 @@ foreach (\$taxonomies as \$taxonomy) {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
 				'details'      => array(
-					'issue' => 'no_taxonomies',
-					'affected_post_types' => $types_without_taxonomies,
-					'message' => sprintf(
+					'issue'                         => 'no_taxonomies',
+					'affected_post_types'           => $types_without_taxonomies,
+					'message'                       => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types have no taxonomies', 'wpshadow' ),
 						count( $types_without_taxonomies )
 					),
-					'why_taxonomies_matter' => array(
+					'why_taxonomies_matter'         => array(
 						'Organize and categorize content',
 						'Filter and search capabilities',
 						'Archive pages by category',
 						'Better content discovery',
 						'SEO benefits',
 					),
-					'when_taxonomies_needed' => array(
+					'when_taxonomies_needed'        => array(
 						'Multiple items in collection',
 						'Content needs categorization',
 						'Users browse by topic',
 						'Filtering is important',
 					),
-					'when_taxonomies_not_needed' => array(
+					'when_taxonomies_not_needed'    => array(
 						'Single instance post types',
 						'Simple lists without categories',
 						'Purely functional content',
 					),
-					'common_taxonomy_patterns' => array(
-						'Portfolio' => 'Project Type, Client, Technology',
-						'Products' => 'Product Category, Brand, Tag',
-						'Events' => 'Event Type, Location, Topic',
+					'common_taxonomy_patterns'      => array(
+						'Portfolio'    => 'Project Type, Client, Technology',
+						'Products'     => 'Product Category, Brand, Tag',
+						'Events'       => 'Event Type, Location, Topic',
 						'Team Members' => 'Department, Role, Location',
 					),
 					'assigning_existing_taxonomies' => "// Assign built-in taxonomies
@@ -334,7 +334,7 @@ register_post_type('portfolio', array(
 	'taxonomies' => array('category', 'post_tag'),
 	// ... other args
 ));",
-					'creating_custom_taxonomies' => "// Create custom taxonomy
+					'creating_custom_taxonomies'    => "// Create custom taxonomy
 register_taxonomy('project_type', 'portfolio', array(
 	'labels' => array(
 		'name' => __('Project Types', 'textdomain'),
@@ -344,18 +344,18 @@ register_taxonomy('project_type', 'portfolio', array(
 	'public' => true,
 	'show_in_rest' => true,
 ));",
-					'hierarchical_vs_tags' => array(
+					'hierarchical_vs_tags'          => array(
 						'Hierarchical (like categories)' => 'Nested structure, parent-child relationships',
-						'Non-hierarchical (like tags)' => 'Flat structure, flexible tagging',
+						'Non-hierarchical (like tags)'   => 'Flat structure, flexible tagging',
 					),
-					'seo_benefits' => array(
+					'seo_benefits'                  => array(
 						'Category/tag archive pages',
 						'Better internal linking',
 						'Keyword-rich URLs',
 						'Breadcrumb navigation',
 					),
-					'user_experience' => __( 'Taxonomies help users find related content easily', 'wpshadow' ),
-					'recommendation' => __( 'Add relevant taxonomies to organize custom post types', 'wpshadow' ),
+					'user_experience'               => __( 'Taxonomies help users find related content easily', 'wpshadow' ),
+					'recommendation'                => __( 'Add relevant taxonomies to organize custom post types', 'wpshadow' ),
 				),
 			);
 		}
@@ -383,9 +383,9 @@ register_taxonomy('project_type', 'portfolio', array(
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
 				'details'      => array(
-					'issue' => 'excessive_terms',
-					'affected_posts' => $excessive_terms,
-					'message' => sprintf(
+					'issue'                   => 'excessive_terms',
+					'affected_posts'          => $excessive_terms,
+					'message'                 => sprintf(
 						/* translators: %d: number of posts */
 						__( '%d posts assigned to 30+ taxonomy terms', 'wpshadow' ),
 						count( $excessive_terms )
@@ -396,20 +396,20 @@ register_taxonomy('project_type', 'portfolio', array(
 						'Slows queries',
 						'Poor UX in editor',
 					),
-					'recommended_limits' => array(
-						'Categories' => '2-5 per post (hierarchical)',
-						'Tags' => '5-15 per post (non-hierarchical)',
+					'recommended_limits'      => array(
+						'Categories'        => '2-5 per post (hierarchical)',
+						'Tags'              => '5-15 per post (non-hierarchical)',
 						'Custom taxonomies' => '3-10 per post',
 					),
-					'seo_impact' => __( 'Search engines may penalize over-categorized content as keyword stuffing', 'wpshadow' ),
-					'user_experience' => __( 'Long lists of categories/tags confuse readers', 'wpshadow' ),
-					'common_causes' => array(
+					'seo_impact'              => __( 'Search engines may penalize over-categorized content as keyword stuffing', 'wpshadow' ),
+					'user_experience'         => __( 'Long lists of categories/tags confuse readers', 'wpshadow' ),
+					'common_causes'           => array(
 						'Automated tagging plugins',
 						'Import from other systems',
 						'Over-enthusiastic editors',
 						'Tag spam',
 					),
-					'cleanup_strategy' => array(
+					'cleanup_strategy'        => array(
 						'1. Review top posts with most terms',
 						'2. Keep only most relevant 5-10',
 						'3. Remove redundant terms',
@@ -430,20 +430,20 @@ foreach (\$posts as \$post) {
 		echo \$post->post_title . ': ' . count(\$terms) . ' terms<br>';
 	}
 }",
-					'editorial_guidelines' => array(
+					'editorial_guidelines'    => array(
 						'Set maximum term limits',
 						'Train content editors',
 						'Regular audits',
 						'Use primary category plugins',
 					),
-					'quality_over_quantity' => __( 'Better to have few relevant terms than many loosely related ones', 'wpshadow' ),
-					'recommendation' => __( 'Limit taxonomy assignments to most relevant 5-15 terms per post', 'wpshadow' ),
+					'quality_over_quantity'   => __( 'Better to have few relevant terms than many loosely related ones', 'wpshadow' ),
+					'recommendation'          => __( 'Limit taxonomy assignments to most relevant 5-15 terms per post', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 6: Taxonomies shared across incompatible post types
-		$taxonomies_to_check = get_taxonomies( array(), 'objects' );
+		$taxonomies_to_check      = get_taxonomies( array(), 'objects' );
 		$incompatible_assignments = array();
 
 		foreach ( $taxonomies_to_check as $taxonomy => $tax_obj ) {
@@ -451,8 +451,8 @@ foreach (\$posts as \$post) {
 
 			// Check if taxonomy assigned to very different post types
 			if ( count( $object_types ) > 1 ) {
-				$has_post = in_array( 'post', $object_types, true );
-				$has_page = in_array( 'page', $object_types, true );
+				$has_post   = in_array( 'post', $object_types, true );
+				$has_page   = in_array( 'page', $object_types, true );
 				$has_custom = false;
 
 				foreach ( $object_types as $type ) {
@@ -478,41 +478,41 @@ foreach (\$posts as \$post) {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
 				'details'      => array(
-					'issue' => 'mixed_post_type_assignments',
-					'affected_taxonomies' => $incompatible_assignments,
-					'message' => sprintf(
+					'issue'                          => 'mixed_post_type_assignments',
+					'affected_taxonomies'            => $incompatible_assignments,
+					'message'                        => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d taxonomies assigned to multiple unrelated post types', 'wpshadow' ),
 						count( $incompatible_assignments )
 					),
-					'why_this_might_be_problematic' => array(
+					'why_this_might_be_problematic'  => array(
 						'Terms for one type irrelevant for another',
 						'Confusing admin dropdown lists',
 						'Mixed content in archives',
 						'Poor content organization',
 					),
-					'when_sharing_makes_sense' => array(
+					'when_sharing_makes_sense'       => array(
 						'Related content types' => 'Products and Reviews share Categories',
-						'Cross-type tagging' => 'Posts, Pages, Projects share Tags',
-						'Location taxonomies' => 'Events, Venues, Team all use Location',
+						'Cross-type tagging'    => 'Posts, Pages, Projects share Tags',
+						'Location taxonomies'   => 'Events, Venues, Team all use Location',
 					),
 					'when_sharing_doesnt_make_sense' => array(
 						'Product Categories on Blog Posts',
 						'Event Types on Team Members',
 						'Book Genres on Portfolio Items',
 					),
-					'examples' => array(
+					'examples'                       => array(
 						'Good: Tags on Posts, Pages, Projects' => 'General keywords apply to all',
 						'Good: Location on Events, Venues, Team' => 'Geographic organization',
 						'Bad: Product Category on Posts, Events, Team' => 'Product-specific, irrelevant elsewhere',
 					),
-					'refactoring_approach' => array(
+					'refactoring_approach'           => array(
 						'1. Identify which post types truly need taxonomy',
 						'2. Create separate taxonomies for unrelated types',
 						'3. Migrate existing terms if needed',
 						'4. Update taxonomy registration',
 					),
-					'unassigning_taxonomy' => "// Remove post type from taxonomy
+					'unassigning_taxonomy'           => "// Remove post type from taxonomy
 unregister_taxonomy_for_object_type('category', 'portfolio');
 
 // Or modify registration
@@ -520,9 +520,9 @@ register_taxonomy('product_category', array('product'), array(
 	// Only assign to products, not posts/pages
 	// ... taxonomy args
 ));",
-					'data_migration_needed' => __( 'If splitting taxonomy, migrate existing term assignments carefully', 'wpshadow' ),
-					'best_practice' => __( 'Share taxonomies only between closely related content types', 'wpshadow' ),
-					'recommendation' => __( 'Review taxonomy assignments and separate unrelated content types', 'wpshadow' ),
+					'data_migration_needed'          => __( 'If splitting taxonomy, migrate existing term assignments carefully', 'wpshadow' ),
+					'best_practice'                  => __( 'Share taxonomies only between closely related content types', 'wpshadow' ),
+					'recommendation'                 => __( 'Review taxonomy assignments and separate unrelated content types', 'wpshadow' ),
 				),
 			);
 		}

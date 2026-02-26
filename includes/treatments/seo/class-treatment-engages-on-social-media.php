@@ -80,17 +80,4 @@ class Treatment_Engages_On_Social_Media extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Engages_On_Social_Media' );
 	}
-
-	/**
-	 * Get the "Why This Matters" educational content.
-	 *
-	 * @since  1.7034.1430
-	 * @return string Explanation of why this treatment matters.
-	 */
-	private static function get_why_matters() {
-		return __(
-			'Social media amplifies your content\'s reach far beyond your website. When readers share your content, you reach their networks. Auto-posting ensures every new article gets promoted. Social feeds show you\'re active and engaged. Open Graph tags control how your content looks when shared, increasing click-through rates. Social media isn\'t optional anymore—it\'s where conversations happen.',
-			'wpshadow'
-		);
-	}
 }

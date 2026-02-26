@@ -78,21 +78,21 @@ class Diagnostic_Theme_Performance extends Diagnostic_Base {
 					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/theme-performance',
 					'details'      => array(
-						'issue' => 'excessive_stylesheets',
-						'stylesheet_count' => $enqueued_styles,
-						'message' => sprintf(
+						'issue'                   => 'excessive_stylesheets',
+						'stylesheet_count'        => $enqueued_styles,
+						'message'                 => sprintf(
 							/* translators: %d: count */
 							__( '%d stylesheets loaded (recommended: 5-10)', 'wpshadow' ),
 							$enqueued_styles
 						),
-						'performance_impact' => __( 'Each stylesheet adds 50-300ms to page load', 'wpshadow' ),
+						'performance_impact'      => __( 'Each stylesheet adds 50-300ms to page load', 'wpshadow' ),
 						'optimization_strategies' => array(
 							'Combine stylesheets' => 'Merge into 1-2 files',
-							'Remove unused CSS' => 'PurgeCSS, UnCSS',
+							'Remove unused CSS'   => 'PurgeCSS, UnCSS',
 							'Inline critical CSS' => 'Speed up rendering',
-							'Defer non-critical' => 'Load after page display',
+							'Defer non-critical'  => 'Load after page display',
 						),
-						'combining_stylesheets' => "// Remove individual enqueues, combine into one
+						'combining_stylesheets'   => "// Remove individual enqueues, combine into one
 wp_enqueue_style('my-theme-combined', get_template_directory_uri() . '/dist/styles.css');
 
 // Or use style concatenation in wp_head
@@ -105,27 +105,27 @@ add_action('wp_print_styles', function() {
 		}
 	}
 });",
-						'removing_unused_css' => "// Don't load CSS on non-necessary pages
+						'removing_unused_css'     => "// Don't load CSS on non-necessary pages
 if (is_admin()) {
 	wp_dequeue_style('plugin-bootstrap');
 	wp_dequeue_style('plugin-fontawesome');
 }",
-						'critical_css' => "// Inline critical CSS to speed up first paint
+						'critical_css'            => "// Inline critical CSS to speed up first paint
 echo '<style>';
 include get_template_directory() . '/dist/critical.css';
 echo '</style>';",
-						'measuring_improvement' => array(
+						'measuring_improvement'   => array(
 							'Before: 15 stylesheets, 3.5s load',
 							'After combining: 3 stylesheets, 1.2s load',
 							'65% improvement in load time',
 						),
-						'tools' => array(
-							'Webpack' => 'Bundle and combine CSS',
+						'tools'                   => array(
+							'Webpack'    => 'Bundle and combine CSS',
 							'Gulp/Grunt' => 'CSS concatenation',
-							'PurgeCSS' => 'Remove unused styles',
-							'Critical' => 'Extract critical CSS',
+							'PurgeCSS'   => 'Remove unused styles',
+							'Critical'   => 'Extract critical CSS',
 						),
-						'recommendation' => __( 'Optimize theme stylesheet loading - target 5-10 total stylesheets', 'wpshadow' ),
+						'recommendation'          => __( 'Optimize theme stylesheet loading - target 5-10 total stylesheets', 'wpshadow' ),
 					),
 				);
 			}
@@ -147,34 +147,34 @@ echo '</style>';",
 					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/theme-performance',
 					'details'      => array(
-						'issue' => 'excessive_scripts',
-						'script_count' => $enqueued_scripts,
-						'message' => sprintf(
+						'issue'                   => 'excessive_scripts',
+						'script_count'            => $enqueued_scripts,
+						'message'                 => sprintf(
 							/* translators: %d: count */
 							__( '%d scripts loaded (recommended: 8-15)', 'wpshadow' ),
 							$enqueued_scripts
 						),
-						'performance_impact' => __( 'Each script adds 100-500ms to execution time', 'wpshadow' ),
+						'performance_impact'      => __( 'Each script adds 100-500ms to execution time', 'wpshadow' ),
 						'optimization_strategies' => array(
 							'Defer script loading' => 'Load after page renders',
-							'Async loading' => 'Don\'t block rendering',
-							'Lazy load' => 'Load on demand',
-							'Combine scripts' => 'Single bundle',
+							'Async loading'        => 'Don\'t block rendering',
+							'Lazy load'            => 'Load on demand',
+							'Combine scripts'      => 'Single bundle',
 						),
-						'defer_scripts' => "wp_enqueue_script('my-theme-js', 
+						'defer_scripts'           => "wp_enqueue_script('my-theme-js', 
 	get_template_directory_uri() . '/dist/app.js',
 	array(),
 	'1.0',
 	true // Load in footer
 );",
-						'async_loading' => "// Add async attribute
+						'async_loading'           => "// Add async attribute
 add_filter('script_loader_tag', function(\$tag, \$handle) {
 	if ('my-analytics' === \$handle) {
 		return str_replace(' src', ' async=\"async\" src', \$tag);
 	}
 	return \$tag;
 }, 10, 2);",
-						'lazy_loading' => "// Load scripts on user interaction
+						'lazy_loading'            => "// Load scripts on user interaction
 document.addEventListener('click', function() {
 	if (!window.heavyScript) {
 		var script = document.createElement('script');
@@ -182,25 +182,25 @@ document.addEventListener('click', function() {
 		document.head.appendChild(script);
 	}
 });",
-						'bundling' => array(
-							'Webpack' => 'Bundle and minify',
-							'Rollup' => 'ES module bundling',
-							'Gulp/Grunt' => 'Task runners',
+						'bundling'                => array(
+							'Webpack'       => 'Bundle and minify',
+							'Rollup'        => 'ES module bundling',
+							'Gulp/Grunt'    => 'Task runners',
 							'Build process' => 'Optimize before deploy',
 						),
-						'measuring' => array(
+						'measuring'               => array(
 							'Before: 30 scripts, 5.5s TTI',
 							'After deferring: 15 scripts, 2.1s TTI',
 							'62% improvement',
 						),
-						'recommendation' => __( 'Optimize theme script loading - target 8-15 total scripts', 'wpshadow' ),
+						'recommendation'          => __( 'Optimize theme script loading - target 8-15 total scripts', 'wpshadow' ),
 					),
 				);
 			}
 		}
 
 		// Pattern 3: Theme not minified
-		$theme_dir = get_template_directory();
+		$theme_dir  = get_template_directory();
 		$theme_file = $theme_dir . '/style.css';
 
 		if ( file_exists( $theme_file ) ) {
@@ -219,37 +219,37 @@ document.addEventListener('click', function() {
 					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/theme-performance',
 					'details'      => array(
-						'issue' => 'not_minified',
-						'file_size' => size_format( $size_normal ),
-						'message' => __( 'Theme assets not minified', 'wpshadow' ),
-						'minification_benefits' => array(
+						'issue'                  => 'not_minified',
+						'file_size'              => size_format( $size_normal ),
+						'message'                => __( 'Theme assets not minified', 'wpshadow' ),
+						'minification_benefits'  => array(
 							'Remove unnecessary characters',
 							'Reduce file size by 30-70%',
 							'Faster download and parse',
 							'Improved page speed',
 						),
-						'minifiable_assets' => array(
-							'CSS' => 'Remove whitespace, shorten names',
+						'minifiable_assets'      => array(
+							'CSS'        => 'Remove whitespace, shorten names',
 							'JavaScript' => 'Remove comments, compress',
-							'HTML' => 'Remove unused attributes',
-							'JSON' => 'Single line format',
+							'HTML'       => 'Remove unused attributes',
+							'JSON'       => 'Single line format',
 						),
-						'size_reduction' => "// Example minification results
+						'size_reduction'         => '// Example minification results
 Original style.css:  125 KB
 Minified style.min.css: 45 KB
 Reduction: 64%
 
 Original app.js: 250 KB
 Minified app.min.js: 75 KB
-Reduction: 70%",
-						'minification_tools' => array(
-							'CSSNano' => 'CSS minification',
-							'Terser' => 'JavaScript minification',
+Reduction: 70%',
+						'minification_tools'     => array(
+							'CSSNano'      => 'CSS minification',
+							'Terser'       => 'JavaScript minification',
 							'HTMLMinifier' => 'HTML minification',
-							'Webpack' => 'Built-in minification',
-							'Gulp/Grunt' => 'Task-based minification',
+							'Webpack'      => 'Built-in minification',
+							'Gulp/Grunt'   => 'Task-based minification',
 						),
-						'gulp_example' => "// gulpfile.js
+						'gulp_example'           => "// gulpfile.js
 const gulp = require('gulp');
 const minify = require('gulp-minify');
 
@@ -258,7 +258,7 @@ gulp.task('minify', () => {
 		.pipe(minify({cssmin: {}}))
 		.pipe(gulp.dest('dist'));
 });",
-						'webpack_config' => "// webpack.config.js
+						'webpack_config'         => "// webpack.config.js
 module.exports = {
 	mode: 'production',
 	entry: './src/index.js',
@@ -268,7 +268,7 @@ module.exports = {
 	},
 	// Automatically minifies in production mode
 };",
-						'enabling_in_wordpress' => "// In functions.php - use minified in production
+						'enabling_in_wordpress'  => "// In functions.php - use minified in production
 \$debug = (defined('WP_DEBUG') && WP_DEBUG);
 \$ext = \$debug ? '.css' : '.min.css';
 
@@ -276,8 +276,8 @@ wp_enqueue_style('my-theme',
 	get_template_directory_uri() . '/style' . \$ext
 );",
 						'gzip_with_minification' => __( 'Combine minification with gzip compression for maximum reduction', 'wpshadow' ),
-						'source_maps' => __( 'Use source maps for debugging minified code', 'wpshadow' ),
-						'recommendation' => __( 'Minify theme CSS and JavaScript files', 'wpshadow' ),
+						'source_maps'            => __( 'Use source maps for debugging minified code', 'wpshadow' ),
+						'recommendation'         => __( 'Minify theme CSS and JavaScript files', 'wpshadow' ),
 					),
 				);
 			}

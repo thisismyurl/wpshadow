@@ -37,6 +37,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			return array();
+		}
+
 		return array(
 			'wp_dashboard_setup'                             => 'register_dashboard_widget',
 			'admin_enqueue_scripts'                          => 'enqueue_assets',
@@ -184,6 +188,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function render_academy_page() {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			wp_die( esc_html( Academy_Release_Gate::get_hold_message() ) );
+		}
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( 'Insufficient permissions.' );
 		}
@@ -787,6 +795,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function dismiss_learning_suggestion() {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			self::send_error( Academy_Release_Gate::get_hold_message() );
+		}
+
 		self::verify_request( 'wpshadow_academy', 'read' );
 
 		$suggestion_id = self::get_post_param( 'suggestion_id', 'text', '', true );
@@ -808,6 +820,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function track_article_view() {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			self::send_error( Academy_Release_Gate::get_hold_message() );
+		}
+
 		self::verify_request( 'wpshadow_academy', 'read' );
 
 		$article_id = self::get_post_param( 'article_id', 'text', '', true );
@@ -826,6 +842,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function track_video_completion() {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			self::send_error( Academy_Release_Gate::get_hold_message() );
+		}
+
 		self::verify_request( 'wpshadow_academy', 'read' );
 
 		$video_id = self::get_post_param( 'video_id', 'text', '', true );
@@ -844,6 +864,10 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function get_learning_path() {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			self::send_error( Academy_Release_Gate::get_hold_message() );
+		}
+
 		self::verify_request( 'wpshadow_academy', 'read' );
 
 		$learning_path = Academy_Manager::get_learning_path();

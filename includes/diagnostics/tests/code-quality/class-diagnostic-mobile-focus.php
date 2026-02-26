@@ -106,7 +106,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	 */
 	private static function find_focus_issues(): array {
 		$issues = array();
-		$html = self::get_page_html();
+		$html   = self::get_page_html();
 
 		if ( ! $html ) {
 			return $issues;
@@ -114,15 +114,15 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 
 		// Check for focus indicators
 		$focus_issues = self::check_focus_indicators( $html );
-		$issues = array_merge( $issues, $focus_issues );
+		$issues       = array_merge( $issues, $focus_issues );
 
 		// Check for focus traps
 		$trap_issues = self::check_focus_traps( $html );
-		$issues = array_merge( $issues, $trap_issues );
+		$issues      = array_merge( $issues, $trap_issues );
 
 		// Check for tabindex misuse
 		$tabindex_issues = self::check_tabindex( $html );
-		$issues = array_merge( $issues, $tabindex_issues );
+		$issues          = array_merge( $issues, $tabindex_issues );
 
 		return $issues;
 	}
@@ -144,10 +144,10 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 		// Check for outline: none on :focus
 		if ( preg_match( '/:focus\s*{[^}]*outline\s*:\s*none/i', $css ) ) {
 			$issues[] = array(
-				'type'        => 'missing-focus-indicator',
-				'issue'       => 'Focus outline disabled with outline: none',
-				'severity'    => 'critical',
-				'element'     => ':focus',
+				'type'     => 'missing-focus-indicator',
+				'issue'    => 'Focus outline disabled with outline: none',
+				'severity' => 'critical',
+				'element'  => ':focus',
 			);
 		}
 

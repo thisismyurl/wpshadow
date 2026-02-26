@@ -65,23 +65,23 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 	 */
 	public static function check() {
 		$theme = wp_get_theme();
-		
+
 		// If not using a child theme, check if they should be.
 		if ( ! $theme->parent() ) {
 			// Check if they're modifying a third-party theme directly.
-			$theme_dir  = $theme->get_stylesheet_directory();
-			$is_custom  = false;
-			
+			$theme_dir = $theme->get_stylesheet_directory();
+			$is_custom = false;
+
 			// Check if this is likely a custom theme (not from wp.org).
 			$theme_uri = $theme->get( 'ThemeURI' );
 			if ( empty( $theme_uri ) || strpos( $theme_uri, 'wordpress.org' ) === false ) {
 				$is_custom = true;
 			}
-			
+
 			// If it's a popular third-party theme, recommend child theme.
 			$popular_themes = array( 'twentytwentyfour', 'twentytwentythree', 'twentytwentytwo', 'astra', 'hello-elementor', 'kadence', 'generatepress', 'oceanwp' );
 			$theme_slug     = $theme->get_stylesheet();
-			
+
 			if ( in_array( $theme_slug, $popular_themes, true ) ) {
 				return array(
 					'id'           => self::$slug,
@@ -101,7 +101,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 					),
 				);
 			}
-			
+
 			return null; // Not using child theme but it's acceptable.
 		}
 
@@ -130,7 +130,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 			// Check if properly enqueuing parent stylesheet.
 			$functions_contents = file_get_contents( $functions_php );
 			if ( strpos( $functions_contents, 'wp_enqueue_style' ) === false &&
-				 strpos( $functions_contents, 'get_stylesheet_uri' ) === false ) {
+				strpos( $functions_contents, 'get_stylesheet_uri' ) === false ) {
 				$warnings[] = __( 'functions.php should enqueue parent and child stylesheets', 'wpshadow' );
 			}
 		}
@@ -138,16 +138,16 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 		// Check if overriding parent files correctly.
 		$parent_theme_dir = $theme->get_template_directory();
 		$child_files      = glob( $child_theme_dir . '/*.php' );
-		
+
 		if ( ! empty( $child_files ) ) {
 			foreach ( $child_files as $child_file ) {
 				$filename = basename( $child_file );
-				
+
 				// Skip functions.php (that's expected).
 				if ( 'functions.php' === $filename ) {
 					continue;
 				}
-				
+
 				// Check if parent file exists (proper override).
 				$parent_file = $parent_theme_dir . '/' . $filename;
 				if ( ! file_exists( $parent_file ) ) {
@@ -162,7 +162,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 
 		// Check screenshot.
 		$has_screenshot = file_exists( $child_theme_dir . '/screenshot.png' ) ||
-						  file_exists( $child_theme_dir . '/screenshot.jpg' );
+							file_exists( $child_theme_dir . '/screenshot.jpg' );
 		if ( ! $has_screenshot ) {
 			$warnings[] = __( 'Missing screenshot.png/jpg - recommended for theme recognition', 'wpshadow' );
 		}

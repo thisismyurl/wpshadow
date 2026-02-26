@@ -58,8 +58,6 @@ function wpshadow_render_feature_card_if_live(
 
 	// Check if feature is live
 	if ( ! Version_Checker::is_feature_live( $class_name ) ) {
-		// Optionally render "coming soon" badge instead
-		wpshadow_render_coming_soon_card( $title, $class_name );
 		return;
 	}
 

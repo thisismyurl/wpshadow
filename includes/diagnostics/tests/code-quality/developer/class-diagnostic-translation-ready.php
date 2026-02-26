@@ -103,13 +103,13 @@ class Diagnostic_Translation_Ready extends Diagnostic_Base {
 		}
 
 		// Scan for hardcoded strings in theme files (sample check).
-		$template_files = glob( $theme_dir . '/*.php' );
+		$template_files          = glob( $theme_dir . '/*.php' );
 		$hardcoded_strings_found = false;
-		
+
 		if ( ! empty( $template_files ) ) {
 			foreach ( array_slice( $template_files, 0, 5 ) as $file ) {
 				$content = file_get_contents( $file );
-				
+
 				// Look for echo with literal strings (not translatable).
 				if ( preg_match( '/echo\s+["\'](?!<\?php)[^"\']{10,}["\']/', $content ) ) {
 					$hardcoded_strings_found = true;
@@ -133,10 +133,10 @@ class Diagnostic_Translation_Ready extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/translation-ready',
 				'context'      => array(
-					'theme_name' => $theme->get( 'Name' ),
+					'theme_name'  => $theme->get( 'Name' ),
 					'text_domain' => $text_domain,
-					'issues'     => $issues,
-					'warnings'   => $warnings,
+					'issues'      => $issues,
+					'warnings'    => $warnings,
 				),
 			);
 		}

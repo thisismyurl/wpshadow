@@ -64,19 +64,19 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 	 * @return array|null Finding array if version control issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues    = array();
-		$warnings  = array();
-		$config    = array();
+		$issues   = array();
+		$warnings = array();
+		$config   = array();
 
 		// Check if .git directory exists.
-		$git_dir = ABSPATH . '.git';
+		$git_dir           = ABSPATH . '.git';
 		$config['has_git'] = is_dir( $git_dir );
 
 		if ( ! $config['has_git'] ) {
 			// Check parent directories (theme/plugin might be in git).
 			$parent_git = dirname( ABSPATH ) . '/.git';
 			if ( is_dir( $parent_git ) ) {
-				$config['has_git'] = true;
+				$config['has_git']      = true;
 				$config['git_location'] = 'parent';
 			} else {
 				$issues[] = __( 'Git repository not detected - version control not initialized', 'wpshadow' );
@@ -86,9 +86,9 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 		}
 
 		if ( $config['has_git'] ) {
-			
+
 			// Check for .gitignore.
-			$gitignore_file = ABSPATH . '.gitignore';
+			$gitignore_file          = ABSPATH . '.gitignore';
 			$config['has_gitignore'] = file_exists( $gitignore_file );
 
 			if ( ! $config['has_gitignore'] ) {
@@ -96,21 +96,21 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 			} else {
 				// Validate .gitignore content.
 				$gitignore_content = file_get_contents( $gitignore_file );
-				
+
 				// Critical files/directories that should be ignored.
 				$should_ignore = array(
-					'wp-config.php'  => 'wp-config.php',
-					'.env'           => '.env',
-					'debug.log'      => 'debug.log',
-					'uploads'        => 'wp-content/uploads',
-					'cache'          => 'wp-content/cache',
-					'node_modules'   => 'node_modules',
+					'wp-config.php' => 'wp-config.php',
+					'.env'          => '.env',
+					'debug.log'     => 'debug.log',
+					'uploads'       => 'wp-content/uploads',
+					'cache'         => 'wp-content/cache',
+					'node_modules'  => 'node_modules',
 				);
 
 				$missing_ignores = array();
 				foreach ( $should_ignore as $key => $pattern ) {
 					if ( strpos( $gitignore_content, $pattern ) === false &&
-						 strpos( $gitignore_content, $key ) === false ) {
+						strpos( $gitignore_content, $key ) === false ) {
 						$missing_ignores[] = $pattern;
 					}
 				}
@@ -141,11 +141,14 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 			}
 
 			// Check for .git directory accessibility.
-			$git_url = home_url( '/.git/config' );
-			$response = wp_remote_head( $git_url, array(
-				'timeout'   => 5,
-				'sslverify' => false,
-			) );
+			$git_url  = home_url( '/.git/config' );
+			$response = wp_remote_head(
+				$git_url,
+				array(
+					'timeout'   => 5,
+					'sslverify' => false,
+				)
+			);
 
 			if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 				$issues[] = __( '.git directory is publicly accessible - security risk', 'wpshadow' );
@@ -164,7 +167,7 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 			}
 
 			// Check if Git is configured (user.name, user.email).
-			$git_user = shell_exec( 'git config user.name 2>&1' );
+			$git_user  = shell_exec( 'git config user.name 2>&1' );
 			$git_email = shell_exec( 'git config user.email 2>&1' );
 
 			if ( empty( $git_user ) || empty( $git_email ) ) {
@@ -172,7 +175,7 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 			}
 
 			// Check for common Git hosting remotes.
-			$git_remote = shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && git remote -v 2>&1' );
+			$git_remote           = shell_exec( 'cd ' . escapeshellarg( ABSPATH ) . ' && git remote -v 2>&1' );
 			$config['has_remote'] = ! empty( $git_remote ) && strpos( $git_remote, 'origin' ) !== false;
 
 			if ( ! $config['has_remote'] ) {
@@ -195,25 +198,24 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 
 			// Check for branch protection indicators.
 			$has_branch_protection_file = file_exists( ABSPATH . '.github/branch_protection.yml' ) ||
-										   file_exists( ABSPATH . '.gitlab/push_rules.yml' );
+											file_exists( ABSPATH . '.gitlab/push_rules.yml' );
 
 			if ( ! $has_branch_protection_file ) {
 				$warnings[] = __( 'No branch protection configuration detected', 'wpshadow' );
 			}
-
 		}
 
 		// Check for alternative version control systems.
 		if ( ! $config['has_git'] ) {
 			$svn_dir = ABSPATH . '.svn';
-			$hg_dir = ABSPATH . '.hg';
+			$hg_dir  = ABSPATH . '.hg';
 
 			if ( is_dir( $svn_dir ) ) {
 				$config['has_svn'] = true;
-				$warnings[] = __( 'SVN detected - consider migrating to Git', 'wpshadow' );
+				$warnings[]        = __( 'SVN detected - consider migrating to Git', 'wpshadow' );
 			} elseif ( is_dir( $hg_dir ) ) {
 				$config['has_hg'] = true;
-				$warnings[] = __( 'Mercurial detected - consider migrating to Git', 'wpshadow' );
+				$warnings[]       = __( 'Mercurial detected - consider migrating to Git', 'wpshadow' );
 			}
 		}
 
@@ -228,8 +230,8 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/git-version-control',
 				'context'      => array(
-					'config'  => $config,
-					'issues'  => $issues,
+					'config'   => $config,
+					'issues'   => $issues,
 					'warnings' => $warnings,
 				),
 			);

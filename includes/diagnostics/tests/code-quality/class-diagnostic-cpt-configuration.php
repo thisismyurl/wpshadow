@@ -66,7 +66,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 
 		// Get all custom post types (exclude built-in)
 		$built_in_types = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
-		$custom_types = array();
+		$custom_types   = array();
 
 		foreach ( $wp_post_types as $type => $type_obj ) {
 			if ( ! in_array( $type, $built_in_types, true ) ) {
@@ -78,7 +78,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 		$missing_labels = array();
 		foreach ( $custom_types as $type => $type_obj ) {
 			$required_labels = array( 'name', 'singular_name', 'add_new', 'add_new_item', 'edit_item', 'new_item', 'view_item', 'search_items', 'not_found', 'not_found_in_trash' );
-			$missing = array();
+			$missing         = array();
 
 			foreach ( $required_labels as $label ) {
 				if ( empty( $type_obj->labels->$label ) ) {
@@ -101,33 +101,33 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
 				'details'      => array(
-					'issue' => 'missing_labels',
-					'affected_post_types' => $missing_labels,
-					'message' => sprintf(
+					'issue'                  => 'missing_labels',
+					'affected_post_types'    => $missing_labels,
+					'message'                => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types missing required labels', 'wpshadow' ),
 						count( $missing_labels )
 					),
-					'why_labels_matter' => array(
+					'why_labels_matter'      => array(
 						'Used throughout WordPress admin',
 						'Improve user experience',
 						'Better accessibility',
 						'Professional appearance',
 					),
-					'required_labels' => array(
-						'name' => 'Plural name (e.g., "Books")',
-						'singular_name' => 'Singular name (e.g., "Book")',
-						'add_new' => 'Add new button text',
-						'add_new_item' => 'Add new item page title',
-						'edit_item' => 'Edit item page title',
-						'new_item' => 'New item label',
-						'view_item' => 'View item link text',
-						'search_items' => 'Search items button text',
-						'not_found' => 'No items found message',
+					'required_labels'        => array(
+						'name'               => 'Plural name (e.g., "Books")',
+						'singular_name'      => 'Singular name (e.g., "Book")',
+						'add_new'            => 'Add new button text',
+						'add_new_item'       => 'Add new item page title',
+						'edit_item'          => 'Edit item page title',
+						'new_item'           => 'New item label',
+						'view_item'          => 'View item link text',
+						'search_items'       => 'Search items button text',
+						'not_found'          => 'No items found message',
 						'not_found_in_trash' => 'No items in trash message',
 					),
 					'user_experience_impact' => __( 'Users see generic "Items" instead of specific post type names', 'wpshadow' ),
-					'code_example' => "register_post_type('book', array(
+					'code_example'           => "register_post_type('book', array(
 	'labels' => array(
 		'name' => __('Books', 'textdomain'),
 		'singular_name' => __('Book', 'textdomain'),
@@ -141,14 +141,14 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 		'not_found_in_trash' => __('No books found in trash', 'textdomain'),
 	),
 ));",
-					'best_practice' => __( 'Always define all label strings for better UX', 'wpshadow' ),
-					'recommendation' => __( 'Update post type registration to include all required labels', 'wpshadow' ),
+					'best_practice'          => __( 'Always define all label strings for better UX', 'wpshadow' ),
+					'recommendation'         => __( 'Update post type registration to include all required labels', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 2: Custom post types using reserved slugs
-		$reserved_slugs = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'action', 'author', 'order', 'theme', 'admin', 'wp-admin', 'login', 'register' );
+		$reserved_slugs    = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'action', 'author', 'order', 'theme', 'admin', 'wp-admin', 'login', 'register' );
 		$problematic_slugs = array();
 
 		foreach ( $custom_types as $type => $type_obj ) {
@@ -167,41 +167,41 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
 				'details'      => array(
-					'issue' => 'reserved_slugs',
-					'problematic_slugs' => $problematic_slugs,
-					'message' => sprintf(
+					'issue'                  => 'reserved_slugs',
+					'problematic_slugs'      => $problematic_slugs,
+					'message'                => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types using reserved WordPress slugs', 'wpshadow' ),
 						count( $problematic_slugs )
 					),
-					'why_this_is_critical' => array(
+					'why_this_is_critical'   => array(
 						'Conflicts with WordPress core',
 						'Breaks admin pages and menus',
 						'Causes URL routing issues',
 						'May break plugins',
 					),
-					'reserved_slugs_list' => $reserved_slugs,
-					'common_conflicts' => array(
-						'post' => 'Conflicts with default post type',
-						'page' => 'Conflicts with default page type',
-						'admin' => 'Breaks admin area routing',
-						'login' => 'Interferes with login page',
+					'reserved_slugs_list'    => $reserved_slugs,
+					'common_conflicts'       => array(
+						'post'   => 'Conflicts with default post type',
+						'page'   => 'Conflicts with default page type',
+						'admin'  => 'Breaks admin area routing',
+						'login'  => 'Interferes with login page',
 						'author' => 'Conflicts with author archives',
 					),
-					'symptoms' => array(
+					'symptoms'               => array(
 						'404 errors on post type archives',
 						'Admin menu items not working',
 						'Cannot access post editor',
 						'Rewrite rules not working',
 					),
-					'how_to_fix' => array(
+					'how_to_fix'             => array(
 						'1. Choose a unique slug',
 						'2. Update register_post_type() call',
 						'3. Migrate existing content (if any)',
 						'4. Flush rewrite rules',
 					),
 					'data_migration_warning' => __( 'Changing slug requires migrating all existing post_type values in database', 'wpshadow' ),
-					'recommendation' => __( 'Use descriptive, unique slugs (e.g., "book", "product", "portfolio")', 'wpshadow' ),
+					'recommendation'         => __( 'Use descriptive, unique slugs (e.g., "book", "product", "portfolio")', 'wpshadow' ),
 				),
 			);
 		}
@@ -224,14 +224,14 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
 				'details'      => array(
-					'issue' => 'no_rest_api_support',
-					'affected_post_types' => $no_rest_api,
-					'message' => sprintf(
+					'issue'                       => 'no_rest_api_support',
+					'affected_post_types'         => $no_rest_api,
+					'message'                     => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types not available in REST API', 'wpshadow' ),
 						count( $no_rest_api )
 					),
-					'why_rest_api_matters' => array(
+					'why_rest_api_matters'        => array(
 						'Required for block editor (Gutenberg)',
 						'Enables headless WordPress',
 						'Allows mobile app integration',
@@ -239,24 +239,24 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 					),
 					'features_requiring_rest_api' => array(
 						'Block editor (Gutenberg)' => 'Cannot use modern editor without REST API',
-						'Site Editor' => 'Full Site Editing requires REST API',
-						'Mobile apps' => 'WordPress mobile apps use REST API',
-						'Headless WordPress' => 'Decoupled frontends require REST API',
+						'Site Editor'              => 'Full Site Editing requires REST API',
+						'Mobile apps'              => 'WordPress mobile apps use REST API',
+						'Headless WordPress'       => 'Decoupled frontends require REST API',
 						'Third-party integrations' => 'Many plugins and services use REST API',
 					),
-					'block_editor_impact' => __( 'Post types without REST API support use classic editor only', 'wpshadow' ),
-					'how_to_enable' => "register_post_type('book', array(
+					'block_editor_impact'         => __( 'Post types without REST API support use classic editor only', 'wpshadow' ),
+					'how_to_enable'               => "register_post_type('book', array(
 	'show_in_rest' => true,
 	'rest_base' => 'books', // Optional: custom REST base
 	'rest_controller_class' => 'WP_REST_Posts_Controller', // Default
 ));",
-					'security_considerations' => array(
+					'security_considerations'     => array(
 						'REST API respects same capabilities',
 						'Private posts remain private',
 						'Unpublished content not exposed',
 					),
-					'best_practice' => __( 'Enable REST API for all modern custom post types', 'wpshadow' ),
-					'recommendation' => __( 'Add show_in_rest => true to post type registration', 'wpshadow' ),
+					'best_practice'               => __( 'Enable REST API for all modern custom post types', 'wpshadow' ),
+					'recommendation'              => __( 'Add show_in_rest => true to post type registration', 'wpshadow' ),
 				),
 			);
 		}
@@ -279,9 +279,9 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
 				'details'      => array(
-					'issue' => 'default_capabilities',
-					'affected_post_types' => $capability_issues,
-					'message' => sprintf(
+					'issue'                          => 'default_capabilities',
+					'affected_post_types'            => $capability_issues,
+					'message'                        => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types using default "post" capabilities', 'wpshadow' ),
 						count( $capability_issues )
@@ -292,16 +292,16 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 						'Better user role management',
 						'More secure content management',
 					),
-					'capability_structure' => array(
-						'edit_posts' => 'Can edit own items',
-						'edit_others_posts' => 'Can edit others items',
-						'publish_posts' => 'Can publish items',
-						'read_private_posts' => 'Can read private items',
-						'delete_posts' => 'Can delete own items',
+					'capability_structure'           => array(
+						'edit_posts'           => 'Can edit own items',
+						'edit_others_posts'    => 'Can edit others items',
+						'publish_posts'        => 'Can publish items',
+						'read_private_posts'   => 'Can read private items',
+						'delete_posts'         => 'Can delete own items',
 						'edit_published_posts' => 'Can edit published items',
 					),
-					'example_use_case' => __( 'Books managed by Book Editors, Products by Shop Managers - different roles', 'wpshadow' ),
-					'how_to_implement' => "register_post_type('book', array(
+					'example_use_case'               => __( 'Books managed by Book Editors, Products by Shop Managers - different roles', 'wpshadow' ),
+					'how_to_implement'               => "register_post_type('book', array(
 	'capability_type' => 'book',
 	'capabilities' => array(
 		'edit_post' => 'edit_book',
@@ -314,14 +314,14 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 	),
 	'map_meta_cap' => true,
 ));",
-					'adding_capabilities_to_roles' => array(
+					'adding_capabilities_to_roles'   => array(
 						'1. Register post type with custom capabilities',
 						'2. Add capabilities to roles programmatically',
 						'3. Use plugin like Members or User Role Editor',
 						'4. Test access control',
 					),
-					'when_not_needed' => __( 'If post type uses same permissions as regular posts, default is fine', 'wpshadow' ),
-					'recommendation' => __( 'Use custom capabilities for specialized content types', 'wpshadow' ),
+					'when_not_needed'                => __( 'If post type uses same permissions as regular posts, default is fine', 'wpshadow' ),
+					'recommendation'                 => __( 'Use custom capabilities for specialized content types', 'wpshadow' ),
 				),
 			);
 		}
@@ -356,35 +356,35 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
 				'details'      => array(
-					'issue' => 'permalink_configuration',
-					'problematic_slugs' => $permalink_issues,
-					'message' => sprintf(
+					'issue'                 => 'permalink_configuration',
+					'problematic_slugs'     => $permalink_issues,
+					'message'               => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types have permalink configuration issues', 'wpshadow' ),
 						count( $permalink_issues )
 					),
-					'slug_requirements' => array(
+					'slug_requirements'     => array(
 						'Lowercase letters only',
 						'Use hyphens for spaces',
 						'No special characters',
 						'Minimum 3 characters',
 						'Descriptive and SEO-friendly',
 					),
-					'common_problems' => array(
-						'Too short' => 'Slugs like "a", "pr" are not descriptive',
+					'common_problems'       => array(
+						'Too short'          => 'Slugs like "a", "pr" are not descriptive',
 						'Special characters' => 'Characters like %, &, ? break URLs',
-						'Uppercase letters' => 'URLs should be lowercase',
-						'Spaces' => 'Spaces must be hyphens',
+						'Uppercase letters'  => 'URLs should be lowercase',
+						'Spaces'             => 'Spaces must be hyphens',
 					),
-					'seo_impact' => array(
+					'seo_impact'            => array(
 						'URLs should be readable',
 						'Descriptive slugs improve SEO',
 						'Clean URLs rank better',
 					),
-					'examples' => array(
-						'Bad: pr' => 'Too short, not descriptive',
-						'Bad: Product%Type' => 'Special character, uppercase',
-						'Good: products' => 'Clear, descriptive, lowercase',
+					'examples'              => array(
+						'Bad: pr'               => 'Too short, not descriptive',
+						'Bad: Product%Type'     => 'Special character, uppercase',
+						'Good: products'        => 'Clear, descriptive, lowercase',
 						'Good: portfolio-items' => 'Clear, uses hyphens',
 					),
 					'rewrite_configuration' => "register_post_type('product', array(
@@ -395,8 +395,8 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 		'pages' => true,
 	),
 ));",
-					'after_changes' => __( 'Always flush rewrite rules after changing permalink structure', 'wpshadow' ),
-					'recommendation' => __( 'Use descriptive, SEO-friendly slugs with only lowercase letters and hyphens', 'wpshadow' ),
+					'after_changes'         => __( 'Always flush rewrite rules after changing permalink structure', 'wpshadow' ),
+					'recommendation'        => __( 'Use descriptive, SEO-friendly slugs with only lowercase letters and hyphens', 'wpshadow' ),
 				),
 			);
 		}
@@ -436,43 +436,43 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
 				'details'      => array(
-					'issue' => 'missing_features',
-					'affected_post_types' => $missing_features,
-					'message' => sprintf(
+					'issue'                   => 'missing_features',
+					'affected_post_types'     => $missing_features,
+					'message'                 => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post types missing recommended features', 'wpshadow' ),
 						count( $missing_features )
 					),
-					'recommended_features' => array(
+					'recommended_features'    => array(
 						'thumbnail' => array(
-							'purpose' => 'Featured images for visual content',
-							'use_cases' => 'Listings, archives, social sharing',
+							'purpose'    => 'Featured images for visual content',
+							'use_cases'  => 'Listings, archives, social sharing',
 							'how_to_add' => "'supports' => array('title', 'editor', 'thumbnail')",
 						),
-						'excerpt' => array(
-							'purpose' => 'Short summaries for archive pages',
-							'use_cases' => 'Meta descriptions, previews, feeds',
+						'excerpt'   => array(
+							'purpose'    => 'Short summaries for archive pages',
+							'use_cases'  => 'Meta descriptions, previews, feeds',
 							'how_to_add' => "'supports' => array('title', 'editor', 'excerpt')",
 						),
 						'queryable' => array(
-							'purpose' => 'Allow frontend queries',
-							'use_cases' => 'Custom queries, search results',
+							'purpose'    => 'Allow frontend queries',
+							'use_cases'  => 'Custom queries, search results',
 							'how_to_add' => "'publicly_queryable' => true",
 						),
 					),
 					'feature_support_options' => array(
-						'title' => 'Post title field',
-						'editor' => 'Content editor',
-						'author' => 'Author dropdown',
-						'thumbnail' => 'Featured image',
-						'excerpt' => 'Excerpt field',
-						'trackbacks' => 'Trackback support',
-						'custom-fields' => 'Custom fields meta box',
-						'comments' => 'Comment support',
-						'revisions' => 'Revision tracking',
+						'title'           => 'Post title field',
+						'editor'          => 'Content editor',
+						'author'          => 'Author dropdown',
+						'thumbnail'       => 'Featured image',
+						'excerpt'         => 'Excerpt field',
+						'trackbacks'      => 'Trackback support',
+						'custom-fields'   => 'Custom fields meta box',
+						'comments'        => 'Comment support',
+						'revisions'       => 'Revision tracking',
 						'page-attributes' => 'Page attributes (order, parent)',
 					),
-					'full_example' => "register_post_type('product', array(
+					'full_example'            => "register_post_type('product', array(
 	'public' => true,
 	'publicly_queryable' => true,
 	'show_ui' => true,
@@ -486,8 +486,8 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 		'revisions',
 	),
 ));",
-					'when_to_skip_features' => __( 'Only include features that make sense for your content type', 'wpshadow' ),
-					'recommendation' => __( 'Add thumbnail and excerpt support for better content presentation', 'wpshadow' ),
+					'when_to_skip_features'   => __( 'Only include features that make sense for your content type', 'wpshadow' ),
+					'recommendation'          => __( 'Add thumbnail and excerpt support for better content presentation', 'wpshadow' ),
 				),
 			);
 		}

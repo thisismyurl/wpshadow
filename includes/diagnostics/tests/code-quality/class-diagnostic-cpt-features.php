@@ -63,15 +63,15 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 	 * @var array
 	 */
 	private static $expected_features = array(
-		'WPShadow\Content\CPT_Block_Patterns'        => 'Block Patterns Library',
-		'WPShadow\Content\CPT_Drag_Drop_Ordering'    => 'Drag & Drop Ordering',
-		'WPShadow\Content\CPT_Live_Preview'          => 'Live Preview',
-		'WPShadow\Content\CPT_Conditional_Display'   => 'Conditional Display',
-		'WPShadow\Content\CPT_Analytics_Dashboard'   => 'Analytics Dashboard',
-		'WPShadow\Content\CPT_Inline_Editing'        => 'Inline Editing',
-		'WPShadow\Content\CPT_Block_Presets'         => 'Block Presets',
-		'WPShadow\Content\CPT_Multi_Language'        => 'Multi-Language Support',
-		'WPShadow\Content\CPT_Version_History'       => 'Version History (Vault Lite)',
+		'WPShadow\Content\CPT_Block_Patterns'      => 'Block Patterns Library',
+		'WPShadow\Content\CPT_Drag_Drop_Ordering'  => 'Drag & Drop Ordering',
+		'WPShadow\Content\CPT_Live_Preview'        => 'Live Preview',
+		'WPShadow\Content\CPT_Conditional_Display' => 'Conditional Display',
+		'WPShadow\Content\CPT_Analytics_Dashboard' => 'Analytics Dashboard',
+		'WPShadow\Content\CPT_Inline_Editing'      => 'Inline Editing',
+		'WPShadow\Content\CPT_Block_Presets'       => 'Block Presets',
+		'WPShadow\Content\CPT_Multi_Language'      => 'Multi-Language Support',
+		'WPShadow\Content\CPT_Version_History'     => 'Version History (Vault Lite)',
 	);
 
 	/**
@@ -92,7 +92,7 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$missing_features = array();
+		$missing_features  = array();
 		$inactive_features = array();
 
 		// Check core features.
@@ -186,8 +186,8 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 						foreach ( $registered_callbacks as $callback ) {
 							// Check if callback belongs to our class.
 							if ( is_array( $callback['function'] ) &&
-							     is_string( $callback['function'][0] ) &&
-							     $callback['function'][0] === $class_name ) {
+								is_string( $callback['function'][0] ) &&
+								$callback['function'][0] === $class_name ) {
 								return true;
 							}
 						}

@@ -64,6 +64,10 @@ class Reward_System extends Hook_Subscriber_Base {
 	 * @return     void
 	 */
 	public static function init() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		self::register_rewards();
 	}
 
@@ -201,6 +205,10 @@ class Reward_System extends Hook_Subscriber_Base {
 	 * @return array|null Reward data or null.
 	 */
 	public static function get( $reward_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return null;
+		}
+
 		return self::$rewards[ $reward_id ] ?? null;
 	}
 
@@ -212,6 +220,10 @@ class Reward_System extends Hook_Subscriber_Base {
 	 * @return array All rewards.
 	 */
 	public static function get_all( $category = '' ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		if ( $category ) {
 			return array_filter(
 				self::$rewards,
@@ -239,6 +251,13 @@ class Reward_System extends Hook_Subscriber_Base {
 	 * }
 	 */
 	public static function redeem( $user_id, $reward_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array(
+				'success' => false,
+				'message' => __( 'Rewards will be available in the July release.', 'wpshadow' ),
+			);
+		}
+
 		$reward = self::get( $reward_id );
 
 		if ( ! $reward ) {

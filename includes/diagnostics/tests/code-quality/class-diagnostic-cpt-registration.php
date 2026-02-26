@@ -63,16 +63,16 @@ class Diagnostic_CPT_Registration extends Diagnostic_Base {
 	 * @var array
 	 */
 	private static $expected_cpts = array(
-		'testimonial'     => 'Testimonials',
-		'team_member'     => 'Team Members',
-		'portfolio_item'  => 'Portfolio Items',
-		'wps_event'       => 'Events',
-		'resource'        => 'Resources',
-		'case_study'      => 'Case Studies',
-		'service'         => 'Services',
-		'location'        => 'Locations',
-		'documentation'   => 'Documentation',
-		'wps_product'     => 'Products',
+		'testimonial'    => 'Testimonials',
+		'team_member'    => 'Team Members',
+		'portfolio_item' => 'Portfolio Items',
+		'wps_event'      => 'Events',
+		'resource'       => 'Resources',
+		'case_study'     => 'Case Studies',
+		'service'        => 'Services',
+		'location'       => 'Locations',
+		'documentation'  => 'Documentation',
+		'wps_product'    => 'Products',
 	);
 
 	/**
@@ -84,7 +84,7 @@ class Diagnostic_CPT_Registration extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$missing_cpts = array();
+		$missing_cpts  = array();
 		$inactive_cpts = array();
 
 		foreach ( self::$expected_cpts as $cpt_slug => $cpt_name ) {

@@ -38,6 +38,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	protected static function get_hooks(): array {
 		return array(
 			'admin_menu'            => array( 'register_menu_pages', 10 ),
+			'admin_init'            => 'gate_direct_access',
 			'admin_enqueue_scripts' => 'enqueue_assets',
 		);
 	}
@@ -74,6 +75,10 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function register_menu_pages() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		// Leaderboard page (under Achievements parent)
 		add_submenu_page(
 			'wpshadow-achievements',
@@ -105,6 +110,10 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function enqueue_assets( $hook ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		if ( ! strpos( $hook, 'wpshadow' ) ) {
 			return;
 		}
@@ -141,6 +150,11 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function render_achievements_page() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+			exit;
+		}
+
 		if ( ! current_user_can( 'read' ) ) {
 			wp_die( 'Insufficient permissions.' );
 		}
@@ -375,6 +389,11 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function render_leaderboard_page() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+			exit;
+		}
+
 		$user_id = get_current_user_id();
 		$opted_in = Leaderboard::is_opted_in( $user_id );
 		$period = isset( $_GET['period'] ) ? sanitize_text_field( wp_unslash( $_GET['period'] ) ) : 'all_time';
@@ -481,6 +500,11 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function render_rewards_page() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+			exit;
+		}
+
 		$user_id = get_current_user_id();
 		$balance = Points_System::get_balance( $user_id );
 		$rewards = Reward_System::get_all();
@@ -616,5 +640,23 @@ class Gamification_UI extends Hook_Subscriber_Base {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Gate direct access to achievements pages until release.
+	 *
+	 * @since  1.6035.2150
+	 * @return void
+	 */
+	public static function gate_direct_access() {
+		if ( Gamification_Release_Gate::is_released() || ! isset( $_GET['page'] ) ) {
+			return;
+		}
+
+		$page = sanitize_key( wp_unslash( $_GET['page'] ) );
+		if ( in_array( $page, array( 'wpshadow-achievements', 'wpshadow-leaderboard', 'wpshadow-rewards' ), true ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+			exit;
+		}
 	}
 }

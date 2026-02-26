@@ -44,64 +44,7 @@ class Treatment_Mobile_Search_Performance extends Treatment_Base {
 	protected static $title = 'Mobile Search Performance';
 
 	/**
-	 * The treatment description.
-	 *
-	 * @var string
-	 */
-	protected static $description = 'Validates search performance on mobile';
 
-	/**
-	 * The treatment family.
-	 *
-	 * @var string
-	 */
-	protected static $family = 'navigation';
-
-	/**
-	 * Run the treatment check.
-	 *
-	 * @since  1.602.1450
-	 * @return array|null Finding array if issue found, null otherwise.
-	 */
-	public static function check() {
-		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Mobile_Search_Performance' );
-	}
-
-	/**
-	 * Find search performance issues.
-	 *
-	 * @since  1.602.1450
-	 * @return array Issues found.
-	 */
-	private static function find_search_performance_issues(): array {
-		$issues = array();
-
-		// Test search performance
-		$search_url = add_query_arg( 's', 'test', home_url( '/' ) );
-		$start_time = microtime( true );
-
-		$response = wp_remote_get(
-			$search_url,
-			array(
-				'timeout'   => 10,
-				'sslverify' => false,
-			)
-		);
-
-		$response_time = microtime( true ) - $start_time;
-
-		if ( is_wp_error( $response ) ) {
-			$issues[] = array(
-				'type'  => 'search-error',
-				'issue' => 'Search request failed',
-				'error' => $response->get_error_message(),
-			);
-			return array( 'all' => $issues );
-		}
-
-		// Check response time
-		if ( $response_time > 3.0 ) {
-			$issues[] = array(
 				'type'          => 'slow-search',
 				'response_time' => round( $response_time, 2 ),
 				'threshold'     => 3.0,

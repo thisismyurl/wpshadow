@@ -90,7 +90,7 @@ class Diagnostic_CPT_Taxonomies extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$missing_taxonomies = array();
+		$missing_taxonomies  = array();
 		$unlinked_taxonomies = array();
 
 		foreach ( self::$expected_taxonomies as $taxonomy_slug => $post_types ) {

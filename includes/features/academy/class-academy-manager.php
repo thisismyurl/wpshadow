@@ -93,6 +93,10 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	private function setup_hooks() {
+		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! Academy_Release_Gate::is_available() ) {
+			return;
+		}
+
 		// Smart prompts after diagnostic checks.
 		add_action( 'wpshadow_after_diagnostic_check', array( $this, 'maybe_suggest_learning' ), 10, 3 );
 

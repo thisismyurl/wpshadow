@@ -27,10 +27,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Manages_Plugins_Strategically extends Diagnostic_Base {
 
-	protected static $slug = 'manages-plugins-strategically';
-	protected static $title = 'Plugin Management Strategy';
+	protected static $slug        = 'manages-plugins-strategically';
+	protected static $title       = 'Plugin Management Strategy';
 	protected static $description = 'Tests if unnecessary plugins are regularly audited and removed';
-	protected static $family = 'code-quality';
+	protected static $family      = 'code-quality';
 
 	/**
 	 * Run the diagnostic check.

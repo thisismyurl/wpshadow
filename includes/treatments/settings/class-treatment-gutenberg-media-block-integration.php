@@ -66,25 +66,4 @@ class Treatment_Gutenberg_Media_Block_Integration extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Gutenberg_Media_Block_Integration' );
 	}
-
-	/**
-	 * Check if media blocks are registered
-	 *
-	 * @since  1.6033.1635
-	 * @return array List of registered media blocks.
-	 */
-	private static function check_media_blocks() {
-		$required_blocks = array( 'core/image', 'core/video', 'core/audio', 'core/file' );
-		$registered      = array();
-
-		if ( function_exists( 'get_block_type' ) ) {
-			foreach ( $required_blocks as $block ) {
-				if ( get_block_type( $block ) ) {
-					$registered[] = $block;
-				}
-			}
-		}
-
-		return $registered;
-	}
 }

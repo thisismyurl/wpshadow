@@ -40,6 +40,10 @@ class Earn_Actions {
 	 * @return array Earn actions definitions.
 	 */
 	public static function get_actions(): array {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		$site_url  = home_url( '/' );
 		$site_name = get_bloginfo( 'name' );
 		$app_name  = $site_name ? $site_name : __( 'my site', 'wpshadow' );
@@ -141,6 +145,10 @@ class Earn_Actions {
 	 * @return array Action status data.
 	 */
 	public static function get_user_status( $user_id ): array {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		$actions = self::get_actions();
 		$status  = array();
 
@@ -179,6 +187,13 @@ class Earn_Actions {
 	 * @return array Result data.
 	 */
 	public static function claim( $user_id, $action_id ): array {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array(
+				'success' => false,
+				'message' => __( 'Achievements will be available in the July release.', 'wpshadow' ),
+			);
+		}
+
 		$actions = self::get_actions();
 
 		if ( ! isset( $actions[ $action_id ] ) ) {

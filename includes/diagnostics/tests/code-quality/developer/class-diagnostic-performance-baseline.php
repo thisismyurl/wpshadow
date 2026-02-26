@@ -64,9 +64,9 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 	 * @return array|null Finding array if baseline issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues    = array();
-		$warnings  = array();
-		$metrics   = array();
+		$issues   = array();
+		$warnings = array();
+		$metrics  = array();
 
 		// Check for performance monitoring plugins.
 		$performance_plugins = array(
@@ -75,12 +75,12 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 			'wp-performance-profiler/profiler.php',
 		);
 
-		$has_monitoring = false;
+		$has_monitoring  = false;
 		$active_monitors = array();
-		
+
 		foreach ( $performance_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_monitoring = true;
+				$has_monitoring    = true;
 				$active_monitors[] = dirname( $plugin );
 			}
 		}
@@ -108,7 +108,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 		$has_page_cache = false;
 		foreach ( $cache_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_page_cache = true;
+				$has_page_cache        = true;
 				$metrics['page_cache'] = dirname( $plugin );
 				break;
 			}
@@ -121,9 +121,9 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 		// Check server response time baseline.
 		$start_time = microtime( true );
 		global $wpdb;
-		$wpdb->get_var( "SELECT 1" );
+		$wpdb->get_var( 'SELECT 1' );
 		$db_query_time = microtime( true ) - $start_time;
-		
+
 		$metrics['db_query_time_ms'] = round( $db_query_time * 1000, 2 );
 
 		if ( $db_query_time > 0.1 ) {
@@ -135,9 +135,9 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 		}
 
 		// Check PHP version (newer = faster).
-		$php_version = phpversion();
+		$php_version            = phpversion();
 		$metrics['php_version'] = $php_version;
-		
+
 		if ( version_compare( $php_version, '7.4', '<' ) ) {
 			$issues[] = sprintf(
 				/* translators: %s: PHP version */
@@ -161,7 +161,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 		$has_cdn = false;
 		foreach ( $cdn_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_cdn = true;
+				$has_cdn        = true;
 				$metrics['cdn'] = dirname( $plugin );
 				break;
 			}
@@ -173,10 +173,10 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 
 		// Check for lazy loading.
 		$has_lazy_load = false;
-		
+
 		// WordPress 5.5+ has native lazy loading.
 		if ( function_exists( 'wp_lazy_loading_enabled' ) ) {
-			$has_lazy_load = true;
+			$has_lazy_load        = true;
 			$metrics['lazy_load'] = 'native';
 		} else {
 			$lazy_load_plugins = array(
@@ -186,7 +186,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 
 			foreach ( $lazy_load_plugins as $plugin ) {
 				if ( is_plugin_active( $plugin ) ) {
-					$has_lazy_load = true;
+					$has_lazy_load        = true;
 					$metrics['lazy_load'] = dirname( $plugin );
 					break;
 				}
@@ -211,7 +211,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 		}
 
 		// Check database optimization.
-		$table_count = $wpdb->get_var( "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()" );
+		$table_count                = $wpdb->get_var( 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()' );
 		$metrics['database_tables'] = (int) $table_count;
 
 		if ( $table_count > 100 ) {
@@ -233,11 +233,11 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/performance-baseline',
 				'context'      => array(
-					'has_monitoring'   => $has_monitoring,
-					'active_monitors'  => $active_monitors,
-					'metrics'          => $metrics,
-					'issues'           => $issues,
-					'warnings'         => $warnings,
+					'has_monitoring'  => $has_monitoring,
+					'active_monitors' => $active_monitors,
+					'metrics'         => $metrics,
+					'issues'          => $issues,
+					'warnings'        => $warnings,
 				),
 			);
 		}
@@ -253,10 +253,10 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/performance-baseline',
 				'context'      => array(
-					'has_monitoring'   => $has_monitoring,
-					'active_monitors'  => $active_monitors,
-					'metrics'          => $metrics,
-					'warnings'         => $warnings,
+					'has_monitoring'  => $has_monitoring,
+					'active_monitors' => $active_monitors,
+					'metrics'         => $metrics,
+					'warnings'        => $warnings,
 				),
 			);
 		}

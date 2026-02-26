@@ -75,26 +75,26 @@ class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 
 		// Check for accessibility plugins.
 		$has_accessibility_plugin = is_plugin_active( 'wp-accessibility/wp-accessibility.php' ) ||
-								   is_plugin_active( 'accessibility-checker/accessibility-checker.php' );
+									is_plugin_active( 'accessibility-checker/accessibility-checker.php' );
 
 		// Check active theme.
-		$theme = wp_get_theme();
+		$theme      = wp_get_theme();
 		$theme_name = $theme->get( 'Name' );
 
 		// Known accessible themes.
-		$accessible_themes = array( 'Twenty Twenty-One', 'Twenty Twenty-Two', 'Twenty Twenty-Three', 'Kadence', 'GeneratePress' );
+		$accessible_themes   = array( 'Twenty Twenty-One', 'Twenty Twenty-Two', 'Twenty Twenty-Three', 'Kadence', 'GeneratePress' );
 		$is_accessible_theme = in_array( $theme_name, $accessible_themes, true );
 
 		// Check navigation menus.
-		$nav_menus = wp_get_nav_menus();
+		$nav_menus     = wp_get_nav_menus();
 		$has_nav_menus = ! empty( $nav_menus );
 
 		// Check for ARIA landmarks.
-		$header_file = get_template_directory() . '/header.php';
+		$header_file        = get_template_directory() . '/header.php';
 		$has_aria_landmarks = false;
 
 		if ( file_exists( $header_file ) ) {
-			$header_content = file_get_contents( $header_file );
+			$header_content     = file_get_contents( $header_file );
 			$has_aria_landmarks = ( strpos( $header_content, 'role="navigation"' ) !== false ) ||
 								( strpos( $header_content, 'role="main"' ) !== false );
 		}
@@ -103,16 +103,16 @@ class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 		$has_skip_link = false;
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
-			$has_skip_link = ( strpos( $header_content, 'skip-link' ) !== false ) ||
-						   ( strpos( $header_content, 'skip-to-content' ) !== false );
+			$has_skip_link  = ( strpos( $header_content, 'skip-link' ) !== false ) ||
+							( strpos( $header_content, 'skip-to-content' ) !== false );
 		}
 
 		// Check CSS for focus indicators.
-		$style_css = get_stylesheet_directory() . '/style.css';
+		$style_css        = get_stylesheet_directory() . '/style.css';
 		$has_focus_styles = false;
 
 		if ( file_exists( $style_css ) ) {
-			$style_content = file_get_contents( $style_css );
+			$style_content    = file_get_contents( $style_css );
 			$has_focus_styles = ( strpos( $style_content, ':focus' ) !== false );
 		}
 
@@ -133,10 +133,10 @@ class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 				if ( is_array( $menu_items ) ) {
 					foreach ( $menu_items as $item ) {
 						if ( absint( $item->menu_item_parent ) > 0 ) {
-							$depth = 1;
+							$depth  = 1;
 							$parent = $item->menu_item_parent;
 							while ( $parent > 0 ) {
-								$depth++;
+								++$depth;
 								foreach ( $menu_items as $potential_parent ) {
 									if ( absint( $potential_parent->ID ) === absint( $parent ) ) {
 										$parent = absint( $potential_parent->menu_item_parent );
@@ -219,27 +219,27 @@ class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/keyboard-navigation-accessibility',
 				'details'      => array(
-					'theme_name'              => $theme_name,
-					'is_accessible_theme'     => $is_accessible_theme,
-					'theme_skip_link_support' => $theme_supports['skip-link'],
+					'theme_name'               => $theme_name,
+					'is_accessible_theme'      => $is_accessible_theme,
+					'theme_skip_link_support'  => $theme_supports['skip-link'],
 					'has_accessibility_plugin' => $has_accessibility_plugin,
-					'has_skip_link'           => $has_skip_link,
-					'has_focus_styles'        => $has_focus_styles,
-					'has_aria_landmarks'      => $has_aria_landmarks,
-					'tabindex_issues'         => $tabindex_issues,
-					'menu_depth'              => $menu_depth,
-					'has_nav_menus'           => $has_nav_menus,
-					'issues_detected'         => $issues,
-					'recommendation'          => __( 'Add skip link, style :focus states, use ARIA landmarks, simplify menu structure', 'wpshadow' ),
-					'wcag_compliance'         => array(
+					'has_skip_link'            => $has_skip_link,
+					'has_focus_styles'         => $has_focus_styles,
+					'has_aria_landmarks'       => $has_aria_landmarks,
+					'tabindex_issues'          => $tabindex_issues,
+					'menu_depth'               => $menu_depth,
+					'has_nav_menus'            => $has_nav_menus,
+					'issues_detected'          => $issues,
+					'recommendation'           => __( 'Add skip link, style :focus states, use ARIA landmarks, simplify menu structure', 'wpshadow' ),
+					'wcag_compliance'          => array(
 						'WCAG 2.1.1' => 'Keyboard - All functionality available via keyboard',
 						'WCAG 2.4.1' => 'Bypass Blocks - Skip link to main content',
 						'WCAG 2.4.7' => 'Focus Visible - Keyboard focus indicator visible',
 						'WCAG 1.3.1' => 'Info and Relationships - Use ARIA landmarks',
 					),
-					'skip_link_code'          => '<a href="#main-content" class="skip-link screen-reader-text">Skip to content</a>',
-					'focus_css_example'       => 'a:focus, button:focus { outline: 2px solid #0073aa; outline-offset: 2px; }',
-					'aria_landmark_examples'  => array(
+					'skip_link_code'           => '<a href="#main-content" class="skip-link screen-reader-text">Skip to content</a>',
+					'focus_css_example'        => 'a:focus, button:focus { outline: 2px solid #0073aa; outline-offset: 2px; }',
+					'aria_landmark_examples'   => array(
 						'<header role="banner">',
 						'<nav role="navigation">',
 						'<main role="main">',

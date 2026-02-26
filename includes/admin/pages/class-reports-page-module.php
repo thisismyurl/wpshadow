@@ -559,10 +559,15 @@ function wpshadow_render_report_detail( $report ) {
 		wp_die( esc_html__( 'Invalid report requested.', 'wpshadow' ) );
 	}
 
-	$report_file = WPSHADOW_PATH . 'includes/views/reports/' . $report_views[ $report ];
+	$report_filename      = $report_views[ $report ];
+	$ui_report_file       = WPSHADOW_PATH . 'includes/ui/reports/' . $report_filename;
+	$legacy_report_file   = WPSHADOW_PATH . 'includes/views/reports/' . $report_filename;
+	$has_ui_report        = file_exists( $ui_report_file );
+	$has_legacy_report    = file_exists( $legacy_report_file );
+	$report_file          = $has_ui_report ? $ui_report_file : $legacy_report_file;
 
-	// Check if file exists
-	if ( ! file_exists( $report_file ) ) {
+	// Check if file exists in either canonical UI reports or legacy reports.
+	if ( ! $has_ui_report && ! $has_legacy_report ) {
 		wp_die( esc_html__( 'Report view file not found.', 'wpshadow' ) );
 	}
 

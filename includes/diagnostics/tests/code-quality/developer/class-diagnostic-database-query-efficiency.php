@@ -66,9 +66,9 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 	public static function check() {
 		global $wpdb;
 
-		$issues    = array();
-		$warnings  = array();
-		$stats     = array();
+		$issues   = array();
+		$warnings = array();
+		$stats    = array();
 
 		// Use Query Monitor if available for detailed analysis.
 		if ( class_exists( 'QM_DB' ) ) {
@@ -77,11 +77,11 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 		}
 
 		// Check for slow queries in the slow_log (if available).
-		$slow_query_table = $wpdb->prefix . 'query_log';
+		$slow_query_table          = $wpdb->prefix . 'query_log';
 		$slow_queries_table_exists = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM information_schema.TABLES 
-				WHERE table_schema = %s AND table_name = %s",
+				'SELECT COUNT(*) FROM information_schema.TABLES 
+				WHERE table_schema = %s AND table_name = %s',
 				DB_NAME,
 				$slow_query_table
 			)
@@ -91,13 +91,15 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 		$query_count_start = $wpdb->num_queries ?? 0;
 
 		// Get all posts (simulating common query scenario).
-		$test_posts = get_posts( array(
-			'posts_per_page' => 5,
-			'post_type'      => 'post',
-		) );
+		$test_posts = get_posts(
+			array(
+				'posts_per_page' => 5,
+				'post_type'      => 'post',
+			)
+		);
 
 		$query_count_after_posts = $wpdb->num_queries ?? 0;
-		$queries_for_posts = $query_count_after_posts - $query_count_start;
+		$queries_for_posts       = $query_count_after_posts - $query_count_start;
 
 		$stats['queries_for_posts_list'] = $queries_for_posts;
 
@@ -111,12 +113,12 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 			}
 
 			$query_count_after_meta = $wpdb->num_queries ?? 0;
-			$queries_for_meta = $query_count_after_meta - $query_count_before_meta;
+			$queries_for_meta       = $query_count_after_meta - $query_count_before_meta;
 
 			$stats['queries_for_postmeta'] = $queries_for_meta;
 
 			// N+1 query rule: if you fetched 5 posts and made 5 postmeta queries, that's likely N+1.
-			if ( $queries_for_meta === count( $test_posts ) ) {
+			if ( count( $test_posts ) === $queries_for_meta ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of queries */
 					__( 'Possible N+1 query pattern detected: %d separate postmeta queries', 'wpshadow' ),
@@ -151,9 +153,9 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 		}
 
 		// Check theme/plugin files for common inefficiency patterns.
-		$theme = wp_get_theme();
-		$theme_dir = $theme->get_stylesheet_directory();
-		$template_files = glob( $theme_dir . '/*.php' );
+		$theme                = wp_get_theme();
+		$theme_dir            = $theme->get_stylesheet_directory();
+		$template_files       = glob( $theme_dir . '/*.php' );
 		$inefficient_patterns = 0;
 
 		foreach ( array_slice( $template_files, 0, 5 ) as $file ) {
@@ -161,17 +163,17 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 
 			// Look for loop + query patterns (N+1 indicator).
 			if ( preg_match( '/foreach\s*\(\s*.*?get_posts/', $content ) ) {
-				$inefficient_patterns++;
+				++$inefficient_patterns;
 			}
 
 			// Look for get_post_meta in loops without batch operations.
 			if ( preg_match( '/foreach\s*\(.*?\)\s*\{[\s\S]{1,500}?get_post_meta/', $content ) ) {
-				$inefficient_patterns++;
+				++$inefficient_patterns;
 			}
 
 			// Look for WP_Query in loops.
 			if ( preg_match( '/foreach\s*\(.*?\)\s*\{[\s\S]{1,500}?new\s+WP_Query/', $content ) ) {
-				$inefficient_patterns++;
+				++$inefficient_patterns;
 			}
 		}
 
@@ -185,7 +187,7 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 
 		// Check for proper use of caching.
 		$cache_plugin_active = false;
-		$cache_plugins = array(
+		$cache_plugins       = array(
 			'wp-super-cache/wp-cache.php',
 			'w3-total-cache/w3-total-cache.php',
 			'wp-fastest-cache/wpFastestCache.php',
@@ -203,7 +205,7 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 		}
 
 		// Check MySQL version for performance.
-		$mysql_version = $wpdb->db_version();
+		$mysql_version          = $wpdb->db_version();
 		$stats['mysql_version'] = $mysql_version;
 
 		// Recommend MySQL 8.0+ for better query optimization.
@@ -217,7 +219,7 @@ class Diagnostic_Database_Query_Efficiency extends Diagnostic_Base {
 
 		// Check total number of queries on frontend (if available).
 		if ( ! is_admin() && isset( $wpdb->num_queries ) ) {
-			$total_queries = $wpdb->num_queries;
+			$total_queries                   = $wpdb->num_queries;
 			$stats['total_frontend_queries'] = $total_queries;
 
 			if ( $total_queries > 100 ) {

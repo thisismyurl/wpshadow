@@ -143,7 +143,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/accessibility-poor-color-contrast',
 			'details'      => array(
-				'issues'       => $contrast_issues,
+				'issues'        => $contrast_issues,
 				'wcag_standard' => 'Level AA requires 4.5:1 for normal text, 3:1 for large text',
 			),
 		);

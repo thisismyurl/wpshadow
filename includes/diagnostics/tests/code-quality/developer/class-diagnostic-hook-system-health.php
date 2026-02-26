@@ -76,7 +76,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 		}
 
 		// Count total hooks.
-		$total_hooks = count( $wp_filter );
+		$total_hooks          = count( $wp_filter );
 		$stats['total_hooks'] = $total_hooks;
 
 		// Check for hooks with excessive callbacks.
@@ -87,7 +87,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 				foreach ( $hook_callbacks as $priority => $callbacks ) {
 					$callback_count += count( (array) $callbacks );
 				}
-				
+
 				if ( $callback_count > 50 ) {
 					$excessive_callbacks[ $hook_name ] = $callback_count;
 				}
@@ -104,14 +104,14 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 
 		// Check for hooks with runtime errors in callbacks.
 		$problematic_hooks = array();
-		
+
 		foreach ( $wp_filter as $hook_name => $hook_callbacks ) {
 			if ( is_array( $hook_callbacks ) ) {
 				foreach ( $hook_callbacks as $priority => $callbacks ) {
 					foreach ( (array) $callbacks as $callback ) {
 						if ( is_array( $callback ) && isset( $callback['function'] ) ) {
 							$function = $callback['function'];
-							
+
 							// Check if callback is a string (function name).
 							if ( is_string( $function ) && ! function_exists( $function ) ) {
 								$problematic_hooks[] = sprintf(
@@ -158,17 +158,17 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 
 		// Check for duplicate hook registrations.
 		$hook_callbacks_by_name = array();
-		$duplicate_hooks = 0;
+		$duplicate_hooks        = 0;
 
 		foreach ( $wp_filter as $hook_name => $hook_callbacks ) {
 			if ( is_array( $hook_callbacks ) ) {
 				foreach ( $hook_callbacks as $priority => $callbacks ) {
 					foreach ( (array) $callbacks as $callback_name => $callback_data ) {
-						$key = serialize( $callback_data );
+						$key      = serialize( $callback_data );
 						$full_key = $hook_name . ':' . $key;
-						
+
 						if ( isset( $hook_callbacks_by_name[ $full_key ] ) ) {
-							$duplicate_hooks++;
+							++$duplicate_hooks;
 						} else {
 							$hook_callbacks_by_name[ $full_key ] = true;
 						}
@@ -191,7 +191,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 			if ( is_array( $hook_callbacks ) ) {
 				foreach ( $hook_callbacks as $priority => $callbacks ) {
 					if ( is_array( $callbacks ) && count( $callbacks ) > 20 ) {
-						$priority_conflicts++;
+						++$priority_conflicts;
 					}
 				}
 			}
@@ -207,7 +207,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 
 		// Check plugin hook registrations.
 		$plugins_with_hooks = array();
-		$plugin_hook_count = array();
+		$plugin_hook_count  = array();
 
 		foreach ( $wp_filter as $hook_callbacks ) {
 			if ( is_array( $hook_callbacks ) ) {
@@ -216,7 +216,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 						// Try to identify plugin from callback.
 						if ( is_array( $callback_data ) && isset( $callback_data['function'] ) ) {
 							$function = $callback_data['function'];
-							
+
 							// Class method.
 							if ( is_array( $function ) && isset( $function[0] ) ) {
 								$class_name = get_class( $function[0] );
@@ -224,7 +224,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 									if ( ! isset( $plugin_hook_count[ $class_name ] ) ) {
 										$plugin_hook_count[ $class_name ] = 0;
 									}
-									$plugin_hook_count[ $class_name ]++;
+									++$plugin_hook_count[ $class_name ];
 								}
 							}
 						}
@@ -233,7 +233,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 			}
 		}
 
-		$stats['plugin_hooks'] = count( $plugin_hook_count );
+		$stats['plugin_hooks']           = count( $plugin_hook_count );
 		$stats['total_hooks_registered'] = $total_hooks;
 
 		// If critical issues found.
@@ -267,9 +267,9 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/hook-system-health',
 				'context'      => array(
-					'stats'                  => $stats,
-					'excessive_callbacks'    => array_slice( $excessive_callbacks, 0, 5 ),
-					'warnings'               => $warnings,
+					'stats'               => $stats,
+					'excessive_callbacks' => array_slice( $excessive_callbacks, 0, 5 ),
+					'warnings'            => $warnings,
 				),
 			);
 		}

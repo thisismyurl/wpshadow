@@ -64,15 +64,15 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	 */
 	public static function check() {
 		$signals = array(
-			'two_factor'          => self::has_two_factor(),
-			'login_protection'    => self::has_login_protection(),
-			'security_plugin'     => self::has_security_plugin(),
-			'rest_auth_filter'    => has_filter( 'rest_authentication_errors' ),
-			'https_enforced'      => self::is_https_enforced(),
+			'two_factor'       => self::has_two_factor(),
+			'login_protection' => self::has_login_protection(),
+			'security_plugin'  => self::has_security_plugin(),
+			'rest_auth_filter' => has_filter( 'rest_authentication_errors' ),
+			'https_enforced'   => self::is_https_enforced(),
 		);
 
 		$enabled_signals = array_filter( $signals );
-		$score = count( $enabled_signals );
+		$score           = count( $enabled_signals );
 
 		if ( $score >= 3 ) {
 			return null;
@@ -109,10 +109,10 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	 */
 	private static function has_two_factor() {
 		$two_factor_plugins = array(
-			'two-factor/two-factor.php'                  => 'Two-Factor',
-			'wordfence/wordfence.php'                    => 'Wordfence',
+			'two-factor/two-factor.php' => 'Two-Factor',
+			'wordfence/wordfence.php'   => 'Wordfence',
 			'google-authenticator/google-authenticator.php' => 'Google Authenticator',
-			'wp-2fa/wp-2fa.php'                          => 'WP 2FA',
+			'wp-2fa/wp-2fa.php'         => 'WP 2FA',
 			'miniorange-2-factor-authentication/miniorange_2_factor_settings.php' => 'miniOrange 2FA',
 		);
 
@@ -134,7 +134,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	private static function has_login_protection() {
 		$protection_plugins = array(
 			'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php' => 'Limit Login Attempts Reloaded',
-			'wordfence/wordfence.php' => 'Wordfence',
+			'wordfence/wordfence.php'               => 'Wordfence',
 			'ithemes-security/ithemes-security.php' => 'iThemes Security',
 			'all-in-one-wp-security-and-firewall/wp-security.php' => 'All In One WP Security',
 		);
@@ -156,8 +156,8 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	 */
 	private static function has_security_plugin() {
 		$security_plugins = array(
-			'wordfence/wordfence.php' => 'Wordfence',
-			'sucuri-scanner/sucuri.php' => 'Sucuri',
+			'wordfence/wordfence.php'               => 'Wordfence',
+			'sucuri-scanner/sucuri.php'             => 'Sucuri',
 			'ithemes-security/ithemes-security.php' => 'iThemes Security',
 			'all-in-one-wp-security-and-firewall/wp-security.php' => 'All In One WP Security',
 		);

@@ -67,7 +67,7 @@ class Diagnostic_Hover_Dependent_Functionality_Detection extends Diagnostic_Base
 
 		// Check for dropdown/tooltip implementations
 		$dropdown_plugins = array(
-			'megamenu' => 'Mega Menu',
+			'megamenu'   => 'Mega Menu',
 			'super-menu' => 'Super Menu',
 		);
 

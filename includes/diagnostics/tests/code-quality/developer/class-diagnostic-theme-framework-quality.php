@@ -64,24 +64,24 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 	 * @return array|null Finding array if framework issues detected, null otherwise.
 	 */
 	public static function check() {
-		$theme      = wp_get_theme();
-		$theme_dir  = $theme->get_stylesheet_directory();
-		$issues     = array();
-		$warnings   = array();
-		$framework  = null;
+		$theme     = wp_get_theme();
+		$theme_dir = $theme->get_stylesheet_directory();
+		$issues    = array();
+		$warnings  = array();
+		$framework = null;
 
 		// List of quality frameworks.
 		$frameworks = array(
-			'Underscores'      => array( 'underscores', '_s' ),
-			'Sage'             => array( 'sage', 'roots' ),
-			'Genesis'          => array( 'genesis', 'studiopress' ),
-			'Divi'             => array( 'divi', 'elegant themes' ),
-			'Avada'            => array( 'avada', 'themefusion' ),
-			'Kadence'          => array( 'kadence' ),
-			'OceanWP'          => array( 'oceanwp', 'ocean' ),
-			'Neve'             => array( 'neve', 'themeisle' ),
-			'Astra'            => array( 'astra', 'brainstormforce' ),
-			'Twenty Twenty'    => array( 'twenty' ),
+			'Underscores'       => array( 'underscores', '_s' ),
+			'Sage'              => array( 'sage', 'roots' ),
+			'Genesis'           => array( 'genesis', 'studiopress' ),
+			'Divi'              => array( 'divi', 'elegant themes' ),
+			'Avada'             => array( 'avada', 'themefusion' ),
+			'Kadence'           => array( 'kadence' ),
+			'OceanWP'           => array( 'oceanwp', 'ocean' ),
+			'Neve'              => array( 'neve', 'themeisle' ),
+			'Astra'             => array( 'astra', 'brainstormforce' ),
+			'Twenty Twenty'     => array( 'twenty' ),
 			'WordPress Default' => array( 'default' ),
 		);
 
@@ -93,8 +93,8 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 		foreach ( $frameworks as $framework_name => $keywords ) {
 			foreach ( $keywords as $keyword ) {
 				if ( strpos( $theme_name, $keyword ) !== false ||
-					 strpos( $theme_author, $keyword ) !== false ||
-					 strpos( $theme_uri, $keyword ) !== false ) {
+					strpos( $theme_author, $keyword ) !== false ||
+					strpos( $theme_uri, $keyword ) !== false ) {
 					$framework = $framework_name;
 					break 2;
 				}
@@ -103,22 +103,16 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 
 		// Check for framework-specific files/structures.
 		if ( ! $framework ) {
-			
+
 			// Check for Sage indicators.
 			if ( file_exists( $theme_dir . '/resources/views' ) ||
-				 file_exists( $theme_dir . '/resources/styles' ) ) {
+				file_exists( $theme_dir . '/resources/styles' ) ) {
 				$framework = 'Sage';
-			}
-			
-			// Check for Genesis.
-			elseif ( file_exists( $theme_dir . '/lib/genesis' ) ||
-					 function_exists( 'genesis' ) ) {
+			} elseif ( file_exists( $theme_dir . '/lib/genesis' ) ||
+					function_exists( 'genesis' ) ) {
 				$framework = 'Genesis';
-			}
-			
-			// Check for underscores/_s.
-			elseif ( file_exists( $theme_dir . '/inc' ) &&
-					 file_exists( $theme_dir . '/functions.php' ) ) {
+			} elseif ( file_exists( $theme_dir . '/inc' ) &&
+					file_exists( $theme_dir . '/functions.php' ) ) {
 				$inc_files = glob( $theme_dir . '/inc/*.php' );
 				if ( count( $inc_files ) > 3 ) {
 					$framework = 'Underscores (or similar)';
@@ -138,18 +132,18 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 
 		// Check for theme version.
 		$theme_version = $theme->get( 'Version' );
-		if ( empty( $theme_version ) || $theme_version === '1.0' ) {
+		if ( empty( $theme_version ) || '1.0' === $theme_version ) {
 			$warnings[] = __( 'Theme version not specified or default - keep version updated', 'wpshadow' );
 		}
 
 		// Check for proper code structure.
 		$has_proper_structure = true;
-		$expected_dirs = array( 'functions.php', 'header.php', 'footer.php', 'index.php' );
-		$missing_files = array();
+		$expected_dirs        = array( 'functions.php', 'header.php', 'footer.php', 'index.php' );
+		$missing_files        = array();
 
 		foreach ( $expected_dirs as $file ) {
 			if ( ! file_exists( $theme_dir . '/' . $file ) ) {
-				$missing_files[] = $file;
+				$missing_files[]      = $file;
 				$has_proper_structure = false;
 			}
 		}
@@ -172,9 +166,9 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 		$style_file = $theme_dir . '/style.css';
 		if ( file_exists( $style_file ) ) {
 			$style_content = file_get_contents( $style_file, false, null, 0, 500 );
-			
+
 			$required_headers = array( 'Theme Name', 'Author' );
-			$missing_headers = array();
+			$missing_headers  = array();
 
 			foreach ( $required_headers as $header ) {
 				if ( strpos( $style_content, $header ) === false ) {
@@ -192,12 +186,12 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 		}
 
 		// Check for unminified assets in production.
-		$css_files = glob( $theme_dir . '/*.css' );
+		$css_files      = glob( $theme_dir . '/*.css' );
 		$unminified_css = array();
 
 		foreach ( $css_files as $css_file ) {
 			if ( basename( $css_file ) !== 'style.css' &&
-				 strpos( basename( $css_file ), '.min.css' ) === false ) {
+				strpos( basename( $css_file ), '.min.css' ) === false ) {
 				// Check file size to estimate if minified.
 				$content = file_get_contents( $css_file );
 				if ( strlen( $content ) > 5000 && substr_count( $content, "\n" ) > 50 ) {
@@ -218,7 +212,7 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 		$functions_file = $theme_dir . '/functions.php';
 		if ( file_exists( $functions_file ) ) {
 			$functions_content = file_get_contents( $functions_file );
-			
+
 			// Check for namespace/organization.
 			if ( strpos( $functions_content, 'namespace' ) === false ) {
 				$warnings[] = __( 'functions.php not using namespace - consider organizing code', 'wpshadow' );
@@ -226,7 +220,7 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 
 			// Check for hooks usage.
 			if ( strpos( $functions_content, 'add_action' ) === false &&
-				 strpos( $functions_content, 'add_filter' ) === false ) {
+				strpos( $functions_content, 'add_filter' ) === false ) {
 				$issues[] = __( 'functions.php not using WordPress hooks - critical for extensibility', 'wpshadow' );
 			}
 		}
@@ -242,11 +236,11 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/theme-framework-quality',
 				'context'      => array(
-					'theme_name'   => $theme->get( 'Name' ),
-					'framework'    => $framework,
+					'theme_name'           => $theme->get( 'Name' ),
+					'framework'            => $framework,
 					'has_proper_structure' => $has_proper_structure,
-					'issues'       => $issues,
-					'warnings'     => $warnings,
+					'issues'               => $issues,
+					'warnings'             => $warnings,
 				),
 			);
 		}
@@ -262,9 +256,9 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/theme-framework-quality',
 				'context'      => array(
-					'theme_name'   => $theme->get( 'Name' ),
-					'framework'    => $framework,
-					'warnings'     => $warnings,
+					'theme_name' => $theme->get( 'Name' ),
+					'framework'  => $framework,
+					'warnings'   => $warnings,
 				),
 			);
 		}

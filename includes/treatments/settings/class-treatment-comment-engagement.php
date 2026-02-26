@@ -64,31 +64,4 @@ class Treatment_Comment_Engagement extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Comment_Engagement' );
 	}
-
-	/**
-	 * Check for featured comments system.
-	 *
-	 * @since  1.6030.2148
-	 * @return bool True if system exists.
-	 */
-	private static function has_featured_comments_system() {
-		// Check for comment rating plugins
-		$plugins = array(
-			'wp-comment-form-customizer',
-			'ultimate-comment-system',
-		);
-
-		foreach ( $plugins as $plugin ) {
-			if ( is_plugin_active( $plugin . '/' . $plugin . '.php' ) ) {
-				return true;
-			}
-		}
-
-		// Check for featured comments option
-		if ( get_option( 'featured_comments_enabled', false ) ) {
-			return true;
-		}
-
-		return false;
-	}
 }

@@ -30,15 +30,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 
-	protected static $slug = 'no-engagement-hooks';
-	protected static $title = 'No Engagement Hooks';
+	protected static $slug        = 'no-engagement-hooks';
+	protected static $title       = 'No Engagement Hooks';
 	protected static $description = 'Tests whether content includes engagement hooks';
-	protected static $family = 'user-engagement';
+	protected static $family      = 'user-engagement';
 
 	public static function check() {
-		$score          = 0;
-		$max_score      = 3;
-		$score_details  = array();
+		$score           = 0;
+		$max_score       = 3;
+		$score_details   = array();
 		$recommendations = array();
 
 		// Get sample of posts.
@@ -50,7 +50,7 @@ class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 			)
 		);
 
-		$posts_checked = 0;
+		$posts_checked    = 0;
 		$posts_with_hooks = 0;
 
 		// Engagement hook patterns.
@@ -69,7 +69,7 @@ class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 		foreach ( $posts as $post ) {
 			++$posts_checked;
 			$content = strtolower( $post->post_content );
-			
+
 			$has_hooks = false;
 			foreach ( $hook_patterns as $pattern ) {
 				if ( strpos( $content, $pattern ) !== false ) {
@@ -88,15 +88,27 @@ class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 			$hook_percentage = ( $posts_with_hooks / $posts_checked ) * 100;
 
 			if ( $hook_percentage >= 60 ) {
-				$score = 3;
-				$score_details[] = sprintf( __( '✓ %d%% of posts include engagement hooks', 'wpshadow' ), round( $hook_percentage ) );
+				$score           = 3;
+				$score_details[] = sprintf(
+					/* translators: %d: percentage of posts with engagement hooks */
+					__( '✓ %d%% of posts include engagement hooks', 'wpshadow' ),
+					round( $hook_percentage )
+				);
 			} elseif ( $hook_percentage >= 30 ) {
-				$score = 2;
-				$score_details[]   = sprintf( __( '◐ %d%% of posts have engagement hooks', 'wpshadow' ), round( $hook_percentage ) );
+				$score             = 2;
+				$score_details[]   = sprintf(
+					/* translators: %d: percentage of posts with engagement hooks */
+					__( '◐ %d%% of posts have engagement hooks', 'wpshadow' ),
+					round( $hook_percentage )
+				);
 				$recommendations[] = __( 'Increase engagement hooks: ask questions, request opinions', 'wpshadow' );
 			} else {
-				$score = 1;
-				$score_details[]   = sprintf( __( '✗ Only %d%% of posts invite engagement', 'wpshadow' ), round( $hook_percentage ) );
+				$score             = 1;
+				$score_details[]   = sprintf(
+					/* translators: %d: percentage of posts that invite engagement */
+					__( '✗ Only %d%% of posts invite engagement', 'wpshadow' ),
+					round( $hook_percentage )
+				);
 				$recommendations[] = __( 'End posts with questions or challenges to encourage discussion', 'wpshadow' );
 			}
 		}
@@ -117,24 +129,24 @@ class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 			return null;
 		}
 
-		$severity = 'medium';
+		$severity     = 'medium';
 		$threat_level = 20;
 
 		return array(
-			'id'               => self::$slug,
-			'title'            => self::$title,
-			'description'      => sprintf(
+			'id'              => self::$slug,
+			'title'           => self::$title,
+			'description'     => sprintf(
 				/* translators: %d: score percentage */
 				__( 'Engagement hooks score: %d%%. Posts with questions/discussion prompts get 3x more comments and 50%% longer dwell time. Engagement signals boost SEO. Examples: "What\'s your favorite strategy?", "Have you tried this?", "Share your results". End with clear invitation to respond.', 'wpshadow' ),
 				$score_percentage
 			),
-			'severity'         => $severity,
-			'threat_level'     => $threat_level,
-			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/engagement-hooks',
-			'details'          => $score_details,
-			'recommendations'  => $recommendations,
-			'impact'           => __( 'Engagement hooks encourage comments, shares, and discussion, creating community and signaling content quality to search engines.', 'wpshadow' ),
+			'severity'        => $severity,
+			'threat_level'    => $threat_level,
+			'auto_fixable'    => false,
+			'kb_link'         => 'https://wpshadow.com/kb/engagement-hooks',
+			'details'         => $score_details,
+			'recommendations' => $recommendations,
+			'impact'          => __( 'Engagement hooks encourage comments, shares, and discussion, creating community and signaling content quality to search engines.', 'wpshadow' ),
 		);
 	}
 }

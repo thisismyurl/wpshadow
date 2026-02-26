@@ -64,9 +64,9 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 	 * @return array|null Finding array if staging issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues    = array();
-		$warnings  = array();
-		$config    = array();
+		$issues   = array();
+		$warnings = array();
+		$config   = array();
 
 		// Determine if this is production.
 		$site_url = home_url();
@@ -76,17 +76,17 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 					strpos( $_SERVER['HTTP_HOST'] ?? '', '.dev' ) !== false;
 
 		$is_staging = strpos( $_SERVER['HTTP_HOST'] ?? '', 'staging' ) !== false ||
-					  strpos( $_SERVER['HTTP_HOST'] ?? '', 'dev' ) !== false ||
-					  strpos( $_SERVER['HTTP_HOST'] ?? '', 'test' ) !== false;
+						strpos( $_SERVER['HTTP_HOST'] ?? '', 'dev' ) !== false ||
+						strpos( $_SERVER['HTTP_HOST'] ?? '', 'test' ) !== false;
 
-		$config['is_local'] = $is_local;
-		$config['is_staging'] = $is_staging;
+		$config['is_local']      = $is_local;
+		$config['is_staging']    = $is_staging;
 		$config['is_production'] = ! $is_local && ! $is_staging;
-		$config['site_url'] = $site_url;
+		$config['site_url']      = $site_url;
 
 		// Check for WP_ENVIRONMENT_TYPE constant (WP 5.5+).
 		if ( function_exists( 'wp_get_environment_type' ) ) {
-			$environment_type = wp_get_environment_type();
+			$environment_type           = wp_get_environment_type();
 			$config['environment_type'] = $environment_type;
 		} else {
 			$config['environment_type'] = 'unknown';
@@ -94,7 +94,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 
 		// If this is production, check for indicators of staging setup.
 		if ( $config['is_production'] ) {
-			
+
 			// Check for staging plugins.
 			$staging_plugins = array(
 				'wp-staging/wp-staging.php',
@@ -106,7 +106,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 			$has_staging_plugin = false;
 			foreach ( $staging_plugins as $plugin ) {
 				if ( is_plugin_active( $plugin ) ) {
-					$has_staging_plugin = true;
+					$has_staging_plugin       = true;
 					$config['staging_plugin'] = dirname( $plugin );
 					break;
 				}
@@ -118,10 +118,10 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 
 			// Check for managed hosting with staging (via constants or headers).
 			$managed_hosts = array(
-				'WPE_CLUSTER'      => 'WP Engine',
-				'IS_WPE'           => 'WP Engine',
-				'KINSTA_CACHE_ZONE' => 'Kinsta',
-				'FLYWHEEL_CONFIG_DIR' => 'Flywheel',
+				'WPE_CLUSTER'          => 'WP Engine',
+				'IS_WPE'               => 'WP Engine',
+				'KINSTA_CACHE_ZONE'    => 'Kinsta',
+				'FLYWHEEL_CONFIG_DIR'  => 'Flywheel',
 				'PANTHEON_ENVIRONMENT' => 'Pantheon',
 			);
 
@@ -151,13 +151,16 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 				);
 
 				foreach ( $possible_staging_urls as $staging_url ) {
-					$response = wp_remote_head( $staging_url, array(
-						'timeout'   => 5,
-						'sslverify' => false,
-					) );
+					$response = wp_remote_head(
+						$staging_url,
+						array(
+							'timeout'   => 5,
+							'sslverify' => false,
+						)
+					);
 
 					if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
-						$has_staging_indicator = true;
+						$has_staging_indicator          = true;
 						$config['detected_staging_url'] = $staging_url;
 						break;
 					}
@@ -178,7 +181,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 		}
 
 		// Check for environment config file.
-		$env_file = ABSPATH . '.env';
+		$env_file               = ABSPATH . '.env';
 		$config['has_env_file'] = file_exists( $env_file );
 
 		if ( $config['has_env_file'] ) {
@@ -197,7 +200,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 		$has_deployment_tool = false;
 		foreach ( $deployment_files as $file ) {
 			if ( file_exists( $file ) ) {
-				$has_deployment_tool = true;
+				$has_deployment_tool       = true;
 				$config['deployment_tool'] = basename( $file );
 				break;
 			}
@@ -210,10 +213,13 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 		// Check for robots.txt blocking (should be blocked on staging).
 		if ( $config['is_staging'] ) {
 			$robots_url = home_url( '/robots.txt' );
-			$response = wp_remote_get( $robots_url, array(
-				'timeout'   => 5,
-				'sslverify' => false,
-			) );
+			$response   = wp_remote_get(
+				$robots_url,
+				array(
+					'timeout'   => 5,
+					'sslverify' => false,
+				)
+			);
 
 			if ( ! is_wp_error( $response ) ) {
 				$robots_content = wp_remote_retrieve_body( $response );
@@ -234,8 +240,8 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/staging-environment',
 				'context'      => array(
-					'config'  => $config,
-					'issues'  => $issues,
+					'config'   => $config,
+					'issues'   => $issues,
 					'warnings' => $warnings,
 				),
 			);

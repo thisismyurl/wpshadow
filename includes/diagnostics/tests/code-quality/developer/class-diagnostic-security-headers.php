@@ -64,21 +64,24 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 	 * @return array|null Finding array if header issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues    = array();
-		$warnings  = array();
-		$headers_found = array();
+		$issues          = array();
+		$warnings        = array();
+		$headers_found   = array();
 		$headers_missing = array();
 
 		// Check if we can fetch headers (requires allow_url_fopen or curl).
 		$site_url = home_url();
-		$headers = array();
+		$headers  = array();
 
 		// Try to get headers using WordPress HTTP API.
-		$response = wp_remote_head( $site_url, array(
-			'timeout'     => 5,
-			'redirection' => 0,
-			'sslverify'   => false,
-		) );
+		$response = wp_remote_head(
+			$site_url,
+			array(
+				'timeout'     => 5,
+				'redirection' => 0,
+				'sslverify'   => false,
+			)
+		);
 
 		if ( ! is_wp_error( $response ) ) {
 			$headers = wp_remote_retrieve_headers( $response );
@@ -86,17 +89,17 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 
 		// Define critical security headers.
 		$security_headers = array(
-			'X-Frame-Options'        => array(
+			'X-Frame-Options'           => array(
 				'name'     => 'X-Frame-Options',
 				'severity' => 'high',
 				'purpose'  => __( 'Prevents clickjacking attacks', 'wpshadow' ),
 			),
-			'X-Content-Type-Options' => array(
+			'X-Content-Type-Options'    => array(
 				'name'     => 'X-Content-Type-Options',
 				'severity' => 'high',
 				'purpose'  => __( 'Prevents MIME-sniffing attacks', 'wpshadow' ),
 			),
-			'X-XSS-Protection'       => array(
+			'X-XSS-Protection'          => array(
 				'name'     => 'X-XSS-Protection',
 				'severity' => 'medium',
 				'purpose'  => __( 'Enables browser XSS protection', 'wpshadow' ),
@@ -106,17 +109,17 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 				'severity' => 'high',
 				'purpose'  => __( 'Forces HTTPS connections', 'wpshadow' ),
 			),
-			'Content-Security-Policy' => array(
+			'Content-Security-Policy'   => array(
 				'name'     => 'Content-Security-Policy',
 				'severity' => 'medium',
 				'purpose'  => __( 'Controls resource loading', 'wpshadow' ),
 			),
-			'Referrer-Policy'        => array(
+			'Referrer-Policy'           => array(
 				'name'     => 'Referrer-Policy',
 				'severity' => 'low',
 				'purpose'  => __( 'Controls referrer information', 'wpshadow' ),
 			),
-			'Permissions-Policy'     => array(
+			'Permissions-Policy'        => array(
 				'name'     => 'Permissions-Policy',
 				'severity' => 'low',
 				'purpose'  => __( 'Controls browser features', 'wpshadow' ),
@@ -126,12 +129,12 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 		// Check each security header.
 		foreach ( $security_headers as $header_key => $header_info ) {
 			$found = false;
-			
+
 			if ( ! empty( $headers ) ) {
 				// Check if header exists (case-insensitive).
 				foreach ( $headers as $key => $value ) {
 					if ( strcasecmp( $key, $header_key ) === 0 ) {
-						$found = true;
+						$found                                 = true;
 						$headers_found[ $header_info['name'] ] = $value;
 						break;
 					}
@@ -140,8 +143,8 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 
 			if ( ! $found ) {
 				$headers_missing[ $header_info['name'] ] = $header_info;
-				
-				if ( $header_info['severity'] === 'high' ) {
+
+				if ( 'high' === $header_info['severity'] ) {
 					$issues[] = sprintf(
 						/* translators: 1: header name, 2: purpose */
 						__( 'Missing %1$s header (%2$s)', 'wpshadow' ),
@@ -161,7 +164,7 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 
 		// Check if site is HTTPS.
 		$is_ssl = is_ssl();
-		
+
 		if ( ! $is_ssl && isset( $headers_missing['Strict-Transport-Security'] ) ) {
 			$warnings[] = __( 'Site not using HTTPS - HSTS header requires SSL', 'wpshadow' );
 		}
@@ -169,10 +172,10 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 		// Check .htaccess for header configuration (Apache).
 		if ( function_exists( 'got_mod_rewrite' ) && got_mod_rewrite() ) {
 			$htaccess_file = ABSPATH . '.htaccess';
-			
+
 			if ( file_exists( $htaccess_file ) && is_readable( $htaccess_file ) ) {
 				$htaccess_content = file_get_contents( $htaccess_file );
-				
+
 				if ( strpos( $htaccess_content, 'Header set' ) !== false ) {
 					$warnings[] = __( 'Headers may be configured in .htaccess - verify configuration', 'wpshadow' );
 				}

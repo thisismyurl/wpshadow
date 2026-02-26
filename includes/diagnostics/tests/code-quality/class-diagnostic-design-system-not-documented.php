@@ -65,13 +65,13 @@ class Diagnostic_Design_System_Not_Documented extends Diagnostic_Base {
 	public static function check() {
 		if ( ! get_option( 'design_system_documented' ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Design system documentation is not available yet. Documenting colors, spacing, and components helps keep interface updates consistent and accessible.', 'wpshadow' ),
-				'severity'    => 'low',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Design system documentation is not available yet. Documenting colors, spacing, and components helps keep interface updates consistent and accessible.', 'wpshadow' ),
+				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/design-system-not-documented',
+				'kb_link'      => 'https://wpshadow.com/kb/design-system-not-documented',
 			);
 		}
 

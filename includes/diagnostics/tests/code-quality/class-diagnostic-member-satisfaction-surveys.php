@@ -68,16 +68,16 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 			return null;
 		}
 
-		$issues = array();
+		$issues       = array();
 		$survey_score = 0;
-		$max_score = 6;
+		$max_score    = 6;
 
 		// Check for survey plugins.
 		$survey_plugins = array(
-			'wp-polls/wp-polls.php' => 'WP-Polls',
-			'survey-maker/survey-maker.php' => 'Survey Maker',
-			'formidable/formidable.php' => 'Formidable Forms',
-			'crowdsignal-forms/crowdsignal-forms.php' => 'Crowdsignal',
+			'wp-polls/wp-polls.php'                       => 'WP-Polls',
+			'survey-maker/survey-maker.php'               => 'Survey Maker',
+			'formidable/formidable.php'                   => 'Formidable Forms',
+			'crowdsignal-forms/crowdsignal-forms.php'     => 'Crowdsignal',
 			'quiz-and-survey-master/quiz_master_next.php' => 'Quiz and Survey Master',
 		);
 
@@ -85,7 +85,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		foreach ( $survey_plugins as $plugin_path => $plugin_name ) {
 			if ( is_plugin_active( $plugin_path ) ) {
 				$has_survey_plugin = true;
-				$survey_score++;
+				++$survey_score;
 				break;
 			}
 		}
@@ -97,7 +97,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		// Check for recent survey posts/pages.
 		$recent_surveys = self::check_recent_surveys();
 		if ( $recent_surveys ) {
-			$survey_score++;
+			++$survey_score;
 		} else {
 			$issues[] = __( 'No recent satisfaction surveys found in past 90 days', 'wpshadow' );
 		}
@@ -105,7 +105,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		// Check for feedback collection system.
 		$feedback_system = self::check_feedback_system();
 		if ( $feedback_system ) {
-			$survey_score++;
+			++$survey_score;
 		} else {
 			$issues[] = __( 'No systematic feedback collection mechanism', 'wpshadow' );
 		}
@@ -113,7 +113,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		// Check for Net Promoter Score (NPS) implementation.
 		$nps_tracking = self::check_nps_tracking();
 		if ( $nps_tracking ) {
-			$survey_score++;
+			++$survey_score;
 		} else {
 			$issues[] = __( 'No Net Promoter Score (NPS) tracking', 'wpshadow' );
 		}
@@ -121,7 +121,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		// Check for survey automation.
 		$automated_surveys = self::check_automated_surveys();
 		if ( $automated_surveys ) {
-			$survey_score++;
+			++$survey_score;
 		} else {
 			$issues[] = __( 'Surveys not automated or scheduled regularly', 'wpshadow' );
 		}
@@ -129,7 +129,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		// Check for feedback-driven improvements.
 		$feedback_action = self::check_feedback_action();
 		if ( $feedback_action ) {
-			$survey_score++;
+			++$survey_score;
 		} else {
 			$issues[] = __( 'No evidence of acting on survey feedback', 'wpshadow' );
 		}
@@ -138,10 +138,10 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 		$survey_percentage = ( $survey_score / $max_score ) * 100;
 
 		if ( $survey_percentage < 30 ) {
-			$severity = 'medium';
+			$severity     = 'medium';
 			$threat_level = 50;
 		} elseif ( $survey_percentage < 60 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 30;
 		} else {
 			return null;

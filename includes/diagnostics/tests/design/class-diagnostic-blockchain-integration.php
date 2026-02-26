@@ -63,9 +63,9 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
+		$issues           = array();
 		$blockchain_score = 0;
-		$max_score = 7;
+		$max_score        = 7;
 
 		// Check for blockchain plugins.
 		$blockchain_plugins = array(
@@ -78,7 +78,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		foreach ( $blockchain_plugins as $plugin_path => $plugin_name ) {
 			if ( is_plugin_active( $plugin_path ) ) {
 				$has_blockchain_plugin = true;
-				$blockchain_score++;
+				++$blockchain_score;
 				break;
 			}
 		}
@@ -92,14 +92,14 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 			'coinbase-commerce/coinbase-commerce.php' => 'Coinbase Commerce',
 			'woocommerce-gateway-ethereum/woocommerce-gateway-ethereum.php' => 'Ethereum Gateway',
 			'woocommerce-bitcoin-payment-gateway/woocommerce-bitcoin-payment-gateway.php' => 'Bitcoin Gateway',
-			'mycryptocheckout/mycryptocheckout.php' => 'MyCryptoCheckout',
+			'mycryptocheckout/mycryptocheckout.php'   => 'MyCryptoCheckout',
 		);
 
 		$has_crypto_gateway = false;
 		foreach ( $crypto_gateways as $plugin_path => $plugin_name ) {
 			if ( is_plugin_active( $plugin_path ) ) {
 				$has_crypto_gateway = true;
-				$blockchain_score++;
+				++$blockchain_score;
 				break;
 			}
 		}
@@ -111,7 +111,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		// Check for smart contract functionality.
 		$smart_contracts = self::check_smart_contracts();
 		if ( $smart_contracts ) {
-			$blockchain_score++;
+			++$blockchain_score;
 		} else {
 			$issues[] = __( 'No smart contract functionality detected', 'wpshadow' );
 		}
@@ -119,7 +119,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		// Check for decentralized identity (DID).
 		$decentralized_id = self::check_decentralized_identity();
 		if ( $decentralized_id ) {
-			$blockchain_score++;
+			++$blockchain_score;
 		} else {
 			$issues[] = __( 'No decentralized identity system implemented', 'wpshadow' );
 		}
@@ -127,7 +127,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		// Check for blockchain verification features.
 		$verification_features = self::check_verification_features();
 		if ( $verification_features ) {
-			$blockchain_score++;
+			++$blockchain_score;
 		} else {
 			$issues[] = __( 'No blockchain verification features (certificates, authenticity)', 'wpshadow' );
 		}
@@ -135,7 +135,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		// Check for distributed storage integration.
 		$distributed_storage = self::check_distributed_storage();
 		if ( $distributed_storage ) {
-			$blockchain_score++;
+			++$blockchain_score;
 		} else {
 			$issues[] = __( 'No distributed storage integration (IPFS, Arweave)', 'wpshadow' );
 		}
@@ -143,7 +143,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		// Check for blockchain content or use cases.
 		$blockchain_content = self::check_blockchain_content();
 		if ( $blockchain_content ) {
-			$blockchain_score++;
+			++$blockchain_score;
 		} else {
 			$issues[] = __( 'No blockchain-related content or use case documentation', 'wpshadow' );
 		}
@@ -153,11 +153,11 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 
 		if ( $blockchain_percentage < 20 ) {
 			// Minimal or no blockchain implementation.
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 20;
 		} elseif ( $blockchain_percentage < 50 ) {
 			// Basic blockchain implementation.
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 15;
 		} else {
 			// Good blockchain implementation - no issue.
@@ -255,7 +255,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 		$post_types = get_post_types( array( 'public' => true ), 'names' );
 		foreach ( $post_types as $post_type ) {
 			if ( strpos( strtolower( $post_type ), 'certificate' ) !== false ||
-				 strpos( strtolower( $post_type ), 'verification' ) !== false ) {
+				strpos( strtolower( $post_type ), 'verification' ) !== false ) {
 				return true;
 			}
 		}

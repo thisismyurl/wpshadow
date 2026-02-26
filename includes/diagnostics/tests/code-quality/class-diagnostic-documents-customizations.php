@@ -27,10 +27,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Documents_Customizations extends Diagnostic_Base {
 
-	protected static $slug = 'documents-customizations';
-	protected static $title = 'Theme Customization Documented';
+	protected static $slug        = 'documents-customizations';
+	protected static $title       = 'Theme Customization Documented';
 	protected static $description = 'Tests if custom code is documented and organized';
-	protected static $family = 'code-quality';
+	protected static $family      = 'code-quality';
 
 	/**
 	 * Run the diagnostic check.
@@ -39,7 +39,7 @@ class Diagnostic_Documents_Customizations extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$has_custom_css = function_exists( 'wp_get_custom_css' ) ? (bool) wp_get_custom_css() : false;
+		$has_custom_css  = function_exists( 'wp_get_custom_css' ) ? (bool) wp_get_custom_css() : false;
 		$has_child_theme = function_exists( 'is_child_theme' ) ? is_child_theme() : false;
 
 		if ( ! $has_custom_css && ! $has_child_theme ) {

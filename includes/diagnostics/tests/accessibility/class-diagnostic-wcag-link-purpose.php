@@ -97,7 +97,7 @@ class Diagnostic_WCAG_Link_Purpose extends Diagnostic_Base {
 				if ( preg_match( $regex, $content ) ) {
 					$has_generic      = true;
 					$found_patterns[] = $pattern;
-					$generic_count++;
+					++$generic_count;
 				}
 			}
 
@@ -126,7 +126,7 @@ class Diagnostic_WCAG_Link_Purpose extends Diagnostic_Base {
 			if ( preg_match_all( '/<a[^>]*>[\s]*<img[^>]*>[\s]*<\/a>/i', $content, $matches ) ) {
 				foreach ( $matches[0] as $match ) {
 					if ( ! preg_match( '/alt=["\'][^"\']*["\']/', $match ) || preg_match( '/alt=["\'][\s]*["\']/', $match ) ) {
-						$image_link_count++;
+						++$image_link_count;
 					}
 				}
 			}
@@ -165,9 +165,10 @@ class Diagnostic_WCAG_Link_Purpose extends Diagnostic_Base {
 			$content = $post->post_content;
 
 			if ( preg_match_all( '/<a[^>]*href=["\']([^"\']*)["\'][^>]*>([^<]+)<\/a>/i', $content, $matches ) ) {
-				for ( $i = 0; $i < count( $matches[0] ); $i++ ) {
+				$match_count = count( $matches[0] );
+				for ( $i = 0; $i < $match_count; $i++ ) {
 					$href = $matches[1][ $i ];
-					$text = trim( strip_tags( $matches[2][ $i ] ) );
+					$text = trim( wp_strip_all_tags( $matches[2][ $i ] ) );
 
 					if ( ! isset( $link_texts[ $text ] ) ) {
 						$link_texts[ $text ] = array();
@@ -181,7 +182,7 @@ class Diagnostic_WCAG_Link_Purpose extends Diagnostic_Base {
 		foreach ( $link_texts as $text => $hrefs ) {
 			$unique_hrefs = array_unique( $hrefs );
 			if ( count( $unique_hrefs ) > 1 && strlen( $text ) < 20 ) {
-				$ambiguous_count++;
+				++$ambiguous_count;
 			}
 		}
 

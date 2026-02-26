@@ -89,29 +89,29 @@ class Diagnostic_REST_API_Validation extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/rest-api-validation',
 				'details'      => array(
-					'issue' => 'no_parameter_validation',
-					'invalid_count' => count( $invalid_endpoints ),
-					'endpoints' => array_slice( $invalid_endpoints, 0, 10 ),
-					'message' => sprintf(
+					'issue'                    => 'no_parameter_validation',
+					'invalid_count'            => count( $invalid_endpoints ),
+					'endpoints'                => array_slice( $invalid_endpoints, 0, 10 ),
+					'message'                  => sprintf(
 						/* translators: %d: number of endpoints */
 						__( '%d REST API endpoints lack parameter validation', 'wpshadow' ),
 						count( $invalid_endpoints )
 					),
-					'security_risks' => array(
+					'security_risks'           => array(
 						'Invalid data accepted',
 						'Type confusion attacks',
 						'Injection attacks',
 						'Unexpected behavior',
 					),
-					'validation_importance' => __( 'REST endpoints must validate all input parameters', 'wpshadow' ),
-					'validation_types' => array(
-						'Type checking' => 'Ensure parameter is correct type',
+					'validation_importance'    => __( 'REST endpoints must validate all input parameters', 'wpshadow' ),
+					'validation_types'         => array(
+						'Type checking'     => 'Ensure parameter is correct type',
 						'Required checking' => 'Verify required params present',
 						'Format validation' => 'Email, URL format checks',
-						'Range validation' => 'Min/max values',
-						'Enum validation' => 'Only allowed values',
+						'Range validation'  => 'Min/max values',
+						'Enum validation'   => 'Only allowed values',
 					),
-					'secure_endpoint_pattern' => "register_rest_route('my-plugin/v1', '/items', array(
+					'secure_endpoint_pattern'  => "register_rest_route('my-plugin/v1', '/items', array(
 	'methods' => 'POST',
 	'callback' => 'create_item',
 	'permission_callback' => 'is_user_logged_in',
@@ -140,13 +140,13 @@ class Diagnostic_REST_API_Validation extends Diagnostic_Base {
 		),
 	),
 ));",
-					'common_validations' => array(
+					'common_validations'       => array(
 						'Text fields' => 'Min/max length, characters',
-						'Numbers' => 'Min/max values, integer',
-						'Emails' => 'Valid email format',
-						'URLs' => 'Valid URL format',
-						'Enums' => 'Specific allowed values',
-						'Arrays' => 'Item types, count',
+						'Numbers'     => 'Min/max values, integer',
+						'Emails'      => 'Valid email format',
+						'URLs'        => 'Valid URL format',
+						'Enums'       => 'Specific allowed values',
+						'Arrays'      => 'Item types, count',
 					),
 					'sanitization_in_callback' => "function create_item(\$request) {
 	\$params = \$request->get_json_params();
@@ -167,11 +167,11 @@ class Diagnostic_REST_API_Validation extends Diagnostic_Base {
 	
 	return rest_ensure_response(array('id' => \$item_id));
 }",
-					'type_safety' => __( 'Validate types in args to prevent type confusion', 'wpshadow' ),
-					'required_parameters' => __( 'Mark critical params as required', 'wpshadow' ),
-					'range_checking' => __( 'Always validate min/max for numeric parameters', 'wpshadow' ),
-					'enum_safety' => __( 'Use enum for parameters with specific allowed values', 'wpshadow' ),
-					'recommendation' => __( 'Add parameter validation to all custom REST endpoints', 'wpshadow' ),
+					'type_safety'              => __( 'Validate types in args to prevent type confusion', 'wpshadow' ),
+					'required_parameters'      => __( 'Mark critical params as required', 'wpshadow' ),
+					'range_checking'           => __( 'Always validate min/max for numeric parameters', 'wpshadow' ),
+					'enum_safety'              => __( 'Use enum for parameters with specific allowed values', 'wpshadow' ),
+					'recommendation'           => __( 'Add parameter validation to all custom REST endpoints', 'wpshadow' ),
 				),
 			);
 		}
@@ -203,24 +203,24 @@ class Diagnostic_REST_API_Validation extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/rest-api-validation',
 				'details'      => array(
-					'issue' => 'sensitive_data_exposure',
-					'message' => __( 'REST API responses may contain unescaped sensitive data', 'wpshadow' ),
-					'sensitive_fields' => array(
+					'issue'                          => 'sensitive_data_exposure',
+					'message'                        => __( 'REST API responses may contain unescaped sensitive data', 'wpshadow' ),
+					'sensitive_fields'               => array(
 						'post_password' => 'Page passwords',
-						'meta_value' => 'Custom field data',
-						'user_pass' => 'Password hashes',
-						'email' => 'Email addresses',
-						'phone' => 'Phone numbers',
+						'meta_value'    => 'Custom field data',
+						'user_pass'     => 'Password hashes',
+						'email'         => 'Email addresses',
+						'phone'         => 'Phone numbers',
 					),
-					'escaping_required' => __( 'All output must be escaped before sending in REST response', 'wpshadow' ),
-					'escaping_methods' => array(
-						'esc_html()' => 'HTML content',
-						'esc_attr()' => 'HTML attributes',
-						'esc_url()' => 'URLs',
-						'esc_js()' => 'JavaScript strings',
+					'escaping_required'              => __( 'All output must be escaped before sending in REST response', 'wpshadow' ),
+					'escaping_methods'               => array(
+						'esc_html()'     => 'HTML content',
+						'esc_attr()'     => 'HTML attributes',
+						'esc_url()'      => 'URLs',
+						'esc_js()'       => 'JavaScript strings',
 						'wp_kses_post()' => 'Allowed HTML tags',
 					),
-					'secure_response_pattern' => "function get_items(\$request) {
+					'secure_response_pattern'        => "function get_items(\$request) {
 	\$items = get_posts(array('post_type' => 'item'));
 	
 	\$response = array();
@@ -236,7 +236,7 @@ class Diagnostic_REST_API_Validation extends Diagnostic_Base {
 	
 	return rest_ensure_response(\$response);
 }",
-					'filtering_sensitive' => "add_filter('rest_prepare_post', function(\$response, \$post) {
+					'filtering_sensitive'            => "add_filter('rest_prepare_post', function(\$response, \$post) {
 	// Remove sensitive data from REST response
 	unset(\$response->data['post_password']);
 	
@@ -253,15 +253,15 @@ class Diagnostic_REST_API_Validation extends Diagnostic_Base {
 	return \$response;
 }, 10, 2);",
 					'authentication_based_filtering' => __( 'Return different data based on user capabilities', 'wpshadow' ),
-					'personally_identifiable_info' => __( 'Never expose PII (email, phone, SSN) without user consent', 'wpshadow' ),
-					'gdpr_considerations' => __( 'Verify REST API responses comply with GDPR requirements', 'wpshadow' ),
-					'testing_exposure' => array(
+					'personally_identifiable_info'   => __( 'Never expose PII (email, phone, SSN) without user consent', 'wpshadow' ),
+					'gdpr_considerations'            => __( 'Verify REST API responses comply with GDPR requirements', 'wpshadow' ),
+					'testing_exposure'               => array(
 						'1. Call endpoint as anonymous user',
 						'2. Inspect JSON response',
 						'3. Check for sensitive fields',
 						'4. Verify fields are escaped',
 					),
-					'recommendation' => __( 'Audit REST API responses and remove/escape sensitive data', 'wpshadow' ),
+					'recommendation'                 => __( 'Audit REST API responses and remove/escape sensitive data', 'wpshadow' ),
 				),
 			);
 		}

@@ -66,7 +66,7 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 
 		// Get all custom post types (exclude built-in)
 		$built_in_types = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
-		$custom_types = array();
+		$custom_types   = array();
 
 		foreach ( $wp_post_types as $type => $type_obj ) {
 			if ( ! in_array( $type, $built_in_types, true ) && $type_obj->public ) {
@@ -92,31 +92,31 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
 				'details'      => array(
-					'issue' => 'no_archives',
-					'affected_post_types' => $no_archives,
-					'message' => sprintf(
+					'issue'                      => 'no_archives',
+					'affected_post_types'        => $no_archives,
+					'message'                    => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d public custom post types have no archive pages', 'wpshadow' ),
 						count( $no_archives )
 					),
-					'why_archives_matter' => array(
+					'why_archives_matter'        => array(
 						'List all posts of that type',
 						'Improve content discoverability',
 						'Better SEO (indexed archive pages)',
 						'User navigation',
 					),
-					'when_archives_needed' => array(
+					'when_archives_needed'       => array(
 						'Public post types with multiple posts',
 						'Content meant to be browsed',
 						'Portfolio items, products, events',
 						'Any content type users should see as a collection',
 					),
-					'when_archives_not_needed' => array(
+					'when_archives_not_needed'   => array(
 						'Single instance post types',
 						'Admin-only content',
 						'Content shown via shortcodes/blocks only',
 					),
-					'how_to_enable' => "register_post_type('portfolio', array(
+					'how_to_enable'              => "register_post_type('portfolio', array(
 	'public' => true,
 	'has_archive' => true, // Creates /portfolio/ archive
 	// Or custom archive slug:
@@ -124,30 +124,30 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 ));",
 					'archive_template_hierarchy' => array(
 						'archive-{post_type}.php' => 'Specific post type archive',
-						'archive.php' => 'Generic archive template',
-						'index.php' => 'Fallback',
+						'archive.php'             => 'Generic archive template',
+						'index.php'               => 'Fallback',
 					),
-					'creating_archive_template' => __( 'Create archive-{post_type}.php in your theme for custom archive design', 'wpshadow' ),
-					'seo_benefits' => array(
+					'creating_archive_template'  => __( 'Create archive-{post_type}.php in your theme for custom archive design', 'wpshadow' ),
+					'seo_benefits'               => array(
 						'Archive pages indexed by search engines',
 						'Additional entry points for content',
 						'Better internal linking structure',
 					),
-					'after_enabling' => __( 'Flush rewrite rules (Settings > Permalinks > Save)', 'wpshadow' ),
-					'recommendation' => __( 'Enable archives for public custom post types with multiple posts', 'wpshadow' ),
+					'after_enabling'             => __( 'Flush rewrite rules (Settings > Permalinks > Save)', 'wpshadow' ),
+					'recommendation'             => __( 'Enable archives for public custom post types with multiple posts', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 2: Archive pages with no posts per page configuration
-		$default_posts_per_page = get_option( 'posts_per_page', 10 );
+		$default_posts_per_page   = get_option( 'posts_per_page', 10 );
 		$archive_settings_missing = array();
 
 		foreach ( $custom_types as $type => $type_obj ) {
 			if ( $type_obj->has_archive ) {
 				// Check if custom posts_per_page is set
 				$option_name = "posts_per_page_{$type}";
-				$custom_ppp = get_option( $option_name );
+				$custom_ppp  = get_option( $option_name );
 
 				if ( false === $custom_ppp ) {
 					$archive_settings_missing[] = $type;
@@ -165,10 +165,10 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
 				'details'      => array(
-					'issue' => 'default_posts_per_page',
-					'affected_post_types' => $archive_settings_missing,
-					'current_default' => $default_posts_per_page,
-					'message' => sprintf(
+					'issue'                      => 'default_posts_per_page',
+					'affected_post_types'        => $archive_settings_missing,
+					'current_default'            => $default_posts_per_page,
+					'message'                    => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post type archives using default posts per page setting', 'wpshadow' ),
 						count( $archive_settings_missing )
@@ -180,26 +180,26 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 						'Products: show 16-48 per page (grid)',
 						'Events: show 5-10 per page (detailed list)',
 					),
-					'how_to_customize' => "add_action('pre_get_posts', function(\$query) {
+					'how_to_customize'           => "add_action('pre_get_posts', function(\$query) {
 	if (!is_admin() && \$query->is_main_query() && is_post_type_archive('portfolio')) {
 		\$query->set('posts_per_page', 24);
 	}
 });",
-					'considerations' => array(
-						'Grid layouts' => 'Use multiples of columns (12, 16, 24)',
+					'considerations'             => array(
+						'Grid layouts'        => 'Use multiples of columns (12, 16, 24)',
 						'Image-heavy content' => 'Fewer items (6-12) to reduce page load',
-						'Text-heavy content' => 'More items (20-30) acceptable',
-						'Mobile experience' => 'Consider responsive grid collapsing',
+						'Text-heavy content'  => 'More items (20-30) acceptable',
+						'Mobile experience'   => 'Consider responsive grid collapsing',
 					),
-					'performance_impact' => __( 'Too many items can slow page load; too few frustrates users', 'wpshadow' ),
-					'user_experience' => __( 'Match posts per page to content type and display style', 'wpshadow' ),
-					'recommendation' => __( 'Set custom posts_per_page for each archive based on content type', 'wpshadow' ),
+					'performance_impact'         => __( 'Too many items can slow page load; too few frustrates users', 'wpshadow' ),
+					'user_experience'            => __( 'Match posts per page to content type and display style', 'wpshadow' ),
+					'recommendation'             => __( 'Set custom posts_per_page for each archive based on content type', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 3: Archive pages without dedicated templates
-		$theme_path = get_template_directory();
+		$theme_path        = get_template_directory();
 		$missing_templates = array();
 
 		foreach ( $custom_types as $type => $type_obj ) {
@@ -221,10 +221,10 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
 				'details'      => array(
-					'issue' => 'missing_templates',
-					'affected_post_types' => $missing_templates,
-					'theme_path' => $theme_path,
-					'message' => sprintf(
+					'issue'                          => 'missing_templates',
+					'affected_post_types'            => $missing_templates,
+					'theme_path'                     => $theme_path,
+					'message'                        => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post type archives using generic template', 'wpshadow' ),
 						count( $missing_templates )
@@ -235,26 +235,26 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 						'Custom fields display',
 						'Better user experience',
 					),
-					'template_hierarchy' => array(
+					'template_hierarchy'             => array(
 						'1. archive-{post_type}.php' => 'Most specific',
-						'2. archive.php' => 'Generic archives',
-						'3. index.php' => 'Fallback',
+						'2. archive.php'             => 'Generic archives',
+						'3. index.php'               => 'Fallback',
 					),
-					'creating_template' => array(
+					'creating_template'              => array(
 						'1. Copy archive.php or index.php',
 						'2. Rename to archive-{post_type}.php',
 						'3. Customize markup and styling',
 						'4. Add custom field displays',
 						'5. Optimize for post type',
 					),
-					'block_theme_alternative' => __( 'Block themes use template parts and patterns instead of PHP templates', 'wpshadow' ),
-					'common_customizations' => array(
+					'block_theme_alternative'        => __( 'Block themes use template parts and patterns instead of PHP templates', 'wpshadow' ),
+					'common_customizations'          => array(
 						'Grid layout for portfolios',
 						'List layout with thumbnails for products',
 						'Calendar view for events',
 						'Card layout with custom fields',
 					),
-					'example_template_code' => "<?php
+					'example_template_code'          => "<?php
 /**
  * Archive Template for Portfolio
  */
@@ -278,7 +278,7 @@ get_header(); ?>
 </div>
 
 <?php get_footer();",
-					'recommendation' => __( 'Create dedicated archive templates for better content presentation', 'wpshadow' ),
+					'recommendation'                 => __( 'Create dedicated archive templates for better content presentation', 'wpshadow' ),
 				),
 			);
 		}
@@ -289,8 +289,8 @@ get_header(); ?>
 
 		foreach ( $custom_types as $type => $type_obj ) {
 			if ( $type_obj->has_archive && ! empty( $type_obj->rewrite ) ) {
-				$archive_slug = is_array( $type_obj->rewrite ) && isset( $type_obj->rewrite['slug'] ) 
-					? $type_obj->rewrite['slug'] 
+				$archive_slug = is_array( $type_obj->rewrite ) && isset( $type_obj->rewrite['slug'] )
+					? $type_obj->rewrite['slug']
 					: $type;
 
 				// Check if rewrite rule exists
@@ -320,32 +320,32 @@ get_header(); ?>
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
 				'details'      => array(
-					'issue' => 'missing_rewrite_rules',
-					'affected_post_types' => $missing_rules,
-					'message' => sprintf(
+					'issue'                  => 'missing_rewrite_rules',
+					'affected_post_types'    => $missing_rules,
+					'message'                => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post type archives have missing rewrite rules', 'wpshadow' ),
 						count( $missing_rules )
 					),
-					'symptoms' => array(
+					'symptoms'               => array(
 						'404 errors on archive pages',
 						'Archive URLs not working',
 						'Posts display but archive doesn\'t',
 						'Recent plugin/theme activation',
 					),
 					'what_are_rewrite_rules' => __( 'Rules that convert clean URLs (/portfolio/) to query strings (?post_type=portfolio)', 'wpshadow' ),
-					'why_this_happens' => array(
+					'why_this_happens'       => array(
 						'Post type registration changed',
 						'Plugin/theme activation',
 						'Permalink structure changed',
 						'Manual database changes',
 					),
-					'how_to_fix' => array(
+					'how_to_fix'             => array(
 						'Manual: Go to Settings > Permalinks > Save Changes',
 						'Code: flush_rewrite_rules() (not on every page load!)',
 						'Plugin activation hook: register_activation_hook()',
 					),
-					'code_example_safe' => "// On plugin activation only
+					'code_example_safe'      => '// On plugin activation only
 register_activation_hook(__FILE__, function() {
 	// Register post types first
 	my_plugin_register_post_types();
@@ -357,20 +357,20 @@ register_activation_hook(__FILE__, function() {
 // On plugin deactivation
 register_deactivation_hook(__FILE__, function() {
 	flush_rewrite_rules();
-});",
-					'do_not_do_this' => "// NEVER call flush_rewrite_rules() on every page load!
+});',
+					'do_not_do_this'         => "// NEVER call flush_rewrite_rules() on every page load!
 add_action('init', function() {
 	register_post_type('portfolio', array(...));
 	flush_rewrite_rules(); // ❌ Performance killer!
 });",
-					'performance_warning' => __( 'flush_rewrite_rules() is expensive; only use on activation/deactivation', 'wpshadow' ),
+					'performance_warning'    => __( 'flush_rewrite_rules() is expensive; only use on activation/deactivation', 'wpshadow' ),
 					'when_to_manually_flush' => array(
 						'After plugin activation',
 						'After theme change',
 						'After permalink structure change',
 						'After post type registration changes',
 					),
-					'recommendation' => __( 'Visit Settings > Permalinks and click Save Changes to flush rewrite rules', 'wpshadow' ),
+					'recommendation'         => __( 'Visit Settings > Permalinks and click Save Changes to flush rewrite rules', 'wpshadow' ),
 				),
 			);
 		}
@@ -381,9 +381,9 @@ add_action('init', function() {
 		foreach ( $custom_types as $type => $type_obj ) {
 			if ( $type_obj->has_archive ) {
 				// Check if common SEO plugins have settings for this post type
-				$has_yoast = defined( 'WPSEO_VERSION' );
+				$has_yoast     = defined( 'WPSEO_VERSION' );
 				$has_rank_math = defined( 'RANK_MATH_VERSION' );
-				$has_aioseo = defined( 'AIOSEO_VERSION' );
+				$has_aioseo    = defined( 'AIOSEO_VERSION' );
 
 				// If no SEO plugin, add to list
 				if ( ! $has_yoast && ! $has_rank_math && ! $has_aioseo ) {
@@ -402,29 +402,29 @@ add_action('init', function() {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
 				'details'      => array(
-					'issue' => 'no_seo_optimization',
-					'affected_post_types' => $no_seo_optimization,
-					'message' => __( 'Custom post type archives missing SEO metadata', 'wpshadow' ),
-					'why_seo_matters' => array(
+					'issue'                      => 'no_seo_optimization',
+					'affected_post_types'        => $no_seo_optimization,
+					'message'                    => __( 'Custom post type archives missing SEO metadata', 'wpshadow' ),
+					'why_seo_matters'            => array(
 						'Archive pages can rank in search',
 						'Meta descriptions improve CTR',
 						'Title tags control search appearance',
 						'Social sharing optimization',
 					),
-					'seo_elements_to_optimize' => array(
-						'Page title' => 'Descriptive, keyword-rich titles',
+					'seo_elements_to_optimize'   => array(
+						'Page title'       => 'Descriptive, keyword-rich titles',
 						'Meta description' => 'Compelling summaries',
-						'Open Graph tags' => 'Social sharing images/text',
-						'Canonical URL' => 'Prevent duplicate content',
-						'Breadcrumbs' => 'Navigation and schema',
+						'Open Graph tags'  => 'Social sharing images/text',
+						'Canonical URL'    => 'Prevent duplicate content',
+						'Breadcrumbs'      => 'Navigation and schema',
 					),
-					'without_seo_plugin' => array(
+					'without_seo_plugin'         => array(
 						'Manual title/description' => 'Add via wp_head action',
 						'og:title, og:description' => 'Open Graph tags',
-						'Twitter Card tags' => 'Twitter sharing',
-						'Canonical link' => 'Link rel=canonical',
+						'Twitter Card tags'        => 'Twitter sharing',
+						'Canonical link'           => 'Link rel=canonical',
 					),
-					'code_example_manual' => "add_action('wp_head', function() {
+					'code_example_manual'        => "add_action('wp_head', function() {
 	if (is_post_type_archive('portfolio')) {
 		\$title = 'Our Portfolio | ' . get_bloginfo('name');
 		\$description = 'Browse our portfolio of recent projects and case studies.';
@@ -436,18 +436,18 @@ add_action('init', function() {
 	}
 });",
 					'seo_plugin_recommendations' => array(
-						'Yoast SEO' => 'Most popular, comprehensive',
-						'Rank Math' => 'Modern, feature-rich',
+						'Yoast SEO'      => 'Most popular, comprehensive',
+						'Rank Math'      => 'Modern, feature-rich',
 						'All in One SEO' => 'Long-established, reliable',
 					),
-					'what_seo_plugins_do' => array(
+					'what_seo_plugins_do'        => array(
 						'Auto-generate meta descriptions',
 						'Customize archive titles',
 						'Add structured data',
 						'Social sharing optimization',
 						'XML sitemap inclusion',
 					),
-					'recommendation' => __( 'Install SEO plugin or manually add meta tags to archive pages', 'wpshadow' ),
+					'recommendation'             => __( 'Install SEO plugin or manually add meta tags to archive pages', 'wpshadow' ),
 				),
 			);
 		}
@@ -482,25 +482,25 @@ add_action('init', function() {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
 				'details'      => array(
-					'issue' => 'archive_performance',
-					'affected_post_types' => $slow_archives,
-					'message' => sprintf(
+					'issue'                      => 'archive_performance',
+					'affected_post_types'        => $slow_archives,
+					'message'                    => sprintf(
 						/* translators: %d: number of post types */
 						__( '%d custom post type archives with large post counts', 'wpshadow' ),
 						count( $slow_archives )
 					),
-					'performance_concerns' => array(
+					'performance_concerns'       => array(
 						'Large post counts slow queries',
 						'Pagination overhead increases',
 						'Memory usage grows',
 						'Database load increases',
 					),
-					'optimization_strategies' => array(
-						'Object caching' => 'Cache query results (Redis, Memcached)',
+					'optimization_strategies'    => array(
+						'Object caching'     => 'Cache query results (Redis, Memcached)',
 						'Query optimization' => 'Limit fields, add indexes',
-						'Lazy loading' => 'Load images only when visible',
-						'Pagination' => 'Keep posts per page reasonable',
-						'Transient caching' => 'Cache expensive queries',
+						'Lazy loading'       => 'Load images only when visible',
+						'Pagination'         => 'Keep posts per page reasonable',
+						'Transient caching'  => 'Cache expensive queries',
 					),
 					'query_optimization_example' => "add_action('pre_get_posts', function(\$query) {
 	if (!is_admin() && \$query->is_main_query() && is_post_type_archive('portfolio')) {
@@ -514,7 +514,7 @@ add_action('init', function() {
 		\$query->set('no_found_rows', true); // If pagination not needed
 	}
 });",
-					'caching_example' => "function get_portfolio_archive_posts() {
+					'caching_example'            => "function get_portfolio_archive_posts() {
 	\$cache_key = 'portfolio_archive_' . get_query_var('paged', 1);
 	\$posts = get_transient(\$cache_key);
 	
@@ -530,14 +530,14 @@ add_action('init', function() {
 	
 	return \$posts;
 }",
-					'when_to_use_caching' => __( 'Archives with >100 posts benefit from caching', 'wpshadow' ),
-					'pagination_best_practices' => array(
+					'when_to_use_caching'        => __( 'Archives with >100 posts benefit from caching', 'wpshadow' ),
+					'pagination_best_practices'  => array(
 						'Limit posts per page (10-24)',
 						'Use prev/next pagination',
 						'Consider infinite scroll',
 						'Add load more button',
 					),
-					'recommendation' => __( 'Implement caching and query optimization for large archives', 'wpshadow' ),
+					'recommendation'             => __( 'Implement caching and query optimization for large archives', 'wpshadow' ),
 				),
 			);
 		}

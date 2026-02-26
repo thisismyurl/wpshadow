@@ -87,19 +87,4 @@ class Treatment_Not_Mobile_Friendly extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Not_Mobile_Friendly' );
 	}
-
-	/**
-	 * Check if site has viewport meta tag
-	 *
-	 * @since  1.6034.2145
-	 * @return bool True if viewport tag exists.
-	 */
-	private static function has_viewport_meta_tag() {
-		// Check if theme adds viewport meta tag via wp_head
-		ob_start();
-		wp_head();
-		$head_content = ob_get_clean();
-
-		return ( stripos( $head_content, 'viewport' ) !== false );
-	}
 }

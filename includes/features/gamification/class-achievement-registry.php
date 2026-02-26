@@ -64,6 +64,10 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	 * @return     void
 	 */
 	public static function init() {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return;
+		}
+
 		self::register_achievements();
 	}
 
@@ -400,6 +404,10 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	 * @return bool True if unlocked (newly or already), false on failure.
 	 */
 	public static function unlock( $user_id, $achievement_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return false;
+		}
+
 		if ( ! $user_id ) {
 			return false;
 		}
@@ -490,6 +498,10 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	 * @return array Unlocked achievements.
 	 */
 	public static function get_unlocked( $user_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		$unlocked = get_user_meta( $user_id, 'wpshadow_achievements', true );
 
 		if ( ! is_array( $unlocked ) ) {
@@ -518,6 +530,10 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	 * @return array Locked achievements.
 	 */
 	public static function get_locked( $user_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array();
+		}
+
 		$unlocked = self::get_unlocked( $user_id );
 		$all      = self::get_all();
 
@@ -532,6 +548,16 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	 * @return array Progress statistics.
 	 */
 	public static function get_progress( $user_id ) {
+		if ( ! Gamification_Release_Gate::is_released() ) {
+			return array(
+				'total'       => 0,
+				'unlocked'    => 0,
+				'locked'      => 0,
+				'percentage'  => 0,
+				'by_category' => array(),
+			);
+		}
+
 		$unlocked    = count( self::get_unlocked( $user_id ) );
 		$total       = count( self::$achievements );
 		$by_category = array();

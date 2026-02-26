@@ -70,7 +70,7 @@ class Diagnostic_CPT_Registration_Validation extends Diagnostic_Base {
 		$post_types = get_post_types( array(), 'objects' );
 
 		// Filter to only custom post types (exclude built-in).
-		$built_in = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
+		$built_in          = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation' );
 		$custom_post_types = array_filter(
 			$post_types,
 			function ( $pt ) use ( $built_in ) {
@@ -104,7 +104,7 @@ class Diagnostic_CPT_Registration_Validation extends Diagnostic_Base {
 			}
 
 			// Check for uppercase characters in slug (bad practice).
-			if ( $cpt->name !== strtolower( $cpt->name ) ) {
+			if ( strtolower( $cpt->name ) !== $cpt->name ) {
 				$issues[] = sprintf(
 					/* translators: %s: post type slug */
 					__( 'CPT "%s" contains uppercase characters (should be lowercase)', 'wpshadow' ),
@@ -215,13 +215,13 @@ class Diagnostic_CPT_Registration_Validation extends Diagnostic_Base {
 
 		if ( ! empty( $issues ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => implode( '. ', $issues ),
-				'severity'    => 'high',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => implode( '. ', $issues ),
+				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cpt-registration-validation',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-registration-validation',
 			);
 		}
 

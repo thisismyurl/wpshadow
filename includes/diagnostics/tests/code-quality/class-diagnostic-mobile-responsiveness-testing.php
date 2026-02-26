@@ -68,15 +68,15 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 	 */
 	public static function check() {
 		// Check viewport meta tag.
-		$header_file = get_template_directory() . '/header.php';
+		$header_file       = get_template_directory() . '/header.php';
 		$has_viewport_meta = false;
-		$viewport_content = '';
+		$viewport_content  = '';
 
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
 			if ( Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $header_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_VIEWPORT ) ) {
 				$has_viewport_meta = true;
-				$viewport_content = $matches[1];
+				$viewport_content  = $matches[1];
 			}
 		}
 
@@ -84,20 +84,20 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 		$viewport_allows_scaling = true;
 		if ( ! empty( $viewport_content ) ) {
 			$viewport_allows_scaling = ( strpos( $viewport_content, 'user-scalable=no' ) === false ) &&
-									 ( strpos( $viewport_content, 'maximum-scale=1' ) === false );
+									( strpos( $viewport_content, 'maximum-scale=1' ) === false );
 		}
 
 		// Check for mobile menu.
 		$has_mobile_menu = false;
 		if ( file_exists( $header_file ) ) {
-			$header_content = file_get_contents( $header_file );
+			$header_content  = file_get_contents( $header_file );
 			$has_mobile_menu = ( strpos( $header_content, 'mobile-menu' ) !== false ) ||
-							 ( strpos( $header_content, 'hamburger' ) !== false ) ||
-							 ( strpos( $header_content, 'menu-toggle' ) !== false );
+							( strpos( $header_content, 'hamburger' ) !== false ) ||
+							( strpos( $header_content, 'menu-toggle' ) !== false );
 		}
 
 		// Check CSS for media queries.
-		$style_css = get_stylesheet_directory() . '/style.css';
+		$style_css         = get_stylesheet_directory() . '/style.css';
 		$media_query_count = 0;
 
 		if ( file_exists( $style_css ) ) {
@@ -121,9 +121,9 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 		foreach ( $recent_posts as $post ) {
 			$content = $post['post_content'];
 			if ( strpos( $content, '<img' ) !== false ) {
-				$posts_with_images++;
+				++$posts_with_images;
 				if ( strpos( $content, 'srcset=' ) !== false ) {
-					$posts_with_srcset++;
+					++$posts_with_srcset;
 				}
 			}
 		}
@@ -132,7 +132,7 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 
 		// Check for mobile-specific plugins.
 		$has_mobile_plugin = is_plugin_active( 'jetpack/jetpack.php' ) ||
-						   is_plugin_active( 'amp/amp.php' );
+							is_plugin_active( 'amp/amp.php' );
 
 		// Check touch target sizes (via CSS).
 		$has_touch_optimized_buttons = false;
@@ -145,15 +145,15 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 		// Check font sizes are readable on mobile.
 		$has_responsive_typography = false;
 		if ( file_exists( $style_css ) ) {
-			$style_content = file_get_contents( $style_css );
+			$style_content             = file_get_contents( $style_css );
 			$has_responsive_typography = ( strpos( $style_content, 'font-size' ) !== false ) &&
-									   ( strpos( $style_content, '@media' ) !== false );
+										( strpos( $style_content, '@media' ) !== false );
 		}
 
 		// Check for horizontal scrolling issues.
 		$prevents_horizontal_scroll = false;
 		if ( file_exists( $style_css ) ) {
-			$style_content = file_get_contents( $style_css );
+			$style_content              = file_get_contents( $style_css );
 			$prevents_horizontal_scroll = ( strpos( $style_content, 'overflow-x: hidden' ) !== false ) ||
 										( strpos( $style_content, 'max-width: 100%' ) !== false );
 		}
@@ -223,35 +223,35 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/mobile-responsiveness-testing',
 				'details'      => array(
-					'has_viewport_meta'       => $has_viewport_meta,
-					'viewport_content'        => $viewport_content,
-					'viewport_allows_scaling' => $viewport_allows_scaling,
-					'has_mobile_menu'         => $has_mobile_menu,
-					'media_query_count'       => $media_query_count,
-					'srcset_coverage'         => round( $srcset_coverage, 1 ) . '%',
-					'has_mobile_plugin'       => $has_mobile_plugin,
+					'has_viewport_meta'           => $has_viewport_meta,
+					'viewport_content'            => $viewport_content,
+					'viewport_allows_scaling'     => $viewport_allows_scaling,
+					'has_mobile_menu'             => $has_mobile_menu,
+					'media_query_count'           => $media_query_count,
+					'srcset_coverage'             => round( $srcset_coverage, 1 ) . '%',
+					'has_mobile_plugin'           => $has_mobile_plugin,
 					'has_touch_optimized_buttons' => $has_touch_optimized_buttons,
-					'has_responsive_typography' => $has_responsive_typography,
-					'prevents_horizontal_scroll' => $prevents_horizontal_scroll,
-					'issues_detected'         => $issues,
-					'recommendation'          => __( 'Add viewport meta, use responsive design, implement mobile menu, optimize touch targets', 'wpshadow' ),
-					'viewport_meta_required'  => '<meta name="viewport" content="width=device-width, initial-scale=1">',
-					'mobile_best_practices'   => array(
-						'Viewport meta'       => 'Enable responsive scaling',
-						'Touch targets'       => 'Minimum 44x44px for buttons/links',
-						'Font sizes'          => 'Minimum 16px to prevent zoom',
-						'Media queries'       => 'Breakpoints at 768px, 1024px',
-						'Responsive images'   => 'Use srcset for different screen sizes',
-						'Mobile menu'         => 'Hamburger menu for small screens',
+					'has_responsive_typography'   => $has_responsive_typography,
+					'prevents_horizontal_scroll'  => $prevents_horizontal_scroll,
+					'issues_detected'             => $issues,
+					'recommendation'              => __( 'Add viewport meta, use responsive design, implement mobile menu, optimize touch targets', 'wpshadow' ),
+					'viewport_meta_required'      => '<meta name="viewport" content="width=device-width, initial-scale=1">',
+					'mobile_best_practices'       => array(
+						'Viewport meta'        => 'Enable responsive scaling',
+						'Touch targets'        => 'Minimum 44x44px for buttons/links',
+						'Font sizes'           => 'Minimum 16px to prevent zoom',
+						'Media queries'        => 'Breakpoints at 768px, 1024px',
+						'Responsive images'    => 'Use srcset for different screen sizes',
+						'Mobile menu'          => 'Hamburger menu for small screens',
 						'No horizontal scroll' => 'Content fits viewport width',
 					),
-					'wcag_mobile_requirements' => array(
+					'wcag_mobile_requirements'    => array(
 						'WCAG 1.4.4'  => 'Resize text - Allow user scaling',
 						'WCAG 1.4.10' => 'Reflow - No horizontal scrolling at 320px',
 						'WCAG 2.5.5'  => 'Target Size - 44x44px minimum',
 					),
-					'mobile_traffic_stats'    => '60%+ of web traffic is mobile devices',
-					'google_mobile_first'     => 'Google uses mobile version for indexing and ranking',
+					'mobile_traffic_stats'        => '60%+ of web traffic is mobile devices',
+					'google_mobile_first'         => 'Google uses mobile version for indexing and ranking',
 				),
 			);
 		}

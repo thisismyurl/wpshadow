@@ -39,12 +39,15 @@ $keep_data = get_option( 'wpshadow_keep_data_on_uninstall', false );
 
 if ( ! $keep_data ) {
 	global $wpdb;
+	$option_like = $wpdb->esc_like( 'wpshadow_' ) . '%';
+	$transient_like = $wpdb->esc_like( '_transient_wpshadow_' ) . '%';
+	$transient_timeout_like = $wpdb->esc_like( '_transient_timeout_wpshadow_' ) . '%';
 
 	// Remove plugin options
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wpshadow_%'" );
+	$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $option_like ) );
 
 	// Remove user meta
-	$wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'wpshadow_%'" );
+	$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", $option_like ) );
 
 	// No custom WPShadow tables are maintained.
 
@@ -66,7 +69,13 @@ if ( ! $keep_data ) {
 	}
 
 	// Clear transients
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_wpshadow_%' OR option_name LIKE '_transient_timeout_wpshadow_%'" );
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+			$transient_like,
+			$transient_timeout_like
+		)
+	);
 }
 
 /**
@@ -77,6 +86,8 @@ if ( ! $keep_data ) {
 $analytics_consent = get_option( 'wpshadow_consent_analytics', false );
 
 if ( $analytics_consent ) {
+	global $wpdb;
+
 	// Prepare minimal diagnostic data
 	$diagnostic_data = array(
 		'plugin_version' => get_option( 'wpshadow_version', 'unknown' ),
@@ -99,7 +110,7 @@ if ( $analytics_consent ) {
 			array(
 				'timeout'  => 5,
 				'blocking' => false, // Non-blocking
-				'body'     => $diagnostic_data,
+				'body'     => wp_json_encode( $diagnostic_data ),
 				'headers'  => array(
 					'Content-Type' => 'application/json',
 				),

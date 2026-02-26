@@ -78,13 +78,21 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 		// Check each custom post type.
 		foreach ( $post_types as $post_type ) {
 			$cpt_name = $post_type->name;
-			$cpts[] = $cpt_name;
+			$cpts[]   = $cpt_name;
 
 			// Check for reserved post type names.
 			$reserved_names = array(
-				'post', 'page', 'attachment', 'revision', 'nav_menu_item',
-				'custom_css', 'customize_changeset', 'user_request',
-				'wp_navigation', 'wp_template', 'wp_template_part',
+				'post',
+				'page',
+				'attachment',
+				'revision',
+				'nav_menu_item',
+				'custom_css',
+				'customize_changeset',
+				'user_request',
+				'wp_navigation',
+				'wp_template',
+				'wp_template_part',
 			);
 
 			if ( in_array( $cpt_name, $reserved_names, true ) ) {
@@ -106,7 +114,7 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 			}
 
 			// Check if CPT is public.
-			if ( $post_type->public === false && $post_type->show_ui === false ) {
+			if ( false === $post_type->public && false === $post_type->show_ui ) {
 				$warnings[] = sprintf(
 					/* translators: %s: post type name */
 					__( 'Custom post type "%s" is not public and hidden from UI', 'wpshadow' ),
@@ -115,7 +123,7 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 			}
 
 			// Check for archive support.
-			if ( $post_type->has_archive === false && $post_type->public === true ) {
+			if ( false === $post_type->has_archive && true === $post_type->public ) {
 				$warnings[] = sprintf(
 					/* translators: %s: post type name */
 					__( 'Public custom post type "%s" has archive disabled', 'wpshadow' ),
@@ -124,7 +132,7 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 			}
 
 			// Check for rewrite rules.
-			if ( empty( $post_type->rewrite ) && $post_type->public === true ) {
+			if ( empty( $post_type->rewrite ) && true === $post_type->public ) {
 				$warnings[] = sprintf(
 					/* translators: %s: post type name */
 					__( 'Public custom post type "%s" missing rewrite rules', 'wpshadow' ),
@@ -133,7 +141,7 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 			}
 
 			// Check capability type.
-			if ( empty( $post_type->capability_type ) || $post_type->capability_type === 'post' ) {
+			if ( empty( $post_type->capability_type ) || 'post' === $post_type->capability_type ) {
 				$warnings[] = sprintf(
 					/* translators: %s: post type name */
 					__( 'Custom post type "%s" using default capability type', 'wpshadow' ),
@@ -154,7 +162,7 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 
 		// Check for CPT conflicts with existing terms/taxonomies.
 		global $wp_taxonomies;
-		$taxonomy_names = array_keys( $wp_taxonomies );
+		$taxonomy_names    = array_keys( $wp_taxonomies );
 		$cpt_tax_conflicts = array_intersect( $cpts, $taxonomy_names );
 
 		if ( ! empty( $cpt_tax_conflicts ) ) {
@@ -179,8 +187,8 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 		// Check post count for each CPT.
 		foreach ( $post_types as $post_type ) {
 			$count = wp_count_posts( $post_type->name );
-			
-			if ( ! isset( $count->publish ) || $count->publish === 0 ) {
+
+			if ( ! isset( $count->publish ) || 0 === $count->publish ) {
 				$warnings[] = sprintf(
 					/* translators: %s: post type name */
 					__( 'Custom post type "%s" has no published posts', 'wpshadow' ),
@@ -193,8 +201,8 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 		$admin_cap_issues = 0;
 		foreach ( $post_types as $post_type ) {
 			// Check if using proper map_meta_cap.
-			if ( isset( $post_type->cap ) && $post_type->cap->edit_posts === 'edit_posts' ) {
-				$admin_cap_issues++;
+			if ( isset( $post_type->cap ) && 'edit_posts' === $post_type->cap->edit_posts ) {
+				++$admin_cap_issues;
 			}
 		}
 
@@ -229,10 +237,10 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-post-types-valid',
 				'context'      => array(
-					'cpts'     => $cpts,
+					'cpts'      => $cpts,
 					'cpt_count' => count( $post_types ),
-					'issues'   => $issues,
-					'warnings' => $warnings,
+					'issues'    => $issues,
+					'warnings'  => $warnings,
 				),
 			);
 		}
@@ -248,9 +256,9 @@ class Diagnostic_Custom_Post_Types_Valid extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-post-types-valid',
 				'context'      => array(
-					'cpts'     => $cpts,
+					'cpts'      => $cpts,
 					'cpt_count' => count( $post_types ),
-					'warnings' => $warnings,
+					'warnings'  => $warnings,
 				),
 			);
 		}

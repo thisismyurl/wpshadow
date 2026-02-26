@@ -63,10 +63,10 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 	 */
 	public static function check() {
 		// Pattern 1: Theme incompatible with current WordPress version
-		$current_wp = get_bloginfo( 'version' );
+		$current_wp    = get_bloginfo( 'version' );
 		$current_theme = wp_get_theme();
 
-		$requires_wp = $current_theme->get( 'Requires at least' );
+		$requires_wp  = $current_theme->get( 'Requires at least' );
 		$tested_up_to = $current_theme->get( 'Tested up to' );
 
 		if ( $requires_wp && version_compare( $current_wp, $requires_wp, '<' ) ) {
@@ -79,12 +79,12 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility',
 				'details'      => array(
-					'issue' => 'theme_wp_incompatible',
-					'theme_requires' => $requires_wp,
-					'current_wp' => $current_wp,
-					'message' => sprintf(
+					'issue'               => 'theme_wp_incompatible',
+					'theme_requires'      => $requires_wp,
+					'current_wp'          => $current_wp,
+					'message'             => sprintf(
 						/* translators: %s: version numbers */
-						__( 'Theme requires WordPress %s (currently running %s)', 'wpshadow' ),
+						__( 'Theme requires WordPress %1$s (currently running %2$s)', 'wpshadow' ),
 						$requires_wp,
 						$current_wp
 					),
@@ -94,20 +94,20 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 						'Security vulnerabilities',
 						'Data loss risk',
 					),
-					'solution' => array(
+					'solution'            => array(
 						'Update WordPress to meet requirement',
 						'Or switch to compatible theme',
 						'Check theme changelog for updates',
 					),
-					'updating_wordpress' => array(
+					'updating_wordpress'  => array(
 						'1. Backup entire site',
 						'2. Go to Dashboard > Updates',
 						'3. Click Update WordPress',
 						'4. Test all functionality',
 						'5. Check compatibility',
 					),
-					'theme_changelog' => 'Check theme developer\'s changelog for version compatibility',
-					'recommendation' => __( 'Update WordPress to meet theme requirements', 'wpshadow' ),
+					'theme_changelog'     => 'Check theme developer\'s changelog for version compatibility',
+					'recommendation'      => __( 'Update WordPress to meet theme requirements', 'wpshadow' ),
 				),
 			);
 		}
@@ -126,37 +126,37 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility',
 					'details'      => array(
-						'issue' => 'theme_outdated_testing',
-						'theme_tested_up_to' => $tested_up_to,
-						'current_wp' => $current_wp,
-						'versions_behind' => $versions_ahead,
-						'message' => sprintf(
+						'issue'                         => 'theme_outdated_testing',
+						'theme_tested_up_to'            => $tested_up_to,
+						'current_wp'                    => $current_wp,
+						'versions_behind'               => $versions_ahead,
+						'message'                       => sprintf(
 							/* translators: %s: version numbers */
-							__( 'Theme only tested up to WordPress %s (running %s)', 'wpshadow' ),
+							__( 'Theme only tested up to WordPress %1$s (running %2$s)', 'wpshadow' ),
 							$tested_up_to,
 							$current_wp
 						),
-						'what_it_means' => array(
+						'what_it_means'                 => array(
 							'Theme not verified with current version',
 							'May have compatibility issues',
 							'Developer may not provide support',
 							'Security patches may not be applied',
 						),
-						'checks_needed' => array(
+						'checks_needed'                 => array(
 							'Test theme on staging server',
 							'Check for visual issues',
 							'Verify all functionality works',
 							'Check console for JavaScript errors',
 							'Test on multiple browsers',
 						),
-						'developer_communication' => 'Contact theme developer about updating testing',
-						'theme_update_process' => "// In theme style.css header
+						'developer_communication'       => 'Contact theme developer about updating testing',
+						'theme_update_process'          => '// In theme style.css header
 /*
 Theme Name: My Theme
 Version: 2.0
 Tested up to: 6.4
 Requires at least: 5.9
-*/",
+*/',
 						'common_issues_after_wp_update' => array(
 							'Block editor compatibility',
 							'REST API changes',
@@ -164,9 +164,9 @@ Requires at least: 5.9
 							'JavaScript changes',
 							'Database schema updates',
 						),
-						'testing_on_staging' => __( 'Create staging environment to safely test compatibility', 'wpshadow' ),
-						'fallback_theme' => __( 'Have compatible fallback theme ready', 'wpshadow' ),
-						'recommendation' => __( 'Contact theme developer to update theme for current WordPress version', 'wpshadow' ),
+						'testing_on_staging'            => __( 'Create staging environment to safely test compatibility', 'wpshadow' ),
+						'fallback_theme'                => __( 'Have compatible fallback theme ready', 'wpshadow' ),
+						'recommendation'                => __( 'Contact theme developer to update theme for current WordPress version', 'wpshadow' ),
 					),
 				);
 			}
@@ -188,17 +188,17 @@ Requires at least: 5.9
 					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility',
 					'details'      => array(
-						'issue' => 'not_responsive',
-						'message' => __( 'Theme lacks responsive design CSS', 'wpshadow' ),
-						'mobile_users' => __( 'Over 60% of web traffic comes from mobile devices', 'wpshadow' ),
-						'seo_impact' => __( 'Google prioritizes mobile-friendly sites in search results', 'wpshadow' ),
-						'mobile_requirements' => array(
+						'issue'                     => 'not_responsive',
+						'message'                   => __( 'Theme lacks responsive design CSS', 'wpshadow' ),
+						'mobile_users'              => __( 'Over 60% of web traffic comes from mobile devices', 'wpshadow' ),
+						'seo_impact'                => __( 'Google prioritizes mobile-friendly sites in search results', 'wpshadow' ),
+						'mobile_requirements'       => array(
 							'Viewport meta tag' => '<meta name="viewport" content="width=device-width">',
-							'Media queries' => '@media (max-width: 768px)',
-							'Flexible layout' => 'Not fixed-width',
-							'Touch-friendly' => 'Large click targets',
+							'Media queries'     => '@media (max-width: 768px)',
+							'Flexible layout'   => 'Not fixed-width',
+							'Touch-friendly'    => 'Large click targets',
 						),
-						'responsive_design_pattern' => "/* Mobile-first responsive design */
+						'responsive_design_pattern' => '/* Mobile-first responsive design */
 
 /* Mobile layout - default */
 body { font-size: 14px; }
@@ -213,27 +213,27 @@ body { font-size: 14px; }
 /* Desktop and up */
 @media (min-width: 1024px) {
 	.container { width: 960px; }
-}",
-						'mobile_first' => array(
+}',
+						'mobile_first'              => array(
 							'Start with mobile layout',
 							'Add complexity at larger breakpoints',
 							'Simpler CSS, easier maintenance',
 							'Better performance on mobile',
 						),
-						'breakpoints' => array(
-							'Phone' => '320px - 480px',
-							'Tablet' => '481px - 768px',
-							'Desktop' => '769px - 1024px',
+						'breakpoints'               => array(
+							'Phone'         => '320px - 480px',
+							'Tablet'        => '481px - 768px',
+							'Desktop'       => '769px - 1024px',
 							'Large Desktop' => '1025px+',
 						),
-						'testing' => array(
+						'testing'                   => array(
 							'Chrome DevTools device emulation',
 							'Browserstack for real devices',
 							'Test on actual phones/tablets',
 							'Check landscape orientation',
 						),
-						'wordpress_themes' => __( 'WordPress.org requires all themes to be mobile-responsive', 'wpshadow' ),
-						'recommendation' => __( 'Ensure theme has responsive CSS for all screen sizes', 'wpshadow' ),
+						'wordpress_themes'          => __( 'WordPress.org requires all themes to be mobile-responsive', 'wpshadow' ),
+						'recommendation'            => __( 'Ensure theme has responsive CSS for all screen sizes', 'wpshadow' ),
 					),
 				);
 			}

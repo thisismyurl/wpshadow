@@ -69,16 +69,16 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 	public static function check() {
 		// Check for accessibility plugins that validate contrast.
 		$has_contrast_checker = is_plugin_active( 'accessibility-checker/accessibility-checker.php' ) ||
-							   is_plugin_active( 'wp-accessibility/wp-accessibility.php' );
+								is_plugin_active( 'wp-accessibility/wp-accessibility.php' );
 
 		// Get theme colors.
-		$theme_mods = get_theme_mods();
+		$theme_mods       = get_theme_mods();
 		$background_color = get_theme_mod( 'background_color', 'ffffff' );
-		$text_color = get_theme_mod( 'text_color', '000000' );
-		$link_color = get_theme_mod( 'link_color', '0073aa' );
+		$text_color       = get_theme_mod( 'text_color', '000000' );
+		$link_color       = get_theme_mod( 'link_color', '0073aa' );
 
 		// Parse CSS for color definitions.
-		$style_css = get_stylesheet_directory() . '/style.css';
+		$style_css    = get_stylesheet_directory() . '/style.css';
 		$color_issues = array();
 
 		if ( file_exists( $style_css ) ) {
@@ -90,7 +90,7 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 
 			// Sample contrast checks (simplified).
 			$light_backgrounds = array( 'ffffff', 'fff', 'f5f5f5', 'eeeeee', 'eee' );
-			$dark_text = array( '000000', '000', '333333', '333', '222222', '222' );
+			$dark_text         = array( '000000', '000', '333333', '333', '222222', '222' );
 
 			// Check if using light gray text on white (common contrast issue).
 			$has_gray_on_white = false;
@@ -98,9 +98,9 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 				$color_lower = strtolower( $color );
 				// Detect light gray (above #777777).
 				if ( strlen( $color_lower ) === 6 ) {
-					$r = hexdec( substr( $color_lower, 0, 2 ) );
-					$g = hexdec( substr( $color_lower, 2, 2 ) );
-					$b = hexdec( substr( $color_lower, 4, 2 ) );
+					$r         = hexdec( substr( $color_lower, 0, 2 ) );
+					$g         = hexdec( substr( $color_lower, 2, 2 ) );
+					$b         = hexdec( substr( $color_lower, 4, 2 ) );
 					$luminance = ( $r + $g + $b ) / 3;
 
 					// Light gray range (170-220 = #AA-#DD).
@@ -113,13 +113,13 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 		}
 
 		// Check for high contrast mode support.
-		$supports_high_contrast = current_theme_supports( 'custom-background' ) || 
-								 current_theme_supports( 'editor-color-palette' );
+		$supports_high_contrast = current_theme_supports( 'custom-background' ) ||
+								current_theme_supports( 'editor-color-palette' );
 
 		// Check if theme uses system colors.
 		$uses_system_colors = false;
 		if ( file_exists( $style_css ) ) {
-			$style_content = file_get_contents( $style_css );
+			$style_content      = file_get_contents( $style_css );
 			$uses_system_colors = ( strpos( $style_content, 'currentColor' ) !== false );
 		}
 
@@ -136,8 +136,8 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 		$button_styles = false;
 		if ( file_exists( $style_css ) ) {
 			$style_content = file_get_contents( $style_css );
-			$button_styles = ( strpos( $style_content, 'button' ) !== false ) || 
-						   ( strpos( $style_content, '.btn' ) !== false );
+			$button_styles = ( strpos( $style_content, 'button' ) !== false ) ||
+							( strpos( $style_content, '.btn' ) !== false );
 		}
 
 		// Check for issues.
@@ -197,17 +197,17 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 					'issues_detected'         => $issues,
 					'recommendation'          => __( 'Install accessibility checker, ensure 4.5:1 contrast for text, 3:1 for large text', 'wpshadow' ),
 					'wcag_requirements'       => array(
-						'WCAG 1.4.3 (AA)'  => 'Normal text: 4.5:1 contrast ratio',
-						'WCAG 1.4.3 (AA)'  => 'Large text (18pt+): 3:1 contrast ratio',
-						'WCAG 1.4.6 (AAA)' => 'Normal text: 7:1 contrast ratio',
-						'WCAG 1.4.6 (AAA)' => 'Large text: 4.5:1 contrast ratio',
-						'WCAG 1.4.11'      => 'UI components: 3:1 contrast ratio',
+						'WCAG 1.4.3 (AA) - Normal text'  => '4.5:1 contrast ratio',
+						'WCAG 1.4.3 (AA) - Large text'   => '3:1 contrast ratio (18pt+)',
+						'WCAG 1.4.6 (AAA) - Normal text' => '7:1 contrast ratio',
+						'WCAG 1.4.6 (AAA) - Large text'  => '4.5:1 contrast ratio',
+						'WCAG 1.4.11 - UI components'    => '3:1 contrast ratio',
 					),
 					'safe_color_combinations' => array(
-						'Black on white'       => '#000000 on #FFFFFF (21:1 ratio)',
-						'Dark gray on white'   => '#333333 on #FFFFFF (12.6:1 ratio)',
-						'White on dark blue'   => '#FFFFFF on #003366 (11.8:1 ratio)',
-						'Black on light gray'  => '#000000 on #F5F5F5 (19.8:1 ratio)',
+						'Black on white'      => '#000000 on #FFFFFF (21:1 ratio)',
+						'Dark gray on white'  => '#333333 on #FFFFFF (12.6:1 ratio)',
+						'White on dark blue'  => '#FFFFFF on #003366 (11.8:1 ratio)',
+						'Black on light gray' => '#000000 on #F5F5F5 (19.8:1 ratio)',
 					),
 					'contrast_tools'          => array(
 						'WebAIM Contrast Checker',

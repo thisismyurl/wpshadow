@@ -80,17 +80,4 @@ class Treatment_Moderates_Comments extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Moderates_Comments' );
 	}
-
-	/**
-	 * Get the "Why This Matters" educational content.
-	 *
-	 * @since  1.7034.1430
-	 * @return string Explanation of why this treatment matters.
-	 */
-	private static function get_why_matters() {
-		return __(
-			'Active comment moderation shows your audience that you\'re paying attention. Responding to comments builds relationships, encourages more engagement, and creates a welcoming community. Unmoderated comments can fill with spam, which hurts your SEO and user experience. Regular moderation keeps your site professional and trustworthy.',
-			'wpshadow'
-		);
-	}
 }

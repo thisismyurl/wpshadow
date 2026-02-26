@@ -277,48 +277,4 @@ class Diagnostic_Certificate_Transparency extends Diagnostic_Base {
 		return $suspicious;
 	}
 
-	/**
-	 * Calculate severity based on suspicious certificates.
-	 *
-	 * @since  1.6035.0000
-	 * @param  array $suspicious_certs Suspicious certificates.
-	 * @return string Severity level.
-	 */
-	private static function determine_severity( array $suspicious_certs ) : string {
-		$count = count( $suspicious_certs );
-
-		// Many certs = critical.
-		if ( $count >= 5 ) {
-			return 'critical';
-		}
-
-		// Several certs = high.
-		if ( $count >= 3 ) {
-			return 'high';
-		}
-
-		// One or two = medium.
-		return 'medium';
-	}
-
-	/**
-	 * Calculate threat level (0-100).
-	 *
-	 * @since  1.6035.0000
-	 * @param  array $suspicious_certs Suspicious certificates.
-	 * @return int Threat level.
-	 */
-	private static function calculate_threat_level( array $suspicious_certs ) : int {
-		$count = count( $suspicious_certs );
-
-		if ( $count >= 10 ) {
-			return 95;
-		} elseif ( $count >= 5 ) {
-			return 85;
-		} elseif ( $count >= 3 ) {
-			return 70;
-		} else {
-			return 50;
-		}
-	}
 }

@@ -94,21 +94,21 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
+			'id'               => self::$slug,
+			'title'            => self::$title,
+			'description'      => sprintf(
 				/* translators: %d: number of small tap targets */
 				__( 'Found %d interactive elements below 44×44px minimum', 'wpshadow' ),
 				$violation_count
 			),
-			'severity'        => $severity,
-			'threat_level'    => $threat,
-			'small_targets'   => array_slice( $small_targets, 0, 10 ), // Show first 10
+			'severity'         => $severity,
+			'threat_level'     => $threat,
+			'small_targets'    => array_slice( $small_targets, 0, 10 ), // Show first 10
 			'total_violations' => $violation_count,
-			'wcag_violation'  => '2.5.5 Target Size (Level AAA)',
-			'user_impact'     => __( 'Difficult to tap correctly, frustration, mis-taps', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/tap-target-size',
+			'wcag_violation'   => '2.5.5 Target Size (Level AAA)',
+			'user_impact'      => __( 'Difficult to tap correctly, frustration, mis-taps', 'wpshadow' ),
+			'auto_fixable'     => true,
+			'kb_link'          => 'https://wpshadow.com/kb/tap-target-size',
 		);
 	}
 
@@ -126,7 +126,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 		}
 
 		$small_targets = array();
-		$min_size = self::MIN_TAP_TARGET_SIZE;
+		$min_size      = self::MIN_TAP_TARGET_SIZE;
 
 		// Parse HTML and check buttons
 		$dom = self::parse_html( $html );
@@ -193,7 +193,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	 */
 	private static function get_element_size( $element ): array {
 		$style = $element->getAttribute( 'style' ) ?? '';
-		
+
 		// Extract width from style
 		$width = 40;
 		if ( preg_match( '/width\s*:\s*(\d+)px/i', $style, $matches ) ) {
@@ -228,6 +228,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	 * @return bool True if inline text link.
 	 */
 	private static function is_inline_text_link( $link ): bool {
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Native DOM API property name.
 		$parent = $link->parentNode;
 		if ( ! $parent ) {
 			return false;
@@ -235,6 +236,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 
 		// Check if parent is paragraph, span, or other text container
 		$text_containers = array( 'p', 'span', 'div', 'li' );
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Native DOM API property name.
 		return in_array( strtolower( $parent->nodeName ), $text_containers, true );
 	}
 
@@ -255,6 +257,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 			$classes = explode( ' ', $class );
 			return '.' . implode( '.', $classes );
 		} else {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Native DOM API property name.
 			return $element->nodeName;
 		}
 	}

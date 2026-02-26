@@ -63,14 +63,14 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
+		$issues     = array();
 		$beta_score = 0;
-		$max_score = 5;
+		$max_score  = 5;
 
 		// Check for beta program.
 		$beta_program = self::check_beta_program();
 		if ( $beta_program ) {
-			$beta_score++;
+			++$beta_score;
 		} else {
 			$issues[] = __( 'No beta testing program documented', 'wpshadow' );
 		}
@@ -78,7 +78,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 		// Check for beta user role.
 		$beta_role = self::check_beta_role();
 		if ( $beta_role ) {
-			$beta_score++;
+			++$beta_score;
 		} else {
 			$issues[] = __( 'No dedicated beta tester user role', 'wpshadow' );
 		}
@@ -86,7 +86,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 		// Check for feedback mechanism.
 		$feedback_mechanism = self::check_feedback_mechanism();
 		if ( $feedback_mechanism ) {
-			$beta_score++;
+			++$beta_score;
 		} else {
 			$issues[] = __( 'No structured feedback collection for beta features', 'wpshadow' );
 		}
@@ -94,7 +94,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 		// Check for beta announcements.
 		$beta_announcements = self::check_beta_announcements();
 		if ( $beta_announcements ) {
-			$beta_score++;
+			++$beta_score;
 		} else {
 			$issues[] = __( 'Beta features not announced to community', 'wpshadow' );
 		}
@@ -102,7 +102,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 		// Check for tester recognition.
 		$tester_recognition = self::check_tester_recognition();
 		if ( $tester_recognition ) {
-			$beta_score++;
+			++$beta_score;
 		} else {
 			$issues[] = __( 'Beta testers not recognized or thanked', 'wpshadow' );
 		}
@@ -111,10 +111,10 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 		$beta_percentage = ( $beta_score / $max_score ) * 100;
 
 		if ( $beta_percentage < 40 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 20;
 		} elseif ( $beta_percentage < 70 ) {
-			$severity = 'low';
+			$severity     = 'low';
 			$threat_level = 10;
 		} else {
 			return null;
@@ -177,11 +177,11 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	private static function check_beta_role() {
 		// Check for beta tester role.
 		$roles = wp_roles()->roles;
-		
+
 		foreach ( $roles as $role_key => $role ) {
 			if ( stripos( $role_key, 'beta' ) !== false ||
-				 stripos( $role['name'], 'Beta' ) !== false ||
-				 stripos( $role['name'], 'Tester' ) !== false ) {
+				stripos( $role['name'], 'Beta' ) !== false ||
+				stripos( $role['name'], 'Tester' ) !== false ) {
 				return true;
 			}
 		}

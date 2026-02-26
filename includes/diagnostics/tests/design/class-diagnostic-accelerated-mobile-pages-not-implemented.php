@@ -64,9 +64,9 @@ class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Bas
 	 */
 	public static function check() {
 		$amp_plugins = array(
-			'amp/amp.php'                 => 'AMP',
-			'better-amp/better-amp.php'   => 'Better AMP',
-			'weeblramp/weeblramp.php'     => 'weeblrAMP',
+			'amp/amp.php'                           => 'AMP',
+			'better-amp/better-amp.php'             => 'Better AMP',
+			'weeblramp/weeblramp.php'               => 'weeblrAMP',
 			'ampforwp/accelerated-mobile-pages.php' => 'AMP for WP',
 		);
 
@@ -95,10 +95,10 @@ class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Bas
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/accelerated-mobile-pages-not-implemented',
 				'details'      => array(
-					'has_amp_plugin'   => false,
-					'has_amp_support'  => false,
-					'recommendation'   => __( 'If mobile visitors use slow networks, consider AMP to reduce page weight. If your site is already fast and responsive, AMP may not be necessary.', 'wpshadow' ),
-					'common_plugins'   => array_values( $amp_plugins ),
+					'has_amp_plugin'  => false,
+					'has_amp_support' => false,
+					'recommendation'  => __( 'If mobile visitors use slow networks, consider AMP to reduce page weight. If your site is already fast and responsive, AMP may not be necessary.', 'wpshadow' ),
+					'common_plugins'  => array_values( $amp_plugins ),
 				),
 			);
 		}
@@ -114,9 +114,9 @@ class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Bas
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/accelerated-mobile-pages-not-implemented',
 				'details'      => array(
-					'plugin_name'       => $plugin_name,
-					'has_amp_support'   => false,
-					'recommendation'    => __( 'Finish the AMP plugin setup and confirm your theme supports AMP. Many themes require a small configuration step.', 'wpshadow' ),
+					'plugin_name'     => $plugin_name,
+					'has_amp_support' => false,
+					'recommendation'  => __( 'Finish the AMP plugin setup and confirm your theme supports AMP. Many themes require a small configuration step.', 'wpshadow' ),
 				),
 			);
 		}

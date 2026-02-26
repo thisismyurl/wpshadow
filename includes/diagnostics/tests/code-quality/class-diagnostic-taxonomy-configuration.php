@@ -66,7 +66,7 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 
 		// Get all custom taxonomies (exclude built-in)
 		$built_in_taxonomies = array( 'category', 'post_tag', 'nav_menu', 'link_category', 'post_format', 'wp_theme', 'wp_template_part_area' );
-		$custom_taxonomies = array();
+		$custom_taxonomies   = array();
 
 		foreach ( $wp_taxonomies as $tax => $tax_obj ) {
 			if ( ! in_array( $tax, $built_in_taxonomies, true ) ) {
@@ -78,7 +78,7 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 		$missing_labels = array();
 		foreach ( $custom_taxonomies as $tax => $tax_obj ) {
 			$required_labels = array( 'name', 'singular_name', 'search_items', 'all_items', 'parent_item', 'parent_item_colon', 'edit_item', 'update_item', 'add_new_item', 'new_item_name', 'menu_name' );
-			$missing = array();
+			$missing         = array();
 
 			foreach ( $required_labels as $label ) {
 				if ( empty( $tax_obj->labels->$label ) ) {
@@ -101,38 +101,38 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-configuration',
 				'details'      => array(
-					'issue' => 'missing_labels',
-					'affected_taxonomies' => $missing_labels,
-					'message' => sprintf(
+					'issue'                            => 'missing_labels',
+					'affected_taxonomies'              => $missing_labels,
+					'message'                          => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d custom taxonomies missing required labels', 'wpshadow' ),
 						count( $missing_labels )
 					),
-					'why_labels_matter' => array(
+					'why_labels_matter'                => array(
 						'Used throughout WordPress admin',
 						'Improve editor experience',
 						'Better accessibility',
 						'Professional appearance',
 					),
-					'required_labels' => array(
-						'name' => 'Plural name (e.g., "Genres")',
-						'singular_name' => 'Singular name (e.g., "Genre")',
-						'search_items' => 'Search button text',
-						'all_items' => 'All items link text',
-						'parent_item' => 'Parent item label (hierarchical)',
+					'required_labels'                  => array(
+						'name'              => 'Plural name (e.g., "Genres")',
+						'singular_name'     => 'Singular name (e.g., "Genre")',
+						'search_items'      => 'Search button text',
+						'all_items'         => 'All items link text',
+						'parent_item'       => 'Parent item label (hierarchical)',
 						'parent_item_colon' => 'Parent item with colon',
-						'edit_item' => 'Edit page title',
-						'update_item' => 'Update button text',
-						'add_new_item' => 'Add new page title',
-						'new_item_name' => 'New item name field label',
-						'menu_name' => 'Menu name',
+						'edit_item'         => 'Edit page title',
+						'update_item'       => 'Update button text',
+						'add_new_item'      => 'Add new page title',
+						'new_item_name'     => 'New item name field label',
+						'menu_name'         => 'Menu name',
 					),
 					'hierarchical_vs_non_hierarchical' => array(
 						'Hierarchical (like categories)' => 'Use parent_item labels',
-						'Non-hierarchical (like tags)' => 'Use popular_items, separate_items_with_commas',
+						'Non-hierarchical (like tags)'   => 'Use popular_items, separate_items_with_commas',
 					),
-					'user_experience_impact' => __( 'Generic labels like "Items" confuse content editors', 'wpshadow' ),
-					'code_example' => "register_taxonomy('genre', 'book', array(
+					'user_experience_impact'           => __( 'Generic labels like "Items" confuse content editors', 'wpshadow' ),
+					'code_example'                     => "register_taxonomy('genre', 'book', array(
 	'labels' => array(
 		'name' => __('Genres', 'textdomain'),
 		'singular_name' => __('Genre', 'textdomain'),
@@ -147,13 +147,13 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 		'menu_name' => __('Genres', 'textdomain'),
 	),
 ));",
-					'recommendation' => __( 'Define all taxonomy labels for better admin UX', 'wpshadow' ),
+					'recommendation'                   => __( 'Define all taxonomy labels for better admin UX', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 2: Taxonomies using reserved slugs
-		$reserved_slugs = array( 'category', 'post_tag', 'tag', 'attachment', 'attachment_id', 'author', 'author_name', 'calendar', 'cat', 'tag', 'taxonomy', 'term' );
+		$reserved_slugs    = array( 'category', 'post_tag', 'tag', 'attachment', 'attachment_id', 'author', 'author_name', 'calendar', 'cat', 'tag', 'taxonomy', 'term' );
 		$problematic_slugs = array();
 
 		foreach ( $custom_taxonomies as $tax => $tax_obj ) {
@@ -172,40 +172,40 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-configuration',
 				'details'      => array(
-					'issue' => 'reserved_slugs',
-					'problematic_slugs' => $problematic_slugs,
-					'message' => sprintf(
+					'issue'                  => 'reserved_slugs',
+					'problematic_slugs'      => $problematic_slugs,
+					'message'                => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d custom taxonomies using reserved WordPress slugs', 'wpshadow' ),
 						count( $problematic_slugs )
 					),
-					'why_this_is_critical' => array(
+					'why_this_is_critical'   => array(
 						'Conflicts with WordPress core',
 						'Breaks taxonomy pages and archives',
 						'Causes URL routing issues',
 						'Query variable conflicts',
 					),
-					'reserved_slugs_list' => $reserved_slugs,
-					'common_conflicts' => array(
+					'reserved_slugs_list'    => $reserved_slugs,
+					'common_conflicts'       => array(
 						'category' => 'Conflicts with default category taxonomy',
-						'tag' => 'Conflicts with default tag taxonomy',
-						'author' => 'Conflicts with author query var',
+						'tag'      => 'Conflicts with default tag taxonomy',
+						'author'   => 'Conflicts with author query var',
 						'taxonomy' => 'Reserved for taxonomy query parameter',
 					),
-					'symptoms' => array(
+					'symptoms'               => array(
 						'404 errors on taxonomy archives',
 						'Wrong content displayed',
 						'Admin pages not working',
 						'Query results incorrect',
 					),
-					'how_to_fix' => array(
+					'how_to_fix'             => array(
 						'1. Choose a unique slug',
 						'2. Update register_taxonomy() call',
 						'3. Migrate term relationships (if any)',
 						'4. Flush rewrite rules',
 					),
 					'data_migration_warning' => __( 'Changing slug requires updating all term_taxonomy rows in database', 'wpshadow' ),
-					'recommendation' => __( 'Use descriptive, unique slugs (e.g., "genre", "product_category", "skill")', 'wpshadow' ),
+					'recommendation'         => __( 'Use descriptive, unique slugs (e.g., "genre", "product_category", "skill")', 'wpshadow' ),
 				),
 			);
 		}
@@ -228,39 +228,39 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-configuration',
 				'details'      => array(
-					'issue' => 'no_rest_api_support',
-					'affected_taxonomies' => $no_rest_api,
-					'message' => sprintf(
+					'issue'                       => 'no_rest_api_support',
+					'affected_taxonomies'         => $no_rest_api,
+					'message'                     => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d custom taxonomies not available in REST API', 'wpshadow' ),
 						count( $no_rest_api )
 					),
-					'why_rest_api_matters' => array(
+					'why_rest_api_matters'        => array(
 						'Required for block editor taxonomy selector',
 						'Enables headless WordPress',
 						'Allows mobile app integration',
 						'Improves developer experience',
 					),
-					'block_editor_impact' => __( 'Taxonomies without REST API cannot be selected in block editor sidebar', 'wpshadow' ),
+					'block_editor_impact'         => __( 'Taxonomies without REST API cannot be selected in block editor sidebar', 'wpshadow' ),
 					'features_requiring_rest_api' => array(
-						'Block editor' => 'Taxonomy selection panel in sidebar',
-						'Site Editor' => 'Full Site Editing features',
-						'Mobile apps' => 'WordPress mobile apps',
-						'Headless WordPress' => 'Decoupled frontends',
+						'Block editor'             => 'Taxonomy selection panel in sidebar',
+						'Site Editor'              => 'Full Site Editing features',
+						'Mobile apps'              => 'WordPress mobile apps',
+						'Headless WordPress'       => 'Decoupled frontends',
 						'Third-party integrations' => 'API-based integrations',
 					),
-					'how_to_enable' => "register_taxonomy('genre', 'book', array(
+					'how_to_enable'               => "register_taxonomy('genre', 'book', array(
 	'show_in_rest' => true,
 	'rest_base' => 'genres', // Optional: custom REST base
 	'rest_controller_class' => 'WP_REST_Terms_Controller', // Default
 ));",
-					'security_considerations' => array(
+					'security_considerations'     => array(
 						'REST API respects same capabilities',
 						'Private terms remain private',
 						'No additional exposure risk',
 					),
-					'best_practice' => __( 'Enable REST API for all modern taxonomies', 'wpshadow' ),
-					'recommendation' => __( 'Add show_in_rest => true to taxonomy registration', 'wpshadow' ),
+					'best_practice'               => __( 'Enable REST API for all modern taxonomies', 'wpshadow' ),
+					'recommendation'              => __( 'Add show_in_rest => true to taxonomy registration', 'wpshadow' ),
 				),
 			);
 		}
@@ -283,39 +283,39 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-configuration',
 				'details'      => array(
-					'issue' => 'no_tag_cloud',
-					'affected_taxonomies' => $no_tag_cloud,
-					'message' => sprintf(
+					'issue'                  => 'no_tag_cloud',
+					'affected_taxonomies'    => $no_tag_cloud,
+					'message'                => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d non-hierarchical taxonomies have tag cloud disabled', 'wpshadow' ),
 						count( $no_tag_cloud )
 					),
-					'what_is_tag_cloud' => __( 'Widget displaying taxonomy terms sized by usage frequency', 'wpshadow' ),
+					'what_is_tag_cloud'      => __( 'Widget displaying taxonomy terms sized by usage frequency', 'wpshadow' ),
 					'benefits_of_tag_clouds' => array(
 						'Visual representation of popular terms',
 						'Improves content discovery',
 						'Shows content relationships',
 						'User navigation aid',
 					),
-					'when_to_enable' => array(
+					'when_to_enable'         => array(
 						'Non-hierarchical taxonomies (tags)',
 						'Public-facing taxonomies',
 						'Taxonomies with many terms',
 						'Content discovery important',
 					),
-					'when_to_disable' => array(
+					'when_to_disable'        => array(
 						'Hierarchical taxonomies (categories)',
 						'Admin-only taxonomies',
 						'Few terms (< 10)',
 						'Not useful for users',
 					),
-					'how_to_enable' => "register_taxonomy('skill', 'portfolio', array(
+					'how_to_enable'          => "register_taxonomy('skill', 'portfolio', array(
 	'hierarchical' => false,
 	'show_tagcloud' => true,
 	'show_in_quick_edit' => true,
 ));",
 					'using_tag_cloud_widget' => __( 'Add via Appearance > Widgets > Tag Cloud widget', 'wpshadow' ),
-					'recommendation' => __( 'Enable tag cloud for public non-hierarchical taxonomies', 'wpshadow' ),
+					'recommendation'         => __( 'Enable tag cloud for public non-hierarchical taxonomies', 'wpshadow' ),
 				),
 			);
 		}
@@ -350,39 +350,39 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-configuration',
 				'details'      => array(
-					'issue' => 'permalink_configuration',
-					'problematic_slugs' => $permalink_issues,
-					'message' => sprintf(
+					'issue'                      => 'permalink_configuration',
+					'problematic_slugs'          => $permalink_issues,
+					'message'                    => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d custom taxonomies have permalink configuration issues', 'wpshadow' ),
 						count( $permalink_issues )
 					),
-					'slug_requirements' => array(
+					'slug_requirements'          => array(
 						'Lowercase letters only',
 						'Use hyphens for spaces',
 						'No special characters',
 						'Minimum 3 characters',
 						'Descriptive and SEO-friendly',
 					),
-					'common_problems' => array(
-						'Too short' => 'Slugs like "t", "tp" not descriptive',
+					'common_problems'            => array(
+						'Too short'          => 'Slugs like "t", "tp" not descriptive',
 						'Special characters' => 'Characters like %, &, ? break URLs',
-						'Uppercase letters' => 'URLs should be lowercase',
-						'Underscores' => 'Prefer hyphens over underscores',
+						'Uppercase letters'  => 'URLs should be lowercase',
+						'Underscores'        => 'Prefer hyphens over underscores',
 					),
-					'seo_impact' => array(
+					'seo_impact'                 => array(
 						'URLs should be readable',
 						'Descriptive slugs improve SEO',
 						'Clean URLs rank better',
 						'Breadcrumb clarity',
 					),
-					'examples' => array(
-						'Bad: tp' => 'Too short, not descriptive',
-						'Bad: Product_Type' => 'Uppercase, underscores',
+					'examples'                   => array(
+						'Bad: tp'            => 'Too short, not descriptive',
+						'Bad: Product_Type'  => 'Uppercase, underscores',
 						'Good: product-type' => 'Clear, descriptive, lowercase',
-						'Good: genres' => 'Clear, simple',
+						'Good: genres'       => 'Clear, simple',
 					),
-					'rewrite_configuration' => "register_taxonomy('genre', 'book', array(
+					'rewrite_configuration'      => "register_taxonomy('genre', 'book', array(
 	'rewrite' => array(
 		'slug' => 'genres',
 		'with_front' => false,
@@ -390,8 +390,8 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 	),
 ));",
 					'hierarchical_url_structure' => __( 'Set hierarchical => true for category-style URLs (genre/parent/child)', 'wpshadow' ),
-					'after_changes' => __( 'Always flush rewrite rules after changing permalink structure', 'wpshadow' ),
-					'recommendation' => __( 'Use descriptive, SEO-friendly slugs with lowercase letters and hyphens', 'wpshadow' ),
+					'after_changes'              => __( 'Always flush rewrite rules after changing permalink structure', 'wpshadow' ),
+					'recommendation'             => __( 'Use descriptive, SEO-friendly slugs with lowercase letters and hyphens', 'wpshadow' ),
 				),
 			);
 		}
@@ -414,20 +414,20 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-configuration',
 				'details'      => array(
-					'issue' => 'unassigned_taxonomies',
-					'affected_taxonomies' => $unassigned_taxonomies,
-					'message' => sprintf(
+					'issue'                       => 'unassigned_taxonomies',
+					'affected_taxonomies'         => $unassigned_taxonomies,
+					'message'                     => sprintf(
 						/* translators: %d: number of taxonomies */
 						__( '%d custom taxonomies not assigned to any post types', 'wpshadow' ),
 						count( $unassigned_taxonomies )
 					),
-					'why_this_is_a_problem' => array(
+					'why_this_is_a_problem'       => array(
 						'Taxonomy cannot be used',
 						'No UI to assign terms',
 						'Wastes database resources',
 						'Confuses administrators',
 					),
-					'common_causes' => array(
+					'common_causes'               => array(
 						'Post type registered after taxonomy',
 						'Typo in post type name',
 						'Post type registration failed',
@@ -435,11 +435,11 @@ class Diagnostic_Taxonomy_Configuration extends Diagnostic_Base {
 					),
 					'how_taxonomies_are_assigned' => array(
 						'During registration' => "register_taxonomy('genre', 'book', array(...))",
-						'After registration' => "register_taxonomy_for_object_type('genre', 'book')",
+						'After registration'  => "register_taxonomy_for_object_type('genre', 'book')",
 						'Multiple post types' => "register_taxonomy('genre', array('book', 'movie'), array(...))",
 					),
 					'checking_registration_order' => __( 'Taxonomies must be registered after post types or use register_taxonomy_for_object_type()', 'wpshadow' ),
-					'code_example' => "// During taxonomy registration
+					'code_example'                => "// During taxonomy registration
 register_taxonomy('genre', array('book', 'movie'), array(
 	'labels' => array(...),
 	'public' => true,
@@ -448,13 +448,13 @@ register_taxonomy('genre', array('book', 'movie'), array(
 // Or after both are registered
 register_taxonomy_for_object_type('genre', 'book');
 register_taxonomy_for_object_type('genre', 'movie');",
-					'troubleshooting' => array(
+					'troubleshooting'             => array(
 						'1. Check post type slug is correct',
 						'2. Verify post type is registered',
 						'3. Check registration hook priority',
 						'4. Test with register_taxonomy_for_object_type()',
 					),
-					'recommendation' => __( 'Assign taxonomies to appropriate post types or remove unused taxonomies', 'wpshadow' ),
+					'recommendation'              => __( 'Assign taxonomies to appropriate post types or remove unused taxonomies', 'wpshadow' ),
 				),
 			);
 		}

@@ -75,57 +75,6 @@ class Treatment_Mobile_Font_Size extends Treatment_Base {
 	}
 
 	/**
-	 * Find body text smaller than minimum.
-	 *
-	 * @since  1.602.1430
-	 * @return array Small text locations.
-	 */
-	private static function find_small_text(): array {
-		// Check theme CSS
-		$css = self::get_stylesheet_content();
-		if ( ! $css ) {
-			return array();
-		}
-
-		$locations = array();
-		$min_size = self::MIN_FONT_SIZE;
-
-		// Look for body font-size rules
-		$patterns = array(
-			'body\s*\{[^}]*font-size\s*:\s*(\d+)px' => 'body',
-			'body\s*\{[^}]*font-size\s*:\s*([\d.]+)em' => 'body',
-			'\.content\s*p\s*\{[^}]*font-size\s*:\s*(\d+)px' => '.content p',
-			'p\s*\{[^}]*font-size\s*:\s*(\d+)px' => 'p',
-		);
-
-		$smallest_size = PHP_INT_MAX;
-
-		foreach ( $patterns as $pattern => $selector ) {
-			if ( preg_match_all( "/$pattern/i", $css, $matches ) ) {
-				foreach ( $matches[1] as $size_str ) {
-					$size = (int) $size_str;
-					if ( $size < $min_size && $size > 0 ) {
-						$locations[] = array(
-							'selector' => $selector,
-							'size'     => $size . 'px',
-						);
-						$smallest_size = min( $smallest_size, $size );
-					}
-				}
-			}
-		}
-
-		if ( empty( $locations ) ) {
-			return array();
-		}
-
-		return array(
-			'current_size' => $smallest_size . 'px',
-			'locations'    => array_slice( $locations, 0, 5 ),
-		);
-	}
-
-	/**
 	 * Get theme stylesheet content.
 	 *
 	 * @since  1.602.1430

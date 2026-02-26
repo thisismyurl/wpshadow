@@ -65,13 +65,13 @@ class Diagnostic_Unused_CSS_Not_Removed extends Diagnostic_Base {
 	public static function check() {
 		if ( ! has_filter( 'wp_head', 'remove_unused_css' ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Unused CSS removal is not configured yet. Trimming unused styles can reduce payload size and improve page speed.', 'wpshadow' ),
-				'severity'    => 'medium',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Unused CSS removal is not configured yet. Trimming unused styles can reduce payload size and improve page speed.', 'wpshadow' ),
+				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/unused-css-not-removed',
+				'kb_link'      => 'https://wpshadow.com/kb/unused-css-not-removed',
 			);
 		}
 

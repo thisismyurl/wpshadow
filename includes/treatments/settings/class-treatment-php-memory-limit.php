@@ -65,38 +65,4 @@ class Treatment_PHP_Memory_Limit extends Treatment_Base {
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Php_Memory_Limit' );
 	}
-
-	/**
-	 * Parse size string like 128M into bytes.
-	 *
-	 * @since  1.6035.1305
-	 * @param  string|false $value Memory limit string.
-	 * @return int Size in bytes.
-	 */
-	private static function parse_size( $value ) {
-		if ( ! is_string( $value ) || '' === $value ) {
-			return 0;
-		}
-
-		$value = trim( $value );
-		if ( '-1' === $value ) {
-			return PHP_INT_MAX;
-		}
-
-		$unit  = strtoupper( substr( $value, -1 ) );
-		$bytes = (int) $value;
-
-		switch ( $unit ) {
-			case 'G':
-				$bytes *= 1024;
-				// no break
-			case 'M':
-				$bytes *= 1024;
-				// no break
-			case 'K':
-				$bytes *= 1024;
-		}
-
-		return $bytes;
-	}
 }

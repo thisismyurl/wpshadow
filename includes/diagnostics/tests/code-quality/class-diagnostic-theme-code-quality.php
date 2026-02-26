@@ -89,22 +89,22 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality',
 				'details'      => array(
-					'issue' => 'unprepared_db_queries',
-					'files_count' => count( $files_with_direct_db ),
-					'sample_files' => array_slice( $files_with_direct_db, 0, 10 ),
-					'message' => sprintf(
+					'issue'                    => 'unprepared_db_queries',
+					'files_count'              => count( $files_with_direct_db ),
+					'sample_files'             => array_slice( $files_with_direct_db, 0, 10 ),
+					'message'                  => sprintf(
 						/* translators: %d: count */
 						__( '%d theme files use unsafe database queries', 'wpshadow' ),
 						count( $files_with_direct_db )
 					),
-					'sql_injection_risk' => __( 'Unescaped queries vulnerable to SQL injection', 'wpshadow' ),
-					'attack_example' => array(
+					'sql_injection_risk'       => __( 'Unescaped queries vulnerable to SQL injection', 'wpshadow' ),
+					'attack_example'           => array(
 						'URL: ?page=1" OR "1"="1',
 						'Query becomes: SELECT * FROM posts WHERE page = 1" OR "1"="1',
 						'Returns all posts regardless of condition',
 						'Data exposed or modified',
 					),
-					'secure_database_access' => "// WRONG - SQL injection vulnerable
+					'secure_database_access'   => "// WRONG - SQL injection vulnerable
 \$results = \$wpdb->get_results(\"SELECT * FROM {$wpdb->posts} WHERE ID = {$_GET['id']}\");
 
 // RIGHT - Using prepare()
@@ -119,17 +119,17 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 	\$post_id,
 	\$status
 ));",
-					'placeholder_types' => array(
+					'placeholder_types'        => array(
 						'%d' => 'Integer values',
 						'%s' => 'String/text values',
 						'%i' => 'Identifier (table/column name)',
 						'%f' => 'Float values',
 					),
-					'wordpress_functions' => array(
-						'get_posts()' => 'Use instead of custom queries',
-						'get_users()' => 'For user queries',
+					'wordpress_functions'      => array(
+						'get_posts()'    => 'Use instead of custom queries',
+						'get_users()'    => 'For user queries',
 						'get_comments()' => 'For comments',
-						'WP_Query' => 'For advanced post queries',
+						'WP_Query'       => 'For advanced post queries',
 					),
 					'replacing_direct_queries' => "// BEFORE - Direct query
 \$theme_posts = \$wpdb->get_results(
@@ -141,8 +141,8 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 	'post_type' => 'post',
 	'numberposts' => 10,
 ));",
-					'legacy_mysql_functions' => __( 'mysql_* functions removed in PHP 7.0 - never use', 'wpshadow' ),
-					'recommendation' => __( 'Use WordPress functions or properly prepared queries in theme', 'wpshadow' ),
+					'legacy_mysql_functions'   => __( 'mysql_* functions removed in PHP 7.0 - never use', 'wpshadow' ),
+					'recommendation'           => __( 'Use WordPress functions or properly prepared queries in theme', 'wpshadow' ),
 				),
 			);
 		}
@@ -171,49 +171,49 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality',
 				'details'      => array(
-					'issue' => 'hardcoded_values',
-					'files_count' => count( $files_with_hardcoding ),
-					'sample_files' => array_slice( $files_with_hardcoding, 0, 10 ),
-					'message' => sprintf(
+					'issue'                   => 'hardcoded_values',
+					'files_count'             => count( $files_with_hardcoding ),
+					'sample_files'            => array_slice( $files_with_hardcoding, 0, 10 ),
+					'message'                 => sprintf(
 						/* translators: %d: count */
 						__( '%d theme files hardcode URLs and paths', 'wpshadow' ),
 						count( $files_with_hardcoding )
 					),
-					'problems' => array(
+					'problems'                => array(
 						'Domain changes break links',
 						'Site migrations fail',
 						'URLs invalid after move',
 						'Maintenance difficult',
 					),
-					'dynamic_functions' => array(
-						'home_url()' => 'Site home URL',
-						'site_url()' => 'Site root URL',
-						'admin_url()' => 'WordPress admin URL',
-						'plugin_dir_url()' => 'Plugin directory URL',
+					'dynamic_functions'       => array(
+						'home_url()'                   => 'Site home URL',
+						'site_url()'                   => 'Site root URL',
+						'admin_url()'                  => 'WordPress admin URL',
+						'plugin_dir_url()'             => 'Plugin directory URL',
 						'get_template_directory_uri()' => 'Theme directory URL',
-						'WP_CONTENT_URL' => 'Content directory URL',
+						'WP_CONTENT_URL'               => 'Content directory URL',
 					),
-					'before_and_after' => "// WRONG - Hardcoded
-<link rel=\"stylesheet\" href=\"http://mysite.com/wp-content/themes/mytheme/style.css\">
-<img src=\"http://mysite.com/images/logo.png\" />
+					'before_and_after'        => "// WRONG - Hardcoded
+[THEME_CSS_URL] http://mysite.com/wp-content/themes/mytheme/style.css
+[LOGO_IMAGE_URL] http://mysite.com/images/logo.png
 
 // RIGHT - Dynamic
-<link rel=\"stylesheet\" href=\"<?php echo get_template_directory_uri(); ?>/style.css\">
-<img src=\"<?php echo home_url('/images/logo.png'); ?>\" />",
-					'example_urls' => "// All these should be dynamic
+[THEME_CSS_URL] <?php echo get_template_directory_uri(); ?>/style.css
+[LOGO_IMAGE_URL] <?php echo home_url('/images/logo.png'); ?>",
+					'example_urls'            => "// All these should be dynamic
 \$home = home_url();  // Instead of 'http://example.com'
 \$admin = admin_url(); // Instead of 'http://example.com/wp-admin/'
 \$theme = get_template_directory_uri(); // Theme CSS/JS",
 					'multisite_compatibility' => __( 'Dynamic URLs required for multisite installations', 'wpshadow' ),
-					'migration_ready' => __( 'Dynamic URLs make migration to new domain seamless', 'wpshadow' ),
-					'recommendation' => __( 'Use WordPress dynamic URL functions instead of hardcoded values', 'wpshadow' ),
+					'migration_ready'         => __( 'Dynamic URLs make migration to new domain seamless', 'wpshadow' ),
+					'recommendation'          => __( 'Use WordPress dynamic URL functions instead of hardcoded values', 'wpshadow' ),
 				),
 			);
 		}
 
 		// Pattern 3: Theme not translatable
-		$theme_dir = get_template_directory();
-		$functions_file = $theme_dir . '/functions.php';
+		$theme_dir        = get_template_directory();
+		$functions_file   = $theme_dir . '/functions.php';
 		$theme_translated = false;
 
 		if ( file_exists( $functions_file ) ) {
@@ -234,53 +234,53 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality',
 				'details'      => array(
-					'issue' => 'not_translatable',
-					'message' => __( 'Theme strings not set up for translation', 'wpshadow' ),
-					'benefits' => array(
+					'issue'                    => 'not_translatable',
+					'message'                  => __( 'Theme strings not set up for translation', 'wpshadow' ),
+					'benefits'                 => array(
 						'Support international users',
 						'Increase audience reach',
 						'Better SEO for multiple languages',
 						'Professional appearance',
 					),
-					'setup_translation' => "// In functions.php
+					'setup_translation'        => "// In functions.php
 add_action('after_setup_theme', function() {
 	load_theme_textdomain(
 		'my-theme',
 		get_template_directory() . '/languages'
 	);
 });",
-					'string_functions' => array(
-						'__()' => 'Simple strings',
-						'_e()' => 'Echo strings',
-						'_n()' => 'Pluralization',
-						'_x()' => 'With context',
+					'string_functions'         => array(
+						'__()'         => 'Simple strings',
+						'_e()'         => 'Echo strings',
+						'_n()'         => 'Pluralization',
+						'_x()'         => 'With context',
 						'esc_html__()' => 'Escaped strings',
 					),
-					'using_strings' => "// WRONG - Hardcoded English
+					'using_strings'            => "// WRONG - Hardcoded English
 echo 'Hello World';
 echo '<h1>Welcome</h1>';
 
 // RIGHT - Translatable
 echo __('Hello World', 'my-theme');
 echo '<h1>' . __('Welcome', 'my-theme') . '</h1>';",
-					'text_domain' => 'my-theme',
-					'creating_pot_file' => array(
+					'text_domain'              => 'my-theme',
+					'creating_pot_file'        => array(
 						'1. Use Poedit or WP-CLI',
 						'2. Scan theme files',
 						'3. Generate .pot file',
 						'4. Create .po translations',
 						'5. Compile to .mo files',
 					),
-					'pot_generation' => "# Using WP-CLI
-wp i18n make-pot . languages/my-theme.pot",
-					'directory_structure' => 'languages/
+					'pot_generation'           => '# Using WP-CLI
+wp i18n make-pot . languages/my-theme.pot',
+					'directory_structure'      => 'languages/
   my-theme.pot (template)
   de_DE.po (German)
   de_DE.mo (German compiled)
   es_ES.po (Spanish)
   es_ES.mo (Spanish compiled)',
 					'wordpress_org_submission' => __( 'Translation-ready required for WordPress.org directory', 'wpshadow' ),
-					'recommendation' => __( 'Set up theme for translation support', 'wpshadow' ),
+					'recommendation'           => __( 'Set up theme for translation support', 'wpshadow' ),
 				),
 			);
 		}

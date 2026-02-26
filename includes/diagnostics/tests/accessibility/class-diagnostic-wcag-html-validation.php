@@ -159,13 +159,13 @@ class Diagnostic_WCAG_HTML_Validation extends Diagnostic_Base {
 				$ids        = $matches[1];
 				$duplicates = array_diff_assoc( $ids, array_unique( $ids ) );
 				if ( ! empty( $duplicates ) ) {
-					$malformed_count++;
+					++$malformed_count;
 				}
 			}
 
 			// Check for improperly nested tags.
 			if ( preg_match( '/<strong[^>]*><em[^>]*>[^<]*<\/strong[^>]*><\/em[^>]*>|<em[^>]*><strong[^>]*>[^<]*<\/em[^>]*><\/strong[^>]*>/i', $content ) ) {
-				$malformed_count++;
+				++$malformed_count;
 			}
 		}
 

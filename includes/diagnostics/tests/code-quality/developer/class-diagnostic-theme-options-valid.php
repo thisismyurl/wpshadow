@@ -70,7 +70,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 		$theme    = wp_get_theme();
 
 		// Get theme mods (customizer options).
-		$theme_mods = get_option( 'theme_mods_' . get_stylesheet() );
+		$theme_mods          = get_option( 'theme_mods_' . get_stylesheet() );
 		$stats['total_mods'] = is_array( $theme_mods ) ? count( $theme_mods ) : 0;
 
 		if ( empty( $theme_mods ) || ! is_array( $theme_mods ) ) {
@@ -81,10 +81,10 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 		if ( is_array( $theme_mods ) ) {
 			foreach ( $theme_mods as $mod_name => $mod_value ) {
 				// Check for serialization issues.
-				if ( is_string( $mod_value ) && strpos( $mod_value, 'O:' ) === 0 ) {
+				if ( is_string( $mod_value ) && 0 === strpos( $mod_value, 'O:' ) ) {
 					// Might be serialized object.
 					$unserialized = @unserialize( $mod_value );
-					if ( $unserialized === false ) {
+					if ( false === $unserialized ) {
 						$issues[] = sprintf(
 							/* translators: %s: mod name */
 							__( 'Theme mod "%s" has corrupted data', 'wpshadow' ),
@@ -105,7 +105,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 		}
 
 		// Check customizer.php exists and is accessible.
-		$theme_dir = $theme->get_stylesheet_directory();
+		$theme_dir       = $theme->get_stylesheet_directory();
 		$customizer_file = $theme_dir . '/inc/customizer.php';
 
 		if ( ! file_exists( $customizer_file ) ) {
@@ -113,19 +113,19 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 		} else {
 			// Check for customizer hooks.
 			$customizer_content = file_get_contents( $customizer_file );
-			
+
 			if ( strpos( $customizer_content, 'customize_register' ) === false ) {
 				$warnings[] = __( 'Customizer file exists but does not register settings', 'wpshadow' );
 			}
 		}
 
 		// Check for theme setting conflicts.
-		$db_theme_settings = get_option( 'theme_settings_' . get_stylesheet() );
+		$db_theme_settings     = get_option( 'theme_settings_' . get_stylesheet() );
 		$wp_customize_settings = get_option( 'wp_customize_settings' );
 
 		if ( is_array( $db_theme_settings ) && is_array( $wp_customize_settings ) ) {
 			$conflicts = array_intersect( array_keys( $db_theme_settings ), array_keys( $wp_customize_settings ) );
-			
+
 			if ( ! empty( $conflicts ) ) {
 				$warnings[] = sprintf(
 					/* translators: %d: number */
@@ -138,7 +138,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 		// Check if theme uses deprecated customizer API.
 		if ( file_exists( $customizer_file ) ) {
 			$content = file_get_contents( $customizer_file );
-			
+
 			// Check for deprecated add_setting.
 			if ( preg_match( '/\$wp_customize->add_setting\s*\(/', $content ) ) {
 				$warnings[] = __( 'Theme using older add_setting() - ensure proper sanitization callbacks', 'wpshadow' );
@@ -152,7 +152,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 
 		// Get all customizer sections.
 		global $wp_customize;
-		
+
 		if ( isset( $wp_customize ) && is_object( $wp_customize ) ) {
 			$sections = $wp_customize->sections();
 			$controls = $wp_customize->controls();
@@ -166,7 +166,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 			$orphaned_controls = 0;
 			foreach ( $controls as $control ) {
 				if ( empty( $control->section ) || ! isset( $sections[ $control->section ] ) ) {
-					$orphaned_controls++;
+					++$orphaned_controls;
 				}
 			}
 
@@ -183,15 +183,15 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 			foreach ( $settings as $setting ) {
 				$has_control = false;
 				foreach ( $controls as $control ) {
-					if ( isset( $control->settings ) && 
-						 ( $control->settings === $setting->id || in_array( $setting->id, (array) $control->settings, true ) ) ) {
+					if ( isset( $control->settings ) &&
+						( $control->settings === $setting->id || in_array( $setting->id, (array) $control->settings, true ) ) ) {
 						$has_control = true;
 						break;
 					}
 				}
-				
+
 				if ( ! $has_control ) {
-					$orphaned_settings++;
+					++$orphaned_settings;
 				}
 			}
 

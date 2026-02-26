@@ -63,7 +63,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$issues = array();
+		$issues        = array();
 		$passed_checks = array();
 
 		// Check for accessibility statement/policy
@@ -90,7 +90,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 
 			// Check for h1 tags
 			$h1_count = substr_count( strtolower( $body ), '<h1' );
-			if ( $h1_count === 0 ) {
+			if ( 0 === $h1_count ) {
 				$issues[] = __( 'Page missing H1 heading (required for WCAG compliance)', 'wpshadow' );
 			} elseif ( $h1_count > 1 ) {
 				$issues[] = sprintf(
@@ -103,7 +103,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 			}
 
 			// Check for alt text on images
-			$img_count = substr_count( strtolower( $body ), '<img' );
+			$img_count  = substr_count( strtolower( $body ), '<img' );
 			$img_no_alt = substr_count( strtolower( $body ), 'src=' ) - substr_count( strtolower( $body ), 'alt=' );
 
 			if ( $img_no_alt > 0 ) {
@@ -117,7 +117,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 			}
 
 			// Check for form labels
-			$form_count = substr_count( strtolower( $body ), '<form' );
+			$form_count  = substr_count( strtolower( $body ), '<form' );
 			$label_count = substr_count( strtolower( $body ), '<label' );
 
 			if ( $form_count > 0 && $label_count < $form_count ) {
@@ -136,15 +136,15 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 
 		// Check for ARIA landmarks
 		$aria_main = substr_count( $body ?? '', 'role="main"' ) + substr_count( $body ?? '', '<main' );
-		$aria_nav = substr_count( $body ?? '', 'role="navigation"' ) + substr_count( $body ?? '', '<nav' );
+		$aria_nav  = substr_count( $body ?? '', 'role="navigation"' ) + substr_count( $body ?? '', '<nav' );
 
-		if ( $aria_main === 0 ) {
+		if ( 0 === $aria_main ) {
 			$issues[] = __( 'Missing main content landmark (ARIA role="main" or <main>)', 'wpshadow' );
 		} else {
 			$passed_checks[] = __( 'Main content landmark present', 'wpshadow' );
 		}
 
-		if ( $aria_nav === 0 ) {
+		if ( 0 === $aria_nav ) {
 			$issues[] = __( 'Missing navigation landmark', 'wpshadow' );
 		} else {
 			$passed_checks[] = __( 'Navigation landmark present', 'wpshadow' );
@@ -159,7 +159,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 		// Check for lang attribute on html tag
 		$html_lang = false;
 		if ( false !== strpos( $body ?? '', 'lang="' ) || false !== strpos( $body ?? '', "lang='" ) ) {
-			$html_lang = true;
+			$html_lang       = true;
 			$passed_checks[] = __( 'Language attribute set on HTML element', 'wpshadow' );
 		} else {
 			$issues[] = __( 'HTML element missing lang attribute', 'wpshadow' );
@@ -176,9 +176,9 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/accessibility-standards-compliance-wcag',
 				'details'      => array(
-					'issues'         => $issues,
-					'passed_checks'  => $passed_checks,
-					'wcag_level'     => 'Level A',
+					'issues'          => $issues,
+					'passed_checks'   => $passed_checks,
+					'wcag_level'      => 'Level A',
 					'recommendations' => array(
 						__( 'Implement WCAG 2.1 Level AA compliance', 'wpshadow' ),
 						__( 'Use accessibility checker tools to identify issues', 'wpshadow' ),

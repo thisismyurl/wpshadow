@@ -74,16 +74,16 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		$score          = 0;
-		$max_score      = 4;
+		$score           = 0;
+		$max_score       = 4;
 		$has_highlighter = false;
 
 		// Check for syntax highlighter plugins.
 		$highlighter_plugins = array(
-			'syntaxhighlighter/syntaxhighlighter.php'   => 'SyntaxHighlighter Evolved',
-			'crayon-syntax-highlighter/crayon_wp.php'   => 'Crayon Syntax Highlighter',
-			'prismatic/prismatic.php'                   => 'Prismatic',
-			'wp-code-highlight/wp-code-highlight.php'   => 'WP Code Highlight',
+			'syntaxhighlighter/syntaxhighlighter.php' => 'SyntaxHighlighter Evolved',
+			'crayon-syntax-highlighter/crayon_wp.php' => 'Crayon Syntax Highlighter',
+			'prismatic/prismatic.php'                 => 'Prismatic',
+			'wp-code-highlight/wp-code-highlight.php' => 'WP Code Highlight',
 		);
 
 		foreach ( $highlighter_plugins as $plugin => $name ) {
@@ -121,9 +121,9 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 			return null;
 		}
 
-		$technical_posts          = 0;
-		$technical_without_code   = 0;
-		$problem_posts            = array();
+		$technical_posts        = 0;
+		$technical_without_code = 0;
+		$problem_posts          = array();
 
 		foreach ( $posts as $post ) {
 			$content = strtolower( $post->post_content . ' ' . $post->post_title );
@@ -141,7 +141,7 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 				continue;
 			}
 
-			$technical_posts++;
+			++$technical_posts;
 
 			// Check for code formatting.
 			$has_code_blocks = false;
@@ -157,7 +157,7 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 			}
 
 			if ( ! $has_code_blocks ) {
-				$technical_without_code++;
+				++$technical_without_code;
 				if ( count( $problem_posts ) < 10 ) {
 					$problem_posts[] = array(
 						'post_id' => $post->ID,
@@ -168,7 +168,7 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 			}
 		}
 
-		if ( $technical_posts === 0 ) {
+		if ( 0 === $technical_posts ) {
 			// No technical posts to check.
 			return null;
 		}
@@ -179,7 +179,7 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 		if ( $missing_code_percentage < 20 ) {
 			$score += 2;
 		} elseif ( $missing_code_percentage < 40 ) {
-			$score++;
+			++$score;
 		}
 
 		// Pass if score is high.
@@ -188,21 +188,21 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'          => self::$slug,
-			'title'       => self::$title,
-			'description' => sprintf(
+			'id'             => self::$slug,
+			'title'          => self::$title,
+			'description'    => sprintf(
 				/* translators: 1: percentage, 2: number without code blocks, 3: total technical posts */
 				__( '%1$d%% of technical posts (%2$d/%3$d) lack proper code formatting. Unformatted code causes: 80%% reduced readability (plain text = visual chaos), Copy-paste errors (smart quotes break code), Professional appearance loss (looks amateur), Syntax confusion (no color-coding = hard to parse), Mobile horror (code wraps badly). Proper formatting provides: Syntax highlighting (language-specific colors), Line numbers (reference specific lines), Copy button (one-click copy), Line wrapping control (horizontal scroll for long lines), Theme options (dark/light modes). Use <pre><code> tags or syntax highlighter plugins. Popular: Prism.js, SyntaxHighlighter, Crayon. Format inline code with <code> tags, blocks with <pre><code>.', 'wpshadow' ),
 				round( $missing_code_percentage ),
 				$technical_without_code,
 				$technical_posts
 			),
-			'severity'      => 'medium',
-			'threat_level'  => 30,
-			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/inline-code-not-formatted',
-			'problem_posts' => $problem_posts,
-			'stats'         => array(
+			'severity'       => 'medium',
+			'threat_level'   => 30,
+			'auto_fixable'   => false,
+			'kb_link'        => 'https://wpshadow.com/kb/inline-code-not-formatted',
+			'problem_posts'  => $problem_posts,
+			'stats'          => array(
 				'technical_posts'     => $technical_posts,
 				'without_code_blocks' => $technical_without_code,
 				'percentage'          => round( $missing_code_percentage, 1 ),

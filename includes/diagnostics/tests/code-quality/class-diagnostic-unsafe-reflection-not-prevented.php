@@ -65,13 +65,13 @@ class Diagnostic_Unsafe_Reflection_Not_Prevented extends Diagnostic_Base {
 	public static function check() {
 		if ( ! has_filter( 'init', 'prevent_unsafe_reflection' ) ) {
 			return array(
-				'id'          => self::$slug,
-				'title'       => self::$title,
-				'description' => __( 'Unsafe reflection protections are not detected yet. Restricting dynamic class and method resolution helps prevent unsafe execution paths.', 'wpshadow' ),
-				'severity'    => 'high',
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Unsafe reflection protections are not detected yet. Restricting dynamic class and method resolution helps prevent unsafe execution paths.', 'wpshadow' ),
+				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/unsafe-reflection-not-prevented',
+				'kb_link'      => 'https://wpshadow.com/kb/unsafe-reflection-not-prevented',
 			);
 		}
 

@@ -64,8 +64,8 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 	 * @return array|null Finding array if taxonomy issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues   = array();
-		$warnings = array();
+		$issues     = array();
+		$warnings   = array();
 		$taxonomies = array();
 
 		// Get all registered taxonomies.
@@ -77,13 +77,17 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 
 		// Check each custom taxonomy.
 		foreach ( $all_taxonomies as $taxonomy ) {
-			$tax_name = $taxonomy->name;
+			$tax_name     = $taxonomy->name;
 			$taxonomies[] = $tax_name;
 
 			// Check for reserved taxonomy names.
 			$reserved_names = array(
-				'category', 'post_tag', 'post_format', 'nav_menu',
-				'link_category', 'post_type',
+				'category',
+				'post_tag',
+				'post_format',
+				'nav_menu',
+				'link_category',
+				'post_type',
 			);
 
 			if ( in_array( $tax_name, $reserved_names, true ) ) {
@@ -104,7 +108,7 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 			}
 
 			// Check for public visibility.
-			if ( $taxonomy->public === false && $taxonomy->show_ui === false ) {
+			if ( false === $taxonomy->public && false === $taxonomy->show_ui ) {
 				$warnings[] = sprintf(
 					/* translators: %s: taxonomy name */
 					__( 'Custom taxonomy "%s" is not public and hidden from UI', 'wpshadow' ),
@@ -122,7 +126,7 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 			}
 
 			// Check for rewrite rules.
-			if ( empty( $taxonomy->rewrite ) && $taxonomy->public === true ) {
+			if ( empty( $taxonomy->rewrite ) && true === $taxonomy->public ) {
 				$warnings[] = sprintf(
 					/* translators: %s: taxonomy name */
 					__( 'Public custom taxonomy "%s" missing rewrite rules', 'wpshadow' ),
@@ -132,11 +136,11 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 
 			// Check for hierarchical vs flat.
 			$is_hierarchical = $taxonomy->hierarchical ?? false;
-			
+
 			// Warn if hierarchical but no terms.
 			if ( $is_hierarchical ) {
 				$term_count = wp_count_terms( $tax_name );
-				if ( $term_count === 0 ) {
+				if ( 0 === $term_count ) {
 					$warnings[] = sprintf(
 						/* translators: %s: taxonomy name */
 						__( 'Hierarchical taxonomy "%s" has no terms', 'wpshadow' ),
@@ -157,8 +161,8 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 			}
 
 			// Check capabilities.
-			if ( empty( $taxonomy->cap ) || 
-				 ( $taxonomy->cap->edit_terms === 'edit_posts' && $taxonomy->cap->manage_terms === 'manage_posts' ) ) {
+			if ( empty( $taxonomy->cap ) ||
+				( 'edit_posts' === $taxonomy->cap->edit_terms && 'manage_posts' === $taxonomy->cap->manage_terms ) ) {
 				$warnings[] = sprintf(
 					/* translators: %s: taxonomy name */
 					__( 'Custom taxonomy "%s" using default capabilities', 'wpshadow' ),
@@ -167,7 +171,7 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 			}
 
 			// Check REST API support.
-			if ( $taxonomy->publicly_queryable === true && $taxonomy->rest_base === false ) {
+			if ( true === $taxonomy->publicly_queryable && false === $taxonomy->rest_base ) {
 				$warnings[] = sprintf(
 					/* translators: %s: taxonomy name */
 					__( 'Public taxonomy "%s" not exposed to REST API', 'wpshadow' ),
@@ -187,9 +191,9 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 		}
 
 		// Check for taxonomy/post type conflicts.
-		$post_types = get_post_types( array( '_builtin' => false ), 'objects' );
+		$post_types      = get_post_types( array( '_builtin' => false ), 'objects' );
 		$post_type_names = array_keys( $post_types );
-		$conflict_names = array_intersect( array_keys( $all_taxonomies ), $post_type_names );
+		$conflict_names  = array_intersect( array_keys( $all_taxonomies ), $post_type_names );
 
 		if ( ! empty( $conflict_names ) ) {
 			foreach ( $conflict_names as $conflict ) {
@@ -212,11 +216,13 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 
 		// Check for orphaned terms.
 		foreach ( $all_taxonomies as $taxonomy ) {
-			$orphaned = get_terms( array(
-				'taxonomy'   => $taxonomy->name,
-				'object_ids' => array(),
-				'hide_empty' => false,
-			) );
+			$orphaned = get_terms(
+				array(
+					'taxonomy'   => $taxonomy->name,
+					'object_ids' => array(),
+					'hide_empty' => false,
+				)
+			);
 
 			if ( ! empty( $orphaned ) && count( $orphaned ) > 100 ) {
 				$warnings[] = sprintf(
@@ -239,10 +245,10 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-taxonomy-valid',
 				'context'      => array(
-					'taxonomies'  => $taxonomies,
-					'tax_count'   => count( $all_taxonomies ),
-					'issues'      => $issues,
-					'warnings'    => $warnings,
+					'taxonomies' => $taxonomies,
+					'tax_count'  => count( $all_taxonomies ),
+					'issues'     => $issues,
+					'warnings'   => $warnings,
 				),
 			);
 		}
@@ -258,9 +264,9 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-taxonomy-valid',
 				'context'      => array(
-					'taxonomies'  => $taxonomies,
-					'tax_count'   => count( $all_taxonomies ),
-					'warnings'    => $warnings,
+					'taxonomies' => $taxonomies,
+					'tax_count'  => count( $all_taxonomies ),
+					'warnings'   => $warnings,
 				),
 			);
 		}

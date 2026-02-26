@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\Upgrade_Path_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,28 +69,5 @@ class Treatment_Document_Preview_Missing extends Treatment_Base {
 	 */
 	public static function check() {
 		return self::proxy_diagnostic_check( '\WPShadow\Diagnostics\Diagnostic_Document_Preview_Missing' );
-	}
-
-	/**
-	 * Check if document preview plugin is already active.
-	 *
-	 * @since  1.6033.1430
-	 * @return bool True if preview plugin detected.
-	 */
-	private static function has_preview_plugin() {
-		$preview_plugins = array(
-			'pdf-embedder/pdf_embedder.php',
-			'pdf-viewer/pdf-viewer.php',
-			'google-doc-embedder/gviewer.php',
-			'embed-pdf-viewer/embed-pdf-viewer.php',
-		);
-
-		foreach ( $preview_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 }

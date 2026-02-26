@@ -73,21 +73,21 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'              => self::$slug,
-			'title'           => self::$title,
-			'description'     => sprintf(
+			'id'             => self::$slug,
+			'title'          => self::$title,
+			'description'    => sprintf(
 				/* translators: %d: number of accessibility issues */
 				__( 'Found %d accessibility issues for screen readers', 'wpshadow' ),
 				count( $issues['all'] )
 			),
-			'severity'        => 'critical',
-			'threat_level'    => 70,
-			'issues'          => array_slice( $issues['all'], 0, 5 ),
-			'total_issues'    => count( $issues['all'] ),
-			'wcag_violation'  => '4.1.2 Name, Role, Value (Level A)',
-			'user_impact'     => __( 'Screen reader users cannot navigate site', 'wpshadow' ),
-			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/screen-reader-compat',
+			'severity'       => 'critical',
+			'threat_level'   => 70,
+			'issues'         => array_slice( $issues['all'], 0, 5 ),
+			'total_issues'   => count( $issues['all'] ),
+			'wcag_violation' => '4.1.2 Name, Role, Value (Level A)',
+			'user_impact'    => __( 'Screen reader users cannot navigate site', 'wpshadow' ),
+			'auto_fixable'   => true,
+			'kb_link'        => 'https://wpshadow.com/kb/screen-reader-compat',
 		);
 	}
 
@@ -104,15 +104,15 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 		$html = self::get_page_html();
 		if ( $html ) {
 			$landmarks = self::check_landmarks( $html );
-			$issues = array_merge( $issues, $landmarks );
+			$issues    = array_merge( $issues, $landmarks );
 
 			// Check for ARIA labels
 			$aria_issues = self::check_aria_labels( $html );
-			$issues = array_merge( $issues, $aria_issues );
+			$issues      = array_merge( $issues, $aria_issues );
 
 			// Check for form labels
 			$form_issues = self::check_form_labels( $html );
-			$issues = array_merge( $issues, $form_issues );
+			$issues      = array_merge( $issues, $form_issues );
 		}
 
 		return array(
@@ -167,7 +167,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 			$unlabeled = 0;
 			foreach ( $matches[0] as $button ) {
 				if ( ! preg_match( '/aria-label|title/i', $button ) ) {
-					$unlabeled++;
+					++$unlabeled;
 				}
 			}
 			if ( $unlabeled > 0 ) {
@@ -198,7 +198,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 			$unlabeled = 0;
 			foreach ( $matches[0] as $input ) {
 				if ( ! preg_match( '/aria-label|id=["\']?[^"\'>\s]+["\']?.*<label[^>]*for=["\']?[^"\'>\s]+["\']?/is', $html, $label_check ) ) {
-					$unlabeled++;
+					++$unlabeled;
 				}
 			}
 			if ( $unlabeled > 0 ) {

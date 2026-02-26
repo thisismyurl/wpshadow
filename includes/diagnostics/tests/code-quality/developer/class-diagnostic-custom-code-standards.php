@@ -64,10 +64,10 @@ class Diagnostic_Custom_Code_Standards extends Diagnostic_Base {
 	 * @return array|null Finding array if standards issues detected, null otherwise.
 	 */
 	public static function check() {
-		$issues    = array();
-		$warnings  = array();
-		$theme     = wp_get_theme();
-		$theme_dir = $theme->get_stylesheet_directory();
+		$issues       = array();
+		$warnings     = array();
+		$theme        = wp_get_theme();
+		$theme_dir    = $theme->get_stylesheet_directory();
 		$total_checks = 0;
 		$issues_found = 0;
 
@@ -88,49 +88,40 @@ class Diagnostic_Custom_Code_Standards extends Diagnostic_Base {
 		$files_to_check = array_slice( $php_files, 0, 5 );
 
 		foreach ( $files_to_check as $file ) {
-			$content = file_get_contents( $file );
+			$content     = file_get_contents( $file );
 			$file_issues = array();
 
 			// Check for proper security practices.
-			
+
 			// Check for nonce verification on form submissions.
-			if ( strpos( $content, '$_POST' ) !== false && 
-				 strpos( $content, 'wp_verify_nonce' ) === false &&
-				 strpos( $content, 'wp_nonce_field' ) === false ) {
+			if ( strpos( $content, '$_POST' ) !== false &&
+				strpos( $content, 'wp_verify_nonce' ) === false &&
+				strpos( $content, 'wp_nonce_field' ) === false ) {
 				$file_issues[] = __( 'Form processing without nonce verification', 'wpshadow' );
 			}
 
 			// Check for sanitization.
 			if ( strpos( $content, '$_GET' ) !== false &&
-				 strpos( $content, 'sanitize_' ) === false &&
-				 strpos( $content, 'absint' ) === false &&
-				 strpos( $content, 'intval' ) === false ) {
+				strpos( $content, 'sanitize_' ) === false &&
+				strpos( $content, 'absint' ) === false &&
+				strpos( $content, 'intval' ) === false ) {
 				$file_issues[] = __( 'GET parameters not sanitized', 'wpshadow' );
 			}
 
 			// Check for escaping on output.
 			if ( strpos( $content, 'echo ' ) !== false &&
-				 strpos( $content, 'esc_' ) === false &&
-				 strpos( $content, 'wp_kses' ) === false ) {
+				strpos( $content, 'esc_' ) === false &&
+				strpos( $content, 'wp_kses' ) === false ) {
 				// May be false positive, but warn anyway.
 				$file_issues[] = __( 'Possible unescaped output found', 'wpshadow' );
 			}
 
 			// Check for prepared SQL queries.
 			if ( strpos( $content, '$wpdb->query' ) !== false ||
-				 strpos( $content, '$wpdb->get_' ) !== false ) {
+				strpos( $content, '$wpdb->get_' ) !== false ) {
 				if ( strpos( $content, '$wpdb->prepare' ) === false ) {
 					$file_issues[] = __( 'Database queries not using prepare()', 'wpshadow' );
 				}
-			}
-
-			// Check for proper WordPress APIs.
-			if ( strpos( $content, 'get_option' ) === false &&
-				 strpos( $content, 'update_option' ) === false &&
-				 strpos( $content, 'add_option' ) === false &&
-				 strpos( $content, 'do_action' ) === false &&
-				 strpos( $content, 'apply_filters' ) === false ) {
-				// File doesn't use WordPress APIs, may be library code.
 			}
 
 			// Check for documentation.
@@ -139,42 +130,37 @@ class Diagnostic_Custom_Code_Standards extends Diagnostic_Base {
 			}
 
 			// Check for proper spacing/formatting.
-			if ( preg_match( '/if\s*\(/', $content ) === 0 && 
-				 preg_match( '/for\s*\(/', $content ) === 0 ) {
-				// Likely no control structures, skip.
-			} else {
+			if ( ( preg_match( '/if\s*\(/', $content ) > 0 || preg_match( '/for\s*\(/', $content ) > 0 ) && preg_match( '/if\(\$/', $content ) ) {
 				// Check for space after control structures (WordPress standard).
-				if ( preg_match( '/if\(\$/', $content ) ) {
-					$file_issues[] = __( 'Missing space after control structures', 'wpshadow' );
-				}
+				$file_issues[] = __( 'Missing space after control structures', 'wpshadow' );
 			}
 
 			// Check for hardcoded database table names.
 			if ( strpos( $content, 'wp_posts' ) !== false &&
-				 strpos( $content, '$wpdb->posts' ) === false ) {
+				strpos( $content, '$wpdb->posts' ) === false ) {
 				$file_issues[] = __( 'Hardcoded table names should use $wpdb globals', 'wpshadow' );
 			}
 
 			// Check for capability checks.
 			if ( strpos( $content, '$_GET' ) !== false ||
-				 strpos( $content, '$_POST' ) !== false ) {
+				strpos( $content, '$_POST' ) !== false ) {
 				if ( strpos( $content, 'current_user_can' ) === false &&
-					 strpos( $content, 'is_admin' ) === false ) {
+					strpos( $content, 'is_admin' ) === false ) {
 					$file_issues[] = __( 'No capability check found for admin functions', 'wpshadow' );
 				}
 			}
 
 			// Check for text domain consistency.
 			if ( strpos( $content, '__(' ) !== false ||
-				 strpos( $content, '_e(' ) !== false ) {
+				strpos( $content, '_e(' ) !== false ) {
 				if ( strpos( $content, "'wpshadow'" ) === false &&
-					 strpos( $content, '"wpshadow"' ) === false ) {
+					strpos( $content, '"wpshadow"' ) === false ) {
 					$file_issues[] = __( 'Translatable strings use different text domain', 'wpshadow' );
 				}
 			}
 
 			if ( ! empty( $file_issues ) ) {
-				$total_checks++;
+				++$total_checks;
 				$issues_found += count( $file_issues );
 				foreach ( $file_issues as $issue ) {
 					$issues[] = basename( $file ) . ': ' . $issue;
@@ -197,10 +183,10 @@ class Diagnostic_Custom_Code_Standards extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-code-standards',
 				'context'      => array(
-					'theme_name'      => $theme->get( 'Name' ),
-					'files_checked'   => count( $files_to_check ),
-					'total_issues'    => $issues_found,
-					'sample_issues'   => array_slice( $issues, 0, 5 ),
+					'theme_name'    => $theme->get( 'Name' ),
+					'files_checked' => count( $files_to_check ),
+					'total_issues'  => $issues_found,
+					'sample_issues' => array_slice( $issues, 0, 5 ),
 				),
 			);
 		}
@@ -216,10 +202,10 @@ class Diagnostic_Custom_Code_Standards extends Diagnostic_Base {
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-code-standards',
 				'context'      => array(
-					'theme_name'      => $theme->get( 'Name' ),
-					'files_checked'   => count( $files_to_check ),
-					'total_issues'    => $issues_found,
-					'issues'          => $issues,
+					'theme_name'    => $theme->get( 'Name' ),
+					'files_checked' => count( $files_to_check ),
+					'total_issues'  => $issues_found,
+					'issues'        => $issues,
 				),
 			);
 		}

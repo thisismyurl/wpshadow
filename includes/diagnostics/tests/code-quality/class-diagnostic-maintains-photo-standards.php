@@ -30,15 +30,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Maintains_Photo_Standards extends Diagnostic_Base {
 
-	protected static $slug = 'maintains-photo-standards';
-	protected static $title = 'Product Photography Standards';
+	protected static $slug        = 'maintains-photo-standards';
+	protected static $title       = 'Product Photography Standards';
 	protected static $description = 'Tests whether the site maintains professional product photography standards';
-	protected static $family = 'ecommerce-optimization';
+	protected static $family      = 'ecommerce-optimization';
 
 	public static function check() {
-		$score          = 0;
-		$max_score      = 5;
-		$score_details  = array();
+		$score           = 0;
+		$max_score       = 5;
+		$score_details   = array();
 		$recommendations = array();
 
 		// Check WooCommerce active.
@@ -61,7 +61,7 @@ class Diagnostic_Maintains_Photo_Standards extends Diagnostic_Base {
 			)
 		);
 
-		$total_products = wp_count_posts( 'product' );
+		$total_products  = wp_count_posts( 'product' );
 		$published_count = isset( $total_products->publish ) ? $total_products->publish : 0;
 
 		if ( $published_count > 0 ) {
@@ -71,7 +71,11 @@ class Diagnostic_Maintains_Photo_Standards extends Diagnostic_Base {
 				++$score;
 				$score_details[] = __( '✓ 90%+ of products have featured images', 'wpshadow' );
 			} elseif ( $image_percentage >= 50 ) {
-				$score_details[]   = sprintf( __( '◐ %d%% of products have images', 'wpshadow' ), round( $image_percentage ) );
+				$score_details[]   = sprintf(
+					/* translators: %d: percentage of products with featured images */
+					__( '◐ %d%% of products have images', 'wpshadow' ),
+					round( $image_percentage )
+				);
 				$recommendations[] = __( 'Add featured images to all products', 'wpshadow' );
 			} else {
 				$score_details[]   = __( '✗ Many products missing images', 'wpshadow' );
@@ -102,7 +106,11 @@ class Diagnostic_Maintains_Photo_Standards extends Diagnostic_Base {
 				count( $products_with_galleries )
 			);
 		} elseif ( ! empty( $products_with_galleries ) ) {
-			$score_details[]   = sprintf( __( '◐ %d product(s) with galleries', 'wpshadow' ), count( $products_with_galleries ) );
+			$score_details[]   = sprintf(
+				/* translators: %d: number of products with image galleries */
+				__( '◐ %d product(s) with galleries', 'wpshadow' ),
+				count( $products_with_galleries )
+			);
 			$recommendations[] = __( 'Add 3-5 images per product showing multiple angles', 'wpshadow' );
 		} else {
 			$score_details[]   = __( '✗ Single images only', 'wpshadow' );
@@ -194,20 +202,20 @@ class Diagnostic_Maintains_Photo_Standards extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'               => self::$slug,
-			'title'            => self::$title,
-			'description'      => sprintf(
+			'id'              => self::$slug,
+			'title'           => self::$title,
+			'description'     => sprintf(
 				/* translators: %d: score percentage */
 				__( 'Product photography score: %d%%. Professional product images are the #1 factor influencing online purchase decisions (93%% of consumers). High-quality photos increase conversions by 30-40%%, multiple angles by 58%%. Consistent styling builds brand trust and perceived value.', 'wpshadow' ),
 				$score_percentage
 			),
-			'severity'         => $severity,
-			'threat_level'     => $threat_level,
-			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/product-photography',
-			'details'          => $score_details,
-			'recommendations'  => $recommendations,
-			'impact'           => __( 'Professional, consistent photography communicates quality, builds trust, and enables customers to make confident purchase decisions.', 'wpshadow' ),
+			'severity'        => $severity,
+			'threat_level'    => $threat_level,
+			'auto_fixable'    => false,
+			'kb_link'         => 'https://wpshadow.com/kb/product-photography',
+			'details'         => $score_details,
+			'recommendations' => $recommendations,
+			'impact'          => __( 'Professional, consistent photography communicates quality, builds trust, and enables customers to make confident purchase decisions.', 'wpshadow' ),
 		);
 	}
 }
