@@ -127,7 +127,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 				'actions' => array( 'report_generated', 'report_scheduled', 'report_sent', 'data_cleanup_completed' ),
 			),
 			'guardian'  => array(
-				'actions' => array( 'guardian_enabled', 'guardian_disabled', 'guardian_execution', 'guardian_deep_scan', 'diagnostic_finding' ),
+				'actions' => array( 'guardian_enabled', 'guardian_disabled', 'guardian_execution', 'guardian_deep_scan', 'diagnostic_run', 'diagnostic_finding', 'diagnostic_failed' ),
 			),
 			'workflows' => array(
 				'actions' => array( 'workflow_created', 'workflow_executed', 'workflow_enabled', 'workflow_disabled', 'workflow_saved', 'workflow_deleted' ),

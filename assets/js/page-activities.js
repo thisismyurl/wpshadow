@@ -18,14 +18,14 @@
 			const prevBtn = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-prev') : null;
 			const nextBtn = paginationDiv ? paginationDiv.querySelector('.wps-activity-pagination-next') : null;
 
-			this.loadActivities(container, context, limit, 0);
+			this.loadActivities(container, context, limit, 0, true);
 
 			if (prevBtn) {
 				prevBtn.addEventListener('click', (e) => {
 					e.preventDefault();
 					const currentPage = parseInt(container.getAttribute('data-current-page'), 10) || 0;
 					if (currentPage > 0) {
-						this.loadActivities(container, context, limit, (currentPage - 1) * limit);
+						this.loadActivities(container, context, limit, (currentPage - 1) * limit, true);
 					}
 				});
 			}
@@ -34,28 +34,28 @@
 				nextBtn.addEventListener('click', (e) => {
 					e.preventDefault();
 					const currentPage = parseInt(container.getAttribute('data-current-page'), 10) || 0;
-					this.loadActivities(container, context, limit, (currentPage + 1) * limit);
+					this.loadActivities(container, context, limit, (currentPage + 1) * limit, true);
 				});
 			}
 
 			const timer = setInterval(() => {
 				const currentPage = parseInt(container.getAttribute('data-current-page'), 10) || 0;
-				this.loadActivities(container, context, limit, currentPage * limit);
+				this.loadActivities(container, context, limit, currentPage * limit, false);
 			}, interval);
 
 			this.refreshTimers[context] = timer;
 
 			document.addEventListener('wpshadow_activity_logged', () => {
 				const currentPage = parseInt(container.getAttribute('data-current-page'), 10) || 0;
-				this.loadActivities(container, context, limit, currentPage * limit);
+				this.loadActivities(container, context, limit, currentPage * limit, false);
 			});
 		},
 
-		loadActivities: function(container, context, limit, offset = 0) {
+		loadActivities: function(container, context, limit, offset = 0, forceFull = false) {
 			const nonce = container.getAttribute('data-nonce');
 			const report = container.getAttribute('data-report') || '';
 			const currentTimestamp = Math.floor(Date.now() / 1000);
-			const sinceTimestamp = this.getLastTimestamp(context);
+			const sinceTimestamp = forceFull ? 0 : this.getLastTimestamp(context);
 
 			$.post(ajaxurl, {
 				action: 'wpshadow_get_activities',
@@ -67,10 +67,22 @@
 				since: sinceTimestamp
 			}, (response) => {
 				if (response.success && response.data.activities) {
-					if (response.data.activities.length > 0 || sinceTimestamp === 0) {
+					if (response.data.activities.length > 0 || sinceTimestamp === 0 || forceFull) {
 						this.renderActivities(container, response.data.activities, response.data);
+						container.dataset.wpsActivityLoaded = '1';
 						this.setLastTimestamp(context, currentTimestamp);
+					} else if (!container.dataset.wpsActivityLoaded) {
+						// First paint safety: replace loading state even when no newer entries exist.
+						this.loadActivities(container, context, limit, offset, true);
 					}
+				} else if (!container.dataset.wpsActivityLoaded) {
+					container.innerHTML = '<div class="wps-activity-empty"><p>' + this.escapeHtml((window.wpshadow_i18n && window.wpshadow_i18n.no_activities) || 'No activities yet') + '</p></div>';
+					container.dataset.wpsActivityLoaded = '1';
+				}
+			}).fail(() => {
+				if (!container.dataset.wpsActivityLoaded) {
+					container.innerHTML = '<div class="wps-activity-empty"><p>' + this.escapeHtml((window.wpshadow_i18n && window.wpshadow_i18n.no_activities) || 'No activities yet') + '</p></div>';
+					container.dataset.wpsActivityLoaded = '1';
 				}
 			});
 		},

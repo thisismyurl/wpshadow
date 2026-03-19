@@ -38,6 +38,9 @@ class Asset_Optimizer {
 
 		// Remove WordPress bloat from admin
 		add_action( 'admin_init', array( __CLASS__, 'remove_admin_bloat' ) );
+
+		// Keep heartbeat enabled so diagnostics can run automatically in the background.
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'ensure_heartbeat_script' ), 100 );
 	}
 
 	/**
@@ -119,12 +122,30 @@ class Asset_Optimizer {
 		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 		remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
-		// Remove unnecessary admin scripts on WPShadow pages
-		wp_dequeue_script( 'heartbeat' ); // Saves periodic AJAX calls
-
 		// Remove admin bar on WPShadow fullscreen pages
 		if ( '1' === Form_Param_Helper::get( 'fullscreen', 'text', '' ) ) {
 			show_admin_bar( false );
+		}
+	}
+
+	/**
+	 * Ensure WordPress heartbeat script is enqueued on WPShadow admin pages.
+	 *
+	 * @since 1.6120.2359
+	 * @return void
+	 */
+	public static function ensure_heartbeat_script(): void {
+		if ( ! \function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = \get_current_screen();
+		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
+			return;
+		}
+
+		if ( ! wp_script_is( 'heartbeat', 'enqueued' ) ) {
+			wp_enqueue_script( 'heartbeat' );
 		}
 	}
 }

@@ -319,8 +319,28 @@ class Guardian_Executor {
 		}
 
 		try {
+			$start_time = microtime( true );
+
 			// Execute diagnostic
 			$finding = call_user_func( array( $full_class_name, 'execute' ) );
+
+			if ( class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
+				Activity_Logger::log(
+					'diagnostic_run',
+					sprintf(
+						/* translators: %s: diagnostic slug */
+						__( 'Checked diagnostic: %s', 'wpshadow' ),
+						$slug
+					),
+					'guardian',
+					array(
+						'diagnostic'      => $slug,
+						'trigger'         => 'heartbeat',
+						'execution_ms'    => (int) round( ( microtime( true ) - $start_time ) * 1000 ),
+						'finding_detected' => null !== $finding,
+					)
+				);
+			}
 
 			// Track KPI if finding detected
 			if ( null !== $finding && class_exists( 'WPShadow\Core\KPI_Tracker' ) ) {
@@ -328,8 +348,42 @@ class Guardian_Executor {
 				KPI_Tracker::log_finding_detected( $slug, $severity, 'guardian_auto' );
 			}
 
+			if ( null !== $finding && class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
+				Activity_Logger::log(
+					'diagnostic_finding',
+					sprintf(
+						/* translators: %s: finding title */
+						__( 'Found issue: %s', 'wpshadow' ),
+						$finding['title'] ?? $slug
+					),
+					$finding['category'] ?? 'guardian',
+					array(
+						'diagnostic' => $slug,
+						'finding_id' => $finding['id'] ?? '',
+						'trigger'    => 'heartbeat',
+					)
+				);
+			}
+
 			return $finding;
 		} catch ( \Exception $e ) {
+			if ( class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
+				Activity_Logger::log(
+					'diagnostic_failed',
+					sprintf(
+						/* translators: 1: diagnostic slug, 2: error message */
+						__( 'Diagnostic failed: %1$s (%2$s)', 'wpshadow' ),
+						$slug,
+						$e->getMessage()
+					),
+					'guardian',
+					array(
+						'diagnostic' => $slug,
+						'trigger'    => 'heartbeat',
+					)
+				);
+			}
+
 			// Log error but don't fail
 			if ( class_exists( 'WPShadow\Core\Error_Handler' ) ) {
 				Error_Handler::log_error(

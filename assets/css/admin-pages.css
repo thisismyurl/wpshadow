@@ -734,8 +734,8 @@
 
 /* Dashboard content loading state */
 .wpshadow-dashboard-content.wps-loading {
-	opacity: 0.3;
-	pointer-events: none;
+	opacity: 1;
+	pointer-events: auto;
 }
 
 /* Drill-down header */
@@ -843,15 +843,16 @@
 /* Scan overlay (loading modal) */
 .wps-scan-overlay {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(255, 255, 255, 0.95);
+	top: 72px;
+	right: 24px;
+	left: auto;
+	bottom: auto;
+	background: transparent;
 	z-index: 999999;
 	display: none;
-	align-items: center;
-	justify-content: center;
+	align-items: flex-start;
+	justify-content: flex-end;
+	pointer-events: none;
 }
 
 .wps-first-scan-overlay {
@@ -860,17 +861,29 @@
 
 .wps-scan-overlay[aria-busy="true"] {
 	display: flex;
+	opacity: 1;
+	pointer-events: none;
+}
+
+.wps-scan-overlay[aria-busy="true"]::after {
+	content: none;
 }
 
 .wps-scan-overlay-content {
-	text-align: center;
-	max-width: 600px;
-	padding: var(--wps-space-10);
+	text-align: left;
+	width: min(420px, calc(100vw - 48px));
+	max-width: 420px;
+	padding: var(--wps-space-5);
+	background: #ffffff;
+	border: 1px solid var(--wps-gray-200);
+	border-radius: var(--wps-radius-lg);
+	box-shadow: var(--wps-shadow-lg);
+	pointer-events: auto;
 }
 
 .wps-scan-overlay-content h2 {
-	margin: 0 0 var(--wps-space-6) 0;
-	font-size: var(--wps-text-2xl);
+	margin: 0 0 var(--wps-space-3) 0;
+	font-size: var(--wps-text-lg);
 	font-weight: var(--wps-font-semibold);
 	color: var(--wps-gray-900);
 }

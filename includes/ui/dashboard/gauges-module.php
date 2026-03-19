@@ -89,45 +89,51 @@ function wpshadow_get_health_status(): array {
 	if ( $never_run ) {
 		return array(
 			'score'   => 0,
-			'status'  => __( 'Not Scanned', 'wpshadow' ),
+			'status'  => __( 'Scanning', 'wpshadow' ),
 			'color'   => '#999999',
-			'message' => __( 'Run your first scan to see your site health.', 'wpshadow' ),
+			'message' => __( 'Your first scan starts automatically when this page opens.', 'wpshadow' ),
 		);
 	}
 
-	// Calculate average of all category gauges
+	// Calculate average of all non-overall gauges shown on the dashboard.
 	$category_meta = \wpshadow_get_category_metadata();
-	$findings_by_category = array();
-	
+	$total_score   = 0;
+	$gauge_count   = 0;
+
 	foreach ( $category_meta as $cat_key => $meta ) {
-		$findings_by_category[ $cat_key ] = array_filter(
+		if ( 'overall' === $cat_key ) {
+			continue;
+		}
+
+		if ( 'wordpress-health' === $cat_key ) {
+			$wp_health_score = (int) ( wpshadow_get_wordpress_health()['score'] ?? 0 );
+			$total_score    += max( 0, min( 100, $wp_health_score ) );
+			++$gauge_count;
+			continue;
+		}
+
+		$cat_findings = array_filter(
 			$findings,
-			function ( $f ) use ( $cat_key ) {
-				return isset( $f['category'] ) && $f['category'] === $cat_key;
+			function ( $finding ) use ( $cat_key ) {
+				return isset( $finding['category'] ) && $finding['category'] === $cat_key;
 			}
 		);
-	}
 
-	// Calculate average score from all categories
-	$total_score = 0;
-	$category_count = 0;
-
-	foreach ( $findings_by_category as $cat_findings ) {
-		$total = count( $cat_findings );
+		$total        = count( $cat_findings );
 		$threat_total = 0;
-		
+
 		foreach ( $cat_findings as $finding ) {
-			$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+			$threat_total += isset( $finding['threat_level'] ) ? (int) $finding['threat_level'] : 50;
 		}
-		
+
 		$gauge_percent = $total > 0 ? min( 100, $threat_total / $total ) : 0;
-		$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
-		
+		$gauge_percent = 100 - $gauge_percent; // Invert: higher is better.
+
 		$total_score += $gauge_percent;
-		$category_count++;
+		++$gauge_count;
 	}
 
-	$weighted_score = $category_count > 0 ? (int) ( $total_score / $category_count ) : 100;
+	$weighted_score = $gauge_count > 0 ? (int) round( $total_score / $gauge_count ) : 100;
 	$weighted_score = max( 0, min( 100, $weighted_score ) );
 
 	if ( $weighted_score >= 80 ) {
