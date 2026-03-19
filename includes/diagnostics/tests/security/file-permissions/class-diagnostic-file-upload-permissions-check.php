@@ -5,7 +5,7 @@
  * Checks if file upload directories have appropriate permissions.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0147
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

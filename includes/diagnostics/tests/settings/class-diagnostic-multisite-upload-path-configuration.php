@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.603.1348
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies multisite upload paths are correctly configured and accessible.
  *
- * @since 1.603.1348
+ * @since 1.6093.1200
  */
 class Diagnostic_Multisite_Upload_Path_Configuration extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Multisite_Upload_Path_Configuration extends Diagnostic_Base {
 	 * - Directories are writable
 	 * - No path conflicts or misconfigurations
 	 *
-	 * @since  1.603.1348
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

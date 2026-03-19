@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for blockchain/crypto features. Blockchain enables cryptocurrency
  * payments, smart contracts, verification, and decentralized functionality.
  *
- * @since 1.6034.1505
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Blockchain extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Blockchain extends Diagnostic_Base {
 	 *
 	 * Looks for cryptocurrency payment gateways and blockchain features.
 	 *
-	 * @since  1.6034.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

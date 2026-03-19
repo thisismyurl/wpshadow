@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues in cross-post-type relationships.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,15 +77,15 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
 		// Check for meta fields that reference post IDs across types.
 		$cross_reference_keys = $wpdb->get_results(
-			"SELECT DISTINCT meta_key, COUNT(*) as usage
+			"SELECT DISTINCT meta_key, COUNT(*) as usage_count
 			FROM {$wpdb->postmeta}
 			WHERE meta_key LIKE '%post%'
 			OR meta_key LIKE '%ref%'
 			OR meta_key LIKE '%id%'
 			OR meta_key LIKE '%link%'
 			GROUP BY meta_key
-			HAVING usage > 10
-			ORDER BY usage DESC
+			HAVING usage_count > 10
+			ORDER BY usage_count DESC
 			LIMIT 30",
 			ARRAY_A
 		);
@@ -281,14 +281,14 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
 		// Check for custom field compatibility issues between post types.
 		$field_usage_by_type = $wpdb->get_results(
-			"SELECT p.post_type, pm.meta_key, COUNT(*) as usage
+			"SELECT p.post_type, pm.meta_key, COUNT(*) as usage_count
 			FROM {$wpdb->postmeta} pm
 			INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 			WHERE p.post_status NOT IN ('trash', 'auto-draft')
 			AND pm.meta_key NOT LIKE '\\_%'
 			GROUP BY p.post_type, pm.meta_key
-			HAVING usage > 10
-			ORDER BY pm.meta_key, usage DESC
+			HAVING usage_count > 10
+			ORDER BY pm.meta_key, usage_count DESC
 			LIMIT 200",
 			ARRAY_A
 		);

@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0640
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Plugin Update Notifications: Same for plugin patches
  * - System Requirements Audit: Broad environment health check
  *
- * @since 1.6033.0640
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Plugin_Dependency_Tracking extends Diagnostic_Base {
 

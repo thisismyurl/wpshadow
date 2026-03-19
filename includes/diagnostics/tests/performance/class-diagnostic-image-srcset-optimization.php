@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1010
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that images are served with srcset attributes for responsive
  * images, allowing browsers to select appropriate size for device/viewport.
  *
- * @since 1.7034.1010
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 	 * Tests if featured images and content images are generated with
 	 * multiple sizes for responsive image srcset attribute.
 	 *
-	 * @since  1.7034.1010
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

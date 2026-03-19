@@ -25,7 +25,7 @@
  * - #9 (Show Value): Can measure how many sites benefit long-term
  *
  * @package WPShadow
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

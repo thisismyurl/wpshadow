@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1305
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies PHP memory limit against recommended thresholds.
  *
- * @since 1.6035.1305
+ * @since 1.6093.1200
  */
 class Diagnostic_PHP_Memory_Limit extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_PHP_Memory_Limit extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1305
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_PHP_Memory_Limit extends Diagnostic_Base {
 	/**
 	 * Parse size string like 128M into bytes.
 	 *
-	 * @since  1.6035.1305
+	 * @since 1.6093.1200
 	 * @param  string|false $value Memory limit string.
 	 * @return int Size in bytes.
 	 */

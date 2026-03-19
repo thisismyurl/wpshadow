@@ -4,7 +4,7 @@
  *
  * Detects absence of scheduled content indicating lack of planning.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects absence of scheduled content which indicates lack of planning and
  * increases risk of publishing inconsistency.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_No_Scheduled_Posts extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_No_Scheduled_Posts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

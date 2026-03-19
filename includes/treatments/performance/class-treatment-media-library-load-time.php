@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tests
- * @since      1.6033.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures media library loads quickly even with large numbers
  * of attachments and identifies performance bottlenecks.
  *
- * @since 1.6033.1545
+ * @since 1.6093.1200
  */
 class Treatment_Media_Library_Load_Time extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Media_Library_Load_Time extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

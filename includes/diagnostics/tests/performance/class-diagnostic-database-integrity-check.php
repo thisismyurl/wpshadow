@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1456
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Runs CHECK TABLE on all database tables to detect corruption.
  *
- * @since 1.6035.1456
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 	/**
 	 * Run the database integrity diagnostic check.
 	 *
-	 * @since  1.6035.1456
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if integrity issue detected, null otherwise.
 	 */
 	public static function check() {

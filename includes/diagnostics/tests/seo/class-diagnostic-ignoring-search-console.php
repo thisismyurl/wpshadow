@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when Search Console integration is missing or data is not being
  * used to optimize content. GSC provides invaluable search performance data.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Ignoring_Search_Console extends Diagnostic_Base {
 

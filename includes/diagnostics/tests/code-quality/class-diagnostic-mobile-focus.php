@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * are properly implemented in modals.
  * WCAG 2.4.3 Level A requirement.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	/**
 	 * Find focus management issues.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_focus_issues(): array {
@@ -130,7 +130,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	/**
 	 * Check for CSS focus indicators.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html Page HTML.
 	 * @return array Focus indicator issues.
 	 */
@@ -166,7 +166,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	/**
 	 * Check for focus trap issues in modals.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html Page HTML.
 	 * @return array Focus trap issues.
 	 */
@@ -204,7 +204,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	/**
 	 * Check for negative tabindex or excessive positive tabindex.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html Page HTML.
 	 * @return array Tabindex issues.
 	 */
@@ -241,7 +241,7 @@ class Diagnostic_Mobile_Focus extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

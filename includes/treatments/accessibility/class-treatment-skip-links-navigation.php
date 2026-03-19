@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,14 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds skip links for keyboard accessibility.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_Skip_Links_Navigation extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -47,7 +47,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 	 *
 	 * Adds skip links to site header via mu-plugin.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -106,7 +106,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 	/**
 	 * Get MU plugin code for skip links.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_skip_links_mu_plugin() {
@@ -119,7 +119,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
  * Created by WPShadow accessibility treatment.
  *
  * @package WPShadow
- * @since   1.6050.0000
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -156,7 +156,7 @@ PHP;
 	/**
 	 * Get CSS for skip links.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return string CSS code.
 	 */
 	private static function get_skip_links_css() {

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_API_Documentation_Completeness Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_API_Documentation_Completeness extends Diagnostic_Base {
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for content optimization opportunities.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Performance_Optimization_Possible extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Performance_Optimization_Possible extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

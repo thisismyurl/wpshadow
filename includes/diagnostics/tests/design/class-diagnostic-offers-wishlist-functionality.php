@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #10: Wishlist Functionality from Specialized & Emerging Success Habits.
  * Checks if the site provides wishlist/favorites features.
  *
- * @since 1.5003.1145
+ * @since 1.6093.1200
  */
 class Diagnostic_Offers_Wishlist_Functionality extends Diagnostic_Base {
 

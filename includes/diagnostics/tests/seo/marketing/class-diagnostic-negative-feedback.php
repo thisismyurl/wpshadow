@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6035.1645
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies review monitoring and response management systems are in place
  * to handle negative feedback promptly.
  *
- * @since 1.6035.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Negative_Feedback extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Negative_Feedback extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

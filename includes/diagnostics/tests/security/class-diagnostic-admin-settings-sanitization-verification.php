@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0641
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Page Hook Security: Validates safe admin patterns
  * - REST API Authentication: Ensures secure endpoints for settings
  *
- * @since 1.6033.0641
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Settings_Sanitization_Verification extends Diagnostic_Base {
 

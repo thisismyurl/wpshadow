@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1620
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies DNS A records point to correct IP address.
  * Like checking your mailing address is correct on envelopes.
  *
- * @since 1.6035.1620
+ * @since 1.6093.1200
  */
 class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 	/**
 	 * Run the DNS A records diagnostic check.
 	 *
-	 * @since  1.6035.1620
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if A record issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -179,7 +179,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 	/**
 	 * Check if an IP is in a given CIDR range.
 	 *
-	 * @since  1.6035.1620
+	 * @since 1.6093.1200
 	 * @param  string $ip    IP address to check.
 	 * @param  string $range CIDR range (e.g., '104.16.0.0/13').
 	 * @return bool True if IP is in range.

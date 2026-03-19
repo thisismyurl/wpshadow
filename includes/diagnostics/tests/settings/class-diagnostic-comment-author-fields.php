@@ -4,7 +4,7 @@
  *
  * Validates comment form author field requirements and email verification.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment form author field requirements and verification.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -270,7 +270,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 	/**
 	 * Check if any spam measures are in place.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if measures found.
 	 */
 	private static function has_any_spam_measures() {

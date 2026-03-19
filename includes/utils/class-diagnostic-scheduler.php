@@ -328,7 +328,7 @@ class Diagnostic_Scheduler {
 	 * This method is called automatically by WordPress heartbeat and executes
 	 * background-safe diagnostics via Guardian_Executor.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $response Heartbeat response data.
 	 * @param  array $data     Heartbeat request data.
 	 * @return array Modified heartbeat response with Guardian data.

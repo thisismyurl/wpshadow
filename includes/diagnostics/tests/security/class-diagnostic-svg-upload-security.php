@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (scripts not removed), high (SVG uploads allowed)
  * - Treatment: sanitize SVG uploads or disable entirely
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
@@ -128,7 +128,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 	 * - Existing SVG files for malicious code
 	 * - User capability restrictions
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -188,7 +188,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-chart-line',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'since'   => '1.6177.1200', // Release 1.6177 (June 2026)
+			'since'   => '1.6177.1200', // Release1.0 (June 2026)
 		),
 		array(
 			'title'   => __( 'Deep Scan Report', 'wpshadow' ),
@@ -197,7 +197,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'since'   => '1.6177.1200', // Release 1.6177 (June 2026)
+			'since'   => '1.6177.1200', // Release1.0 (June 2026)
 		),
 		array(
 			'title'   => __( 'Quick Scan Report', 'wpshadow' ),
@@ -206,7 +206,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'analysis',
 			'enabled' => true,
-			'since'   => '1.6212.1200', // Release 1.6212 (July 2026)
+			'since'   => '1.6212.1200', // Release1.0 (July 2026)
 		),
 		array(
 			'title'   => __( 'Diagnostics Fix Rate Report', 'wpshadow' ),
@@ -226,7 +226,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-shield-alt',
 			'family'  => 'security',
 			'enabled' => true,
-			'since'   => '1.6119.1200', // Release 1.6119 (April 2026)
+			'since'   => '1.6119.1200', // Release1.0 (April 2026)
 		),
 
 		// Performance Reports
@@ -237,7 +237,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'performance',
 			'enabled' => true,
-			'since'   => '1.6119.1200', // Release 1.6119 (April 2026)
+			'since'   => '1.6119.1200', // Release1.0 (April 2026)
 		),
 
 		// SEO Reports
@@ -248,7 +248,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'seo',
 			'enabled' => true,
-			'since'   => '1.6038.1200', // Release 1.6038 (February 2026)
+			'since'   => '1.6038.1200', // Release1.0 (February 2026)
 		),
 
 		// Optimization Reports
@@ -259,7 +259,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-database',
 			'family'  => 'optimization',
 			'enabled' => true,
-			'since'   => '1.6212.1200', // Release 1.6212 (July 2026)
+			'since'   => '1.6212.1200', // Release1.0 (July 2026)
 		),
 		array(
 			'title'   => __( 'Plugin Audit Report', 'wpshadow' ),
@@ -268,7 +268,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'optimization',
 			'enabled' => true,
-			'since'   => '1.6240.1200', // Release 1.6240 (August 2026)
+			'since'   => '1.6240.1200', // Release1.0 (August 2026)
 		),
 
 		// Commerce Reports
@@ -279,7 +279,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-cart',
 			'family'  => 'commerce',
 			'enabled' => true,
-			'since'   => '1.6240.1200', // Release 1.6240 (August 2026)
+			'since'   => '1.6240.1200', // Release1.0 (August 2026)
 		),
 
 		// Compliance & Operations Reports
@@ -290,7 +290,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-privacy',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
+			'since'   => '1.6150.1200', // Release1.0 (May 2026)
 		),
 		array(
 			'title'   => __( 'User Privacy Report', 'wpshadow' ),
@@ -308,7 +308,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-email-alt',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6038.1200', // Release 1.6038 (February 2026)
+			'since'   => '1.6038.1200', // Release1.0 (February 2026)
 		),
 		array(
 			'title'   => __( 'Backup Readiness Report', 'wpshadow' ),
@@ -317,7 +317,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6268.1200', // Release 1.6268 (September 2026)
+			'since'   => '1.6268.1200', // Release1.0 (September 2026)
 		),
 		array(
 			'title'   => __( 'Multisite Network Report', 'wpshadow' ),
@@ -326,7 +326,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-multisite',
 			'family'  => 'operations',
 			'enabled' => true,
-			'since'   => '1.6268.1200', // Release 1.6268 (September 2026)
+			'since'   => '1.6268.1200', // Release1.0 (September 2026)
 		),
 
 		// Page-Specific Reports
@@ -337,7 +337,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-smartphone',
 			'family'  => 'page-analysis',
 			'enabled' => true,
-			'since'   => '1.6303.1200', // Release 1.6303 (October 2026)
+			'since'   => '1.6303.1200', // Release1.0 (October 2026)
 		),
 		array(
 			'title'   => __( 'Accessibility Audit Report', 'wpshadow' ),
@@ -346,7 +346,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-universal-access',
 			'family'  => 'page-analysis',
 			'enabled' => true,
-			'since'   => '1.6303.1200', // Release 1.6303 (October 2026)
+			'since'   => '1.6303.1200', // Release1.0 (October 2026)
 		),
 		array(
 			'title'   => __( 'Broken Links Report', 'wpshadow' ),
@@ -355,7 +355,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-links',
 			'family'  => 'page-analysis',
 			'enabled' => true,
-			'since'   => '1.6331.1200', // Release 1.6331 (November 2026)
+			'since'   => '1.6331.1200', // Release1.0 (November 2026)
 		),
 
 		// Comparison & Historical Reports
@@ -366,7 +366,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-images-alt2',
 			'family'  => 'comparison',
 			'enabled' => true,
-			'since'   => '1.6331.1200', // Release 1.6331 (November 2026)
+			'since'   => '1.6331.1200', // Release1.0 (November 2026)
 		),
 		array(
 			'title'   => __( 'Customization Audit Report', 'wpshadow' ),
@@ -375,7 +375,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-admin-customizer',
 			'family'  => 'comparison',
 			'enabled' => true,
-			'since'   => '1.6359.1200', // Release 1.6359 (December 2026)
+			'since'   => '1.6359.1200', // Release1.0 (December 2026)
 		),
 
 		// Activity & History Reports
@@ -386,7 +386,7 @@ function wpshadow_get_reports_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'history',
 			'enabled' => true,
-			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
+			'since'   => '1.6150.1200', // Release1.0 (May 2026)
 		),
 	);
 }
@@ -445,7 +445,7 @@ function wpshadow_render_reports_page() {
 /**
  * Render individual report card using standardized card function.
  *
- * @since  1.6030.2148
+ * @since 1.6093.1200
  * @param  array $item Report configuration.
  * @return void
  */

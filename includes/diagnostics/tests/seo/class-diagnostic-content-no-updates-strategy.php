@@ -4,7 +4,7 @@
  *
  * Identifies sites without content update strategy.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies sites that only publish new content without updating existing posts,
  * missing significant SEO and value opportunities.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_No_Updates_Strategy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_No_Updates_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

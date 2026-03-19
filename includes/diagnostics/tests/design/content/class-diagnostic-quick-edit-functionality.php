@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1345
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that WordPress Quick Edit feature is functioning
  * properly and saving data without loss or corruption.
  *
- * @since 1.6033.1345
+ * @since 1.6093.1200
  */
 class Diagnostic_Quick_Edit_Functionality extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Quick_Edit_Functionality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1345
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

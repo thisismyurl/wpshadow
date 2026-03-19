@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies password fields use type='password', checks for credit card masking,
  * and scans for sensitive data in HTML comments.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Security_Data_Masking_UI extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Security_Data_Masking_UI extends Diagnostic_Base {
 	 * - Credit card numbers in HTML
 	 * - Sensitive data in HTML comments
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

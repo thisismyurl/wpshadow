@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.6034.2153
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Check for meta queries in loops
  * - Identify repeated user/term lookups
  *
- * @since 1.6034.2153
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_N1_Query_Problem extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Database_N1_Query_Problem extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2153
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if N+1 patterns detected, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1506
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies PHP max execution time is adequate.
  *
- * @since 1.6035.1506
+ * @since 1.6093.1200
  */
 class Diagnostic_PHP_Max_Execution_Time extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_PHP_Max_Execution_Time extends Diagnostic_Base {
 	/**
 	 * Run the execution time diagnostic check.
 	 *
-	 * @since  1.6035.1506
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if time issue detected, null otherwise.
 	 */
 	public static function check() {

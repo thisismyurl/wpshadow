@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1508
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Button/link detection
  * - Action keywords
  *
- * @since 1.7030.1508
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_CTA extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Missing_CTA extends Diagnostic_Base {
 	 * - 2 points: <25% without CTA
 	 * - 0 points: ≥25% without CTA
 	 *
-	 * @since  1.7030.1508
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

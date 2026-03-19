@@ -77,7 +77,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0642
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -121,7 +121,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin REST API Authentication: Checks capability requirements on endpoints
  * - Settings Sanitization Verification: Validates option update capabilities
  *
- * @since 1.6033.0642
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Capability_Map_Consistency extends Diagnostic_Base {
 

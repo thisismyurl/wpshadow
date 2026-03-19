@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6035.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether long-form articles (2000+ words) include
  * a table of contents for better navigation.
  *
- * @since 1.6035.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Table_Of_Contents_For_Long_Form_Content extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Table_Of_Contents_For_Long_Form_Content extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

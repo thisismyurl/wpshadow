@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.602.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies long-running JavaScript tasks that block main thread
  * and delay interaction on mobile.
  *
- * @since 1.602.1600
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_JS_Execution_Time extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_JS_Execution_Time extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -102,7 +102,7 @@ class Diagnostic_Mobile_JS_Execution_Time extends Diagnostic_Base {
 	/**
 	 * Detect long-running JavaScript tasks.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function detect_long_tasks(): array {
@@ -151,7 +151,7 @@ class Diagnostic_Mobile_JS_Execution_Time extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

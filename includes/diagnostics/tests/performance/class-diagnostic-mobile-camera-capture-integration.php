@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if mobile camera capture is properly integrated in the
  * WordPress media uploader for improved mobile user experience.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Camera_Capture_Integration extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Mobile_Camera_Capture_Integration extends Diagnostic_Base {
 	 * Tests if the media library properly supports HTML5 camera capture
 	 * attributes for mobile devices.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

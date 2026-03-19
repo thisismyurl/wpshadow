@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (cache efficiency issue)
  * - Treatment: implement selective cache invalidation hooks
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Cache_Invalidation_Strategy_Not_Defined extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Cache_Invalidation_Strategy_Not_Defined extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

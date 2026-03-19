@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since      1.6034.1610
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates animated counters for showcasing statistics and achievements.
  *
- * @since 1.6034.1610
+ * @since 1.6093.1200
  */
 class Stats_Counter_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6034.1610
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Stats_Counter_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since  1.6034.1610
+	 * @since 1.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -95,7 +95,7 @@ class Stats_Counter_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since  1.6034.1610
+	 * @since 1.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */

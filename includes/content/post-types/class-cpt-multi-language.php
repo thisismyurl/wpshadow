@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6365.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Integrates custom post types with WPML and Polylang.
  *
- * @since 1.6365.2359
+ * @since 1.6093.1200
  */
 class CPT_Multi_Language {
 
 	/**
 	 * Initialize multi-language support.
 	 *
-	 * @since 1.6034.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class CPT_Multi_Language {
 	/**
 	 * Register custom post types for translation.
 	 *
-	 * @since 1.6034.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_translations() {
@@ -68,7 +68,7 @@ class CPT_Multi_Language {
 	/**
 	 * Register CPTs with WPML.
 	 *
-	 * @since  1.6034.1400
+	 * @since 1.6093.1200
 	 * @param  array $post_types Registered post types.
 	 * @return array Modified post types array.
 	 */
@@ -88,7 +88,7 @@ class CPT_Multi_Language {
 	/**
 	 * Register CPTs with Polylang.
 	 *
-	 * @since 1.6034.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_with_polylang() {
@@ -115,7 +115,7 @@ class CPT_Multi_Language {
 	/**
 	 * Get translatable post types.
 	 *
-	 * @since  1.6034.1400
+	 * @since 1.6093.1200
 	 * @return array Post type slugs (only if they exist).
 	 */
 	private static function get_translatable_post_types() {
@@ -139,7 +139,7 @@ class CPT_Multi_Language {
 	/**
 	 * Get translatable taxonomies.
 	 *
-	 * @since  1.6034.1400
+	 * @since 1.6093.1200
 	 * @return array Taxonomy slugs (only if they exist).
 	 */
 	private static function get_translatable_taxonomies() {
@@ -168,7 +168,7 @@ class CPT_Multi_Language {
 	/**
 	 * Get available languages.
 	 *
-	 * @since  1.6034.1400
+	 * @since 1.6093.1200
 	 * @return array Languages array.
 	 */
 	public static function get_available_languages() {
@@ -196,7 +196,7 @@ class CPT_Multi_Language {
 	/**
 	 * Get post translations.
 	 *
-	 * @since  1.6034.1400
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return array Translations array.
 	 */

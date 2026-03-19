@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1448
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Share count meta data
  * - Share button presence
  *
- * @since 1.7030.1448
+ * @since 1.6093.1200
  */
 class Diagnostic_Zero_Social_Shares extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Zero_Social_Shares extends Diagnostic_Base {
 	 * - 1 point: <40% of top posts have zero shares
 	 * - 1 point: <60% of top posts have zero shares
 	 *
-	 * @since  1.7030.1448
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

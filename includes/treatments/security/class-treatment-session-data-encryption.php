@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.2033.2106
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,14 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * vulnerability because sessions are often stored in shared hosting
  * environments or transmitted over insecure connections.
  *
- * @since 1.2033.2106
+ * @since 1.6093.1200
  */
 class Treatment_Session_Data_Encryption extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-data-encryption';
@@ -49,7 +49,7 @@ class Treatment_Session_Data_Encryption extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Data Encryption';
@@ -57,7 +57,7 @@ class Treatment_Session_Data_Encryption extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies sensitive data in sessions and cookies is encrypted';
@@ -65,7 +65,7 @@ class Treatment_Session_Data_Encryption extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -79,7 +79,7 @@ class Treatment_Session_Data_Encryption extends Treatment_Base {
 	 * 3. Validates cookie security flags
 	 * 4. Checks for encryption of stored credentials
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

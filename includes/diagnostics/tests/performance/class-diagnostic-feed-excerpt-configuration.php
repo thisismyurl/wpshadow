@@ -79,7 +79,7 @@
  * See https://wpshadow.com/kb/feed-content-strategy for decision framework
  * or https://wpshadow.com/training/content-distribution-business-strategy
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -118,7 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Feed XML Validity: Ensures excerpt HTML properly encoded
  * - Content Strategy Audit: Broader content distribution review
  *
- * @since 1.6032.1921
+ * @since 1.6093.1200
  */
 class Diagnostic_Feed_Excerpt_Configuration extends Diagnostic_Base {
 	/**
@@ -152,7 +152,7 @@ class Diagnostic_Feed_Excerpt_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

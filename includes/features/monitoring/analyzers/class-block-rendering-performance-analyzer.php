@@ -13,7 +13,7 @@ namespace WPShadow\Guardian;
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Block_Rendering_Performance_Analyzer {
 

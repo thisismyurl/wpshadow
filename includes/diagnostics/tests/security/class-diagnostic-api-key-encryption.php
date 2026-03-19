@@ -4,7 +4,7 @@
  *
  * Checks that sensitive API keys are properly encrypted before storage.
  *
- * @since   1.6032.1000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that API keys are encrypted using Secret_Manager.
  *
- * @since 1.6032.1000
+ * @since 1.6093.1200
  */
 class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return array|null Finding if encryption is not properly configured.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 	/**
 	 * Check for plaintext API keys in database
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return array Array of plaintext key option names found.
 	 */
 	private static function check_plaintext_api_keys(): array {

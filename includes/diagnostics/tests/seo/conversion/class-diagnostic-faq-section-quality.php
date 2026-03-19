@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6036.1620
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for FAQ pages and content.
  *
- * @since 1.6036.1620
+ * @since 1.6093.1200
  */
 class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6036.1620
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,5 +105,33 @@ class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Find pages or posts by keyword search.
+	 *
+	 * @since 1.6093.1200
+	 * @param  array $keywords Keywords to search for.
+	 * @return array List of matching page titles.
+	 */
+	private static function find_pages_by_keywords( array $keywords ): array {
+		$matches = array();
+
+		foreach ( $keywords as $keyword ) {
+			$results = get_posts(
+				array(
+					's'              => $keyword,
+					'post_type'      => array( 'page', 'post' ),
+					'post_status'    => 'publish',
+					'posts_per_page' => 5,
+				)
+			);
+
+			foreach ( $results as $post ) {
+				$matches[ $post->ID ] = get_the_title( $post );
+			}
+		}
+
+		return array_values( $matches );
 	}
 }

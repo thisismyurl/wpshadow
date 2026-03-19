@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1725
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Plugin Admin Security Test Class
  *
- * @since 1.6028.1725
+ * @since 1.6093.1200
  */
 class PluginAdminSecurityTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test diagnostic passes with secure plugins
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_secure_plugins(): void {
@@ -64,7 +64,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test diagnostic flags unescaped output
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_unescaped_output(): void {
@@ -108,7 +108,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test diagnostic flags unsanitized input
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_unsanitized_input(): void {
@@ -151,7 +151,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test diagnostic flags missing nonce
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_missing_nonce(): void {
@@ -194,7 +194,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -246,7 +246,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test meta includes scan statistics
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_scan_statistics(): void {
@@ -283,7 +283,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test details include vulnerable file list
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_vulnerable_file_list(): void {
@@ -319,7 +319,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -353,7 +353,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test threat level scales with severity
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_scales_with_severity(): void {
@@ -393,7 +393,7 @@ class PluginAdminSecurityTest extends TestCase {
 	/**
 	 * Test issue types tracked
 	 *
-	 * @since 1.6028.1725
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_issue_types_tracked(): void {

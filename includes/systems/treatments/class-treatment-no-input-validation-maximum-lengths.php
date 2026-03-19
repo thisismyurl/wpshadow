@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds sensible maxlength attributes to common form fields.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Treatment_No_Input_Validation_Maximum_Lengths extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_No_Input_Validation_Maximum_Lengths extends Treatment_Base {
 	 *
 	 * Adds maxlength attributes to input and textarea fields where missing.
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -175,7 +175,7 @@ class Treatment_No_Input_Validation_Maximum_Lengths extends Treatment_Base {
 	/**
 	 * Get maxlength for input fields based on type and name.
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @param  string $type Input type.
 	 * @param  string $name Input name.
 	 * @return int|null Maxlength or null if not applicable.
@@ -219,7 +219,7 @@ class Treatment_No_Input_Validation_Maximum_Lengths extends Treatment_Base {
 	/**
 	 * Get maxlength for textarea fields.
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @param  string $name Textarea name attribute.
 	 * @return int|null Maxlength or null if not applicable.
 	 */

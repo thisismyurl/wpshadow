@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the theme includes proper Schema.org structured data
  * for better SEO and rich snippets.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Schema_Markup extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the schema markup diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if schema issues detected, null otherwise.
 	 */
 	public static function check() {

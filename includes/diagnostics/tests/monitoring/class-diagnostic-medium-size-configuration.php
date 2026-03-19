@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2032.1352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when medium image size dimensions are not properly configured,
  * which can lead to suboptimal media handling and inconsistent image display.
  *
- * @since 1.2032.1352
+ * @since 1.6093.1200
  */
 class Diagnostic_Medium_Size_Configuration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Medium_Size_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2032.1352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-caching-patterns\n * - Video: https://wpshadow.com/training/cache-compatible-themes (7 min)\n * - Advanced: https://wpshadow.com/training/cache-busting-strategies (12 min)\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6032.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates theme compatibility with caching mechanisms.
  *
- * @since 1.6032.1200
+ * @since 1.6093.1200
  */
 class Treatment_Theme_Caching_Compatibility extends Treatment_Base {
 
@@ -77,7 +77,7 @@ class Treatment_Theme_Caching_Compatibility extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6032.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

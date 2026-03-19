@@ -35,7 +35,7 @@ class Error_Handler {
 	/**
 	 * Ensure errors show on screen and are logged.
 	 *
-	 * @since  1.7038.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function enable_screen_error_output(): void {
@@ -68,7 +68,7 @@ class Error_Handler {
 					<?php esc_html_e( 'How can WPShadow help?', 'wpshadow' ); ?>
 				</h2>
 				
-				<p style="line-height: 1.6; color: #333;">
+				<p style="line-height:1.0; color: #333;">
 					<?php esc_html_e( 'We have two options to help you resolve this error:', 'wpshadow' ); ?>
 				</p>
 				

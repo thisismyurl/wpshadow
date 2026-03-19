@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the checkout page loads quickly to minimize cart
  * abandonment and improve conversion rates.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Checkout_Speed_Extended extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Checkout_Speed_Extended extends Diagnostic_Base {
 	/**
 	 * Run the checkout speed diagnostic check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if checkout speed issues detected, null otherwise.
 	 */
 	public static function check() {

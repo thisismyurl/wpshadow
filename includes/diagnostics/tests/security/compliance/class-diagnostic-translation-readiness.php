@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Professional localization shows respect for users
  * - wp.org requires translation readiness for plugins
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'translation-readiness';
@@ -56,7 +56,7 @@ class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'No Translation Support (Strings Not in Text Domain)';
@@ -64,7 +64,7 @@ class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if all user-facing strings are translatable';
@@ -72,7 +72,7 @@ class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'compliance';
@@ -80,7 +80,7 @@ class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

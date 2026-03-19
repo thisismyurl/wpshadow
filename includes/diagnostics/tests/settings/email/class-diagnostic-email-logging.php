@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * troubleshoot why emails aren't being delivered (like trying to track a
  * package without a tracking number).
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Logging extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Email_Logging extends Diagnostic_Base {
 	/**
 	 * Run the email logging diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if logging issues detected, null otherwise.
 	 */
 	public static function check() {

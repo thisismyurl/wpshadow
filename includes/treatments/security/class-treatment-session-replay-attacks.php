@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Security
- * @since      1.6041.0204
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Long session lifetimes without rotation
  * - No device/IP binding to sessions
  *
- * @since 1.6041.0204
+ * @since 1.6093.1200
  */
 class Treatment_Session_Replay_Attacks extends Treatment_Base {
 
@@ -75,7 +75,7 @@ class Treatment_Session_Replay_Attacks extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6041.0204
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

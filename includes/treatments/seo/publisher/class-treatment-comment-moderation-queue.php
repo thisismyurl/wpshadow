@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that pending comments are being reviewed and processed
  * in a timely manner.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Treatment_Comment_Moderation_Queue extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Comment_Moderation_Queue extends Treatment_Base {
 	/**
 	 * Run the comment moderation queue treatment check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if moderation issues detected, null otherwise.
 	 */
 	public static function check() {

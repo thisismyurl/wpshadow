@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6035.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - #8 Inspire Confidence: Users trust the system won't break
  * - #1 Helpful Neighbor: Transparent about what's happening
  *
- * @since 1.6035.1500
+ * @since 1.6093.1200
  */
 class Murphy_Safe_Request {
 
@@ -45,7 +45,7 @@ class Murphy_Safe_Request {
 	 * 3. Stale cache (better than nothing)
 	 * 4. Safe default
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @param  string $url       URL to fetch.
 	 * @param  string $cache_key Cache key for storing response.
 	 * @param  int    $ttl       Cache TTL in seconds. Default 1 hour.
@@ -204,7 +204,7 @@ class Murphy_Safe_Request {
 	 * Attempts to POST data with exponential backoff retry.
 	 * Queues failed requests for later retry if all attempts fail.
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @param  string $url        URL to POST to.
 	 * @param  array  $body       Request body.
 	 * @param  int    $max_tries  Maximum retry attempts. Default 3.
@@ -270,7 +270,7 @@ class Murphy_Safe_Request {
 	 *
 	 * Retries on network errors and transient HTTP status codes.
 	 *
-	 * @since  1.8035.1200
+	 * @since 1.6093.1200
 	 * @param  mixed $response Response from wp_remote_get.
 	 * @return bool True if retryable.
 	 */
@@ -296,7 +296,7 @@ class Murphy_Safe_Request {
 	 *
 	 * Stores failed requests in database for retry worker to process.
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @param  string $url  Request URL.
 	 * @param  array  $body Request body.
 	 * @param  array  $args Request args.
@@ -327,7 +327,7 @@ class Murphy_Safe_Request {
 	 *
 	 * Attempts to resend failed requests. Called by wp-cron every 5 minutes.
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Processing results.
 	 *
@@ -401,7 +401,7 @@ class Murphy_Safe_Request {
 	/**
 	 * Register retry queue cron job
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_cron() {
@@ -415,7 +415,7 @@ class Murphy_Safe_Request {
 	/**
 	 * Add custom cron interval
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @param  array $schedules Existing cron schedules.
 	 * @return array Modified schedules.
 	 */

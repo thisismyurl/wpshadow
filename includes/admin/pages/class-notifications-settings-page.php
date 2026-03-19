@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Settings
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Notifications Settings Page
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Notifications_Settings_Page {
 
 	/**
 	 * Render the notifications settings page
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {

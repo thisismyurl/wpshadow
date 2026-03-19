@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Data_Retention_Policy Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Data_Retention_Policy extends Diagnostic_Base {
 

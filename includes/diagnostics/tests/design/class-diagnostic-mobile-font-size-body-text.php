@@ -4,7 +4,7 @@
  *
  * Validates minimum font size for body text on mobile to ensure readability.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates minimum font size for body text on mobile to ensure readability
  * without forcing pinch-zoom, prevents iOS auto-zoom issues.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Font_Size_Body_Text extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Font_Size_Body_Text extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

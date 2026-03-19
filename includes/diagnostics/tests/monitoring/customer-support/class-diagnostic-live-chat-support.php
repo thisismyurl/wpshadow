@@ -5,7 +5,7 @@
  * Checks if live chat support is implemented for real-time customer assistance.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * DoS attacks. Always validate maximum input lengths on both client (HTML5) and
  * server (PHP).
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Input_Validation_Maximum_Lengths extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Input_Validation_Maximum_Lengths extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_No_Input_Validation_Maximum_Lengths extends Diagnostic_Base {
 	/**
 	 * Check for form inputs without maximum length validation
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of unvalidated inputs
 	 */
 	private static function check_unvalidated_inputs(): array {
@@ -165,7 +165,7 @@ class Diagnostic_No_Input_Validation_Maximum_Lengths extends Diagnostic_Base {
 	/**
 	 * Get recommended maximum lengths by field type
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of field types with recommended max lengths
 	 */
 	private static function get_recommended_lengths(): array {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2211
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Update images and examples
  * - Check and fix broken links
  *
- * @since 1.6034.2211
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Content_Update_Strategy extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_No_Content_Update_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2211
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no update strategy, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites don't have a documented schedule for security
  * penetration testing and vulnerability assessments.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Diagnostic_Penetration_Testing_Schedule_Not_Documented extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Penetration_Testing_Schedule_Not_Documented extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

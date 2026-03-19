@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6031.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies Theme Builder templates are not causing site-wide performance issues.
  *
- * @since 1.6031.1200
+ * @since 1.6093.1200
  */
 class Treatment_Elementor_Pro_Theme_Builder_Performance extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Elementor_Pro_Theme_Builder_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6031.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -69,7 +69,7 @@ class Treatment_Elementor_Pro_Theme_Builder_Performance extends Treatment_Base {
 	/**
 	 * Count widgets recursively in Elementor data.
 	 *
-	 * @since  1.6031.1200
+	 * @since 1.6093.1200
 	 * @param  array $elements Elementor elements array.
 	 * @return int Widget count.
 	 */
@@ -89,7 +89,7 @@ class Treatment_Elementor_Pro_Theme_Builder_Performance extends Treatment_Base {
 	/**
 	 * Check if data contains specific widget types.
 	 *
-	 * @since  1.6031.1200
+	 * @since 1.6093.1200
 	 * @param  array $elements    Elementor elements array.
 	 * @param  array $widget_types Widget types to search for.
 	 * @return bool True if found, false otherwise.
@@ -111,7 +111,7 @@ class Treatment_Elementor_Pro_Theme_Builder_Performance extends Treatment_Base {
 	/**
 	 * Get posts_per_page setting from loop widgets.
 	 *
-	 * @since  1.6031.1200
+	 * @since 1.6093.1200
 	 * @param  array $elements Elementor elements array.
 	 * @return int Maximum posts_per_page found.
 	 */

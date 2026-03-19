@@ -4,7 +4,7 @@
  *
  * Identifies missed opportunities when traffic peaks on weekends.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies missed opportunities when analytics show high weekend traffic
  * but no content is published during those peak periods.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Weekend_Publishing_Gaps extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Weekend_Publishing_Gaps extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

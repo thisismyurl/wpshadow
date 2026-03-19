@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2102
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * unencrypted violates GDPR, PCI-DSS, and most compliance frameworks,
  * resulting in fines up to 4% of annual revenue.
  *
- * @since 1.2033.2102
+ * @since 1.6093.1200
  */
 class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'sensitive-data-in-database';
@@ -51,7 +51,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Sensitive Data in Database';
@@ -59,7 +59,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects unencrypted sensitive data stored in the database';
@@ -67,7 +67,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -82,7 +82,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 	 * 4. SSN/tax ID patterns
 	 * 5. Unencrypted personal identification
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -285,7 +285,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 	/**
 	 * Check if a meta key name suggests credit card data.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @param  string $key Meta key name.
 	 * @return bool True if key suggests credit card data.
 	 */
@@ -305,7 +305,7 @@ class Diagnostic_Sensitive_Data_In_Database extends Diagnostic_Base {
 	/**
 	 * Check if a value appears to be encrypted.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @param  string $value Value to check.
 	 * @return bool True if value appears encrypted.
 	 */

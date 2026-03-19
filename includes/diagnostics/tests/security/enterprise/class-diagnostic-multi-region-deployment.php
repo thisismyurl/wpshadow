@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that WordPress is deployed across multiple geographic regions for
  * improved resilience, disaster recovery, and global performance.
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Multi_Region_Deployment extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Multi_Region_Deployment extends Diagnostic_Base {
 	/**
 	 * Run the multi-region deployment diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if multi-region gaps detected, null otherwise.
 	 */
 	public static function check() {
@@ -193,7 +193,7 @@ class Diagnostic_Multi_Region_Deployment extends Diagnostic_Base {
 	/**
 	 * Determine if this is an enterprise environment.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return bool True if enterprise indicators detected, false otherwise.
 	 */
 	private static function is_enterprise_environment() {

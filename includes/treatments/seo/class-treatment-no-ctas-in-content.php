@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Engagement
- * @since      1.6034.2156
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - "Contact us today"
  * - "Learn more"
  *
- * @since 1.6034.2156
+ * @since 1.6093.1200
  */
 class Treatment_No_CTAs_In_Content extends Treatment_Base {
 
@@ -74,7 +74,7 @@ class Treatment_No_CTAs_In_Content extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2156
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if posts lack CTAs, null otherwise.
 	 */
 	public static function check() {

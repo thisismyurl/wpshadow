@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1030
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Heat maps show what users actually do vs. what you think they do. Often
  * reveals buttons are invisible or important content is ignored.
  *
- * @since 1.6035.1030
+ * @since 1.6093.1200
  */
 class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 	/**
 	 * Check if heat mapping tool is installed.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return bool True if tool exists.
 	 */
 	private static function check_heatmap_tool(): bool {
@@ -185,7 +185,7 @@ class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 	/**
 	 * Check if session recording is active.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return bool True if recording exists.
 	 */
 	private static function check_session_recording(): bool {
@@ -196,7 +196,7 @@ class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 	/**
 	 * Check if click tracking exists.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_click_tracking(): bool {
@@ -224,7 +224,7 @@ class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 	/**
 	 * Check if scroll depth tracking exists.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_scroll_depth(): bool {
@@ -235,7 +235,7 @@ class Diagnostic_Heat_Map_Session_Recording extends Diagnostic_Base {
 	/**
 	 * Check if privacy-compliant recording is configured.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return bool True if compliant.
 	 */
 	private static function check_privacy_compliance(): bool {

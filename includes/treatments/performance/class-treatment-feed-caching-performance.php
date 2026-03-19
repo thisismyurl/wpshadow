@@ -35,7 +35,7 @@
  * See https://wpshadow.com/kb/feed-caching-performance
  * or https://wpshadow.com/training/wordpress-performance-basics
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -97,7 +97,7 @@ class Treatment_Feed_Caching_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

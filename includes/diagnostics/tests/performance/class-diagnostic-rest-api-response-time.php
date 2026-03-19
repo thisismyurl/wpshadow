@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2064
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests REST API endpoint performance. Slow REST API impacts
  * Gutenberg editor, mobile apps, and API integrations.
  *
- * @since 1.6033.2064
+ * @since 1.6093.1200
  */
 class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 	 * Tests REST API by timing internal request.
 	 * Threshold: <500ms good, >1000ms slow
 	 *
-	 * @since  1.6033.2064
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

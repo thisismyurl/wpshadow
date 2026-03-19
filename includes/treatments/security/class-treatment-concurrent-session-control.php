@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.2033.2106
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,14 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sessions and provide mechanisms to terminate active sessions,
  * especially after credential changes or suspicious activity.
  *
- * @since 1.2033.2106
+ * @since 1.6093.1200
  */
 class Treatment_Concurrent_Session_Control extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'concurrent-session-control';
@@ -49,7 +49,7 @@ class Treatment_Concurrent_Session_Control extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Concurrent Session Control';
@@ -57,7 +57,7 @@ class Treatment_Concurrent_Session_Control extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies proper concurrent session management and controls';
@@ -65,7 +65,7 @@ class Treatment_Concurrent_Session_Control extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -79,7 +79,7 @@ class Treatment_Concurrent_Session_Control extends Treatment_Base {
 	 * 3. Concurrent session limits
 	 * 4. Session metadata tracking
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

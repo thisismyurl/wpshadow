@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates database lock handling in tool operations.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 	 *
 	 * Tests lock conflict mechanisms.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 	/**
 	 * Check for lock detection.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if locks detected.
 	 */
 	private static function detects_locks() {
@@ -148,7 +148,7 @@ class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 	/**
 	 * Check for lock wait handling.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if wait handled.
 	 */
 	private static function handles_lock_waits() {
@@ -176,7 +176,7 @@ class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 	/**
 	 * Check for deadlock recovery.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if recovery implemented.
 	 */
 	private static function recovers_from_deadlocks() {
@@ -201,7 +201,7 @@ class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 	/**
 	 * Check for lock minimization.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if locks minimized.
 	 */
 	private static function minimizes_lock_duration() {
@@ -226,7 +226,7 @@ class Diagnostic_Tool_Database_Lock_Conflicts extends Diagnostic_Base {
 	/**
 	 * Check for lock conflict reporting.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if conflicts reported.
 	 */
 	private static function reports_lock_conflicts() {

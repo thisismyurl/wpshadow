@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1025
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Active communities answer 60-80% of support questions for free and build
  * loyalty and organic content for SEO.
  *
- * @since 1.6035.1025
+ * @since 1.6093.1200
  */
 class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1025
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 	/**
 	 * Check if forum plugin is installed.
 	 *
-	 * @since  1.6035.1025
+	 * @since 1.6093.1200
 	 * @return bool True if forum exists.
 	 */
 	private static function check_forum_plugin(): bool {
@@ -167,7 +167,7 @@ class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 	/**
 	 * Check if Q&A sections exist.
 	 *
-	 * @since  1.6035.1025
+	 * @since 1.6093.1200
 	 * @return bool True if Q&A exists.
 	 */
 	private static function check_qa_sections(): bool {
@@ -202,7 +202,7 @@ class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 	/**
 	 * Check if discussion threads exist.
 	 *
-	 * @since  1.6035.1025
+	 * @since 1.6093.1200
 	 * @return bool True if discussions exist.
 	 */
 	private static function check_discussion_threads(): bool {
@@ -240,7 +240,7 @@ class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 	/**
 	 * Check if moderation tools are available.
 	 *
-	 * @since  1.6035.1025
+	 * @since 1.6093.1200
 	 * @return bool True if moderation exists.
 	 */
 	private static function check_moderation_tools(): bool {
@@ -274,7 +274,7 @@ class Diagnostic_Community_Forum_Features extends Diagnostic_Base {
 	/**
 	 * Check if community is active.
 	 *
-	 * @since  1.6035.1025
+	 * @since 1.6093.1200
 	 * @return bool True if activity exists.
 	 */
 	private static function check_community_activity(): bool {

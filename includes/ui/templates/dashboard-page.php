@@ -97,6 +97,11 @@ function wpshadow_render_dashboard() {
 					<p class="wps-progress-details" id="wpshadow-progress-details">
 						<span id="wpshadow-current-diagnostic"></span>
 					</p>
+					<div class="wps-scan-overlay-actions" id="wpshadow-overlay-actions" hidden>
+						<button type="button" class="button wps-btn wps-btn--secondary" id="wpshadow-overlay-dismiss">
+							<?php esc_html_e( 'Close and Continue', 'wpshadow' ); ?>
+						</button>
+					</div>
 				</div>
 			</div>
 		<?php endif; ?>
@@ -154,13 +159,61 @@ function wpshadow_render_dashboard() {
 		 */
 		function runQuickScanWithProgress() {
 			var $overlay = $('#wpshadow-refresh-overlay');
+			var $dashboardContent = $('.wpshadow-dashboard-content');
 			var $progressFill = $('#wpshadow-progress-fill');
 			var $progressText = $('#wpshadow-progress-text');
 			var $progressDetails = $('#wpshadow-progress-details');
 			var $currentDiagnostic = $('#wpshadow-current-diagnostic');
+			var $overlayActions = $('#wpshadow-overlay-actions');
+			var $overlayDismiss = $('#wpshadow-overlay-dismiss');
 			var $progressBar = $('.wps-progress-bar');
 
+			$overlayActions.prop('hidden', true);
+			$overlay.attr('aria-busy', 'true');
 			$overlay.show();
+
+			function escapeHtml(text) {
+				return String(text).replace(/[&<>\"']/g, function(character) {
+					return {
+						'&': '&amp;',
+						'<': '&lt;',
+						'>': '&gt;',
+						'"': '&quot;',
+						"'": '&#39;'
+					}[character];
+				});
+			}
+
+			function dismissOverlay() {
+				$overlay.attr('aria-busy', 'false').fadeOut();
+				$dashboardContent.removeClass('wps-loading');
+			}
+
+			function showOverlayError(errorMsg) {
+				var safeMessage = escapeHtml(errorMsg || '<?php echo esc_js( __( 'Unable to complete scan.', 'wpshadow' ) ); ?>');
+				$progressText.html('<span class="wps-progress-error"><?php echo esc_js( __( 'Error:', 'wpshadow' ) ); ?> ' + safeMessage + '</span>');
+				$progressDetails.text('<?php echo esc_js( __( 'You can close this message and continue using your dashboard.', 'wpshadow' ) ); ?>');
+				$overlayActions.prop('hidden', false);
+				$overlay.attr('aria-busy', 'false');
+				$progressFill.css('width', '100%');
+				$progressBar.attr('aria-valuenow', 100);
+			}
+
+			$overlayDismiss.on('click', function() {
+				dismissOverlay();
+			});
+
+			$overlay.on('click', function(event) {
+				if (! $overlayActions.prop('hidden') && $(event.target).is($overlay)) {
+					dismissOverlay();
+				}
+			});
+
+			$(document).on('keydown.wpshadowDashboardOverlay', function(event) {
+				if ('Escape' === event.key && ! $overlayActions.prop('hidden')) {
+					dismissOverlay();
+				}
+			});
 
 			// Start Quick Scan
 			$.ajax({
@@ -215,15 +268,11 @@ function wpshadow_render_dashboard() {
 								}
 							}
 						}
-						$progressText.html('<span style="color: #dc3232;"><?php esc_html_e( 'Error:', 'wpshadow' ); ?> ' + errorMsg + '</span>');
-						// Hide overlay after delay so user can see error
-						setTimeout(function() {
-							$overlay.fadeOut();
-						}, 5000);
+						showOverlayError(errorMsg);
 					}
 				},
 				error: function() {
-					$progressText.text('<?php esc_html_e( 'Error: Unable to complete scan', 'wpshadow' ); ?>');
+					showOverlayError('<?php echo esc_js( __( 'Unable to complete scan.', 'wpshadow' ) ); ?>');
 				}
 			});
 

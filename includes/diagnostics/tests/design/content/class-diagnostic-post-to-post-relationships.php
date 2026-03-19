@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues in post relationship connections.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Post_To_Post_Relationships extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_To_Post_Relationships extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,14 +165,14 @@ class Diagnostic_Post_To_Post_Relationships extends Diagnostic_Base {
 
 		// Check for meta keys that suggest relationships.
 		$relationship_meta_keys = $wpdb->get_results(
-			"SELECT DISTINCT meta_key, COUNT(*) as usage
+			"SELECT DISTINCT meta_key, COUNT(*) as usage_count
 			FROM {$wpdb->postmeta}
 			WHERE meta_key LIKE '%related%'
 			OR meta_key LIKE '%connection%'
 			OR meta_key LIKE '%link%'
 			GROUP BY meta_key
-			HAVING usage > 10
-			ORDER BY usage DESC
+			HAVING usage_count > 10
+			ORDER BY usage_count DESC
 			LIMIT 20",
 			ARRAY_A
 		);

@@ -44,7 +44,7 @@
  * - Video: https://wpshadow.com/training/query-optimization-101 (6 min)
  * - Advanced: https://wpshadow.com/training/filesort-elimination (11 min)
  *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -96,7 +96,7 @@ class Diagnostic_Order_By_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

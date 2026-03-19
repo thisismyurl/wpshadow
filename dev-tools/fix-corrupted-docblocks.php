@@ -5,7 +5,7 @@
  * Removes literal \n characters from docblocks in performance diagnostic files.
  * These files have corrupted docblocks where \n literals replaced actual newlines.
  *
- * @since 1.6033.2063
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

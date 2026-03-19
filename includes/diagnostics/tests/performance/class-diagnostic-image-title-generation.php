@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if image titles are being properly generated from filenames
  * and whether they follow SEO best practices.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Title_Generation extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Image_Title_Generation extends Diagnostic_Base {
 	 * Analyzes image titles to check if they're properly formatted,
 	 * meaningful, and SEO-friendly vs. raw filenames.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

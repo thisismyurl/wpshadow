@@ -4,7 +4,7 @@
  *
  * Validates theme code quality and WordPress standards compliance.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme code quality and standards compliance.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 
@@ -58,13 +58,18 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Pattern 1: Theme using direct database queries
 		$theme_dir = get_template_directory();
-		$php_files = glob( $theme_dir . '/**/*.php', GLOB_RECURSIVE );
+		
+		// Use a helper function to recursively find PHP files (GLOB_RECURSIVE might not be available)
+		$php_files = array();
+		if (function_exists('scandir')) {
+			self::find_php_files_recursive($theme_dir, $php_files);
+		}
 
 		$files_with_direct_db = array();
 		foreach ( $php_files as $file ) {
@@ -287,4 +292,39 @@ wp i18n make-pot . languages/my-theme.pot',
 
 		return null;
 	}
+
+	/**
+	 * Recursively find all PHP files in a directory.
+	 *
+	 * @since 1.6093.1200
+	 * @param string $dir Directory to search.
+	 * @param array  $files Array to populate with found files (passed by reference).
+	 * @return void
+	 */
+	private static function find_php_files_recursive( $dir, &$files ) {
+		if ( ! is_dir( $dir ) ) {
+			return;
+		}
+
+		$items = scandir( $dir );
+		if ( false === $items ) {
+			return;
+		}
+
+		foreach ( $items as $item ) {
+			if ( '.' === $item || '..' === $item ) {
+				continue;
+			}
+
+			$path = $dir . '/' . $item;
+			if ( is_dir( $path ) ) {
+				// Recursively search subdirectories
+				self::find_php_files_recursive( $path, $files );
+			} elseif ( '.php' === substr( $item, -4 ) ) {
+				// Add PHP files
+				$files[] = $path;
+			}
+		}
+	}
 }
+

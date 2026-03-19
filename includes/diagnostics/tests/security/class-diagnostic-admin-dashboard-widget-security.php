@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0631
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Plugin Output Escaping: Broader plugin security audit
  * - Theme Template Security: XSS in frontend templates
  *
- * @since 1.6033.0631
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Dashboard_Widget_Security extends Diagnostic_Base {
 

@@ -15,7 +15,7 @@ use WPShadow\Core\Hook_Subscriber_Base;
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class API_Latency_Analyzer extends Hook_Subscriber_Base {
 
@@ -27,7 +27,7 @@ class API_Latency_Analyzer extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -41,7 +41,7 @@ class API_Latency_Analyzer extends Hook_Subscriber_Base {
 	/**
 	 * Initialize API monitoring (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use API_Latency_Analyzer::subscribe() instead
+	 * @deprecated1.0 Use API_Latency_Analyzer::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {

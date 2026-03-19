@@ -4,7 +4,7 @@
  *
  * Detects seasonal content that has not been refreshed.
  *
- * @since   1.6033.1700
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Seasonal guides with outdated dates (e.g., 2022) lose up to 80% of
  * traffic vs refreshed competitors.
  *
- * @since 1.6033.1700
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Stale_Seasonal_Content extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Stale_Seasonal_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1700
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

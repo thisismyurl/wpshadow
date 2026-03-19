@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1340
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for issues preventing featured images from uploading
  * or thumbnails from generating properly.
  *
- * @since 1.6033.1340
+ * @since 1.6093.1200
  */
 class Diagnostic_Featured_Image_Upload_Failures extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Featured_Image_Upload_Failures extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

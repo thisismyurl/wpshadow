@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks email bounce rates and alerts if they exceed acceptable thresholds.
  *
- * @since 1.6035.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the email bounce rate diagnostic check.
 	 *
-	 * @since  1.6035.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if bounce rate issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 	/**
 	 * Get email bounce statistics from Activity Logger.
 	 *
-	 * @since  1.6035.1440
+	 * @since 1.6093.1200
 	 * @return array Bounce statistics.
 	 */
 	private static function get_bounce_statistics(): array {
@@ -162,7 +162,7 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 	 *
 	 * This method should be called by email handling code when a bounce is detected.
 	 *
-	 * @since  1.6035.1440
+	 * @since 1.6093.1200
 	 * @param  string $email  Email address that bounced.
 	 * @param  string $reason Bounce reason.
 	 * @return void
@@ -187,7 +187,7 @@ class Diagnostic_Email_Bounce_Rate_Tracking extends Diagnostic_Base {
 	 *
 	 * This method should be called by email handling code when an email is sent.
 	 *
-	 * @since  1.6035.1440
+	 * @since 1.6093.1200
 	 * @param  string $email Email address.
 	 * @return void
 	 */

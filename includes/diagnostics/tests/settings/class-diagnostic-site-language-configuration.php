@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates site language configuration.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 	 *
 	 * Tests language configuration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 	/**
 	 * Check if language files exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if files exist.
 	 */
 	private static function language_files_exist() {
@@ -170,7 +170,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 	/**
 	 * Check for RTL support.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if RTL supported.
 	 */
 	private static function has_rtl_support() {

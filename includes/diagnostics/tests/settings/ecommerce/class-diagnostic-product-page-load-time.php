@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that product pages load quickly enough to maintain
  * user engagement and reduce bounce rate.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Product_Page_Load_Time extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Product_Page_Load_Time extends Diagnostic_Base {
 	/**
 	 * Run the product page load time diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if product load time issues detected, null otherwise.
 	 */
 	public static function check() {

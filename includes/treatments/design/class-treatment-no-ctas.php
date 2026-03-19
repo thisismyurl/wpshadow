@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects posts with no calls-to-action at all. Every post should guide
  * readers toward a next action - subscribe, download, product, etc.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Treatment_No_CTAs extends Treatment_Base {
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the site implements structured data (schema markup)
  * for better search engine understanding and rich snippets.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Structured_Data extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Structured_Data extends Diagnostic_Base {
 	/**
 	 * Run the structured data diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if structured data issues detected, null otherwise.
 	 */
 	public static function check() {

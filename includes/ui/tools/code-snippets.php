@@ -5,7 +5,7 @@
  * Intelligent snippet manager with syntax validation, sandboxing, and rollback.
  *
  * @package WPShadow
- * @since   1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

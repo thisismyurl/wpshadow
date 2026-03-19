@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when CTAs are only placed at the bottom of content, missing
  * readers who don't scroll that far (65% of visitors).
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Treatment_Poor_CTA_Placement extends Treatment_Base {
 

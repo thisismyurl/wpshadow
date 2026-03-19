@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7030.1527
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Deletes low-value tags to reduce clutter.
  *
- * @since 1.7030.1527
+ * @since 1.6093.1200
  */
 class Treatment_Tag_Overuse extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.7030.1527
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_Tag_Overuse extends Treatment_Base {
 	 *
 	 * Deletes tags that have fewer than 3 posts associated with them.
 	 *
-	 * @since  1.7030.1527
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses custom, compelling thumbnails that achieve >10% click-through rates.
  *
- * @since   1.6034.0355
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Custom thumbnails increase click-through rates by 154% vs auto-generated.
  * Professional thumbnails are critical for video discoverability.
  *
- * @since 1.6034.0355
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0355
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 	/**
 	 * Check custom thumbnails.
 	 *
-	 * @since  1.6034.0355
+	 * @since 1.6093.1200
 	 * @return bool True if custom, false otherwise.
 	 */
 	private static function check_custom_thumbnails() {
@@ -169,7 +169,7 @@ class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 	/**
 	 * Check HQ images.
 	 *
-	 * @since  1.6034.0355
+	 * @since 1.6093.1200
 	 * @return bool True if HQ, false otherwise.
 	 */
 	private static function check_hq_images() {
@@ -195,7 +195,7 @@ class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 	/**
 	 * Check text overlays.
 	 *
-	 * @since  1.6034.0355
+	 * @since 1.6093.1200
 	 * @return bool True if overlays used, false otherwise.
 	 */
 	private static function check_text_overlays() {
@@ -215,7 +215,7 @@ class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 	/**
 	 * Check consistent branding.
 	 *
-	 * @since  1.6034.0355
+	 * @since 1.6093.1200
 	 * @return bool True if consistent, false otherwise.
 	 */
 	private static function check_consistent_branding() {
@@ -235,7 +235,7 @@ class Diagnostic_Video_Thumbnails_Optimized extends Diagnostic_Base {
 	/**
 	 * Check thumbnail testing.
 	 *
-	 * @since  1.6034.0355
+	 * @since 1.6093.1200
 	 * @return bool True if testing, false otherwise.
 	 */
 	private static function check_thumbnail_testing() {

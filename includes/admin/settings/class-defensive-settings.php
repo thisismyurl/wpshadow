@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since      1.6035.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages defensive engineering settings to protect users from
  * system failures, network issues, and data loss.
  *
- * @since 1.6035.1500
+ * @since 1.6093.1200
  */
 class Defensive_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -44,7 +44,7 @@ class Defensive_Settings {
 	/**
 	 * Enqueue defensive settings assets.
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -64,7 +64,7 @@ class Defensive_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -80,7 +80,7 @@ class Defensive_Settings {
 	/**
 	 * Render the defensive settings page
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {

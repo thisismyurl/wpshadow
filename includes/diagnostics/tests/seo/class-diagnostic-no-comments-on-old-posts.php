@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Engagement
- * @since      1.6034.2217
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Add discussion prompts
  * - Enable email notifications
  *
- * @since 1.6034.2217
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Comments_On_Old_Posts extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_No_Comments_On_Old_Posts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2217
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if old posts lack comments, null otherwise.
 	 */
 	public static function check() {

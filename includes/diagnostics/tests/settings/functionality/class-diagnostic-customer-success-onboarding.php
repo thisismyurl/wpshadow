@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0945
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Good onboarding reduces churn by 50%. Helps customers succeed early
  * so they stay and buy more.
  *
- * @since 1.6035.0945
+ * @since 1.6093.1200
  */
 class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0945
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check if onboarding email sequence exists.
 	 *
-	 * @since  1.6035.0945
+	 * @since 1.6093.1200
 	 * @return bool True if sequence exists.
 	 */
 	private static function check_onboarding_sequence(): bool {
@@ -213,7 +213,7 @@ class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check if welcome guide or checklist exists.
 	 *
-	 * @since  1.6035.0945
+	 * @since 1.6093.1200
 	 * @return bool True if guide exists.
 	 */
 	private static function check_welcome_guide(): bool {
@@ -242,7 +242,7 @@ class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check if success milestones are defined.
 	 *
-	 * @since  1.6035.0945
+	 * @since 1.6093.1200
 	 * @return bool True if milestones exist.
 	 */
 	private static function check_success_milestones(): bool {
@@ -264,7 +264,7 @@ class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check if proactive support outreach is configured.
 	 *
-	 * @since  1.6035.0945
+	 * @since 1.6093.1200
 	 * @return bool True if outreach exists.
 	 */
 	private static function check_proactive_support(): bool {
@@ -292,7 +292,7 @@ class Diagnostic_Customer_Success_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check if at-risk customer monitoring exists.
 	 *
-	 * @since  1.6035.0945
+	 * @since 1.6093.1200
 	 * @return bool True if monitoring exists.
 	 */
 	private static function check_at_risk_monitoring(): bool {

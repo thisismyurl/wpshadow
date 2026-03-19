@@ -38,7 +38,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0632
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 * - Admin Bar Security: Checks for unauthorized toolbar items
 * - Plugin Quality Audit: Reviews all active plugins
  *
- * @since 1.6033.0632
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Color_Scheme_Security extends Diagnostic_Base {
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites lack post-specific downloadable resources. Content
  * upgrades (related to specific post) convert dramatically better than generic offers.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Content_Upgrades extends Diagnostic_Base {
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since      1.602.1215
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,9 +26,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks that forms use HTML5 autocomplete attributes to enable mobile
  * browsers' auto-fill features, dramatically improving form completion speed.
  *
- * WCAG Reference: 1.3.5 Identify Input Purpose (Level AA)
+ * WCAG Reference:1.0 Identify Input Purpose (Level AA)
  *
- * @since 1.602.1215
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1215
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -193,7 +193,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Get test pages.
 	 *
-	 * @since  1.602.1215
+	 * @since 1.6093.1200
 	 * @return array Pages to test.
 	 */
 	private static function get_test_pages() {
@@ -225,7 +225,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since  1.602.1215
+	 * @since 1.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */
@@ -248,7 +248,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Find inputs missing autocomplete attributes.
 	 *
-	 * @since  1.602.1215
+	 * @since 1.6093.1200
 	 * @param  string $html HTML to scan.
 	 * @return array Missing autocomplete inputs.
 	 */

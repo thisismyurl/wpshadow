@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7030.1507
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Code-related keywords
  * - Syntax highlighter plugins
  *
- * @since 1.7030.1507
+ * @since 1.6093.1200
  */
 class Treatment_Inline_Code_Not_Formatted extends Treatment_Base {
 
@@ -70,7 +70,7 @@ class Treatment_Inline_Code_Not_Formatted extends Treatment_Base {
 	 * - 1 point: Code blocks found in technical posts
 	 * - 1 point: <20% technical posts lack code blocks
 	 *
-	 * @since  1.7030.1507
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

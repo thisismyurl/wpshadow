@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Internationalization
- * @since      1.7431.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if site detects and respects visitor's browser language preference.
  *
- * @since 1.7431.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Browser_Language_Detection extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Browser_Language_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.7431.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

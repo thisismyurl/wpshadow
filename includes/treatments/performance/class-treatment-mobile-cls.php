@@ -53,7 +53,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures cumulative layout shifts that cause mobile usability problems and form abandonment.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Cls extends Treatment_Base {
 
@@ -111,7 +111,7 @@ class Treatment_Mobile_Cls extends Treatment_Base {
 	 * - Needs Improvement: 0.1-0.25
 	 * - Poor: >0.25
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

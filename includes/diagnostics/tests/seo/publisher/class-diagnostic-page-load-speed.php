@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the homepage loads in under 2 seconds and meets
  * Core Web Vitals performance standards.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 	/**
 	 * Run the page load speed diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if performance issues detected, null otherwise.
 	 */
 	public static function check() {

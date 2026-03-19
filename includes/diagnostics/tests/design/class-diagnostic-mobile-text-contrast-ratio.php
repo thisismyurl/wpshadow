@@ -4,7 +4,7 @@
  *
  * Validates text contrast meets WCAG standards for mobile readability.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that text contrast meets WCAG standards, especially critical for mobile
  * devices used outdoors in sunlight, ensuring WCAG AA/AAA compliance.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Text_Contrast_Ratio extends Diagnostic_Base {
 
@@ -47,7 +47,7 @@ class Diagnostic_Mobile_Text_Contrast_Ratio extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Validate text contrast meets WCAG standards for mobile readability (WCAG 1.4.3)';
+	protected static $description = 'Validate text contrast meets WCAG standards for mobile readability (WCAG1.0)';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Text_Contrast_Ratio extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

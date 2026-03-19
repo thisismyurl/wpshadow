@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures attachment queries are optimized and identifies
  * performance issues with media library database operations.
  *
- * @since 1.6033.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 		);
 		$count_time = microtime( true ) - $start;
 
-		if ( $count_time > 1.0 ) {
+		if ( $count_time >1.0 ) {
 			$issues[] = sprintf(
 				/* translators: %s: query time in seconds */
 				__( 'Counting attachments took %s seconds; database optimization needed', 'wpshadow' ),
@@ -121,7 +121,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 			
 			$meta_time = microtime( true ) - $start;
 
-			if ( $meta_time > 1.5 ) {
+			if ( $meta_time >1.0 ) {
 				$issues[] = sprintf(
 					/* translators: %s: query time in seconds */
 					__( 'Querying attachment metadata took %s seconds; consider caching', 'wpshadow' ),
@@ -250,7 +250,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 		);
 		$unattached_time = microtime( true ) - $start;
 
-		if ( $unattached_time > 1.5 ) {
+		if ( $unattached_time >1.0 ) {
 			$issues[] = sprintf(
 				/* translators: %s: query time in seconds */
 				__( 'Querying unattached media took %s seconds; post_parent index may be missing', 'wpshadow' ),

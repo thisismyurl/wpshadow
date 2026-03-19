@@ -1,10 +1,10 @@
 <?php
 /**
- * WCAG 1.4.2 Audio Control Treatment
+ * WCAG1.0 Audio Control Treatment
  *
  * Validates that auto-playing audio can be paused or stopped.
  *
- * @since   1.6035.1200
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -21,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WCAG Auto-playing Audio Control Treatment Class
  *
- * Checks for auto-playing audio that interferes with screen readers (WCAG 1.4.2 Level A).
+ * Checks for auto-playing audio that interferes with screen readers (WCAG1.0 Level A).
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Treatment_WCAG_Audio_Control extends Treatment_Base {
 
@@ -39,7 +39,7 @@ class Treatment_WCAG_Audio_Control extends Treatment_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Audio Control (WCAG 1.4.2)';
+	protected static $title = 'Audio Control (WCAG1.0)';
 
 	/**
 	 * The treatment description
@@ -58,7 +58,7 @@ class Treatment_WCAG_Audio_Control extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles registration and management of the modal custom post type.
  *
- * @since 1.6089
+ * @since 1.6093.1200
  */
 class Modal_Post_Type extends Hook_Subscriber_Base {
 
@@ -39,7 +39,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -58,7 +58,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Register the modal custom post type.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_post_type() {
@@ -112,7 +112,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Add meta boxes for modal configuration.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_meta_boxes() {
@@ -138,7 +138,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Render display rules meta box.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -312,7 +312,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Render settings meta box.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -364,7 +364,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Save modal meta data.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @param  int      $post_id Post ID.
 	 * @param  \WP_Post $post    Post object.
 	 * @return void
@@ -427,7 +427,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Render active modals in footer.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_active_modals() {
@@ -445,7 +445,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Get active modals for current page.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @return array Array of modal post objects.
 	 */
 	public static function get_active_modals() {
@@ -477,7 +477,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Check if modal should be displayed on current page.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @param  int $modal_id Modal post ID.
 	 * @return bool True if should display.
 	 */
@@ -551,7 +551,7 @@ class Modal_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Render a single modal.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $modal Modal post object.
 	 * @return void
 	 */

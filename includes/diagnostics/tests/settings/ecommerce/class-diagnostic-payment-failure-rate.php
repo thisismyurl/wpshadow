@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that payment failures are being tracked and that the
  * failure rate is within acceptable limits.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Payment_Failure_Rate extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Payment_Failure_Rate extends Diagnostic_Base {
 	/**
 	 * Run the payment failure rate diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if payment issues detected, null otherwise.
 	 */
 	public static function check() {

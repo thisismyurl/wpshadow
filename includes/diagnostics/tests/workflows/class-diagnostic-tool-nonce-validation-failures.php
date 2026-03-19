@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Comprehensive validation of nonce implementation across tool actions.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 	 *
 	 * Tests nonce validation comprehensively.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 	/**
 	 * Check form nonce presence.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_form_nonces() {
@@ -162,7 +162,7 @@ class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 	/**
 	 * Check AJAX nonce implementation.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_ajax_nonces() {
@@ -206,7 +206,7 @@ class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 	/**
 	 * Check nonce regeneration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_nonce_regeneration() {
@@ -229,7 +229,7 @@ class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 	/**
 	 * Check replay attack prevention.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_replay_attack_prevention() {
@@ -257,7 +257,7 @@ class Diagnostic_Tool_Nonce_Validation_Failures extends Diagnostic_Base {
 	/**
 	 * Check nonce time-to-live.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_nonce_ttl() {

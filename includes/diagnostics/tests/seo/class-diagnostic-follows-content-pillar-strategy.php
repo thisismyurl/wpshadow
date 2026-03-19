@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2323
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Clear topical hierarchy
  * - Strategic keyword targeting
  *
- * @since 1.6034.2323
+ * @since 1.6093.1200
  */
 class Diagnostic_Follows_Content_Pillar_Strategy extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Follows_Content_Pillar_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2323
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no pillar strategy detected, null otherwise.
 	 */
 	public static function check() {
@@ -148,7 +148,7 @@ class Diagnostic_Follows_Content_Pillar_Strategy extends Diagnostic_Base {
 	/**
 	 * Find potential pillar page candidates
 	 *
-	 * @since  1.6034.2323
+	 * @since 1.6093.1200
 	 * @return array Array of posts 2000+ words.
 	 */
 	private static function find_pillar_candidates() {
@@ -178,7 +178,7 @@ class Diagnostic_Follows_Content_Pillar_Strategy extends Diagnostic_Base {
 	/**
 	 * Count Yoast SEO cornerstone posts
 	 *
-	 * @since  1.6034.2323
+	 * @since 1.6093.1200
 	 * @return int Number of cornerstone posts.
 	 */
 	private static function count_cornerstone_posts() {
@@ -200,7 +200,7 @@ class Diagnostic_Follows_Content_Pillar_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for cluster-style internal linking
 	 *
-	 * @since  1.6034.2323
+	 * @since 1.6093.1200
 	 * @return bool True if cluster linking detected.
 	 */
 	private static function has_cluster_linking() {
@@ -243,7 +243,7 @@ class Diagnostic_Follows_Content_Pillar_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if category structure supports pillars
 	 *
-	 * @since  1.6034.2323
+	 * @since 1.6093.1200
 	 * @return bool True if structure is pillar-friendly.
 	 */
 	private static function has_pillar_structure() {

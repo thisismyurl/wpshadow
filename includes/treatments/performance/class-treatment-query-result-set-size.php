@@ -21,7 +21,7 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents memory-exhaustion crashes\n * - #9 Show Value: Enables data analysis that was previously impossible\n * - #10 Talk-About-Worthy: "We can now analyze millions of records"\n *
  * **Related Checks:**\n * - PHP Memory Limit (available memory)\n * - Query Timeout Risk (execution time)\n * - Database Index Efficiency (query optimization)\n * - Pagination Implementation (result limiting)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/query-result-optimization\n * - Video: https://wpshadow.com/training/pagination-best-practices (6 min)\n * - Advanced: https://wpshadow.com/training/large-dataset-handling (12 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -73,7 +73,7 @@ class Treatment_Query_Result_Set_Size extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

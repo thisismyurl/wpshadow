@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for ethical countdown timer usage tied to real deadlines.
  * Timers create urgency but must be legitimate to maintain trust.
  *
- * @since 1.6034.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Countdown_Timers extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Countdown_Timers extends Diagnostic_Base {
 	 *
 	 * Detects timer plugins and validates ethical usage patterns.
 	 *
-	 * @since  1.6034.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array with usage assessment, null if optimal.
 	 */
 	public static function check() {

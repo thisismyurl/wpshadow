@@ -4,7 +4,7 @@
  *
  * Validates proper Open Graph implementation for social media content preview.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if Open Graph meta tags are properly implemented for social media sharing.
  * These tags control how content appears when shared on Facebook, LinkedIn, and other platforms.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -273,7 +273,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if SEO plugin is active.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if SEO plugin active.
 	 */
 	private static function has_seo_plugin() {
@@ -297,7 +297,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if social media plugin is active.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if social plugin active.
 	 */
 	private static function has_social_plugin() {
@@ -320,7 +320,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if site is multilingual.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if multilingual plugins detected.
 	 */
 	private static function is_multilingual_site() {

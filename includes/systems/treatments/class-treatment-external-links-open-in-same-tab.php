@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures external links open in a new tab and use safe rel attributes.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Treatment_External_Links_Open_In_Same_Tab extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_External_Links_Open_In_Same_Tab extends Treatment_Base {
 	 *
 	 * Adds target and rel attributes to external links in posts and pages.
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

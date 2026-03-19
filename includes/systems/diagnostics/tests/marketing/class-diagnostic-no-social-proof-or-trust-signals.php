@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6035.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether social proof elements are displayed
  * to build trust with visitors.
  *
- * @since 1.6035.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Social_Proof_Or_Trust_Signals extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Social_Proof_Or_Trust_Signals extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

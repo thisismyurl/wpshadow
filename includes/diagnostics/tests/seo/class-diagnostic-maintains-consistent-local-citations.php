@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1130
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #14: Local Citations Consistent from Specialized & Emerging Success Habits.
  * Checks if the site has consistent NAP across directories.
  *
- * @since 1.5003.1130
+ * @since 1.6093.1200
  */
 class Diagnostic_Maintains_Consistent_Local_Citations extends Diagnostic_Base {
 

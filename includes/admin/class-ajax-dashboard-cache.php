@@ -5,7 +5,7 @@
  * Handles AJAX requests for invalidating dashboard cache
  * and clearing widget-specific caches from the frontend.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides AJAX endpoints for managing dashboard cache operations.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 
@@ -35,7 +35,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * AJAX endpoint: wp_ajax_wpshadow_invalidate_dashboard_cache
 	 * Clears the entire dashboard page cache.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function invalidate_dashboard_cache() {
@@ -60,7 +60,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * AJAX endpoint: wp_ajax_wpshadow_invalidate_widget_cache
 	 * Clears cache for a specific dashboard widget.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function invalidate_widget_cache() {
@@ -92,7 +92,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * AJAX endpoint: wp_ajax_wpshadow_get_cache_stats
 	 * Returns dashboard cache statistics for monitoring.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function get_cache_stats() {
@@ -113,7 +113,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * AJAX endpoint: wp_ajax_wpshadow_invalidate_all_caches
 	 * Clears dashboard page cache and all widget caches.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function invalidate_all_caches() {

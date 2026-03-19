@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if design tools are integrated. Manual export/upload from
  * Canva, Figma, or Adobe wastes time and breaks workflows.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	 * Checks if design tools are integrated. Direct integration saves
 	 * 15-30 minutes per image workflow.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	/**
 	 * Check if design integration is already enabled.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if design integration detected.
 	 */
 	private static function has_design_integration() {
@@ -138,7 +138,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	/**
 	 * Detect design tools from image metadata.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array Array of detected tool names.
 	 */
 	private static function detect_design_tools() {
@@ -187,7 +187,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	/**
 	 * Estimate manual image uploads per week.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return int Estimated uploads per week.
 	 */
 	private static function estimate_manual_uploads() {

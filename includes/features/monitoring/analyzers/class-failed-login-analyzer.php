@@ -15,14 +15,14 @@ use WPShadow\Core\Hook_Subscriber_Base;
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Failed_Login_Analyzer extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -37,7 +37,7 @@ class Failed_Login_Analyzer extends Hook_Subscriber_Base {
 	 *
 	 * Hooks into WordPress authentication events
 	 *
-	 * @deprecated 1.7035.1400 Use Failed_Login_Analyzer::subscribe() instead
+	 * @deprecated1.0 Use Failed_Login_Analyzer::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {

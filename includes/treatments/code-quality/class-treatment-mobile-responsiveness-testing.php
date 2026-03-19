@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1330
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site is mobile-friendly with proper viewport
  * settings, touch targets, and responsive design.
  *
- * @since 1.7034.1330
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Responsiveness_Testing extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Mobile_Responsiveness_Testing extends Treatment_Base {
 	 * Tests mobile responsiveness including viewport meta tag,
 	 * touch target sizes, and responsive images.
 	 *
-	 * @since  1.7034.1330
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Table_Headers_Association Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Table_Headers_Association extends Diagnostic_Base {
 
@@ -56,7 +56,7 @@ class Diagnostic_Table_Headers_Association extends Diagnostic_Base {
 				'kb_link'      => 'https://wpshadow.com/kb/table-headers',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1 1.3.1 Info and Relationships (Level A)',
+					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Info and Relationships (Level A)',
 					'example'                 => '<th scope="col">Name</th>',
 					'why_important'           => 'Screen reader announces "Name: John Doe" not just "John Doe"',
 				),

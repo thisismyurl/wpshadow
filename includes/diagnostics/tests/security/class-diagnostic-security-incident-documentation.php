@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1524
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether security incidents are properly logged, tracked, and documented.
  * Checks for logging systems, incident response tools, and audit trails.
  *
- * @since 1.6035.1524
+ * @since 1.6093.1200
  */
 class Diagnostic_Security_Incident_Documentation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Security_Incident_Documentation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1524
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

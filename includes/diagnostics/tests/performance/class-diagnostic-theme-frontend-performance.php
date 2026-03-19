@@ -14,7 +14,7 @@
  * **Why This Matters:**\n * A slow theme affects every page on site. If theme adds 2 seconds to every page, multiply by 100,000
  * monthly visitors = 200,000 seconds (55+ hours) of wasted visitor time monthly. Revenue impact: $5,000+
  * monthly from bounces and abandoned carts.\n *
- * **Real-World Scenario:**\n * WooCommerce store replaced slow theme (page load 4.2s) with lightweight theme (page load 1.8s).
+ * **Real-World Scenario:**\n * WooCommerce store replaced slow theme (page load 4.2s) with lightweight theme (page load1.0s).
  * Exact same plugins, exact same content. Only theme changed. Bounce rate dropped from 45% to 28%
  * (38% improvement). Conversion rate improved 22%. Monthly revenue increased $15,000. Theme cost $69.
  * ROI: 217x in one month.\n *
@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-performance-comparison\n * - Video: https://wpshadow.com/training/lightweight-theme-selection (7 min)\n * - Advanced: https://wpshadow.com/training/theme-architecture-performance (13 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme for performance issues affecting page load times.
  *
- * @since 1.5049.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Theme_Frontend_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1528
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies log directory permissions if debug logging configured.
  *
- * @since 1.6035.1528
+ * @since 1.6093.1200
  */
 class Diagnostic_Log_File_Directory_Permissions extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Log_File_Directory_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the permissions diagnostic check.
 	 *
-	 * @since  1.6035.1528
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if permission issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Log_File_Directory_Permissions extends Diagnostic_Base {
 	/**
 	 * Get log file path.
 	 *
-	 * @since  1.6035.1528
+	 * @since 1.6093.1200
 	 * @return string|null Log file path or null.
 	 */
 	private static function get_log_path(): ?string {

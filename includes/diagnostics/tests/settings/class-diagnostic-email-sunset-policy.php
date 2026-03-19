@@ -4,7 +4,7 @@
  *
  * Tests whether the site implements a documented policy for removing inactive subscribers.
  *
- * @since   1.6034.0330
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Sunset policies improve deliverability and reduce costs. Keeping inactive
  * subscribers damages sender reputation and wastes money.
  *
- * @since 1.6034.0330
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0330
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 	/**
 	 * Check documented policy.
 	 *
-	 * @since  1.6034.0330
+	 * @since 1.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_documented_policy() {
@@ -164,7 +164,7 @@ class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 	/**
 	 * Check automated removal.
 	 *
-	 * @since  1.6034.0330
+	 * @since 1.6093.1200
 	 * @return bool True if automated, false otherwise.
 	 */
 	private static function check_automated_removal() {
@@ -179,7 +179,7 @@ class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 	/**
 	 * Check warning sequence.
 	 *
-	 * @since  1.6034.0330
+	 * @since 1.6093.1200
 	 * @return bool True if sequence exists, false otherwise.
 	 */
 	private static function check_warning_sequence() {
@@ -199,7 +199,7 @@ class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 	/**
 	 * Check reactivation opportunity.
 	 *
-	 * @since  1.6034.0330
+	 * @since 1.6093.1200
 	 * @return bool True if opportunity exists, false otherwise.
 	 */
 	private static function check_reactivation_opportunity() {
@@ -219,7 +219,7 @@ class Diagnostic_Email_Sunset_Policy extends Diagnostic_Base {
 	/**
 	 * Check clear timeline.
 	 *
-	 * @since  1.6034.0330
+	 * @since 1.6093.1200
 	 * @return bool True if timeline exists, false otherwise.
 	 */
 	private static function check_clear_timeline() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if documents can be previewed in-browser. WordPress doesn't
  * provide document previews, creating friction and security concerns.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Treatment_Document_Preview_Missing extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Document_Preview_Missing extends Treatment_Base {
 	 * Checks if documents have preview capability. In-browser previews
 	 * improve UX and allow viewing without downloading.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

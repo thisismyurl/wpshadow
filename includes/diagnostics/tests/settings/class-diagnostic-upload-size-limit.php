@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1508
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies adequate upload file size limits are configured.
  *
- * @since 1.6035.1508
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 	/**
 	 * Run the upload size diagnostic check.
 	 *
-	 * @since  1.6035.1508
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if upload issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -131,34 +131,34 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 	/**
 	 * Parse size string to bytes.
 	 *
-	 * @since  1.6035.1508
+	 * @since 1.6093.1200
 	 * @param  string $value Size value (e.g., '64M', '2G').
 	 * @return int Size in bytes.
 	 */
 	private static function parse_size( string $value ): int {
 		$value = trim( $value );
-		$value = (int) $value;
 		$last_char = strtoupper( substr( $value, -1 ) );
+		$bytes = (int) $value;
 
 		switch ( $last_char ) {
 			case 'G':
-				$value *= 1024;
+				$bytes *= 1024;
 				// Fall through.
 			case 'M':
-				$value *= 1024;
+				$bytes *= 1024;
 				// Fall through.
 			case 'K':
-				$value *= 1024;
+				$bytes *= 1024;
 				break;
 		}
 
-		return $value;
+		return $bytes;
 	}
 
 	/**
 	 * Format bytes to human readable.
 	 *
-	 * @since  1.6035.1508
+	 * @since 1.6093.1200
 	 * @param  int $bytes Bytes to format.
 	 * @return string Formatted bytes.
 	 */

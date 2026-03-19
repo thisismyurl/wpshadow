@@ -46,7 +46,7 @@
  * - Video: https://wpshadow.com/training/mysql-fulltext-search (5 min)
  * - Advanced: https://wpshadow.com/training/index-strategy (12 min)
  *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -98,7 +98,7 @@ class Diagnostic_Like_Query_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

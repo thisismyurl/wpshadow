@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1655
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Active Count Diagnostic Test Class
  *
- * @since 1.6028.1655
+ * @since 1.6093.1200
  */
 class ActiveCountTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test diagnostic passes with healthy plugin count
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_healthy_count(): void {
@@ -71,7 +71,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test diagnostic flags excessive plugins
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_excessive_plugins(): void {
@@ -119,7 +119,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test diagnostic flags above recommended
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_above_recommended(): void {
@@ -163,7 +163,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test diagnostic flags inactive plugins
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_inactive_plugins(): void {
@@ -206,7 +206,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -262,7 +262,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test meta includes plugin counts
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_counts(): void {
@@ -309,7 +309,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test details include recommendations
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_recommendations(): void {
@@ -354,7 +354,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test threat level calculation
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_calculation(): void {
@@ -398,7 +398,7 @@ class ActiveCountTest extends TestCase {
 	/**
 	 * Test performance impact included
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_performance_impact_included(): void {

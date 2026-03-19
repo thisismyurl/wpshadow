@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,14 +31,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Generates visual progress reports and milestone celebrations.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Visual_Health_Journey {
 
 	/**
 	 * Generate complete health journey
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days Days of history to include.
 	 * @return array Journey data with timeline and milestones.
 	 */
@@ -63,7 +63,7 @@ class Visual_Health_Journey {
 	/**
 	 * Build timeline of health events
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days Days to include.
 	 * @return array Timeline entries.
 	 */
@@ -129,7 +129,7 @@ class Visual_Health_Journey {
 	/**
 	 * Identify significant milestones
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $timeline Timeline data.
 	 * @return array Milestones.
 	 */
@@ -198,7 +198,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get achievements/badges
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Earned achievements.
 	 */
 	private static function get_achievements(): array {
@@ -261,7 +261,7 @@ class Visual_Health_Journey {
 	/**
 	 * Calculate progress statistics
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $timeline Timeline data.
 	 * @return array Progress stats.
 	 */
@@ -307,7 +307,7 @@ class Visual_Health_Journey {
 	/**
 	 * Generate shareable data
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $progress Progress statistics.
 	 * @param  array $achievements Achievements earned.
 	 * @return array Share data.
@@ -336,7 +336,7 @@ class Visual_Health_Journey {
 	/**
 	 * Generate visualization data
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $timeline Timeline entries.
 	 * @return array Visualization configuration.
 	 */
@@ -378,7 +378,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get health description
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $score Health score.
 	 * @return string Description.
 	 */
@@ -397,7 +397,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get health icon
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $score Health score.
 	 * @return string Icon.
 	 */
@@ -416,7 +416,7 @@ class Visual_Health_Journey {
 	/**
 	 * Classify activity type
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $activity Activity data.
 	 * @return string|null Event type or null.
 	 */
@@ -443,7 +443,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get event icon
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $type Event type.
 	 * @return string Icon.
 	 */
@@ -461,7 +461,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get event impact level
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $type Event type.
 	 * @return string Impact level.
 	 */
@@ -479,7 +479,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get last top-severity issue date.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return int|null Timestamp or null.
 	 */
 	private static function get_last_critical_issue_date(): ?int {
@@ -497,7 +497,7 @@ class Visual_Health_Journey {
 	/**
 	 * Generate share image URL
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $progress Progress data.
 	 * @return string Image URL.
 	 */
@@ -509,7 +509,7 @@ class Visual_Health_Journey {
 	/**
 	 * Render journey HTML
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $journey Journey data.
 	 * @return string HTML output.
 	 */
@@ -615,7 +615,7 @@ class Visual_Health_Journey {
 	/**
 	 * Get achievement badge CSS class.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $achievement_id Achievement identifier.
 	 * @return string Badge class name.
 	 */

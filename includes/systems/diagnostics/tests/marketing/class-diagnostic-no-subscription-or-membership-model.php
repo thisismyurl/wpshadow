@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * One $100 customer buying once is worth $100. One $10/month customer is worth
  * $600+/year. Subscriptions improve business valuation dramatically.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Subscription_Or_Membership_Model extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Subscription_Or_Membership_Model extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_No_Subscription_Or_Membership_Model extends Diagnostic_Base {
 	/**
 	 * Check if subscriptions exist
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if subscriptions detected
 	 */
 	private static function check_subscriptions(): bool {
@@ -121,7 +121,7 @@ class Diagnostic_No_Subscription_Or_Membership_Model extends Diagnostic_Base {
 	/**
 	 * Get subscription models
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of subscription models
 	 */
 	private static function get_subscription_models(): array {

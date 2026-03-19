@@ -27,7 +27,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-admin-performance\n * - Video: https://wpshadow.com/training/debugging-slow-admin (7 min)\n * - Advanced: https://wpshadow.com/training/plugin-profiling (12 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects admin pages with excessive load times, large DOM trees, or heavy resource usage.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Diagnostic_Plugin_Admin_Page_Performance extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Plugin_Admin_Page_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,15 +93,15 @@ class Diagnostic_Plugin_Admin_Page_Performance extends Diagnostic_Base {
 		$slow_patterns = array(
 			'woocommerce'       => array( 'threshold' => 2.0, 'name' => 'WooCommerce' ),
 			'elementor'         => array( 'threshold' => 2.5, 'name' => 'Elementor' ),
-			'wp-rocket'         => array( 'threshold' => 1.5, 'name' => 'WP Rocket' ),
-			'yoast'             => array( 'threshold' => 1.5, 'name' => 'Yoast SEO' ),
+			'wp-rocket'         => array( 'threshold' =>1.0, 'name' => 'WP Rocket' ),
+			'yoast'             => array( 'threshold' =>1.0, 'name' => 'Yoast SEO' ),
 			'jetpack'           => array( 'threshold' => 2.0, 'name' => 'Jetpack' ),
 			'wordfence'         => array( 'threshold' => 2.0, 'name' => 'Wordfence' ),
-			'wpforms'           => array( 'threshold' => 1.5, 'name' => 'WPForms' ),
-			'gravityforms'      => array( 'threshold' => 1.8, 'name' => 'Gravity Forms' ),
-			'contact-form-7'    => array( 'threshold' => 1.2, 'name' => 'Contact Form 7' ),
+			'wpforms'           => array( 'threshold' =>1.0, 'name' => 'WPForms' ),
+			'gravityforms'      => array( 'threshold' =>1.0, 'name' => 'Gravity Forms' ),
+			'contact-form-7'    => array( 'threshold' =>1.0, 'name' => 'Contact Form 7' ),
 			'wp-all-import'     => array( 'threshold' => 2.5, 'name' => 'WP All Import' ),
-			'advanced-custom-fields' => array( 'threshold' => 1.5, 'name' => 'Advanced Custom Fields' ),
+			'advanced-custom-fields' => array( 'threshold' =>1.0, 'name' => 'Advanced Custom Fields' ),
 		);
 
 		// Check active plugins for known slow admin pages.

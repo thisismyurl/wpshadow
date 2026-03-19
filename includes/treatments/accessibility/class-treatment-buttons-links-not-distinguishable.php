@@ -4,7 +4,7 @@
  *
  * Checks if buttons and links are semantically and visually distinct.
  *
- * @since   1.6035.1400
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that buttons and links use correct semantics and are visually distinct.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Treatment_Buttons_Links_Not_Distinguishable extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Buttons_Links_Not_Distinguishable extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

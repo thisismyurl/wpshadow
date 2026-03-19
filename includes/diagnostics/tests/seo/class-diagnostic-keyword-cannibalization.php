@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when multiple pages target the same keyword, splitting ranking
  * power and confusing search engines about which page to rank.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Keyword_Cannibalization extends Diagnostic_Base {
 

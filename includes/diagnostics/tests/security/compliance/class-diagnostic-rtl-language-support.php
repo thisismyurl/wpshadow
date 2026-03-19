@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - UI breaking in RTL is like app breaking on mobile - it excludes markets
  * - Logical CSS is better for responsive design anyway
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'rtl-language-support';
@@ -56,7 +56,7 @@ class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'UI Not Ready for Right-to-Left Languages';
@@ -64,7 +64,7 @@ class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if UI properly supports RTL languages (Arabic, Hebrew, Urdu, Persian)';
@@ -72,7 +72,7 @@ class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'compliance';
@@ -80,7 +80,7 @@ class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

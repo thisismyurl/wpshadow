@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if WordPress image editor supports touch-based
  * interactions for mobile and tablet users.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 	 * Tests if WordPress image editor is functional and usable
 	 * on touch devices.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

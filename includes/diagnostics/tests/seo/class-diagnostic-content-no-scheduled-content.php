@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site has scheduled posts ready. A buffer of scheduled content
  * improves consistency and reduces publishing stress.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_No_Scheduled_Content extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_No_Scheduled_Content extends Diagnostic_Base {
 	 * Checks if site has posts scheduled for future publication. Recommended
 	 * buffer is 2-4 weeks of scheduled content.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

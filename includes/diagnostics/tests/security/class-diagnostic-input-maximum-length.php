@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1010
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Unbounded inputs enable DOS attacks and database errors. Ensures text fields
  * have maxlength attributes with reasonable limits.
  *
- * @since 1.6035.1010
+ * @since 1.6093.1200
  */
 class Diagnostic_Input_Maximum_Length extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Input_Maximum_Length extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1010
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

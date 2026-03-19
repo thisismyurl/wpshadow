@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1040
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enhanced E-commerce shows which products sell, where shoppers abandon,
  * and checkout friction points. Without it, you're guessing what to fix.
  *
- * @since 1.6035.1040
+ * @since 1.6093.1200
  */
 class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1040
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 	/**
 	 * Check if Enhanced E-commerce is enabled.
 	 *
-	 * @since  1.6035.1040
+	 * @since 1.6093.1200
 	 * @return bool True if enabled.
 	 */
 	private static function check_enhanced_ecommerce(): bool {
@@ -185,7 +185,7 @@ class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 	/**
 	 * Check if product impression tracking exists.
 	 *
-	 * @since  1.6035.1040
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_product_impressions(): bool {
@@ -196,7 +196,7 @@ class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 	/**
 	 * Check if add-to-cart events are tracked.
 	 *
-	 * @since  1.6035.1040
+	 * @since 1.6093.1200
 	 * @return bool True if events tracked.
 	 */
 	private static function check_add_to_cart_events(): bool {
@@ -207,7 +207,7 @@ class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 	/**
 	 * Check if checkout funnel is configured.
 	 *
-	 * @since  1.6035.1040
+	 * @since 1.6093.1200
 	 * @return bool True if funnel exists.
 	 */
 	private static function check_checkout_funnel(): bool {
@@ -218,7 +218,7 @@ class Diagnostic_Ecommerce_Enhanced_Analytics extends Diagnostic_Base {
 	/**
 	 * Check if purchase revenue tracking exists.
 	 *
-	 * @since  1.6035.1040
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_revenue_tracking(): bool {

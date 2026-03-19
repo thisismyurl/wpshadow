@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * leaves, knowledge walks out the door. Documented processes are trainable,
  * delegable, and scalable.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Scalable_Systems_Or_Process_Documentation extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Scalable_Systems_Or_Process_Documentation extends Diagnostic
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Scalable_Systems_Or_Process_Documentation extends Diagnostic
 	/**
 	 * Check documentation completeness
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return int Documentation score 0-100
 	 */
 	private static function check_documentation_completeness(): int {
@@ -138,7 +138,7 @@ class Diagnostic_No_Scalable_Systems_Or_Process_Documentation extends Diagnostic
 	/**
 	 * Get critical processes to document
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of critical processes
 	 */
 	private static function get_critical_processes(): array {
@@ -185,7 +185,7 @@ class Diagnostic_No_Scalable_Systems_Or_Process_Documentation extends Diagnostic
 	/**
 	 * Get documentation methods
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of documentation methods
 	 */
 	private static function get_documentation_methods(): array {

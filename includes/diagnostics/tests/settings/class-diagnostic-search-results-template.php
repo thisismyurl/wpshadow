@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks search template implementation.
  *
- * @since 1.6032.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Search_Results_Template extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Search_Results_Template extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

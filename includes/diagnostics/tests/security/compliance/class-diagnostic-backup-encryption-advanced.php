@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Advanced verification that database and file backups are encrypted
  * with strong algorithms to meet GDPR and compliance requirements.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Encryption_Advanced extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Encryption_Advanced extends Diagnostic_Base {
 	/**
 	 * Run the backup encryption status check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup encryption not configured, null otherwise.
 	 */
 	public static function check() {

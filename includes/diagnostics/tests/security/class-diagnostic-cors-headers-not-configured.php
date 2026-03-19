@@ -17,7 +17,7 @@
  * CORS security guide: https://wpshadow.com/kb/wordpress-cors-configuration\n * Video: Configuring CORS safely (10min): https://wpshadow.com/training/cors-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer builds WordPress API for mobile app. Needs CORS for frontend calls.\n * Sets header: \"Access-Control-Allow-Origin: *\" (simplest solution). Forgot\n * to restrict origins. Attacker finds API documentation, creates webpage that\n * calls API (CORS allows any domain). Redirects users via social media link.\n * API accessed from attacker.com with user credentials. User data exfiltrated.\n *
  * **Implementation Notes:**
  * - Tests actual header response\n * - Validates allowed origins whitelist\n * - Checks credentials handling\n * - Severity: critical (wildcard origin), high (unvalidated)\n * - Treatment: restrict CORS to known domains\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_CORS_Headers_Not_Configured extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_CORS_Headers_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

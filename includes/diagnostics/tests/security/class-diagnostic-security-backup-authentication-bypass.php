@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects emergency admin accounts, hardcoded credentials, and authentication
  * backdoors in plugins/themes.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Security_Backup_Authentication_Bypass extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Security_Backup_Authentication_Bypass extends Diagnostic_Base {
 	 * - Hardcoded authentication in code
 	 * - Authentication filter bypasses
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

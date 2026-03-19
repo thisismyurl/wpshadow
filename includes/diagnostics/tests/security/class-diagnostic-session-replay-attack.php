@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2108
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * capturing and reusing authentication tokens, even after the original
  * session has ended.
  *
- * @since 1.2033.2108
+ * @since 1.6093.1200
  */
 class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-replay-attack';
@@ -51,7 +51,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Replay Attack Vulnerability';
@@ -59,7 +59,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects session replay attack vulnerabilities';
@@ -67,7 +67,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	 *
 	 * Validates session replay protections.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -177,7 +177,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check if sessions bind to IP addresses.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if IP binding found.
 	 */
 	private static function check_ip_binding() {
@@ -201,7 +201,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check user agent validation.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if validation found.
 	 */
 	private static function check_user_agent_validation() {
@@ -213,7 +213,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check session rotation on privilege change.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if rotation found.
 	 */
 	private static function check_session_rotation_on_privilege_change() {
@@ -224,7 +224,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check timestamp validation.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if validation found.
 	 */
 	private static function check_timestamp_validation() {
@@ -254,7 +254,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check session token entropy.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if sufficient.
 	 */
 	private static function check_session_token_entropy() {
@@ -277,7 +277,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check logout invalidation.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if invalidation found.
 	 */
 	private static function check_logout_invalidation() {
@@ -288,7 +288,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check for security plugin features.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @param  string $feature Feature identifier.
 	 * @return bool True if found.
 	 */
@@ -310,7 +310,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

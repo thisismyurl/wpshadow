@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates WordPress core update recommendations for accuracy.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 	 *
 	 * Tests for outdated core recommendations.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -128,7 +128,7 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 	/**
 	 * Check version current status.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_version_current_status() {
@@ -147,6 +147,14 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 		}
 
 		// Check for minor version recommendations
+		if ( ! function_exists( 'get_core_updates' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/update.php';
+		}
+
+		if ( ! function_exists( 'get_core_updates' ) ) {
+			return null;
+		}
+
 		$core_updates = get_core_updates();
 		if ( empty( $core_updates ) ) {
 			return null; // Up to date
@@ -169,7 +177,7 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 	/**
 	 * Check for deprecated recommendations.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_deprecated_recommendations() {
@@ -200,7 +208,7 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 	/**
 	 * Check for incompatible advice.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_incompatible_advice() {
@@ -243,7 +251,7 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 	/**
 	 * Check hosting recommendations.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_hosting_recommendations() {
@@ -268,7 +276,7 @@ class Diagnostic_Outdated_WordPress_Core_Recommendations extends Diagnostic_Base
 	/**
 	 * Check security recommendations accuracy.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_security_recommendations() {

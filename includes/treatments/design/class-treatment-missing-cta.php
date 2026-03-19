@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Design
- * @since      1.7030.1508
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Adds CTA framework and tools to help users add calls-to-action.
  * Provides shortcodes, templates, and guidance for effective CTAs.
  *
- * @since 1.7030.1508
+ * @since 1.6093.1200
  */
 class Treatment_Missing_CTA extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.7030.1508
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -45,7 +45,7 @@ class Treatment_Missing_CTA extends Treatment_Base {
 	 *
 	 * Installs CTA framework with shortcodes and templates.
 	 *
-	 * @since  1.7030.1508
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -113,7 +113,7 @@ class Treatment_Missing_CTA extends Treatment_Base {
 	/**
 	 * Get MU plugin code for CTA system.
 	 *
-	 * @since  1.7030.1508
+	 * @since 1.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_cta_mu_plugin_code() {
@@ -126,7 +126,7 @@ class Treatment_Missing_CTA extends Treatment_Base {
  * Created by WPShadow design treatment.
  *
  * @package WPShadow
- * @since   1.7030.1508
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

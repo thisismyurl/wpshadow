@@ -4,7 +4,7 @@
  *
  * Validates REST API authentication and permission implementations.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API authentication and permission issues.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Treatment_REST_API_Authentication extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_REST_API_Authentication extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

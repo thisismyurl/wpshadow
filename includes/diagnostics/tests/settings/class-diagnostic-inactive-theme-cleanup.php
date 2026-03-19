@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1340
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for inactive theme cleanup.
  *
- * @since 1.6032.1340
+ * @since 1.6093.1200
  */
 class Diagnostic_Inactive_Theme_Cleanup extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Inactive_Theme_Cleanup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -252,7 +252,7 @@ class Diagnostic_Inactive_Theme_Cleanup extends Diagnostic_Base {
 	/**
 	 * Calculate directory size recursively.
 	 *
-	 * @since  1.6032.1340
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @return int Total directory size in bytes.
 	 */

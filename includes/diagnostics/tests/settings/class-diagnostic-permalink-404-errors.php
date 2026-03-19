@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for broken permalinks and URL accessibility issues.
  *
- * @since 1.6032.1401
+ * @since 1.6093.1200
  */
 class Diagnostic_Permalink_404_Errors extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Permalink_404_Errors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1401
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -181,7 +181,7 @@ class Diagnostic_Permalink_404_Errors extends Diagnostic_Base {
 	/**
 	 * Get URLs to test for accessibility.
 	 *
-	 * @since  1.6032.1401
+	 * @since 1.6093.1200
 	 * @return array Array of test URLs keyed by type.
 	 */
 	private static function get_test_urls(): array {
@@ -225,7 +225,7 @@ class Diagnostic_Permalink_404_Errors extends Diagnostic_Base {
 	/**
 	 * Check custom post type permalink configuration.
 	 *
-	 * @since  1.6032.1401
+	 * @since 1.6093.1200
 	 * @return array Array of issues found.
 	 */
 	private static function check_custom_post_type_permalinks(): array {
@@ -260,7 +260,7 @@ class Diagnostic_Permalink_404_Errors extends Diagnostic_Base {
 	/**
 	 * Check permalink structure for common problems.
 	 *
-	 * @since  1.6032.1401
+	 * @since 1.6093.1200
 	 * @return array Array of issues found.
 	 */
 	private static function check_permalink_structure(): array {

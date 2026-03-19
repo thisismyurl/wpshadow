@@ -5,7 +5,7 @@
  * Critical for publishers: measures Google Core Web Vitals (LCP, FID, CLS)
  * which directly impact SEO rankings and audience reach.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures Core Web Vitals: Largest Contentful Paint (LCP), First Input Delay (FID),
  * and Cumulative Layout Shift (CLS). High priority for publishers focused on SEO.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
     /**
      * Run the diagnostic check
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
@@ -153,7 +153,7 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
     /**
      * Fetch Core Web Vitals from Google PageSpeed Insights API
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array|false Array with LCP, FID, CLS, or false on error.
      */
     private static function fetch_cwv_from_pagespeed_insights() {

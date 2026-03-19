@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing global error handler.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 		}
 
 		// Development site with errors displayed to public.
-		if ( $wp_debug && $wp_debug_display && ! is_local_environment() ) {
+		if ( $wp_debug && $wp_debug_display && ! self::is_local_environment() ) {
 			return array(
 				'id'          => self::$slug,
 				'title'       => __( 'Debug Display Enabled in Production', 'wpshadow' ),
@@ -149,7 +149,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Check if site is in local development environment.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return bool True if local environment.
 	 */
 	private static function is_local_environment() {

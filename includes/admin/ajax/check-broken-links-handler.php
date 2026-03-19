@@ -4,7 +4,7 @@
  *
  * Uses diagnostic system for broken link checking.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow
  */
 
@@ -24,13 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Refactored to use existing diagnostic system.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX handler.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_check_broken_links', array( __CLASS__, 'handle' ) );
@@ -39,7 +39,7 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle broken link check request using diagnostic system.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_link_check', 'read', 'nonce' );

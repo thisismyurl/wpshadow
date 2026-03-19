@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Guardian
- * @since      1.6004.0300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides interface to WPShadow Guardian cloud scanning services.
  * Handles authentication, token management, and scan requests.
  *
- * @since 1.6004.0300
+ * @since 1.6093.1200
  */
 class Guardian_API_Client {
 
 	/**
 	 * Guardian API base URL.
 	 *
-	 * @since 1.6004.0300
+	 * @since 1.6093.1200
 	 * @var string
 	 */
 	const API_BASE_URL = 'https://guardian.wpshadow.com/api/v1';
@@ -41,7 +41,7 @@ class Guardian_API_Client {
 	/**
 	 * API version.
 	 *
-	 * @since 1.6004.0300
+	 * @since 1.6093.1200
 	 * @var string
 	 */
 	const API_VERSION = '1.0';
@@ -49,7 +49,7 @@ class Guardian_API_Client {
 	/**
 	 * Check if Guardian is available.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return bool True if Guardian service is reachable.
 	 */
 	public static function is_available() {
@@ -89,7 +89,7 @@ class Guardian_API_Client {
 	/**
 	 * Check if user is connected to Guardian.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return bool True if API key exists and is valid.
 	 */
 	public static function is_connected() {
@@ -126,7 +126,7 @@ class Guardian_API_Client {
 	/**
 	 * Get stored API key.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return string API key or empty string.
 	 */
 	public static function get_api_key() {
@@ -136,7 +136,7 @@ class Guardian_API_Client {
 	/**
 	 * Store API key.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $api_key API key to store.
 	 * @return bool True on success.
 	 */
@@ -153,7 +153,7 @@ class Guardian_API_Client {
 	/**
 	 * Disconnect from Guardian (remove API key).
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return bool True on success.
 	 */
 	public static function disconnect() {
@@ -175,7 +175,7 @@ class Guardian_API_Client {
 	/**
 	 * Validate API key with Guardian service.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $api_key API key to validate.
 	 * @return bool True if valid.
 	 */
@@ -199,7 +199,7 @@ class Guardian_API_Client {
 	/**
 	 * Get account information from Guardian.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return array|WP_Error Account info or error.
 	 */
 	public static function get_account_info() {
@@ -236,7 +236,7 @@ class Guardian_API_Client {
 	/**
 	 * Get token balance.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return int|WP_Error Token balance or error.
 	 */
 	public static function get_token_balance() {
@@ -252,7 +252,7 @@ class Guardian_API_Client {
 	/**
 	 * Request a Guardian scan.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $scan_type Type of scan: 'security', 'performance', 'seo', 'full'.
 	 * @param  array  $options Scan options.
 	 * @return array|WP_Error Scan result or error.
@@ -323,7 +323,7 @@ class Guardian_API_Client {
 	/**
 	 * Get scan results.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $scan_id Scan ID.
 	 * @return array|WP_Error Scan results or error.
 	 */
@@ -344,7 +344,7 @@ class Guardian_API_Client {
 	/**
 	 * Make API request to Guardian.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $endpoint API endpoint (without base URL).
 	 * @param  array  $args Request arguments.
 	 * @return array|WP_Error Response data or error.
@@ -394,7 +394,7 @@ class Guardian_API_Client {
 	 *
 	 * Only sends non-sensitive information needed for analysis.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $scan_type Type of scan.
 	 * @return array Site data.
 	 */
@@ -436,7 +436,7 @@ class Guardian_API_Client {
 	/**
 	 * Store scan record in database.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $scan_id Scan ID.
 	 * @param  string $scan_type Scan type.
 	 * @return void
@@ -459,7 +459,7 @@ class Guardian_API_Client {
 	/**
 	 * Get user agent string.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return string User agent.
 	 */
 	private static function get_user_agent() {
@@ -473,7 +473,7 @@ class Guardian_API_Client {
 	/**
 	 * Get recent scans.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  int $limit Number of scans to return.
 	 * @return array Recent scans.
 	 */
@@ -485,7 +485,7 @@ class Guardian_API_Client {
 	/**
 	 * Get pricing information.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return array Pricing tiers.
 	 */
 	public static function get_pricing() {

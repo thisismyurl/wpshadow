@@ -4,7 +4,7 @@
  *
  * Validates that keyboard users can escape from all interactive elements.
  *
- * @since   1.6035.1200
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for potential keyboard traps in modals, dropdowns, and custom widgets (WCAG 2.1.2 Level A).
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Treatment_WCAG_Keyboard_Trap extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_WCAG_Keyboard_Trap extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

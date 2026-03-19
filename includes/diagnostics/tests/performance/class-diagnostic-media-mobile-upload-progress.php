@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1635
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests if mobile upload progress indicators are properly implemented,
  * providing feedback on slow network connections during media uploads.
  *
- * @since 1.6033.1635
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Mobile_Upload_Progress extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Mobile_Upload_Progress extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6033.1635
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since      1.602.1250
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks anchor link implementation for mobile smooth scrolling, proper
  * offset calculations, and accessibility.
  *
- * @since 1.602.1250
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1250
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -273,7 +273,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 	/**
 	 * Check anchor link implementation.
 	 *
-	 * @since  1.602.1250
+	 * @since 1.6093.1200
 	 * @return array Check results.
 	 */
 	private static function check_anchor_links() {
@@ -331,7 +331,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since  1.602.1250
+	 * @since 1.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

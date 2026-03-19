@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\UX
- * @since      1.6035.2300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if AJAX error handlers show technical errors to users instead of friendly messages.
  *
- * @since 1.6035.2300
+ * @since 1.6093.1200
  */
 class Treatment_AJAX_Technical_Errors extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_AJAX_Technical_Errors extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6035.2300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {

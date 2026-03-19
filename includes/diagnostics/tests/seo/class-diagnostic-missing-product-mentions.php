@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2157
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Product names in site title/tagline
  * - Service-related keywords
  *
- * @since 1.6034.2157
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Product_Mentions extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Missing_Product_Mentions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2157
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if posts lack product mentions, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Missing_Product_Mentions extends Diagnostic_Base {
 	/**
 	 * Get product/service keywords from various sources
 	 *
-	 * @since  1.6034.2157
+	 * @since 1.6093.1200
 	 * @return array Array of product/service keywords.
 	 */
 	private static function get_product_keywords() {

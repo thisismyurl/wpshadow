@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Pages
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages API key configuration, encryption, and connection testing for
  * free security database integrations.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Security_API_Settings_Page extends Settings_Page_Base {
 
@@ -55,7 +55,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Initialize the page
 	 *
-	 * @since 1.6035.0000
+	 * @since 1.6093.1200
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -68,7 +68,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Render the page
 	 *
-	 * @since 1.6035.0000
+	 * @since 1.6093.1200
 	 */
 	public function render(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -656,7 +656,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Test API connection
 	 *
-	 * @since 1.6035.0000
+	 * @since 1.6093.1200
 	 */
 	public function ajax_test_connection() {
 		check_ajax_referer( 'wpshadow_test_api_connection', 'nonce' );
@@ -684,7 +684,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Save API keys
 	 *
-	 * @since 1.6035.0000
+	 * @since 1.6093.1200
 	 */
 	public function ajax_save_api_keys() {
 		check_ajax_referer( 'wpshadow_save_api_settings', 'nonce' );

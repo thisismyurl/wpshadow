@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Comment Backtrace Diagnostic Class
  *
- * @since 1.6031.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Backtrace_Generation extends Diagnostic_Base {
 
@@ -35,7 +35,7 @@ class Diagnostic_Comment_Backtrace_Generation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6031.1300
+	 * @since 1.6093.1200
 	 * @return array|null
 	 */
 	public static function check() {

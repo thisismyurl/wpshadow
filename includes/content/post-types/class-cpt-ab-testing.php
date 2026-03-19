@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since      1.6365.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles A/B testing functionality for custom post types with statistical analysis.
  *
- * @since 1.6365.2359
+ * @since 1.6093.1200
  */
 class CPT_AB_Testing extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -58,7 +58,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Register A/B testing admin page.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_ab_testing_page(): void {
@@ -75,7 +75,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -111,7 +111,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Render A/B testing admin page.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_ab_testing_page(): void {
@@ -190,7 +190,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Handle create A/B test AJAX request.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_create_test(): void {
@@ -228,7 +228,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Handle get results AJAX request.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_get_results(): void {
@@ -255,7 +255,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Handle A/B test display.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_ab_test_display(): void {
@@ -289,7 +289,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Inject A/B variant content.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  string $content Post content.
 	 * @return string Modified content.
 	 */
@@ -323,7 +323,7 @@ class CPT_AB_Testing extends Hook_Subscriber_Base {
 	/**
 	 * Track conversion.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function track_conversion(): void {

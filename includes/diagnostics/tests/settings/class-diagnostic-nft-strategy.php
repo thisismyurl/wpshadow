@@ -4,7 +4,7 @@
  *
  * Tests whether the site implements NFTs for community building or revenue generation.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Non-fungible tokens (NFTs) can be used for digital collectibles, membership access,
  * exclusive content, and community engagement, creating new revenue streams.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Nft_Strategy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Nft_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -182,7 +182,7 @@ class Diagnostic_Nft_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for NFT-related content.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if NFT content exists, false otherwise.
 	 */
 	private static function check_nft_content() {
@@ -218,7 +218,7 @@ class Diagnostic_Nft_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for wallet integration.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if wallet integration exists, false otherwise.
 	 */
 	private static function check_wallet_integration() {
@@ -240,7 +240,7 @@ class Diagnostic_Nft_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for smart contract integration.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if smart contract integration exists, false otherwise.
 	 */
 	private static function check_smart_contract_integration() {
@@ -251,7 +251,7 @@ class Diagnostic_Nft_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for marketplace features.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if marketplace features exist, false otherwise.
 	 */
 	private static function check_marketplace_features() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Forms
- * @since      1.602.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures forms use appropriate HTML5 input types (email, tel, url, number)
  * to trigger correct mobile keyboards, improving user experience.
  *
- * @since 1.602.1445
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Input_Type extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Find input type issues in forms.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_input_type_issues(): array {
@@ -120,7 +120,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Check for email fields using type="text".
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Email field issues.
 	 */
@@ -154,7 +154,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Check for phone fields using type="text".
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Phone field issues.
 	 */
@@ -187,7 +187,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Check for URL fields using type="text".
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array URL field issues.
 	 */
@@ -220,7 +220,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Check for number fields using type="text".
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Number field issues.
 	 */
@@ -253,7 +253,7 @@ class Treatment_Mobile_Input_Type extends Treatment_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

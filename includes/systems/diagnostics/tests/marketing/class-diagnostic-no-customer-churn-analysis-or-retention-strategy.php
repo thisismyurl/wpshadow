@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * A 5% increase in retention yields 25-95% increase in profit.
  * Retention is your foundation.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Churn_Analysis_Or_Retention_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Churn_Analysis_Or_Retention_Strategy extends Diagno
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Churn_Analysis_Or_Retention_Strategy extends Diagno
 	/**
 	 * Check if churn analysis exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if analysis detected, false otherwise.
 	 */
 	private static function has_churn_analysis() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Customer_Churn_Analysis_Or_Retention_Strategy extends Diagno
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Customer_Churn_Analysis_Or_Retention_Strategy extends Diagno
 	/**
 	 * Get churn metrics to track.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Churn metrics with definitions.
 	 */
 	private static function get_churn_metrics() {
@@ -174,7 +174,7 @@ class Diagnostic_No_Customer_Churn_Analysis_Or_Retention_Strategy extends Diagno
 	/**
 	 * Get retention improvement strategies.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Retention strategies.
 	 */
 	private static function get_retention_strategies() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies alerts trigger when performance degrades.
  * Like getting notified when your store is too crowded or slow.
  *
- * @since 1.6035.1630
+ * @since 1.6093.1200
  */
 class Diagnostic_Performance_Alerts extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Performance_Alerts extends Diagnostic_Base {
 	/**
 	 * Run the performance alerts diagnostic check.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if alerts not configured, null otherwise.
 	 */
 	public static function check() {

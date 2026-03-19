@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7030.1529
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds skip navigation link via hook.
  *
- * @since 1.7030.1529
+ * @since 1.6093.1200
  */
 class Treatment_No_Skip_Links extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.7030.1529
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	 *
 	 * Adds skip link via WordPress hook and injects CSS for styling.
 	 *
-	 * @since  1.7030.1529
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -87,7 +87,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	/**
 	 * Add skip link HTML.
 	 *
-	 * @since 1.7030.1529
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_skip_link() {
@@ -101,7 +101,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	/**
 	 * Add skip link CSS.
 	 *
-	 * @since 1.7030.1529
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_skip_link_css() {
@@ -160,7 +160,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	/**
 	 * Remove the skip link treatment.
 	 *
-	 * @since 1.7030.1529
+	 * @since 1.6093.1200
 	 * @return bool Success status.
 	 */
 	public static function remove() {

@@ -4,7 +4,7 @@
  *
  * Validates that keyboard focus indicators are visible.
  *
- * @since   1.6035.1200
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for visible keyboard focus indicators (WCAG 2.4.7 Level AA).
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Treatment_WCAG_Focus_Visible extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_WCAG_Focus_Visible extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

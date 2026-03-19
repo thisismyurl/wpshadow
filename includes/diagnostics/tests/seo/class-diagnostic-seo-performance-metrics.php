@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has proper SEO tracking and
  * analytics implementation for measuring SEO performance.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 	/**
 	 * Run the SEO performance metrics diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if SEO metrics tracking issues detected, null otherwise.
 	 */
 	public static function check() {

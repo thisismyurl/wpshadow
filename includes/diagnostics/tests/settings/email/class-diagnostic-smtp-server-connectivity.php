@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1730
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * server. This is like checking if your phone line works before trying to
  * make a call - without a working connection, emails will fail silently.
  *
- * @since 1.6035.1730
+ * @since 1.6093.1200
  */
 class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Run the SMTP server connectivity diagnostic check.
 	 *
-	 * @since  1.6035.1730
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if connection issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -151,7 +151,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Get SMTP configuration from various sources.
 	 *
-	 * @since  1.6035.1730
+	 * @since 1.6093.1200
 	 * @return array|null SMTP configuration array or null if not configured.
 	 */
 	private static function get_smtp_configuration() {
@@ -214,7 +214,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Test SMTP connection to a specific host and port.
 	 *
-	 * @since  1.6035.1730
+	 * @since 1.6093.1200
 	 * @param  string $host SMTP host.
 	 * @param  int    $port SMTP port.
 	 * @return array {

@@ -4,7 +4,7 @@
  *
  * Tests if keyword rankings are actively monitored.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that target keywords are tracked using tools or reports.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Tracks_Target_Keywords extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Tracks_Target_Keywords extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Tracks_Target_Keywords extends Diagnostic_Base {
 	/**
 	 * Check for rank tracking plugins or integrations.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return bool True if detected.
 	 */
 	private static function has_rank_tracking_plugin() {

@@ -4,7 +4,7 @@
  *
  * Validates REST API response caching and performance optimization.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API response caching and performance issues.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -69,7 +69,8 @@ class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 
 		if ( ! headers_sent() ) {
 			// Check if Cache-Control header would be sent
-			$cache_header      = get_http_header( 'Cache-Control' );
+			// Note: get_http_header() doesn't exist; skip this check in CLI/non-request context
+			$cache_header      = isset( $_SERVER['HTTP_CACHE_CONTROL'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_CACHE_CONTROL'] ) ) : '';
 			$has_cache_headers = ! empty( $cache_header );
 		}
 
@@ -211,7 +212,8 @@ add_filter('rest_post_query', function(\$args) {
 		}
 
 		// Pattern 3: REST API missing compression
-		$gzip_enabled = in_array( 'gzip', explode( ',', get_http_header( 'Accept-Encoding' ) ?? '' ), true );
+		$accept_encoding = isset( $_SERVER['HTTP_ACCEPT_ENCODING'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_ACCEPT_ENCODING'] ) ) : '';
+		$gzip_enabled = strpos( $accept_encoding, 'gzip' ) !== false;
 
 		if ( ! $gzip_enabled ) {
 			return array(

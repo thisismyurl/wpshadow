@@ -4,7 +4,7 @@
  *
  * Critical for corporate/compliance: ensures admin actions are being logged for audit trails.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies admin action logging is active and entries are being recorded.
  * High priority for corporate compliance and regulatory requirements.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Audit_Log_Activity extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Audit_Log_Activity extends Diagnostic_Base {
     /**
      * Run the diagnostic check
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {

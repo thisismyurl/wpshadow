@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for comment moderation and configuration.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Comments_Settings_Not_Properly_Configured extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Comments_Settings_Not_Properly_Configured extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Comments_Settings_Not_Properly_Configured extends Diagnostic_Ba
 		}
 
 		// Check blacklist/whitelist.
-		$comment_blacklist = get_option( 'blacklist_keys' );
+		$comment_blacklist = get_option( 'disallowed_keys', '' );
 
 		if ( empty( $comment_blacklist ) ) {
 			$issues[] = __( 'No comment blacklist configured - unable to filter spam keywords', 'wpshadow' );

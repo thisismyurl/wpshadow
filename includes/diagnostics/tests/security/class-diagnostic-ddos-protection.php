@@ -4,7 +4,7 @@
  *
  * Analyzes DDoS protection and rate limiting configuration.
  *
- * @since   1.6033.2145
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates DDoS protection mechanisms and rate limiting.
  *
- * @since 1.6033.2145
+ * @since 1.6093.1200
  */
 class Diagnostic_DDoS_Protection extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_DDoS_Protection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2145
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

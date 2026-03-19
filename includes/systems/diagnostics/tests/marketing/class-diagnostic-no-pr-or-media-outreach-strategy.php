@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when there is no visible press kit or media page. Press coverage
  * builds credibility quickly and can create lasting trust signals.
  *
- * @since 1.6035.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Pr_Or_Media_Outreach_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Pr_Or_Media_Outreach_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Pr_Or_Media_Outreach_Strategy extends Diagnostic_Base {
 	/**
 	 * Count press-related pages or posts.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return int Number of press assets found.
 	 */
 	private static function count_press_assets(): int {
@@ -108,7 +108,7 @@ class Diagnostic_No_Pr_Or_Media_Outreach_Strategy extends Diagnostic_Base {
 	/**
 	 * Count posts/pages containing any keyword.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Count of matching posts/pages.
 	 */
@@ -131,7 +131,7 @@ class Diagnostic_No_Pr_Or_Media_Outreach_Strategy extends Diagnostic_Base {
 	/**
 	 * Provide examples of press kit items.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return array Press kit items.
 	 */
 	private static function get_press_kit_items(): array {

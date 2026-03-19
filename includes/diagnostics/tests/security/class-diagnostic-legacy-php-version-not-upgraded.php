@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses phpversion() function (requires PHP access)\n * - Checks against official PHP support timeline\n * - Returns severity: high (EOL version), medium (version nearing EOL)\n * - Non-fixable diagnostic (requires hosting provider support)\n *
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Legacy_PHP_Version_Not_Upgraded extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Legacy_PHP_Version_Not_Upgraded extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1635
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests if REST API media upload endpoints enforce file type restrictions,
  * size limits, and proper security checks before accepting uploads.
  *
- * @since 1.6033.1635
+ * @since 1.6093.1200
  */
 class Diagnostic_REST_API_Media_Upload extends Diagnostic_Base {
 
@@ -60,11 +60,16 @@ class Diagnostic_REST_API_Media_Upload extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6033.1635
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
-		if ( ! rest_is_enabled() ) {
+		$rest_enabled = false;
+		if ( function_exists( 'rest_get_server' ) ) {
+			$rest_enabled = (bool) rest_get_server();
+		}
+
+		if ( ! $rest_enabled ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

@@ -27,7 +27,7 @@
  * Mobile 3G: font takes 2.5 seconds to load. Headline invisible
  * for 2.5 seconds. 40% users bounce before seeing content.
  * Added font-display: swap + Arial fallback. Headline visible
- * instantly in Arial. Custom font swaps in after 1.2 seconds.
+ * instantly in Arial. Custom font swaps in after1.0 seconds.
  * Bounce rate reduced to 18%. Conversion rate improved 55%.
  * Implementation: 5 minutes CSS change. Revenue impact: +$30K/month.
  *
@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -91,7 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (affects perceived load time)
  * - Treatment: add font-display: swap and system font fallbacks
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Fallback_Font_Loading_Not_Configured extends Diagnostic_Base {
 
@@ -126,7 +126,7 @@ class Diagnostic_Fallback_Font_Loading_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

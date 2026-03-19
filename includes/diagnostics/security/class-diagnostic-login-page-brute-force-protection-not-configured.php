@@ -17,7 +17,7 @@
  * Brute force protection setup: https://wpshadow.com/kb/wordpress-brute-force-protection\n * Video: Implementing login security (10min): https://wpshadow.com/training/brute-force-protection\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site vulnerable to brute force (no plugin protection). Attacker uses\n * common password list (10K passwords). Starts 10 concurrent attack threads.\n * After 1 hour: 100K login attempts sent. Server overloaded (CPU busy validating\n * passwords). Site becomes slow/unusable for legitimate users. With rate limit:\n * 5 failures blocks IP for 15 minutes. Attack defeated in minutes.\n *
  * **Implementation Notes:**
  * - Checks for login rate limiting plugin\n * - Validates failed attempt tracking\n * - Confirms lockout mechanism works\n * - Severity: critical (no protection), high (weak lockout)\n * - Treatment: enable brute force protection plugin\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Login_Page_Brute_Force_Protection_Not_Configured extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Login_Page_Brute_Force_Protection_Not_Configured extends Diagno
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages knowledge base articles and their relationships to diagnostics.
  *
- * @since 1.6089
+ * @since 1.6093.1200
  */
 class KB_Article_Registry extends Hook_Subscriber_Base {
 
@@ -38,7 +38,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6089
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -58,8 +58,8 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Initialize registry (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use KB_Article_Registry::subscribe() instead
-	 * @since      1.6030.1905
+	 * @deprecated1.0 Use KB_Article_Registry::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -69,7 +69,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register all KB articles
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_articles() {
@@ -254,7 +254,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register a KB article
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @param  string $id Article ID.
 	 * @param  array  $data Article data.
 	 * @return void
@@ -266,7 +266,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get article by ID
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @param  string $id Article ID.
 	 * @return array|null Article data or null.
 	 */
@@ -277,7 +277,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get article for diagnostic
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @return array|null Article data or null.
 	 */
@@ -295,7 +295,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get articles by category
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @param  string $category Category slug.
 	 * @return array Articles in category.
 	 */
@@ -315,7 +315,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get all articles
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @return array All registered articles.
 	 */
 	public static function get_all() {
@@ -332,7 +332,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Search articles
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @param  string $query Search query.
 	 * @return array Matching articles.
 	 */
@@ -355,7 +355,7 @@ class KB_Article_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get article categories
 	 *
-	 * @since  1.6030.1905
+	 * @since 1.6093.1200
 	 * @return array Category list with counts.
 	 */
 	public static function get_categories() {

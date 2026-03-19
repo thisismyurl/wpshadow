@@ -5,7 +5,7 @@
  * Adds or fixes the HTML lang attribute so screen readers
  * can pronounce content correctly.
  *
- * @since   1.6050.1200
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds proper lang attribute to <html> element (WCAG 3.1.1 Level A).
  *
- * @since 1.6050.1200
+ * @since 1.6093.1200
  */
 class Treatment_WCAG_Language_Of_Page extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6050.1200
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -43,7 +43,7 @@ class Treatment_WCAG_Language_Of_Page extends Treatment_Base {
 	 *
 	 * Adds proper HTML lang attribute using WordPress language_attributes().
 	 *
-	 * @since  1.6050.1200
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -142,7 +142,7 @@ class Treatment_WCAG_Language_Of_Page extends Treatment_Base {
 	/**
 	 * Apply treatment via filter (fallback method).
 	 *
-	 * @since  1.6050.1200
+	 * @since 1.6093.1200
 	 * @return array Result array.
 	 */
 	private static function apply_via_filter() {
@@ -180,7 +180,7 @@ class Treatment_WCAG_Language_Of_Page extends Treatment_Base {
 	/**
 	 * Get MU plugin code for language filter.
 	 *
-	 * @since  1.6050.1200
+	 * @since 1.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_lang_filter_mu_plugin() {
@@ -193,7 +193,7 @@ class Treatment_WCAG_Language_Of_Page extends Treatment_Base {
  * Created by WPShadow accessibility treatment.
  *
  * @package WPShadow
- * @since   1.6050.1200
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -4,7 +4,7 @@
  *
  * Validates comment section engagement metrics and community activity.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment section engagement and community health indicators.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Comment_Engagement extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Comment_Engagement extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

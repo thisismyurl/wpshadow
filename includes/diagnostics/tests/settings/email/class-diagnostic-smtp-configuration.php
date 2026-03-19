@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * reliable email delivery. Without SMTP, WordPress emails often end up in spam
  * or fail to send completely.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Smtp_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Smtp_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the SMTP configuration diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if SMTP issues detected, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6180
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Central registry for all achievements and their unlock status.
  *
- * @since 1.6180
+ * @since 1.6093.1200
  */
 class Achievement_Registry extends Hook_Subscriber_Base {
 
@@ -39,7 +39,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -49,7 +49,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6180
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -59,8 +59,8 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Initialize achievement registry (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Achievement_Registry::subscribe() instead
-	 * @since      1.6004.0400
+	 * @deprecated1.0 Use Achievement_Registry::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -74,7 +74,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register all achievements.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_achievements() {
@@ -344,7 +344,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register an achievement.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $id          Achievement ID.
 	 * @param  array  $achievement Achievement data.
 	 * @return void
@@ -367,7 +367,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get all registered achievements.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $category Optional. Filter by category.
 	 * @return array Achievements.
 	 */
@@ -387,7 +387,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get achievement definition.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $id Achievement ID.
 	 * @return array|null Achievement data or null.
 	 */
@@ -398,7 +398,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Unlock an achievement for a user.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id       User ID.
 	 * @param  string $achievement_id Achievement ID.
 	 * @return bool True if unlocked (newly or already), false on failure.
@@ -479,7 +479,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Check if user has unlocked an achievement.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id       User ID.
 	 * @param  string $achievement_id Achievement ID.
 	 * @return bool True if unlocked.
@@ -493,7 +493,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get user's unlocked achievements.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Unlocked achievements.
 	 */
@@ -525,7 +525,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get user's locked achievements.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Locked achievements.
 	 */
@@ -543,7 +543,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get achievement progress.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Progress statistics.
 	 */
@@ -591,7 +591,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Show achievement unlocked notification.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id       User ID.
 	 * @param  string $achievement_id Achievement ID.
 	 * @return void
@@ -626,7 +626,7 @@ class Achievement_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get achievement categories.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Categories with labels.
 	 */
 	public static function get_categories() {

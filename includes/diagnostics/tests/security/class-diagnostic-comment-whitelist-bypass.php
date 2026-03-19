@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (direct bypass), medium (partial bypass)
  * - Treatment: enforce strict email validation
  *
- * @since 1.6031.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Whitelist_Bypass extends Diagnostic_Base {
 
@@ -122,14 +122,14 @@ class Diagnostic_Comment_Whitelist_Bypass extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6031.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		$issues = array();
 
 		// Check if comment whitelist/allowlist is enabled.
-		$whitelist_enabled = (int) get_option( 'comment_whitelist', 1 );
+		$whitelist_enabled = (int) get_option( 'comment_previously_approved', 1 );
 
 		if ( 0 === $whitelist_enabled ) {
 			// Whitelist is disabled - anyone can comment without moderation.

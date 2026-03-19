@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if upload progress is properly displayed for mobile users
  * with touch-friendly UI elements.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Upload_Progress_Indicators extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Mobile_Upload_Progress_Indicators extends Diagnostic_Base {
 	 * Tests if WordPress provides adequate upload progress feedback
 	 * for mobile users.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

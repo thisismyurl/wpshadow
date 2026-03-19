@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects posts with no incoming internal links. Orphaned content is hard
  * for users and search engines to discover, leading to poor rankings.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Orphan_Content extends Diagnostic_Base {
 

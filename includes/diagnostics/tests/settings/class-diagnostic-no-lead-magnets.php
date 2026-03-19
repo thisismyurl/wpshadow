@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites lack downloadable resources (PDFs, checklists, guides)
  * for email list building. Lead magnets convert 10-50x better than generic signup.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Lead_Magnets extends Diagnostic_Base {
 

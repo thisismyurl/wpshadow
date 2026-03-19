@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1025
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #21: Local Landing Pages from Specialized & Emerging Success Habits.
  * Checks if the site creates location-specific landing pages for each service area.
  *
- * @since 1.5003.1025
+ * @since 1.6093.1200
  */
 class Diagnostic_Creates_Local_Landing_Pages extends Diagnostic_Base {
 

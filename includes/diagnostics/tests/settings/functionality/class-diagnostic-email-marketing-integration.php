@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1125
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Email marketing returns $42 for every $1 spent. Without it, you're leaving
  * massive revenue on the table. It's the most profitable channel.
  *
- * @since 1.6035.1125
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1125
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 	/**
 	 * Check for ESP connection.
 	 *
-	 * @since  1.6035.1125
+	 * @since 1.6093.1200
 	 * @return bool True if ESP connected.
 	 */
 	private static function check_esp_connection(): bool {
@@ -169,7 +169,7 @@ class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 	/**
 	 * Check for opt-in forms.
 	 *
-	 * @since  1.6035.1125
+	 * @since 1.6093.1200
 	 * @return bool True if forms exist.
 	 */
 	private static function check_optin_forms(): bool {
@@ -196,7 +196,7 @@ class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 	/**
 	 * Check for welcome sequence.
 	 *
-	 * @since  1.6035.1125
+	 * @since 1.6093.1200
 	 * @return bool True if sequence exists.
 	 */
 	private static function check_welcome_sequence(): bool {
@@ -219,7 +219,7 @@ class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 	/**
 	 * Check for list segmentation.
 	 *
-	 * @since  1.6035.1125
+	 * @since 1.6093.1200
 	 * @return bool True if segmentation exists.
 	 */
 	private static function check_list_segmentation(): bool {
@@ -230,7 +230,7 @@ class Diagnostic_Email_Marketing_Integration extends Diagnostic_Base {
 	/**
 	 * Check for email analytics.
 	 *
-	 * @since  1.6035.1125
+	 * @since 1.6093.1200
 	 * @return bool True if analytics exist.
 	 */
 	private static function check_email_analytics(): bool {

@@ -5,7 +5,7 @@
  * Checks for unoptimized images that could impact Core Web Vitals,
  * particularly Largest Contentful Paint (LCP).
  *
- * @since   1.6033.2073
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - High file size to dimensions ratio
  * - Unoptimized JPEG quality
  *
- * @since 1.6033.2073
+ * @since 1.6093.1200
  */
 class Treatment_Image_Optimization extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Image_Optimization extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2073
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

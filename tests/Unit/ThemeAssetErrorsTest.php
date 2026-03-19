@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1715
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Theme Asset Errors Diagnostic Test Class
  *
- * @since 1.6028.1715
+ * @since 1.6093.1200
  */
 class ThemeAssetErrorsTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test diagnostic passes with no broken assets
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_no_broken_assets(): void {
@@ -64,7 +64,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test diagnostic flags broken CSS file
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_broken_css_file(): void {
@@ -104,7 +104,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test diagnostic flags broken JS file
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_broken_js_file(): void {
@@ -143,7 +143,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test diagnostic flags multiple broken assets
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_multiple_broken_assets(): void {
@@ -181,7 +181,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -228,7 +228,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test meta includes asset counts
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_asset_counts(): void {
@@ -268,7 +268,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test details include broken asset list
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_broken_asset_list(): void {
@@ -305,7 +305,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -340,7 +340,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test severity scales with broken count
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_severity_scales_with_broken_count(): void {
@@ -373,7 +373,7 @@ class ThemeAssetErrorsTest extends TestCase {
 	/**
 	 * Test impact message included
 	 *
-	 * @since 1.6028.1715
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_impact_message_included(): void {

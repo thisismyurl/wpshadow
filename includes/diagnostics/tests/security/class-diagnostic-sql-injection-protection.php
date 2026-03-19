@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Attackers can delete all data
  * - One vulnerable query compromises entire site
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_SQL_Injection_Protection extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'sql-injection-protection';
@@ -56,7 +56,7 @@ class Diagnostic_SQL_Injection_Protection extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Custom Queries Not Using Prepared Statements';
@@ -64,7 +64,7 @@ class Diagnostic_SQL_Injection_Protection extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if database queries use prepared statements to prevent SQL injection';
@@ -72,7 +72,7 @@ class Diagnostic_SQL_Injection_Protection extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Diagnostic_SQL_Injection_Protection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

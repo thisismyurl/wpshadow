@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Email response tracking
  * - Support ticket system
  *
- * @since 1.7034.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Responds_To_Inquiries extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Responds_To_Inquiries extends Diagnostic_Base {
 	 * - 1 point: Help desk/ticket system active
 	 * - 1 point: FAQ or knowledge base available
 	 *
-	 * @since  1.7034.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -190,7 +190,7 @@ class Diagnostic_Responds_To_Inquiries extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since  1.7034.1430
+	 * @since 1.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

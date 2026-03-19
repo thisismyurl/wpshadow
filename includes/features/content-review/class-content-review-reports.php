@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Features/ContentReview
- * @since      1.6034.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds content review functionality to the Reports menu for formal analysis.
  *
- * @since 1.6034.0000
+ * @since 1.6093.1200
  */
 class Content_Review_Reports extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -45,8 +45,8 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 	/**
 	 * Initialize hooks (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Content_Review_Reports::subscribe() instead
-	 * @since      1.6034.0000
+	 * @deprecated1.0 Use Content_Review_Reports::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -56,7 +56,7 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 	/**
 	 * Register report menu item
 	 *
-	 * @since  1.6034.0000
+	 * @since 1.6093.1200
 	 * @param  array $menu_items Existing menu items.
 	 * @return array Modified menu items.
 	 */
@@ -76,7 +76,7 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 	/**
 	 * Render content review report page
 	 *
-	 * @since 1.6034.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_content_review_report() {
@@ -139,7 +139,7 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 	/**
 	 * Render post type filter options
 	 *
-	 * @since 1.6034.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function render_post_type_options() {
@@ -167,7 +167,7 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 	/**
 	 * Handle AJAX request to get review data
 	 *
-	 * @since 1.6034.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_get_review_data() {
@@ -260,7 +260,7 @@ class Content_Review_Reports extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue report page assets
 	 *
-	 * @since 1.6034.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function enqueue_report_assets() {

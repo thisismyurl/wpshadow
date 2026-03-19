@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2328
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Evergreen = foundations that compound
  * - Timely = relevance and fresh traffic
  *
- * @since 1.6034.2328
+ * @since 1.6093.1200
  */
 class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2328
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if poor balance, null otherwise.
 	 */
 	public static function check() {
@@ -175,7 +175,7 @@ class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 	/**
 	 * Detect if content is timely/trending
 	 *
-	 * @since  1.6034.2328
+	 * @since 1.6093.1200
 	 * @param  string $content Combined title and content.
 	 * @param  string $post_date Post publish date.
 	 * @return bool True if content appears timely.

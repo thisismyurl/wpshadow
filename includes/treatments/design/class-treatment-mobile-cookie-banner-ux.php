@@ -4,7 +4,7 @@
  *
  * Optimizes cookie consent banner for mobile devices.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates cookie consent banner is properly formatted for mobile,
  * ensuring GDPR compliance and good UX without blocking main content.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Cookie_Banner_UX extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Cookie_Banner_UX extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

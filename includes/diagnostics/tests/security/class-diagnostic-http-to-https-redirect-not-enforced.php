@@ -17,7 +17,7 @@
  * HTTPS redirect setup: https://wpshadow.com/kb/http-to-https-redirect\n * Video: Enforcing HTTPS on WordPress (6min): https://wpshadow.com/training/https-enforcement\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site has SSL cert installed. Admin configures siteurl to HTTPS\n * in WordPress settings. But server redirect not configured. User bookmarks\n * http://site.com. Next visit, HTTP connection established (unencrypted).\n * Before WordPress even loads, user sends credentials to attacker (proxy).\n * Attacker captures admin password during login. Admin account compromised.\n *
  * **Implementation Notes:**
  * - Checks WordPress siteurl/home options\n * - Tests actual HTTP server response\n * - Validates redirect code (301 preferred, 302 acceptable)\n * - Tests for all paths (not just homepage)\n * - Severity: critical (no redirect), high (temporary redirect)\n * - Treatment: implement permanent HTTP→HTTPS redirect\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_HTTP_To_HTTPS_Redirect_Not_Enforced extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_HTTP_To_HTTPS_Redirect_Not_Enforced extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

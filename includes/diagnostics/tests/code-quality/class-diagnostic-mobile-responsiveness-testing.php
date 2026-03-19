@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1330
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site is mobile-friendly with proper viewport
  * settings, touch targets, and responsive design.
  *
- * @since 1.7034.1330
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 	 * Tests mobile responsiveness including viewport meta tag,
 	 * touch target sizes, and responsive images.
 	 *
-	 * @since  1.7034.1330
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -173,7 +173,7 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 		if ( ! $viewport_allows_scaling ) {
 			$issues[] = array(
 				'type'        => 'viewport_no_scaling',
-				'description' => __( 'Viewport disables user scaling; violates WCAG 1.4.4 (users cannot zoom)', 'wpshadow' ),
+				'description' => __( 'Viewport disables user scaling; violates WCAG1.0 (users cannot zoom)', 'wpshadow' ),
 			);
 		}
 
@@ -246,8 +246,8 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 						'No horizontal scroll' => 'Content fits viewport width',
 					),
 					'wcag_mobile_requirements'    => array(
-						'WCAG 1.4.4'  => 'Resize text - Allow user scaling',
-						'WCAG 1.4.10' => 'Reflow - No horizontal scrolling at 320px',
+						'WCAG1.0'  => 'Resize text - Allow user scaling',
+						'WCAG1.0' => 'Reflow - No horizontal scrolling at 320px',
 						'WCAG 2.5.5'  => 'Target Size - 44x44px minimum',
 					),
 					'mobile_traffic_stats'        => '60%+ of web traffic is mobile devices',

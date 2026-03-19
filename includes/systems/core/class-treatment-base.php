@@ -34,7 +34,7 @@
  * ```
  *
  * @package WPShadow
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Multisite Site Admin: Apply to current blog
  * - Multisite Network Admin: Apply to all blogs or specific blog
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 abstract class Treatment_Base implements Treatment_Interface {
 	/**
@@ -116,7 +116,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * This helper reduces duplicated detector logic between matching
 	 * diagnostic/treatment pairs while preserving identical finding output.
 	 *
-	 * @since  1.6035.2200
+	 * @since 1.6093.1200
 	 * @param  string $diagnostic_class Fully-qualified diagnostic class name.
 	 * @return array|null Diagnostic finding array, or null if unavailable.
 	 */
@@ -154,7 +154,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		/**
 		 * Filters whether a treatment is enabled.
 		 *
-		 * @since 1.6030.2148
+		 * @since 1.6093.1200
 		 *
 		 * @param bool   $enabled Whether the treatment is enabled.
 		 * @param string $class   Fully-qualified treatment class name.

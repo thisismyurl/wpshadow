@@ -23,14 +23,14 @@
  * Automated cleanup = maintenance-free.
  *
  * **Business Impact:**
- * Corporate blog: 3000 posts, 180K revisions, 1.2GB space. Set
+ * Corporate blog: 3000 posts, 180K revisions,1.0GB space. Set
  * WP_POST_REVISIONS=5 (prevents future bloat). But existing 180K
  * revisions still there. Implemented cleanup: WP-CLI scheduled task
  * (monthly cron), DELETE revisions older than 90 days, keep minimum
  * 3 revisions per post. First cleanup: removed 165K old revisions
- * (92%), reclaimed 1.1GB. Monthly cleanup: removes ~500 old revisions.
+ * (92%), reclaimed1.0GB. Monthly cleanup: removes ~500 old revisions.
  * Database stays lean automatically. Query performance: 65% improvement.
- * Backup size: 1.4GB → 0.3GB. Backup time: 12 min → 2 min. Setup:
+ * Backup size:1.0GB → 0.3GB. Backup time: 12 min → 2 min. Setup:
  * 1 hour (WP-CLI script + cron). Maintenance: zero (automated).
  *
  * **Philosophy Alignment:**
@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (prevents long-term bloat)
  * - Treatment: implement automated cleanup strategy
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Post_Revisions_Not_Managed extends Diagnostic_Base {
 
@@ -124,7 +124,7 @@ class Diagnostic_Post_Revisions_Not_Managed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

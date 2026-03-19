@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * PhishTank is maintained by OpenDNS and updated in real-time with user submissions.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 
@@ -91,7 +91,7 @@ class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 	 *
 	 * Extracts external links from posts and checks against PhishTank.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if phishing links found, null otherwise.
 	 */
 	public static function check() {
@@ -180,7 +180,7 @@ class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 	/**
 	 * Extract all external links from post/page content.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Array of link data with post information.
 	 */
 	private static function extract_external_links() : array {
@@ -239,7 +239,7 @@ class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 	/**
 	 * Check URL against PhishTank API.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $url URL to check.
 	 * @param  string $api_key PhishTank API key.
 	 * @return array|false|WP_Error Phishing info array, false if safe, WP_Error on error.
@@ -314,7 +314,7 @@ class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 	/**
 	 * Determine severity based on phishing links found.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $phishing_links Array of phishing links.
 	 * @return string Severity level.
 	 */
@@ -346,7 +346,7 @@ class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 	/**
 	 * Calculate threat level (0-100 scale).
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $phishing_links Array of phishing links.
 	 * @return int Threat level.
 	 */
@@ -378,7 +378,7 @@ class Diagnostic_Phishing_Url_Phishtank extends Diagnostic_Base {
 	/**
 	 * Build user-friendly description.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $phishing_links Array of phishing links.
 	 * @return string Description text.
 	 */

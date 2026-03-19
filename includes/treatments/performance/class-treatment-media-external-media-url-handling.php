@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tests
- * @since      1.6033.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for external media URLs and validates access.
  *
- * @since 1.6033.1615
+ * @since 1.6093.1200
  */
 class Treatment_Media_External_Media_URL_Handling extends Treatment_Base {
 
@@ -62,7 +62,7 @@ class Treatment_Media_External_Media_URL_Handling extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

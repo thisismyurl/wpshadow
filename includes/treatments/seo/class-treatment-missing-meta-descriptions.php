@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7030.1516
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Length validation (120-160 characters)
  * - Quality assessment
  *
- * @since 1.7030.1516
+ * @since 1.6093.1200
  */
 class Treatment_Missing_Meta_Descriptions extends Treatment_Base {
 
@@ -70,7 +70,7 @@ class Treatment_Missing_Meta_Descriptions extends Treatment_Base {
 	 * - 1 point: <25% posts missing
 	 * - 1 point: <50% posts missing
 	 *
-	 * @since  1.7030.1516
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

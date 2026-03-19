@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.6035.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether text has sufficient color contrast
  * (WCAG AA: 4.5:1 for normal text, 3:1 for large text).
  *
- * @since 1.6035.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

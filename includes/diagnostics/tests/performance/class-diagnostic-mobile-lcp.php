@@ -22,7 +22,7 @@
  * **Real-World Scenario:**
  * SaaS landing page with hero video (5.2MB) LCP was 7.8 seconds. Half of visitors bounced within 3 seconds.
  * Optimization: (1) Video preload, (2) Use image placeholder until video ready, (3) Use modern video codec.
- * LCP dropped to 1.9 seconds. Bounce rate decreased 52%. Trial signups increased 145% (same traffic, better UX).
+ * LCP dropped to1.0 seconds. Bounce rate decreased 52%. Trial signups increased 145% (same traffic, better UX).
  * Cost: 2 weeks optimization. Value: $320,000 in additional trials/customers that quarter.
  *
  * **Business Impact:**
@@ -52,7 +52,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures render time of the largest visible content element, directly impacting bounce rates.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 
@@ -110,7 +110,7 @@ class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 	 * - Needs Improvement: 2.5-4.0s
 	 * - Poor: >4.0s
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -164,7 +164,7 @@ class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 	/**
 	 * Identify common LCP bottlenecks.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Issues identified.
 	 */
 	private static function identify_lcp_issues(): array {
@@ -225,13 +225,13 @@ class Diagnostic_Mobile_Lcp extends Diagnostic_Base {
 	/**
 	 * Estimate LCP time based on identified issues.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  array $issues Issues identified.
 	 * @return float Estimated LCP in seconds.
 	 */
 	private static function estimate_lcp( array $issues ): float {
 		// Base LCP (typical good performance)
-		$estimated_lcp = 1.5;
+		$estimated_lcp =1.0;
 
 		// Add time for each issue
 		$estimated_lcp += count( $issues['problems'] ) * 0.6;

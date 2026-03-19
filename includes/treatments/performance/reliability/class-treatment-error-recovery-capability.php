@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Lack of recovery creates anxiety and lost data
  * - Defensive design prevents user error
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_Error_Recovery_Capability extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'error-recovery-capability';
@@ -56,7 +56,7 @@ class Treatment_Error_Recovery_Capability extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Users Can\'t Recover From Errors (No Undo)';
@@ -64,7 +64,7 @@ class Treatment_Error_Recovery_Capability extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if destructive operations have confirmation and undo capability';
@@ -72,7 +72,7 @@ class Treatment_Error_Recovery_Capability extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -80,7 +80,7 @@ class Treatment_Error_Recovery_Capability extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

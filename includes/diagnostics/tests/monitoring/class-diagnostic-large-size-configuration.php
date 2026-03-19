@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress automatically creates multiple image sizes when you upload an image.
  * The "large" size should be configured appropriately for your site's needs.
  *
- * @since 1.6032.1352
+ * @since 1.6093.1200
  */
 class Diagnostic_Large_Size_Configuration extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Large_Size_Configuration extends Diagnostic_Base {
 	 * - Validates dimensions are within reasonable limits (not 0, not excessively large)
 	 * - Checks if both width and height are set to 0 (disabled)
 	 *
-	 * @since  1.6032.1352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

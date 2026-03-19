@@ -4,7 +4,7 @@
  *
  * Analyzes GDPR cookie consent implementation and compliance.
  *
- * @since   1.6033.2135
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates GDPR cookie consent banner implementation and compliance.
  *
- * @since 1.6033.2135
+ * @since 1.6093.1200
  */
 class Diagnostic_GDPR_Cookie_Consent extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_GDPR_Cookie_Consent extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2135
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_GDPR_Cookie_Consent extends Diagnostic_Base {
 
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( ! isset( $script->src ) ) {
+				if ( ! isset( $script->src ) || ! is_string( $script->src ) ) {
 					continue;
 				}
 

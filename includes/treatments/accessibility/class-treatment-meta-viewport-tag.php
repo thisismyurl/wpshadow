@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,14 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds proper viewport meta tag to site header.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -47,7 +47,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	 *
 	 * Adds proper viewport meta tag to WordPress header.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -113,7 +113,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	/**
 	 * Check if viewport meta tag already exists.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return bool True if viewport exists.
 	 */
 	private static function check_existing_viewport() {
@@ -128,7 +128,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	/**
 	 * Output viewport meta tag.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function output_viewport_meta() {
@@ -138,7 +138,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	/**
 	 * Get MU plugin code for viewport meta tag.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_viewport_mu_plugin_code() {
@@ -151,7 +151,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
  * Created by WPShadow accessibility treatment.
  *
  * @package WPShadow
- * @since   1.6050.0000
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

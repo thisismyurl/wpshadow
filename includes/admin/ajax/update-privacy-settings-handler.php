@@ -11,7 +11,7 @@ use WPShadow\Admin\Pages\Privacy_Settings_Manager;
  *
  * Updates GDPR compliance and privacy configuration.
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Update_Privacy_Settings_Handler extends AJAX_Handler_Base {

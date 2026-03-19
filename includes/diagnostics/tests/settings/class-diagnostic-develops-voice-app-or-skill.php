@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1410
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website has developed voice assistant integrations like Alexa Skills
  * or Google Actions to extend brand presence into the voice ecosystem.
  *
- * @since 1.5002.1410
+ * @since 1.6093.1200
  */
 class Diagnostic_Develops_Voice_App_Or_Skill extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Develops_Voice_App_Or_Skill extends Diagnostic_Base {
 	 * This diagnostic checks for documentation, API endpoints, skill/action references,
 	 * and development evidence.
 	 *
-	 * @since  1.5002.1410
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

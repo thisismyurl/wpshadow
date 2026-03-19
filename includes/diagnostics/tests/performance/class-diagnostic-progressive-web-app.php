@@ -4,7 +4,7 @@
  *
  * Tests whether the site implements progressive web app features for app-like experience.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * PWAs provide app-like experiences including offline functionality, push notifications,
  * and installation to home screen, improving engagement and retention.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Progressive_Web_App extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Progressive_Web_App extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -172,7 +172,7 @@ class Diagnostic_Progressive_Web_App extends Diagnostic_Base {
 	/**
 	 * Check if manifest.json file exists.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if manifest exists, false otherwise.
 	 */
 	private static function check_manifest_file() {
@@ -200,7 +200,7 @@ class Diagnostic_Progressive_Web_App extends Diagnostic_Base {
 	/**
 	 * Check if service worker is registered.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if service worker exists, false otherwise.
 	 */
 	private static function check_service_worker() {
@@ -224,7 +224,7 @@ class Diagnostic_Progressive_Web_App extends Diagnostic_Base {
 	/**
 	 * Check if offline page exists.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if offline page exists, false otherwise.
 	 */
 	private static function check_offline_page() {
@@ -246,7 +246,7 @@ class Diagnostic_Progressive_Web_App extends Diagnostic_Base {
 	/**
 	 * Check if app icons are configured.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if app icons exist, false otherwise.
 	 */
 	private static function check_app_icons() {

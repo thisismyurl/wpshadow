@@ -4,7 +4,7 @@
  *
  * Tests whether the site provides exclusive content for members to maintain value.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Exclusive content is a primary value driver for membership retention.
  * Sites need consistent, high-quality exclusive content to justify ongoing subscriptions.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -181,7 +181,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check for restricted content.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if restricted content exists, false otherwise.
 	 */
 	private static function check_restricted_content() {
@@ -227,7 +227,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check content frequency.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if recent exclusive content exists, false otherwise.
 	 */
 	private static function check_content_frequency() {
@@ -263,7 +263,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check content diversity.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if diverse content types exist, false otherwise.
 	 */
 	private static function check_content_diversity() {
@@ -296,7 +296,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check for community features.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if community features exist, false otherwise.
 	 */
 	private static function check_community_features() {
@@ -319,7 +319,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check for downloadable resources.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if downloads exist, false otherwise.
 	 */
 	private static function check_downloadable_resources() {
@@ -363,7 +363,7 @@ class Diagnostic_Member_Exclusive_Content extends Diagnostic_Base {
 	/**
 	 * Check for exclusivity messaging.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if messaging exists, false otherwise.
 	 */
 	private static function check_exclusivity_messaging() {

@@ -36,7 +36,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Import Taxonomy Mismatches
  * - Import Character Encoding Corruption
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
@@ -100,7 +100,7 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -399,10 +399,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for meta table indices.
 		$meta_indices = $wpdb->get_results(
-			$wpdb->prepare(
-				"SHOW INDEX FROM {$wpdb->postmeta} 
-				WHERE Key_name != 'PRIMARY'"
-			),
+			"SHOW INDEX FROM {$wpdb->postmeta} 
+			WHERE Key_name != 'PRIMARY'",
 			ARRAY_A
 		);
 

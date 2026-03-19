@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1005
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website maintains compliance with regulations across all target
  * international markets.
  *
- * @since 1.5003.1005
+ * @since 1.6093.1200
  */
 class Diagnostic_Maintains_Regional_Compliance extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Maintains_Regional_Compliance extends Diagnostic_Base {
 	 * This diagnostic checks for privacy policies, cookie consent, compliance
 	 * plugins, regional legal pages, and compliance documentation.
 	 *
-	 * @since  1.5003.1005
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

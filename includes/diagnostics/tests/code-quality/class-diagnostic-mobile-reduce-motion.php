@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * prefers-reduced-motion media query for accessibility.
  * WCAG 2.3.3 Level AAA requirement.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 	/**
 	 * Find motion-related accessibility issues.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_motion_issues(): array {
@@ -156,7 +156,7 @@ class Diagnostic_Mobile_Reduce_Motion extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

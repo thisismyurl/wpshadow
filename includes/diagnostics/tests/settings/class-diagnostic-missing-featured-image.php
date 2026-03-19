@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1504
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Theme support verification
  * - Missing image count
  *
- * @since 1.7030.1504
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Featured_Image extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Missing_Featured_Image extends Diagnostic_Base {
 	 * - 2 points: <10% of posts missing featured image
 	 * - 1 point: <30% missing
 	 *
-	 * @since  1.7030.1504
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

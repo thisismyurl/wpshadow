@@ -4,7 +4,7 @@
  *
  * Analyzes incident logging and resolution tracking systems.
  *
- * @since   1.6033.2155
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates incident management and post-mortem processes.
  *
- * @since 1.6033.2155
+ * @since 1.6093.1200
  */
 class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2155
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

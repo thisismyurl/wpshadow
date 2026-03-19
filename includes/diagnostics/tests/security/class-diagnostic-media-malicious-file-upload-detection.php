@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.2099
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - MIME type checking
  * - Executable file rejection
  *
- * @since 1.6033.2099
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2099
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when content lacks engagement hooks like questions, polls,
  * challenges, or calls for reader input which drive interaction.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 

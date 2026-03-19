@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1510
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies database server version is supported.
  *
- * @since 1.6035.1510
+ * @since 1.6093.1200
  */
 class Diagnostic_MySQL_Version_Check extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_MySQL_Version_Check extends Diagnostic_Base {
 	/**
 	 * Run the MySQL version diagnostic check.
 	 *
-	 * @since  1.6035.1510
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if version issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -143,7 +143,7 @@ class Diagnostic_MySQL_Version_Check extends Diagnostic_Base {
 	/**
 	 * Parse database version string.
 	 *
-	 * @since  1.6035.1510
+	 * @since 1.6093.1200
 	 * @param  string $version_string Version string from database.
 	 * @return array|null Parsed version or null if unable to parse.
 	 */

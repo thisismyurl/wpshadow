@@ -5,7 +5,7 @@
  * Checks that WordPress GDPR privacy export functionality is available
  * and that WPShadow implements proper user data export capabilities.
  *
- * @since   1.6032.1000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that privacy data export is configured per GDPR requirements.
  *
- * @since 1.6032.1000
+ * @since 1.6093.1200
  */
 class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return array|null Finding if privacy export is not properly configured.
 	 */
 	public static function check() {
@@ -69,7 +69,7 @@ class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 		// Check for WPShadow data exporter
 		$has_wpshadow_exporter = false;
 		foreach ( $exporters as $exporter_callback ) {
-			if ( is_array( $exporter_callback ) && 'WPShadow\Privacy\Privacy_Exporter' === $exporter_callback[0] ) {
+			if ( is_array( $exporter_callback ) && isset( $exporter_callback[0] ) && 'WPShadow\Privacy\Privacy_Exporter' === $exporter_callback[0] ) {
 				$has_wpshadow_exporter = true;
 				break;
 			}

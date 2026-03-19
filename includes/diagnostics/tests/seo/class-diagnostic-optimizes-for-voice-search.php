@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1435
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website optimizes content for voice search with conversational
  * language, question-format headings, and featured snippet optimization.
  *
- * @since 1.5002.1435
+ * @since 1.6093.1200
  */
 class Diagnostic_Optimizes_For_Voice_Search extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Optimizes_For_Voice_Search extends Diagnostic_Base {
 	 * This diagnostic checks for question-format content, conversational headings,
 	 * structured data, and featured snippet optimization.
 	 *
-	 * @since  1.5002.1435
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -177,10 +177,13 @@ class Diagnostic_Optimizes_For_Voice_Search extends Diagnostic_Base {
 		$theme = wp_get_theme();
 		$responsive_keywords = array( 'responsive', 'mobile', 'adaptive', 'fluid' );
 		$is_mobile_friendly = false;
+		$theme_description  = (string) $theme->get( 'Description' );
+		$theme_tags         = $theme->get( 'Tags' );
+		$theme_tags_text    = is_array( $theme_tags ) ? implode( ' ', $theme_tags ) : (string) $theme_tags;
 
 		foreach ( $responsive_keywords as $keyword ) {
-			if ( stripos( $theme->get( 'Description' ), $keyword ) !== false ||
-				 stripos( $theme->get( 'Tags' ), $keyword ) !== false ) {
+			if ( stripos( $theme_description, $keyword ) !== false ||
+				 stripos( $theme_tags_text, $keyword ) !== false ) {
 				$is_mobile_friendly = true;
 				break;
 			}

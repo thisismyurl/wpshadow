@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for structured onboarding for new members/users. Effective onboarding
  * increases retention by 50% and time-to-value understanding.
  *
- * @since 1.6034.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Onboarding_Sequence extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Onboarding_Sequence extends Diagnostic_Base {
 	 *
 	 * Looks for onboarding plugins, welcome emails, and guided setup flows.
 	 *
-	 * @since  1.6034.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

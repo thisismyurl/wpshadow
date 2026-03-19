@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

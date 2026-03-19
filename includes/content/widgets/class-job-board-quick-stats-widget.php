@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Job Board Quick Stats Widget Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -43,7 +43,7 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue widget stylesheet on dashboard.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -63,7 +63,7 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Register the dashboard widget.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_widget() {
 		wp_add_dashboard_widget(
@@ -76,7 +76,7 @@ class Job_Board_Quick_Stats_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render the widget.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function render_widget() {
 		// Get statistics

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1740
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This is like making sure your return address on mail matches where you
  * actually live - otherwise it looks suspicious.
  *
- * @since 1.6035.1740
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_From_Address extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Email_From_Address extends Diagnostic_Base {
 	/**
 	 * Run the email from address diagnostic check.
 	 *
-	 * @since  1.6035.1740
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if from address issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -159,7 +159,7 @@ class Diagnostic_Email_From_Address extends Diagnostic_Base {
 	/**
 	 * Extract root domain from a full domain.
 	 *
-	 * @since  1.6035.1740
+	 * @since 1.6093.1200
 	 * @param  string $domain Full domain name.
 	 * @return string Root domain.
 	 */
@@ -176,7 +176,7 @@ class Diagnostic_Email_From_Address extends Diagnostic_Base {
 	/**
 	 * Get SMTP from address from various plugin configurations.
 	 *
-	 * @since  1.6035.1740
+	 * @since 1.6093.1200
 	 * @return string|null SMTP from address or null if not configured.
 	 */
 	private static function get_smtp_from_address() {

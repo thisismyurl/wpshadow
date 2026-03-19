@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Analytics
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Displays usage statistics and ROI on WordPress dashboard.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Impact_Dashboard_Widget {
 
 	/**
 	 * Initialize the dashboard widget.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class Impact_Dashboard_Widget {
 	/**
 	 * Register the dashboard widget.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_widget() {
@@ -55,7 +55,7 @@ class Impact_Dashboard_Widget {
 	/**
 	 * Enqueue widget assets.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -75,7 +75,7 @@ class Impact_Dashboard_Widget {
 	/**
 	 * Render the dashboard widget.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_widget() {
@@ -272,7 +272,7 @@ class Impact_Dashboard_Widget {
 		.wpshadow-stat-value {
 			font-size: 24px;
 			font-weight: 600;
-			line-height: 1.2;
+			line-height:1.0;
 		}
 		.wpshadow-stat-label {
 			font-size: 12px;

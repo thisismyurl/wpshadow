@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that infrastructure is defined and managed through code (IaC) tools
  * for reproducibility, version control, and automated deployments.
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Infrastructure_As_Code extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Infrastructure_As_Code extends Diagnostic_Base {
 	/**
 	 * Run the infrastructure as code diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if IaC gaps detected, null otherwise.
 	 */
 	public static function check() {
@@ -271,7 +271,7 @@ class Diagnostic_Infrastructure_As_Code extends Diagnostic_Base {
 	/**
 	 * Scan for files matching a pattern in a directory.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @param  string $path    Directory path to scan.
 	 * @param  string $pattern Glob pattern to match.
 	 * @return bool True if matching files found, false otherwise.

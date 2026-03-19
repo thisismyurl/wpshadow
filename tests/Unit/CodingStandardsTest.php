@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1730
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Coding Standards Test Class
  *
- * @since 1.6028.1730
+ * @since 1.6093.1200
  */
 class CodingStandardsTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test diagnostic passes with compliant code
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_compliant_code(): void {
@@ -64,7 +64,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test diagnostic flags spacing violations
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_spacing_violations(): void {
@@ -97,7 +97,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test diagnostic flags Yoda condition violations
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_yoda_condition_violations(): void {
@@ -130,7 +130,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -174,7 +174,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test meta includes compliance percentage
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_compliance_percentage(): void {
@@ -206,7 +206,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test details include top violations
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_top_violations(): void {
@@ -245,7 +245,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -277,7 +277,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test severity scales with compliance
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_severity_scales_with_compliance(): void {
@@ -310,7 +310,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test high severity with low compliance
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_high_severity_with_low_compliance(): void {
@@ -342,7 +342,7 @@ class CodingStandardsTest extends TestCase {
 	/**
 	 * Test files with violations list
 	 *
-	 * @since 1.6028.1730
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_files_with_violations_list(): void {

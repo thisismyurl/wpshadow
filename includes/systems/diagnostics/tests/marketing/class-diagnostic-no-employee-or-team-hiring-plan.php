@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies with documented hiring plans execute 5x faster and
  * build stronger teams than those without plans.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Employee_Or_Team_Hiring_Plan extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Employee_Or_Team_Hiring_Plan extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Employee_Or_Team_Hiring_Plan extends Diagnostic_Base {
 	/**
 	 * Check if hiring plan exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if plan detected, false otherwise.
 	 */
 	private static function has_hiring_plan() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Employee_Or_Team_Hiring_Plan extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Employee_Or_Team_Hiring_Plan extends Diagnostic_Base {
 	/**
 	 * Get hiring framework.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Hiring framework components.
 	 */
 	private static function get_hiring_framework() {
@@ -158,7 +158,7 @@ class Diagnostic_No_Employee_Or_Team_Hiring_Plan extends Diagnostic_Base {
 	/**
 	 * Get typical first hires.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Typical first hire priorities.
 	 */
 	private static function get_first_hires() {

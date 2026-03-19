@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Note: This checks a sample of links due to API rate limits. To check all links,
  * enable scheduled daily scans.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 
@@ -96,7 +96,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	 * Finds external links in posts/pages and checks them against Google
 	 * Safe Browsing for malware, phishing, and unwanted software.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if unsafe links found, null otherwise.
 	 */
 	public static function check() {
@@ -189,7 +189,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	 *
 	 * Queries posts and pages, extracts URLs, filters to external only.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Array of link data with post ID and title.
 	 */
 	private static function extract_external_links() : array {
@@ -248,7 +248,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	/**
 	 * Check URL against Google Safe Browsing API.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $url URL to check.
 	 * @param  string $api_key Google Safe Browsing API key.
 	 * @return array|false|WP_Error Threat info array, false if safe, WP_Error on API error.
@@ -341,7 +341,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	/**
 	 * Determine severity based on threat types found.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $unsafe_links Array of unsafe links.
 	 * @return string Severity level.
 	 */
@@ -365,7 +365,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	/**
 	 * Calculate threat level (0-100 scale).
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $unsafe_links Array of unsafe links.
 	 * @return int Threat level.
 	 */
@@ -386,7 +386,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	/**
 	 * Build user-friendly description.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $unsafe_links Array of unsafe links.
 	 * @return string Description text.
 	 */
@@ -454,7 +454,7 @@ class Diagnostic_External_Link_Safety_Gsb extends Diagnostic_Base {
 	/**
 	 * Translate threat type code to human-readable name.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $threat_type Threat type code.
 	 * @return string Human-readable threat name.
 	 */

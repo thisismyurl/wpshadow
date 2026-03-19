@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests post meta save operations and detects issues that may cause
  * meta data to fail saving or be lost during updates.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Post_Meta_Save_Reliability extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Post_Meta_Save_Reliability extends Diagnostic_Base {
 	 * Tests post meta save reliability and checks for common issues
 	 * that prevent meta data from persisting correctly.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if save issues found, null otherwise.
 	 */
 	public static function check() {

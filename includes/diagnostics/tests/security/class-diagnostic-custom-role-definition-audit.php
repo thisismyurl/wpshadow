@@ -41,7 +41,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1330
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -79,7 +79,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Compares against role capability maps.
  * - Non-fixable diagnostic (manual audit required).
  *
- * @since 1.6032.1330
+ * @since 1.6093.1200
  */
 class Diagnostic_Custom_Role_Definition_Audit extends Diagnostic_Base {
 
@@ -114,7 +114,7 @@ class Diagnostic_Custom_Role_Definition_Audit extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1330
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

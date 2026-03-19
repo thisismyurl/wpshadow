@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Analytics
- * @since      1.6034.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Custom analytics dashboard pages
  * - Plugin settings indicating active monitoring
  *
- * @since 1.6034.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'reviews-analytics-regularly';
@@ -44,7 +44,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Analytics Regularly Reviewed';
@@ -52,7 +52,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies site owner regularly accesses and reviews analytics data';
@@ -60,7 +60,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'analytics';
@@ -75,7 +75,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	 * 3. Custom analytics pages
 	 * 4. Recent plugin access logs
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null {
 	 *     Finding array if analytics exists but no review setup, null otherwise.
 	 *
@@ -150,7 +150,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * Check if analytics is installed.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return bool True if analytics detected.
 	 */
 	private static function has_analytics_installed() {
@@ -184,7 +184,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * Check for analytics dashboard widgets.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null Widget details or null if none found.
 	 */
 	private static function check_dashboard_widgets() {
@@ -223,7 +223,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * Check for email report configuration.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null Email report details or null if not configured.
 	 */
 	private static function check_email_reports() {
@@ -266,7 +266,7 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * Check for custom analytics pages.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null Custom page details or null if none found.
 	 */
 	private static function check_custom_analytics_pages() {
@@ -297,10 +297,10 @@ class Diagnostic_Reviews_Analytics_Regularly extends Diagnostic_Base {
 	/**
 	 * Get detailed description of the finding.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return string Formatted description with recommendations.
 	 */
-	private static function get_description() {
+	public static function get_description(): string {
 		$description  = __( 'You have analytics installed, but there\'s no evidence of regular review. Analytics are only valuable when you actually look at the data and take action.', 'wpshadow' ) . "\n\n";
 		$description .= '<strong>' . __( 'Why This Matters:', 'wpshadow' ) . "</strong>\n";
 		$description .= __( '• Data without action is just noise', 'wpshadow' ) . "\n";

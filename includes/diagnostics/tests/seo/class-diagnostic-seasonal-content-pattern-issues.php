@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2213
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Summer vacation planning (March-May)
  * - Year-end planning (November-December)
  *
- * @since 1.6034.2213
+ * @since 1.6093.1200
  */
 class Diagnostic_Seasonal_Content_Pattern_Issues extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Seasonal_Content_Pattern_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2213
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if seasonal opportunities missed, null otherwise.
 	 */
 	public static function check() {

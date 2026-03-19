@@ -5,7 +5,7 @@
  * Checks if images are being converted to next-generation formats (AVIF, WebP)
  * to maximize compression and file size reduction.
  *
- * @since   1.6033.2098
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Format plugin detection
  * - Automatic conversion
  *
- * @since 1.6033.2098
+ * @since 1.6093.1200
  */
 class Treatment_Next_Gen_Image_Format_Conversion extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Next_Gen_Image_Format_Conversion extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2098
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

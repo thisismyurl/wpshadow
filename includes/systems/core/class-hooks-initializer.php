@@ -299,7 +299,7 @@ class Hooks_Initializer {
 	 * Conditionally enqueues assets only on WPShadow pages to reduce
 	 * unnecessary CSS/JS loading (30-40% page load improvement).
 	 *
-	 * @since  1.6031.1450
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -1184,7 +1184,7 @@ class Hooks_Initializer {
 	 * privacy consent settings. This helps us understand which KB articles are
 	 * most helpful for users.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array|null $finding   Diagnostic finding result
 	 * @param  string     $class     Diagnostic class name
 	 * @param  string     $slug      Diagnostic slug

@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,14 +31,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Forecasts future site health, resource usage, and potential issues.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Predictive_Analytics {
 
 	/**
 	 * Generate predictive forecast
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days_ahead How many days to forecast (default: 30).
 	 * @return array Prediction data with confidence scores.
 	 */
@@ -61,7 +61,7 @@ class Predictive_Analytics {
 	/**
 	 * Predict future health score
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @param  int   $days Days ahead to predict.
 	 * @return array Health prediction with trend.
@@ -98,7 +98,7 @@ class Predictive_Analytics {
 	/**
 	 * Forecast resource usage
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @param  int   $days Days ahead to forecast.
 	 * @return array Resource predictions.
@@ -142,7 +142,7 @@ class Predictive_Analytics {
 	/**
 	 * Predict likely issues
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @param  int   $days Days ahead to predict.
 	 * @return array Issue predictions.
@@ -182,7 +182,7 @@ class Predictive_Analytics {
 	/**
 	 * Forecast costs
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @param  int   $days Days ahead to forecast.
 	 * @return array Cost predictions.
@@ -202,7 +202,7 @@ class Predictive_Analytics {
 			'breakdown' => array(
 				'server_resources' => array(
 					'current' => round( $historical_costs['server_cost'] ?? 0, 2 ),
-					'predicted' => round( ( $historical_costs['server_cost'] ?? 0 ) * 1.05, 2 ), // 5% growth assumption
+					'predicted' => round( ( $historical_costs['server_cost'] ?? 0 ) *1.0, 2 ), // 5% growth assumption
 				),
 				'inefficiency_cost' => array(
 					'current' => round( $historical_costs['inefficiency_cost'] ?? 0, 2 ),
@@ -216,7 +216,7 @@ class Predictive_Analytics {
 	/**
 	 * Assess risk levels
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @param  int   $days Days ahead to assess.
 	 * @return array Risk assessment.
@@ -281,7 +281,7 @@ class Predictive_Analytics {
 	/**
 	 * Generate recommendations based on predictions
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @param  int   $days Days ahead predicted.
 	 * @return array Actionable recommendations.
@@ -336,7 +336,7 @@ class Predictive_Analytics {
 	/**
 	 * Get historical data for analysis
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days Days of history to retrieve.
 	 * @return array Historical data.
 	 */
@@ -360,7 +360,7 @@ class Predictive_Analytics {
 	/**
 	 * Extract health scores from historical data
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @return array Health scores over time.
 	 */
@@ -380,7 +380,7 @@ class Predictive_Analytics {
 	/**
 	 * Calculate trend slope using linear regression
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $values Historical values.
 	 * @return float Slope (daily change rate).
 	 */
@@ -416,7 +416,7 @@ class Predictive_Analytics {
 	/**
 	 * Calculate days until threshold is reached
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $current Current value.
 	 * @param  float $rate Rate of change per day.
 	 * @param  float $threshold Threshold value.
@@ -436,7 +436,7 @@ class Predictive_Analytics {
 	/**
 	 * Calculate growth rate from historical values
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $values Historical values.
 	 * @return float Growth rate per day.
 	 */
@@ -447,7 +447,7 @@ class Predictive_Analytics {
 	/**
 	 * Get current database size in MB
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Database size in MB.
 	 */
 	private static function get_current_database_size(): float {
@@ -468,7 +468,7 @@ class Predictive_Analytics {
 	/**
 	 * Get database size history
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days Days of history.
 	 * @return array Historical database sizes.
 	 */
@@ -480,7 +480,7 @@ class Predictive_Analytics {
 	/**
 	 * Get plugin count history
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days Days of history.
 	 * @return array Historical plugin counts.
 	 */
@@ -492,7 +492,7 @@ class Predictive_Analytics {
 	/**
 	 * Get uploads directory size
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Size in MB.
 	 */
 	private static function get_uploads_size(): float {
@@ -509,7 +509,7 @@ class Predictive_Analytics {
 	/**
 	 * Get directory size recursively
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $directory Directory path.
 	 * @return int Size in bytes.
 	 */
@@ -524,7 +524,7 @@ class Predictive_Analytics {
 	/**
 	 * Predict uploads growth
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $days Days ahead.
 	 * @return float Predicted size in MB.
 	 */
@@ -537,7 +537,7 @@ class Predictive_Analytics {
 	/**
 	 * Identify recurring issue patterns
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @return array Recurring patterns.
 	 */
@@ -586,7 +586,7 @@ class Predictive_Analytics {
 	/**
 	 * Calculate historical costs
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @return array Cost breakdown.
 	 */
@@ -607,7 +607,7 @@ class Predictive_Analytics {
 	/**
 	 * Calculate confidence level
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $data Historical data.
 	 * @return float Confidence percentage (0-100).
 	 */

@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Asset Caching Headers Diagnostic Test Class
  *
- * @since 1.6028.1530
+ * @since 1.6093.1200
  */
 class AssetCachingHeadersTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test diagnostic passes with optimal caching
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_optimal_caching(): void {
@@ -70,7 +70,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test diagnostic flags assets without caching
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_assets_without_caching(): void {
@@ -116,7 +116,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test diagnostic flags short cache durations
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_short_cache_duration(): void {
@@ -155,7 +155,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -207,7 +207,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test meta includes performance metrics
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_performance_metrics(): void {
@@ -254,7 +254,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test details include htaccess solution
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_htaccess_solution(): void {
@@ -295,7 +295,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test details include recommended cache times
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_recommended_cache_times(): void {
@@ -337,7 +337,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test details include alternative solutions
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_alternative_solutions(): void {
@@ -378,7 +378,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test threat level increases with more issues
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_increases_with_issues(): void {
@@ -415,7 +415,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test performance impact calculation
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_performance_impact_calculation(): void {
@@ -453,7 +453,7 @@ class AssetCachingHeadersTest extends TestCase {
 	/**
 	 * Test details include problematic assets
 	 *
-	 * @since 1.6028.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_problematic_assets(): void {

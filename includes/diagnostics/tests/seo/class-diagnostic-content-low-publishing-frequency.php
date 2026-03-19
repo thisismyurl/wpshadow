@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site publishes at minimum recommended frequency (4-8 posts/month).
  * Low frequency negatively impacts growth and SEO rankings.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 	 * Analyzes posting frequency over last 3 months. Minimum recommended
 	 * frequency is 4-8 posts per month for sustained growth.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

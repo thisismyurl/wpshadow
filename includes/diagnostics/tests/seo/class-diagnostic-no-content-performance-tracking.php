@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Analytics
- * @since      1.6034.2207
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Conversions/goals
  * - Comments and engagement
  *
- * @since 1.6034.2207
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Content_Performance_Tracking extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_No_Content_Performance_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2207
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if tracking not configured, null otherwise.
 	 */
 	public static function check() {
@@ -119,7 +119,7 @@ class Diagnostic_No_Content_Performance_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if analytics plugin is installed
 	 *
-	 * @since  1.6034.2207
+	 * @since 1.6093.1200
 	 * @return bool True if analytics plugin active, false otherwise.
 	 */
 	private static function has_analytics_plugin() {
@@ -146,7 +146,7 @@ class Diagnostic_No_Content_Performance_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if post-level tracking is configured
 	 *
-	 * @since  1.6034.2207
+	 * @since 1.6093.1200
 	 * @return bool True if post tracking configured, false otherwise.
 	 */
 	private static function has_post_level_tracking() {

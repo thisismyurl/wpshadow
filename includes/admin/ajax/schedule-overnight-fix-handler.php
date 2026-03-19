@@ -22,7 +22,7 @@ class Schedule_Overnight_Fix_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for overnight fix scheduling.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -32,7 +32,7 @@ class Schedule_Overnight_Fix_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle overnight fix scheduling requests.
 	 *
-	 * @since 1.6047.1200
+	 * @since 1.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

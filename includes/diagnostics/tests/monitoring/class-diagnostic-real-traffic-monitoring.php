@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing analytics or RUM tracking for real user traffic.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Get the first active plugin from a list.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  array $plugins Plugin list (file => label).
 	 * @return string|null Active plugin label or null.
 	 */
@@ -126,7 +126,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check for a matching script source.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  array $needles List of substrings to match.
 	 * @return bool True when any script matches.
 	 */

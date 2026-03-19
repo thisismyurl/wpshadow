@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2102
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * can extract entire databases one character at a time using
  * time-based or boolean-based techniques.
  *
- * @since 1.2033.2102
+ * @since 1.6093.1200
  */
 class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'blind-sql-injection';
@@ -51,7 +51,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Blind SQL Injection Vulnerability';
@@ -59,7 +59,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects potential blind SQL injection vulnerabilities in code';
@@ -67,7 +67,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -78,7 +78,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 	 * Scans active theme and plugins for patterns indicating
 	 * potential blind SQL injection vulnerabilities.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -202,7 +202,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * Scan a directory for PHP files.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @param  int    $limit Maximum number of files to scan.
 	 * @return array Array of file paths.
@@ -237,7 +237,7 @@ class Diagnostic_Blind_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * Scan a file for dangerous patterns.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Array of regex patterns to search for.
 	 * @return array Array of violations found.

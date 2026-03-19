@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site is fully keyboard accessible per WCAG 2.1
  * guidelines for users who cannot use a mouse.
  *
- * @since 1.7034.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 	 * Tests keyboard navigation including skip links, focus indicators,
 	 * and accessible dropdown menus.
 	 *
-	 * @since  1.7034.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -235,7 +235,7 @@ class Diagnostic_Keyboard_Navigation_Accessibility extends Diagnostic_Base {
 						'WCAG 2.1.1' => 'Keyboard - All functionality available via keyboard',
 						'WCAG 2.4.1' => 'Bypass Blocks - Skip link to main content',
 						'WCAG 2.4.7' => 'Focus Visible - Keyboard focus indicator visible',
-						'WCAG 1.3.1' => 'Info and Relationships - Use ARIA landmarks',
+						'WCAG1.0' => 'Info and Relationships - Use ARIA landmarks',
 					),
 					'skip_link_code'           => '<a href="#main-content" class="skip-link screen-reader-text">Skip to content</a>',
 					'focus_css_example'        => 'a:focus, button:focus { outline: 2px solid #0073aa; outline-offset: 2px; }',

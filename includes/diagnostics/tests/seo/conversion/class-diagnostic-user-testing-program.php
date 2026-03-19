@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1512
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site conducts regular user testing and research.
  * Checks for testing tools, session recording, feedback mechanisms, and research infrastructure.
  *
- * @since 1.6035.1512
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Testing_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_User_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1512
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

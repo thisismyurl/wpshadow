@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer resizing validation patterns.
  *
- * @since 1.6033.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Resizing_Misconfigured extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Image_Resizing_Misconfigured extends Diagnostic_Base {
 	 *
 	 * Checks if WordPress image sizes are properly configured.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -118,7 +118,7 @@ class Diagnostic_Image_Resizing_Misconfigured extends Diagnostic_Base {
 	/**
 	 * Get image resize configuration.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Resize configuration information.
 	 *

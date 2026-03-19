@@ -24,10 +24,10 @@
  *
  * **Business Impact:**
  * E-commerce site: average load time 4.2 seconds. Bounce rate: 58%.
- * Conversion rate: 1.8%. Implemented optimizations: page caching,
+ * Conversion rate:1.0%. Implemented optimizations: page caching,
  * image optimization, CDN, minification, lazy loading. Load time:
- * 4.2s → 1.1s (74% faster). Bounce rate: 58% → 28% (52% improvement).
- * Conversion rate: 1.8% → 3.4% (89% increase). Revenue: +$85K/month.
+ * 4.2s →1.0s (74% faster). Bounce rate: 58% → 28% (52% improvement).
+ * Conversion rate:1.0% → 3.4% (89% increase). Revenue: +$85K/month.
  * Google rankings: improved 8 positions average. Lighthouse score:
  * 42 → 91. Customer satisfaction: testimonials mention "fast site".
  * Investment: 40 hours optimization work. ROI: $85K monthly ongoing.
@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -76,9 +76,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * **Real-World Scenario:**
  * GTmetrix test: 5.2s load time. Waterfall analysis: 2.5s downloading
- * images (unoptimized), 1.2s JavaScript (render-blocking), 0.8s TTFB
+ * images (unoptimized),1.0s JavaScript (render-blocking), 0.8s TTFB
  * (slow server). Optimizations: WP Rocket (caching), ShortPixel
- * (images), Cloudflare (CDN), defer JavaScript. Result: 5.2s → 1.4s.
+ * (images), Cloudflare (CDN), defer JavaScript. Result: 5.2s →1.0s.
  * Each optimization contributed ~25-30% improvement (compounding effect).
  *
  * **Implementation Notes:**
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (critical user experience metric)
  * - Treatment: comprehensive speed optimization
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Load_Time_Not_Optimized_Below_3_Seconds extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Page_Load_Time_Not_Optimized_Below_3_Seconds extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

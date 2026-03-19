@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that file editing via the WordPress admin panel is disabled
  * to prevent unauthorized code execution.
  *
- * @since 1.6035.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_File_Editing extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_File_Editing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

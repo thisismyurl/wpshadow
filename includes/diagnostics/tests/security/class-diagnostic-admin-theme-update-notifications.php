@@ -99,7 +99,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0639
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -141,7 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Cron Health Check: Validates wp-cron.php executing
  * - Theme Security Audit: Scans theme code for vulnerabilities
  *
- * @since 1.6033.0639
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Theme_Update_Notifications extends Diagnostic_Base {
 

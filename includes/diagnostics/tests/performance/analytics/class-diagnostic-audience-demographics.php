@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Analytics
- * @since      1.6035.1630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies demographic tracking and audience analysis tools are configured
  * to enable targeted content and marketing strategies.
  *
- * @since 1.6035.1630
+ * @since 1.6093.1200
  */
 class Diagnostic_Audience_Demographics extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Audience_Demographics extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

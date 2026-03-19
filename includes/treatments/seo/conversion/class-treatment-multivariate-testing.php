@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1510
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has multivariate testing
  * capability for complex optimization experiments.
  *
- * @since 1.6035.1510
+ * @since 1.6093.1200
  */
 class Treatment_Multivariate_Testing extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Multivariate_Testing extends Treatment_Base {
 	/**
 	 * Run the multivariate testing treatment check.
 	 *
-	 * @since  1.6035.1510
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if multivariate testing issues detected, null otherwise.
 	 */
 	public static function check() {

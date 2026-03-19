@@ -11,7 +11,7 @@ use WPShadow\Admin\Pages\Report_Scheduler;
  *
  * Updates scheduled report configuration and cron jobs.
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Update_Report_Schedule_Handler extends AJAX_Handler_Base {

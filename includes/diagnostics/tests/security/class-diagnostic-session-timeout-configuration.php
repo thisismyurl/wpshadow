@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2104
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * detect a breach is 207 days (IBM), during which stolen
  * sessions can remain active.
  *
- * @since 1.2033.2104
+ * @since 1.6093.1200
  */
 class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2104
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-timeout-configuration';
@@ -51,7 +51,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2104
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Timeout Configuration';
@@ -59,7 +59,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2104
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies session timeout settings follow security best practices';
@@ -67,7 +67,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2104
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	 * 3. Idle timeout implementation
 	 * 4. Session regeneration after privilege escalation
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -208,7 +208,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * Get auth cookie expiration time.
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return int Expiration time in seconds.
 	 */
 	private static function get_auth_cookie_expiration() {
@@ -220,7 +220,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * Get "Remember Me" duration.
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return int Duration in seconds.
 	 */
 	private static function get_remember_me_duration() {
@@ -232,7 +232,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * Check for idle timeout implementation.
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return bool True if implemented.
 	 */
 	private static function check_idle_timeout_implementation() {
@@ -243,7 +243,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * Check for absolute session timeout.
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return bool True if implemented.
 	 */
 	private static function check_absolute_timeout() {
@@ -264,7 +264,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * Check if sessions regenerate on login.
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return bool True if regeneration occurs.
 	 */
 	private static function check_session_regeneration() {
@@ -276,7 +276,7 @@ class Diagnostic_Session_Timeout_Configuration extends Diagnostic_Base {
 	/**
 	 * Check for concurrent session handling.
 	 *
-	 * @since  1.2033.2104
+	 * @since 1.6093.1200
 	 * @return bool True if handled.
 	 */
 	private static function check_concurrent_session_handling() {

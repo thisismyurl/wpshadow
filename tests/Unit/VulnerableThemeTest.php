@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1700
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Vulnerable Theme Diagnostic Test Class
  *
- * @since 1.6028.1700
+ * @since 1.6093.1200
  */
 class VulnerableThemeTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test diagnostic passes with secure theme
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_secure_theme(): void {
@@ -64,7 +64,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test diagnostic flags outdated theme
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_outdated_theme(): void {
@@ -111,7 +111,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test diagnostic flags known vulnerability
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_known_vulnerability(): void {
@@ -158,7 +158,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -212,7 +212,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test meta includes theme details
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_theme_details(): void {
@@ -255,7 +255,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test details include vulnerability list
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_vulnerability_list(): void {
@@ -299,7 +299,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -339,7 +339,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test threat level scales with severity
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_scales_with_severity(): void {
@@ -381,7 +381,7 @@ class VulnerableThemeTest extends TestCase {
 	/**
 	 * Test vulnerability count accuracy
 	 *
-	 * @since 1.6028.1700
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_vulnerability_count_accuracy(): void {

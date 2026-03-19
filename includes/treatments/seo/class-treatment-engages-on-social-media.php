@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Social auto-posting
  * - Social feed integration
  *
- * @since 1.7034.1430
+ * @since 1.6093.1200
  */
 class Treatment_Engages_On_Social_Media extends Treatment_Base {
 
@@ -74,7 +74,7 @@ class Treatment_Engages_On_Social_Media extends Treatment_Base {
 	 * - 1 point: Click to Tweet or similar features
 	 * - 1 point: Open Graph tags configured
 	 *
-	 * @since  1.7034.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

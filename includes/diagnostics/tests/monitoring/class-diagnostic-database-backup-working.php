@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures database backups are generated and accessible.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Backup_Working extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Database_Backup_Working extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -128,7 +128,7 @@ class Diagnostic_Database_Backup_Working extends Diagnostic_Base {
 	/**
 	 * Filter backups by type.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  array $backups Backup list.
 	 * @param  string $type Backup type.
 	 * @return array Filtered backups.
@@ -147,7 +147,7 @@ class Diagnostic_Database_Backup_Working extends Diagnostic_Base {
 	/**
 	 * Get latest backup from list.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  array $backups Backup list.
 	 * @return array Latest backup.
 	 */

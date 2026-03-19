@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for loyalty and retention. Birthday offers have 40% higher redemption rates
  * and generate goodwill that increases retention. Simple to implement, high ROI.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Birthday_Or_Anniversary_Rewards extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Birthday_Or_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_No_Birthday_Or_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Check if birthday rewards exist
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if birthday rewards active
 	 */
 	private static function check_birthday_rewards(): bool {
@@ -116,7 +116,7 @@ class Diagnostic_No_Birthday_Or_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Get reward types
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of reward types
 	 */
 	private static function get_reward_types(): array {
@@ -162,7 +162,7 @@ class Diagnostic_No_Birthday_Or_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Get implementation steps
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of implementation steps
 	 */
 	private static function get_implementation_steps(): array {

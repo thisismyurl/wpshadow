@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Retrieves certificate metadata and evaluates days until expiry.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_SSL_Certificate_Expiration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_SSL_Certificate_Expiration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_SSL_Certificate_Expiration extends Diagnostic_Base {
 	/**
 	 * Get SSL certificate info for a domain.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  string $domain Domain name.
 	 * @return array SSL certificate info array.
 	 */

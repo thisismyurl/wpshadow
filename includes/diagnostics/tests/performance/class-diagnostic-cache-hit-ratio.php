@@ -28,7 +28,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2057
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes object cache effectiveness through hit/miss ratio measurement.
  *
- * @since 1.6033.2057
+ * @since 1.6093.1200
  */
 class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 
@@ -85,7 +85,7 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 	 * Good hit ratio: >80%
 	 * Poor hit ratio: <50%
 	 *
-	 * @since  1.6033.2057
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

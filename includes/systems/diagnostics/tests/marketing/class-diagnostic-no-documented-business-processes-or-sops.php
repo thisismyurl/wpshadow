@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies with documented processes scale faster.
  * Without documentation, every hire requires weeks of training.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Documented_Business_Processes_Or_Sops extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Documented_Business_Processes_Or_Sops extends Diagnostic_Bas
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_No_Documented_Business_Processes_Or_Sops extends Diagnostic_Bas
 	/**
 	 * Check if processes are documented.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if processes detected, false otherwise.
 	 */
 	private static function has_documented_processes() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Documented_Business_Processes_Or_Sops extends Diagnostic_Bas
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Documented_Business_Processes_Or_Sops extends Diagnostic_Bas
 	/**
 	 * Get critical processes to document.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Critical processes.
 	 */
 	private static function get_critical_processes() {

@@ -4,7 +4,7 @@
  *
  * Detects multiple H1 tags on a page.
  *
- * @since   1.6033.1730
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Multiple H1 tags confuse search engines about page topic and reduce
  * clarity for assistive technologies.
  *
- * @since 1.6033.1730
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Multiple_H1 extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Multiple_H1 extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1730
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

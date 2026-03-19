@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\CustomerFeedback
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that surveys or feedback forms are available.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Customer_Feedback_System extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Customer_Feedback_System extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -112,7 +112,7 @@ class Diagnostic_Customer_Feedback_System extends Diagnostic_Base {
 	/**
 	 * Find pages or posts by keyword search.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching page titles.
 	 */

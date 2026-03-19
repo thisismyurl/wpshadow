@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1510
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has an active CRO program
  * with testing, tracking, and optimization infrastructure.
  *
- * @since 1.6035.1510
+ * @since 1.6093.1200
  */
 class Diagnostic_Conversion_Rate_Optimization extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Conversion_Rate_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the conversion rate optimization diagnostic check.
 	 *
-	 * @since  1.6035.1510
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if CRO issues detected, null otherwise.
 	 */
 	public static function check() {

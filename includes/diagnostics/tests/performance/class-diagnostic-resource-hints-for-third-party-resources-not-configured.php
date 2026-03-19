@@ -25,7 +25,7 @@
  * **Business Impact:**
  * Site uses: Google Fonts, Google Analytics, Cloudflare CDN, Stripe.
  * No resource hints. Each domain: DNS (100ms) + connect (200ms) =
- * 300ms overhead × 4 domains = 1.2s wasted. Added preconnect hints:
+ * 300ms overhead × 4 domains =1.0s wasted. Added preconnect hints:
  * <link rel="preconnect" href="https://fonts.googleapis.com">
  * <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
  * <link rel="preconnect" href="https://www.google-analytics.com">
@@ -51,7 +51,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -91,7 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (optimization, measurable improvement)
  * - Treatment: add preconnect/dns-prefetch hints
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Resource_Hints_For_Third_Party_Resources_Not_Configured extends Diagnostic_Base {
 
@@ -126,7 +126,7 @@ class Diagnostic_Resource_Hints_For_Third_Party_Resources_Not_Configured extends
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures site has recent, accessible database backups for disaster recovery capability.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 	 * Checks for backup plugins, backup files in common directories,
 	 * and backup configuration settings to ensure database backups exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no recent backups found, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 	 * Detects common WordPress backup plugins and verifies their
 	 * activation status and last backup timestamp.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array List of detected backup plugins with details.
 	 */
 	private static function check_backup_plugins() {
@@ -259,7 +259,7 @@ class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 	 * Scans common backup file locations for .sql or .gz database backup files.
 	 * Checks file age to determine if backups are recent.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array List of recent backup files found.
 	 */
 	private static function check_backup_files() {
@@ -319,7 +319,7 @@ class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 	 * Detects if the site is hosted on a provider known to offer
 	 * automatic backups (WP Engine, Kinsta, SiteGround, etc.).
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array Hosting provider backup information if detected.
 	 */
 	private static function check_hosting_backups() {
@@ -364,7 +364,7 @@ class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 	 * Detects scheduled WordPress cron events that indicate
 	 * automatic backups are configured.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array List of scheduled backup events.
 	 */
 	private static function check_scheduled_backups() {
@@ -409,7 +409,7 @@ class Diagnostic_Database_Backup_Availability extends Diagnostic_Base {
 	 * Calculates the total size of all WordPress database tables
 	 * to assess backup importance and storage requirements.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return float Database size in MB.
 	 */
 	private static function get_database_size() {

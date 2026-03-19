@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Core\Security
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides unified interface for testing and managing security API integrations.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Security_API_Manager {
 
 	/**
 	 * Get decrypted API key for a service
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name (wpscan, hibp, etc).
 	 * @return string Decrypted API key or empty string.
 	 */
@@ -54,7 +54,7 @@ class Security_API_Manager {
 	/**
 	 * Save encrypted API key
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @param  string $api_key API key.
 	 * @return bool True on success.
@@ -78,7 +78,7 @@ class Security_API_Manager {
 	/**
 	 * Check if service is enabled
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @return bool True if enabled.
 	 */
@@ -89,7 +89,7 @@ class Security_API_Manager {
 	/**
 	 * Enable or disable a service
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @param  bool   $enabled Enable or disable.
 	 * @return bool True on success.
@@ -101,7 +101,7 @@ class Security_API_Manager {
 	/**
 	 * Get service configuration
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @return array {
 	 *     @type string $name Service display name.
@@ -120,7 +120,7 @@ class Security_API_Manager {
 	/**
 	 * Get all service configurations
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Service configurations.
 	 */
 	public static function get_all_configs() {
@@ -181,7 +181,7 @@ class Security_API_Manager {
 	/**
 	 * Get all enabled services
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array List of enabled service names.
 	 */
 	public static function get_enabled_services() {
@@ -200,7 +200,7 @@ class Security_API_Manager {
 	/**
 	 * Cache API response
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @param  string $cache_key Cache key.
 	 * @param  mixed  $data Data to cache.
@@ -215,7 +215,7 @@ class Security_API_Manager {
 	/**
 	 * Get cached API response
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @param  string $cache_key Cache key.
 	 * @return mixed Cached data or false if not found.
@@ -228,7 +228,7 @@ class Security_API_Manager {
 	/**
 	 * Clear cache for a service
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name (optional, clears all if not specified).
 	 */
 	public static function clear_cache( $service = '' ) {
@@ -256,7 +256,7 @@ class Security_API_Manager {
 	/**
 	 * Log API call for audit trail
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $service Service name.
 	 * @param  string $action Action performed.
 	 * @param  array  $details Additional details.

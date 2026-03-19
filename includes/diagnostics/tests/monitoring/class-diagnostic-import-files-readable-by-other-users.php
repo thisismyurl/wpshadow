@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since      1.2034.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that import files have secure permissions.
  *
- * @since 1.2034.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

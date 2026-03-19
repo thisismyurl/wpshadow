@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.602.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies CSS files loaded in <head> that block render
  * and should be deferred or inlined for mobile.
  *
- * @since 1.602.1600
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 	/**
 	 * Find render-blocking CSS files.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_render_blocking_css(): array {
@@ -165,7 +165,7 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 	/**
 	 * Check if style is render-blocking.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @param  object $style WordPress style object.
 	 * @param  int    $size  File size in bytes.
 	 * @return bool Is render-blocking.

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2106
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sessions and provide mechanisms to terminate active sessions,
  * especially after credential changes or suspicious activity.
  *
- * @since 1.2033.2106
+ * @since 1.6093.1200
  */
 class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'concurrent-session-control';
@@ -50,7 +50,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Concurrent Session Control';
@@ -58,7 +58,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies proper concurrent session management and controls';
@@ -66,7 +66,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2106
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	 * 3. Concurrent session limits
 	 * 4. Session metadata tracking
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -222,7 +222,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * Check for session limit implementation.
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return bool True if limits exist.
 	 */
 	private static function check_session_limit_implementation() {
@@ -234,7 +234,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * Check if sessions invalidate on password change.
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return bool True if invalidation occurs.
 	 */
 	private static function check_password_change_invalidation() {
@@ -246,7 +246,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * Check for session revocation capability.
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return bool True if revocation exists.
 	 */
 	private static function check_session_revocation() {
@@ -258,7 +258,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * Find users with excessive active sessions.
 	 *
-	 * @since  1.2033.2106
+	 * @since 1.6093.1200
 	 * @return array User IDs with excessive sessions.
 	 */
 	private static function find_users_with_excessive_sessions() {

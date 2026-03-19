@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for multiple membership tiers and upgrade pathways. Clear upgrade
  * paths increase revenue per user by 30-50% through tier progression.
  *
- * @since 1.6034.1450
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Upgrade_Path extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Upgrade_Path extends Diagnostic_Base {
 	 *
 	 * Looks for multiple tiers and upgrade prompts in membership systems.
 	 *
-	 * @since  1.6034.1450
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if single-tier, null if multi-tier.
 	 */
 	public static function check() {

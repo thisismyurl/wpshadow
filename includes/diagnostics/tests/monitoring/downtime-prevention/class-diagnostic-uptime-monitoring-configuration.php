@@ -5,7 +5,7 @@
  * Checks if uptime monitoring is configured for downtime alerts.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

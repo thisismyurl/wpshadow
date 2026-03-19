@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2155
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Recommended: 1000+ words for blog posts
  * - In-depth: 2000+ words for cornerstone content
  *
- * @since 1.6034.2155
+ * @since 1.6093.1200
  */
 class Diagnostic_Thin_Content_Detection extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Thin_Content_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2155
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if thin content detected, null otherwise.
 	 */
 	public static function check() {

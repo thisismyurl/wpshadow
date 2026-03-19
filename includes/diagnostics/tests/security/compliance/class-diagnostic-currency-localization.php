@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Currency_Localization Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Currency_Localization extends Diagnostic_Base {
 
@@ -39,7 +39,7 @@ class Diagnostic_Currency_Localization extends Diagnostic_Base {
 		$issues = array();
 
 		$issues[] = __( 'Allow users to select currency (USD, EUR, GBP, JPY, etc)', 'wpshadow' );
-		$issues[] = __( 'Format currency per locale: $1,000.50 vs 1.000,50 €', 'wpshadow' );
+		$issues[] = __( 'Format currency per locale: $1,000.50 vs1.0,50 €', 'wpshadow' );
 		$issues[] = __( 'Position symbol correctly: $100 vs 100€ vs ¥100', 'wpshadow' );
 		$issues[] = __( 'Use ISO currency codes in data (USD, EUR)', 'wpshadow' );
 		$issues[] = __( 'Display symbol to users ($ € £ ¥)', 'wpshadow' );
@@ -55,7 +55,7 @@ class Diagnostic_Currency_Localization extends Diagnostic_Base {
 				'kb_link'      => 'https://wpshadow.com/kb/currency-localization',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'format_examples'         => 'US: $1,000.50, DE: 1.000,50 €, JP: ¥1,000',
+					'format_examples'         => 'US: $1,000.50, DE:1.0,50 €, JP: ¥1,000',
 					'symbol_position'         => 'USD/GBP prefix ($100), EUR suffix (100€)',
 					'php_function'            => 'NumberFormatter class with locale',
 				),

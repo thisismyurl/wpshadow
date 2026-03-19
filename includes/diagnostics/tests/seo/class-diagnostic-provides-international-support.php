@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website provides customer support in multiple languages to serve
  * international customers effectively.
  *
- * @since 1.5002.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Provides_International_Support extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Provides_International_Support extends Diagnostic_Base {
 	 * checks for multi-language plugins, translated support content, international
 	 * contact options, and localized help resources.
 	 *
-	 * @since  1.5002.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  * Runs health checks on configurable schedule (daily/weekly).
  * Stores results and logs scan activity.
  *
- * @since   1.6032.1010
+ * @since 1.6093.1200
  * @package WPShadow\Guardian
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles automated diagnostic scans on a configurable schedule.
  *
- * @since 1.6032.1010
+ * @since 1.6093.1200
  */
 class Scan_Scheduler extends Hook_Subscriber_Base {
 
@@ -49,7 +49,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -64,8 +64,8 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Initialize scheduled scans system (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Scan_Scheduler::subscribe() instead
-	 * @since      1.6032.1010
+	 * @deprecated1.0 Use Scan_Scheduler::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -80,7 +80,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Register scheduled scan settings
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_settings() {
@@ -146,7 +146,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Called on plugin activation to register WordPress cron event.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function schedule_cron() {
@@ -179,7 +179,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Called on plugin deactivation to remove WordPress cron event.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function unschedule_cron() {
@@ -196,7 +196,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Runs the diagnostic scan at the scheduled time.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function execute_scheduled_scan() {
@@ -247,7 +247,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Executes all registered diagnostics based on configured depth.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return array Results of all diagnostics.
 	 */
 	private static function run_diagnostics(): array {
@@ -329,7 +329,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Get diagnostics based on scan depth
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  string $depth Scan depth (quick, standard, deep).
 	 * @return array Array of diagnostic slugs and classes.
 	 */
@@ -376,7 +376,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Saves scan results to database for historical tracking.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  array $results Scan results.
 	 * @param  float $execution_time Time taken to complete scan.
 	 * @return void
@@ -419,7 +419,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Sends scan results via email if configured.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  array $results Scan results.
 	 * @return void
 	 */
@@ -452,7 +452,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Reschedules the next diagnostic scan.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function schedule_next_run() {
@@ -467,7 +467,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Calculate next run time based on settings
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return int Unix timestamp of next run.
 	 */
 	private static function calculate_next_run_time(): int {
@@ -496,7 +496,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Provides a safe, normalized snapshot of the most recent scan results.
 	 *
-	 * @since  1.8001.1200
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Latest scan summary.
 	 *
@@ -539,7 +539,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Uses the currently configured depth to build the diagnostic list.
 	 *
-	 * @since  1.8001.1200
+	 * @since 1.6093.1200
 	 * @return array Array of diagnostic slugs mapped to class names.
 	 */
 	public static function get_next_scan_diagnostics(): array {
@@ -550,7 +550,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Get diagnostic map for a specific depth.
 	 *
-	 * @since  1.8001.1200
+	 * @since 1.6093.1200
 	 * @param  string $depth Scan depth (quick, standard, deep).
 	 * @return array Array of diagnostic slugs mapped to class names.
 	 */
@@ -565,7 +565,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Get the next scheduled scan time.
 	 *
-	 * @since  1.8001.1200
+	 * @since 1.6093.1200
 	 * @return string Next scan time in Y-m-d H:i:s, or empty string if unknown.
 	 */
 	public static function get_next_scan_time(): string {
@@ -585,7 +585,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Check if scheduled scans are enabled.
 	 *
-	 * @since  1.8001.1200
+	 * @since 1.6093.1200
 	 * @return bool True when scheduled scans are enabled.
 	 */
 	public static function is_scheduled_scan_enabled(): bool {
@@ -595,7 +595,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Check if scheduled scans are enabled
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return bool
 	 */
 	private static function is_enabled(): bool {
@@ -605,7 +605,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Check if should email results
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return bool
 	 */
 	private static function should_email_results(): bool {
@@ -615,7 +615,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Get frequency setting
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return string
 	 */
 	private static function get_frequency(): string {
@@ -625,7 +625,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Get frequency label for display
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return string
 	 */
 	private static function get_frequency_label(): string {
@@ -641,7 +641,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	 *
 	 * Displays notice if WordPress cron is not working.
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function check_cron_health() {
@@ -691,7 +691,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Handle AJAX request to dismiss cron disabled notice
 	 *
-	 * @since  1.6032.1748
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function dismiss_cron_disabled_notice() {
@@ -714,7 +714,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Sanitize boolean
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return bool
 	 */
@@ -725,7 +725,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Sanitize frequency
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return string
 	 */
@@ -737,7 +737,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Sanitize time
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return string
 	 */
@@ -751,7 +751,7 @@ class Scan_Scheduler extends Hook_Subscriber_Base {
 	/**
 	 * Sanitize depth
 	 *
-	 * @since  1.6032.1010
+	 * @since 1.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return string
 	 */

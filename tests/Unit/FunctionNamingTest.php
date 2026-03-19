@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1735
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Function Naming Test Class
  *
- * @since 1.6028.1735
+ * @since 1.6093.1200
  */
 class FunctionNamingTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test diagnostic passes with compliant functions
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_compliant_functions(): void {
@@ -64,7 +64,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test diagnostic flags camelCase functions
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_camelcase_functions(): void {
@@ -95,7 +95,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test diagnostic flags PascalCase functions
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_pascalcase_functions(): void {
@@ -126,7 +126,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -168,7 +168,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test meta includes compliance percentage
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_compliance_percentage(): void {
@@ -198,7 +198,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test details include violations list
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_violations_list(): void {
@@ -231,7 +231,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -261,7 +261,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test severity scales with compliance
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_severity_scales_with_compliance(): void {
@@ -291,7 +291,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test high severity with low compliance
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_high_severity_with_low_compliance(): void {
@@ -321,7 +321,7 @@ class FunctionNamingTest extends TestCase {
 	/**
 	 * Test violations grouped by type
 	 *
-	 * @since 1.6028.1735
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_violations_grouped_by_type(): void {

@@ -25,7 +25,7 @@
  * Site has 3MB autoloaded options (plugin settings, transients).
  * Every page takes 500ms extra for autoload query. User sees
  * 2-second load times. Bounce rate: 45%. Revenue: $100K/month.
- * After cleanup (200KB autoload): pages load in 1.2 seconds.
+ * After cleanup (200KB autoload): pages load in1.0 seconds.
  * Bounce rate drops to 25%. Revenue increases to $150K/month.
  * Cost of bloat: $600K/year in lost revenue.
  *
@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1354
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (>1MB), medium (>800KB)
  * - Treatment: convert large options to non-autoload
  *
- * @since 1.5049.1354
+ * @since 1.6093.1200
  */
 class Diagnostic_Autoload_Options_Size extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Autoload_Options_Size extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1354
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_Autoload_Options_Size extends Diagnostic_Base {
 
 		$size_mb = round( $size_bytes / 1024 / 1024, 2 );
 
-		if ( $size_mb >= 1.0 ) {
+		if ( $size_mb >=1.0 ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,

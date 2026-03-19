@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1470
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that page speed meets Google Core Web Vitals requirements
  * which are now used as SEO ranking factors.
  *
- * @since 1.7034.1470
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Speed_SEO_Impact extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Page_Speed_SEO_Impact extends Diagnostic_Base {
 	 * Tests page speed optimization including Core Web Vitals,
 	 * image optimization, and caching configuration.
 	 *
-	 * @since  1.7034.1470
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

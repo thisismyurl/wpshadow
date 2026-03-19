@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * translate well and confuse non-native speakers. Clear, literal language helps
  * everyone—especially international audiences and translation tools.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Uses_English_Idioms extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Content_Uses_English_Idioms extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Content_Uses_English_Idioms extends Diagnostic_Base {
 	/**
 	 * Scan content for common English idioms
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of found idioms with context
 	 */
 	private static function scan_content_for_idioms(): array {
@@ -146,7 +146,7 @@ class Diagnostic_Content_Uses_English_Idioms extends Diagnostic_Base {
 	/**
 	 * Get main content to scan (homepage, about page, main services)
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return string Combined scannable content
 	 */
 	private static function get_scannable_content(): string {

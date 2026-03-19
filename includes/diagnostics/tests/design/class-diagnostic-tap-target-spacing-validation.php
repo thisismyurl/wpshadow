@@ -4,7 +4,7 @@
  *
  * Measures distance between adjacent interactive elements to prevent accidental activation.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures distance between adjacent interactive elements to prevent accidental
  * activation on touch devices, ensuring WCAG 2.5.8 compliance.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Tap_Target_Spacing_Validation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Tap_Target_Spacing_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

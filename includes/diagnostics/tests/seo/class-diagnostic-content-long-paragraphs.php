@@ -4,7 +4,7 @@
  *
  * Detects paragraphs exceeding optimal length.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 73% of users abandon. Mobile makes it worse (5 lines = 15 lines mobile).
  * Target: 50-75 words.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Long_Paragraphs extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Content_Long_Paragraphs extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

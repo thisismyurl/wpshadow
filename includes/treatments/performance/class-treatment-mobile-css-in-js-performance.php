@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since      1.602.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies CSS-in-JS library usage and measures runtime
  * CSS generation overhead.
  *
- * @since 1.602.1600
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_CSS_In_JS_Performance extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Mobile_CSS_In_JS_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1600
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

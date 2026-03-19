@@ -4,7 +4,7 @@
  *
  * Tests if mobile-first approach is evident.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies mobile optimization is prioritized through responsive theme
  * support and mobile enhancement plugins.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Prioritizes_Mobile_Optimization extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Prioritizes_Mobile_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

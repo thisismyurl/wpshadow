@@ -14,14 +14,14 @@
  * **Real-World Scenario:**\n * Custom theme fetched related posts inside loop (query per post in main loop = N+1). Homepage
  * with 10 featured posts = 10 queries. Plus related posts for each = 10 × 5 = 50 queries just for
  * related fetching. After moving to single query with JOIN, 50 queries → 1 query. Homepage queries:
- * 60 → 11. Page load: 4.5 seconds → 1.2 seconds (4x faster).\n *
+ * 60 → 11. Page load: 4.5 seconds →1.0 seconds (4x faster).\n *
  * **Business Impact:**\n * - Database queries 50-100+ per page (inefficient)\n * - Database server overloaded\n * - Page load 3-10+ seconds slower\n * - Cannot scale without database upgrade ($50k+)\n * - User experience poor and unpredictable\n *
  * **Philosophy Alignment:**\n * - #9 Show Value: Massive page speed improvement (4-10x)\n * - #8 Inspire Confidence: Prevents database overload\n * - #10 Talk-About-Worthy: "Database barely works anymore"\n *
  * **Related Checks:**\n * - Theme Database Query Optimization (optimization patterns)\n * - Database Index Efficiency (query optimization)\n * - Plugin Database Query Volume (plugin contribution)\n * - Slow Query Detection (specific slow queries)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-database-optimization\n * - Video: https://wpshadow.com/training/wp-query-best-practices (7 min)\n * - Advanced: https://wpshadow.com/training/theme-refactoring-patterns (14 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes database query count and efficiency on theme pages.
  *
- * @since 1.5049.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Database_Queries extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Theme_Database_Queries extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

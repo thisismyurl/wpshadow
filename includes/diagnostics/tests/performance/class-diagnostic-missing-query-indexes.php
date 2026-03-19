@@ -51,7 +51,7 @@
  * - Video: https://wpshadow.com/training/database-indexing-101 (7 min)
  * - Advanced: https://wpshadow.com/training/index-strategy-for-scale (14 min)
  *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -113,7 +113,7 @@ class Diagnostic_Missing_Query_Indexes extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -130,12 +130,8 @@ class Diagnostic_Missing_Query_Indexes extends Diagnostic_Base {
 		);
 
 		foreach ( $critical_columns as $table => $columns ) {
-			$indexes = $wpdb->get_results(
-				$wpdb->prepare(
-					"SHOW INDEX FROM {$table}",
-					array()
-				)
-			);
+			$safe_table = str_replace( '`', '``', $table );
+			$indexes    = $wpdb->get_results( "SHOW INDEX FROM `{$safe_table}`" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- SHOW INDEX does not support placeholders for identifiers.
 
 			$indexed_columns = array();
 			foreach ( (array) $indexes as $index ) {

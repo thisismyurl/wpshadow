@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no 2FA), high (optional not required)
  * - Treatment: install 2FA plugin and require for all admins
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Two_Factor_Authentication_For_Admin_Not_Required extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Two_Factor_Authentication_For_Admin_Not_Required extends Diagno
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

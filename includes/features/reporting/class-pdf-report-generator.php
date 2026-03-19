@@ -4,7 +4,7 @@
  *
  * Generates PDF reports for WPShadow findings and diagnostics
  *
- * @since   1.6032.1021
+ * @since 1.6093.1200
  * @package WPShadow\Reporting
  */
 
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates PDF reports without external dependencies using native PHP
  *
- * @since 1.6032.1021
+ * @since 1.6093.1200
  */
 class PDF_Report_Generator {
 
 	/**
 	 * Generate a PDF report from findings
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  string $report_type Report type (summary, detailed, audit_trail).
 	 * @param  array  $findings Array of findings.
 	 * @return string|false PDF file path or false on failure.
@@ -68,7 +68,7 @@ class PDF_Report_Generator {
 	/**
 	 * Prepare report data based on type
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  string $report_type Report type.
 	 * @param  array  $findings Array of findings.
 	 * @return array Prepared report data.
@@ -112,7 +112,7 @@ class PDF_Report_Generator {
 	/**
 	 * Render HTML report from data
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  array $data Report data.
 	 * @return string HTML content.
 	 */
@@ -137,7 +137,7 @@ class PDF_Report_Generator {
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body {
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-			line-height: 1.6;
+			line-height:1.0;
 			color: #333;
 			background: #fff;
 		}
@@ -375,7 +375,7 @@ HTML;
 	/**
 	 * Save report file
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  string $html_content HTML content.
 	 * @param  string $report_type Report type.
 	 * @return string|false File path or false.
@@ -412,7 +412,7 @@ HTML;
 	/**
 	 * Get downloadable report URL
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  string $file_path File path.
 	 * @return string|false URL or false.
 	 */

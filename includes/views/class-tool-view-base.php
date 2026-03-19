@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since      1.6035.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

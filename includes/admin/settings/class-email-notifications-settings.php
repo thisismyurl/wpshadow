@@ -4,7 +4,7 @@
  *
  * Admin page for configuring email notification preferences
  *
- * @since   1.6032.1021
+ * @since 1.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Renders the email notifications settings page
  *
- * @since 1.6032.1021
+ * @since 1.6093.1200
  */
 class Email_Notifications_Settings {
 
 	/**
 	 * Initialize settings page
 	 *
-	 * @since 1.6032.1021
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -38,7 +38,7 @@ class Email_Notifications_Settings {
 	/**
 	 * Register settings section
 	 *
-	 * @since 1.6032.1021
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_settings_section() {
@@ -49,7 +49,7 @@ class Email_Notifications_Settings {
 	/**
 	 * Render email notifications settings form
 	 *
-	 * @since 1.6032.1021
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_form() {

@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0644
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Settings Sanitization: Protects REST update inputs
  * - Capability Map Consistency: Ensures auth checks align with roles
  *
- * @since 1.6033.0644
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Rest_Api_Authentication extends Diagnostic_Base {
 
@@ -106,8 +106,14 @@ class Diagnostic_Admin_Rest_Api_Authentication extends Diagnostic_Base {
 		}
 
 		// Check for unprotected custom REST endpoints
-		global $wp_rest_server;
-		$endpoints = rest_get_endpoints();
+		// Note: rest_get_endpoints() doesn't exist; use REST server routes instead
+		$rest_server = rest_get_server();
+		if ( $rest_server ) {
+			$routes = $rest_server->get_routes();
+			$endpoints = is_array( $routes ) ? $routes : array();
+		} else {
+			$endpoints = array();
+		}
 		$public_endpoints = 0;
 
 		foreach ( (array) $endpoints as $route => $endpoint ) {

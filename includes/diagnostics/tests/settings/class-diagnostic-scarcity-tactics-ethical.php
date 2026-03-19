@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses ethical scarcity tactics (limited inventory, time-sensitive offers) to encourage decisions.
  *
- * @since   1.6034.0245
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ethical scarcity increases conversions by 226%, but must be authentic.
  * Fake scarcity damages trust and brand reputation.
  *
- * @since 1.6034.0245
+ * @since 1.6093.1200
  */
 class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Check inventory display.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return bool True if inventory displayed, false otherwise.
 	 */
 	private static function check_inventory_display() {
@@ -175,7 +175,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Check time offers.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return bool True if time offers exist, false otherwise.
 	 */
 	private static function check_time_offers() {
@@ -202,7 +202,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Check sale scarcity.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return bool True if sales have urgency, false otherwise.
 	 */
 	private static function check_sale_scarcity() {
@@ -234,7 +234,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Check limited edition.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return bool True if limited products exist, false otherwise.
 	 */
 	private static function check_limited_edition() {
@@ -260,7 +260,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Check enrollment limits.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return bool True if enrollment limits exist, false otherwise.
 	 */
 	private static function check_enrollment_limits() {
@@ -286,7 +286,7 @@ class Diagnostic_Scarcity_Tactics_Ethical extends Diagnostic_Base {
 	/**
 	 * Check authenticity.
 	 *
-	 * @since  1.6034.0245
+	 * @since 1.6093.1200
 	 * @return bool True if scarcity is authentic, false otherwise.
 	 */
 	private static function check_authenticity() {

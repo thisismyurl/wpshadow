@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no audit trail)
  * - Treatment: enable audit logging for user roles
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Role_Permissions_Audit_Trail_Not_Enabled extends Diagnostic_Base {
 
@@ -118,7 +118,7 @@ class Diagnostic_User_Role_Permissions_Audit_Trail_Not_Enabled extends Diagnosti
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

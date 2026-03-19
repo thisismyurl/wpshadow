@@ -4,7 +4,7 @@
  *
  * Validates that link text is descriptive and meaningful.
  *
- * @since   1.6035.1200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for generic or unclear link text (WCAG 2.4.4 Level A).
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_WCAG_Link_Purpose extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_WCAG_Link_Purpose extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

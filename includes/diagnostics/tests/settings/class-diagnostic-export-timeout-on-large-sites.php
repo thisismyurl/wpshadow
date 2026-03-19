@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether export operations will timeout on large sites.
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 	 * Determines if export will timeout based on content size
 	 * and server timeout settings.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -86,11 +86,7 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 		$estimated_export_size = ( $publishable_posts * ( $avg_post_size + $avg_meta_size ) );
 
 		// Get actual postmeta size.
-		$total_meta = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->postmeta}"
-			)
-		);
+		$total_meta = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->postmeta}" );
 
 		// Check for large posts with lots of content.
 		$large_posts = (int) $wpdb->get_var(
@@ -205,7 +201,7 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 	/**
 	 * Convert memory string to bytes.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @param  string $value Memory limit string (e.g., "128M", "2G").
 	 * @return int Memory in bytes.
 	 */

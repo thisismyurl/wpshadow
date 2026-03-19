@@ -5,7 +5,7 @@
  * Checks for performance issues with active widgets including unnecessary
  * rendering and database queries.
  *
- * @since   1.6033.2085
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Sidebar activity
  * - Widget query impact
  *
- * @since 1.6033.2085
+ * @since 1.6093.1200
  */
 class Diagnostic_Widget_Performance extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Widget_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2085
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

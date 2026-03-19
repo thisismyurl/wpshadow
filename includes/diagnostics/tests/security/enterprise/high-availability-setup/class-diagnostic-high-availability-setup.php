@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics/Enterprise
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that high availability infrastructure is configured with load balancing.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_High_Availability_Setup extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_High_Availability_Setup extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
-     * @since  1.6050.0000
+     * @since 1.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {

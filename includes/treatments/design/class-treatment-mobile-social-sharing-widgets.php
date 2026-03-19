@@ -4,7 +4,7 @@
  *
  * Optimizes social sharing widgets for mobile devices.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates social sharing widgets are optimized for mobile with proper button
  * sizing and layout, ensuring WCAG 2.5.5 compliance.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Social_Sharing_Widgets extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Social_Sharing_Widgets extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

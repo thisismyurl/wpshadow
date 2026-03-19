@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Readability
- * @since      1.6034.2202
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Passive: "The ball was thrown by the player"
  * - Active: "The player threw the ball"
  *
- * @since 1.6034.2202
+ * @since 1.6093.1200
  */
 class Diagnostic_Passive_Voice_Overuse extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Passive_Voice_Overuse extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2202
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if excessive passive voice detected, null otherwise.
 	 */
 	public static function check() {
@@ -141,7 +141,7 @@ class Diagnostic_Passive_Voice_Overuse extends Diagnostic_Base {
 	 *
 	 * Uses simple pattern matching for common passive voice constructions.
 	 *
-	 * @since  1.6034.2202
+	 * @since 1.6093.1200
 	 * @param  string $content Content to analyze.
 	 * @return float Percentage of sentences using passive voice.
 	 */

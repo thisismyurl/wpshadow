@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1800
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures site is not hidden from search engines.
  *
- * @since 1.6032.1800
+ * @since 1.6093.1200
  */
 class Diagnostic_Search_Engine_Visibility extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Search_Engine_Visibility extends Diagnostic_Base {
 	 * - robots.txt is not blocking crawlers
 	 * - No noindex is set globally
 	 *
-	 * @since  1.6032.1800
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,11 +79,13 @@ class Diagnostic_Search_Engine_Visibility extends Diagnostic_Base {
 		}
 
 		// Check for robots.txt blocking.
-		$robots_path = get_home_path() . 'robots.txt';
-		if ( file_exists( $robots_path ) ) {
-			$robots_content = file_get_contents( $robots_path );
-			if ( $robots_content && false !== strpos( strtolower( $robots_content ), 'disallow: /' ) ) {
-				$issues[] = __( 'robots.txt appears to block all crawlers from accessing the site', 'wpshadow' );
+		if ( function_exists( 'get_home_path' ) ) {
+			$robots_path = get_home_path() . 'robots.txt';
+			if ( file_exists( $robots_path ) ) {
+				$robots_content = file_get_contents( $robots_path );
+				if ( $robots_content && false !== strpos( strtolower( $robots_content ), 'disallow: /' ) ) {
+					$issues[] = __( 'robots.txt appears to block all crawlers from accessing the site', 'wpshadow' );
+				}
 			}
 		}
 

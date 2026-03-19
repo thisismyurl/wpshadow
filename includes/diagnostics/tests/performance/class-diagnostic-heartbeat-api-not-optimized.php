@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -79,7 +79,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * frontend (unnecessary for visitors), 120s interval in admin
  * (autosave works fine), 30s on editor pages (reasonable for locks).
  * Result: Heartbeat requests reduced 90%. Server load from
- * Heartbeat: 15% → 1.5%. No user-facing changes. Better performance.
+ * Heartbeat: 15% →1.0%. No user-facing changes. Better performance.
  *
  * **Implementation Notes:**
  * - Checks Heartbeat frequency settings
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (affects server load under editor usage)
  * - Treatment: install Heartbeat control, optimize intervals
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Heartbeat_API_Not_Optimized extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Heartbeat_API_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

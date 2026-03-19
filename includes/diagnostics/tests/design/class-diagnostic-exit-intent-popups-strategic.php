@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses exit-intent popups strategically to recover abandoning visitors without being annoying.
  *
- * @since   1.6034.0250
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Well-designed exit-intent popups recover 10-15% of abandoning visitors.
  * Poor implementation damages user experience and brand perception.
  *
- * @since 1.6034.0250
+ * @since 1.6093.1200
  */
 class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Check exit-intent technology.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return bool True if exit-intent exists, false otherwise.
 	 */
 	private static function check_exit_intent_tech() {
@@ -176,7 +176,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Check valuable offers.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return bool True if offers exist, false otherwise.
 	 */
 	private static function check_valuable_offers() {
@@ -203,7 +203,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Check frequency control.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return bool True if frequency control exists, false otherwise.
 	 */
 	private static function check_frequency_control() {
@@ -219,7 +219,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Check page targeting.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return bool True if targeting exists, false otherwise.
 	 */
 	private static function check_page_targeting() {
@@ -235,7 +235,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Check mobile friendly.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return bool True if mobile optimized, false otherwise.
 	 */
 	private static function check_mobile_friendly() {
@@ -252,7 +252,7 @@ class Diagnostic_Exit_Intent_Popups_Strategic extends Diagnostic_Base {
 	/**
 	 * Check A/B testing.
 	 *
-	 * @since  1.6034.0250
+	 * @since 1.6093.1200
 	 * @return bool True if testing capability exists, false otherwise.
 	 */
 	private static function check_ab_testing() {

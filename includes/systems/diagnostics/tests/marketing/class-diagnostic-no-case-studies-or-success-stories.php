@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Case studies are 92% trusted by B2B buyers and increase conversion by 15-30%.
  * Without them, you're competing on features alone instead of proven results.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Case_Studies_Or_Success_Stories extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Case_Studies_Or_Success_Stories extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_No_Case_Studies_Or_Success_Stories extends Diagnostic_Base {
 	/**
 	 * Count case studies on the site
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return int Number of case studies found
 	 */
 	private static function count_case_studies(): int {
@@ -123,7 +123,7 @@ class Diagnostic_No_Case_Studies_Or_Success_Stories extends Diagnostic_Base {
 	/**
 	 * Get recommended case study format
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Recommended case study structure
 	 */
 	private static function get_case_study_format(): array {

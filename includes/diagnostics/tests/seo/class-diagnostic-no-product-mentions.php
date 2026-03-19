@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when blog content doesn't naturally reference products/services,
  * missing conversion opportunities.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Product_Mentions extends Diagnostic_Base {
 

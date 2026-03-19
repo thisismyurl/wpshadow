@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.4031.1939
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (LFI confirmed), high (potential LFI)
  * - Treatment: validate file paths, use realpath(), whitelist allowed files
  *
- * @since 1.4031.1939
+ * @since 1.6093.1200
  */
 class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

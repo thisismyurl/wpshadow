@@ -1686,7 +1686,7 @@ class Workflow_Wizard {
 	/**
 	 * Get public post type options.
 	 *
-	 * @since  1.7035.1410
+	 * @since 1.6093.1200
 	 * @return array Post type options.
 	 */
 	private static function get_public_post_type_options(): array {
@@ -1712,7 +1712,7 @@ class Workflow_Wizard {
 	/**
 	 * Get post status options.
 	 *
-	 * @since  1.7035.1410
+	 * @since 1.6093.1200
 	 * @return array Post status options.
 	 */
 	private static function get_post_status_options(): array {
@@ -1731,7 +1731,7 @@ class Workflow_Wizard {
 	/**
 	 * Get comment status options.
 	 *
-	 * @since  1.7035.1410
+	 * @since 1.6093.1200
 	 * @return array Comment status options.
 	 */
 	private static function get_comment_status_options(): array {

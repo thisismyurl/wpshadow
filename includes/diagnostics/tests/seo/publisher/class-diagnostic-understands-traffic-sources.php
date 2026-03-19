@@ -4,7 +4,7 @@
  *
  * Tests if owner understands and analyzes traffic sources.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that traffic sources are analyzed.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Understands_Traffic_Sources extends Diagnostic_Base {
 
@@ -35,7 +35,7 @@ class Diagnostic_Understands_Traffic_Sources extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Diagnostic_Understands_Traffic_Sources extends Diagnostic_Base {
 	/**
 	 * Check for documentation evidence in posts.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Search terms.
 	 * @return bool True if found.
 	 */

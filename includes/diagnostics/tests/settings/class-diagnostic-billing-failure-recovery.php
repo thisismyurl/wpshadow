@@ -4,7 +4,7 @@
  *
  * Tests whether the site has automated recovery for failed subscription payments.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * proper recovery processes. This diagnostic checks for automated retry
  * and recovery systems.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -166,7 +166,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check if site has subscriptions.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if subscriptions detected, false otherwise.
 	 */
 	private static function has_subscriptions() {
@@ -189,7 +189,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for automatic retry.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if auto-retry exists, false otherwise.
 	 */
 	private static function check_automatic_retry() {
@@ -209,7 +209,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for dunning emails.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if dunning emails exist, false otherwise.
 	 */
 	private static function check_dunning_emails() {
@@ -236,7 +236,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for payment update process.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if update process exists, false otherwise.
 	 */
 	private static function check_payment_update() {
@@ -267,7 +267,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for grace period.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if grace period exists, false otherwise.
 	 */
 	private static function check_grace_period() {
@@ -286,7 +286,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for failure notifications.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if notifications exist, false otherwise.
 	 */
 	private static function check_failure_notifications() {
@@ -314,7 +314,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for alternative payment methods.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if multiple payment methods exist, false otherwise.
 	 */
 	private static function check_alternative_payment() {
@@ -329,7 +329,7 @@ class Diagnostic_Billing_Failure_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for recovery analytics.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if analytics tracking exists, false otherwise.
 	 */
 	private static function check_recovery_analytics() {

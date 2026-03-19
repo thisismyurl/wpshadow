@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests whether WordPress export includes all custom post types
  * registered on the site.
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Custom_Post_Types_In_Export extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Missing_Custom_Post_Types_In_Export extends Diagnostic_Base {
 	 * Verifies that all custom post types are exportable
 	 * and not missing from export configuration.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -145,9 +145,10 @@ class Diagnostic_Missing_Custom_Post_Types_In_Export extends Diagnostic_Base {
 		}
 
 		// Check for custom post type registration without export support.
+		$built_in_types_sql = "'" . implode( "','", array_map( 'esc_sql', $built_in_types ) ) . "'";
 		$cpt_without_export = $wpdb->get_results(
 			"SELECT DISTINCT post_type FROM {$wpdb->posts} 
-			WHERE post_type NOT IN (" . implode( ',', array_map( 'esc_sql', $built_in_types ) ) . ') 
+			WHERE post_type NOT IN (" . $built_in_types_sql . ') 
 			LIMIT 20'
 		);
 

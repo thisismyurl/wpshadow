@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Skip_Links_Navigation Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Skip_Links_Navigation extends Diagnostic_Base {
 

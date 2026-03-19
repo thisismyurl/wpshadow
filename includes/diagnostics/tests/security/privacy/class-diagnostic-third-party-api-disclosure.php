@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies disclosure of third-party services in privacy policy content.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Third_Party_API_Disclosure extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Third_Party_API_Disclosure extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1405
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website provides newsletter content in audio format to serve
  * busy subscribers who prefer listening over reading.
  *
- * @since 1.5002.1405
+ * @since 1.6093.1200
  */
 class Diagnostic_Provides_Audio_Newsletter extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Provides_Audio_Newsletter extends Diagnostic_Base {
 	 * in newsletter posts, audio file attachments, podcast RSS feeds, and references
 	 * to audio versions.
 	 *
-	 * @since  1.5002.1405
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

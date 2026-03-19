@@ -4,7 +4,7 @@
  *
  * Checks if modal dialogs properly trap keyboard focus.
  *
- * @since   1.6035.1400
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that modals keep keyboard focus inside until closed.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Treatment_Modal_Focus_Trap extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Modal_Focus_Trap extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Video content gets 1200% more shares than text+images, and viewers
  * retain 95% of video information vs 10% of text.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Video_Content_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Video_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Video_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if video strategy exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if strategy detected, false otherwise.
 	 */
 	private static function has_video_strategy() {
@@ -140,7 +140,7 @@ class Diagnostic_No_Video_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -169,7 +169,7 @@ class Diagnostic_No_Video_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Get video types to create.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Video content types with descriptions.
 	 */
 	private static function get_video_types() {
@@ -188,7 +188,7 @@ class Diagnostic_No_Video_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Get video platforms.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Video platforms with strategies.
 	 */
 	private static function get_video_platforms() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that payment processing complies with PCI DSS standards
  * and that credit card data is handled securely.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 	/**
 	 * Run the PCI DSS compliance diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if PCI DSS issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,16 @@ class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 		}
 
 		// Check 5: Payment gateway compliance.
-		$payment_gateways = WC()->payment_gateways()->payment_gateways();
+		$payment_gateways = array();
+		if ( function_exists( 'WC' ) ) {
+			$woocommerce = WC();
+			if ( is_object( $woocommerce ) && method_exists( $woocommerce, 'payment_gateways' ) ) {
+				$gateways_manager = $woocommerce->payment_gateways();
+				if ( is_object( $gateways_manager ) && method_exists( $gateways_manager, 'payment_gateways' ) ) {
+					$payment_gateways = $gateways_manager->payment_gateways();
+				}
+			}
+		}
 		$compliant_gateways = array();
 
 		$pci_compliant_gateways = array(
@@ -112,10 +121,10 @@ class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 		);
 
 		foreach ( $payment_gateways as $gateway ) {
-			if ( $gateway->enabled === 'yes' ) {
+			if ( isset( $gateway->enabled ) && 'yes' === $gateway->enabled && isset( $gateway->id ) ) {
 				foreach ( $pci_compliant_gateways as $compliant ) {
-					if ( strpos( strtolower( $gateway->id ), $compliant ) !== false ) {
-						$compliant_gateways[] = $gateway->title;
+					if ( false !== strpos( strtolower( (string) $gateway->id ), $compliant ) ) {
+						$compliant_gateways[] = isset( $gateway->title ) ? $gateway->title : $gateway->id;
 					}
 				}
 			}

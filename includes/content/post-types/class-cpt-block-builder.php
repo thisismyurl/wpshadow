@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since      1.6181.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ exit;
  *
  * Handles visual block building functionality for custom post types.
  *
- * @since 1.6181.2359
+ * @since 1.6093.1200
  */
 class CPT_Block_Builder extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -52,7 +52,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue block editor assets.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_block_editor_assets(): void {
@@ -85,7 +85,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Register custom blocks.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_custom_blocks(): void {
@@ -108,7 +108,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Register block category.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $categories Existing block categories.
 	 * @return array Modified block categories.
 	 */
@@ -128,7 +128,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Render custom block.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered block HTML.
 	 */
@@ -144,7 +144,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Handle save template AJAX request.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_save_template(): void {
@@ -167,7 +167,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Handle get templates AJAX request.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_get_templates(): void {
@@ -184,7 +184,7 @@ class CPT_Block_Builder extends Hook_Subscriber_Base {
 	/**
 	 * Get available block templates.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array Available templates.
 	 */
 	private static function get_available_templates(): array {

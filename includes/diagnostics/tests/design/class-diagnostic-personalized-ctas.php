@@ -4,7 +4,7 @@
  *
  * Tests whether the site personalizes calls-to-action based on user context to outperform generic CTAs.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Personalized CTAs can outperform generic CTAs by 202%. Tailoring messages
  * to user behavior, source, or stage in the journey dramatically improves conversion.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Check for personalization plugins.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if plugins exist, false otherwise.
 	 */
 	private static function check_personalization_plugins() {
@@ -174,7 +174,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Check for dynamic content.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if dynamic content exists, false otherwise.
 	 */
 	private static function check_dynamic_content() {
@@ -197,7 +197,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Check for member-specific CTAs.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if member CTAs exist, false otherwise.
 	 */
 	private static function check_member_ctas() {
@@ -229,7 +229,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Check for location personalization.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if location-based exists, false otherwise.
 	 */
 	private static function check_location_personalization() {
@@ -254,7 +254,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Check for source personalization.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if source-based exists, false otherwise.
 	 */
 	private static function check_source_personalization() {
@@ -279,7 +279,7 @@ class Diagnostic_Personalized_Ctas extends Diagnostic_Base {
 	/**
 	 * Check for behavior triggers.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if behavior triggers exist, false otherwise.
 	 */
 	private static function check_behavior_triggers() {

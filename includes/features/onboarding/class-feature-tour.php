@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Onboarding
- * @since      1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages guided tours for new features and utilities.
  *
- * @since 1.6089
+ * @since 1.6093.1200
  */
 class Feature_Tour extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -49,7 +49,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6089
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -59,8 +59,8 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the feature tour system (deprecated).
 	 *
-	 * @deprecated 1.7035.1400 Use Feature_Tour::subscribe() instead
-	 * @since      1.6030.2200
+	 * @deprecated1.0 Use Feature_Tour::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -70,7 +70,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue tour assets.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -109,7 +109,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Show tour prompt for new features.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	/**
@@ -118,7 +118,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	 * Disabled per bug #3867 - alert removed from admin UI
 	 * Feature tour still accessible via Help menu
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function show_tour_prompt() {
@@ -129,7 +129,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Show Killer Utilities tour prompt (legacy method, now disabled).
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function show_killer_utilities_prompt() {
@@ -141,7 +141,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Get available tours.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Available tours configuration.
 	 */
 	private static function get_available_tours() {
@@ -221,7 +221,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * Get completed tours for current user.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Completed tour IDs.
 	 */
 	private static function get_completed_tours() {
@@ -231,7 +231,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * AJAX: Start a tour.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_start_tour() {
@@ -270,7 +270,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * AJAX: Complete a tour step.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_complete_step() {
@@ -326,7 +326,7 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	/**
 	 * AJAX: Dismiss a tour.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_dismiss_tour() {

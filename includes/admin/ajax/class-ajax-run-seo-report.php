@@ -5,7 +5,7 @@
  * Handles the AJAX request to generate and save SEO reports.
  *
  * @package WPShadow\Admin\Ajax
- * @since   1.6041.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Generates SEO report data and saves it as a snapshot.
  *
- * @since 1.6041.1200
+ * @since 1.6093.1200
  */
 class Run_SEO_Report_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX handler.
 	 *
-	 * @since 1.6041.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -42,7 +42,7 @@ class Run_SEO_Report_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request to run an SEO report.
 	 *
-	 * @since 1.6041.1200
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {

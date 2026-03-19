@@ -43,6 +43,8 @@ class Menu_Manager {
 	 * @return void
 	 */
 	public static function register_menus() {
+		$core_pages_released = self::are_core_pages_released();
+
 		// Top-level menu
 		add_menu_page(
 			'WPShadow',
@@ -64,35 +66,37 @@ class Menu_Manager {
 			'wpshadow_render_dashboard'
 		);
 
-		// Findings (Kanban Board)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Findings', 'wpshadow' ),
-			__( 'Findings', 'wpshadow' ),
-			'read',
-			'wpshadow-findings',
-			'wpshadow_render_findings'
-		);
+		if ( $core_pages_released ) {
+			// Findings (Kanban Board)
+			add_submenu_page(
+				'wpshadow',
+				__( 'Findings', 'wpshadow' ),
+				__( 'Findings', 'wpshadow' ),
+				'read',
+				'wpshadow-findings',
+				'wpshadow_render_findings'
+			);
 
-		// Guardian (Diagnostics & Treatments System)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Guardian', 'wpshadow' ),
-			__( 'Guardian', 'wpshadow' ),
-			'read',
-			'wpshadow-guardian',
-			'wpshadow_render_guardian'
-		);
+			// Guardian (Diagnostics & Treatments System)
+			add_submenu_page(
+				'wpshadow',
+				__( 'Guardian', 'wpshadow' ),
+				__( 'Guardian', 'wpshadow' ),
+				'read',
+				'wpshadow-guardian',
+				'wpshadow_render_guardian'
+			);
 
-		// Automations (Workflow Automation)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Automations', 'wpshadow' ),
-			__( 'Automations', 'wpshadow' ),
-			'read',
-			'wpshadow-automations',
-			'wpshadow_render_workflow_builder'
-		);
+			// Automations (Workflow Automation)
+			add_submenu_page(
+				'wpshadow',
+				__( 'Automations', 'wpshadow' ),
+				__( 'Automations', 'wpshadow' ),
+				'read',
+				'wpshadow-automations',
+				'wpshadow_render_workflow_builder'
+			);
+		}
 
 		// Reports (Analytics & Insights)
 		add_submenu_page(
@@ -112,16 +116,6 @@ class Menu_Manager {
 			'manage_options',
 			'wpshadow-settings',
 			'wpshadow_render_settings'
-		);
-
-		// Post Types (Custom Post Type Management)
-		add_submenu_page(
-			'wpshadow',
-			__( 'Post Types', 'wpshadow' ),
-			__( 'Post Types', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-post-types',
-			array( 'WPShadow\Admin\Post_Types_Page', 'render_page' )
 		);
 
 		Post_Types_Page::subscribe();
@@ -193,6 +187,14 @@ class Menu_Manager {
 		}
 
 		$page      = Form_Param_Helper::get( 'page', 'text', '' );
+		$core_pages_released = self::are_core_pages_released();
+
+		if ( in_array( $page, array( 'wpshadow-findings', 'wpshadow-guardian', 'wpshadow-automations' ), true ) && ! $core_pages_released ) {
+			if ( current_user_can( 'read' ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				exit;
+			}
+		}
 
 		if ( 'wpshadow-academy' === $page && class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! \WPShadow\Academy\Academy_Release_Gate::is_available() ) {
 			if ( current_user_can( 'manage_options' ) ) {
@@ -236,5 +238,25 @@ class Menu_Manager {
 		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow' ) ) . '">Settings</a>';
 		array_unshift( $links, $settings_link );
 		return $links;
+	}
+
+	/**
+	 * Check whether Findings, Guardian, and Automations pages are released.
+	 *
+	 * @since 1.6120.2359
+	 * @return bool True when pages should be visible.
+	 */
+	private static function are_core_pages_released() {
+		$release_datetime = (string) apply_filters( 'wpshadow_core_pages_release_datetime', '2026-04-30 23:59:59' );
+
+		try {
+			$timezone = wp_timezone();
+			$release  = new \DateTimeImmutable( $release_datetime, $timezone );
+			$now      = new \DateTimeImmutable( 'now', $timezone );
+
+			return $now >= $release;
+		} catch ( \Exception $exception ) {
+			return false;
+		}
 	}
 }

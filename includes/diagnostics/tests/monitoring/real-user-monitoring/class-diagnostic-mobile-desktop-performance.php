@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies device-specific performance tracking.
  * Like knowing if your store is harder to navigate on a wheelchair.
  *
- * @since 1.6035.1630
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Run the mobile/desktop performance diagnostic check.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if tracking issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -153,7 +153,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Check if Google Analytics is present.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return bool True if GA detected.
 	 */
 	private static function has_google_analytics() {

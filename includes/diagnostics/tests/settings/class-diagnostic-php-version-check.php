@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies PHP version meets minimum requirements and is not EOL.
  *
- * @since 1.6035.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_PHP_Version_Check extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_PHP_Version_Check extends Diagnostic_Base {
 	/**
 	 * Run the PHP version diagnostic check.
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if version issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_PHP_Version_Check extends Diagnostic_Base {
 	/**
 	 * Check if PHP version is EOL.
 	 *
-	 * @since  1.6035.1500
+	 * @since 1.6093.1200
 	 * @param  string $version PHP version string.
 	 * @return bool True if EOL, false otherwise.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.2058
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors affecting LCP (Largest Contentful Paint).
  * LCP is the most important Core Web Vital for perceived load speed.
  *
- * @since 1.6033.2058
+ * @since 1.6093.1200
  */
 class Treatment_Largest_Contentful_Paint extends Treatment_Base {
 
@@ -71,7 +71,7 @@ class Treatment_Largest_Contentful_Paint extends Treatment_Base {
 	 * - Needs Improvement: 2.5-4.0s
 	 * - Poor: >4.0s
 	 *
-	 * @since  1.6033.2058
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages report export in multiple formats.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Report_Export_Manager {
 
 	/**
 	 * Export report as PDF
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  array  $data      Report data.
 	 * @return string|false PDF file path or false on failure.
@@ -59,7 +59,7 @@ class Report_Export_Manager {
 		/**
 		 * Fires after PDF export is generated.
 		 *
-		 * @since 1.603.0200
+		 * @since 1.6093.1200
 		 *
 		 * @param string $filepath PDF file path.
 		 * @param string $report_id Report ID.
@@ -73,7 +73,7 @@ class Report_Export_Manager {
 	/**
 	 * Export report as CSV
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  array  $data      Report data.
 	 * @return string|false CSV file path or false on failure.
@@ -117,7 +117,7 @@ class Report_Export_Manager {
 		/**
 		 * Fires after CSV export is generated.
 		 *
-		 * @since 1.603.0200
+		 * @since 1.6093.1200
 		 *
 		 * @param string $filepath CSV file path.
 		 * @param string $report_id Report ID.
@@ -131,7 +131,7 @@ class Report_Export_Manager {
 	/**
 	 * Generate HTML for report
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  array  $data      Report data.
 	 * @return string HTML content.
@@ -176,7 +176,7 @@ class Report_Export_Manager {
 	/**
 	 * Get download URL for exported file
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $filepath File path.
 	 * @return string Download URL.
 	 */
@@ -189,7 +189,7 @@ class Report_Export_Manager {
 	/**
 	 * Clean up old export files
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  int $days Days to keep files.
 	 * @return int Number of files deleted.
 	 */

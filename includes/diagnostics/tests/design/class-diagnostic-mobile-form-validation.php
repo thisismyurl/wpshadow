@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Forms
- * @since      1.602.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * use appropriate colors/contrast, and are accessible to screen readers.
  * WCAG 3.3.1 Level A requirement.
  *
- * @since 1.602.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 	/**
 	 * Find form validation issues.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_validation_issues(): array {
@@ -122,7 +122,7 @@ class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 	/**
 	 * Check for error message implementation.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Error message issues.
 	 */
@@ -159,7 +159,7 @@ class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 	/**
 	 * Check for aria-invalid usage.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array ARIA issues.
 	 */
@@ -192,7 +192,7 @@ class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 	/**
 	 * Check for inline validation implementation.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Inline validation issues.
 	 */
@@ -226,7 +226,7 @@ class Diagnostic_Mobile_Form_Validation extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

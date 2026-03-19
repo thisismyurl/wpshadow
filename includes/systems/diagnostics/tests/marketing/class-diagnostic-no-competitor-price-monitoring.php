@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * competitor pricing helps you position competitively and identify market
  * opportunities.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Competitor_Price_Monitoring extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Competitor_Price_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_No_Competitor_Price_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check if price monitoring is active
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if monitoring detected
 	 */
 	private static function check_price_monitoring(): bool {
@@ -116,7 +116,7 @@ class Diagnostic_No_Competitor_Price_Monitoring extends Diagnostic_Base {
 	/**
 	 * Get pricing factors
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of pricing factors
 	 */
 	private static function get_pricing_factors(): array {
@@ -135,7 +135,7 @@ class Diagnostic_No_Competitor_Price_Monitoring extends Diagnostic_Base {
 	/**
 	 * Get pricing metrics to track
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of metrics
 	 */
 	private static function get_pricing_metrics(): array {

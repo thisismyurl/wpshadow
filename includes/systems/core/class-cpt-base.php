@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -47,14 +47,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * }
  * ```
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 abstract class CPT_Base extends Hook_Subscriber_Base {
 
 	/**
 	 * Get post type configuration.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Post type configuration.
 	 *
@@ -68,7 +68,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Get taxonomies configuration (optional).
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Taxonomies configuration keyed by taxonomy slug.
 	 *
@@ -85,7 +85,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Get meta fields configuration (optional).
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Meta fields configuration.
 	 *
@@ -102,7 +102,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Get REST API fields configuration (optional).
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     REST fields configuration.
 	 *
@@ -124,7 +124,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	 * This base implementation registers CPT, taxonomies, meta, and REST fields.
 	 * Child classes can override to add additional hooks.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -145,7 +145,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	 *
 	 * Called on 'init' hook.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_all(): void {
@@ -157,7 +157,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Register the post type.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_post_type(): void {
@@ -182,7 +182,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Register taxonomies.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_taxonomies(): void {
@@ -211,7 +211,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Register meta fields.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_meta(): void {
@@ -239,7 +239,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Register REST API fields.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_rest_fields(): void {
@@ -281,7 +281,7 @@ abstract class CPT_Base extends Hook_Subscriber_Base {
 	/**
 	 * Backwards compatibility: Redirect old init() to subscribe().
 	 *
-	 * @since      1.6035.1200
+	 * @since 1.6093.1200
 	 * @deprecated Use CPT_Registry auto-discovery instead.
 	 * @return     void
 	 */

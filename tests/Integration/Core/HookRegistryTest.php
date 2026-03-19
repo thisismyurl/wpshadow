@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Integration\Core
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,14 +21,14 @@ use WPShadow\Tests\TestCase;
 /**
  * Hook_Registry Test Class
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class HookRegistryTest extends TestCase {
 
 	/**
 	 * Set up before each test.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -39,7 +39,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry has init method.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_hook_registry_has_init_method() {
@@ -52,7 +52,7 @@ class HookRegistryTest extends TestCase {
 	 * This test verifies the auto-discovery mechanism works by checking
 	 * that real classes in the codebase are discovered.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_discovers_hook_subscriber_classes() {
@@ -93,7 +93,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that discovered classes have hooks registered.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_discovered_classes_have_registered_hooks() {
@@ -114,7 +114,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry subscribes discovered classes.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_registry_subscribes_discovered_classes() {
@@ -132,7 +132,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry handles classes without get_hooks method.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_handles_classes_without_get_hooks() {
@@ -148,7 +148,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry discovers classes in multiple directories.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_discovers_classes_in_multiple_directories() {
@@ -182,7 +182,7 @@ class HookRegistryTest extends TestCase {
 	 * According to Phase 2 documentation, there should be 45 classes
 	 * using Hook_Subscriber_Base pattern.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_discovers_expected_number_of_classes() {
@@ -228,7 +228,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry doesn't subscribe classes multiple times.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_prevents_duplicate_subscriptions() {
@@ -252,7 +252,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry works with WordPress hooks lifecycle.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_works_with_wordpress_lifecycle() {
@@ -267,7 +267,7 @@ class HookRegistryTest extends TestCase {
 	/**
 	 * Test that Hook_Registry logs discovered classes (if debug enabled).
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_logs_discovered_classes_in_debug_mode() {

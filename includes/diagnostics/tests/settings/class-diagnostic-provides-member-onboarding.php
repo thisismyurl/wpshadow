@@ -4,7 +4,7 @@
  *
  * Tests whether the site provides structured onboarding to help new community members succeed.
  *
- * @since   1.6034.0520
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Structured onboarding increases member activation by 500% and long-term retention
  * by 350%. First 24 hours determine member success.
  *
- * @since 1.6034.0520
+ * @since 1.6093.1200
  */
 class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check welcome email.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_welcome_email() {
@@ -168,7 +168,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check getting started guide.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_getting_started_guide() {
@@ -195,7 +195,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check community introduction.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return bool True if prompted, false otherwise.
 	 */
 	private static function check_community_introduction() {
@@ -222,7 +222,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check onboarding checklist.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_onboarding_checklist() {
@@ -249,7 +249,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check mentor system.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_mentor_system() {
@@ -276,7 +276,7 @@ class Diagnostic_Provides_Member_Onboarding extends Diagnostic_Base {
 	/**
 	 * Check onboarding follow-up.
 	 *
-	 * @since  1.6034.0520
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_onboarding_followup() {

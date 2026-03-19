@@ -3,7 +3,7 @@
  * Tests for Database User Privileges Validation Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.2802.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -16,7 +16,7 @@ use WPShadow\Tests\TestCase;
 /**
  * Database User Privileges Diagnostic Tests
  *
- * @since 1.2802.1430
+ * @since 1.6093.1200
  */
 class DatabaseUserPrivilegesTest extends TestCase {
 

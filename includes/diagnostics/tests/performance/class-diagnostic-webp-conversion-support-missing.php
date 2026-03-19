@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer WebP conversion patterns.
  *
- * @since 1.6033.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 	 *
 	 * Checks if WebP conversion is available through various methods.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Check if an optimizer plugin is active.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if optimizer plugin is active.
 	 */
 	private static function has_optimizer_plugin() {
@@ -129,7 +129,7 @@ class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Get WebP support status.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     WebP support information.
 	 *
@@ -168,7 +168,7 @@ class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Check if cwebp binary is available.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if cwebp is available.
 	 */
 	private static function is_cwebp_available() {
@@ -206,7 +206,7 @@ class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Check if GD has WebP support.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if GD supports WebP.
 	 */
 	private static function has_gd_webp_support() {
@@ -221,7 +221,7 @@ class Diagnostic_Webp_Conversion_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Check if ImageMagick has WebP support.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if ImageMagick supports WebP.
 	 */
 	private static function has_imagick_webp_support() {

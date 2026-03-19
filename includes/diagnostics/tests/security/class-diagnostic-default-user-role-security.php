@@ -1,10 +1,11 @@
 <?php
-<?php
 /**
  * Default User Role Security Diagnostic
  *
  * Validates that the default user role assigned to new registrations
- * is appropriately restrictive to prevent privilege escalation. Sites allowing\n * self-registration often default new users to "Subscriber" role. If misconfigured,\n * could default to "Contributor" or worse. Wrong role = new users can edit posts.\n *
+ * is appropriately restrictive to prevent privilege escalation. Sites allowing
+ * self-registration often default new users to "Subscriber" role. If misconfigured,
+ * could default to "Contributor" or worse. Wrong role = new users can edit posts.
  * **What This Check Does:**
  * - Gets the default user role (get_option('default_role'))\n * - Validates default role is \"Subscriber\" (or appropriately restrictive)\n * - Detects if default role can edit published posts (dangerous)\n * - Checks if default role can publish posts (should require moderation)\n * - Tests permission levels for default role\n * - Confirms custom registration forms use correct role\n *
  * **Why This Matters:**
@@ -19,7 +20,7 @@
  * User roles and registration: https://wpshadow.com/kb/wordpress-user-roles\n * Video: User registration security (8min): https://wpshadow.com/training/user-roles-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1340
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer creates multi-author blog. Sets default role to 'contributor' (thinking\n * new users should be able to submit). Forgets: contributor role can see all post\n * status filters (drafts, scheduled). New user registers. Views 'drafts' and sees\n * CEO's confidential article draft about layoffs (before published). CEO discovers\n * employee (new contributor) knew about layoffs before announcement.\n *
  * **Implementation Notes:**
  * - Checks get_option('default_role')\n * - Validates against $wp_roles->roles array\n * - Tests role capabilities against expected minimums\n * - Severity: medium (overly permissive), low (slightly permissive)\n * - Treatment: set default role to 'subscriber'\n *
- * @since 1.6032.1340
+ * @since 1.6093.1200
  */
 class Diagnostic_Default_User_Role_Security extends Diagnostic_Base {
 
@@ -78,7 +79,7 @@ class Diagnostic_Default_User_Role_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

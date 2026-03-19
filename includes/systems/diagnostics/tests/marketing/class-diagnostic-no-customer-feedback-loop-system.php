@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies that actively collect and act on feedback see 14% higher
  * customer satisfaction and 10% lower churn.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Feedback_Loop_System extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Feedback_Loop_System extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Feedback_Loop_System extends Diagnostic_Base {
 	/**
 	 * Check if feedback system exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if system detected, false otherwise.
 	 */
 	private static function has_feedback_system() {
@@ -143,7 +143,7 @@ class Diagnostic_No_Customer_Feedback_Loop_System extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -172,7 +172,7 @@ class Diagnostic_No_Customer_Feedback_Loop_System extends Diagnostic_Base {
 	/**
 	 * Get feedback collection types.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Feedback types with descriptions.
 	 */
 	private static function get_feedback_types() {
@@ -192,7 +192,7 @@ class Diagnostic_No_Customer_Feedback_Loop_System extends Diagnostic_Base {
 	/**
 	 * Get tactics for closing the feedback loop.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Closing loop tactics.
 	 */
 	private static function get_closing_loop_tactics() {

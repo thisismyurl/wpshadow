@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since      1.2034.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if admins are notified when export requests are completed.
  *
- * @since 1.2034.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

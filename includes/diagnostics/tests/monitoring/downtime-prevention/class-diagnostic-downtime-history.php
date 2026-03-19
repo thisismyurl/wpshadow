@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1625
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks past outage patterns to prevent future downtime.
  * Like reviewing security incident logs to improve protection.
  *
- * @since 1.6035.1625
+ * @since 1.6093.1200
  */
 class Diagnostic_Downtime_History extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Downtime_History extends Diagnostic_Base {
 	/**
 	 * Run the downtime history diagnostic check.
 	 *
-	 * @since  1.6035.1625
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if concerning downtime detected, null otherwise.
 	 */
 	public static function check() {

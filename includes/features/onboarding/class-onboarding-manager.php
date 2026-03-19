@@ -15,7 +15,7 @@ use WPShadow\Core\Hook_Subscriber_Base;
  * Philosophy: #5 Drive to KB - Link to learning resources
  * Philosophy: #6 Drive to Training - Educational journey
  *
- * @since 1.6089
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Onboarding_Manager extends Hook_Subscriber_Base {
@@ -53,7 +53,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -69,7 +69,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6089
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -79,7 +79,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Initialize onboarding system (deprecated).
 	 *
-	 * @deprecated 1.7035.1400 Use Onboarding_Manager::subscribe() instead
+	 * @deprecated1.0 Use Onboarding_Manager::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {
@@ -368,7 +368,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue onboarding manager assets.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function enqueue_assets(): void {

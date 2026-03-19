@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if existing content is being refreshed. Regular updates are more
  * efficient than new content for maintaining rankings.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 	 * Analyzes if posts are being updated. Checks if <5% of older posts have
 	 * been updated in the last year, indicating no refresh strategy.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

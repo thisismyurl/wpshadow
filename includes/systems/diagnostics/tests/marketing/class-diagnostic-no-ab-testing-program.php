@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies that run systematic A/B tests improve conversion rates by
  * 20-50% annually. Most growth comes from testing, not big ideas.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Ab_Testing_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Ab_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Ab_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Check if testing program exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if program detected, false otherwise.
 	 */
 	private static function has_testing_program() {
@@ -141,7 +141,7 @@ class Diagnostic_No_Ab_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -170,7 +170,7 @@ class Diagnostic_No_Ab_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Get testing areas.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Areas to test with examples.
 	 */
 	private static function get_testing_areas() {
@@ -191,7 +191,7 @@ class Diagnostic_No_Ab_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Get A/B testing methodology.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Testing methodology steps.
 	 */
 	private static function get_testing_methodology() {

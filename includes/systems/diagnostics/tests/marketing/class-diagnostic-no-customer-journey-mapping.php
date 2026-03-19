@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * points and optimization opportunities. Companies with optimized journeys see
  * 20-40% revenue increases.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Journey_Mapping extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Customer_Journey_Mapping extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_No_Customer_Journey_Mapping extends Diagnostic_Base {
 	/**
 	 * Check if journey mapping exists
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if journey documented
 	 */
 	private static function check_journey_mapping(): bool {
@@ -121,7 +121,7 @@ class Diagnostic_No_Customer_Journey_Mapping extends Diagnostic_Base {
 	/**
 	 * Check if website shows clear funnel/journey structure
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if funnel structure evident
 	 */
 	private static function has_clear_funnel_structure(): bool {
@@ -150,7 +150,7 @@ class Diagnostic_No_Customer_Journey_Mapping extends Diagnostic_Base {
 	/**
 	 * Get customer journey stages
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of journey stages with details
 	 */
 	private static function get_journey_stages(): array {
@@ -197,7 +197,7 @@ class Diagnostic_No_Customer_Journey_Mapping extends Diagnostic_Base {
 	/**
 	 * Get metrics to track by stage
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of key metrics
 	 */
 	private static function get_metrics(): array {

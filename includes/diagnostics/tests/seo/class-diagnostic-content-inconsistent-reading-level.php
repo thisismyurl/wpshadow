@@ -4,7 +4,7 @@
  *
  * Detects dramatic variance in reading level consistency.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reading level varies dramatically (grade 6 to grade 14+) causing brand
  * inconsistency. After standardizing: 31% bounce rate decrease.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Inconsistent_Reading_Level extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Inconsistent_Reading_Level extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

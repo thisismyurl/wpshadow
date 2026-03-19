@@ -4,7 +4,7 @@
  *
  * Tests whether the site formally recognizes and supports community advocates through an ambassador program.
  *
- * @since   1.6034.0510
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ambassador programs amplify reach by 500% and reduce acquisition costs by 70%.
  * Formal advocate programs turn enthusiasts into brand champions.
  *
- * @since 1.6034.0510
+ * @since 1.6093.1200
  */
 class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0510
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 	/**
 	 * Check ambassador program.
 	 *
-	 * @since  1.6034.0510
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_ambassador_program() {
@@ -171,7 +171,7 @@ class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 	/**
 	 * Check ambassador benefits.
 	 *
-	 * @since  1.6034.0510
+	 * @since 1.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_ambassador_benefits() {
@@ -198,7 +198,7 @@ class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 	/**
 	 * Check ambassador application.
 	 *
-	 * @since  1.6034.0510
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_ambassador_application() {
@@ -225,7 +225,7 @@ class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 	/**
 	 * Check ambassador content.
 	 *
-	 * @since  1.6034.0510
+	 * @since 1.6093.1200
 	 * @return bool True if showcased, false otherwise.
 	 */
 	private static function check_ambassador_content() {
@@ -252,7 +252,7 @@ class Diagnostic_Operates_Ambassador_Program extends Diagnostic_Base {
 	/**
 	 * Check ambassador support.
 	 *
-	 * @since  1.6034.0510
+	 * @since 1.6093.1200
 	 * @return bool True if provided, false otherwise.
 	 */
 	private static function check_ambassador_support() {

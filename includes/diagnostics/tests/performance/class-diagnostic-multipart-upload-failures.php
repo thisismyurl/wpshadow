@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * in chunks via JavaScript (Plupload). Issues with chunk handling cause
  * upload failures for files larger than server limits.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Multipart_Upload_Failures extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Multipart_Upload_Failures extends Diagnostic_Base {
 	 * - Server support for chunked uploads
 	 * - Failed multipart uploads in database
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

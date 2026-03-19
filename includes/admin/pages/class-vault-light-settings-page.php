@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WPShadow Vault Light Settings Page
  *
- * @since 1.6030.0232
+ * @since 1.6093.1200
  */
 class Vault_Light_Settings_Page {
 
 	/**
 	 * Render the Vault Light settings page
 	 *
-	 * @since  1.6030.0232
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {

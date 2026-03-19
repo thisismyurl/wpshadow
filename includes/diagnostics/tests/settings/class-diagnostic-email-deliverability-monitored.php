@@ -4,7 +4,7 @@
  *
  * Tests whether the site actively monitors inbox placement and maintains >95% delivery rate.
  *
- * @since   1.6034.0255
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Email deliverability monitoring ensures messages reach inboxes, not spam.
  * Poor deliverability wastes marketing budget and damages sender reputation.
  *
- * @since 1.6034.0255
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check email platform.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return bool True if platform exists, false otherwise.
 	 */
 	private static function check_email_platform() {
@@ -164,7 +164,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 		);
 
 		foreach ( $email_plugins as $plugin_path ) {
-			if ( is_plugin_active( $plugin_path ) ) {
+			if ( self::is_plugin_active_safe( $plugin_path ) ) {
 				return true;
 			}
 		}
@@ -175,11 +175,15 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check SPF configuration.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return bool True if SPF configured, false otherwise.
 	 */
 	private static function check_spf_configuration() {
-		$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
+		$domain = self::get_site_domain();
+		if ( '' === $domain ) {
+			return false;
+		}
+
 		if ( ! function_exists( 'dns_get_record' ) ) {
 			return apply_filters( 'wpshadow_spf_configured', false );
 		}
@@ -199,18 +203,18 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check DKIM configuration.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return bool True if DKIM configured, false otherwise.
 	 */
 	private static function check_dkim_configuration() {
 		// Check for DKIM plugins.
-		if ( is_plugin_active( 'wp-mail-smtp/wp_mail_smtp.php' ) ||
-			 is_plugin_active( 'post-smtp/postman-smtp.php' ) ) {
+		if ( self::is_plugin_active_safe( 'wp-mail-smtp/wp_mail_smtp.php' ) ||
+			 self::is_plugin_active_safe( 'post-smtp/postman-smtp.php' ) ) {
 			return true;
 		}
 
 		// MailPoet has built-in DKIM.
-		if ( is_plugin_active( 'mailpoet/mailpoet.php' ) ) {
+		if ( self::is_plugin_active_safe( 'mailpoet/mailpoet.php' ) ) {
 			return true;
 		}
 
@@ -220,11 +224,15 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check DMARC configuration.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return bool True if DMARC configured, false otherwise.
 	 */
 	private static function check_dmarc_configuration() {
-		$domain = Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
+		$domain = self::get_site_domain();
+		if ( '' === $domain ) {
+			return false;
+		}
+
 		if ( ! function_exists( 'dns_get_record' ) ) {
 			return apply_filters( 'wpshadow_dmarc_configured', false );
 		}
@@ -244,13 +252,13 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check monitoring tools.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return bool True if monitoring exists, false otherwise.
 	 */
 	private static function check_monitoring_tools() {
 		// Professional email platforms have built-in monitoring.
-		if ( is_plugin_active( 'mailpoet/mailpoet.php' ) ||
-			 is_plugin_active( 'newsletter/newsletter.php' ) ) {
+		if ( self::is_plugin_active_safe( 'mailpoet/mailpoet.php' ) ||
+			 self::is_plugin_active_safe( 'newsletter/newsletter.php' ) ) {
 			return true;
 		}
 
@@ -258,9 +266,35 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	}
 
 	/**
+	 * Get the current site domain.
+	 *
+	 * @since 1.6093.1200
+	 * @return string Domain name or empty string.
+	 */
+	private static function get_site_domain() {
+		if ( class_exists( 'WPShadow\\Diagnostics\\Diagnostic_URL_And_Pattern_Helper' ) ) {
+			return (string) Diagnostic_URL_And_Pattern_Helper::get_domain( home_url() );
+		}
+
+		$host = wp_parse_url( home_url(), PHP_URL_HOST );
+		return is_string( $host ) ? $host : '';
+	}
+
+	/**
+	 * Safely check if a plugin is active.
+	 *
+	 * @since 1.6093.1200
+	 * @param  string $plugin_path Plugin path.
+	 * @return bool Whether plugin is active.
+	 */
+	private static function is_plugin_active_safe( string $plugin_path ): bool {
+		return function_exists( 'is_plugin_active' ) && is_plugin_active( $plugin_path );
+	}
+
+	/**
 	 * Check dedicated IP.
 	 *
-	 * @since  1.6034.0255
+	 * @since 1.6093.1200
 	 * @return bool True if dedicated IP likely, false otherwise.
 	 */
 	private static function check_dedicated_ip() {

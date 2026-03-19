@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.6034.2152
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,9 +38,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Font loading strategy
  * - Critical CSS implementation
  *
- * **Target:** < 1.8 seconds, ideal < 1.0 second
+ * **Target:** <1.0 seconds, ideal <1.0 second
  *
- * @since 1.6034.2152
+ * @since 1.6093.1200
  */
 class Diagnostic_First_Contentful_Paint_FCP extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_First_Contentful_Paint_FCP extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2152
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if FCP likely poor, null if acceptable.
 	 */
 	public static function check() {
@@ -177,7 +177,7 @@ class Diagnostic_First_Contentful_Paint_FCP extends Diagnostic_Base {
 				'issues'        => $issues,
 				'css_count'     => $css_count,
 				'blocking_js'   => $blocking_js,
-				'target'        => '< 1.8 seconds',
+				'target'        => '<1.0 seconds',
 			),
 		);
 	}

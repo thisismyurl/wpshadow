@@ -6,11 +6,11 @@
  * Pillar: 🌐 Culturally Respectful
  *
  * Checks if numbers respect locale formatting.
- * 1,000.50 vs 1.000,50 confuses international users.
+ * 1,000.50 vs1.0,50 confuses international users.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Number_Formatting_Localization Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Number_Formatting_Localization extends Diagnostic_Base {
 
@@ -41,13 +41,13 @@ class Diagnostic_Number_Formatting_Localization extends Diagnostic_Base {
 		$issues[] = __( 'Use number_format_i18n() for WordPress locale', 'wpshadow' );
 		$issues[] = __( 'Respect decimal separator: . (US) vs , (EU)', 'wpshadow' );
 		$issues[] = __( 'Respect thousands separator: , (US) vs . (EU) vs space (FR)', 'wpshadow' );
-		$issues[] = __( 'Format large numbers: 1,000,000 vs 1.000.000', 'wpshadow' );
+		$issues[] = __( 'Format large numbers: 1,000,000 vs1.0', 'wpshadow' );
 
 		if ( ! empty( $issues ) ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Number formatting varies globally. "1,000.50" is clear to Americans but means 1.00050 to Europeans. Use locale-aware formatting.', 'wpshadow' ),
+				'description'  => __( 'Number formatting varies globally. "1,000.50" is clear to Americans but means1.0 to Europeans. Use locale-aware formatting.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => true,

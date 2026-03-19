@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site uses code splitting techniques
  * to optimize JavaScript and CSS delivery.
  *
- * @since 1.6035.1505
+ * @since 1.6093.1200
  */
 class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the code splitting strategy diagnostic check.
 	 *
-	 * @since  1.6035.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if code splitting issues detected, null otherwise.
 	 */
 	public static function check() {

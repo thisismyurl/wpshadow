@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tools
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Comprehensive validation of nonce implementation across tool actions.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Tool_Nonce_Validation_Failures extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Tool_Nonce_Validation_Failures extends Treatment_Base {
 	 *
 	 * Tests nonce validation comprehensively.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

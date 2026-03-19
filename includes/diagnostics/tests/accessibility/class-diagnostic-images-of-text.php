@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6036.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for use of images of text instead of real HTML text.
  *
- * @since 1.6036.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Images_Of_Text extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Images_Of_Text extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6036.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Images_Of_Text extends Diagnostic_Base {
 				'kb_link'      => 'https://wpshadow.com/kb/images-of-text',
 				'details'      => array(
 					'recommendations'     => $issues,
-					'wcag_requirement'    => 'WCAG 2.1 1.4.5 Images of Text (Level AA)',
+					'wcag_requirement'    => 'WCAG 2.1.6093.1200 Images of Text (Level AA)',
 					'affected_users'      => 'Blind/low vision users (10%), translation users, zoom users',
 					'css_alternative'     => 'Use @font-face for custom fonts + CSS styling',
 					'common_culprits'     => 'Fancy headings, quotes, buttons with special fonts, decorative text',

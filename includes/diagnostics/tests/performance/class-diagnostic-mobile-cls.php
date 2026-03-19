@@ -53,7 +53,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -72,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures cumulative layout shifts that cause mobile usability problems and form abandonment.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 
@@ -112,7 +112,7 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	 * - Needs Improvement: 0.1-0.25
 	 * - Poor: >0.25
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -170,7 +170,7 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	/**
 	 * Identify sources of layout shifts.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Shift sources found.
 	 *
@@ -238,7 +238,7 @@ class Diagnostic_Mobile_Cls extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null Page HTML or null.
 	 */
 	private static function get_page_html(): ?string {

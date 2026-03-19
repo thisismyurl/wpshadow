@@ -24,7 +24,7 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Identifies dangerous plugins early\n * - #9 Show Value: Prevents exploitation before damage\n * - #10 Talk-About-Worthy: "Every plugin passes security review"\n *
  * **Related Checks:**\n * - Plugin Security Vulnerabilities (known CVEs)\n * - User Role Security (privilege escalation detection)\n * - Database Security (SQL injection prevention)\n * - Nonce Verification (CSRF protection)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-coding-standards\n * - Video: https://wpshadow.com/training/wordpress-security-standards (7 min)\n * - Advanced: https://wpshadow.com/training/plugin-vetting-process (13 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -76,7 +76,7 @@ class Diagnostic_Plugin_Coding_Standards extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

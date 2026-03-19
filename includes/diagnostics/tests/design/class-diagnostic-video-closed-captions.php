@@ -4,7 +4,7 @@
  *
  * Tests whether all videos include closed captions (100% caption coverage for accessibility).
  *
- * @since   1.6034.0420
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Captions increase watch time by 12% and make content accessible to 466 million
  * deaf/hard-of-hearing people globally. They're essential for SEO and accessibility.
  *
- * @since 1.6034.0420
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0420
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 	/**
 	 * Check caption documentation.
 	 *
-	 * @since  1.6034.0420
+	 * @since 1.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_caption_documentation() {
@@ -171,7 +171,7 @@ class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 	/**
 	 * Check auto-captions.
 	 *
-	 * @since  1.6034.0420
+	 * @since 1.6093.1200
 	 * @return bool True if enabled, false otherwise.
 	 */
 	private static function check_auto_captions() {
@@ -192,7 +192,7 @@ class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 	/**
 	 * Check edited captions.
 	 *
-	 * @since  1.6034.0420
+	 * @since 1.6093.1200
 	 * @return bool True if edited, false otherwise.
 	 */
 	private static function check_edited_captions() {
@@ -212,7 +212,7 @@ class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 	/**
 	 * Check multi-language captions.
 	 *
-	 * @since  1.6034.0420
+	 * @since 1.6093.1200
 	 * @return bool True if available, false otherwise.
 	 */
 	private static function check_multilang_captions() {
@@ -239,7 +239,7 @@ class Diagnostic_Video_Closed_Captions extends Diagnostic_Base {
 	/**
 	 * Check caption styling.
 	 *
-	 * @since  1.6034.0420
+	 * @since 1.6093.1200
 	 * @return bool True if styled, false otherwise.
 	 */
 	private static function check_caption_styling() {

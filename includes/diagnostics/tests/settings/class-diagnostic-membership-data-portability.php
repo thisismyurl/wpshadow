@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Checks for GDPR export, data deletion, privacy policy
  *
- * @since 1.6031.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_MembershipDataPortability extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'membership';
 /**
  * Run the diagnostic check.
  *
- * @since  1.6031.1445
+ * @since 1.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (misconfiguration risk)
  * - Treatment: implement CDN validation tests
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Content_Delivery_Network_Integration_Not_Tested extends Treatment_Base {
 
@@ -120,7 +120,7 @@ class Treatment_Content_Delivery_Network_Integration_Not_Tested extends Treatmen
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

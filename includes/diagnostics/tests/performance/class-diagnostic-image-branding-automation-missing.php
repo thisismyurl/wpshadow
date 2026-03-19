@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * protection and consistent visual identity, automated branding saves
  * time and ensures consistency.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	 * Checks if images have automated branding. Watermarking protects
 	 * copyright and maintains brand consistency.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	/**
 	 * Check if watermark plugin is already active.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if watermark plugin detected.
 	 */
 	private static function has_watermark_plugin() {
@@ -148,7 +148,7 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	/**
 	 * Count posts with social images (og:image).
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return int Number of posts with social images.
 	 */
 	private static function count_social_images() {
@@ -177,7 +177,7 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	/**
 	 * Check if site has high branding need.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if high branding need detected.
 	 */
 	private static function has_high_branding_need() {

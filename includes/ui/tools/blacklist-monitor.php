@@ -5,7 +5,7 @@
  * Checks global blacklist providers for your domain.
  *
  * @package WPShadow
- * @since   1.6031.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

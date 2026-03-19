@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses social proof (reviews, testimonials, counters) to build trust and increase conversions.
  *
- * @since   1.6034.0240
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Social proof increases conversions by 15-34% by reducing purchase anxiety
  * and building trust through others' experiences.
  *
- * @since 1.6034.0240
+ * @since 1.6093.1200
  */
 class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Check for reviews.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return bool True if reviews exist, false otherwise.
 	 */
 	private static function check_reviews() {
@@ -193,7 +193,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Check for testimonials.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return bool True if testimonials exist, false otherwise.
 	 */
 	private static function check_testimonials() {
@@ -225,7 +225,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Check for trust badges.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return bool True if trust badges exist, false otherwise.
 	 */
 	private static function check_trust_badges() {
@@ -252,7 +252,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Check for social counters.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return bool True if counters exist, false otherwise.
 	 */
 	private static function check_social_counters() {
@@ -284,7 +284,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Check for recent activity.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return bool True if activity notifications exist, false otherwise.
 	 */
 	private static function check_recent_activity() {
@@ -306,7 +306,7 @@ class Diagnostic_Social_Proof_Elements extends Diagnostic_Base {
 	/**
 	 * Check for case studies.
 	 *
-	 * @since  1.6034.0240
+	 * @since 1.6093.1200
 	 * @return bool True if case studies exist, false otherwise.
 	 */
 	private static function check_case_studies() {

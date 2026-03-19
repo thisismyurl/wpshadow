@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Pricing is one of the highest-leverage decisions.
  * A 10% price increase = 25-50% profit increase.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Pricing_Analysis_Or_Optimization extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Pricing_Analysis_Or_Optimization extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Pricing_Analysis_Or_Optimization extends Diagnostic_Base {
 	/**
 	 * Check if pricing analysis exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if analysis detected, false otherwise.
 	 */
 	private static function has_pricing_analysis() {
@@ -109,7 +109,7 @@ class Diagnostic_No_Pricing_Analysis_Or_Optimization extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -138,7 +138,7 @@ class Diagnostic_No_Pricing_Analysis_Or_Optimization extends Diagnostic_Base {
 	/**
 	 * Get analysis framework.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Analysis framework.
 	 */
 	private static function get_analysis_framework() {
@@ -153,7 +153,7 @@ class Diagnostic_No_Pricing_Analysis_Or_Optimization extends Diagnostic_Base {
 	/**
 	 * Get pricing methods.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Pricing methods.
 	 */
 	private static function get_pricing_methods() {

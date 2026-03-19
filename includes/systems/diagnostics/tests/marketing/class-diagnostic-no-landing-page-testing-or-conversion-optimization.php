@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies optimizing landing pages improve conversion rates by 20-40%
  * without increasing traffic. Direct impact to bottom line.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Landing_Page_Testing_Or_Conversion_Optimization extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Landing_Page_Testing_Or_Conversion_Optimization extends Diag
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Landing_Page_Testing_Or_Conversion_Optimization extends Diag
 	/**
 	 * Check if optimization program exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if program detected, false otherwise.
 	 */
 	private static function has_optimization_program() {
@@ -139,7 +139,7 @@ class Diagnostic_No_Landing_Page_Testing_Or_Conversion_Optimization extends Diag
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -168,7 +168,7 @@ class Diagnostic_No_Landing_Page_Testing_Or_Conversion_Optimization extends Diag
 	/**
 	 * Get key optimization areas.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Optimization areas with impact.
 	 */
 	private static function get_optimization_areas() {
@@ -209,7 +209,7 @@ class Diagnostic_No_Landing_Page_Testing_Or_Conversion_Optimization extends Diag
 	/**
 	 * Get friction elements to remove.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Friction elements and solutions.
 	 */
 	private static function get_friction_elements() {

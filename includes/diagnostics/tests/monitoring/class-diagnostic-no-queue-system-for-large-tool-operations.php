@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since      1.2034.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies tool operations use queuing for reliability.
  *
- * @since 1.2034.1505
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

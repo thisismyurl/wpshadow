@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles application submissions, tracking, and management.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Job_Application_Tracker extends Hook_Subscriber_Base {
 
@@ -33,7 +33,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -46,7 +46,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Register job application post type.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_post_type() {
 		register_post_type(
@@ -69,7 +69,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Handle job application submission via AJAX.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function handle_application_submission() {
 		check_ajax_referer( 'wpshadow_job_application_nonce' );
@@ -145,7 +145,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Get applications for a job.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  int   $job_id Job post ID.
 	 * @param  array $args   Query arguments.
 	 * @return array Array of applications.
@@ -199,7 +199,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Get total application count.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return int Total applications.
 	 */
 	public static function get_total_applications() {
@@ -214,7 +214,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Get application count by status.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $status Application status.
 	 * @return int Count for status.
 	 */
@@ -240,7 +240,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Get recent applications.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  int $limit Number of recent applications to retrieve.
 	 * @return array Recent applications.
 	 */
@@ -273,7 +273,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Update application status.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  int    $application_id Application ID.
 	 * @param  string $status         New status.
 	 * @param  string $notes          Optional notes.
@@ -301,7 +301,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Send confirmation email to applicant.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $email  Applicant email.
 	 * @param  string $name   Applicant name.
 	 * @param  int    $job_id Job post ID.
@@ -328,7 +328,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Send application notification to job poster.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  int    $job_id Job post ID.
 	 * @param  string $name   Applicant name.
 	 * @param  string $email  Applicant email.
@@ -358,7 +358,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Get application statistics for a job.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  int $job_id Job post ID.
 	 * @return array Statistics array.
 	 */
@@ -395,7 +395,7 @@ class Job_Application_Tracker extends Hook_Subscriber_Base {
 	/**
 	 * Convert application post to legacy response shape.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Application post ID.
 	 * @return \stdClass|null Application object.
 	 */

@@ -21,6 +21,8 @@ if ( file_exists( WPSHADOW_PATH . 'includes/ui/templates/functions-feature-avail
 if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page (Kanban Board)
+	 *
+	 * @since 1.6120.2359
 	 */
 	function wpshadow_render_findings() {
 		// Load the kanban board view
@@ -60,6 +62,8 @@ if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
 if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 	/**
 	 * Render Guardian page (Diagnostics & Treatments)
+	 *
+	 * @since 1.6120.2359
 	 */
 	function wpshadow_render_guardian() {
 		// Load Guardian classes if not already loaded

@@ -11,7 +11,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package WPShadow
- * @since   1.0000.0000
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

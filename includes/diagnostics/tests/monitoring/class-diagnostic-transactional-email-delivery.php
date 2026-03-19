@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1442
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Sends test email to admin to verify email delivery is working.
  *
- * @since 1.6035.1442
+ * @since 1.6093.1200
  */
 class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 	/**
 	 * Run the transactional email delivery diagnostic check.
 	 *
-	 * @since  1.6035.1442
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if delivery issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -110,6 +110,8 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 			if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 				\WPShadow\Core\Activity_Logger::log(
 					'email_test_failed',
+					__( 'Transactional email test failed', 'wpshadow' ),
+					'monitoring',
 					array(
 						'recipient'     => $admin_email,
 						'delivery_time' => round( $delivery_time, 2 ),
@@ -121,6 +123,8 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 			if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 				\WPShadow\Core\Activity_Logger::log(
 					'email_test_success',
+					__( 'Transactional email test succeeded', 'wpshadow' ),
+					'monitoring',
 					array(
 						'recipient'     => $admin_email,
 						'delivery_time' => round( $delivery_time, 2 ),

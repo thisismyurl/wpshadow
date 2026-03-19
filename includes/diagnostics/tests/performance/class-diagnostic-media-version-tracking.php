@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies media file versioning and revision history,
  * including replacement tracking and rollback functionality.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Version_Tracking extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Version_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -85,8 +85,13 @@ class Diagnostic_Media_Version_Tracking extends Diagnostic_Base {
 			$issues[] = __( 'No media versioning/replacement plugin detected', 'wpshadow' );
 		}
 
-		// Check if revisions are enabled for attachments.
-		$revisions_enabled = wp_revisions_enabled( get_post_type_object( 'attachment' ) );
+		// wp_revisions_enabled() expects a post object (or object with post_type),
+		// not a WP_Post_Type object.
+		$revisions_enabled = wp_revisions_enabled(
+			(object) array(
+				'post_type' => 'attachment',
+			)
+		);
 		if ( ! $revisions_enabled ) {
 			$issues[] = __( 'Post revisions are not enabled for attachments', 'wpshadow' );
 		}

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6057.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Controls whether Academy functionality is available.
  *
- * @since 1.6057.0000
+ * @since 1.6093.1200
  */
 class Academy_Release_Gate {
 
@@ -31,7 +31,7 @@ class Academy_Release_Gate {
 	 *
 	 * Defaults to May 1, 2026 (Toronto time) and can be filtered.
 	 *
-	 * @since  1.6057.0000
+	 * @since 1.6093.1200
 	 * @return bool True when Academy should be enabled.
 	 */
 	public static function is_available(): bool {
@@ -55,7 +55,7 @@ class Academy_Release_Gate {
 	/**
 	 * Get holdback message shown while Academy is gated.
 	 *
-	 * @since  1.6057.0000
+	 * @since 1.6093.1200
 	 * @return string User-friendly message.
 	 */
 	public static function get_hold_message(): string {

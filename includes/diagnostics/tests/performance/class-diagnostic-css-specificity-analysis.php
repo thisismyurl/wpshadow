@@ -4,7 +4,7 @@
  *
  * Analyzes CSS specificity depth and complexity.
  *
- * @since   1.6033.2120
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates CSS specificity patterns and identifies maintainability issues.
  *
- * @since 1.6033.2120
+ * @since 1.6093.1200
  */
 class Diagnostic_CSS_Specificity_Analysis extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CSS_Specificity_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2120
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

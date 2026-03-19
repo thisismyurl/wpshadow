@@ -5,7 +5,7 @@
  * Checks if WebP image format support is enabled to reduce image file sizes.
  * WebP can reduce file sizes by 25-35% compared to JPEG/PNG.
  *
- * @since   1.6033.2075
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - WebP plugin installation and configuration
  * - Browser compatibility detection
  *
- * @since 1.6033.2075
+ * @since 1.6093.1200
  */
 class Treatment_Webp_Support extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Webp_Support extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2075
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

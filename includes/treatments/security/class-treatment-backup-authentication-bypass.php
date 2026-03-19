@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.2033.2108
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,14 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Backup authentication bypass allows attackers to access sensitive
  * data or restore malicious backups without proper authentication.
  *
- * @since 1.2033.2108
+ * @since 1.6093.1200
  */
 class Treatment_Backup_Authentication_Bypass extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'backup-authentication-bypass';
@@ -49,7 +49,7 @@ class Treatment_Backup_Authentication_Bypass extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Backup Authentication Bypass';
@@ -57,7 +57,7 @@ class Treatment_Backup_Authentication_Bypass extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects authentication bypass in backup and restore functionality';
@@ -65,7 +65,7 @@ class Treatment_Backup_Authentication_Bypass extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -75,7 +75,7 @@ class Treatment_Backup_Authentication_Bypass extends Treatment_Base {
 	 *
 	 * Scans for backup authentication vulnerabilities.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

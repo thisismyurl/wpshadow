@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Navigation
- * @since      1.602.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures search results load quickly on mobile and provide
  * relevant results without excessive page weight.
  *
- * @since 1.602.1450
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Search_Performance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Search_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1450
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Mobile_Search_Performance extends Diagnostic_Base {
 	/**
 	 * Find search performance issues.
 	 *
-	 * @since  1.602.1450
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_search_performance_issues(): array {

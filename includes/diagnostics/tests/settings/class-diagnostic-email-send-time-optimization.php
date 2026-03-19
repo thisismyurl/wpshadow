@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses data-driven send time optimization for each subscriber.
  *
- * @since   1.6034.0320
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Send time optimization increases open rates by 30% by reaching subscribers
  * when they're most likely to engage.
  *
- * @since 1.6034.0320
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0320
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 	/**
 	 * Check advanced platform.
 	 *
-	 * @since  1.6034.0320
+	 * @since 1.6093.1200
 	 * @return bool True if advanced, false otherwise.
 	 */
 	private static function check_advanced_platform() {
@@ -159,7 +159,7 @@ class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 	/**
 	 * Check engagement tracking.
 	 *
-	 * @since  1.6034.0320
+	 * @since 1.6093.1200
 	 * @return bool True if tracking, false otherwise.
 	 */
 	private static function check_engagement_tracking() {
@@ -175,7 +175,7 @@ class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 	/**
 	 * Check timezone awareness.
 	 *
-	 * @since  1.6034.0320
+	 * @since 1.6093.1200
 	 * @return bool True if timezone aware, false otherwise.
 	 */
 	private static function check_timezone_awareness() {
@@ -190,7 +190,7 @@ class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 	/**
 	 * Check send time testing.
 	 *
-	 * @since  1.6034.0320
+	 * @since 1.6093.1200
 	 * @return bool True if testing, false otherwise.
 	 */
 	private static function check_send_time_testing() {
@@ -210,7 +210,7 @@ class Diagnostic_Email_Send_Time_Optimization extends Diagnostic_Base {
 	/**
 	 * Check automated optimization.
 	 *
-	 * @since  1.6034.0320
+	 * @since 1.6093.1200
 	 * @return bool True if automated, false otherwise.
 	 */
 	private static function check_automated_optimization() {

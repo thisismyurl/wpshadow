@@ -4,7 +4,7 @@
  *
  * Detects keyword stuffing that can trigger search penalties.
  *
- * @since   1.6033.1715
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Keyword density above 3% can trigger search penalties. Natural language
  * and semantic keywords are required for healthy SEO.
  *
- * @since 1.6033.1715
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Keyword_Stuffing extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Keyword_Stuffing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1715
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

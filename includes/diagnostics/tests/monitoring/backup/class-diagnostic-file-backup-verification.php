@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies file backups cover all important site files.
  * Like checking that you're backing up all your important folders.
  *
- * @since 1.6035.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 	/**
 	 * Run the file backup verification diagnostic check.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if file backup issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -188,7 +188,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 	/**
 	 * Get directory size (sampling method for performance).
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @return int Size in bytes (estimated).
 	 */

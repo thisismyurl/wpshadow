@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies PHP upload limits allow for media, themes, and plugins.
  * Like the size limit on email attachments—too small blocks uploads.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Php_Upload_Limits extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Php_Upload_Limits extends Diagnostic_Base {
 	/**
 	 * Run the PHP upload limits diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if upload limit issues detected, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Job Board Settings Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Job_Board_Settings {
 
 	/**
 	 * Register job board settings.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_settings() {
 		$settings = array(
@@ -187,7 +187,7 @@ class Job_Board_Settings {
 	/**
 	 * Get a job board setting.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $option Option name (without wpshadow_ prefix).
 	 * @param  mixed  $default Default value.
 	 * @return mixed Setting value.
@@ -199,7 +199,7 @@ class Job_Board_Settings {
 	/**
 	 * Update a job board setting.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $option Option name (without wpshadow_ prefix).
 	 * @param  mixed  $value  Option value.
 	 * @return bool Success.
@@ -211,7 +211,7 @@ class Job_Board_Settings {
 	/**
 	 * Get email template.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $template Template name.
 	 * @return string Template content.
 	 */

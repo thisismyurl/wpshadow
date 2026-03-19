@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since      1.6034.2205
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Bi-weekly (minimum for growth)
  * - Monthly (retention only)
  *
- * @since 1.6034.2205
+ * @since 1.6093.1200
  */
 class Diagnostic_Inconsistent_Publishing_Schedule extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Inconsistent_Publishing_Schedule extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2205
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if schedule inconsistent, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Inconsistent_Publishing_Schedule extends Diagnostic_Base {
 	/**
 	 * Calculate standard deviation
 	 *
-	 * @since  1.6034.2205
+	 * @since 1.6093.1200
 	 * @param  array $values Array of numeric values.
 	 * @return float Standard deviation.
 	 */

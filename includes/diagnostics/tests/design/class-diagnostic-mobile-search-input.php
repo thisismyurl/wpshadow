@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Forms
- * @since      1.602.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures search inputs are optimized for mobile devices with
  * proper size, placeholder text, and submit button accessibility.
  *
- * @since 1.602.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 	/**
 	 * Find search input issues.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_search_issues(): array {
@@ -146,7 +146,7 @@ class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 	/**
 	 * Check for accessible submit button.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Submit button issues.
 	 */
@@ -180,7 +180,7 @@ class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 	/**
 	 * Check for placeholder text.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Placeholder issues.
 	 */
@@ -203,7 +203,7 @@ class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 	/**
 	 * Check for autocomplete support.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Autocomplete issues.
 	 */
@@ -224,7 +224,7 @@ class Diagnostic_Mobile_Search_Input extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides advanced analytics capabilities.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Report_Analytics_Engine {
 
 	/**
 	 * Calculate ROI for fixes
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $findings Report findings.
 	 * @return array ROI calculations.
 	 */
@@ -86,7 +86,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Detect regressions between snapshots
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @param  int    $days Days to check.
 	 * @return array Regressions detected.
@@ -137,7 +137,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Generate executive summary
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $findings Report findings.
 	 * @return array Executive summary.
 	 */
@@ -214,7 +214,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Simulate what-if scenarios
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $findings Current findings.
 	 * @param  array $fixes_to_apply Fix IDs to simulate.
 	 * @return array Projected impact.
@@ -249,7 +249,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Compare to industry benchmarks
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array  $findings Report findings.
 	 * @param  string $site_type Site type (blog, ecommerce, business).
 	 * @return array Comparison data.
@@ -292,7 +292,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Calculate percentile ranking
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  int   $count Current count.
 	 * @param  array $benchmark Benchmark data.
 	 * @return int Percentile (0-100).

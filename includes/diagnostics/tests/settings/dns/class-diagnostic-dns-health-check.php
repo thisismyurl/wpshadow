@@ -5,7 +5,7 @@
  * Checks if DNS records are properly configured and healthy.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0146
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -62,13 +62,26 @@ class Diagnostic_DNS_Health_Check extends Diagnostic_Base {
 		$host     = wp_parse_url( $home_url, PHP_URL_HOST );
 		$stats['domain'] = $host;
 
+		if ( ! is_string( $host ) || '' === $host ) {
+			return array(
+				'id'            => self::$slug,
+				'title'         => self::$title,
+				'description'   => __( 'We could not determine your site domain for DNS checks yet. Confirm your WordPress site URL settings so we can validate DNS health.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'threat_level'  => 40,
+				'auto_fixable'  => false,
+				'kb_link'       => 'https://wpshadow.com/kb/dns-setup',
+			);
+		}
+
 		// Check DNS resolution
 		$dns_records = dns_get_record( $host );
 		$stats['dns_records_found'] = is_array( $dns_records ) ? count( $dns_records ) : 0;
 
 		// Check for MX records (email)
-		$mx_records = dns_get_mx( $host );
-		$stats['mx_records_found'] = is_array( $mx_records ) ? count( $mx_records ) : 0;
+		$mx_hosts = array();
+		dns_get_mx( $host, $mx_hosts );
+		$stats['mx_records_found'] = count( $mx_hosts );
 
 		// Check for SPF record (email security)
 		if ( is_array( $dns_records ) ) {

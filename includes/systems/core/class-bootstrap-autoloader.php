@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Intelligently loads all WPShadow classes with proper dependency ordering.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Bootstrap_Autoloader {
 
@@ -143,7 +143,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Initialize autoloader and load all classes.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -160,7 +160,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Load critical classes in dependency order.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function load_critical_classes(): void {
@@ -182,7 +182,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Load feature classes from directories.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function load_features(): void {
@@ -205,7 +205,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Discover all PHP files in feature directories.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array Array of file paths.
 	 */
 	private static function discover_feature_files(): array {
@@ -228,7 +228,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Recursively scan directory for PHP files.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @param  string $directory Directory to scan.
 	 * @return array Array of file paths.
 	 */
@@ -274,7 +274,7 @@ class Bootstrap_Autoloader {
 	 *
 	 * Useful during development when new files are added.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function clear_cache(): void {
@@ -284,7 +284,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Get list of loaded files (for debugging).
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array Array of loaded file paths.
 	 */
 	public static function get_loaded_files(): array {

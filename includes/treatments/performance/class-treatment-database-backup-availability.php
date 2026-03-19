@@ -24,9 +24,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents catastrophic data loss anxiety\n * - #9 Show Value: Protects years of work with single configuration\n * - #10 Talk-About-Worthy: "We never lose a single post even if hacked" is gold\n *
  * **Related Checks:**\n * - Security Vulnerability Not Patched (backup is last line of defense)\n * - Data Encryption Not Configured (backup privacy)\n * - Disaster Recovery Plan Not Tested (backup usability)\n * - Site Health Monitoring Not Enabled (early warning before disaster)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/database-backup-availability\n * - Video: https://wpshadow.com/training/backup-strategy-101 (8 min)\n * - Advanced: https://wpshadow.com/training/disaster-recovery-plan (15 min)\n *
- * @package    WPShadow\n * @subpackage Treatments\n * @since      1.6030.2148\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Database Backup Availability Class\n *\n * Ensures site has recent, accessible database backups for disaster recovery capability.
+ * @package    WPShadow\n * @subpackage Treatments\n * @since 1.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Database Backup Availability Class\n *\n * Ensures site has recent, accessible database backups for disaster recovery capability.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Database_Backup_Availability extends Treatment_Base {
 
@@ -71,7 +71,7 @@ class Treatment_Database_Backup_Availability extends Treatment_Base {
 	 * Checks for backup plugins, backup files in common directories,
 	 * and backup configuration settings to ensure database backups exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no recent backups found, null otherwise.
 	 */
 	public static function check() {

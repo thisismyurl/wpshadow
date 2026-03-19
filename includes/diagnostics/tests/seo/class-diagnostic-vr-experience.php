@@ -4,7 +4,7 @@
  *
  * Tests whether the site offers virtual reality content or tours for immersive engagement.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Virtual Reality experiences provide immersive 3D environments for product showcases,
  * virtual tours, training, and entertainment, enhancing user engagement.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Vr_Experience extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -170,7 +170,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for 360-degree content.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if 360 content exists, false otherwise.
 	 */
 	private static function check_360_content() {
@@ -216,7 +216,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for WebXR support.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if WebXR support exists, false otherwise.
 	 */
 	private static function check_webxr_support() {
@@ -225,12 +225,17 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
+				$script_src = '';
+				if ( isset( $script->src ) && is_string( $script->src ) ) {
+					$script_src = $script->src;
+				}
+
 				if ( strpos( $handle, 'webxr' ) !== false || 
-					 strpos( $script->src, 'webxr' ) !== false ||
+					 strpos( $script_src, 'webxr' ) !== false ||
 					 strpos( $handle, 'three' ) !== false ||
-					 strpos( $script->src, 'three.js' ) !== false ||
+					 strpos( $script_src, 'three.js' ) !== false ||
 					 strpos( $handle, 'a-frame' ) !== false ||
-					 strpos( $script->src, 'aframe' ) !== false ) {
+					 strpos( $script_src, 'aframe' ) !== false ) {
 					return true;
 				}
 			}
@@ -242,7 +247,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for VR headset support indicators.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if VR headset support exists, false otherwise.
 	 */
 	private static function check_vr_headset_support() {
@@ -270,7 +275,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for virtual tours.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if virtual tours exist, false otherwise.
 	 */
 	private static function check_virtual_tours() {
@@ -307,7 +312,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for VR-related content.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if VR content exists, false otherwise.
 	 */
 	private static function check_vr_content() {

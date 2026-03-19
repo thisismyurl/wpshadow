@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Content
- * @since      1.6034.2325
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Case studies and interviews
  * - Long-form articles
  *
- * @since 1.6034.2325
+ * @since 1.6093.1200
  */
 class Treatment_Diversifies_Content_Formats extends Treatment_Base {
 
@@ -76,7 +76,7 @@ class Treatment_Diversifies_Content_Formats extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2325
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if low format diversity, null otherwise.
 	 */
 	public static function check() {

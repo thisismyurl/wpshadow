@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1320
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site works properly with screen readers
  * including proper semantic HTML and ARIA labels.
  *
- * @since 1.7034.1320
+ * @since 1.6093.1200
  */
 class Treatment_Screen_Reader_Compatibility extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Screen_Reader_Compatibility extends Treatment_Base {
 	 * Tests screen reader compatibility including alt text, ARIA labels,
 	 * semantic HTML, and heading hierarchy.
 	 *
-	 * @since  1.7034.1320
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

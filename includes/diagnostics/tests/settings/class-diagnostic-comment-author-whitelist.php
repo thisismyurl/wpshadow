@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1755
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment approval whitelist configuration.
  *
- * @since 1.6032.1755
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Author_Whitelist extends Diagnostic_Base {
 
@@ -59,14 +59,14 @@ class Diagnostic_Comment_Author_Whitelist extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1755
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		$issues = array();
 
 		// Check comment approval whitelist setting.
-		$whitelist_enabled = get_option( 'comment_whitelist', 1 );
+		$whitelist_enabled = get_option( 'comment_previously_approved', 1 );
 
 		if ( ! $whitelist_enabled ) {
 			$issues[] = __( 'Comment author whitelist is disabled - all comments require moderation', 'wpshadow' );

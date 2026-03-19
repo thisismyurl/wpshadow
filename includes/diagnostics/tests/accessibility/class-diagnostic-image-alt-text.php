@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.6035.1700
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Image Alt Text Diagnostic Class
  *
  * Verifies images have descriptive alt text for screen readers.
- * WCAG 2.1 Level A Success Criterion 1.1.1 (Non-text Content).
+ * WCAG 2.1 Level A Success Criterion1.0 (Non-text Content).
  *
- * @since 1.6035.1700
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1700
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 					'stats'    => $stats,
 					'issues'   => $issues,
 					'warnings' => $warnings,
-					'wcag_criterion' => 'WCAG 2.1 Level A - 1.1.1 Non-text Content',
+					'wcag_criterion' => 'WCAG 2.1 Level A -1.0 Non-text Content',
 				),
 			);
 		}

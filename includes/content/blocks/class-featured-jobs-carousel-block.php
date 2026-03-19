@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Featured Jobs Carousel Block Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -41,7 +41,7 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 	/**
 	 * Register the featured jobs carousel block.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_block(): void {
 		register_block_type(
@@ -82,7 +82,7 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render the featured jobs carousel block.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered carousel HTML.
 	 */
@@ -203,7 +203,7 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render a single job card.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $job        Job post object.
 	 * @param  array    $attributes Block attributes.
 	 * @return string Rendered job card HTML.

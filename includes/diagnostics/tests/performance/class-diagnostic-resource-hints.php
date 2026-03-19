@@ -5,7 +5,7 @@
  * Checks for proper implementation of resource hints (preload, prefetch, prerender)
  * to optimize critical resource loading.
  *
- * @since   1.6033.2079
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Prerender for likely next pages
  * - Proper HTTP headers for resource hints
  *
- * @since 1.6033.2079
+ * @since 1.6093.1200
  */
 class Diagnostic_Resource_Hints extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Resource_Hints extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2079
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6036.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for tooltip guidance on complex features.
  *
- * @since 1.6036.1505
+ * @since 1.6093.1200
  */
 class Diagnostic_Tooltips_Missing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Tooltips_Missing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6036.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

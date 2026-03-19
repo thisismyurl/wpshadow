@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -78,7 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Changed <script src="analytics.js"> to <script async src="analytics.js">.
  * Analytics loads parallel, doesn't block. Also: <script defer src="theme.js">.
  * Theme JS executes after DOM ready. Result: no blocking scripts.
- * First Contentful Paint improved 1.2 seconds. Lighthouse warning
+ * First Contentful Paint improved1.0 seconds. Lighthouse warning
  * "Eliminate render-blocking resources" resolved. Rule: defer for
  * order-dependent scripts, async for independent scripts.
  *
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (major rendering blocker)
  * - Treatment: add async/defer attributes appropriately
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_JavaScript_Loading_Strategy_Not_Optimized extends Treatment_Base {
 
@@ -124,7 +124,7 @@ class Treatment_JavaScript_Loading_Strategy_Not_Optimized extends Treatment_Base
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

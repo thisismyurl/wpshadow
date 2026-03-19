@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since      1.6034.2204
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Great: 2-3 posts per week
  * - Enterprise: Daily posts
  *
- * @since 1.6034.2204
+ * @since 1.6093.1200
  */
 class Diagnostic_Long_Content_Gaps extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Long_Content_Gaps extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2204
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if long gaps detected, null otherwise.
 	 */
 	public static function check() {

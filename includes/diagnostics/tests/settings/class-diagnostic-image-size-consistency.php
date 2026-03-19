@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.602.1352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that all registered image sizes are properly configured and can generate correctly.
  * Checks for missing sizes, invalid dimensions, and theme-specific image size issues.
  *
- * @since 1.602.1352
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Size_Consistency extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Image_Size_Consistency extends Diagnostic_Base {
 	 *
 	 * Checks all registered image sizes for proper configuration and validates theme-specific sizes.
 	 *
-	 * @since  1.602.1352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -200,7 +200,7 @@ class Diagnostic_Image_Size_Consistency extends Diagnostic_Base {
 	 *
 	 * Retrieves both default WordPress sizes and additional theme/plugin sizes.
 	 *
-	 * @since  1.602.1352
+	 * @since 1.6093.1200
 	 * @return array Array of image sizes with their dimensions.
 	 */
 	private static function get_all_image_sizes() {
@@ -241,7 +241,7 @@ class Diagnostic_Image_Size_Consistency extends Diagnostic_Base {
 	 *
 	 * Identifies multiple image sizes that have identical dimensions.
 	 *
-	 * @since  1.602.1352
+	 * @since 1.6093.1200
 	 * @param  array $sizes Array of image sizes.
 	 * @return array Array of duplicate dimensions grouped by size names.
 	 */
@@ -272,7 +272,7 @@ class Diagnostic_Image_Size_Consistency extends Diagnostic_Base {
 	 *
 	 * Validates that theme-registered image sizes are properly configured.
 	 *
-	 * @since  1.602.1352
+	 * @since 1.6093.1200
 	 * @param  array $sizes Array of all image sizes.
 	 * @return array Array of theme-specific issues.
 	 */
@@ -324,7 +324,7 @@ class Diagnostic_Image_Size_Consistency extends Diagnostic_Base {
 	 *
 	 * Attempts to identify image sizes that are registered but not used in theme templates.
 	 *
-	 * @since  1.602.1352
+	 * @since 1.6093.1200
 	 * @param  array $sizes Array of all image sizes.
 	 * @return array Array of unused size names.
 	 */

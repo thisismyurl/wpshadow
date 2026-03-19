@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates disk space for uploads. Low disk space can break uploads,
  * thumbnail generation, and backups.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Storage_Space_Availability extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Storage_Space_Availability extends Diagnostic_Base {
 	 * - Disk usage percentage
 	 * - Multisite quota limits
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

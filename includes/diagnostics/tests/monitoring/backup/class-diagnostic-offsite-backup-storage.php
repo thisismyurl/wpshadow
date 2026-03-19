@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies backups are stored offsite for disaster recovery.
  * Like keeping important documents in a safe deposit box, not at home.
  *
- * @since 1.6035.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 	/**
 	 * Run the offsite backup storage diagnostic check.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if offsite storage issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 	/**
 	 * Get user-friendly name for storage service.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @param  string $service_code Service identifier.
 	 * @return string User-friendly name.
 	 */

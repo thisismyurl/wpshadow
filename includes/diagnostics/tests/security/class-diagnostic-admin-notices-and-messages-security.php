@@ -57,7 +57,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0637
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -96,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Settings Page Output Escaping: Validates settings forms
  * - Plugin Code Security Audit: Broader plugin security scan
  *
- * @since 1.6033.0637
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Notices_And_Messages_Security extends Diagnostic_Base {
 

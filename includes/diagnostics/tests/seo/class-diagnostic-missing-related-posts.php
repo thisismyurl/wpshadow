@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Engagement
- * @since      1.6034.2159
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Use descriptive anchor text
  * - Link to both newer and older content
  *
- * @since 1.6034.2159
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Related_Posts extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Missing_Related_Posts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2159
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if posts lack internal links, null otherwise.
 	 */
 	public static function check() {
@@ -139,7 +139,7 @@ class Diagnostic_Missing_Related_Posts extends Diagnostic_Base {
 	/**
 	 * Count internal links in content
 	 *
-	 * @since  1.6034.2159
+	 * @since 1.6093.1200
 	 * @param  string $content  Post content.
 	 * @param  string $site_url Site URL for internal link detection.
 	 * @return int Number of internal links found.

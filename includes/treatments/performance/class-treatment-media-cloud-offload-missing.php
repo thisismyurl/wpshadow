@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if media files are offloaded to cloud storage. Cloud offload
  * reduces hosting costs, improves performance, and increases reliability.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Treatment_Media_Cloud_Offload_Missing extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Media_Cloud_Offload_Missing extends Treatment_Base {
 	 * Checks if media is offloaded to cloud storage (S3, R2, GCS, etc.).
 	 * Cloud offload reduces server load and hosting costs.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2201
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Active vs passive voice
  * - Transition words
  *
- * @since 1.6034.2201
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Readability_Scores extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_No_Readability_Scores extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2201
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if readability not tracked, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_No_Readability_Scores extends Diagnostic_Base {
 	/**
 	 * Check if a readability analysis plugin is active
 	 *
-	 * @since  1.6034.2201
+	 * @since 1.6093.1200
 	 * @return bool True if readability plugin active, false otherwise.
 	 */
 	private static function has_readability_plugin() {

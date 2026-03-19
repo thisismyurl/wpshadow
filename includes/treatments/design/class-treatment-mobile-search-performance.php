@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Navigation
- * @since      1.602.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures search results load quickly on mobile and provide
  * relevant results without excessive page weight.
  *
- * @since 1.602.1450
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Search_Performance extends Treatment_Base {
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\AJAX
- * @since      1.6033.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Toggle Post Type AJAX Handler
  *
- * @since 1.6033.1530
+ * @since 1.6093.1200
  */
 class AJAX_Toggle_Post_Type extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {

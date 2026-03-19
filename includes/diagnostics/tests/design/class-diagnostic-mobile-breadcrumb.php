@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Navigation
- * @since      1.602.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ class-diagnostic-exit;
  * Ensures breadcrumb navigation exists and is mobile-friendly
  * with appropriate sizing and schema markup.
  *
- * @since 1.602.1450
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Breadcrumb extends Diagnostic_Base {
 

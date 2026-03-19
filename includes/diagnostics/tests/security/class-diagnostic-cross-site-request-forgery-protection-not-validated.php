@@ -17,7 +17,7 @@
  * CSRF protection guide: https://wpshadow.com/kb/wordpress-nonce-validation\n * Video: Implementing nonce security (10min): https://wpshadow.com/training/csrf-protection\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer creates delete-user form. Includes nonce field but forgets to verify.\n * Form HTML: <input name=\"_wpnonce\" value=\"xyz...\" />\n * Processing: wp_verify_nonce() call removed during debugging (never added back).\n * Attacker crafts CSRF payload that submits deletion form. Admin visits malicious\n * site. Deletion processed (no nonce check). Admin account removed.\n *
  * **Implementation Notes:**
  * - Scans for wp_verify_nonce() and check_ajax_referer()\n * - Matches nonce field names in forms\n * - Validates action parameter consistency\n * - Severity: critical (admin action exposed), high (data modification)\n * - Treatment: add nonce verification to all forms\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Cross_Site_Request_Forgery_Protection_Not_Validated extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Cross_Site_Request_Forgery_Protection_Not_Validated extends Dia
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -36,7 +36,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Import Taxonomy Mismatches
  * - Import Character Encoding Corruption
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
@@ -100,7 +100,7 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -114,16 +114,16 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 			FROM {$wpdb->posts} 
 			WHERE post_type IN ('post', 'page') 
 			AND post_status = 'publish' 
-			AND post_content REGEXP '\\[([a-zA-Z0-9_-]+)' 
+			AND post_content LIKE '%[%'
 			LIMIT 50",
 			ARRAY_A
 		);
 
 		$unregistered_shortcodes = array();
 		
-		foreach ( $posts_with_shortcodes as $post ) {
+		foreach ( (array) $posts_with_shortcodes as $post ) {
 			// Find all shortcodes in content.
-			preg_match_all( '/\[([a-zA-Z0-9_-]+)/', $post['post_content'], $matches );
+			preg_match_all( '/\[([a-zA-Z0-9_-]+)/', isset( $post['post_content'] ) ? $post['post_content'] : '', $matches );
 			
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $shortcode ) {

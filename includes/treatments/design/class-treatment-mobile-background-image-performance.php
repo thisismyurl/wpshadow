@@ -4,7 +4,7 @@
  *
  * Validates background images are optimized for mobile.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that background images are optimized for mobile with appropriate
  * image sizes and media queries to reduce bandwidth.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Background_Image_Performance extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Background_Image_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

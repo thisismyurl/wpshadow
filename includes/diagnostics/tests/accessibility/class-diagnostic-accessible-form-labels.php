@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Mouse users need larger click area (label is clickable)
  * - Mobile users benefit from larger touch targets
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Accessible_Form_Labels extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'accessible-form-labels';
@@ -56,7 +56,7 @@ class Diagnostic_Accessible_Form_Labels extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Form Fields Missing Associated Labels';
@@ -64,7 +64,7 @@ class Diagnostic_Accessible_Form_Labels extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if form inputs have properly associated labels for accessibility';
@@ -72,7 +72,7 @@ class Diagnostic_Accessible_Form_Labels extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'accessibility';
@@ -80,7 +80,7 @@ class Diagnostic_Accessible_Form_Labels extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Accessible_Form_Labels extends Diagnostic_Base {
 				'kb_link'      => 'https://wpshadow.com/kb/form-labels',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1 1.3.1 Info and Relationships',
+					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Info and Relationships',
 					'css_pattern'             => 'label { display: block; margin-bottom: 5px; } /* Ensure space */',
 					'ux_benefit'              => 'Larger click area for labels helps mobile users and people with fine-motor issues',
 					'affected_population'     => 'Blind, low vision, motor disabilities, mobile users',

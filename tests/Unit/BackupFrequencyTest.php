@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1645
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Backup Frequency Diagnostic Test Class
  *
- * @since 1.6028.1645
+ * @since 1.6093.1200
  */
 class BackupFrequencyTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test diagnostic passes when backups recent
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_when_backups_recent(): void {
@@ -69,7 +69,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test diagnostic flags no backup plugin
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_no_backup_plugin(): void {
@@ -111,7 +111,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test diagnostic flags plugin but no backups
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_plugin_but_no_backups(): void {
@@ -152,7 +152,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test diagnostic flags outdated backup
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_outdated_backup(): void {
@@ -194,7 +194,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -246,7 +246,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test meta includes backup data
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_backup_data(): void {
@@ -289,7 +289,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test details include why backups matter
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_why_matters(): void {
@@ -330,7 +330,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test details include backup plugins list
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_backup_plugins(): void {
@@ -371,7 +371,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test threat level calculation
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_calculation(): void {
@@ -412,7 +412,7 @@ class BackupFrequencyTest extends TestCase {
 	/**
 	 * Test data loss risk calculation
 	 *
-	 * @since 1.6028.1645
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_data_loss_risk_calculation(): void {

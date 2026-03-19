@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that competitor pricing is monitored and alerts are configured
  * so pricing decisions stay competitive.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Competitor_Price_Monitoring extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Competitor_Price_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -168,7 +168,7 @@ class Diagnostic_Competitor_Price_Monitoring extends Diagnostic_Base {
 	/**
 	 * Find pages or posts by keyword search.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching page titles.
 	 */

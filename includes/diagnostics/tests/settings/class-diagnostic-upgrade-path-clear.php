@@ -4,7 +4,7 @@
  *
  * Tests whether membership upgrade options are clearly presented.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Clear upgrade paths can increase average revenue per user (ARPU) by 15-25%.
  * Members need to understand their upgrade options and the value they receive.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check if site has multiple membership levels.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if multiple levels detected, false otherwise.
 	 */
 	private static function has_multiple_levels() {
@@ -219,7 +219,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for upgrade page.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if upgrade page exists, false otherwise.
 	 */
 	private static function check_upgrade_page() {
@@ -246,7 +246,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for comparison table.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if comparison table exists, false otherwise.
 	 */
 	private static function check_comparison_table() {
@@ -275,7 +275,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for upgrade CTAs.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if upgrade CTAs exist, false otherwise.
 	 */
 	private static function check_upgrade_ctas() {
@@ -304,7 +304,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for value messaging.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if value messaging exists, false otherwise.
 	 */
 	private static function check_value_messaging() {
@@ -331,7 +331,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for feature gating.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if feature gating exists, false otherwise.
 	 */
 	private static function check_feature_gating() {
@@ -351,7 +351,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for upgrade incentives.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if incentives exist, false otherwise.
 	 */
 	private static function check_upgrade_incentives() {
@@ -392,7 +392,7 @@ class Diagnostic_Upgrade_Path_Clear extends Diagnostic_Base {
 	/**
 	 * Check for upgrade process.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if process is documented, false otherwise.
 	 */
 	private static function check_upgrade_process() {

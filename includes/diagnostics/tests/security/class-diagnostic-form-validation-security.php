@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1020
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that forms have proper security measures including nonce
  * validation, CSRF protection, and input sanitization.
  *
- * @since 1.7034.1020
+ * @since 1.6093.1200
  */
 class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 	 * Tests if forms have nonce protection, CSRF prevention,
 	 * input validation, and server-side sanitization.
 	 *
-	 * @since  1.7034.1020
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

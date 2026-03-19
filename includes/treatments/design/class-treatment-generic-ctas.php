@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects generic calls-to-action like "Click Here" or "Read More" which
  * convert poorly compared to specific, benefit-focused CTAs.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Treatment_Generic_CTAs extends Treatment_Base {
 

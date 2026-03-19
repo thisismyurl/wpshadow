@@ -27,7 +27,7 @@
  * (FOIT). Bounce rate: 65%. Optimized: subset to Latin characters
  * only (remove Cyrillic, Greek). Convert to WOFF2. Variable font
  * (1 file, all weights). Total: 120KB (85% reduction). Load time:
- * 1.2 seconds. Added font-display: swap (text visible immediately).
+ *1.0 seconds. Added font-display: swap (text visible immediately).
  * Bounce rate: 28%. Conversions increased 130%. Setup: 2 hours.
  *
  * **Philosophy Alignment:**
@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -73,11 +73,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 6. Return if using legacy formats or large files
  *
  * **Real-World Scenario:**
- * Original: 4 TTF files (Regular, Bold, Italic, BoldItalic) = 1.2MB.
+ * Original: 4 TTF files (Regular, Bold, Italic, BoldItalic) =1.0MB.
  * Optimization: converted to WOFF2 = 400KB. Subset to Latin-only
  * (unicode-range: U+0000-00FF) = 220KB. Used variable font instead
  * (single file, all weights) = 85KB. Final reduction: 93%. Page load
- * time improved 2.5 seconds on mobile. First Contentful Paint: 3.8s → 1.3s.
+ * time improved 2.5 seconds on mobile. First Contentful Paint: 3.8s →1.0s.
  *
  * **Implementation Notes:**
  * - Checks font formats and sizes
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant mobile impact)
  * - Treatment: convert to WOFF2, subset, use variable fonts
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Font_Optimization_Not_Configured extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_Font_Optimization_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

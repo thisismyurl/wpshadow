@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Queries recent comments efficiently (last 1000, filters by date)\n * - Groups by IP address (primary indicator)\n * - Configurable threshold (3 comments per 15 sec is default)\n * - Returns severity: critical (active flooding detected), medium (threshold too high)\n * - Auto-fixable treatment: adjust flood protection thresholds\n *
  *
- * @since 1.6031.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Flood_Protection extends Diagnostic_Base {
 	protected static $slug        = 'comment-flood-protection';

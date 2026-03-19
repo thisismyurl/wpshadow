@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the theme meets basic WCAG AA accessibility standards
  * including skip links, ARIA labels, and semantic HTML.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Accessibility_Compliance extends Diagnostic_Base {
 	/**
 	 * Run the accessibility compliance diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if accessibility issues detected, null otherwise.
 	 */
 	public static function check() {

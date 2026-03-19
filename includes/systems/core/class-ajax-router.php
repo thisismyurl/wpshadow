@@ -29,7 +29,7 @@ class AJAX_Router {
 	 * Scans the includes/admin/ajax/ directory and automatically
 	 * registers all classes that extend AJAX_Handler_Base.
 	 *
-	 * @since 1.7035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class AJAX_Router {
 	 * Convention: All handlers extend AJAX_Handler_Base and live in
 	 * includes/admin/ajax/ directory.
 	 *
-	 * @since 1.7035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function discover_and_register_handlers() {
@@ -83,7 +83,7 @@ class AJAX_Router {
 	 * - dismiss-finding-handler.php -> Dismiss_Finding_Handler
 	 * - class-site-dna-handler.php -> Site_Dna_Handler
 	 *
-	 * @since  1.7035.1200
+	 * @since 1.6093.1200
 	 * @param  string $filename Filename without .php extension.
 	 * @return string Class name.
 	 */

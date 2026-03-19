@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects HTTP resources loading on HTTPS pages.
  * Like having an unlocked back door on a secured building.
  *
- * @since 1.6035.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Mixed_Content extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mixed_Content extends Diagnostic_Base {
 	/**
 	 * Run the mixed content diagnostic check.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if mixed content detected, null otherwise.
 	 */
 	public static function check() {
@@ -193,7 +193,7 @@ class Diagnostic_Mixed_Content extends Diagnostic_Base {
 	/**
 	 * Scan directory for hardcoded HTTP URLs.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @return array Files with HTTP URLs.
 	 */

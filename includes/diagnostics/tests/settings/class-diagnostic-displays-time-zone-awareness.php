@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website automatically detects and displays times based on
  * user timezone for global audience accessibility.
  *
- * @since 1.5003.1000
+ * @since 1.6093.1200
  */
 class Diagnostic_Displays_Time_Zone_Awareness extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Displays_Time_Zone_Awareness extends Diagnostic_Base {
 	 * for timezone plugins, JavaScript timezone detection, timezone references in
 	 * content, and proper WordPress timezone configuration.
 	 *
-	 * @since  1.5003.1000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

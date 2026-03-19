@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates the internal linking strategy for SEO effectiveness.
  * Checks link density, orphan pages, and anchor text optimization.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 	/**
 	 * Run the internal linking SEO diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if internal linking issues detected, null otherwise.
 	 */
 	public static function check() {

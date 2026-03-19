@@ -21,13 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Attempts to create and set proper permissions on the cache directory.
  *
- * @since 1.6030.0000
+ * @since 1.6093.1200
  */
 class Fix_Cache_Permissions_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX action
 	 *
-	 * @since 1.6030.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -37,7 +37,7 @@ class Fix_Cache_Permissions_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request
 	 *
-	 * @since 1.6030.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle(): void {

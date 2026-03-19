@@ -4,7 +4,7 @@
  *
  * Detects absence of long-form content for SEO authority.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects absence of long-form content (2,000+ words) which ranks better,
  * earns more backlinks, and establishes greater authority.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_No_Longform extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_No_Longform extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

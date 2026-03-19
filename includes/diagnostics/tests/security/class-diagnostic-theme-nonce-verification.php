@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2240
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no nonce), high (weak nonce handling)
  * - Treatment: add wp_verify_nonce or check_admin_referer calls
  *
- * @since 1.6030.2240
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Nonce_Verification extends Diagnostic_Base {
 
@@ -128,7 +128,7 @@ class Diagnostic_Theme_Nonce_Verification extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2240
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

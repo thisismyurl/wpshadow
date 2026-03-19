@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1635
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Missing Meta Tags Diagnostic Test Class
  *
- * @since 1.6028.1635
+ * @since 1.6093.1200
  */
 class MissingMetaTagsTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test diagnostic passes when tags complete
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_when_tags_complete(): void {
@@ -67,7 +67,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test diagnostic flags low completeness
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_low_completeness(): void {
@@ -116,7 +116,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test diagnostic flags missing descriptions
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_missing_descriptions(): void {
@@ -160,7 +160,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test diagnostic flags missing OG tags
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_missing_og_tags(): void {
@@ -208,7 +208,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -265,7 +265,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test meta includes completeness data
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_completeness_data(): void {
@@ -313,7 +313,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test details include recommended plugins
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_recommended_plugins(): void {
@@ -359,7 +359,7 @@ class MissingMetaTagsTest extends TestCase {
 	/**
 	 * Test threat level calculation
 	 *
-	 * @since 1.6028.1635
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_calculation(): void {

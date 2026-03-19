@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Forms
- * @since      1.602.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that checkout forms are optimized for mobile users,
  * including multi-step flows, field optimization, and payment methods.
  *
- * @since 1.602.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Check if ecommerce plugin is active.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return bool Has ecommerce plugin.
 	 */
 	private static function has_ecommerce_plugin(): bool {
@@ -105,7 +105,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Find checkout form issues.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_checkout_issues(): array {
@@ -133,7 +133,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Check checkout field count.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Field count issues.
 	 */
 	private static function check_field_count(): array {
@@ -165,7 +165,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Check payment method availability.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Payment method issues.
 	 */
 	private static function check_payment_methods(): array {
@@ -189,7 +189,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Check guest checkout availability.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Guest checkout issues.
 	 */
 	private static function check_guest_checkout(): array {
@@ -212,7 +212,7 @@ class Diagnostic_Mobile_Checkout_Form extends Diagnostic_Base {
 	/**
 	 * Check for mobile payment options.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Mobile payment issues.
 	 */
 	private static function check_mobile_payments(): array {

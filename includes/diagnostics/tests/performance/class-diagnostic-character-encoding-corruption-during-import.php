@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when special characters, unicode, or emoji become corrupted during import.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Character_Encoding_Corruption_During_Import extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Character_Encoding_Corruption_During_Import extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

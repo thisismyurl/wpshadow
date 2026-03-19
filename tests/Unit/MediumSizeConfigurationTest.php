@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.2032.1352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  *
  * Tests validation of WordPress medium image size settings.
  *
- * @since 1.2032.1352
+ * @since 1.6093.1200
  */
 class MediumSizeConfigurationTest extends TestCase {
 

@@ -25,7 +25,7 @@
  * Global e-commerce site. Server in US. International users (40%
  * traffic) see 4-second load times. Bounce rate: 60%. Implement
  * Cloudflare CDN. Edge servers in 200+ cities. International load
- * times drop to 1.2 seconds. Bounce rate: 25%. International
+ * times drop to1.0 seconds. Bounce rate: 25%. International
  * conversions increase 180%. Revenue gain: $300K/year. CDN cost:
  * $50/month. ROI: 600:1. Setup time: 2 hours.
  *
@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * example.com/uploads/image.jpg to cdn.example.com/uploads/image.jpg.
  * Edge servers cache images. User in Tokyo: image loads from Tokyo
  * server (15ms latency vs 180ms from US origin). Page load time
- * for Tokyo users: 3.2s → 1.1s (66% improvement).
+ * for Tokyo users: 3.2s →1.0s (66% improvement).
  *
  * **Implementation Notes:**
  * - Checks CDN plugin or manual configuration
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant global performance impact)
  * - Treatment: configure CDN (Cloudflare, BunnyCDN, etc)
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Delivery_Network_Integration_Not_Configured extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Content_Delivery_Network_Integration_Not_Configured extends Dia
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -4,7 +4,7 @@
  *
  * Detects statistics that are outdated or stale.
  *
- * @since   1.6033.1715
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Statistics older than 3 years damage credibility. Updating stats
  * increases trust by up to 67%.
  *
- * @since 1.6033.1715
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Outdated_Statistics extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Outdated_Statistics extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1715
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

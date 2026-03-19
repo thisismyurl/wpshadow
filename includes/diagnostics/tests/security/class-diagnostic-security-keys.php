@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.1620
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies WordPress security keys and salts are properly configured
  * with unique, strong values to protect authentication and sessions.
  *
- * @since 1.6035.1620
+ * @since 1.6093.1200
  */
 class Diagnostic_Security_Keys extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Security_Keys extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1620
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

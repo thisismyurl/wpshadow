@@ -5,7 +5,7 @@
  * Provides common functionality for all test cases.
  *
  * @package WPShadow\Tests
- * @since   1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

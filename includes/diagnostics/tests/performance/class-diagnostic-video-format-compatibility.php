@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.0910
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WordPress is configured to support multiple video formats
  * (MP4, WebM, OGG) for maximum browser compatibility.
  *
- * @since 1.7034.0910
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Format_Compatibility extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Video_Format_Compatibility extends Diagnostic_Base {
 	 * Tests if WordPress allows commonly supported video formats and
 	 * checks for FFmpeg/codec availability for transcoding.
 	 *
-	 * @since  1.7034.0910
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

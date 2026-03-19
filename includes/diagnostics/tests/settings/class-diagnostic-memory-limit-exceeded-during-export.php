@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects memory limit issues during export operations.
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 	 * Determines if export will run into memory limit issues
 	 * based on site size and server configuration.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -227,7 +227,7 @@ class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 	/**
 	 * Convert memory string to bytes.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @param  string $value Memory limit string (e.g., "128M", "2G").
 	 * @return int Memory in bytes.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that articles and pages have proper meta descriptions,
  * titles, and other SEO-critical tags.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Treatment_SEO_Meta_Tags extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_SEO_Meta_Tags extends Treatment_Base {
 	/**
 	 * Run the SEO meta tags treatment check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if SEO issues detected, null otherwise.
 	 */
 	public static function check() {

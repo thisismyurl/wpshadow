@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures database UTF-8mb4 consistency to support emoji and
  * international characters.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 	 * Checks database, table, and column charset/collation settings.
 	 * Identifies inconsistencies that may prevent emoji from displaying.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if charset issues found, null otherwise.
 	 */
 	public static function check() {

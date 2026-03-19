@@ -4,7 +4,7 @@
  *
  * Tests whether the site organizes videos into strategic playlists that increase watch sessions.
  *
- * @since   1.6034.0400
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Playlists increase watch time by 150% and session length by 3x.
  * Strategic organization keeps viewers engaged longer.
  *
- * @since 1.6034.0400
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 	/**
 	 * Check playlist embeds.
 	 *
-	 * @since  1.6034.0400
+	 * @since 1.6093.1200
 	 * @return bool True if playlists exist, false otherwise.
 	 */
 	private static function check_playlist_embeds() {
@@ -164,7 +164,7 @@ class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 	/**
 	 * Check categorized videos.
 	 *
-	 * @since  1.6034.0400
+	 * @since 1.6093.1200
 	 * @return bool True if categorized, false otherwise.
 	 */
 	private static function check_categorized_videos() {
@@ -191,7 +191,7 @@ class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 	/**
 	 * Check beginner series.
 	 *
-	 * @since  1.6034.0400
+	 * @since 1.6093.1200
 	 * @return bool True if series exists, false otherwise.
 	 */
 	private static function check_beginner_series() {
@@ -218,7 +218,7 @@ class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 	/**
 	 * Check strategic ordering.
 	 *
-	 * @since  1.6034.0400
+	 * @since 1.6093.1200
 	 * @return bool True if ordered, false otherwise.
 	 */
 	private static function check_strategic_ordering() {
@@ -238,7 +238,7 @@ class Diagnostic_Video_Playlists_Organized extends Diagnostic_Base {
 	/**
 	 * Check playlist promotion.
 	 *
-	 * @since  1.6034.0400
+	 * @since 1.6093.1200
 	 * @return bool True if promoted, false otherwise.
 	 */
 	private static function check_playlist_promotion() {

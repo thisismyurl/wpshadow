@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether interrupted imports can be resumed from checkpoints.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Import_Resume_And_Checkpoint_Capability extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Import_Resume_And_Checkpoint_Capability extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,10 +96,16 @@ class Diagnostic_Import_Resume_And_Checkpoint_Capability extends Diagnostic_Base
 		}
 
 		// Check for REST API resume endpoint.
-		$rest_routes = rest_get_routes();
+		$rest_routes = array();
+		if ( function_exists( 'rest_get_server' ) ) {
+			$rest_server = rest_get_server();
+			if ( is_object( $rest_server ) && method_exists( $rest_server, 'get_routes' ) ) {
+				$rest_routes = $rest_server->get_routes();
+			}
+		}
 		$has_resume_endpoint = false;
 
-		foreach ( $rest_routes as $route => $methods ) {
+		foreach ( (array) $rest_routes as $route => $methods ) {
 			if ( stripos( $route, 'import' ) !== false && stripos( $route, 'resume' ) !== false ) {
 				$has_resume_endpoint = true;
 				break;

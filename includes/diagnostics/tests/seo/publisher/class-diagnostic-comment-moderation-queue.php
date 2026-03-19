@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that pending comments are being reviewed and processed
  * in a timely manner.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 	/**
 	 * Run the comment moderation queue diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if moderation issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -197,10 +197,10 @@ class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 
 		// Check moderation queue processing time.
 		$moderation_avg_wait = 0;
-		$recently_approved = $wpdb->get_results(
-			"SELECT DATEDIFF(comment_approved_datetime, comment_date) as wait_days 
+		$recently_approved   = $wpdb->get_results(
+			"SELECT DATEDIFF(NOW(), comment_date) as wait_days
 			 FROM {$wpdb->comments}
-			 WHERE comment_approved = '1' AND comment_approved_datetime IS NOT NULL
+			 WHERE comment_approved = '0'
 			 AND comment_date > DATE_SUB(NOW(), INTERVAL 7 DAY)
 			 LIMIT 10"
 		);

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1402
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for properly configured permalink structures and rewrite rules
  * for custom post types to ensure clean, SEO-friendly URLs.
  *
- * @since 1.6032.1402
+ * @since 1.6093.1200
  */
 class Diagnostic_Custom_Post_Type_Permalinks extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Custom_Post_Type_Permalinks extends Diagnostic_Base {
 	 * - Permalink conflicts with existing pages/posts
 	 * - Archive page URL structure
 	 *
-	 * @since  1.6032.1402
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

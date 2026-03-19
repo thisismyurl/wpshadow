@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 1.6035.1402
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides shared utilities for safe HTTP requests.
  *
- * @since 1.6035.1402
+ * @since 1.6093.1200
  */
 class Diagnostic_Request_Helper {
 
 	/**
 	 * Perform a HEAD request and return a structured result.
 	 *
-	 * @since  1.6035.1402
+	 * @since 1.6093.1200
 	 * @param  string $url  URL to request.
 	 * @param  array  $args Optional. wp_remote_head args.
 	 * @return array {
@@ -49,7 +49,7 @@ class Diagnostic_Request_Helper {
 	/**
 	 * Perform a POST request and return a structured result.
 	 *
-	 * @since  1.6035.1402
+	 * @since 1.6093.1200
 	 * @param  string $url  URL to request.
 	 * @param  array  $args Optional. wp_remote_post args.
 	 * @return array {
@@ -69,7 +69,7 @@ class Diagnostic_Request_Helper {
 	/**
 	 * Perform a HEAD request and return the response code.
 	 *
-	 * @since  1.6035.1402
+	 * @since 1.6093.1200
 	 * @param  string $url  URL to request.
 	 * @param  array  $args Optional. wp_remote_head args.
 	 * @return int|null Response code or null on failure.
@@ -86,7 +86,7 @@ class Diagnostic_Request_Helper {
 	/**
 	 * Perform a POST request and return the response code.
 	 *
-	 * @since  1.6035.1402
+	 * @since 1.6093.1200
 	 * @param  string $url  URL to request.
 	 * @param  array  $args Optional. wp_remote_post args.
 	 * @return int|null Response code or null on failure.
@@ -103,7 +103,7 @@ class Diagnostic_Request_Helper {
 	/**
 	 * Perform an HTTP request with standard defaults.
 	 *
-	 * @since  1.6035.1402
+	 * @since 1.6093.1200
 	 * @param  string $method HTTP method.
 	 * @param  string $url    URL to request.
 	 * @param  array  $args   Request args.
@@ -143,7 +143,7 @@ class Diagnostic_Request_Helper {
 	/**
 	 * Perform an HTTP request and return a structured result.
 	 *
-	 * @since  1.6035.1402
+	 * @since 1.6093.1200
 	 * @param  string $method HTTP method.
 	 * @param  string $url    URL to request.
 	 * @param  array  $args   Request args.

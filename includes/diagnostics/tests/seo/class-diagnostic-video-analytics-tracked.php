@@ -4,7 +4,7 @@
  *
  * Tests whether the site tracks and reviews video analytics regularly (watch time, retention, engagement).
  *
- * @since   1.6034.0425
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Data-driven video optimization increases performance by 85%. Regular analytics
  * review is essential for understanding what resonates with your audience.
  *
- * @since 1.6034.0425
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Check analytics platform.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return bool True if configured, false otherwise.
 	 */
 	private static function check_analytics_platform() {
@@ -182,7 +182,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Check watch time tracking.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return bool True if tracked, false otherwise.
 	 */
 	private static function check_watch_time_tracking() {
@@ -209,7 +209,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Check retention analysis.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return bool True if analyzed, false otherwise.
 	 */
 	private static function check_retention_analysis() {
@@ -236,7 +236,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Check engagement metrics.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return bool True if tracked, false otherwise.
 	 */
 	private static function check_engagement_metrics() {
@@ -263,7 +263,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Check traffic sources.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return bool True if analyzed, false otherwise.
 	 */
 	private static function check_traffic_sources() {
@@ -290,7 +290,7 @@ class Diagnostic_Video_Analytics_Tracked extends Diagnostic_Base {
 	/**
 	 * Check regular reporting.
 	 *
-	 * @since  1.6034.0425
+	 * @since 1.6093.1200
 	 * @return bool True if reporting, false otherwise.
 	 */
 	private static function check_regular_reporting() {

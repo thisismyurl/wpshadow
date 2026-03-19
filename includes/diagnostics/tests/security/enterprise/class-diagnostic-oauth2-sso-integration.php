@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that enterprise single sign-on (SSO) is configured for centralized
  * authentication, better security, and improved user experience.
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Oauth2_Sso_Integration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Oauth2_Sso_Integration extends Diagnostic_Base {
 	/**
 	 * Run the OAuth2/SSO diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if SSO gaps detected, null otherwise.
 	 */
 	public static function check() {
@@ -203,7 +203,7 @@ class Diagnostic_Oauth2_Sso_Integration extends Diagnostic_Base {
 	/**
 	 * Determine if this is an enterprise environment.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return bool True if enterprise indicators detected, false otherwise.
 	 */
 	private static function is_enterprise_environment() {

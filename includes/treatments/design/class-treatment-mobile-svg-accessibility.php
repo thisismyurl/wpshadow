@@ -4,7 +4,7 @@
  *
  * Ensures SVG icons are accessible to screen readers.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures SVG icons have proper accessibility features including title/desc elements
  * and ARIA roles for screen reader users.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_SVG_Accessibility extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_SVG_Accessibility extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

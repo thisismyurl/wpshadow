@@ -3,7 +3,7 @@
  * Knowledge Base custom post type.
  *
  * @package WPShadow
- * @since   1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -19,13 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the KB post type, taxonomies, and meta fields.
  *
- * @since 1.6089
+ * @since 1.6093.1200
  */
 class KB_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {

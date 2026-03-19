@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Navigation
- * @since      1.602.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

@@ -52,7 +52,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5049.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -82,7 +82,7 @@ exit;
  * - Database Index Efficiency
  * - Plugin Database Corruption
  *
- * @since 1.5049.1401
+ * @since 1.6093.1200
  */
 class Treatment_Database_Table_Corruption_Check extends Treatment_Base {
 
@@ -117,7 +117,7 @@ class Treatment_Database_Table_Corruption_Check extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.5049.1401
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for virtual reality content. VR tours/experiences increase engagement
  * for real estate (property tours), tourism (destination previews), education.
  *
- * @since 1.6034.1505
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 	 *
 	 * Looks for 360° tours, VR content, and immersive experiences.
 	 *
-	 * @since  1.6034.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (critical for high-traffic sites)
  * - Treatment: perform load testing, document capacity
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Load_Testing_Performance_Not_Validated extends Diagnostic_Base {
 
@@ -125,7 +125,7 @@ class Diagnostic_Load_Testing_Performance_Not_Validated extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

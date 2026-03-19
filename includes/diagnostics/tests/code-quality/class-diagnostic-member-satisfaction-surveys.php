@@ -4,7 +4,7 @@
  *
  * Tests whether the site conducts quarterly member satisfaction surveys and acts on feedback.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Regular satisfaction surveys help identify issues, gather feedback, and improve
  * member experience, reducing churn and increasing retention.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -171,7 +171,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -196,7 +196,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Check for recent surveys.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if recent surveys exist, false otherwise.
 	 */
 	private static function check_recent_surveys() {
@@ -228,7 +228,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Check for feedback collection system.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if feedback system exists, false otherwise.
 	 */
 	private static function check_feedback_system() {
@@ -252,7 +252,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Check for NPS tracking.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if NPS tracking exists, false otherwise.
 	 */
 	private static function check_nps_tracking() {
@@ -280,7 +280,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Check for automated surveys.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if automated surveys exist, false otherwise.
 	 */
 	private static function check_automated_surveys() {
@@ -303,7 +303,7 @@ class Diagnostic_Member_Satisfaction_Surveys extends Diagnostic_Base {
 	/**
 	 * Check for evidence of acting on feedback.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if feedback action evidence exists, false otherwise.
 	 */
 	private static function check_feedback_action() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if videos use adaptive streaming (HLS, DASH). Single-file
  * delivery doesn't adapt to bandwidth, causing poor UX.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Streaming_Not_Optimized extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Video_Streaming_Not_Optimized extends Diagnostic_Base {
 	 * Checks if videos use adaptive streaming. Adaptive bitrate
 	 * reduces buffering and bandwidth costs.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -128,7 +128,7 @@ class Diagnostic_Video_Streaming_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Check if streaming plugin is already active.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if streaming plugin detected.
 	 */
 	private static function has_streaming_plugin() {
@@ -155,7 +155,7 @@ class Diagnostic_Video_Streaming_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Check if HLS/DASH files exist in media library.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if streaming files detected.
 	 */
 	private static function has_streaming_files() {
@@ -174,7 +174,7 @@ class Diagnostic_Video_Streaming_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Count large video files (>50MB).
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return int Number of large videos.
 	 */
 	private static function count_large_videos() {

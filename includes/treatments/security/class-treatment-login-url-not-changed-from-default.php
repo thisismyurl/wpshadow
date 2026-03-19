@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (default URL), low (obscured but plugin heavy)
  * - Treatment: use custom login URL plugin
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Login_URL_Not_Changed_From_Default extends Treatment_Base {
 
@@ -118,7 +118,7 @@ class Treatment_Login_URL_Not_Changed_From_Default extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

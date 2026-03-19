@@ -53,6 +53,10 @@ $findings_by_status = array(
 );
 
 foreach ( $all_findings as $finding ) {
+	if ( ! is_array( $finding ) ) {
+		continue;
+	}
+
 	$finding_id = isset( $finding['id'] ) ? $finding['id'] : '';
 	if ( empty( $finding_id ) ) {
 		// Generate a stable fallback ID from title/description to avoid undefined index notices

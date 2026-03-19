@@ -4,7 +4,7 @@
  *
  * Tests if written SEO strategy and goals are documented.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that a written SEO strategy exists.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Has_Documented_SEO_Strategy extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Has_Documented_SEO_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Has_Documented_SEO_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for documentation evidence in posts or attachments.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Search terms.
 	 * @return bool True if found.
 	 */
@@ -125,7 +125,7 @@ class Diagnostic_Has_Documented_SEO_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for SEO strategy files in site root.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return bool True if found.
 	 */
 	private static function has_strategy_files() {

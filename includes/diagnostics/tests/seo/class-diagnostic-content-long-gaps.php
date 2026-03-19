@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes posting history to identify extended gaps (30+ days) between posts.
  * Such gaps have severe negative impact on traffic and engagement.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 	 * Analyzes the last 6 months of posts to find gaps of 30+ days.
 	 * Research shows such gaps cause 15-40% traffic loss.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

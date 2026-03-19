@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Registers job posting CPT with meta fields, taxonomies, and REST API support.
  *
- * @since 1.6089
+ * @since 1.6093.1200
  */
 class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 
@@ -33,7 +33,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -57,7 +57,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Register the job posting custom post type.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_post_type(): void {
 		$labels = array(
@@ -110,7 +110,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Register job posting taxonomies.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_taxonomies(): void {
 		// Job Category taxonomy
@@ -175,7 +175,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Register job posting meta fields.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_meta_fields(): void {
 		$meta_fields = array(
@@ -215,7 +215,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Register REST API fields for job postings.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_rest_fields(): void {
 		$meta_fields = array(
@@ -261,7 +261,7 @@ class Job_Posting_Post_Type extends Hook_Subscriber_Base {
 	/**
 	 * Add Schema.org JobPosting markup to job postings.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $content Post content.
 	 * @return string Post content with schema markup.
 	 */

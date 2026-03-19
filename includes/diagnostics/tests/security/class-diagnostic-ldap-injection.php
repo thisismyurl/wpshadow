@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2107
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * bypassing authentication, accessing unauthorized directory data, or
  * escalating privileges within Active Directory environments.
  *
- * @since 1.2033.2107
+ * @since 1.6093.1200
  */
 class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'ldap-injection';
@@ -50,7 +50,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'LDAP Injection Vulnerability';
@@ -58,7 +58,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects LDAP injection vulnerabilities in directory queries';
@@ -66,7 +66,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	 *
 	 * Scans for LDAP usage and validates injection prevention.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -180,7 +180,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * Find LDAP authentication plugins.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array Plugin slugs using LDAP.
 	 */
 	private static function find_ldap_plugins() {
@@ -213,7 +213,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * Scan LDAP plugins for injection vulnerabilities.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @param  array $plugins Plugin slugs.
 	 * @return array Vulnerable files.
 	 */
@@ -258,7 +258,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * Check if ldap_escape is used.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @param  array $plugins Plugin slugs.
 	 * @return bool True if escaping found.
 	 */
@@ -282,7 +282,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * Check for direct concatenation in ldap_search.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @param  array $plugins Plugin slugs.
 	 * @return bool True if concatenation found.
 	 */
@@ -308,7 +308,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * Check for special character filtering.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @param  array $plugins Plugin slugs.
 	 * @return bool True if filtering found.
 	 */
@@ -341,7 +341,7 @@ class Diagnostic_LDAP_Injection extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

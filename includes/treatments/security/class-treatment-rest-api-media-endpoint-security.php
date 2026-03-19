@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (unauth upload), high (weak auth)
  * - Treatment: require authentication + proper capabilities
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Treatment_REST_API_Media_Endpoint_Security extends Treatment_Base {
 
@@ -121,7 +121,7 @@ class Treatment_REST_API_Media_Endpoint_Security extends Treatment_Base {
 	 * Tests if REST API media endpoints require proper authentication
 	 * and have adequate capability checks.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

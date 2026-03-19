@@ -4,7 +4,7 @@
  *
  * Ensures videos play inline on mobile.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures videos play inline on mobile with proper controls and attributes,
  * preventing full-screen-only playback that disrupts content flow.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Video_Playback extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Video_Playback extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,7 @@ class Diagnostic_Mobile_Video_Playback extends Diagnostic_Base {
 		// Check for video transcript or captions
 		$has_captions_or_transcript = apply_filters( 'wpshadow_video_has_captions_or_transcript', false );
 		if ( ! $has_captions_or_transcript ) {
-			$issues[] = __( 'Videos should have captions or transcript for deaf/hard-of-hearing users (WCAG 1.2.1)', 'wpshadow' );
+			$issues[] = __( 'Videos should have captions or transcript for deaf/hard-of-hearing users (WCAG1.0)', 'wpshadow' );
 		}
 
 		// Check if video dimensions are responsive

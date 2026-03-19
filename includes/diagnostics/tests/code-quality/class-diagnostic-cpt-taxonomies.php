@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6034.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if all WPShadow custom taxonomies are registered and linked.
  *
- * @since 1.6034.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Taxonomies extends Diagnostic_Base {
 
@@ -86,7 +86,7 @@ class Diagnostic_CPT_Taxonomies extends Diagnostic_Base {
 	 *
 	 * Verifies that all expected taxonomies are registered and linked to post types.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -156,7 +156,7 @@ class Diagnostic_CPT_Taxonomies extends Diagnostic_Base {
 	/**
 	 * Get total count of registered taxonomies
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Count of registered taxonomies.
 	 */
 	public static function get_registered_count() {

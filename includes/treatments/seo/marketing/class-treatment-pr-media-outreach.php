@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Marketing
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies press kit and media outreach indicators.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Treatment_Pr_Media_Outreach extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Pr_Media_Outreach extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

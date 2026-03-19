@@ -4,7 +4,7 @@
  *
  * Analyzes SSL certificate and HTTPS configuration.
  *
- * @since   1.6033.2145
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates SSL certificate validity and security configuration.
  *
- * @since 1.6033.2145
+ * @since 1.6093.1200
  */
 class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2145
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -118,7 +118,7 @@ class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 4. Fix mixed content: Warnings appear in console if page loads http:// resources from https:// page. Search & replace old URLs: wp-cli: `wp search-replace \'http://domain.com\' \'https://domain.com\'`
 5. Redirect HTTP to HTTPS: Add to .htaccess: `RewriteEngine On` + `RewriteCond %{HTTPS} off` + `RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]`
 6. Update WordPress URLs: Dashboard > Settings > General URL, update both "WordPress Address" and "Site Address" to https://
-7. Test SSL: Visit https://www.ssllabs.com/ssltest, enter domain, verify A or A+ rating. Fix any weak protocols (TLS 1.0, TLS 1.1).
+7. Test SSL: Visit https://www.ssllabs.com/ssltest, enter domain, verify A or A+ rating. Fix any weak protocols (TLS1.0, TLS1.0).
 8. Enable HSTS header: Add to .htaccess: `Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"` (tells browser: always use HTTPS for 1 year).
 9. Add HSTS preload: Submit domain to https://hstspreload.org (includes site in browser HSTS preload list, prevents first visit MITM).
 10. Monitor SSL certificate expiration: Let\'s Encrypt auto-renews, but set calendar reminder to verify renewal (happens 30 days before expiration).',

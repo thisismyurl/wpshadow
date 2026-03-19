@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.0940
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WordPress has appropriate upload limits configured
  * for audio files including MP3, WAV, OGG, and other audio formats.
  *
- * @since 1.7034.0940
+ * @since 1.6093.1200
  */
 class Treatment_Audio_File_Upload_Limits extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Audio_File_Upload_Limits extends Treatment_Base {
 	 * Tests if WordPress allows audio uploads and if PHP limits
 	 * are sufficient for typical audio file sizes.
 	 *
-	 * @since  1.7034.0940
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

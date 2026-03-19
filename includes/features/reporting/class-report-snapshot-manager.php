@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages report snapshots for historical comparison.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Report_Snapshot_Manager {
 	/**
@@ -42,7 +42,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Save a report snapshot
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  array  $data      Report data.
 	 * @param  array  $metadata  Additional metadata.
@@ -82,7 +82,7 @@ class Report_Snapshot_Manager {
 			/**
 			 * Fires after a report snapshot is saved.
 			 *
-			 * @since 1.603.0200
+			 * @since 1.6093.1200
 			 *
 			 * @param int    $snapshot_id Snapshot ID.
 			 * @param string $report_id Report ID.
@@ -96,7 +96,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get snapshots for a report
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  int    $limit     Number of snapshots to retrieve.
 	 * @return array Snapshots.
@@ -108,7 +108,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Check whether the snapshots table exists.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @return bool True when table exists.
 	 */
 	public static function has_snapshots_table() {
@@ -118,7 +118,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get a snapshot by ID.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @param  int $snapshot_id Snapshot ID.
 	 * @return array|null Snapshot data or null when not found.
 	 */
@@ -146,7 +146,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get total snapshot count for a report.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @return int Snapshot count.
 	 */
@@ -157,7 +157,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get paginated snapshots for a report.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  int    $limit     Number of snapshots to retrieve.
 	 * @param  int    $offset    Result offset.
@@ -182,7 +182,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get paginated snapshots for a report and user.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  int    $user_id   User ID.
 	 * @param  int    $limit     Number of snapshots to retrieve.
@@ -205,7 +205,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get total snapshot count for a report and user.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  int    $user_id   User ID.
 	 * @return int Snapshot count.
@@ -217,7 +217,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Delete snapshots for a report and user.
 	 *
-	 * @since  1.7039.1200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  int    $user_id   User ID.
 	 * @return int Number of snapshots deleted.
@@ -258,7 +258,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Compare two snapshots
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  int $snapshot_id_1 First snapshot ID.
 	 * @param  int $snapshot_id_2 Second snapshot ID.
 	 * @return array Comparison data.
@@ -298,7 +298,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Find new issues between snapshots
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $old_data Old snapshot data.
 	 * @param  array $new_data New snapshot data.
 	 * @return array New issues.
@@ -324,7 +324,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Find resolved issues between snapshots
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $old_data Old snapshot data.
 	 * @param  array $new_data New snapshot data.
 	 * @return array Resolved issues.
@@ -350,7 +350,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get trend data for a report
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report identifier.
 	 * @param  int    $days      Number of days to analyze.
 	 * @return array Trend data.
@@ -388,7 +388,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Calculate trend direction
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $snapshots Snapshot data.
 	 * @return string Trend direction (improving, declining, stable).
 	 */
@@ -414,7 +414,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Delete old snapshots
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  int $days Days to keep snapshots.
 	 * @return int Number of snapshots deleted.
 	 */
@@ -457,7 +457,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Create snapshots table if it doesn't exist
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function maybe_create_table() {
@@ -473,7 +473,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get the next snapshot ID.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @return int Next ID.
 	 */
 	private static function get_next_snapshot_id() {
@@ -490,7 +490,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get option key for a single snapshot record.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  int $snapshot_id Snapshot ID.
 	 * @return string Option key.
 	 */
@@ -501,7 +501,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Get option key for report snapshot index.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @return string Option key.
 	 */
@@ -512,7 +512,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Persist snapshot record.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  array $snapshot Snapshot record.
 	 * @return bool True on success.
 	 */
@@ -523,7 +523,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Read report snapshot IDs in newest-first order.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @return array Snapshot IDs.
 	 */
@@ -540,7 +540,7 @@ class Report_Snapshot_Manager {
 	/**
 	 * Save report snapshot IDs in newest-first order.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @param  array  $ids       Snapshot IDs.
 	 * @return void

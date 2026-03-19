@@ -11,7 +11,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Server load conditions
  * - User configuration
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Guardian_Executor {
 
@@ -68,7 +68,7 @@ class Guardian_Executor {
 	/**
 	 * Initialize Guardian Executor
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -83,7 +83,7 @@ class Guardian_Executor {
 	 * Runs during WordPress heartbeat for quick, low-impact diagnostics.
 	 * Respects execution time limits and server load conditions.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Execution results.
 	 *
@@ -155,7 +155,7 @@ class Guardian_Executor {
 	 * Runs during off-peak hours for resource-intensive diagnostics.
 	 * Scheduled via WP-Cron.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Execution results.
 	 *
@@ -230,7 +230,7 @@ class Guardian_Executor {
 	 *
 	 * For low-traffic sites where heartbeat doesn't fire frequently.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array Execution results.
 	 */
 	public static function execute_background_diagnostics_cron(): array {
@@ -248,7 +248,7 @@ class Guardian_Executor {
 	/**
 	 * Batch execute diagnostics with time limit
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $diagnostic_slugs Array of diagnostic slugs to execute.
 	 * @param  int   $max_time_ms      Maximum execution time in milliseconds.
 	 * @return array {
@@ -298,7 +298,7 @@ class Guardian_Executor {
 	/**
 	 * Execute a single diagnostic
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $slug Diagnostic slug.
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
@@ -344,7 +344,7 @@ class Guardian_Executor {
 	/**
 	 * Get background-safe diagnostics that are due for execution
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array Array of diagnostic slugs.
 	 */
 	protected static function get_background_diagnostics_due(): array {
@@ -379,7 +379,7 @@ class Guardian_Executor {
 	/**
 	 * Get scheduled diagnostics that are due for execution
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array Array of diagnostic slugs.
 	 */
 	protected static function get_scheduled_diagnostics_due(): array {
@@ -407,7 +407,7 @@ class Guardian_Executor {
 	/**
 	 * Check if diagnostic is background-safe
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $slug Diagnostic slug.
 	 * @return bool True if diagnostic can run in background.
 	 */
@@ -438,7 +438,7 @@ class Guardian_Executor {
 	/**
 	 * Check if diagnostic is scheduled-only
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $slug Diagnostic slug.
 	 * @return bool True if diagnostic should only run during scheduled times.
 	 */
@@ -454,7 +454,7 @@ class Guardian_Executor {
 	/**
 	 * Check if current time is within off-peak hours
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if current time is off-peak.
 	 */
 	public static function is_off_peak_time(): bool {
@@ -467,7 +467,7 @@ class Guardian_Executor {
 	/**
 	 * Get off-peak hours configuration
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array Array of hours (0-23).
 	 */
 	public static function get_off_peak_hours(): array {
@@ -483,7 +483,7 @@ class Guardian_Executor {
 	/**
 	 * Check if server load is acceptable
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if server load is acceptable for Guardian execution.
 	 */
 	protected static function is_server_load_acceptable(): bool {
@@ -514,7 +514,7 @@ class Guardian_Executor {
 	/**
 	 * Check if Guardian is enabled
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if Guardian is enabled.
 	 */
 	protected static function is_guardian_enabled(): bool {
@@ -524,7 +524,7 @@ class Guardian_Executor {
 	/**
 	 * Check if heartbeat execution is enabled
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if heartbeat execution is enabled.
 	 */
 	protected static function is_heartbeat_execution_enabled(): bool {
@@ -534,7 +534,7 @@ class Guardian_Executor {
 	/**
 	 * Check if deep scan is enabled
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if deep scan is enabled.
 	 */
 	protected static function is_deep_scan_enabled(): bool {
@@ -544,7 +544,7 @@ class Guardian_Executor {
 	/**
 	 * Get maximum heartbeat execution time
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return int Maximum time in milliseconds.
 	 */
 	protected static function get_max_heartbeat_time(): int {
@@ -555,7 +555,7 @@ class Guardian_Executor {
 	/**
 	 * Check if email report should be sent
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $result Execution result.
 	 * @return bool True if email should be sent.
 	 */
@@ -571,7 +571,7 @@ class Guardian_Executor {
 	/**
 	 * Send email report
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $result Execution result.
 	 * @return void
 	 */
@@ -593,7 +593,7 @@ class Guardian_Executor {
 	/**
 	 * Format email report
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $result Execution result.
 	 * @return string Formatted email message.
 	 */
@@ -623,7 +623,7 @@ class Guardian_Executor {
 	/**
 	 * Get empty result array
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $reason Optional reason for empty result.
 	 * @return array Empty result array.
 	 */

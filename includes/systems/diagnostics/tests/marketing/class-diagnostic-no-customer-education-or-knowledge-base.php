@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies with strong knowledge bases reduce support costs by 40% and
  * increase customer satisfaction by 35%. Education drives retention.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Education_Or_Knowledge_Base extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Education_Or_Knowledge_Base extends Diagnostic_Base
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_No_Customer_Education_Or_Knowledge_Base extends Diagnostic_Base
 	/**
 	 * Count knowledge base content.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return int Number of KB articles.
 	 */
 	private static function count_kb_content() {
@@ -123,7 +123,7 @@ class Diagnostic_No_Customer_Education_Or_Knowledge_Base extends Diagnostic_Base
 	/**
 	 * Get knowledge base content types.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Content types with descriptions.
 	 */
 	private static function get_content_types() {
@@ -143,7 +143,7 @@ class Diagnostic_No_Customer_Education_Or_Knowledge_Base extends Diagnostic_Base
 	/**
 	 * Get recommended article structure.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Article structure guidelines.
 	 */
 	private static function get_article_structure() {

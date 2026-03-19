@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Recent comment activity
  * - Comment response time
  *
- * @since 1.7034.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 	 * - 1 point: Admin responses to recent comments
 	 * - 1 point: No pending comments older than 7 days
 	 *
-	 * @since  1.7034.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -210,7 +210,7 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since  1.7034.1430
+	 * @since 1.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

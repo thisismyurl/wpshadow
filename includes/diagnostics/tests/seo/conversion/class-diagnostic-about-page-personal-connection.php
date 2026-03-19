@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Conversion
- * @since      1.7431.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the About page tells a personal story and builds human connection.
  *
- * @since 1.7431.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_About_Page_Personal_Connection extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_About_Page_Personal_Connection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.7431.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

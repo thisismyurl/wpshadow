@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Engaged communities drive 3x higher customer lifetime value and provide
  * free word-of-mouth marketing worth 10x paid advertising.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Community_Engagement_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Community_Engagement_Strategy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Community_Engagement_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if community engagement exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if community detected, false otherwise.
 	 */
 	private static function has_community_engagement() {
@@ -143,7 +143,7 @@ class Diagnostic_No_Community_Engagement_Strategy extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -172,7 +172,7 @@ class Diagnostic_No_Community_Engagement_Strategy extends Diagnostic_Base {
 	/**
 	 * Get community platform types.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Community types with descriptions.
 	 */
 	private static function get_community_types() {
@@ -189,7 +189,7 @@ class Diagnostic_No_Community_Engagement_Strategy extends Diagnostic_Base {
 	/**
 	 * Get community engagement tactics.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Engagement tactics with descriptions.
 	 */
 	private static function get_engagement_tactics() {

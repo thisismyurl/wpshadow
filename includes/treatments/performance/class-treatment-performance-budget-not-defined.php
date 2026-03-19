@@ -23,13 +23,13 @@
  * Prevents performance regression.
  *
  * **Business Impact:**
- * Marketing site: optimized to 1.2s load. 6 months later: 3.8s load.
+ * Marketing site: optimized to1.0s load. 6 months later: 3.8s load.
  * Cause: new features, unoptimized images, third-party scripts.
  * Nobody noticed until conversion rate dropped 40%. Implemented
  * performance budget: page weight <2MB, <50 requests, LCP <2.5s,
  * load time <2s. Added Lighthouse CI: fails pull request if budget
  * violated. Content team: automated image optimization. Result:
- * performance maintained. Load time stable at 1.3-1.5s for 2 years.
+ * performance maintained. Load time stable at1.0-1.5s for 2 years.
  * Prevented repeat performance crisis. Budget enforcement: automated,
  * zero ongoing effort. Setup: 4 hours (Lighthouse CI config).
  *
@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (preventive measure, high long-term value)
  * - Treatment: define budget, implement enforcement
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Performance_Budget_Not_Defined extends Treatment_Base {
 
@@ -125,7 +125,7 @@ class Treatment_Performance_Budget_Not_Defined extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

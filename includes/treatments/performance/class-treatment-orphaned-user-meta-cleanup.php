@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5049.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (privacy + performance concern)
  * - Treatment: DELETE orphaned rows, document for compliance
  *
- * @since 1.5049.1401
+ * @since 1.6093.1200
  */
 class Treatment_Orphaned_User_Meta_Cleanup extends Treatment_Base {
 
@@ -124,7 +124,7 @@ class Treatment_Orphaned_User_Meta_Cleanup extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.5049.1401
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

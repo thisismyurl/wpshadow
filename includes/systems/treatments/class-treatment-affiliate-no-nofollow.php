@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7030.1525
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds proper rel attributes to affiliate links.
  *
- * @since 1.7030.1525
+ * @since 1.6093.1200
  */
 class Treatment_Affiliate_No_Nofollow extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.7030.1525
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_Affiliate_No_Nofollow extends Treatment_Base {
 	 *
 	 * Scans all posts for affiliate links and adds rel="sponsored" attribute.
 	 *
-	 * @since  1.7030.1525
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

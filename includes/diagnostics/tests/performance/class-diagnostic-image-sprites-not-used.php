@@ -26,7 +26,7 @@
  * But CSS still loaded individual icons: icon-facebook.png, icon-twitter.png,
  * etc. Total requests: 21 (sprite + 20 individuals). Total data: 85KB.
  * Updated CSS to use sprite with background-position. Removed individual
- * files. Requests: 21 → 1. Data: 85KB → 45KB. Load time improved 1.5s.
+ * files. Requests: 21 → 1. Data: 85KB → 45KB. Load time improved1.0s.
  * Properly utilizing existing sprite = zero additional work, immediate gain.
  *
  * **Philosophy Alignment:**
@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (wasted optimization opportunity)
  * - Treatment: update CSS to use sprite, remove individuals
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Sprites_Not_Used extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Image_Sprites_Not_Used extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

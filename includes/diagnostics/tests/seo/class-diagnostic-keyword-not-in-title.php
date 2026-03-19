@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when focus keywords are not present in title tags. The title is
  * the most important on-page SEO factor after content.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Keyword_Not_In_Title extends Diagnostic_Base {
 

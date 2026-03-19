@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1150
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that CSS and JavaScript assets are minified and
  * concatenated for optimal loading performance.
  *
- * @since 1.7034.1150
+ * @since 1.6093.1200
  */
 class Treatment_CSS_JS_Minification_Configuration extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_CSS_JS_Minification_Configuration extends Treatment_Base {
 	 * Tests if CSS/JS minification and concatenation is enabled
 	 * via plugins or manual configuration.
 	 *
-	 * @since  1.7034.1150
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

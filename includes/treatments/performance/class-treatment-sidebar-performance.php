@@ -5,7 +5,7 @@
  * Monitors sidebar implementation for performance issues including
  * unnecessary rendering and complex queries.
  *
- * @since   1.6033.2086
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Sidebar on single posts vs archives
  * - Sidebar conditional loading
  *
- * @since 1.6033.2086
+ * @since 1.6093.1200
  */
 class Treatment_Sidebar_Performance extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Sidebar_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2086
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

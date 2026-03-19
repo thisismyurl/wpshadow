@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site is optimized for Google's Core Web Vitals:
  * LCP, FID, and CLS. Checks for performance monitoring and optimization.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 	/**
 	 * Run the Core Web Vitals diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if Core Web Vitals issues detected, null otherwise.
 	 */
 	public static function check() {

@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/fixed-header-optimization\n * - Video: https://wpshadow.com/training/css-animation-performance (6 min)\n * - Advanced: https://wpshadow.com/training/intersection-observer-patterns (11 min)\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6031.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

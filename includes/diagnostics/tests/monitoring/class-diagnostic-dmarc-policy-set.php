@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1438
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that DMARC (Domain-based Message Authentication, Reporting & Conformance) policy is set.
  *
- * @since 1.6035.1438
+ * @since 1.6093.1200
  */
 class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Run the DMARC policy diagnostic check.
 	 *
-	 * @since  1.6035.1438
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if DMARC issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Get the site's domain.
 	 *
-	 * @since  1.6035.1438
+	 * @since 1.6093.1200
 	 * @return string Site domain.
 	 */
 	private static function get_site_domain(): string {
@@ -149,7 +149,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Get the "from" email address domain.
 	 *
-	 * @since  1.6035.1438
+	 * @since 1.6093.1200
 	 * @return string|null From email domain or null if not configured.
 	 */
 	private static function get_from_email_domain() {
@@ -178,7 +178,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Check if domain has DMARC policy.
 	 *
-	 * @since  1.6035.1438
+	 * @since 1.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array Array with 'exists' and 'policy' keys.
 	 */

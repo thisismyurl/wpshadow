@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6273.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Rules engine for conditional content display based on
  * user role, device, date/time, and custom conditions.
  *
- * @since 1.6273.2359
+ * @since 1.6093.1200
  */
 class CPT_Conditional_Display {
 
 	/**
 	 * Initialize conditional display system.
 	 *
-	 * @since 1.6034.1230
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -44,7 +44,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Add conditional display meta box.
 	 *
-	 * @since 1.6034.1245
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_conditions_meta_box() {
@@ -81,7 +81,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Render conditions meta box.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -159,7 +159,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Save conditions on post save.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @param  int      $post_id Post ID.
 	 * @param  \WP_Post $post    Post object.
 	 * @return void
@@ -192,7 +192,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Apply conditions to content display.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @param  string $content Post content.
 	 * @return string Modified content or empty if conditions not met.
 	 */
@@ -216,7 +216,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Check if post should be displayed based on conditions.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return bool True if should display.
 	 */
@@ -267,7 +267,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Detect current device type.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @return string Device type (desktop, tablet, mobile).
 	 */
 	private static function detect_device() {
@@ -284,7 +284,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Filter queries by display conditions.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @param  \WP_Query $query WP_Query object.
 	 * @return void
 	 */
@@ -300,7 +300,7 @@ class CPT_Conditional_Display {
 	/**
 	 * Filter WHERE clause for conditional posts.
 	 *
-	 * @since  1.6034.1245
+	 * @since 1.6093.1200
 	 * @param  string    $where WHERE clause.
 	 * @param  \WP_Query $query WP_Query object.
 	 * @return string Modified WHERE clause.

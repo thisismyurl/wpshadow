@@ -5,7 +5,7 @@
  * Checks if DNS prefetch and preconnect headers are configured to optimize
  * connection establishment with third-party domains.
  *
- * @since   1.6033.2078
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - preconnect for critical domains
  * - Implementation via wp_resource_hints filter
  *
- * @since 1.6033.2078
+ * @since 1.6093.1200
  */
 class Treatment_Dns_Prefetch_Preconnect extends Treatment_Base {
 
@@ -62,7 +62,7 @@ class Treatment_Dns_Prefetch_Preconnect extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2078
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

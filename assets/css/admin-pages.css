@@ -917,6 +917,10 @@
 	margin: var(--wps-space-3) 0;
 }
 
+.wps-progress-error {
+	color: #dc3232;
+}
+
 .wps-progress-details {
 	font-size: var(--wps-text-sm);
 	color: var(--wps-gray-600);
@@ -927,6 +931,16 @@
 	font-size: var(--wps-text-sm);
 	color: var(--wps-gray-800);
 	margin-top: var(--wps-space-2);
+}
+
+.wps-scan-overlay-actions {
+	margin-top: var(--wps-space-6);
+	display: flex;
+	justify-content: center;
+}
+
+.wps-scan-overlay-actions[hidden] {
+	display: none !important;
 }
 
 .wps-progress-log {

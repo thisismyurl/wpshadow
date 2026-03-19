@@ -4,7 +4,7 @@
  *
  * Analyzes database query patterns and optimization opportunities.
  *
- * @since   1.6033.2130
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates database query efficiency and identifies slow queries.
  *
- * @since 1.6033.2130
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Query_Optimization extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Database_Query_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2130
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

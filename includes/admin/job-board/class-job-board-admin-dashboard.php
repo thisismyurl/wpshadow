@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Job Board Admin Dashboard Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -43,7 +43,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Add job board admin menu.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function add_admin_menu() {
 		add_submenu_page(
@@ -80,7 +80,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Render job board dashboard.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function render_dashboard() {
 		?>
@@ -104,7 +104,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Render statistics cards.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	private static function render_stats_cards() {
 		// Total active jobs
@@ -156,7 +156,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Render recent applications widget.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	private static function render_recent_applications() {
 		$recent = Job_Application_Tracker::get_recent_applications( 5 );
@@ -195,7 +195,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Render active jobs widget.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	private static function render_active_jobs() {
 		$jobs = get_posts( array(
@@ -229,7 +229,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Render applications page.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function render_applications_page() {
 		?>
@@ -245,7 +245,7 @@ class Job_Board_Admin_Dashboard extends Hook_Subscriber_Base {
 	/**
 	 * Render settings page.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function render_settings_page() {
 		?>

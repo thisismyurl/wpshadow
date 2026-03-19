@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors database growth and warns about size limits.
  * Like checking how full your filing cabinet is getting.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Size extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Size extends Diagnostic_Base {
 	/**
 	 * Run the database size monitoring diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if size issues detected, null otherwise.
 	 */
 	public static function check() {

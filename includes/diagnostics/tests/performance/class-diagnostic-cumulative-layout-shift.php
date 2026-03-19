@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2060
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors causing CLS (Cumulative Layout Shift).
  * CLS measures visual stability during page load.
  *
- * @since 1.6033.2060
+ * @since 1.6093.1200
  */
 class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 	 * - Needs Improvement: 0.1-0.25
 	 * - Poor: >0.25
 	 *
-	 * @since  1.6033.2060
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -138,7 +138,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
-				if ( $script && isset( $script->src ) ) {
+				if ( $script && isset( $script->src ) && is_string( $script->src ) && '' !== $script->src ) {
 					$src_lower = strtolower( $script->src );
 					if ( strpos( $src_lower, 'embed' ) !== false || 
 					     strpos( $src_lower, 'twitter' ) !== false ||
@@ -163,9 +163,9 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
-				if ( $script && isset( $script->src ) ) {
+				if ( $script && isset( $script->src ) && is_string( $script->src ) && '' !== $script->src ) {
 					foreach ( $ad_scripts as $ad_keyword ) {
-						if ( isset( $script->src ) && is_string( $script->src ) && stripos( $script->src, $ad_keyword ) !== false ) {
+						if ( stripos( $script->src, $ad_keyword ) !== false ) {
 							$has_ads = true;
 							break 2;
 						}

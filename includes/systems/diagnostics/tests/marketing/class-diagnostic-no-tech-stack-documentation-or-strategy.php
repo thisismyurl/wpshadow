@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tech decisions compound over time.
  * Document why you chose each tool.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Tech_Stack_Documentation_Or_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Tech_Stack_Documentation_Or_Strategy extends Diagnostic_Base
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_No_Tech_Stack_Documentation_Or_Strategy extends Diagnostic_Base
 	/**
 	 * Check if tech documentation exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if documentation detected, false otherwise.
 	 */
 	private static function has_tech_documentation() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Tech_Stack_Documentation_Or_Strategy extends Diagnostic_Base
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Tech_Stack_Documentation_Or_Strategy extends Diagnostic_Base
 	/**
 	 * Get stack components.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Stack components to document.
 	 */
 	private static function get_stack_components() {

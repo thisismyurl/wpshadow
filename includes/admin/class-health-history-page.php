@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.602.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Health History Page Class
  *
- * @since 1.602.0200
+ * @since 1.6093.1200
  */
 class Health_History_Page extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -43,8 +43,8 @@ class Health_History_Page extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the page (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Health_History_Page::subscribe() instead
-	 * @since      1.602.0200
+	 * @deprecated1.0 Use Health_History_Page::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -54,7 +54,7 @@ class Health_History_Page extends Hook_Subscriber_Base {
 	/**
 	 * Register admin menu page.
 	 *
-	 * @since 1.602.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_menu() {
@@ -71,7 +71,7 @@ class Health_History_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render the page.
 	 *
-	 * @since 1.602.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -85,7 +85,7 @@ class Health_History_Page extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue assets for the page.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */

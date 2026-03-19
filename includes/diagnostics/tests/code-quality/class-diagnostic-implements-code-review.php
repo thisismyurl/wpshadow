@@ -4,7 +4,7 @@
  *
  * Tests if code changes are reviewed before deployment.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that code reviews are required before deployment.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Implements_Code_Review extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Implements_Code_Review extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Implements_Code_Review extends Diagnostic_Base {
 	/**
 	 * Check for repository indicators of code review practices.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return bool True if files exist.
 	 */
 	private static function has_code_review_files() {

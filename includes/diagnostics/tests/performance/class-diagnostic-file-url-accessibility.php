@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that media URLs return valid HTTP responses. Broken URLs can
  * indicate 404s, CDN misconfiguration, or permission issues.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_File_URL_Accessibility extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_File_URL_Accessibility extends Diagnostic_Base {
 	 * - Base upload URL correctness
 	 * - CDN or offload configuration signals
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

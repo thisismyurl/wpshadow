@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer integration testing patterns.
  *
- * @since 1.6033.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Optimizer_Integration_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Image_Optimizer_Integration_Missing extends Diagnostic_Base {
 	 *
 	 * Checks if a reputable image optimizer plugin is active and configured.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -117,7 +117,7 @@ class Diagnostic_Image_Optimizer_Integration_Missing extends Diagnostic_Base {
 	/**
 	 * Get optimizer plugin status.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Optimizer status information.
 	 *

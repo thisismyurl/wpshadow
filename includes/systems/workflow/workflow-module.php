@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Workflow
- * @since      1.6030.2148
+ * @since 1.6120.2359
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,7 +35,7 @@ use WPShadow\Workflow\Block_Registry;
  * automations wizard (create/edit) or the automations dashboard list view.
  * Also enqueues required dashboard assets and localized strings.
  *
- * @since  1.6030.2148
+ * @since 1.6120.2359
  * @return void
  */
 function wpshadow_render_workflow_builder() {

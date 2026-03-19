@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Admin\Ajax
- * @since   1.6030.2148
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Admin\Ajax;
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Create_Suggested_Workflow_Handler class.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX action for creating a suggested workflow.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -46,7 +46,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	 * blocks, stores the workflow, logs activity, and returns response data
 	 * for both redirect and inline dashboard rendering.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
@@ -125,7 +125,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get a friendly trigger summary.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @param  string $trigger_slug  Trigger identifier.
 	 * @param  array  $trigger_block Trigger block config.
 	 * @return string Human-readable trigger label for dashboard cards.
@@ -168,7 +168,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get a friendly action summary from workflow blocks.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @param  array $blocks Workflow blocks.
 	 * @return string Human-readable action label for dashboard cards.
 	 */
@@ -194,7 +194,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Render an automation card for the dashboard list.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @param  string $workflow_id   Workflow ID.
 	 * @param  string $title         Workflow title.
 	 * @param  string $trigger_label Trigger summary label.
@@ -264,7 +264,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Render the automations section wrapper with a single card.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @param  string $card_html Rendered card HTML.
 	 * @return string Rendered section HTML markup.
 	 */
@@ -287,7 +287,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map suggestion trigger slug into workflow trigger block
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $trigger_slug Trigger identifier from suggestion.
 	 * @return array|null Trigger block structure.
 	 */
@@ -355,7 +355,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map suggestion action slugs into workflow action blocks
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array  $actions Action slugs.
 	 * @param  string $title   Workflow title for messaging.
 	 * @return array Workflow action blocks, including a Kanban note action.

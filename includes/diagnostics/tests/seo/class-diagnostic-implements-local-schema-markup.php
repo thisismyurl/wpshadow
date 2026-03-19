@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1130
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #19: Local Schema Markup from Specialized & Emerging Success Habits.
  * Checks if the site implements LocalBusiness schema markup correctly.
  *
- * @since 1.5003.1130
+ * @since 1.6093.1200
  */
 class Diagnostic_Implements_Local_Schema_Markup extends Diagnostic_Base {
 

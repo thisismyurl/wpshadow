@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues with shortcode processing in posts.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 			FROM {$wpdb->posts}
 			WHERE post_status = 'publish'
 			AND post_type IN ('post', 'page')
-			AND post_content REGEXP '\\[([a-zA-Z0-9_-]+)'
+			AND post_content LIKE '%[%'
 			LIMIT 100",
 			ARRAY_A
 		);

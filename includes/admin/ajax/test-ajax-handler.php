@@ -19,7 +19,7 @@ class Test_AJAX_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for connectivity tests.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -29,7 +29,7 @@ class Test_AJAX_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX connectivity test requests.
 	 *
-	 * @since 1.6047.1200
+	 * @since 1.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

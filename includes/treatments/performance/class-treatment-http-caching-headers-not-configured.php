@@ -23,11 +23,11 @@
  *
  * **Business Impact:**
  * News site: 60% repeat visitors. No cache headers. Every visit
- * downloads 1.8MB assets (images, CSS, JS). Bandwidth: 2.7TB/month.
+ * downloads1.0MB assets (images, CSS, JS). Bandwidth: 2.7TB/month.
  * Repeat visit load time: 3.5 seconds. Added cache headers:
  * Cache-Control: max-age=31536000 for static assets. Repeat visitors
  * load cached assets (zero downloads). Load time: 0.4 seconds (90%
- * faster). Bandwidth reduced to 1.1TB/month (60% savings = $400/month).
+ * faster). Bandwidth reduced to1.0TB/month (60% savings = $400/month).
  * User engagement increased 40% (faster = more page views). Setup: 10 minutes.
  *
  * **Philosophy Alignment:**
@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (affects all repeat visitors)
  * - Treatment: configure server cache headers
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_HTTP_Caching_Headers_Not_Configured extends Treatment_Base {
 
@@ -125,7 +125,7 @@ class Treatment_HTTP_Caching_Headers_Not_Configured extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

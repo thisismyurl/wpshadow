@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates date format consistency across site.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	 *
 	 * Tests date format configuration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -145,7 +145,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	/**
 	 * Check if format is readable.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $format Date/time format string.
 	 * @param  bool   $is_time Whether checking time format.
 	 * @return bool True if readable.
@@ -180,7 +180,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	/**
 	 * Check for format consistency.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if consistent.
 	 */
 	private static function has_format_consistency() {
@@ -207,7 +207,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	/**
 	 * Check if format includes year.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $format Date format string.
 	 * @return bool True if year included.
 	 */

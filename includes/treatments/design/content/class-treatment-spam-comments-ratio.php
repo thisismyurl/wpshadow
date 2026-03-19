@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1410
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates spam vs approved comments to detect moderation issues.
  *
- * @since 1.6035.1410
+ * @since 1.6093.1200
  */
 class Treatment_Spam_Comments_Ratio extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Spam_Comments_Ratio extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1410
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

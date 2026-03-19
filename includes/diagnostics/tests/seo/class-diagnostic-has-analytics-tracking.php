@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Analytics
- * @since      1.6034.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Universal Analytics (legacy UA- codes)
  * - Custom tracking implementations
  *
- * @since 1.6034.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'has-analytics-tracking';
@@ -44,7 +44,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Analytics Tracking Installed';
@@ -52,7 +52,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies site has analytics tracking installed (GA4, MonsterInsights, etc.)';
@@ -60,7 +60,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'analytics';
@@ -74,7 +74,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	 * 3. Universal Analytics (UA-) codes
 	 * 4. Other analytics services (gtag, analytics.js)
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null {
 	 *     Finding array if no analytics detected, null otherwise.
 	 *
@@ -130,7 +130,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * Check for analytics plugins.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null Plugin detection details or null if none found.
 	 */
 	private static function check_analytics_plugins() {
@@ -177,7 +177,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * Check for analytics tracking codes in header/footer.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null Tracking code detection details or null if none found.
 	 */
 	private static function check_tracking_codes() {
@@ -245,7 +245,7 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * Get list of checked plugins.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array List of plugin names checked.
 	 */
 	private static function get_checked_plugin_list() {
@@ -263,10 +263,10 @@ class Diagnostic_Has_Analytics_Tracking extends Diagnostic_Base {
 	/**
 	 * Get detailed description of the finding.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return string Formatted description with recommendations.
 	 */
-	private static function get_description() {
+	public static function get_description(): string {
 		$description  = __( 'No analytics tracking was detected on your site. Without analytics, you\'re flying blind - making decisions based on gut feeling instead of data.', 'wpshadow' ) . "\n\n";
 		$description .= '<strong>' . __( 'Why This Matters:', 'wpshadow' ) . "</strong>\n";
 		$description .= __( '• You can\'t improve what you don\'t measure', 'wpshadow' ) . "\n";

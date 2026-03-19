@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Navigation
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that a mobile-friendly navigation menu exists and is properly
  * implemented at mobile viewport sizes (<768px).
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Find mobile menu issues.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_menu_issues(): array {
@@ -168,7 +168,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Check for mobile menu element.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return bool Has mobile menu.
 	 */
@@ -194,7 +194,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Check for hamburger menu button.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return bool Has hamburger button.
 	 */
@@ -218,7 +218,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Check for menu toggle JavaScript.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return bool Has toggle handler.
 	 */
@@ -240,7 +240,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Check for responsive media query.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return bool Has media query.
 	 */
@@ -263,7 +263,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Check CSS for mobile display rules.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array CSS issues.
 	 */
@@ -296,7 +296,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

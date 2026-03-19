@@ -18,7 +18,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Delivers massive (30x) speed improvements\n * - #8 Inspire Confidence: Prevents database CPU exhaustion\n * - #10 Talk-About-Worthy: "Archive pages load instantly now" is huge\n *
  * **Related Checks:**\n * - Database Index Efficiency (foundational check)\n * - Missing Query Indexes (related optimization)\n * - Meta Query Performance (ORDER BY meta optimization)\n * - Slow Query Log Analysis (identifies slow ORDER BY queries)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/order-by-performance\n * - Video: https://wpshadow.com/training/query-optimization-101 (6 min)\n * - Advanced: https://wpshadow.com/training/filesort-elimination (11 min)\n *
- * @since   1.4031.1939\n * @package WPShadow\\Treatments\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}
+ * @since 1.6093.1200\n * @package WPShadow\\Treatments\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}
 
 /**
  * Treatment_Order_By_Performance Class
@@ -58,7 +58,7 @@ class Treatment_Order_By_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

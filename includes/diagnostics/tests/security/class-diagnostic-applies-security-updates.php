@@ -4,7 +4,7 @@
  *
  * Tests if WordPress and plugins are kept up to date.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for pending core/plugin/theme updates.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Applies_Security_Updates extends Diagnostic_Base {
 
@@ -35,7 +35,7 @@ class Diagnostic_Applies_Security_Updates extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

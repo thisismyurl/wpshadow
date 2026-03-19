@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.2068
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects excessive post revisions. Each revision stores full
  * post content, significantly bloating the database.
  *
- * @since 1.6033.2068
+ * @since 1.6093.1200
  */
 class Treatment_Post_Revisions_Count extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Post_Revisions_Count extends Treatment_Base {
 	 * Counts post revisions and calculates database impact.
 	 * Threshold: >1000 revisions or >10MB
 	 *
-	 * @since  1.6033.2068
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Inspire Confidence (#8) - Celebrate progress
  * Philosophy: Helpful Neighbor (#1) - Encouraging feedback
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Milestone_Notifier {

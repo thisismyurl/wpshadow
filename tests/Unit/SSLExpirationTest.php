@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6027.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * SSL Certificate Expiration Diagnostic Test Class
  *
- * @since 1.6027.1450
+ * @since 1.6093.1200
  */
 class SSLExpirationTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -40,7 +40,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -51,7 +51,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic returns null for HTTP sites
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_for_http_sites(): void {
@@ -67,7 +67,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic returns null when certificate has 60+ days
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_when_certificate_valid_long_term(): void {
@@ -93,7 +93,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic flags certificate expiring in 20 days
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_certificate_expiring_in_20_days(): void {
@@ -132,7 +132,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic flags certificate expiring in 5 days as critical
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_certificate_expiring_in_5_days_critical(): void {
@@ -171,7 +171,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic flags expired certificate
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_expired_certificate(): void {
@@ -215,7 +215,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test finding includes certificate details
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_certificate_details(): void {
@@ -255,7 +255,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test finding includes meta information
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_meta(): void {
@@ -297,7 +297,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test finding includes remediation steps
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_remediation_steps(): void {
@@ -336,7 +336,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test expired certificate has urgent remediation steps
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_expired_certificate_urgent_remediation(): void {
@@ -382,7 +382,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test finding includes impact analysis
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_impact_analysis(): void {
@@ -423,7 +423,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -473,7 +473,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test certificate age calculation
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_calculates_certificate_age_correctly(): void {
@@ -514,7 +514,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic handles missing certificate gracefully
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_handles_missing_certificate_gracefully(): void {
@@ -543,7 +543,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test diagnostic includes hosting provider tips
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_hosting_provider_tips(): void {
@@ -582,7 +582,7 @@ class SSLExpirationTest extends TestCase {
 	/**
 	 * Test description changes based on days remaining
 	 *
-	 * @since 1.6027.1450
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_description_varies_by_urgency(): void {

@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6031.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Medium blog using default WordPress REST API without custom permissions. January 2024:\n * bot discovers open /wp-json/wp/v2/comments endpoint. Injects 500 spam comments/day via\n * automated script. Within 1 week: site drowning in spam comments. Moderator spends 3 hours/day\n * removing. Finally implements authentication requirement. After fix: spam drops to 0.\n *
  * **Implementation Notes:**
  * - Inspects REST API route handlers directly\n * - Checks both endpoint permission AND comment_registration setting\n * - Returns severity: high (endpoint open), critical (open + registration disabled)\n * - Auto-fixable treatment: require authentication on comment endpoints\n *
- * @since 1.6031.1500
+ * @since 1.6093.1200
  */
 class Treatment_Comment_API_Endpoint_Security extends Treatment_Base {
 	protected static $slug = 'comment-api-endpoint-security';

@@ -17,7 +17,7 @@
  * Comment meta best practices: https://wpshadow.com/kb/wordpress-comment-meta\n * Video: Comment metadata management (8min): https://wpshadow.com/training/comment-meta\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site has 2 spam filtering plugins active. First plugin stores\n * spam_score as commentmeta. Second plugin stores separate spam_score for its\n * own confidence. Query get_comment_meta(123, 'spam_score') returns first result.\n * First plugin: score = 95 (high spam). Second plugin: score = 5 (low spam).\n * Moderator sees low spam score, approves comment. Comment was actually spam.\n *
  * **Implementation Notes:**
  * - Uses $wpdb->get_results() with GROUP BY\n * - Counts duplicate entries per comment per key\n * - Validates all duplicates returned\n * - Severity: medium (duplicates detected), high (many duplicates)\n * - Treatment: consolidate duplicate meta values, delete extras\n *
- * @since 1.5049.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_Duplicate_Comment_Meta_Keys extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Duplicate_Comment_Meta_Keys extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

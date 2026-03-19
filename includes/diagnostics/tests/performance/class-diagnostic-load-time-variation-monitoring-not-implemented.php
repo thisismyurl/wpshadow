@@ -23,7 +23,7 @@
  * Investigate immediately. Fix before users notice.
  *
  * **Business Impact:**
- * E-commerce site: load time degraded 1.2s → 3.8s over 4 months.
+ * E-commerce site: load time degraded1.0s → 3.8s over 4 months.
  * Conversion rate declined 30% but attributed to "seasonality".
  * Implemented SpeedCurve RUM: tracked real user load times, Core Web
  * Vitals, by device/location. Discovered: mobile load time 6.5s
@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * **Real-World Scenario:**
  * Integrated SpeedCurve: tracks Core Web Vitals from real users.
- * Alert: LCP increased from 1.8s to 3.2s over 2 weeks. Investigation:
+ * Alert: LCP increased from1.0s to 3.2s over 2 weeks. Investigation:
  * new hero image (5MB, unoptimized). Fixed immediately. Also set up
  * weekly reports: track performance trends, compare to competitors.
  * Result: performance degradation caught within days, not months.
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (prevents long-term degradation)
  * - Treatment: implement RUM + synthetic monitoring
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnost
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.2033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when media files lack CDN delivery.
  * CDN improves page load speed and reduces server bandwidth costs.
  *
- * @since 1.2033.0000
+ * @since 1.6093.1200
  */
 class Treatment_Media_CDN_Not_Configured extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_Media_CDN_Not_Configured extends Treatment_Base {
 	 * - Cloudflare configuration
 	 * - Custom CDN URL settings
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

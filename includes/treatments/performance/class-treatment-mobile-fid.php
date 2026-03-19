@@ -53,7 +53,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures responsiveness delay for mobile user interactions during page load.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Fid extends Treatment_Base {
 
@@ -111,7 +111,7 @@ class Treatment_Mobile_Fid extends Treatment_Base {
 	 * - Needs Improvement: 100-300ms
 	 * - Poor: >300ms
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

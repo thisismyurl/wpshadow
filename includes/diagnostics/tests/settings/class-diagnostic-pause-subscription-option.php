@@ -4,7 +4,7 @@
  *
  * Tests whether the site offers subscription pause option that reduces cancellations.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Offering subscription pause as an alternative to cancellation can reduce churn
  * by 20-30%, giving members flexibility during busy periods or financial constraints.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -149,7 +149,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Check if site has subscriptions.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if subscriptions detected, false otherwise.
 	 */
 	private static function has_subscriptions() {
@@ -174,7 +174,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Check for pause-capable plugins.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if pause capability exists, false otherwise.
 	 */
 	private static function check_pause_capable_plugins() {
@@ -197,7 +197,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Check for pause documentation.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if documentation exists, false otherwise.
 	 */
 	private static function check_pause_documentation() {
@@ -224,7 +224,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Check for duration options.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if duration options exist, false otherwise.
 	 */
 	private static function check_duration_options() {
@@ -252,7 +252,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Check for retention messaging.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if retention messaging exists, false otherwise.
 	 */
 	private static function check_retention_messaging() {
@@ -279,7 +279,7 @@ class Diagnostic_Pause_Subscription_Option extends Diagnostic_Base {
 	/**
 	 * Check for cancellation flow with pause option.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if cancellation flow offers pause, false otherwise.
 	 */
 	private static function check_cancellation_flow() {

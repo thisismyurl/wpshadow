@@ -135,7 +135,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0633
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -180,7 +180,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - User Role Assignment Security: Checks role change logging
  * - Admin Page Hook Security: Validates page registration patterns
  *
- * @since 1.6033.0633
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Menu_Visibility_Control extends Diagnostic_Base {
 

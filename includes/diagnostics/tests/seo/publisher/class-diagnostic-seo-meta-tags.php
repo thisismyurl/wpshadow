@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that articles and pages have proper meta descriptions,
  * titles, and other SEO-critical tags.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_SEO_Meta_Tags extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_SEO_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Run the SEO meta tags diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if SEO issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -156,19 +156,11 @@ class Diagnostic_SEO_Meta_Tags extends Diagnostic_Base {
 		// Check for issues.
 		if ( $posts_without_meta_description > count( $posts ) * 0.3 ) {
 			// More than 30% missing meta descriptions.
-			$issues[] = sprintf(
-				/* translators: %d: number of posts */
-				__( '%d posts missing meta descriptions (>30% of sample)', 'wpshadow' ),
-				$posts_without_meta_description
-			);
+			$issues[] = number_format_i18n( (int) $posts_without_meta_description ) . ' ' . __( 'posts missing meta descriptions (>30% of sample)', 'wpshadow' );
 		}
 
 		if ( $posts_missing_title > 0 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of posts */
-				__( '%d posts missing SEO titles', 'wpshadow' ),
-				$posts_missing_title
-			);
+			$issues[] = number_format_i18n( (int) $posts_missing_title ) . ' ' . __( 'posts missing SEO titles', 'wpshadow' );
 		}
 
 		// Check for recommendations.
@@ -177,19 +169,11 @@ class Diagnostic_SEO_Meta_Tags extends Diagnostic_Base {
 		}
 
 		if ( $short_meta_descriptions > 0 ) {
-			$warnings[] = sprintf(
-				/* translators: %d: number */
-				__( '%d posts have short meta descriptions (<120 chars)', 'wpshadow' ),
-				$short_meta_descriptions
-			);
+			$warnings[] = number_format_i18n( (int) $short_meta_descriptions ) . ' ' . __( 'posts have short meta descriptions (<120 chars)', 'wpshadow' );
 		}
 
 		if ( $long_meta_descriptions > 0 ) {
-			$warnings[] = sprintf(
-				/* translators: %d: number */
-				__( '%d posts have long meta descriptions (>160 chars)', 'wpshadow' ),
-				$long_meta_descriptions
-			);
+			$warnings[] = number_format_i18n( (int) $long_meta_descriptions ) . ' ' . __( 'posts have long meta descriptions (>160 chars)', 'wpshadow' );
 		}
 
 		// Check for social meta tags.

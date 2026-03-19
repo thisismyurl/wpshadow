@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that HTML5 video player works correctly with controls,
  * autoplay settings, loop functionality, and proper event handling.
  *
- * @since 1.7034.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Player_Functionality extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Video_Player_Functionality extends Diagnostic_Base {
 	 * Tests if WordPress video player is properly configured and
 	 * video shortcodes render with correct controls.
 	 *
-	 * @since  1.7034.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

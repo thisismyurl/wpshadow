@@ -35,7 +35,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Use `Diagnostic_Admin_User_Enumeration_Treatment` to apply filters
  * that redirect author archives and restrict REST API endpoints to authenticated users.
  *
- * @since 1.6033.0630
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_User_Enumeration extends Diagnostic_Base {
 
@@ -110,7 +110,7 @@ class Diagnostic_Admin_User_Enumeration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0630
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

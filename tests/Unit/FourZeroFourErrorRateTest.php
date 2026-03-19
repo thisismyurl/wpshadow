@@ -3,7 +3,7 @@
  * Tests for 404 Error Rate Diagnostic
  *
  * @package WPShadow\Tests
- * @since   1.6028.2115
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Tests\Unit;
@@ -14,7 +14,7 @@ use WP_Mock\Tools\TestCase;
 /**
  * 404 Error Rate Test Class
  *
- * @since 1.6028.2115
+ * @since 1.6093.1200
  */
 class FourZeroFourErrorRateTest extends TestCase {
 

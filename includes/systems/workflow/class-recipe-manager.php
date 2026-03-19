@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Workflow
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages and executes multi-step workflow recipes.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Recipe_Manager {
 
 	/**
 	 * Initialize the recipe manager.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -44,7 +44,7 @@ class Recipe_Manager {
 	/**
 	 * Get available workflow recipes.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Available recipes.
 	 */
 	public static function get_recipes() {
@@ -272,7 +272,7 @@ class Recipe_Manager {
 	/**
 	 * Execute a recipe.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $recipe_id Recipe identifier.
 	 * @return array {
 	 *     Execution result.
@@ -327,7 +327,7 @@ class Recipe_Manager {
 	/**
 	 * Mark recipe step as complete.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $recipe_id Recipe identifier.
 	 * @param  string $step_id   Step identifier.
 	 * @return array {
@@ -384,7 +384,7 @@ class Recipe_Manager {
 	/**
 	 * AJAX: Get available recipes.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_get_recipes() {
@@ -403,7 +403,7 @@ class Recipe_Manager {
 	/**
 	 * AJAX: Execute a recipe.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_execute_recipe() {
@@ -428,7 +428,7 @@ class Recipe_Manager {
 	/**
 	 * AJAX: Mark step as complete.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_step_complete() {

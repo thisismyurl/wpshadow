@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since      1.602.1225
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks search forms for mobile-specific optimizations including input type,
  * autocomplete, button size, and keyboard appearance.
  *
- * @since 1.602.1225
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1225
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -210,7 +210,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 	/**
 	 * Check search forms for mobile issues.
 	 *
-	 * @since  1.602.1225
+	 * @since 1.6093.1200
 	 * @param  string $html HTML to scan.
 	 * @return array Issues found.
 	 */
@@ -301,7 +301,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since  1.602.1225
+	 * @since 1.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

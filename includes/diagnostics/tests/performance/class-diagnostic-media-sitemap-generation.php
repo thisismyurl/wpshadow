@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1625
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for image sitemap providers or SEO plugin support.
  *
- * @since 1.6033.1625
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Sitemap_Generation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Sitemap_Generation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1625
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,9 +88,20 @@ class Diagnostic_Media_Sitemap_Generation extends Diagnostic_Base {
 
 		$image_sitemap_provider = false;
 		if ( function_exists( 'wp_sitemaps_get_server' ) ) {
-			$providers = wp_sitemaps_get_server()->get_providers();
-			foreach ( $providers as $name => $provider ) {
-				if ( false !== strpos( $name, 'image' ) ) {
+			$server    = wp_sitemaps_get_server();
+			$providers = array();
+
+			if ( is_object( $server ) && isset( $server->registry ) && is_object( $server->registry ) && method_exists( $server->registry, 'get_providers' ) ) {
+				$providers = $server->registry->get_providers();
+			}
+
+			foreach ( (array) $providers as $name => $provider ) {
+				if ( is_string( $name ) && false !== strpos( $name, 'image' ) ) {
+					$image_sitemap_provider = true;
+					break;
+				}
+
+				if ( is_object( $provider ) && false !== stripos( get_class( $provider ), 'image' ) ) {
 					$image_sitemap_provider = true;
 					break;
 				}

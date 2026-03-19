@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates comprehensive hosting environment coverage in Site Health checks.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	 *
 	 * Tests for missing hosting environment checks.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if file permission checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_file_permission_checks() {
@@ -160,7 +160,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if server software checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_server_software_checks() {
@@ -185,7 +185,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if disk space checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_disk_space_checks() {
@@ -204,7 +204,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if memory allocation checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_memory_checks() {
@@ -216,7 +216,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 		}
 
 		// Should recommend 256MB+
-		$memory_mb = $this->convert_to_mb( $memory_limit );
+		$memory_mb = self::convert_to_mb( $memory_limit );
 
 		return $memory_mb >= 64;
 	}
@@ -224,7 +224,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if SSL checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_ssl_checks() {
@@ -244,7 +244,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if .htaccess checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_htaccess_checks() {
@@ -269,7 +269,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if database checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_database_checks() {
@@ -287,7 +287,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if email checks exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_email_checks() {
@@ -310,11 +310,11 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Convert memory value to MB.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $value Memory value like "256M".
 	 * @return int Memory in MB.
 	 */
-	private function convert_to_mb( $value ) {
+	private static function convert_to_mb( $value ) {
 		$value = strtoupper( $value );
 
 		if ( 'G' === substr( $value, -1 ) ) {

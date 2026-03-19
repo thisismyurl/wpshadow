@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects confusing or broken scrolling behavior on the homepage.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Scroll_Behavior extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Page_Scroll_Behavior extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Page_Scroll_Behavior extends Diagnostic_Base {
 	/**
 	 * Detect scroll behavior flags from HTML.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  string $html Homepage HTML.
 	 * @return array Flag values.
 	 */

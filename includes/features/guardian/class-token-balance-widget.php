@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Guardian
- * @since      1.6004.0300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Shows Guardian token balance and provides quick access to purchase more.
  *
- * @since 1.6004.0300
+ * @since 1.6093.1200
  */
 class Token_Balance_Widget extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -47,8 +47,8 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the widget (deprecated).
 	 *
-	 * @deprecated 1.7035.1400 Use Token_Balance_Widget::subscribe() instead
-	 * @since      1.6004.0300
+	 * @deprecated1.0 Use Token_Balance_Widget::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -58,7 +58,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Add token balance to admin bar.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  \WP_Admin_Bar $wp_admin_bar Admin bar instance.
 	 * @return void
 	 */
@@ -171,7 +171,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Get HTML for admin bar item.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  int|string $balance    Token balance.
 	 * @param  string     $status_dot Status indicator HTML.
 	 * @return string HTML.
@@ -195,7 +195,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue widget styles.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_styles() {
@@ -260,7 +260,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue widget scripts.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_scripts() {
@@ -349,7 +349,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Add dashboard widget.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_dashboard_widget() {
@@ -367,7 +367,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render dashboard widget.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_dashboard_widget() {
@@ -567,7 +567,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render connect prompt.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function render_connect_prompt() {
@@ -635,7 +635,7 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Get token status summary.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @return array Status information.
 	 */
 	public static function get_status() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if media files are offloaded to cloud storage. Cloud offload
  * reduces hosting costs, improves performance, and increases reliability.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	 * Checks if media is offloaded to cloud storage (S3, R2, GCS, etc.).
 	 * Cloud offload reduces server load and hosting costs.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	 *
 	 * Detects existing cloud offload plugins and services.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if cloud offload detected.
 	 */
 	private static function has_cloud_offload() {
@@ -152,7 +152,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	/**
 	 * Calculate media library storage size in GB.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @param  string $directory Upload directory path.
 	 * @return float Storage size in GB.
 	 */
@@ -197,7 +197,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	/**
 	 * Check if CDN is active.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if CDN detected.
 	 */
 	private static function has_cdn() {
@@ -230,7 +230,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	/**
 	 * Estimate monthly cost savings from cloud offload.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @param  float $storage_gb Storage size in GB.
 	 * @return string Estimated savings range.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1625
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies downtime alerts are set up to notify you immediately.
  * Like having a smoke alarm that actually works.
  *
- * @since 1.6035.1625
+ * @since 1.6093.1200
  */
 class Diagnostic_Alert_System extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Alert_System extends Diagnostic_Base {
 	/**
 	 * Run the alert system diagnostic check.
 	 *
-	 * @since  1.6035.1625
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if alerts not configured, null otherwise.
 	 */
 	public static function check() {

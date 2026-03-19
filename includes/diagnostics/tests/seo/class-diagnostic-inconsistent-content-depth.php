@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2203
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Pillar content: 2000-4000+ words
  * - Variation within 30% is acceptable
  *
- * @since 1.6034.2203
+ * @since 1.6093.1200
  */
 class Diagnostic_Inconsistent_Content_Depth extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Inconsistent_Content_Depth extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2203
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if inconsistent depth detected, null otherwise.
 	 */
 	public static function check() {
@@ -148,7 +148,7 @@ class Diagnostic_Inconsistent_Content_Depth extends Diagnostic_Base {
 	/**
 	 * Calculate standard deviation
 	 *
-	 * @since  1.6034.2203
+	 * @since 1.6093.1200
 	 * @param  array $values Array of numeric values.
 	 * @return float Standard deviation.
 	 */

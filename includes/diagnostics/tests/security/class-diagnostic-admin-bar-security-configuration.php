@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0635
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic: Admin Bar Security Configuration
  *
- * @since 1.6033.0635
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Bar_Security_Configuration extends Diagnostic_Base {
 

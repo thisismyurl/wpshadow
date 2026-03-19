@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 70% of carts are abandoned. Recovering even 10% = massive revenue increase.
  * Abandoned cart emails recover 10-15% of lost sales.
  *
- * @since 1.6035.1100
+ * @since 1.6093.1200
  */
 class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 	/**
 	 * Check if abandoned cart emails are enabled.
 	 *
-	 * @since  1.6035.1100
+	 * @since 1.6093.1200
 	 * @return bool True if emails enabled.
 	 */
 	private static function check_abandoned_cart_emails_enabled(): bool {
@@ -169,7 +169,7 @@ class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for multi-email sequence.
 	 *
-	 * @since  1.6035.1100
+	 * @since 1.6093.1200
 	 * @return bool True if sequence exists.
 	 */
 	private static function check_email_sequence(): bool {
@@ -197,7 +197,7 @@ class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for cart content personalization.
 	 *
-	 * @since  1.6035.1100
+	 * @since 1.6093.1200
 	 * @return bool True if personalization exists.
 	 */
 	private static function check_cart_personalization(): bool {
@@ -209,7 +209,7 @@ class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for recovery incentive.
 	 *
-	 * @since  1.6035.1100
+	 * @since 1.6093.1200
 	 * @return bool True if incentive configured.
 	 */
 	private static function check_recovery_incentive(): bool {
@@ -231,7 +231,7 @@ class Diagnostic_Abandoned_Cart_Email_Recovery extends Diagnostic_Base {
 	/**
 	 * Check for one-click cart return.
 	 *
-	 * @since  1.6035.1100
+	 * @since 1.6093.1200
 	 * @return bool True if one-click return exists.
 	 */
 	private static function check_one_click_return(): bool {

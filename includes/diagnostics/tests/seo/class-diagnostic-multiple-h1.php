@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects pages with 2 or more H1 tags which confuses search engine understanding
  * of page hierarchy and primary topic.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Multiple_H1 extends Diagnostic_Base {
 

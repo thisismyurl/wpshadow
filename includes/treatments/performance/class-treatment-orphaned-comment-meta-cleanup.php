@@ -24,11 +24,11 @@
  *
  * **Business Impact:**
  * News site: 500K comments over 5 years. Heavy spam deletion.
- * commentmeta table: 2.8M rows. Orphaned check: 1.2M orphaned
+ * commentmeta table: 2.8M rows. Orphaned check:1.0M orphaned
  * (43% of table). Space wasted: 180MB. Query performance: meta
  * lookups slower (larger table = more scans). Cleanup: DELETE FROM
  * wp_commentmeta WHERE comment_id NOT IN (SELECT comment_ID FROM
- * wp_comments). Removed 1.2M rows. Table: 2.8M → 1.6M (43% reduction).
+ * wp_comments). Removed1.0M rows. Table: 2.8M →1.0M (43% reduction).
  * Space reclaimed: 180MB. Query performance: 30% faster average.
  * Setup: 5 minutes query + OPTIMIZE TABLE. Regular cleanup: monthly.
  *
@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5049.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (space issue, minor performance impact)
  * - Treatment: DELETE orphaned rows, OPTIMIZE TABLE
  *
- * @since 1.5049.1401
+ * @since 1.6093.1200
  */
 class Treatment_Orphaned_Comment_Meta_Cleanup extends Treatment_Base {
 
@@ -123,7 +123,7 @@ class Treatment_Orphaned_Comment_Meta_Cleanup extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.5049.1401
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

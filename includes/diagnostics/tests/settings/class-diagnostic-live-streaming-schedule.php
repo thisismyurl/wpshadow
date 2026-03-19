@@ -4,7 +4,7 @@
  *
  * Tests whether the site maintains a regular live streaming schedule (at least monthly).
  *
- * @since   1.6034.0415
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Live streaming increases engagement by 1200% vs pre-recorded content.
  * Regular streams build authentic connections and loyal communities.
  *
- * @since 1.6034.0415
+ * @since 1.6093.1200
  */
 class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 	/**
 	 * Check livestream content.
 	 *
-	 * @since  1.6034.0415
+	 * @since 1.6093.1200
 	 * @return bool True if content exists, false otherwise.
 	 */
 	private static function check_livestream_content() {
@@ -171,7 +171,7 @@ class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 	/**
 	 * Check consistent schedule.
 	 *
-	 * @since  1.6034.0415
+	 * @since 1.6093.1200
 	 * @return bool True if scheduled, false otherwise.
 	 */
 	private static function check_consistent_schedule() {
@@ -197,7 +197,7 @@ class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 	/**
 	 * Check stream announcements.
 	 *
-	 * @since  1.6034.0415
+	 * @since 1.6093.1200
 	 * @return bool True if announced, false otherwise.
 	 */
 	private static function check_stream_announcements() {
@@ -224,7 +224,7 @@ class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 	/**
 	 * Check stream replays.
 	 *
-	 * @since  1.6034.0415
+	 * @since 1.6093.1200
 	 * @return bool True if replays exist, false otherwise.
 	 */
 	private static function check_stream_replays() {
@@ -251,7 +251,7 @@ class Diagnostic_Live_Streaming_Schedule extends Diagnostic_Base {
 	/**
 	 * Check interactive elements.
 	 *
-	 * @since  1.6034.0415
+	 * @since 1.6093.1200
 	 * @return bool True if interactive, false otherwise.
 	 */
 	private static function check_interactive_elements() {

@@ -32,7 +32,7 @@
  * See https://wpshadow.com/kb/custom-feed-endpoints
  * or https://wpshadow.com/training/rss-customization
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -94,7 +94,7 @@ class Diagnostic_Feed_Custom_Endpoints extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

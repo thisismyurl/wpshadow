@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,16 +24,16 @@ exit;
  * Treatment_Image_Alt_Text Class
  *
  * Adds alt text to images for screen reader accessibility.
- * WCAG 2.1 Level A Success Criterion 1.1.1 (Non-text Content).
+ * WCAG 2.1 Level A Success Criterion1.0 (Non-text Content).
  *
- * @since 1.6050.1300
+ * @since 1.6093.1200
  */
 class Treatment_Image_Alt_Text extends Treatment_Base {
 
 /**
  * Get the finding ID this treatment addresses.
  *
- * @since  1.6050.1300
+ * @since 1.6093.1200
  * @return string Finding ID.
  */
 public static function get_finding_id() {
@@ -45,7 +45,7 @@ return 'image_alt_text';
  *
  * Adds alt text to images missing it in the media library.
  *
- * @since  1.6050.1300
+ * @since 1.6093.1200
  * @return array {
  *     Result array.
  *
@@ -139,7 +139,7 @@ $updated_count
 'skipped_count'  => $skipped_count,
 'total_processed' => count( $images_without_alt ),
 'sample_updates'  => $sample_updates,
-'wcag_compliance' => 'WCAG 2.1 Level A - 1.1.1 Non-text Content',
+'wcag_compliance' => 'WCAG 2.1 Level A -1.0 Non-text Content',
 'impact'          => __( 'Screen readers can now describe these images to visually impaired users', 'wpshadow' ),
 'seo_benefit'     => __( 'Alt text improves image SEO and helps Google understand your content', 'wpshadow' ),
 ),
@@ -149,7 +149,7 @@ $updated_count
 /**
  * Generate alt text from image data.
  *
- * @since  1.6050.1300
+ * @since 1.6093.1200
  * @param  object $image Image post object.
  * @return string Generated alt text.
  */

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Heading_Hierarchy_Structure Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Heading_Hierarchy_Structure extends Diagnostic_Base {
 
@@ -55,7 +55,7 @@ class Diagnostic_Heading_Hierarchy_Structure extends Diagnostic_Base {
 				'kb_link'      => 'https://wpshadow.com/kb/heading-hierarchy',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1 1.3.1 Info and Relationships',
+					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Info and Relationships',
 					'bad_example'             => 'h1 → h4 (skips h2, h3)',
 					'good_example'            => 'h1 → h2 → h3 → h2 (back to sibling)',
 					'screen_reader_nav'       => 'Users press H key to jump between headings',

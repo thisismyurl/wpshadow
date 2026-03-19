@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1130
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #15: Local Reviews Managed from Specialized & Emerging Success Habits.
  * Checks if the site actively manages and responds to reviews.
  *
- * @since 1.5003.1130
+ * @since 1.6093.1200
  */
 class Diagnostic_Manages_Local_Reviews_Actively extends Diagnostic_Base {
 

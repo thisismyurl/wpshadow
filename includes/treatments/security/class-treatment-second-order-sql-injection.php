@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.2033.2105
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This makes it particularly dangerous as standard input validation
  * won't catch it.
  *
- * @since 1.2033.2105
+ * @since 1.6093.1200
  */
 class Treatment_Second_Order_SQL_Injection extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'second-order-sql-injection';
@@ -50,7 +50,7 @@ class Treatment_Second_Order_SQL_Injection extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Second-Order SQL Injection';
@@ -58,7 +58,7 @@ class Treatment_Second_Order_SQL_Injection extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects second-order SQL injection where stored data is used unsafely';
@@ -66,7 +66,7 @@ class Treatment_Second_Order_SQL_Injection extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Treatment_Second_Order_SQL_Injection extends Treatment_Base {
 	 * Scans code for patterns where database-retrieved values
 	 * are used directly in SQL queries without proper escaping.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6034.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if WPShadow block patterns are registered in Gutenberg.
  *
- * @since 1.6034.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 	 *
 	 * Verifies that block patterns are registered for all CPTs.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 	/**
 	 * Get total count of registered WPShadow patterns
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Count of registered patterns.
 	 */
 	public static function get_registered_count() {

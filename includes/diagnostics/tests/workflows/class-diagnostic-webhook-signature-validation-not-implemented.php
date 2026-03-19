@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects webhooks that don't validate sender signatures.
  * Unvalidated webhooks can be exploited for malicious payloads.
  *
- * @since 1.2033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Webhook_Signature_Validation_Not_Implemented extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Webhook_Signature_Validation_Not_Implemented extends Diagnostic
 	 * - Admin AJAX handlers without nonce checks
 	 * - Custom webhook handlers without HMAC validation
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

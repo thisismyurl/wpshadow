@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1025
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ exit;
  * Diagnostic #25: Language Versions Available from Specialized & Emerging Success Habits.
  * Checks if the website provides professionally translated content in 3+ languages.
  *
- * @since 1.5003.1025
+ * @since 1.6093.1200
  */
 class Diagnostic_Provides_Language_Versions extends Diagnostic_Base {
 

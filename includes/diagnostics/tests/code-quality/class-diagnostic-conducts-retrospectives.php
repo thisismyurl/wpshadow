@@ -4,7 +4,7 @@
  *
  * Tests if team conducts regular retrospectives.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that teams run retrospectives or post‑mortems regularly.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Conducts_Retrospectives extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Conducts_Retrospectives extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Conducts_Retrospectives extends Diagnostic_Base {
 	/**
 	 * Check for recent documentation evidence in posts.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Search terms.
 	 * @param  int   $days     Lookback window.
 	 * @return bool True if found.

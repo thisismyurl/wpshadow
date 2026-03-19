@@ -4,7 +4,7 @@
  *
  * Validates Twitter Card meta tags for optimal Twitter thread sharing.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Diagnostics\Helpers\Diagnostic_HTML_Helper;
+use WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_Helper;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper Twitter Card implementation which controls content previews on Twitter/X.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 
@@ -59,10 +60,32 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
+		if ( ! class_exists( 'WPShadow\\Diagnostics\\Helpers\\Diagnostic_HTML_Helper' ) ) {
+			$helper_file = WPSHADOW_PATH . 'includes/diagnostics/helpers/class-diagnostic-html-helper.php';
+			if ( file_exists( $helper_file ) ) {
+				require_once $helper_file;
+			}
+		}
+
+		if ( ! class_exists( 'WPShadow\\Diagnostics\\Helpers\\Diagnostic_URL_And_Pattern_Helper' ) ) {
+			$url_pattern_helper_file = WPSHADOW_PATH . 'includes/diagnostics/helpers/class-diagnostic-url-and-pattern-helper.php';
+			if ( file_exists( $url_pattern_helper_file ) ) {
+				require_once $url_pattern_helper_file;
+			}
+		}
+
+		if ( ! class_exists( 'WPShadow\\Diagnostics\\Helpers\\Diagnostic_HTML_Helper' ) ) {
+			return null;
+		}
+
+		if ( ! class_exists( 'WPShadow\\Diagnostics\\Helpers\\Diagnostic_URL_And_Pattern_Helper' ) ) {
+			return null;
+		}
+
 		// Get homepage content
 		$homepage_content = Diagnostic_HTML_Helper::fetch_html( home_url() );
 
@@ -220,7 +243,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 					'inclusive_design' => __( 'Alt text makes your content accessible to 1B+ visually impaired internet users', 'wpshadow' ),
 					'example_format' => '<meta name="twitter:image:alt" content="Description of image" />',
 					'best_practice' => __( 'Alt text should be descriptive but concise (125 characters max)', 'wpshadow' ),
-					'wcag_compliance' => 'WCAG 2.1 Level A - 1.1.1 Non-text Content',
+					'wcag_compliance' => 'WCAG 2.1 Level A -1.0 Non-text Content',
 				),
 			);
 		}

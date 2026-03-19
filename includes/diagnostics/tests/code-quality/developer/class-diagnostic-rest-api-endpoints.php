@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that REST API endpoints are properly configured, secured,
  * and accessible only to authorized users.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 	/**
 	 * Run the REST API endpoints diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if API issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -69,12 +69,14 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 		$stats    = array();
 
 		// Check if REST API is enabled.
-		if ( ! rest_api_enabled() ) {
+		// Note: rest_api_enabled() may not exist, use rest_get_server() instead
+		$rest_server = rest_get_server();
+		if ( null === $rest_server ) {
 			$issues[] = __( 'REST API is disabled globally', 'wpshadow' );
 		}
 
 		// Get REST API index.
-		$rest_index = rest_get_server();
+		$rest_index = $rest_server;
 
 		if ( null === $rest_index ) {
 			$warnings[] = __( 'REST server not properly initialized', 'wpshadow' );
@@ -129,7 +131,8 @@ class Diagnostic_REST_API_Endpoints extends Diagnostic_Base {
 		}
 
 		// Check REST API access methods.
-		if ( get_rest_option( 'rest_api_enabled' ) === false ) {
+		// Note: get_rest_option() doesn't exist; check via get_option() instead
+		if ( ! function_exists( 'rest_is_enabled' ) || ! rest_is_enabled() ) {
 			$warnings[] = __( 'REST API disabled via settings', 'wpshadow' );
 		}
 

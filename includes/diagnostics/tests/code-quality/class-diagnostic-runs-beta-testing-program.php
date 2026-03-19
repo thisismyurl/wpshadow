@@ -4,7 +4,7 @@
  *
  * Tests whether the site involves community members in product development through beta testing.
  *
- * @since   1.6034.0505
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Beta programs increase product quality by 85% and member loyalty by 400%.
  * Involving users in development creates powerful advocates.
  *
- * @since 1.6034.0505
+ * @since 1.6093.1200
  */
 class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Check beta program.
 	 *
-	 * @since  1.6034.0505
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_beta_program() {
@@ -171,7 +171,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Check beta role.
 	 *
-	 * @since  1.6034.0505
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_beta_role() {
@@ -192,7 +192,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Check feedback mechanism.
 	 *
-	 * @since  1.6034.0505
+	 * @since 1.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_feedback_mechanism() {
@@ -219,7 +219,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Check beta announcements.
 	 *
-	 * @since  1.6034.0505
+	 * @since 1.6093.1200
 	 * @return bool True if announced, false otherwise.
 	 */
 	private static function check_beta_announcements() {
@@ -246,7 +246,7 @@ class Diagnostic_Runs_Beta_Testing_Program extends Diagnostic_Base {
 	/**
 	 * Check tester recognition.
 	 *
-	 * @since  1.6034.0505
+	 * @since 1.6093.1200
 	 * @return bool True if recognized, false otherwise.
 	 */
 	private static function check_tester_recognition() {

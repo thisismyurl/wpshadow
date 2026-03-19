@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since      1.602.1235
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks breadcrumb implementation for mobile usability, structured data,
  * and accessibility compliance.
  *
- * @since 1.602.1235
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1235
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -248,7 +248,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Check breadcrumb implementation.
 	 *
-	 * @since  1.602.1235
+	 * @since 1.6093.1200
 	 * @return array Check results.
 	 */
 	private static function check_breadcrumbs() {
@@ -342,7 +342,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since  1.602.1235
+	 * @since 1.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

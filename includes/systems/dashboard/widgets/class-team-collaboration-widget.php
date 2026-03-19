@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Dashboard\Widgets
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,14 +31,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Displays team performance metrics and collaboration features.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Team_Collaboration_Widget {
 
 	/**
 	 * Render widget
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return string HTML output.
 	 */
 	public static function render(): string {
@@ -285,7 +285,7 @@ class Team_Collaboration_Widget {
 	/**
 	 * Get team collaboration data
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Team data.
 	 */
 	private static function get_team_data(): array {
@@ -327,7 +327,7 @@ class Team_Collaboration_Widget {
 	/**
 	 * Build contributor leaderboard
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $activities Activity data.
 	 * @return array Leaderboard entries.
 	 */
@@ -384,7 +384,7 @@ class Team_Collaboration_Widget {
 	/**
 	 * Get active tasks
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Active tasks.
 	 */
 	private static function get_active_tasks(): array {
@@ -416,7 +416,7 @@ class Team_Collaboration_Widget {
 	/**
 	 * Calculate average response time
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Response time in hours.
 	 */
 	private static function calculate_avg_response_time(): float {
@@ -427,7 +427,7 @@ class Team_Collaboration_Widget {
 	/**
 	 * Calculate collaboration score
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $activities Activity data.
 	 * @return int Collaboration score (0-100).
 	 */
@@ -455,7 +455,7 @@ class Team_Collaboration_Widget {
 	/**
 	 * Get team goals
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Team goals.
 	 */
 	private static function get_team_goals(): array {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site uses genuine scarcity (limited stock, time-bound offers)
  * vs fake urgency that damages trust.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 	 *
 	 * Looks for legitimate scarcity features vs manipulative fake urgency.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues detected, null if ethical.
 	 */
 	public static function check() {

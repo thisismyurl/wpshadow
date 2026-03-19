@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site uses exit intent technology to recover abandoning visitors.
  * Strategic use can increase conversions by 2-4%.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Exit_Intent_Popups extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Exit_Intent_Popups extends Diagnostic_Base {
 	 *
 	 * Detects exit intent plugins and JavaScript implementations.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if not implemented, null if present.
 	 */
 	public static function check() {

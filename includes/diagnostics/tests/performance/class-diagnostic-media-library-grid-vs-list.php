@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1605
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Compares query performance for grid and list modes to
  * detect slow media library view rendering.
  *
- * @since 1.6033.1605
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Library_Grid_Vs_List extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Media_Library_Grid_Vs_List extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1605
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_Media_Library_Grid_Vs_List extends Diagnostic_Base {
 			);
 		}
 
-		if ( $grid_time > 0 && $list_time > 0 && $grid_time > ( $list_time * 1.5 ) ) {
+		if ( $grid_time > 0 && $list_time > 0 && $grid_time > ( $list_time *1.0 ) ) {
 			$issues[] = __( 'Grid view is significantly slower than list view; large thumbnails may be slowing the media library', 'wpshadow' );
 		}
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * messaging resonates, conversion improves by 30-50%, and marketing becomes
  * more efficient.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Persona_Development_Or_Research extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Customer_Persona_Development_Or_Research extends Diagnostic_
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Customer_Persona_Development_Or_Research extends Diagnostic_
 	/**
 	 * Check if personas exist
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if personas documented
 	 */
 	private static function check_personas(): bool {
@@ -109,7 +109,7 @@ class Diagnostic_No_Customer_Persona_Development_Or_Research extends Diagnostic_
 	/**
 	 * Get persona elements
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of persona elements
 	 */
 	private static function get_persona_elements(): array {
@@ -128,7 +128,7 @@ class Diagnostic_No_Customer_Persona_Development_Or_Research extends Diagnostic_
 	/**
 	 * Get research methods
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of research methods
 	 */
 	private static function get_research_methods(): array {

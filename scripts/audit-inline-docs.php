@@ -9,7 +9,7 @@
  *   php scripts/audit-inline-docs.php --include-tests
  *
  * @package WPShadow
- * @since   1.6047.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

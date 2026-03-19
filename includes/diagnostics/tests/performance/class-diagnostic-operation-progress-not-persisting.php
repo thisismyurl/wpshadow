@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for progress tracking persistence during operations.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Operation_Progress_Not_Persisting extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Operation_Progress_Not_Persisting extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,12 @@ class Diagnostic_Operation_Progress_Not_Persisting extends Diagnostic_Base {
 		}
 
 		// Check for object cache enabling progress.
-		$has_cache = wp_cache_is_enabled();
+		$has_cache = false;
+		if ( function_exists( 'wp_using_ext_object_cache' ) ) {
+			$has_cache = wp_using_ext_object_cache();
+		} elseif ( function_exists( 'wp_cache_get' ) ) {
+			$has_cache = true;
+		}
 
 		if ( ! $has_cache ) {
 			$issues[] = __( 'Object cache not enabled - progress tracking will be slow', 'wpshadow' );

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures total page weight (HTML + CSS + JS + images) served to mobile users.
  * High page weights consume data plans, slow down load times, and impact Core Web Vitals.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Page_Weight extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Mobile_Page_Weight extends Treatment_Base {
 	 * - Total page (<3MB recommended)
 	 * - Above-fold resources (<500KB recommended)
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages alerts and thresholds for report metrics.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Report_Alert_Manager {
 
 	/**
 	 * Set an alert threshold
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $metric     Metric name.
 	 * @param  string $operator   Comparison operator (gt, lt, gte, lte, eq).
 	 * @param  mixed  $threshold  Threshold value.
@@ -60,7 +60,7 @@ class Report_Alert_Manager {
 	/**
 	 * Check if metric triggers alert
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $metric Metric name.
 	 * @param  mixed  $value  Current value.
 	 * @return array Triggered alerts.
@@ -86,7 +86,7 @@ class Report_Alert_Manager {
 	/**
 	 * Evaluate condition
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  mixed  $value     Current value.
 	 * @param  string $operator  Operator.
 	 * @param  mixed  $threshold Threshold.
@@ -112,7 +112,7 @@ class Report_Alert_Manager {
 	/**
 	 * Trigger an alert
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $alert_id Alert ID.
 	 * @param  array  $alert    Alert data.
 	 * @param  mixed  $value    Current value.
@@ -141,7 +141,7 @@ class Report_Alert_Manager {
 		/**
 		 * Fires when an alert is triggered.
 		 *
-		 * @since 1.603.0200
+		 * @since 1.6093.1200
 		 *
 		 * @param string $alert_id Alert ID.
 		 * @param array  $alert Alert data.
@@ -153,7 +153,7 @@ class Report_Alert_Manager {
 	/**
 	 * Get all alerts
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return array Alerts.
 	 */
 	public static function get_alerts() {
@@ -163,7 +163,7 @@ class Report_Alert_Manager {
 	/**
 	 * Delete an alert
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $alert_id Alert ID.
 	 * @return bool Success.
 	 */

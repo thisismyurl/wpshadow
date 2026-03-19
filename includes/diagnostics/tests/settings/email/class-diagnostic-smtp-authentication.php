@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1735
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * having a password to prove who you are - without it, email servers will
  * reject your messages.
  *
- * @since 1.6035.1735
+ * @since 1.6093.1200
  */
 class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 	/**
 	 * Run the SMTP authentication diagnostic check.
 	 *
-	 * @since  1.6035.1735
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if authentication issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -135,7 +135,7 @@ class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 	/**
 	 * Get SMTP authentication configuration from various sources.
 	 *
-	 * @since  1.6035.1735
+	 * @since 1.6093.1200
 	 * @return array|null SMTP authentication config array or null if not configured.
 	 */
 	private static function get_smtp_authentication_config() {

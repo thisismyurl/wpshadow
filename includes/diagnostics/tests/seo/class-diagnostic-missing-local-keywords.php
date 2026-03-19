@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1522
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Google Business Profile integration
  * - NAP (Name, Address, Phone) consistency
  *
- * @since 1.7030.1522
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Local_Keywords extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Missing_Local_Keywords extends Diagnostic_Base {
 	 * - 1 point: Location in titles/headings
 	 * - 1 point: Local business schema present
 	 *
-	 * @since  1.7030.1522
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

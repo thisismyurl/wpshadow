@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1518
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Tags with single posts
  * - Tag-to-post ratio
  *
- * @since 1.7030.1518
+ * @since 1.6093.1200
  */
 class Diagnostic_Tag_Overuse extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Tag_Overuse extends Diagnostic_Base {
 	 * - 1 point: <30% tags with only 1 post
 	 * - 1 point: Tag-to-post ratio <1:5
 	 *
-	 * @since  1.7030.1518
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

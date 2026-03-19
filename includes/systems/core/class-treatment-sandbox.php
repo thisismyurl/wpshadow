@@ -20,7 +20,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6035.0948
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates treatment safety before execution.
  *
- * @since 1.6035.0948
+ * @since 1.6093.1200
  */
 class Treatment_Sandbox {
 
@@ -75,7 +75,7 @@ class Treatment_Sandbox {
 	/**
 	 * Validate treatment safety before execution.
 	 *
-	 * @since  1.6035.0948
+	 * @since 1.6093.1200
 	 * @param  string $treatment_class Fully qualified treatment class name.
 	 * @return array {
 	 *     Safety validation result.
@@ -159,7 +159,7 @@ class Treatment_Sandbox {
 	/**
 	 * Analyze treatment source code for dangerous patterns.
 	 *
-	 * @since  1.6035.0948
+	 * @since 1.6093.1200
 	 * @param  string $treatment_class Treatment class name.
 	 * @return array {
 	 *     Code analysis result.
@@ -247,7 +247,7 @@ class Treatment_Sandbox {
 	 *
 	 * Philosophy #1 (Helpful Neighbor): Explain risks in plain language.
 	 *
-	 * @since  1.6035.0948
+	 * @since 1.6093.1200
 	 * @param  array $validation_result Result from validate_treatment().
 	 * @return string HTML safety report.
 	 */
@@ -301,7 +301,7 @@ class Treatment_Sandbox {
 	/**
 	 * Validate treatment before application (hook integration).
 	 *
-	 * @since  1.6035.0948
+	 * @since 1.6093.1200
 	 * @param  string $treatment_class Treatment class to validate.
 	 * @return bool True if safe to proceed, false otherwise.
 	 */
@@ -324,7 +324,7 @@ class Treatment_Sandbox {
 		/**
 		 * Filter whether to allow treatment despite validation warnings.
 		 *
-		 * @since 1.6035.0948
+		 * @since 1.6093.1200
 		 *
 		 * @param bool   $allow            Whether to allow treatment.
 		 * @param array  $validation       Validation result.

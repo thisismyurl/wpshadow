@@ -31,7 +31,7 @@
  * See https://wpshadow.com/kb/feed-pingback-trackback for detailed explanation
  * or https://wpshadow.com/training/feed-security for interactive walkthrough.
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Feed Content Length: Monitors feed excerpt vs full content
  * - Feed URL Accessibility: Ensures feed URLs respond correctly
  *
- * @since 1.6032.1921
+ * @since 1.6093.1200
  */
 class Treatment_Feed_Pingback_Trackback extends Treatment_Base {
 	/**
@@ -97,7 +97,7 @@ class Treatment_Feed_Pingback_Trackback extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

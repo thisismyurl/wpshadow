@@ -11,7 +11,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6036.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper focus management patterns.
  *
- * @since 1.6036.1450
+ * @since 1.6093.1200
  */
 class Treatment_Focus_Management extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Focus_Management extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6036.1450
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

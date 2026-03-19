@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.6032.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,14 +31,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages the unified account registration UI.
  *
- * @since 1.6032.0000
+ * @since 1.6093.1200
  */
 class Account_Registration_Page extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -50,8 +50,8 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the registration page (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Account_Registration_Page::subscribe() instead
-	 * @since      1.6032.0000
+	 * @deprecated1.0 Use Account_Registration_Page::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -61,7 +61,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Register menu page.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_menu() {
@@ -79,7 +79,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue page assets.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  string $hook Current page hook.
 	 * @return void
 	 */
@@ -132,7 +132,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render the registration page.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -164,7 +164,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render registration view.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  array $services Service information.
 	 * @return void
 	 */
@@ -269,7 +269,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render dashboard view.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  array|\WP_Error $account_info Account information.
 	 * @param  array           $services Service information.
 	 * @return void
@@ -327,7 +327,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render service benefits.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  array $services Service information.
 	 * @return void
 	 */
@@ -388,7 +388,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render service card.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  string $service_id Service identifier.
 	 * @param  array  $service_data Service data.
 	 * @return void
@@ -470,7 +470,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render upgrade CTA.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  array $services Service information.
 	 * @return void
 	 */
@@ -532,7 +532,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	/**
 	 * Get service metadata.
 	 *
-	 * @since  1.6032.0000
+	 * @since 1.6093.1200
 	 * @param  string $service_id Service identifier.
 	 * @return array Service metadata.
 	 */

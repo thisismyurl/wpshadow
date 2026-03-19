@@ -23,7 +23,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Fixes site freezing issues immediately\n * - #8 Inspire Confidence: Restores reliable performance\n * - #10 Talk-About-Worthy: "Scheduled tasks don't freeze the site"\n *
  * **Related Checks:**\n * - Background Job Performance (async task analysis)\n * - Server CPU Utilization (cron CPU impact)\n * - Disk Space Availability (backup cron storage)\n * - System Health Monitoring (reliability tracking)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-cron-optimization\n * - Video: https://wpshadow.com/training/wordpress-cron-101 (6 min)\n * - Advanced: https://wpshadow.com/training/async-task-patterns (13 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -75,7 +75,7 @@ class Diagnostic_Plugin_Cron_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

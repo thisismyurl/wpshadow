@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6180
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Coordinates achievements, badges, points, and rewards.
  *
- * @since 1.6180
+ * @since 1.6093.1200
  */
 class Gamification_Manager extends Hook_Subscriber_Base {
 
@@ -46,7 +46,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get singleton instance.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return Gamification_Manager
 	 */
 	public static function get_instance() {
@@ -63,7 +63,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	 * Note: Gamification_Manager uses instance methods, so hooks
 	 * are registered in the instance's setup_hooks() method.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -73,7 +73,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6180
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -83,8 +83,8 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Initialize gamification system (deprecated).
 	 *
-	 * @deprecated 1.7035.1400 Gamification_Manager is singleton
-	 * @since      1.6004.0400
+	 * @deprecated1.0 Gamification_Manager is singleton
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -103,7 +103,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Setup action hooks for gamification triggers.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setup_hooks() {
@@ -134,7 +134,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle diagnostic run event.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string     $class   Diagnostic class name.
 	 * @param  string     $slug    Diagnostic slug.
 	 * @param  array|null $finding Finding result.
@@ -172,7 +172,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle treatment applied event.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $class      Treatment class name.
 	 * @param  string $finding_id Finding ID.
 	 * @param  array  $result     Treatment result.
@@ -210,7 +210,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle KB article viewed event.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id    User ID.
 	 * @param  string $article_id Article ID.
 	 * @return void
@@ -240,7 +240,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle training video completed event.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id  User ID.
 	 * @param  string $video_id Video ID.
 	 * @return void
@@ -270,7 +270,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle Guardian scan completed event.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  string $scan_id Scan ID.
 	 * @return void
@@ -300,7 +300,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle workflow completed event.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int   $user_id     User ID.
 	 * @param  array $workflow_id Workflow ID.
 	 * @return void
@@ -330,7 +330,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Handle important feature setup changes.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $option    Setting name.
 	 * @param  mixed  $old_value Previous value.
 	 * @param  mixed  $value     New value.
@@ -378,7 +378,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Determine if a setting value is enabled.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  mixed $value Setting value.
 	 * @return bool True if enabled.
 	 */
@@ -401,7 +401,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Register dashboard widgets.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function register_dashboard_widgets() {
@@ -423,7 +423,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Render gamification dashboard widget.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function render_dashboard_widget() {
@@ -586,7 +586,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue gamification assets.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -631,7 +631,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get user's gamification summary.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Summary data.
 	 */
@@ -660,7 +660,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Check if gamification is enabled.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return bool True if enabled.
 	 */
 	public static function is_enabled() {
@@ -670,7 +670,7 @@ class Gamification_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Enable or disable gamification.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  bool $enabled Whether to enable.
 	 * @return bool Success.
 	 */

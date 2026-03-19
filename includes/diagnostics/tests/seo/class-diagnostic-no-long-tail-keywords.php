@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites focus only on 1-2 word competitive terms instead of
  * 3-5 word long-tail keywords that are easier to rank for.
  *
- * @since 1.5003.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Long_Tail_Keywords extends Diagnostic_Base {
 

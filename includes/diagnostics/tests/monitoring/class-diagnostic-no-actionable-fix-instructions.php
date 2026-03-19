@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates actionability of Site Health fix guidance.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 	 *
 	 * Tests for actionable fix instructions.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 	/**
 	 * Check for step-by-step instructions.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if instructions available.
 	 */
 	private static function has_step_by_step_instructions() {
@@ -141,7 +141,7 @@ class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 	/**
 	 * Check for documentation links.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if links available.
 	 */
 	private static function has_documentation_links() {
@@ -160,7 +160,7 @@ class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 	/**
 	 * Check for one-click fixes.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if one-click fixes available.
 	 */
 	private static function has_one_click_fixes() {
@@ -191,11 +191,15 @@ class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 	/**
 	 * Check for contextual help.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if contextual help available.
 	 */
 	private static function has_contextual_help() {
 		// Check if help screen exists
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
 		$screen = get_current_screen();
 
 		if ( $screen && method_exists( $screen, 'get_help_tabs' ) ) {
@@ -209,7 +213,7 @@ class Diagnostic_No_Actionable_Fix_Instructions extends Diagnostic_Base {
 	/**
 	 * Check for user-level guidance.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if user-appropriate guidance available.
 	 */
 	private static function has_user_level_guidance() {

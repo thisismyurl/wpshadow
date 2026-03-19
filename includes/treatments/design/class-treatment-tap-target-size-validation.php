@@ -4,7 +4,7 @@
  *
  * Measures interactive element dimensions to ensure they're large enough for accurate tapping.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures interactive element dimensions to ensure they're large enough for accurate
  * tapping on mobile devices, ensuring WCAG 2.5.5 compliance.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Tap_Target_Size_Validation extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Tap_Target_Size_Validation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1021
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (unverified), medium (no auto-updates)
  * - Treatment: use only WP.org or verified commercial themes
  *
- * @since 1.6032.1021
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -173,7 +173,7 @@ class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 	/**
 	 * Check active theme source
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @return array|null
 	 */
 	private static function check_active_theme(): ?array {
@@ -202,7 +202,7 @@ class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 	/**
 	 * Check all themes for suspicious sources
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @return array
 	 */
 	private static function check_all_themes(): array {
@@ -243,7 +243,7 @@ class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 	/**
 	 * Check if theme is from WordPress.org
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  string $stylesheet Theme stylesheet.
 	 * @return bool
 	 */
@@ -282,7 +282,7 @@ class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 	/**
 	 * Check if theme has valid metadata
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  \WP_Theme $theme Theme object.
 	 * @return bool
 	 */
@@ -306,7 +306,7 @@ class Diagnostic_Theme_Installation_Source extends Diagnostic_Base {
 	/**
 	 * Check for suspicious indicators
 	 *
-	 * @since  1.6032.1021
+	 * @since 1.6093.1200
 	 * @param  \WP_Theme $theme Theme object.
 	 * @return bool
 	 */

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Integration\Core
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,14 +20,14 @@ use WPShadow\Tests\TestCase;
 /**
  * Bootstrap_Autoloader Test Class
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class BootstrapAutoloaderTest extends TestCase {
 
 	/**
 	 * Test that Bootstrap_Autoloader has init method.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_has_init_method() {
@@ -37,7 +37,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that critical classes are loaded.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_loads_critical_classes() {
@@ -64,7 +64,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	 *
 	 * Error_Handler must be loaded first to catch errors from other classes.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_critical_classes_loaded_in_order() {
@@ -87,7 +87,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that feature directories are scanned.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_scans_feature_directories() {
@@ -118,7 +118,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that discover_feature_files finds PHP files recursively.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_discovers_files_recursively() {
@@ -146,7 +146,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that discovered files are loaded correctly.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_loads_discovered_files() {
@@ -170,7 +170,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that Bootstrap_Autoloader handles missing directories gracefully.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_handles_missing_directories_gracefully() {
@@ -190,7 +190,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that Bootstrap_Autoloader skips non-PHP files.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_skips_non_php_files() {
@@ -215,7 +215,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that Bootstrap_Autoloader doesn't load files twice.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_prevents_duplicate_loading() {
@@ -233,7 +233,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	 * According to Phase 4 documentation, we should eliminate 97% of
 	 * manual require_once calls (from 79 to 3).
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_reduces_manual_require_calls() {
@@ -259,7 +259,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that Bootstrap_Autoloader works with Hook_Registry integration.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_integrates_with_hook_registry() {
@@ -282,7 +282,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that Bootstrap_Autoloader loads files from all feature directories.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_loads_from_all_feature_directories() {
@@ -315,7 +315,7 @@ class BootstrapAutoloaderTest extends TestCase {
 	/**
 	 * Test that Bootstrap_Autoloader handles WordPress not loaded gracefully.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_handles_wordpress_not_loaded() {

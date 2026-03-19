@@ -34,7 +34,7 @@
  * See https://wpshadow.com/kb/feed-encoding
  * or https://wpshadow.com/training/xml-encoding-basics
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -96,7 +96,7 @@ class Diagnostic_Feed_Content_Encoding extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

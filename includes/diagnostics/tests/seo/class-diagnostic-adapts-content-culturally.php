@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1020
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website adapts content for cultural differences beyond simple
  * translation, including imagery, formats, and culturally relevant messaging.
  *
- * @since 1.5003.1020
+ * @since 1.6093.1200
  */
 class Diagnostic_Adapts_Content_Culturally extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Adapts_Content_Culturally extends Diagnostic_Base {
 	 * checks for region-specific content, cultural references, localized examples,
 	 * and cultural sensitivity documentation.
 	 *
-	 * @since  1.5003.1020
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

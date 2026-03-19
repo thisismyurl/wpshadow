@@ -4,7 +4,7 @@
  *
  * Checks if form fields have autocomplete attributes.
  *
- * @since   1.6035.1400
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that form fields use autocomplete attributes for common data types.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Treatment_Form_Fields_Missing_Autocomplete extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Form_Fields_Missing_Autocomplete extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

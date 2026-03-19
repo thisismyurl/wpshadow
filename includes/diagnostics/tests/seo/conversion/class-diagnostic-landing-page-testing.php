@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1515
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether landing pages are regularly tested and optimized.
  * Checks for landing page builders, A/B testing, analytics, and optimization tools.
  *
- * @since 1.6035.1515
+ * @since 1.6093.1200
  */
 class Diagnostic_Landing_Page_Testing extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Landing_Page_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1515
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -114,7 +114,17 @@ class Diagnostic_Landing_Page_Testing extends Diagnostic_Base {
 					'relation' => 'OR',
 					array(
 						'key'     => '_wp_page_template',
-						'value'   => array( 'landing', 'lp-', 'template-landing' ),
+						'value'   => 'landing',
+						'compare' => 'LIKE',
+					),
+					array(
+						'key'     => '_wp_page_template',
+						'value'   => 'lp-',
+						'compare' => 'LIKE',
+					),
+					array(
+						'key'     => '_wp_page_template',
+						'value'   => 'template-landing',
 						'compare' => 'LIKE',
 					),
 				),

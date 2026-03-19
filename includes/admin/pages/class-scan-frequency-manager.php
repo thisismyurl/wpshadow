@@ -10,7 +10,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Helpful Neighbor (#1) - Let users choose their own schedule
  * Philosophy: Show Value (#9) - Track scan results and improvements
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Scan_Frequency_Manager {

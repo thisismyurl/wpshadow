@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1030
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Heat maps show what users actually do vs. what you think they do. Often
  * reveals buttons are invisible or important content is ignored.
  *
- * @since 1.6035.1030
+ * @since 1.6093.1200
  */
 class Treatment_Heat_Map_Session_Recording extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Heat_Map_Session_Recording extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1030
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

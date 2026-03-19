@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2209
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - 50% medium (600-1500 words)
  * - 20% long-form (1500+ words)
  *
- * @since 1.6034.2209
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Long_Form_Content extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_No_Long_Form_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2209
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no long-form content, null otherwise.
 	 */
 	public static function check() {

@@ -4,7 +4,7 @@
  *
  * Validates comment display settings and threaded reply functionality.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment display settings and threading configuration.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Threading extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -243,7 +243,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 		// Pattern 6: Comment moderation settings too strict
 		if ( $comment_moderation ) {
 			$moderation_keys = get_option( 'moderation_keys', '' );
-			$blacklist_keys = get_option( 'blacklist_keys', '' );
+			$blacklist_keys = get_option( 'disallowed_keys', '' );
 
 			if ( strlen( $moderation_keys ) > 500 || strlen( $blacklist_keys ) > 500 ) {
 				return array(

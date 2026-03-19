@@ -31,7 +31,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -71,14 +71,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - {@link \WPShadow\Core\Backup_Manager} database backup before modifications
  * - {@link \WPShadow\Monitoring\Character_Encoding_Monitor} ongoing charset health
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Database_Charset_Collation_Consistency extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -91,7 +91,7 @@ class Treatment_Database_Charset_Collation_Consistency extends Treatment_Base {
 	 * Converts database tables and columns to UTF-8mb4 charset.
 	 * This is a potentially long-running operation on large databases.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

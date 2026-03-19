@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that WordPress is deployed with high availability infrastructure including
  * load balancing, multiple web servers, and redundancy for enterprise operations.
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_High_Availability_Setup extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_High_Availability_Setup extends Diagnostic_Base {
 	/**
 	 * Run the high availability diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if HA gaps detected, null otherwise.
 	 */
 	public static function check() {
@@ -219,7 +219,7 @@ class Diagnostic_High_Availability_Setup extends Diagnostic_Base {
 	/**
 	 * Determine if this is an enterprise environment.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return bool True if enterprise indicators detected, false otherwise.
 	 */
 	private static function is_enterprise_environment() {

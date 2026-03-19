@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6031.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides reusable security validation methods for non-AJAX contexts.
  * For AJAX handlers, use AJAX_Handler_Base instead.
  *
- * @since 1.6031.1500
+ * @since 1.6093.1200
  */
 class Security_Validator {
 
@@ -33,7 +33,7 @@ class Security_Validator {
 	 *
 	 * Multisite-aware capability checking with standardized error handling.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @param  string $capability Required capability. Default 'manage_options'.
 	 * @param  bool   $die        Whether to wp_die on failure. Default true.
 	 * @return bool True if user has capability, false otherwise.
@@ -60,7 +60,7 @@ class Security_Validator {
 	/**
 	 * Verify nonce for form submissions.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @param  string $action      Nonce action.
 	 * @param  string $nonce_field Nonce field name. Default '_wpnonce'.
 	 * @param  bool   $die         Whether to wp_die on failure. Default true.
@@ -87,7 +87,7 @@ class Security_Validator {
 	 *
 	 * Common pattern for form submissions that require both checks.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @param  string $action      Nonce action.
 	 * @param  string $capability  Required capability. Default 'manage_options'.
 	 * @param  string $nonce_field Nonce field name. Default '_wpnonce'.
@@ -102,7 +102,7 @@ class Security_Validator {
 	/**
 	 * Get standardized permission error message.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @param  string $capability Required capability that was missing.
 	 * @return string Localized error message.
 	 */
@@ -128,7 +128,7 @@ class Security_Validator {
 	/**
 	 * Check if current request is from admin area.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @return bool True if in admin area.
 	 */
 	public static function is_admin_request(): bool {
@@ -138,7 +138,7 @@ class Security_Validator {
 	/**
 	 * Check if current request is AJAX.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @return bool True if AJAX request.
 	 */
 	public static function is_ajax_request(): bool {
@@ -148,7 +148,7 @@ class Security_Validator {
 	/**
 	 * Sanitize and validate email address.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @param  string $email Email to validate.
 	 * @return string|false Sanitized email or false if invalid.
 	 */
@@ -160,7 +160,7 @@ class Security_Validator {
 	/**
 	 * Sanitize and validate URL.
 	 *
-	 * @since  1.6031.1500
+	 * @since 1.6093.1200
 	 * @param  string $url URL to validate.
 	 * @return string|false Sanitized URL or false if invalid.
 	 */
@@ -175,7 +175,7 @@ class Security_Validator {
 	 * Ensures file path is within allowed directory to prevent path traversal attacks.
 	 * Resolves symlinks and checks against base directory.
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $file_path File path to validate.
 	 * @param  string $base_dir  Optional base directory (default: WPSHADOW_PATH).
 	 * @return string|false Validated real path or false if invalid.
@@ -212,7 +212,7 @@ class Security_Validator {
 	/**
 	 * Validate file path with multiple allowed directories
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $file_path   File path to validate.
 	 * @param  array  $allowed_dirs Array of allowed base directories.
 	 * @return string|false Validated real path or false if invalid.

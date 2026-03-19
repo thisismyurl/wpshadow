@@ -13,7 +13,7 @@
  * - Commandment #4: Advice Not Sales - Focus on learning, not persuasion
  * - Commandment #11: Talk-About-Worthy - Insightful questions that show we care
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Engagement
  */
 
@@ -43,7 +43,7 @@ class Exit_Survey_Builder {
 	/**
 	 * Build survey questions based on survey type and context.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $survey_type Survey type: 'competitor_analysis', 'feature_needs', or 'general_followup'.
 	 * @param  array  $context     Exit interview context data.
 	 * @return array Array of survey questions.
@@ -69,7 +69,7 @@ class Exit_Survey_Builder {
 	 *
 	 * Focuses on understanding why they chose a competitor and what we can learn.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $context Exit interview context.
 	 * @return array Survey questions.
 	 */
@@ -153,7 +153,7 @@ class Exit_Survey_Builder {
 	 *
 	 * Focuses on understanding what features they needed but couldn't find.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $context Exit interview context.
 	 * @return array Survey questions.
 	 */
@@ -236,7 +236,7 @@ class Exit_Survey_Builder {
 	 *
 	 * Generic survey for users who left for other reasons or long-term followup.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $context Exit interview context.
 	 * @return array Survey questions.
 	 */
@@ -312,7 +312,7 @@ class Exit_Survey_Builder {
 	/**
 	 * Get human-readable usage duration label.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  int $days Number of days.
 	 * @return string Human-readable label.
 	 */
@@ -343,7 +343,7 @@ class Exit_Survey_Builder {
 	/**
 	 * Validate survey responses.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $questions Survey questions.
 	 * @param  array $responses User responses.
 	 * @return array {

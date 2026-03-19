@@ -4,7 +4,7 @@
  *
  * Analyzes JavaScript bundling approach and optimization opportunities.
  *
- * @since   1.6033.2115
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates JavaScript bundling patterns and identifies optimization opportunities.
  *
- * @since 1.6033.2115
+ * @since 1.6093.1200
  */
 class Diagnostic_Javascript_Bundling_Strategy extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Javascript_Bundling_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2115
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

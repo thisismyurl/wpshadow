@@ -4,7 +4,7 @@
  *
  * Supports OS-level text scaling (Dynamic Type/font scaling).
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Mobile Text Size Responsiveness Treatment Class
  *
  * Validates that text scales with system-level font size preferences,
- * ensuring WCAG 1.4.4 compliance for text resizing.
+ * ensuring WCAG1.0 compliance for text resizing.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Text_Size_Responsiveness extends Treatment_Base {
 
@@ -47,7 +47,7 @@ class Treatment_Mobile_Text_Size_Responsiveness extends Treatment_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Support OS-level text scaling without overflow (WCAG 1.4.4)';
+	protected static $description = 'Support OS-level text scaling without overflow (WCAG1.0)';
 
 	/**
 	 * The family this treatment belongs to
@@ -59,7 +59,7 @@ class Treatment_Mobile_Text_Size_Responsiveness extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

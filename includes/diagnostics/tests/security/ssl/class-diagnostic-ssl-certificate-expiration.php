@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors SSL certificate validity and expiration.
  * Like checking when your security badge expires.
  *
- * @since 1.6035.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 	/**
 	 * Run the SSL certificate expiration diagnostic check.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if certificate expiration issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -178,7 +178,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 	/**
 	 * Get SSL certificate information for a domain.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array|false Certificate info or false on failure.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies database backup configuration and recency.
  * Like checking that you have recent copies of important documents.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Backup_Verification extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Backup_Verification extends Diagnostic_Base {
 	/**
 	 * Run the database backup verification diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup issues detected, null otherwise.
 	 */
 	public static function check() {

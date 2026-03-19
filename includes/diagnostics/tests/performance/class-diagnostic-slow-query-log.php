@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2055
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Hooks into $wpdb to detect queries taking >1 second.
  * Slow queries can dramatically impact page load times.
  *
- * @since 1.6033.2055
+ * @since 1.6093.1200
  */
 class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 	 * Checks for slow queries logged during request.
 	 * Queries >1 second indicate database optimization needed.
 	 *
-	 * @since  1.6033.2055
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 			$total_time += $time;
 			
 			// Log queries taking >1 second
-			if ( $time > 1.0 ) {
+			if ( $time >1.0 ) {
 				$slow_queries[] = array(
 					'time' => $time,
 					'sql'  => substr( $sql, 0, 200 ),

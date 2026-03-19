@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since      1.602.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -224,7 +224,7 @@ $summary_90 = Health_History::get_summary( 90 );
 .wpshadow-chart-wrapper h3 {
 	margin-top: 0;
 	margin-bottom: 15px;
-	font-size: 1.2em;
+	font-size:1.0em;
 }
 
 .wpshadow-chart-grid {
@@ -242,7 +242,7 @@ $summary_90 = Health_History::get_summary( 90 );
 }
 
 .wpshadow-health-history-footer p {
-	font-size: 1.1em;
+	font-size:1.0em;
 	color: #2c3338;
 	margin: 0;
 }

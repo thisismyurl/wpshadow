@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1010
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website accurately calculates VAT/GST/sales tax for international
  * customers based on their location.
  *
- * @since 1.5003.1010
+ * @since 1.6093.1200
  */
 class Diagnostic_Calculates_International_Taxes extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Calculates_International_Taxes extends Diagnostic_Base {
 	 * configuration. This diagnostic checks for WooCommerce tax settings, tax plugins,
 	 * EU VAT compliance, and tax documentation.
 	 *
-	 * @since  1.5003.1010
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses a stepped conversion strategy with small commitments before big asks.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The foot-in-the-door technique increases major conversion rates by 33%.
  * Start with small asks (newsletter, quiz, free tool) before major commitments.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for lead magnets.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if lead magnets exist, false otherwise.
 	 */
 	private static function check_lead_magnets() {
@@ -198,7 +198,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for quizzes.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if quizzes exist, false otherwise.
 	 */
 	private static function check_quizzes() {
@@ -231,7 +231,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for free trials.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if trials exist, false otherwise.
 	 */
 	private static function check_free_trials() {
@@ -262,7 +262,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for progressive profiling.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if progressive profiling exists, false otherwise.
 	 */
 	private static function check_progressive_profiling() {
@@ -285,7 +285,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for multi-step forms.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if multi-step forms exist, false otherwise.
 	 */
 	private static function check_multistep_forms() {
@@ -311,7 +311,7 @@ class Diagnostic_Micro_Commitments_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for nurture sequences.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if sequences exist, false otherwise.
 	 */
 	private static function check_nurture_sequences() {

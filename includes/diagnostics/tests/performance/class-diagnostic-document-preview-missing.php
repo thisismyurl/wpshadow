@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if documents can be previewed in-browser. WordPress doesn't
  * provide document previews, creating friction and security concerns.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 	 * Checks if documents have preview capability. In-browser previews
 	 * improve UX and allow viewing without downloading.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -141,7 +141,7 @@ class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 	/**
 	 * Check if document preview plugin is already active.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if preview plugin detected.
 	 */
 	private static function has_preview_plugin() {

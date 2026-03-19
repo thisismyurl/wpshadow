@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.602.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Health History Widget Class
  *
- * @since 1.602.0200
+ * @since 1.6093.1200
  */
 class Health_History_Widget extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -43,8 +43,8 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the widget (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Health_History_Widget::subscribe() instead
-	 * @since      1.602.0200
+	 * @deprecated1.0 Use Health_History_Widget::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -54,7 +54,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue widget assets.
 	 *
-	 * @since  1.6004.0300
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -75,7 +75,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render the widget.
 	 *
-	 * @since 1.602.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_widget() {

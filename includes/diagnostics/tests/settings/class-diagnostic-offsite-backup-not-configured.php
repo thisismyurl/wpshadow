@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when backups are only stored locally (same server).
  * Local-only backups are vulnerable to server failures, fires, and ransomware.
  *
- * @since 1.2033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Offsite_Backup_Not_Configured extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Offsite_Backup_Not_Configured extends Diagnostic_Base {
 	 * - Cloud storage configuration (S3, Google Drive, Dropbox)
 	 * - Vault configuration
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

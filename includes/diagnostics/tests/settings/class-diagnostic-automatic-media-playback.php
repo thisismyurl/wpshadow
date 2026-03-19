@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1524
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Iframe autoplay (YouTube, Vimeo)
  * - Background video checking
  *
- * @since 1.7030.1524
+ * @since 1.6093.1200
  */
 class Diagnostic_Automatic_Media_Playback extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Automatic_Media_Playback extends Diagnostic_Base {
 	 * - 3 points: No autoplay media found
 	 * - 0 points: Autoplay detected
 	 *
-	 * @since  1.7030.1524
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -146,7 +146,7 @@ class Diagnostic_Automatic_Media_Playback extends Diagnostic_Base {
 		return array(
 			'id'          => self::$slug,
 			'title'       => self::$title,
-			'description' => __( 'Automatic media playback violates WCAG 2.1 Success Criterion 1.4.2 (Audio Control). Problems: Screen reader interference (audio conflicts with screen reader voice), Startle effect (sudden sounds = bad UX, especially for anxiety/PTSD), Bandwidth waste (mobile users on limited data), Battery drain (video playback = power hungry), Annoyance factor (67% immediately leave sites with autoplay ads). WCAG requirements: Must provide mechanism to pause/stop, Or audio stops automatically within 3 seconds, Or audio is <3 seconds total, Exception: Background audio can play if separate volume control. Mobile browsers: iOS Safari blocks autoplay (requires user interaction), Chrome mobile blocks unless muted, Firefox allows with restrictions. Best practices: User-initiated playback only (click/tap to play), Provide visible controls (play/pause/volume), Mute by default (especially for promotional videos), Add captions/transcripts (accessibility + SEO), Use poster image (shows before play). YouTube embed without autoplay: Remove ?autoplay=1 or set autoplay=0, Add controls=1 for visible controls, Add rel=0 to hide related videos. Exceptions where autoplay OK: Background decorative video (muted, no audio), Looping animations (purely visual, <5 seconds), User explicitly requested (clicked play on previous page).', 'wpshadow' ),
+			'description' => __( 'Automatic media playback violates WCAG 2.1 Success Criterion1.0 (Audio Control). Problems: Screen reader interference (audio conflicts with screen reader voice), Startle effect (sudden sounds = bad UX, especially for anxiety/PTSD), Bandwidth waste (mobile users on limited data), Battery drain (video playback = power hungry), Annoyance factor (67% immediately leave sites with autoplay ads). WCAG requirements: Must provide mechanism to pause/stop, Or audio stops automatically within 3 seconds, Or audio is <3 seconds total, Exception: Background audio can play if separate volume control. Mobile browsers: iOS Safari blocks autoplay (requires user interaction), Chrome mobile blocks unless muted, Firefox allows with restrictions. Best practices: User-initiated playback only (click/tap to play), Provide visible controls (play/pause/volume), Mute by default (especially for promotional videos), Add captions/transcripts (accessibility + SEO), Use poster image (shows before play). YouTube embed without autoplay: Remove ?autoplay=1 or set autoplay=0, Add controls=1 for visible controls, Add rel=0 to hide related videos. Exceptions where autoplay OK: Background decorative video (muted, no audio), Looping animations (purely visual, <5 seconds), User explicitly requested (clicked play on previous page).', 'wpshadow' ),
 			'severity'    => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,

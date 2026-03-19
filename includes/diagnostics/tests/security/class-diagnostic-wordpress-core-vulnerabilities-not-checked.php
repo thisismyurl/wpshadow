@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (known vulnerabilities unpatched)
  * - Treatment: enable vulnerability monitoring and auto-updates
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_WordPress_Core_Vulnerabilities_Not_Checked extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_WordPress_Core_Vulnerabilities_Not_Checked extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

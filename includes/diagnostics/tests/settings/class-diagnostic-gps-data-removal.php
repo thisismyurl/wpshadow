@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if GPS/location metadata is present in uploaded images,
  * which poses significant privacy risks if not stripped.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_GPS_Data_Removal extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_GPS_Data_Removal extends Diagnostic_Base {
 	 * Scans recent image uploads for GPS/location EXIF data that could
 	 * reveal user location and compromise privacy.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

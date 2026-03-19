@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2070
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates Cache-Control and Expires headers for browser caching optimization.
  *
- * @since 1.6033.2070
+ * @since 1.6093.1200
  */
 class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 	 *
 	 * Tests static asset and HTML caching headers.
 	 *
-	 * @since  1.6033.2070
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,10 +87,16 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 		}
 
 		foreach ( $test_resources as $type => $url ) {
-			$response = Diagnostic_Request_Helper::head_result( $url, array( 'timeout' => 5 ) );
-			if ( null === $response ) {
+			if ( ! is_string( $url ) || '' === $url ) {
 				continue;
 			}
+
+			$response_result = Diagnostic_Request_Helper::head_result( $url, array( 'timeout' => 5 ) );
+			if ( empty( $response_result['success'] ) || empty( $response_result['response'] ) || ! is_array( $response_result['response'] ) ) {
+				continue;
+			}
+
+			$response = $response_result['response'];
 
 			$cache_control = (string) wp_remote_retrieve_header( $response, 'cache-control' );
 			$expires       = (string) wp_remote_retrieve_header( $response, 'expires' );

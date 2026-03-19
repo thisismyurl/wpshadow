@@ -5,7 +5,7 @@
  * Checks if currency localization is properly configured for international markets.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

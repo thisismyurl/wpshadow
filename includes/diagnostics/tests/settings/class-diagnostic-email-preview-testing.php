@@ -4,7 +4,7 @@
  *
  * Tests whether the site tests email rendering across major email clients before sending.
  *
- * @since   1.6034.0340
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Email rendering varies wildly across clients. Testing prevents broken
  * emails that damage brand perception and reduce engagement.
  *
- * @since 1.6034.0340
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 	/**
 	 * Check testing tools.
 	 *
-	 * @since  1.6034.0340
+	 * @since 1.6093.1200
 	 * @return bool True if tools exist, false otherwise.
 	 */
 	private static function check_testing_tools() {
@@ -159,7 +159,7 @@ class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 	/**
 	 * Check responsive design.
 	 *
-	 * @since  1.6034.0340
+	 * @since 1.6093.1200
 	 * @return bool True if responsive, false otherwise.
 	 */
 	private static function check_responsive_design() {
@@ -175,7 +175,7 @@ class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 	/**
 	 * Check spam testing.
 	 *
-	 * @since  1.6034.0340
+	 * @since 1.6093.1200
 	 * @return bool True if testing exists, false otherwise.
 	 */
 	private static function check_spam_testing() {
@@ -186,7 +186,7 @@ class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 	/**
 	 * Check link testing.
 	 *
-	 * @since  1.6034.0340
+	 * @since 1.6093.1200
 	 * @return bool True if testing exists, false otherwise.
 	 */
 	private static function check_link_testing() {
@@ -201,7 +201,7 @@ class Diagnostic_Email_Preview_Testing extends Diagnostic_Base {
 	/**
 	 * Check testing process.
 	 *
-	 * @since  1.6034.0340
+	 * @since 1.6093.1200
 	 * @return bool True if process documented, false otherwise.
 	 */
 	private static function check_testing_process() {

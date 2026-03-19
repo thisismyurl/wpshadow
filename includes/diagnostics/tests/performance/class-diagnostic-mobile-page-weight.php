@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures total page weight (HTML + CSS + JS + images) served to mobile users.
  * High page weights consume data plans, slow down load times, and impact Core Web Vitals.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Page_Weight extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Mobile_Page_Weight extends Diagnostic_Base {
 	 * - Total page (<3MB recommended)
 	 * - Above-fold resources (<500KB recommended)
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_Mobile_Page_Weight extends Diagnostic_Base {
 		$threshold_initial = 1 * 1024 * 1024; // 1MB
 
 		// Determine severity based on weight
-		if ( $total_weight > $threshold_total * 1.5 ) {
+		if ( $total_weight > $threshold_total *1.0 ) {
 			$severity = 'critical';
 			$threat   = 80;
 		} elseif ( $total_weight > $threshold_total ) {
@@ -132,7 +132,7 @@ class Diagnostic_Mobile_Page_Weight extends Diagnostic_Base {
 	/**
 	 * Measure page weight by simulating a request.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $url URL to measure.
 	 * @return array {
 	 *     Measurement results.
@@ -175,7 +175,7 @@ class Diagnostic_Mobile_Page_Weight extends Diagnostic_Base {
 		);
 
 		// Calculate totals (using conservative estimates)
-		$total_size      = (int) ( $html_size + 380 * 1024 + 1.2 * 1024 * 1024 + 2.4 * 1024 * 1024 + 180 * 1024 );
+		$total_size      = (int) ( $html_size + 380 * 1024 +1.0 * 1024 * 1024 + 2.4 * 1024 * 1024 + 180 * 1024 );
 		$above_fold_size = (int) ( $html_size + 380 * 1024 + 400 * 1024 ); // HTML + CSS + some JS
 
 		return array(
@@ -189,7 +189,7 @@ class Diagnostic_Mobile_Page_Weight extends Diagnostic_Base {
 	/**
 	 * Format bytes as human-readable string.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  int $bytes Size in bytes.
 	 * @return string Formatted size.
 	 */

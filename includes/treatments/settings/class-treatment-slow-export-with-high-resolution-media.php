@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Export
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests performance degradation when exporting high-resolution media.
  * Monitors export speed, media processing, and file handling efficiency.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Slow_Export_With_High_Resolution_Media extends Treatment_Base {
 
@@ -62,7 +62,7 @@ class Treatment_Slow_Export_With_High_Resolution_Media extends Treatment_Base {
 	 *
 	 * Tests for media-related export performance issues.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

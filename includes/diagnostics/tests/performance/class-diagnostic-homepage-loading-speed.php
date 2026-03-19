@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates homepage speed metrics that impact user experience and conversion.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 
 		$severity = 'medium';
 		$threat_level = 60;
-		if ( $timings['load_time'] > 4.0 || $timings['server_response_time'] > 1.0 ) {
+		if ( $timings['load_time'] > 4.0 || $timings['server_response_time'] >1.0 ) {
 			$severity = 'critical';
 			$threat_level = 85;
 		} elseif ( $timings['load_time'] > 3.0 || $timings['page_size_mb'] > 2.5 ) {
@@ -170,7 +170,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Measure homepage load time, response time, and payload size.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  string $url Homepage URL.
 	 * @return array|null Timing data or null when unavailable.
 	 */
@@ -226,7 +226,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Fetch PageSpeed Insights metrics when API key is configured.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  string $url Homepage URL.
 	 * @return array|null Metrics array or null if unavailable.
 	 */

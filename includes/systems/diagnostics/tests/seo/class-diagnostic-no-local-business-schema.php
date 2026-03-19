@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since      1.6035.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether local business structured data
  * is implemented for local search visibility.
  *
- * @since 1.6035.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Local_Business_Schema extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Local_Business_Schema extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

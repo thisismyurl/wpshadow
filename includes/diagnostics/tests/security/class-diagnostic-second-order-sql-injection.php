@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2105
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This makes it particularly dangerous as standard input validation
  * won't catch it.
  *
- * @since 1.2033.2105
+ * @since 1.6093.1200
  */
 class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'second-order-sql-injection';
@@ -51,7 +51,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Second-Order SQL Injection';
@@ -59,7 +59,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects second-order SQL injection where stored data is used unsafely';
@@ -67,7 +67,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -78,7 +78,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	 * Scans code for patterns where database-retrieved values
 	 * are used directly in SQL queries without proper escaping.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -215,7 +215,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * Scan directory for PHP files.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files to scan.
 	 * @return array File paths.
@@ -250,7 +250,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * Scan file for dangerous patterns.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Patterns to search for.
 	 * @return array Violations found.

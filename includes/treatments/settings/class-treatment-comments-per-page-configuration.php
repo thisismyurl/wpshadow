@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6032.1755
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comments per page setting for optimal balance.
  *
- * @since 1.6032.1755
+ * @since 1.6093.1200
  */
 class Treatment_Comments_Per_Page_Configuration extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Comments_Per_Page_Configuration extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6032.1755
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

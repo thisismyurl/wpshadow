@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Helpers
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides a minimal implementation of Hook_Subscriber_Base for testing.
  * Tracks hook subscriptions and callback execution.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class MockHookSubscriber extends Hook_Subscriber_Base {
 
@@ -47,7 +47,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Get the hooks this class subscribes to.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array Array of hooks with callbacks and priorities.
 	 */
 	public static function get_hooks() {
@@ -78,7 +78,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Handle init hook.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_init() {
@@ -88,7 +88,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Handle admin_init hook.
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_admin_init() {
@@ -98,7 +98,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Handle wp_loaded hook.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  mixed $arg1 First argument.
 	 * @param  mixed $arg2 Second argument.
 	 * @return void
@@ -110,7 +110,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Handle admin_menu hook (early).
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_menu_early() {
@@ -120,7 +120,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Handle admin_menu hook (late).
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_menu_late() {
@@ -130,7 +130,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Track that a callback was called.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  string $hook Hook name.
 	 * @param  array  $args Optional. Arguments passed to callback.
 	 * @return void
@@ -148,7 +148,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Check if a hook was called.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  string $hook Hook name.
 	 * @return bool True if called, false otherwise.
 	 */
@@ -159,7 +159,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Get number of times a hook was called.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  string $hook Hook name.
 	 * @return int Call count.
 	 */
@@ -170,7 +170,7 @@ class MockHookSubscriber extends Hook_Subscriber_Base {
 	/**
 	 * Reset tracking data.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function reset() {

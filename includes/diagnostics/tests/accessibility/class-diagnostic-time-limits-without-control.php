@@ -4,7 +4,7 @@
  *
  * Checks if users can extend or disable time limits.
  *
- * @since   1.6035.1400
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that time limits can be turned off, adjusted, or extended.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Time_Limits_Without_Control extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Time_Limits_Without_Control extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

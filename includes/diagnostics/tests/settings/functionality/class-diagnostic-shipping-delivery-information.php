@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1020
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 60% abandon carts due to unexpected shipping costs. Showing shipping
  * information upfront reduces abandonment.
  *
- * @since 1.6035.1020
+ * @since 1.6093.1200
  */
 class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1020
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -153,7 +153,7 @@ class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 	/**
 	 * Check if shipping calculator exists on product pages.
 	 *
-	 * @since  1.6035.1020
+	 * @since 1.6093.1200
 	 * @return bool True if calculator exists.
 	 */
 	private static function check_shipping_calculator(): bool {
@@ -180,7 +180,7 @@ class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 	/**
 	 * Check if shipping policy page exists.
 	 *
-	 * @since  1.6035.1020
+	 * @since 1.6093.1200
 	 * @return bool True if policy exists.
 	 */
 	private static function check_shipping_policy_page(): bool {
@@ -209,7 +209,7 @@ class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 	/**
 	 * Check if delivery timeframes are mentioned.
 	 *
-	 * @since  1.6035.1020
+	 * @since 1.6093.1200
 	 * @return bool True if timeframes exist.
 	 */
 	private static function check_delivery_timeframes(): bool {
@@ -234,7 +234,7 @@ class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 	/**
 	 * Check if free shipping threshold is displayed.
 	 *
-	 * @since  1.6035.1020
+	 * @since 1.6093.1200
 	 * @return bool True if threshold exists.
 	 */
 	private static function check_free_shipping_threshold(): bool {
@@ -258,7 +258,7 @@ class Diagnostic_Shipping_Delivery_Information extends Diagnostic_Base {
 	/**
 	 * Check if international shipping is available.
 	 *
-	 * @since  1.6035.1020
+	 * @since 1.6093.1200
 	 * @return bool True if international shipping exists.
 	 */
 	private static function check_international_shipping(): bool {

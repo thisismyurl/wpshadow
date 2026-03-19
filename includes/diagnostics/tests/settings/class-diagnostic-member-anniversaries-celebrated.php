@@ -4,7 +4,7 @@
  *
  * Tests whether the site recognizes membership milestones to increase retention.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Celebrating membership anniversaries and milestones increases member loyalty,
  * engagement, and lifetime value through recognition and appreciation.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -180,7 +180,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check for automation plugins.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if automation exists, false otherwise.
 	 */
 	private static function check_automation_plugins() {
@@ -203,7 +203,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check for email templates.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if templates exist, false otherwise.
 	 */
 	private static function check_email_templates() {
@@ -230,7 +230,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check for milestone rewards.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if rewards exist, false otherwise.
 	 */
 	private static function check_milestone_rewards() {
@@ -262,7 +262,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check for anniversary content.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if anniversary content exists, false otherwise.
 	 */
 	private static function check_anniversary_content() {
@@ -289,7 +289,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check for gamification.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if gamification exists, false otherwise.
 	 */
 	private static function check_gamification() {
@@ -311,7 +311,7 @@ class Diagnostic_Member_Anniversaries_Celebrated extends Diagnostic_Base {
 	/**
 	 * Check for anniversary tracking.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists, false otherwise.
 	 */
 	private static function check_anniversary_tracking() {

@@ -12,7 +12,7 @@
  *
  * @package WPShadow
  * @subpackage Onboarding
- * @since 1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ class Onboarding_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6089
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -47,7 +47,7 @@ class Onboarding_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -63,7 +63,7 @@ class Onboarding_Wizard extends Hook_Subscriber_Base {
 	 *
 	 * Sets up hooks to display the wizard when needed.
 	 *
-	 * @deprecated 1.7035.1400 Use Onboarding_Wizard::subscribe() instead
+	 * @deprecated1.0 Use Onboarding_Wizard::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {
@@ -208,7 +208,7 @@ class Onboarding_Wizard extends Hook_Subscriber_Base {
 		 *
 		 * Allows extensions to add additional assets for the wizard.
 		 *
-		 * @since 1.6030.2148
+		 * @since 1.6093.1200
 		 */
 		do_action( 'wpshadow_onboarding_wizard_assets' );
 	}

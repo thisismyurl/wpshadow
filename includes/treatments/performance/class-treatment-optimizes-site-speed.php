@@ -4,7 +4,7 @@
  *
  * Tests for active speed optimization efforts.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that performance tools or workflows are in place.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_Optimizes_Site_Speed extends Treatment_Base {
 
@@ -35,7 +35,7 @@ class Treatment_Optimizes_Site_Speed extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

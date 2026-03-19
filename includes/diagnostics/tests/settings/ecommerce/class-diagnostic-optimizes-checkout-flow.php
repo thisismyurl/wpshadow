@@ -4,7 +4,7 @@
  *
  * Tests if purchase flow is streamlined and optimized.
  *
- * @since   1.6050.0000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates if checkout flow has excessive fields or friction.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Optimizes_Checkout_Flow extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Optimizes_Checkout_Flow extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

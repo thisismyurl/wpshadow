@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Security
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (major mixed content), medium (minor issues)
  * - Treatment: update media URLs to HTTPS
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Media_SSL_HTTPS_Enforcement extends Treatment_Base {
 
@@ -125,7 +125,7 @@ class Treatment_Media_SSL_HTTPS_Enforcement extends Treatment_Base {
 	 * - Media URLs protocol
 	 * - Mixed content in posts
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

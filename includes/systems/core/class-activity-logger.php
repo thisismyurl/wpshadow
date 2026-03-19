@@ -260,7 +260,7 @@ class Activity_Logger {
 	 * Prevents CSV injection by prepending single quote to values that
 	 * start with potentially dangerous characters (=, +, -, @, tab, return).
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  string $value Value to escape.
 	 * @return string Escaped value.
 	 */

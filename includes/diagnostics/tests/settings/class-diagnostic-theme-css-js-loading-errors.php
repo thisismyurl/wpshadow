@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1245
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for broken or missing theme assets.
  *
- * @since 1.5049.1245
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1245
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,11 +72,11 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 		// Check enqueued scripts.
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( isset( $script->src ) && strpos( $script->src, '/themes/' . $theme_slug ) !== false ) {
+				if ( isset( $script->src ) && is_string( $script->src ) && false !== strpos( $script->src, '/themes/' . $theme_slug ) ) {
 					$file_path = str_replace( content_url(), WP_CONTENT_DIR, $script->src );
 					$file_path = preg_replace( '/\?.*$/', '', $file_path ); // Remove query string.
 
-					if ( ! file_exists( $file_path ) ) {
+					if ( is_string( $file_path ) && ! file_exists( $file_path ) ) {
 						$broken_assets[] = array(
 							'type'   => 'script',
 							'handle' => $handle,
@@ -90,11 +90,11 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 		// Check enqueued styles.
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, '/themes/' . $theme_slug ) !== false ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && false !== strpos( $style->src, '/themes/' . $theme_slug ) ) {
 					$file_path = str_replace( content_url(), WP_CONTENT_DIR, $style->src );
 					$file_path = preg_replace( '/\?.*$/', '', $file_path );
 
-					if ( ! file_exists( $file_path ) ) {
+					if ( is_string( $file_path ) && ! file_exists( $file_path ) ) {
 						$broken_assets[] = array(
 							'type'   => 'style',
 							'handle' => $handle,

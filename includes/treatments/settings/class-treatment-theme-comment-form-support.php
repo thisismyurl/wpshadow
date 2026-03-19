@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5049.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for proper theme comment form implementation, including template
  * customization, accessibility features, and styling support.
  *
- * @since 1.5049.1200
+ * @since 1.6093.1200
  */
 class Treatment_Theme_Comment_Form_Support extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Theme_Comment_Form_Support extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.5049.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

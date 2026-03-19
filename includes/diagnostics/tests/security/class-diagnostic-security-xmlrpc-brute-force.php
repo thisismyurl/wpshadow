@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects XML-RPC enabled with system.multicall allowing amplified brute force
  * attacks. One request can test thousands of password combinations.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Security_XMLRPC_Brute_Force extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Security_XMLRPC_Brute_Force extends Diagnostic_Base {
 	 * - If system.multicall is available
 	 * - If rate limiting is in place
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

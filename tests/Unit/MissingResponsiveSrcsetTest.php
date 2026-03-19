@@ -3,7 +3,7 @@
  * Tests for Missing Responsive Srcset Diagnostic
  *
  * @package WPShadow\Tests
- * @since   1.6028.2130
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Tests\Unit;
@@ -14,7 +14,7 @@ use WP_Mock\Tools\TestCase;
 /**
  * Missing Responsive Srcset Test Class
  *
- * @since 1.6028.2130
+ * @since 1.6093.1200
  */
 class MissingResponsiveSrcsetTest extends TestCase {
 

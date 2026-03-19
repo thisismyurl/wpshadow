@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1562
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors Core Web Vitals (LCP, FID, CLS).
  *
- * @since 1.6035.1562
+ * @since 1.6093.1200
  */
 class Diagnostic_Core_Web_Vitals_Performance extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Core_Web_Vitals_Performance extends Diagnostic_Base {
 	/**
 	 * Run the Core Web Vitals diagnostic check.
 	 *
-	 * @since  1.6035.1562
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if vitals degraded, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Core_Web_Vitals_Performance extends Diagnostic_Base {
 	/**
 	 * Check LCP optimization status.
 	 *
-	 * @since  1.6035.1562
+	 * @since 1.6093.1200
 	 * @return bool True if LCP optimized.
 	 */
 	private static function check_lcp_optimization(): bool {
@@ -166,7 +166,7 @@ class Diagnostic_Core_Web_Vitals_Performance extends Diagnostic_Base {
 	/**
 	 * Check FID optimization status.
 	 *
-	 * @since  1.6035.1562
+	 * @since 1.6093.1200
 	 * @return bool True if FID optimized.
 	 */
 	private static function check_fid_optimization(): bool {
@@ -190,7 +190,7 @@ class Diagnostic_Core_Web_Vitals_Performance extends Diagnostic_Base {
 	/**
 	 * Check CLS optimization status.
 	 *
-	 * @since  1.6035.1562
+	 * @since 1.6093.1200
 	 * @return bool True if CLS optimized.
 	 */
 	private static function check_cls_optimization(): bool {

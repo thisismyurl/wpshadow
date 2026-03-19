@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Real-World Scenario:**
  * Activated Imagify plugin. Settings: Normal compression (good balance),
  * convert to WebP, preserve EXIF. Bulk optimized 2400 existing images.
- * Average compression: 68%. Total savings: 1.8GB storage. Page load
+ * Average compression: 68%. Total savings:1.0GB storage. Page load
  * time improved 3.2 seconds average. Lighthouse performance score:
  * 52 → 78. Monthly bandwidth reduced 60% = $120/month savings.
  *
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (images usually biggest bottleneck)
  * - Treatment: install and configure optimization plugin
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Optimization_Plugin_Not_Active extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_Image_Optimization_Plugin_Not_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

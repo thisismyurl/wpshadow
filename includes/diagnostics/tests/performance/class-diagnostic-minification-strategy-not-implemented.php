@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant but requires testing)
  * - Treatment: implement minification (plugin or build process)
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Minification_Strategy_Not_Implemented extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Minification_Strategy_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,7 +160,7 @@ class Diagnostic_Minification_Strategy_Not_Implemented extends Diagnostic_Base {
 
 		if ( ! empty( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( ! empty( $script->src ) ) {
+				if ( ! empty( $script->src ) && is_string( $script->src ) ) {
 					$total_scripts++;
 					if ( strpos( $script->src, '.min.js' ) !== false ) {
 						$minified_scripts++;
@@ -175,7 +175,7 @@ class Diagnostic_Minification_Strategy_Not_Implemented extends Diagnostic_Base {
 
 		if ( ! empty( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( ! empty( $style->src ) ) {
+				if ( ! empty( $style->src ) && is_string( $style->src ) ) {
 					$total_styles++;
 					if ( strpos( $style->src, '.min.css' ) !== false ) {
 						$minified_styles++;
@@ -234,7 +234,7 @@ class Diagnostic_Minification_Strategy_Not_Implemented extends Diagnostic_Base {
 		$has_source_maps = false;
 		if ( ! empty( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( ! empty( $script->src ) && strpos( $script->src, '.map' ) !== false ) {
+				if ( ! empty( $script->src ) && is_string( $script->src ) && strpos( $script->src, '.map' ) !== false ) {
 					$has_source_maps = true;
 					break;
 				}

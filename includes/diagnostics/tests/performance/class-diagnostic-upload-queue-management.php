@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * manages upload queues client-side. Server configuration and race conditions
  * can cause queue failures when multiple files upload concurrently.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 	 * - Database deadlock detection
 	 * - Race condition patterns
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -231,10 +231,13 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 			$issues[] = __( 'PHP session active - may block concurrent upload requests', 'wpshadow' );
 		}
 
-		// Check for query cache issues (MySQL).
-		$query_cache_size = $wpdb->get_var( "SELECT @@query_cache_size" );
-		if ( $query_cache_size > 0 ) {
-			$issues[] = __( 'MySQL query cache enabled - may cause race conditions (deprecated in MySQL 5.7.20+)', 'wpshadow' );
+		// Query cache was removed in MySQL 8.0, so skip this check there.
+		$db_version = $wpdb->db_version();
+		if ( version_compare( $db_version, '8.0', '<' ) ) {
+			$query_cache_size = $wpdb->get_var( 'SELECT @@query_cache_size' );
+			if ( is_numeric( $query_cache_size ) && (int) $query_cache_size > 0 ) {
+				$issues[] = __( 'MySQL query cache enabled - may cause race conditions (deprecated in MySQL 5.7.20+)', 'wpshadow' );
+			}
 		}
 
 		// Check for InnoDB lock wait timeout.
@@ -247,27 +250,30 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 			);
 		}
 
-		// Check for table locks on postmeta (common bottleneck).
-		$table_locks = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*)
-				FROM information_schema.INNODB_LOCKS
-				WHERE lock_table = %s",
-				$wpdb->dbname . '/' . $wpdb->postmeta
-			)
-		);
-
-		if ( $table_locks > 0 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of locks */
-				_n(
-					'%d table lock on postmeta - affecting upload queue',
-					'%d table locks on postmeta - affecting upload queue',
-					$table_locks,
-					'wpshadow'
-				),
-				$table_locks
+		// information_schema.INNODB_LOCKS does not exist on newer MySQL versions,
+		// so only run this check for older environments where it is available.
+		if ( version_compare( $db_version, '8.0', '<' ) ) {
+			$table_locks = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*)
+					FROM information_schema.INNODB_LOCKS
+					WHERE lock_table = %s",
+					$wpdb->dbname . '/' . $wpdb->postmeta
+				)
 			);
+
+			if ( is_numeric( $table_locks ) && (int) $table_locks > 0 ) {
+				$issues[] = sprintf(
+					/* translators: %d: number of locks */
+					_n(
+						'%d table lock on postmeta - affecting upload queue',
+						'%d table locks on postmeta - affecting upload queue',
+						(int) $table_locks,
+						'wpshadow'
+					),
+					(int) $table_locks
+				);
+			}
 		}
 
 		// Check for auto-increment lock mode (affects concurrent inserts).

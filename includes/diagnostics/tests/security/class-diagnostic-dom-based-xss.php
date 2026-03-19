@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2105
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * exists entirely in client-side code. The server never sees the
  * malicious payload, making it harder to detect and prevent.
  *
- * @since 1.2033.2105
+ * @since 1.6093.1200
  */
 class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'dom-based-xss';
@@ -51,7 +51,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'DOM-Based XSS Vulnerability';
@@ -59,7 +59,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects DOM-based XSS vulnerabilities in JavaScript code';
@@ -67,7 +67,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2105
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	 *
 	 * Scans JavaScript files for dangerous DOM manipulation patterns.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -212,7 +212,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * Find JavaScript files in directory.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files to find.
 	 * @return array File paths.
@@ -252,7 +252,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * Scan JavaScript file for dangerous patterns.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Patterns to search for.
 	 * @return array Violations found.
@@ -278,7 +278,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * Scan PHP files for inline JavaScript with DOM XSS.
 	 *
-	 * @since  1.2033.2105
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function scan_php_for_inline_js() {

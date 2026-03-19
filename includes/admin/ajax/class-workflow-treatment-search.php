@@ -6,7 +6,7 @@
  * in the workflow wizard.
  *
  * @package WPShadow
- * @since   1.6037.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

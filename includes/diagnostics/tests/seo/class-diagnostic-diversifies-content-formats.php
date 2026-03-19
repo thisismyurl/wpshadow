@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2325
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Case studies and interviews
  * - Long-form articles
  *
- * @since 1.6034.2325
+ * @since 1.6093.1200
  */
 class Diagnostic_Diversifies_Content_Formats extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Diversifies_Content_Formats extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2325
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if low format diversity, null otherwise.
 	 */
 	public static function check() {

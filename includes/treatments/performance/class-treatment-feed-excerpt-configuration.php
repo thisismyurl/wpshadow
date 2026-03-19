@@ -79,7 +79,7 @@
  * See https://wpshadow.com/kb/feed-content-strategy for decision framework
  * or https://wpshadow.com/training/content-distribution-business-strategy
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -118,7 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Feed XML Validity: Ensures excerpt HTML properly encoded
  * - Content Strategy Audit: Broader content distribution review
  *
- * @since 1.6032.1921
+ * @since 1.6093.1200
  */
 class Treatment_Feed_Excerpt_Configuration extends Treatment_Base {
 	/**
@@ -152,7 +152,7 @@ class Treatment_Feed_Excerpt_Configuration extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

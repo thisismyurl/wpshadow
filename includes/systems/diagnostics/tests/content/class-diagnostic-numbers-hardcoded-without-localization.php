@@ -3,11 +3,11 @@
  * Numbers Hardcoded Without Localization Diagnostic
  *
  * Checks if numbers use WordPress localization functions instead of hardcoded separators.
- * Different regions use different number formats (US: 1,000.50 vs Europe: 1.000,50).
+ * Different regions use different number formats (US: 1,000.50 vs Europe:1.0,50).
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress localization functions like `number_format_i18n()`. This affects
  * international users who expect their regional number formats.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -78,7 +78,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 				'title'       => self::$title,
 				'description' => sprintf(
 					/* translators: %d: number of files with hardcoded numbers */
-					__( 'Found %d instances of hardcoded number formatting (commas, dots as thousands separators). Use WordPress `number_format_i18n()` to adapt to user\'s locale (US: 1,000.50 vs Europe: 1.000,50).', 'wpshadow' ),
+					__( 'Found %d instances of hardcoded number formatting (commas, dots as thousands separators). Use WordPress `number_format_i18n()` to adapt to user\'s locale (US: 1,000.50 vs Europe:1.0,50).', 'wpshadow' ),
 					count( $issues )
 				),
 				'severity'    => 'medium',
@@ -99,7 +99,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 	/**
 	 * Scan for hardcoded numbers in content
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of findings with locations
 	 */
 	private static function scan_for_hardcoded_numbers(): array {

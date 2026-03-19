@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects suspicious authentication mechanisms that could allow
  * unauthorized access or bypass normal security controls.
  *
- * @since 1.6035.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Auth_Bypass extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Backup_Auth_Bypass extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

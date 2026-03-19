@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,10 +39,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Detection Pattern:**
  * 1. Query wp_comments for comment_content with CHAR_LENGTH > 5000\n * 2. Count results (threshold: > 0 is concerning, > 10 is critical)\n * 3. Check for preprocess_comment or comment_text filters (validation)\n * 4. If long comments exist AND no filters: flag as high severity\n * 5. Calculate average comment length (detect bloat trend)\n *
  * **Real-World Scenario:**
- * Forum site with no comment length limits. Jan 2024: attacker discovers endpoint.\n * Posts 50 comments/day, each with 50KB of random text. Within 2 weeks: database\n * swells from 500MB to 1.5GB. Hosting provider sends notice: pay for upgrade or\n * reduce usage. Cost: $300/month increase. Prevention: 5-minute limit configuration.\n *
+ * Forum site with no comment length limits. Jan 2024: attacker discovers endpoint.\n * Posts 50 comments/day, each with 50KB of random text. Within 2 weeks: database\n * swells from 500MB to1.0GB. Hosting provider sends notice: pay for upgrade or\n * reduce usage. Cost: $300/month increase. Prevention: 5-minute limit configuration.\n *
  * **Implementation Notes:**
  * - Uses CHAR_LENGTH for accurate multi-byte character counting\n * - Threshold: 5000 characters reasonable for typical comments\n * - Returns severity: high (1000+ long comments), critical (100KB+ comments)\n * - Auto-fixable treatment: enforce length limit at form submission\n *
- * @since 1.6031.1300
+ * @since 1.6093.1200
  */\nclass Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
 
 	protected static $slug = 'comment-text-length-limits';
@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6031.1300
+	 * @since 1.6093.1200
 	 * @return array|null
 	 */
 	public static function check() {

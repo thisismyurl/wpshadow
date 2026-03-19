@@ -4,7 +4,7 @@
  *
  * Detects dynamic CSS injection and inline style performance issues.
  *
- * @since   1.6033.2120
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes dynamic CSS injection patterns and performance impact.
  *
- * @since 1.6033.2120
+ * @since 1.6093.1200
  */
 class Diagnostic_Dynamic_Style_Injection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Dynamic_Style_Injection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2120
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

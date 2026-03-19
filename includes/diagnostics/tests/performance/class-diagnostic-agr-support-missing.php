@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer AGR test suite (test-agr.php lines 28-33).
  *
- * @since 1.6033.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Agr_Support_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Agr_Support_Missing extends Diagnostic_Base {
 	 *
 	 * Checks if gifsicle is available for animated GIF optimization.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Agr_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Check if an optimizer plugin is active.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if optimizer plugin is active.
 	 */
 	private static function has_optimizer_plugin() {
@@ -125,7 +125,7 @@ class Diagnostic_Agr_Support_Missing extends Diagnostic_Base {
 	/**
 	 * Check if gifsicle is available.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if gifsicle is available.
 	 */
 	private static function is_gifsicle_available() {

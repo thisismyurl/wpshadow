@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Dashboard with 18 category icons (32x32px). Each separate PNG.
  * Combined into sprite sheet (18 icons in grid). CSS: background-image
  * (sprite), background-position (offset to specific icon). Requests:
- * 18 → 1. Page load: 1.8s → 0.5s. Also modernized: replaced with
+ * 18 → 1. Page load:1.0s → 0.5s. Also modernized: replaced with
  * icon font (Font Awesome). Scalable, color-customizable, 1 font file.
  *
  * **Implementation Notes:**
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (HTTP/2 reduces impact, but still valuable)
  * - Treatment: implement sprite sheet or modern alternative
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Sprites_Not_Implemented extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_Image_Sprites_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

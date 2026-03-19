@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1130
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #16: Local Content Created from Specialized & Emerging Success Habits.
  * Checks if the site publishes location-specific content regularly.
  *
- * @since 1.5003.1130
+ * @since 1.6093.1200
  */
 class Diagnostic_Creates_Local_Content extends Diagnostic_Base {
 

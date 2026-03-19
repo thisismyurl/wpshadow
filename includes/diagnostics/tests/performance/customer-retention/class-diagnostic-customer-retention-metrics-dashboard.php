@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\CustomerRetention
- * @since      1.6035.2315
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the site tracks important customer retention KPIs.
  *
- * @since 1.6035.2315
+ * @since 1.6093.1200
  */
 class Diagnostic_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2315
+	 * @since 1.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {

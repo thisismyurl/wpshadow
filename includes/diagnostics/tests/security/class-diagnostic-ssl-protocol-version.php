@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1452
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that site is using secure TLS protocols.
  *
- * @since 1.6035.1452
+ * @since 1.6093.1200
  */
 class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 	/**
 	 * Run the SSL protocol version diagnostic check.
 	 *
-	 * @since  1.6035.1452
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if protocol issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -112,7 +112,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 				'title'       => self::$title,
 				'description' => sprintf(
 					/* translators: %s: protocol version */
-					__( 'Site is using deprecated %s protocol. Upgrade to TLS 1.2 or 1.3 for better security.', 'wpshadow' ),
+					__( 'Site is using deprecated %s protocol. Upgrade to TLS1.0 or1.0 for better security.', 'wpshadow' ),
 					$protocol
 				),
 				'severity'    => 'medium',
@@ -133,7 +133,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 	/**
 	 * Get SSL/TLS protocol version.
 	 *
-	 * @since  1.6035.1452
+	 * @since 1.6093.1200
 	 * @param  string $url Site URL.
 	 * @return array|null Protocol information or null on failure.
 	 */
@@ -174,7 +174,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 				
 				// Map generic 'tls' to likely version.
 				if ( 'tls' === $test_protocol ) {
-					// Modern PHP defaults to TLS 1.2+.
+					// Modern PHP defaults to TLS1.0+.
 					return array( 'protocol' => 'TLSv1.2+' );
 				}
 
@@ -188,7 +188,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 	/**
 	 * Get crypto method constant for protocol.
 	 *
-	 * @since  1.6035.1452
+	 * @since 1.6093.1200
 	 * @param  string $protocol Protocol name.
 	 * @return int Crypto method constant.
 	 */

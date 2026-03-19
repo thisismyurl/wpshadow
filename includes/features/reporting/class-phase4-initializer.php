@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Initializes Phase 4 infrastructure components.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Phase4_Initializer {
 
 	/**
 	 * Initialize Phase 4 features
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -49,7 +49,7 @@ class Phase4_Initializer {
 	/**
 	 * Register REST API endpoints
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_api_endpoints() {
@@ -59,7 +59,7 @@ class Phase4_Initializer {
 	/**
 	 * Enqueue Phase 4 assets
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -109,7 +109,7 @@ class Phase4_Initializer {
 	/**
 	 * Register cron schedules
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_cron_schedules() {
@@ -136,7 +136,7 @@ class Phase4_Initializer {
 	/**
 	 * Register AJAX handlers
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_ajax_handlers() {
@@ -163,7 +163,7 @@ class Phase4_Initializer {
 	/**
 	 * Deactivation cleanup
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function deactivate() {
@@ -176,7 +176,7 @@ class Phase4_Initializer {
 	/**
 	 * Get integration settings
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return array Integration configuration.
 	 */
 	public static function get_integration_settings() {
@@ -194,7 +194,7 @@ class Phase4_Initializer {
 	/**
 	 * Save integration settings
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array $settings Integration settings.
 	 * @return bool Success.
 	 */

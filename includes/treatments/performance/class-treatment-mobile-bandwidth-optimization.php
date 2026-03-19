@@ -54,7 +54,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -72,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates responsive image serving and mobile-specific bandwidth efficiency.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Bandwidth_Optimization extends Treatment_Base {
 
@@ -110,7 +110,7 @@ class Treatment_Mobile_Bandwidth_Optimization extends Treatment_Base {
 	 * Tests if site implements bandwidth-saving features for mobile users
 	 * like lazy loading and responsive images.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

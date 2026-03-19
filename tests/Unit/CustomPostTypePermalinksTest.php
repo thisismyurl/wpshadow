@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests
- * @since      1.6032.1402
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Tests\Unit;
@@ -18,14 +18,14 @@ use WP_Mock\Tools\TestCase;
  * Tests the diagnostic that validates CPT permalink structures
  * and rewrite slug configurations.
  *
- * @since 1.6032.1402
+ * @since 1.6093.1200
  */
 class CustomPostTypePermalinksTest extends TestCase {
 
 	/**
 	 * Test that diagnostic has correct slug
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_has_correct_slug() {
 		$this->assertEquals(
@@ -37,7 +37,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	/**
 	 * Test that diagnostic has correct title
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_has_correct_title() {
 		$this->assertEquals(
@@ -49,7 +49,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	/**
 	 * Test that diagnostic has correct description
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_has_correct_description() {
 		$this->assertEquals(
@@ -61,7 +61,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	/**
 	 * Test that diagnostic belongs to seo family
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_belongs_to_seo_family() {
 		$this->assertEquals(
@@ -76,7 +76,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic returns null (no issues) when
 	 * there are no custom post types registered on the site.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_passes_with_no_custom_post_types() {
 		\WP_Mock::userFunction( 'get_post_types' )
@@ -94,7 +94,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic returns null when a CPT is
 	 * properly configured with valid rewrite rules.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_passes_with_properly_configured_cpt() {
 		$mock_post_type = (object) array(
@@ -137,7 +137,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when a custom post type
 	 * has rewrites explicitly disabled (rewrite => false).
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_cpt_with_disabled_rewrites() {
 		$mock_post_type = (object) array(
@@ -181,7 +181,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when a custom post type
 	 * has rewrite enabled but no slug defined.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_cpt_with_missing_rewrite_slug() {
 		$mock_post_type = (object) array(
@@ -226,7 +226,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when a CPT uses a
 	 * reserved WordPress slug that could cause conflicts.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_cpt_with_reserved_slug() {
 		$mock_post_type = (object) array(
@@ -282,7 +282,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when a CPT slug
 	 * conflicts with an existing page.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_cpt_with_page_conflict() {
 		$mock_post_type = (object) array(
@@ -344,7 +344,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects invalid characters
 	 * in rewrite slugs that could cause URL issues.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_cpt_with_invalid_slug_characters() {
 		$mock_post_type = (object) array(
@@ -400,7 +400,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when a hierarchical
 	 * post type doesn't have hierarchical rewrite enabled.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_hierarchical_cpt_without_hierarchical_rewrite() {
 		$mock_post_type = (object) array(
@@ -457,7 +457,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when a public, queryable
 	 * post type doesn't have archive pages enabled.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_public_cpt_without_archive() {
 		$mock_post_type = (object) array(
@@ -513,7 +513,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic detects when WordPress is using
 	 * default permalinks (no pretty permalinks enabled).
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_flags_when_pretty_permalinks_disabled() {
 		$mock_post_type = (object) array(
@@ -569,7 +569,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic ignores non-public CPTs
 	 * as they don't need public permalink configurations.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_skips_non_public_post_types() {
 		$mock_post_type = (object) array(
@@ -600,7 +600,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic correctly sets threat level to 60
 	 * as specified in the requirements.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_threat_level_is_60() {
 		$mock_post_type = (object) array(
@@ -640,7 +640,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 *
 	 * Verifies that the diagnostic sets severity to medium.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_severity_is_medium() {
 		$mock_post_type = (object) array(
@@ -681,7 +681,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic is marked as not auto-fixable
 	 * since permalink changes require manual configuration.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_is_not_auto_fixable() {
 		$mock_post_type = (object) array(
@@ -722,7 +722,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic includes detailed information
 	 * about problematic post types and configurations.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_includes_details_in_result() {
 		$mock_post_type = (object) array(
@@ -767,7 +767,7 @@ class CustomPostTypePermalinksTest extends TestCase {
 	 * Verifies that the diagnostic includes a link to the
 	 * relevant knowledge base article.
 	 *
-	 * @since 1.6032.1402
+	 * @since 1.6093.1200
 	 */
 	public function test_includes_kb_link() {
 		$mock_post_type = (object) array(

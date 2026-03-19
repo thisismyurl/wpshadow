@@ -4,7 +4,7 @@
  *
  * Validates comment section accessibility and rendering quality.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment section accessibility and display quality.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 					'details'      => array(
 						'issue' => 'form_fields_unlabeled',
 						'message' => __( 'Form fields have no <label> elements (WCAG failure)', 'wpshadow' ),
-						'wcag_violation' => 'WCAG 2.1 Level A - 1.3.1 Info and Relationships',
+						'wcag_violation' => 'WCAG 2.1 Level A -1.0 Info and Relationships',
 						'accessibility_impact' => array(
 							'Screen reader users don\'t know what field is what',
 							'Keyboard users can\'t identify fields',
@@ -132,7 +132,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 					'details'      => array(
 						'issue' => 'missing_heading_hierarchy',
 						'message' => __( 'Comment section has no clear heading structure', 'wpshadow' ),
-						'wcag_violation' => 'WCAG 2.1 Level A - 1.3.1 Info and Relationships',
+						'wcag_violation' => 'WCAG 2.1 Level A -1.0 Info and Relationships',
 						'screen_reader_impact' => __( 'Screen reader users can\'t navigate to comments section', 'wpshadow' ),
 						'navigation_structure' => array(
 							'Missing: <h2>Comments</h2> (or similar)',

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for privacy policy page configuration.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Privacy_Policy_Page_Not_Configured extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Privacy_Policy_Page_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_Privacy_Policy_Page_Not_Configured extends Diagnostic_Base {
 		}
 
 		// Check if privacy link is in footer.
-		$privacy_link = wp_get_privacy_policy_url();
+		$privacy_link = get_privacy_policy_url();
 
 		if ( empty( $privacy_link ) ) {
 			$issues[] = __( 'Privacy policy link not available for footer', 'wpshadow' );

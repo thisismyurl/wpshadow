@@ -4,7 +4,7 @@
  *
  * Validates custom post type registration and configuration.
  *
- * @since   1.2034.1145
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks custom post type registration issues and configuration problems.
  *
- * @since 1.2034.1145
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1145
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

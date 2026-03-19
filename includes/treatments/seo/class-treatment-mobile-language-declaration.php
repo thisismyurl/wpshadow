@@ -4,7 +4,7 @@
  *
  * Validates HTML lang attribute is properly set.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the HTML lang attribute is set and properly formatted,
  * ensuring screen readers pronounce text correctly (WCAG 3.1.1).
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Language_Declaration extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Language_Declaration extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

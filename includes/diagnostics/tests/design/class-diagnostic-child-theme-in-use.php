@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1405
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if a child theme is active when a parent theme is used.
  *
- * @since 1.6035.1405
+ * @since 1.6093.1200
  */
 class Diagnostic_Child_Theme_In_Use extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Child_Theme_In_Use extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1405
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

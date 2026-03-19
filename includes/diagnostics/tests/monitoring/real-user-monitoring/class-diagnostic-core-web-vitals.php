@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies Core Web Vitals are monitored for real user experience.
  * Like tracking how fast customers can shop in your store.
  *
- * @since 1.6035.1630
+ * @since 1.6093.1200
  */
 class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 	/**
 	 * Run the Core Web Vitals monitoring diagnostic check.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if monitoring issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -170,7 +170,7 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 	/**
 	 * Get sample of head content for script detection.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return string Head content sample.
 	 */
 	private static function get_head_content_sample() {

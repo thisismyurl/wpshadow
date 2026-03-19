@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Finds attachments where the database references files that do not exist
  * on disk. These cause broken images and 404s.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Physical_Files extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Missing_Physical_Files extends Diagnostic_Base {
 	 * - Missing _wp_attached_file meta
 	 * - Broken attachments
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

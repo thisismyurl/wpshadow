@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Checks for profile visibility, private messaging, search indexing
  *
- * @since 1.6031.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Forum_Member_Privacy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'forum';
 /**
  * Run the diagnostic check.
  *
- * @since  1.6031.1445
+ * @since 1.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {

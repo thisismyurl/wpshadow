@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1340
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user metadata privacy and security.
  *
- * @since 1.6032.1340
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Metadata_Privacy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_User_Metadata_Privacy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -181,7 +181,9 @@ class Diagnostic_User_Metadata_Privacy extends Diagnostic_Base {
 		// Most custom metadata with underscore prefix is private.
 
 		// Check WP REST API user exposure.
-		if ( is_plugin_active( 'rest-api/plugin.php' ) || rest_is_enabled() ) {
+		$rest_plugin_active = function_exists( 'is_plugin_active' ) && is_plugin_active( 'rest-api/plugin.php' );
+		$rest_api_available = function_exists( 'rest_get_server' ) && null !== rest_get_server();
+		if ( $rest_plugin_active || $rest_api_available ) {
 			// Check what user data is exposed via REST.
 			$exposed_fields = array( 'email', 'meta' );
 			// Note: This would need deeper analysis.

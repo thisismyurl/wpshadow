@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Businesses without planned allocation of marketing budget underutilize
  * channels and get lower ROI than optimized strategies (often 40-50% lower).
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Marketing_Mix_Or_Media_Spend_Allocation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Marketing_Mix_Or_Media_Spend_Allocation extends Diagnostic_B
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Marketing_Mix_Or_Media_Spend_Allocation extends Diagnostic_B
 	/**
 	 * Check if marketing plan exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if plan detected, false otherwise.
 	 */
 	private static function has_marketing_plan() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Marketing_Mix_Or_Media_Spend_Allocation extends Diagnostic_B
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Marketing_Mix_Or_Media_Spend_Allocation extends Diagnostic_B
 	/**
 	 * Get channel allocation examples.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Channel examples with typical allocations.
 	 */
 	private static function get_channel_examples() {
@@ -175,7 +175,7 @@ class Diagnostic_No_Marketing_Mix_Or_Media_Spend_Allocation extends Diagnostic_B
 	/**
 	 * Get budget framework rules.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Budget allocation framework.
 	 */
 	private static function get_budget_framework() {

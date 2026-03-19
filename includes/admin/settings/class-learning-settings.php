@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages learning style and neurodiversity accommodation settings
  * to make WPShadow work for all types of learners.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Learning_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -44,7 +44,7 @@ class Learning_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -60,7 +60,7 @@ class Learning_Settings {
 	/**
 	 * Enqueue CSS for the settings page
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @param string $hook Current admin page hook
 	 * @return void
 	 */
@@ -90,7 +90,7 @@ class Learning_Settings {
 	/**
 	 * Render the learning settings page
 	 *
-	 * @since 1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {

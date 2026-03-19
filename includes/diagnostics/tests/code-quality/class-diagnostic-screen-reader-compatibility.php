@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1320
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site works properly with screen readers
  * including proper semantic HTML and ARIA labels.
  *
- * @since 1.7034.1320
+ * @since 1.6093.1200
  */
 class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 	 * Tests screen reader compatibility including alt text, ARIA labels,
 	 * semantic HTML, and heading hierarchy.
 	 *
-	 * @since  1.7034.1320
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -239,8 +239,8 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 					'issues_detected'        => $issues,
 					'recommendation'         => __( 'Add alt text to images, use semantic HTML, add ARIA labels, fix heading hierarchy', 'wpshadow' ),
 					'wcag_requirements'      => array(
-						'WCAG 1.1.1' => 'Non-text Content - All images need alt text',
-						'WCAG 1.3.1' => 'Info and Relationships - Use semantic HTML',
+						'WCAG1.0' => 'Non-text Content - All images need alt text',
+						'WCAG1.0' => 'Info and Relationships - Use semantic HTML',
 						'WCAG 2.4.6' => 'Headings and Labels - Descriptive headings',
 						'WCAG 2.4.4' => 'Link Purpose - Descriptive link text',
 						'WCAG 4.1.2' => 'Name, Role, Value - ARIA labels for custom controls',

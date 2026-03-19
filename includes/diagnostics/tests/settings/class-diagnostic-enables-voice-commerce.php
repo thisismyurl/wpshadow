@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website has implemented voice commerce capabilities for voice-activated
  * purchasing through virtual assistants.
  *
- * @since 1.5002.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Enables_Voice_Commerce extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Enables_Voice_Commerce extends Diagnostic_Base {
 	 * checks for evidence of voice shopping integration through plugins, APIs, content
 	 * references, and structured data that supports voice assistants.
 	 *
-	 * @since  1.5002.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

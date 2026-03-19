@@ -4,7 +4,7 @@
  *
  * Validates that backups can be successfully restored.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks that backups have been tested and can be restored.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -329,7 +329,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Get active backup plugin slug.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string Plugin slug or empty.
 	 */
 	private static function get_active_backup_plugin() {
@@ -352,7 +352,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if backups exist.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if backups exist.
 	 */
@@ -363,7 +363,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Get last backup test timestamp.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Timestamp or 0.
 	 */
@@ -374,7 +374,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if recovery plan exists.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if plan exists.
 	 */
@@ -385,7 +385,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if staging environment exists.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if staging exists.
 	 */
 	private static function has_staging_environment() {
@@ -396,7 +396,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Get recovery plan age.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Timestamp.
 	 */
@@ -407,7 +407,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if restore time is documented.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if documented.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Referred customers have 25% higher lifetime value and 16% lower
  * churn than other customers. They also convert 4x faster.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Referral_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Referral_Program extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Referral_Program extends Diagnostic_Base {
 	/**
 	 * Check if referral program exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if program detected, false otherwise.
 	 */
 	private static function has_referral_program() {
@@ -138,7 +138,7 @@ class Diagnostic_No_Customer_Referral_Program extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -167,7 +167,7 @@ class Diagnostic_No_Customer_Referral_Program extends Diagnostic_Base {
 	/**
 	 * Get program components.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Program components with descriptions.
 	 */
 	private static function get_program_components() {
@@ -185,7 +185,7 @@ class Diagnostic_No_Customer_Referral_Program extends Diagnostic_Base {
 	/**
 	 * Get reward structure examples.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Reward structure options.
 	 */
 	private static function get_reward_structures() {

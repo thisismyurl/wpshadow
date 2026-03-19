@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.6035.1700
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * ARIA Landmarks Diagnostic Class
  *
  * Verifies proper use of ARIA landmark roles for navigation.
- * WCAG 2.1 Level A Success Criterion 1.3.1 (Info and Relationships).
+ * WCAG 2.1 Level A Success Criterion1.0 (Info and Relationships).
  *
- * @since 1.6035.1700
+ * @since 1.6093.1200
  */
 class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1700
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -163,7 +163,7 @@ class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 					'stats'          => $stats,
 					'issues'         => $issues,
 					'warnings'       => $warnings,
-					'wcag_criterion' => 'WCAG 2.1 Level A - 1.3.1 Info and Relationships',
+					'wcag_criterion' => 'WCAG 2.1 Level A -1.0 Info and Relationships',
 					'key_landmarks'  => array(
 						'<header>'     => 'Site header (banner)',
 						'<nav>'        => 'Navigation menus',

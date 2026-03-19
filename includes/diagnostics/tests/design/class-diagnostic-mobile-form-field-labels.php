@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since      1.602.1205
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.3.2 Labels or Instructions (Level A)
  *
- * @since 1.602.1205
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1205
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -177,7 +177,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Get list of pages to test.
 	 *
-	 * @since  1.602.1205
+	 * @since 1.6093.1200
 	 * @return array Pages with URLs as keys, names as values.
 	 */
 	private static function get_test_pages() {
@@ -211,7 +211,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Capture HTML for page.
 	 *
-	 * @since  1.602.1205
+	 * @since 1.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */
@@ -234,7 +234,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Find inputs without proper labels.
 	 *
-	 * @since  1.602.1205
+	 * @since 1.6093.1200
 	 * @param  string $html HTML to scan.
 	 * @return array Unlabeled inputs.
 	 */

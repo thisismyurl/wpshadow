@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sensitive content (medical, legal, financial), unencrypted storage
  * violates compliance requirements (HIPAA, GDPR, PCI-DSS).
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Treatment_Media_Files_Unencrypted extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Media_Files_Unencrypted extends Treatment_Base {
 	 * Checks if media files are encrypted. For compliance-sensitive sites,
 	 * encryption at rest is required for sensitive file types (PDFs, DOCX, etc.).
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

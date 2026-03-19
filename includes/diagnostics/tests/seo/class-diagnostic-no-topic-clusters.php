@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1514
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Internal linking patterns
  * - Content organization
  *
- * @since 1.7030.1514
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Topic_Clusters extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_No_Topic_Clusters extends Diagnostic_Base {
 	 * - 1 point: Strong internal linking (avg 5+ internal links/post)
 	 * - 1 point: Clear categories (10+ with descriptions)
 	 *
-	 * @since  1.7030.1514
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

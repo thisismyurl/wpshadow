@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Export
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests whether WordPress export supports chunking for large sites.
  * Verifies date range filters, content type filtering, and export capability.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Bas
 	 *
 	 * Tests for chunked export capability and filtering options.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Bas
 	/**
 	 * Check if chunking is supported.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if chunking is supported.
 	 */
 	private static function has_chunking_support() {
@@ -169,7 +169,7 @@ class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Bas
 	/**
 	 * Check if date range filter is available.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if date filtering supported.
 	 */
 	private static function has_date_range_filter() {
@@ -191,7 +191,7 @@ class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Bas
 	/**
 	 * Check if post type filtering works.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if post type filtering available.
 	 */
 	private static function has_post_type_filtering() {
@@ -210,7 +210,7 @@ class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Bas
 	/**
 	 * Check if category filtering is available.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if category filtering available.
 	 */
 	private static function has_category_filtering() {
@@ -236,7 +236,7 @@ class Diagnostic_No_Chunked_Export_Option_For_Large_Sites extends Diagnostic_Bas
 	/**
 	 * Get batch size configuration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return int|false Batch size or false if not configured.
 	 */
 	private static function get_batch_size_config() {

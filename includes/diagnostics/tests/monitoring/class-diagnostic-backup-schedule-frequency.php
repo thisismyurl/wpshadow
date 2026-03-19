@@ -4,7 +4,7 @@
  *
  * Validates backup frequency and scheduling configuration.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks backup scheduling configuration and frequency adequacy.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -267,7 +267,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get active backup plugin slug.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string Plugin slug or empty string.
 	 */
 	private static function get_active_backup_plugin() {
@@ -292,7 +292,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get backup frequency in days.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Frequency in days or 1 for daily.
 	 */
@@ -304,7 +304,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get scheduled backup time.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return string Time in HH:MM format or empty.
 	 */
@@ -315,7 +315,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get backup retention days.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Retention days or 0.
 	 */
@@ -326,7 +326,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Check if incremental backups enabled.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if incremental enabled.
 	 */
@@ -337,7 +337,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Check for database-only backup option.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if database backup configured.
 	 */
@@ -348,7 +348,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get last backup test timestamp.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Timestamp or 0.
 	 */

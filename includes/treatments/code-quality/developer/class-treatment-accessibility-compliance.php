@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Implements WCAG AA compliance fixes including skip links,
  * ARIA landmarks, and keyboard navigation support.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Treatment_Accessibility_Compliance extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -45,7 +45,7 @@ class Treatment_Accessibility_Compliance extends Treatment_Base {
 	 *
 	 * Creates a mu-plugin to add missing accessibility features.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -84,7 +84,7 @@ class Treatment_Accessibility_Compliance extends Treatment_Base {
 	 *
 	 * Removes the accessibility mu-plugin.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {
@@ -107,7 +107,7 @@ class Treatment_Accessibility_Compliance extends Treatment_Base {
 	/**
 	 * Get the mu-plugin code for accessibility compliance.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return string PHP code for the mu-plugin.
 	 */
 	private static function get_accessibility_mu_plugin_code() {

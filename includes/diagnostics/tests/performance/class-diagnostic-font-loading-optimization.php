@@ -5,7 +5,7 @@
  * Checks web font loading strategy and optimization to prevent font render delay
  * and cumulative layout shift from font swaps.
  *
- * @since   1.6033.2081
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Font preloading
  * - Reduced font variants
  *
- * @since 1.6033.2081
+ * @since 1.6093.1200
  */
 class Diagnostic_Font_Loading_Optimization extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Font_Loading_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2081
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

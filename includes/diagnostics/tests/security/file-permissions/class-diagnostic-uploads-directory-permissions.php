@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies uploads folder has secure yet functional permissions.
  * Like checking that your photo album storage has the right access settings.
  *
- * @since 1.6035.1600
+ * @since 1.6093.1200
  */
 class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the uploads directory permissions diagnostic check.
 	 *
-	 * @since  1.6035.1600
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if permission issues detected, null otherwise.
 	 */
 	public static function check() {

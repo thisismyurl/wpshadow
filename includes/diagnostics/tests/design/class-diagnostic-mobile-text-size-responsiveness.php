@@ -4,7 +4,7 @@
  *
  * Supports OS-level text scaling (Dynamic Type/font scaling).
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Mobile Text Size Responsiveness Diagnostic Class
  *
  * Validates that text scales with system-level font size preferences,
- * ensuring WCAG 1.4.4 compliance for text resizing.
+ * ensuring WCAG1.0 compliance for text resizing.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 
@@ -47,7 +47,7 @@ class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Support OS-level text scaling without overflow (WCAG 1.4.4)';
+	protected static $description = 'Support OS-level text scaling without overflow (WCAG1.0)';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 		if ( '100%' === $max_scale_supported || '150%' === $max_scale_supported ) {
 			$issues[] = sprintf(
 				/* translators: %s: max scale percentage */
-				__( 'Maximum text scale is %s; target 200%% for WCAG 1.4.4 compliance', 'wpshadow' ),
+				__( 'Maximum text scale is %s; target 200%% for WCAG1.0 compliance', 'wpshadow' ),
 				$max_scale_supported
 			);
 		}
@@ -108,7 +108,7 @@ class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 		// Check for line height to allow text scaling
 		$line_height_adequate = apply_filters( 'wpshadow_line_height_adequate_for_scaling', false );
 		if ( ! $line_height_adequate ) {
-			$issues[] = __( 'Line height should be at least 1.5 to accommodate text scaling without crowding', 'wpshadow' );
+			$issues[] = __( 'Line height should be at least1.0 to accommodate text scaling without crowding', 'wpshadow' );
 		}
 
 		if ( ! empty( $issues ) ) {

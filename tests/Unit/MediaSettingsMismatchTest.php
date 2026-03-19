@@ -16,7 +16,7 @@ require_once WPSHADOW_PLUGIN_DIR . '/includes/diagnostics/tests/performance/clas
 /**
  * Test Media Settings Mismatch Diagnostic
  *
- * @since 1.6032.1352
+ * @since 1.6093.1200
  */
 class MediaSettingsMismatchTest extends TestCase {
 

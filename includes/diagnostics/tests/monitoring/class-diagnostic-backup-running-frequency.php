@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1532
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies backups are running at recommended frequency.
  *
- * @since 1.6035.1532
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 	/**
 	 * Run the backup frequency diagnostic check.
 	 *
-	 * @since  1.6035.1532
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup frequency issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 	/**
 	 * Find latest backup timestamp.
 	 *
-	 * @since  1.6035.1532
+	 * @since 1.6093.1200
 	 * @return int|null Timestamp of latest backup or null.
 	 */
 	private static function find_latest_backup(): ?int {

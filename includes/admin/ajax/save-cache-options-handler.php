@@ -20,7 +20,7 @@ class Save_Cache_Options_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for cache option saves.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -30,7 +30,7 @@ class Save_Cache_Options_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle cache option save requests.
 	 *
-	 * @since 1.6047.1200
+	 * @since 1.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

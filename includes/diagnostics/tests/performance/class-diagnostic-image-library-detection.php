@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * both GD and ImageMagick. ImageMagick generally offers better performance
  * and quality but may not be available on all servers.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 	 * - Format support
 	 * - Performance characteristics
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

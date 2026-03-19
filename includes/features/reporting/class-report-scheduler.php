@@ -10,7 +10,7 @@ namespace WPShadow\Settings;
  * Philosophy: Free as Possible (#2) - Scheduling available to all users
  * Philosophy: Show Value (#9) - Automated insights delivered on schedule
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Report_Scheduler {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * drop zone feature for drag-and-drop. Issues with HTML5 FileAPI or drop
  * zone configuration can break this feature.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 	 * - Conflicting JavaScript handlers
 	 * - CSS that might hide drop zones
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

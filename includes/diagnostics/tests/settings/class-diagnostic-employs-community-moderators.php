@@ -4,7 +4,7 @@
  *
  * Tests whether the site employs active moderators who maintain a healthy community environment.
  *
- * @since   1.6034.0450
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Active moderation reduces toxic behavior by 90% and increases member retention
  * by 200%. Moderators are essential for healthy community scaling.
  *
- * @since 1.6034.0450
+ * @since 1.6093.1200
  */
 class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0450
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check moderator roles.
 	 *
-	 * @since  1.6034.0450
+	 * @since 1.6093.1200
 	 * @return bool True if exist, false otherwise.
 	 */
 	private static function check_moderator_roles() {
@@ -173,7 +173,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check multiple moderators.
 	 *
-	 * @since  1.6034.0450
+	 * @since 1.6093.1200
 	 * @return bool True if multiple exist, false otherwise.
 	 */
 	private static function check_multiple_moderators() {
@@ -192,7 +192,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check recent moderation activity.
 	 *
-	 * @since  1.6034.0450
+	 * @since 1.6093.1200
 	 * @return bool True if active, false otherwise.
 	 */
 	private static function check_recent_moderation_activity() {
@@ -215,7 +215,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check moderator guidelines.
 	 *
-	 * @since  1.6034.0450
+	 * @since 1.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_moderator_guidelines() {
@@ -235,7 +235,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check response tracking.
 	 *
-	 * @since  1.6034.0450
+	 * @since 1.6093.1200
 	 * @return bool True if tracked, false otherwise.
 	 */
 	private static function check_response_tracking() {

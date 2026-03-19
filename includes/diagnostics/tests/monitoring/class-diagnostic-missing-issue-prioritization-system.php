@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates prioritization and impact guidance in Site Health.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 	 *
 	 * Tests for prioritization support.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -132,7 +132,7 @@ class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 	/**
 	 * Check for severity-based sorting.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if severity sorting available.
 	 */
 	private static function has_severity_sorting() {
@@ -156,7 +156,7 @@ class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 	/**
 	 * Check for impact explanation.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if impact explained.
 	 */
 	private static function has_impact_explanation() {
@@ -185,7 +185,7 @@ class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 	/**
 	 * Identify quick wins.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if quick wins identified.
 	 */
 	private static function identifies_quick_wins() {
@@ -219,7 +219,7 @@ class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 	/**
 	 * Check for fix order guidance.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if order guidance available.
 	 */
 	private static function has_fix_order_guidance() {
@@ -246,7 +246,7 @@ class Diagnostic_Missing_Issue_Prioritization_System extends Diagnostic_Base {
 	/**
 	 * Check for impact metrics.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if metrics available.
 	 */
 	private static function has_impact_metrics() {

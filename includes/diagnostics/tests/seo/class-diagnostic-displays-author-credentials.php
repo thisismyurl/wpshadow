@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2329
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Links to author social profiles
  * - Author archive pages
  *
- * @since 1.6034.2329
+ * @since 1.6093.1200
  */
 class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2329
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if poor author display, null otherwise.
 	 */
 	public static function check() {
@@ -163,7 +163,7 @@ class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 	/**
 	 * Count authors with biographical information
 	 *
-	 * @since  1.6034.2329
+	 * @since 1.6093.1200
 	 * @return int Number of authors with bios.
 	 */
 	private static function count_authors_with_bios() {
@@ -188,7 +188,7 @@ class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 	/**
 	 * Check if theme displays author bylines
 	 *
-	 * @since  1.6034.2329
+	 * @since 1.6093.1200
 	 * @return bool True if bylines detected.
 	 */
 	private static function theme_shows_author_bylines() {
@@ -222,7 +222,7 @@ class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 	/**
 	 * Check for author display plugins
 	 *
-	 * @since  1.6034.2329
+	 * @since 1.6093.1200
 	 * @return bool True if author plugin active.
 	 */
 	private static function has_author_plugin() {
@@ -245,7 +245,7 @@ class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 	/**
 	 * Count active contributing authors
 	 *
-	 * @since  1.6034.2329
+	 * @since 1.6093.1200
 	 * @return int Number of active authors.
 	 */
 	private static function count_active_authors() {
@@ -285,7 +285,7 @@ class Diagnostic_Displays_Author_Credentials extends Diagnostic_Base {
 	/**
 	 * Check if authors have social profile links
 	 *
-	 * @since  1.6034.2329
+	 * @since 1.6093.1200
 	 * @return bool True if social links found.
 	 */
 	private static function authors_have_social_links() {

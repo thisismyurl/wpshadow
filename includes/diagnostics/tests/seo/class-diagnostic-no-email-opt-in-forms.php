@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Engagement
- * @since      1.6034.2216
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Content upgrades (lead magnets)
  * - Welcome bar at top
  *
- * @since 1.6034.2216
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Email_Opt_In_Forms extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_No_Email_Opt_In_Forms extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2216
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no email forms detected, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_No_Email_Opt_In_Forms extends Diagnostic_Base {
 	/**
 	 * Check if email marketing plugin is installed
 	 *
-	 * @since  1.6034.2216
+	 * @since 1.6093.1200
 	 * @return bool True if plugin detected, false otherwise.
 	 */
 	private static function has_email_marketing_plugin() {
@@ -168,7 +168,7 @@ class Diagnostic_No_Email_Opt_In_Forms extends Diagnostic_Base {
 	/**
 	 * Check if email form exists in widgets
 	 *
-	 * @since  1.6034.2216
+	 * @since 1.6093.1200
 	 * @return bool True if email widget found, false otherwise.
 	 */
 	private static function has_email_form_widget() {

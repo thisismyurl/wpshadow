@@ -4,7 +4,7 @@
  *
  * Ensures links are visually distinguishable on mobile.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Mobile Link Underlines Diagnostic Class
  *
  * Ensures links are visually distinguishable from body text through underlines
- * or color differentiation, following WCAG 1.4.1.
+ * or color differentiation, following WCAG1.0.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Link_Underlines extends Diagnostic_Base {
 
@@ -47,7 +47,7 @@ class Diagnostic_Mobile_Link_Underlines extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Ensure links are visually distinguishable from body text (WCAG 1.4.1)';
+	protected static $description = 'Ensure links are visually distinguishable from body text (WCAG1.0)';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Link_Underlines extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Mobile_Link_Underlines extends Diagnostic_Base {
 		// Check if links have distinct color
 		$links_color_distinct = apply_filters( 'wpshadow_link_color_distinct_from_body_text', false );
 		if ( ! $links_color_distinct ) {
-			$issues[] = __( 'Links should use distinct color differentiated from body text (WCAG 1.4.1)', 'wpshadow' );
+			$issues[] = __( 'Links should use distinct color differentiated from body text (WCAG1.0)', 'wpshadow' );
 		}
 
 		// Check for link hover state visibility
@@ -92,7 +92,7 @@ class Diagnostic_Mobile_Link_Underlines extends Diagnostic_Base {
 		// Check that color alone isn't the only differentiator
 		$color_plus_other = apply_filters( 'wpshadow_links_use_color_plus_underline', false );
 		if ( ! $color_plus_other ) {
-			$issues[] = __( 'Use color AND underline/other visual cue (not color alone) per WCAG 1.4.1', 'wpshadow' );
+			$issues[] = __( 'Use color AND underline/other visual cue (not color alone) per WCAG1.0', 'wpshadow' );
 		}
 
 		// Check for sufficient color contrast between link and text

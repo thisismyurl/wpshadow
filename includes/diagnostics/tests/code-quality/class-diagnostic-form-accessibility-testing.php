@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1340
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that forms have proper labels, error messages, and
  * keyboard accessibility for users with disabilities.
  *
- * @since 1.7034.1340
+ * @since 1.6093.1200
  */
 class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 	 * Tests form accessibility including label associations, required
 	 * field indicators, error messages, and fieldset grouping.
 	 *
-	 * @since  1.7034.1340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -230,7 +230,7 @@ class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 					'issues_detected'         => $issues,
 					'recommendation'          => __( 'Add labels to all inputs, use aria-required, style errors, implement fieldset grouping', 'wpshadow' ),
 					'wcag_requirements'       => array(
-						'WCAG 1.3.1' => 'Info and Relationships - Associate labels with inputs',
+						'WCAG1.0' => 'Info and Relationships - Associate labels with inputs',
 						'WCAG 3.3.2' => 'Labels or Instructions - Provide clear labels',
 						'WCAG 3.3.1' => 'Error Identification - Clearly identify errors',
 						'WCAG 3.3.3' => 'Error Suggestion - Suggest how to fix errors',

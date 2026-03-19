@@ -4,7 +4,7 @@
  *
  * Validates that form errors are clearly identified and associated with fields.
  *
- * @since   1.6035.1200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper form error identification (WCAG 3.3.1 Level A).
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_WCAG_Form_Error_Identification extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_WCAG_Form_Error_Identification extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

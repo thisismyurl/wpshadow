@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Note: This checks PAST registrations, not future ones. To block spam at registration
  * time, consider using security plugins with real-time spam checking.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 
@@ -99,7 +99,7 @@ class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 	 * Retrieves recent user registrations and checks emails and IPs against
 	 * StopForumSpam database.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if spam registrations found, null otherwise.
 	 */
 	public static function check() {
@@ -192,7 +192,7 @@ class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 	/**
 	 * Check if email or IP is in StopForumSpam database.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $value Email address or IP address.
 	 * @param  string $type 'email' or 'ip'.
 	 * @return array|false|WP_Error Array with spam info, false if not spam, WP_Error on API error.
@@ -277,7 +277,7 @@ class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 	/**
 	 * Validate IP address format.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $ip IP address to validate.
 	 * @return bool True if valid IPv4 or IPv6 address.
 	 */
@@ -290,7 +290,7 @@ class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 	 *
 	 * Severity is based on what percentage of recent registrations are spam.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $spam_users Array of spam user records.
 	 * @param  int   $total_users Total users checked.
 	 * @return string Severity level: critical, high, medium, low.
@@ -326,7 +326,7 @@ class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 	 *
 	 * Higher threat for more spam registrations.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $spam_users Array of spam user records.
 	 * @param  int   $total_users Total users checked.
 	 * @return int Threat level from 0 to 100.
@@ -362,7 +362,7 @@ class Diagnostic_Spam_Registrations_Stopforumspam extends Diagnostic_Base {
 	 *
 	 * Creates a clear message explaining spam registrations and what to do.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $spam_users Array of spam user records.
 	 * @return string Human-readable description.
 	 */

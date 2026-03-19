@@ -4,7 +4,7 @@
  *
  * Detects absence of pillar content for authority building.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Pillar posts (2,500+ words) generate 4.3x more traffic than average posts.
  * Industry standard: 3+ pillars per 100 posts.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_No_Pillar_Content extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_No_Pillar_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

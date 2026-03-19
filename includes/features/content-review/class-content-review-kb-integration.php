@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Features/ContentReview
- * @since      1.6034.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Filter hook: Get KB articles for a diagnostic
  *
- * @since  1.6034.0000
+ * @since 1.6093.1200
  * @param  array  $articles Array of KB articles (initially empty).
  * @param  string $slug     Diagnostic slug.
  * @return array KB articles for the diagnostic.
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Filter hook: Get training courses for a family
  *
- * @since  1.6034.0000
+ * @since 1.6093.1200
  * @param  array  $courses Array of training courses (initially empty).
  * @param  string $family  Diagnostic family name.
  * @return array Training courses for the family.
@@ -66,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Fires after a content report is generated in the wizard.
  *
- * @since  1.6034.0000
+ * @since 1.6093.1200
  * @param  int   $post_id Post ID being reported on.
  * @param  array $report  Full report data including diagnostics and summary.
  *
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Connects to the existing KB article registry if available.
  *
- * @since 1.6034.0000
+ * @since 1.6093.1200
  * @return void
  */
 function wpshadow_register_content_review_kb_hooks() {

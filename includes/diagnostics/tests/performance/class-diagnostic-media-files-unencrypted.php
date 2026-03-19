@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sensitive content (medical, legal, financial), unencrypted storage
  * violates compliance requirements (HIPAA, GDPR, PCI-DSS).
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Files_Unencrypted extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Media_Files_Unencrypted extends Diagnostic_Base {
 	 * Checks if media files are encrypted. For compliance-sensitive sites,
 	 * encryption at rest is required for sensitive file types (PDFs, DOCX, etc.).
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Media_Files_Unencrypted extends Diagnostic_Base {
 	 *
 	 * Detects common filesystem encryption methods.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if encrypted filesystem detected.
 	 */
 	private static function is_filesystem_encrypted() {
@@ -152,7 +152,7 @@ class Diagnostic_Media_Files_Unencrypted extends Diagnostic_Base {
 	/**
 	 * Count total media files in uploads directory.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @param  string $directory Upload directory path.
 	 * @return int Total file count.
 	 */
@@ -170,7 +170,7 @@ class Diagnostic_Media_Files_Unencrypted extends Diagnostic_Base {
 	/**
 	 * Count sensitive file types in uploads directory.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @param  string $directory Upload directory path.
 	 * @return int Sensitive file count.
 	 */
@@ -205,7 +205,7 @@ class Diagnostic_Media_Files_Unencrypted extends Diagnostic_Base {
 	 *
 	 * Detects indicators that site handles compliance-sensitive data.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if compliance requirements detected.
 	 */
 	private static function has_compliance_requirements() {

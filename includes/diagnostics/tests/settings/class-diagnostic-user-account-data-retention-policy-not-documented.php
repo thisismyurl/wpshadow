@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing data retention policy.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Account_Data_Retention_Policy_Not_Documented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_User_Account_Data_Retention_Policy_Not_Documented extends Diagn
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

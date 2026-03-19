@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.6034.2153
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -18,6 +18,10 @@ use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+if ( class_exists( __NAMESPACE__ . '\\Diagnostic_HTTP2_Protocol_Support' ) ) {
+	return;
 }
 
 /**
@@ -39,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Improved Core Web Vitals scores
  * - Free upgrade (no code changes needed)
  *
- * @since 1.6034.2153
+ * @since 1.6093.1200
  */
 class Diagnostic_HTTP2_Protocol_Support extends Diagnostic_Base {
 
@@ -74,7 +78,7 @@ class Diagnostic_HTTP2_Protocol_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2153
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if HTTP/2 not detected, null if enabled.
 	 */
 	public static function check() {

@@ -29,7 +29,7 @@ class Download_Report_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hook
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -39,7 +39,7 @@ class Download_Report_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle download request
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle(): void {

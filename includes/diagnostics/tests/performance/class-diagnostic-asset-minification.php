@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Asset_Minification Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Asset_Minification extends Diagnostic_Base {
 
@@ -44,7 +44,7 @@ class Diagnostic_Asset_Minification extends Diagnostic_Base {
 		// Check scripts
 		if ( ! empty( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( $script->src && strpos( $script->src, '.min.js' ) === false && strpos( $script->src, 'wp-includes' ) === false ) {
+				if ( isset( $script->src ) && is_string( $script->src ) && '' !== $script->src && strpos( $script->src, '.min.js' ) === false && strpos( $script->src, 'wp-includes' ) === false ) {
 					$unminified_count++;
 				}
 			}

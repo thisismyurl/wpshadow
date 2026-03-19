@@ -18,7 +18,7 @@
  * File permissions guide: https://wpshadow.com/kb/wordpress-file-permissions\n * Video: Securing WordPress file permissions (10min): https://wpshadow.com/training/permissions-security\n *
  * @package    WPShadow
  * @subpackage Treatments\Security
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer deploys WordPress to shared hosting. Hosting support says:\n * \"Set permissions to 777 for uploads to work\". Developer follows advice.\n * Later: site compromised. Attacker uploaded PHP shell via comment form.\n * PHP executed = full compromise. Database + files accessed. Attacker demands\n * ransom. Site down for 1 week during recovery.\n *
  * **Implementation Notes:**
  * - Uses fileperms() and decoct() for permission checking\n * - Validates 755 (rwxr-xr-x) or more restrictive\n * - Checks for 777 (rwxrwxrwx) or world-writable\n * - Severity: critical (world-writable), high (too open)\n * - Treatment: chmod uploads to 755, files to 644\n *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_File_Permission_Security extends Treatment_Base {
 
@@ -82,7 +82,7 @@ class Treatment_File_Permission_Security extends Treatment_Base {
 	 * - World-writable files
 	 * - WordPress file permission constants
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

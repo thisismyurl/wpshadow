@@ -4,7 +4,7 @@
  *
  * Analyzes data retention policies and automated cleanup.
  *
- * @since   1.6033.2135
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates data retention policies and cleanup mechanisms.
  *
- * @since 1.6033.2135
+ * @since 1.6093.1200
  */
 class Diagnostic_Data_Retention_Policy extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Data_Retention_Policy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2135
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

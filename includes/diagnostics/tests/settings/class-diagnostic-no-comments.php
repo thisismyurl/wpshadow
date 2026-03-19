@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1447
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Comment status (enabled/disabled)
  * - Posts older than 3 months with zero comments
  *
- * @since 1.7030.1447
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Comments extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_No_Comments extends Diagnostic_Base {
 	 * - 1 point: <50% posts have zero comments
 	 * - 1 point: Comment plugin active
 	 *
-	 * @since  1.7030.1447
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

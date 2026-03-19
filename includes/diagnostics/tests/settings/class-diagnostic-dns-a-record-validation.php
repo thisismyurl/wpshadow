@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks A records for the site domain and compares against the server address.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_DNS_A_Record_Validation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_A_Record_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since   1.6030.2148
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Note: This function is also defined in workflow-list.php
  * Using it here to ensure availability in the dashboard view
  *
- * @since  1.6030.2148
+ * @since 1.6093.1200
  * @param  array $workflow Workflow data.
  * @return string Trigger summary.
  */
@@ -104,7 +104,7 @@ if ( ! function_exists( 'wpshadow_workflow_get_trigger_summary' ) ) {
  * Note: This function is also defined in workflow-list.php
  * Using it here to ensure availability in the dashboard view
  *
- * @since  1.6030.2148
+ * @since 1.6093.1200
  * @param  array $workflow Workflow data.
  * @return string Action summary.
  */
@@ -505,7 +505,7 @@ $workflows           = array_filter(
 	font-size: 13px;
 	color: #666;
 	flex: 1;
-	line-height: 1.4;
+	line-height:1.0;
 }
 
 .wpshadow-suggestion-card .wps-btn {

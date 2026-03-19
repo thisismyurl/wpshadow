@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that all author accounts are actively contributing and
  * identifies inactive or unused author accounts.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Author_Activity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Author_Activity extends Diagnostic_Base {
 	/**
 	 * Run the author activity diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if author activity issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Diagnostic_Author_Activity extends Diagnostic_Base {
 
 		// Get all users with author+ capabilities.
 		$author_args = array(
-			'who' => 'authors',
+			'capability' => 'edit_posts',
 		);
 
 		$authors = get_users( $author_args );

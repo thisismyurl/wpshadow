@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1560
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors page load time and alerts on degradation.
  *
- * @since 1.6035.1560
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the page load time diagnostic check.
 	 *
-	 * @since  1.6035.1560
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if load time degraded, null otherwise.
 	 */
 	public static function check() {
@@ -146,7 +146,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	/**
 	 * Measure homepage load time.
 	 *
-	 * @since  1.6035.1560
+	 * @since 1.6093.1200
 	 * @return float|null Load time in seconds or null.
 	 */
 	private static function measure_homepage_load_time(): ?float {
@@ -171,7 +171,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	/**
 	 * Get baseline load time from Activity Logger.
 	 *
-	 * @since  1.6035.1560
+	 * @since 1.6093.1200
 	 * @return float|null Baseline load time or null.
 	 */
 	private static function get_baseline_load_time(): ?float {

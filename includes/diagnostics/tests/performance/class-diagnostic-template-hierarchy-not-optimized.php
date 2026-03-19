@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress checks all possibilities. Hierarchy depth: 15+ files.
  * Simplified: removed post-specific templates (use single-{post-type}.php),
  * removed category-specific (use category.php with conditional logic).
- * Hierarchy depth: 15 → 5. Template loading: 4ms → 1.5ms. Minimal but
+ * Hierarchy depth: 15 → 5. Template loading: 4ms →1.0ms. Minimal but
  * measurable at scale.
  *
  * **Implementation Notes:**
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (minor impact, optimization for scale)
  * - Treatment: simplify template structure, use specific names
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Template_Hierarchy_Not_Optimized extends Diagnostic_Base {
 
@@ -125,7 +125,7 @@ class Diagnostic_Template_Hierarchy_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

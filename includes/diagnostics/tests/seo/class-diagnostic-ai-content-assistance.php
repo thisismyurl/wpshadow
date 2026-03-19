@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses AI tools for content creation and optimization.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * AI-powered content tools help with writing, SEO optimization, grammar checking,
  * and content ideation, improving quality and reducing production time.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -176,7 +176,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Check for SEO AI tools.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if SEO AI tools exist, false otherwise.
 	 */
 	private static function check_seo_ai_tools() {
@@ -199,7 +199,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Check for grammar and readability checkers.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if grammar checkers exist, false otherwise.
 	 */
 	private static function check_grammar_checkers() {
@@ -228,7 +228,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Check for content ideation tools.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if ideation tools exist, false otherwise.
 	 */
 	private static function check_ideation_tools() {
@@ -251,7 +251,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Check for image AI tools.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if image AI exists, false otherwise.
 	 */
 	private static function check_image_ai() {
@@ -275,7 +275,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Check for translation AI.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if translation AI exists, false otherwise.
 	 */
 	private static function check_translation_ai() {
@@ -299,7 +299,7 @@ class Diagnostic_Ai_Content_Assistance extends Diagnostic_Base {
 	/**
 	 * Check for content performance analysis.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if performance analysis exists, false otherwise.
 	 */
 	private static function check_performance_analysis() {

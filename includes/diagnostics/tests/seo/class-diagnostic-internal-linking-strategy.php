@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1480
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that internal linking strategy follows SEO best practices
  * for link equity distribution and content discovery.
  *
- * @since 1.7034.1480
+ * @since 1.6093.1200
  */
 class Diagnostic_Internal_Linking_Strategy extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Internal_Linking_Strategy extends Diagnostic_Base {
 	 * Tests internal linking including link density, orphaned content,
 	 * and link relevance.
 	 *
-	 * @since  1.7034.1480
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -147,7 +147,10 @@ class Diagnostic_Internal_Linking_Strategy extends Diagnostic_Base {
 
 		// Check theme for navigation menus.
 		$nav_menus = wp_get_nav_menus();
-		$has_primary_menu = wp_nav_menu_exists( 'primary' ) || wp_nav_menu_exists( 'main' );
+		$has_primary_menu = false;
+		if ( function_exists( 'wp_nav_menu_exists' ) ) {
+			$has_primary_menu = wp_nav_menu_exists( 'primary' ) || wp_nav_menu_exists( 'main' );
+		}
 
 		// Check for broken internal links.
 		$broken_links = 0;

@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Used Critical plugin (WordPress). Generated critical CSS for homepage,
 	 * blog archive, single post. Inlined in <head>: <style>[critical]</style>.
  * Full CSS: <link rel="preload" as="style" onload="this.rel='stylesheet'">.
- * Result: content renders before full CSS loads. FCP improved 1.9 seconds.
+ * Result: content renders before full CSS loads. FCP improved1.0 seconds.
  * Mobile users especially benefited (slow connections). PageSpeed score
  * increased 28 points.
  *
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant rendering improvement)
  * - Treatment: extract and inline critical CSS
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Inline_Critical_CSS_Not_Optimized extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Inline_Critical_CSS_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

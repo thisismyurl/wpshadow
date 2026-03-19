@@ -4,7 +4,7 @@
  *
  * Detects unnecessary polyfills for modern browsers.
  *
- * @since   1.6033.2115
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies unnecessary JavaScript polyfills for modern browsers.
  *
- * @since 1.6033.2115
+ * @since 1.6093.1200
  */
 class Diagnostic_Polyfill_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Polyfill_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2115
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,11 +90,11 @@ class Diagnostic_Polyfill_Detection extends Diagnostic_Base {
 			// Check for polyfill patterns in handle or source
 			foreach ( $polyfill_patterns as $pattern => $name ) {
 				if ( strpos( $handle, $pattern ) !== false || 
-				     ( isset( $script->src ) && strpos( $script->src, $pattern ) !== false ) ) {
+				     ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, $pattern ) !== false ) ) {
 					$detected_polyfills[ $pattern ] = $name;
 
 					// Estimate size for local scripts
-					if ( isset( $script->src ) && strpos( $script->src, home_url() ) !== false ) {
+					if ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, home_url() ) !== false ) {
 						$file_path = str_replace( home_url(), ABSPATH, $script->src );
 						if ( file_exists( $file_path ) ) {
 							$polyfill_size += filesize( $file_path );

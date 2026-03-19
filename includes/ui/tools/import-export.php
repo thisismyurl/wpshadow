@@ -5,7 +5,7 @@
  * Backup, restore, or sync WPShadow configuration across sites.
  *
  * @package WPShadow
- * @since   1.6037.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

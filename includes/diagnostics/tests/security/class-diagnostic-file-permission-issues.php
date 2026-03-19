@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1485
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Flags world-writable permissions on key directories.
  *
- * @since 1.6035.1485
+ * @since 1.6093.1200
  */
 class Diagnostic_File_Permission_Issues extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_File_Permission_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1485
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

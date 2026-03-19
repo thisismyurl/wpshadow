@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to JPEG/PNG. Server-side support requires GD 2.0+ or ImageMagick with
  * WebP delegates. Browser support is near-universal (95%+).
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 	 * - Upload capability
 	 * - Conversion functionality
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if videos have thumbnails. WordPress doesn't generate
  * thumbnails automatically, requiring manual work.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 	 * Checks if videos have thumbnails. Auto-generated thumbnails
 	 * improve UX and eliminate manual work.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 	/**
 	 * Check if video thumbnail plugin is already active.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if video thumbnail plugin detected.
 	 */
 	private static function has_video_thumbnail_plugin() {
@@ -144,7 +144,7 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 	/**
 	 * Count videos with thumbnails.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return int Number of videos with thumbnails.
 	 */
 	private static function count_videos_with_thumbnails() {

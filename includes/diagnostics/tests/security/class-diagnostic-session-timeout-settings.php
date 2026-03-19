@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -37,14 +37,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * IBM reports average breach detection time is 207 days during which
  * stolen sessions can remain active.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Session_Timeout_Settings extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-timeout-settings';
@@ -52,7 +52,7 @@ class Diagnostic_Session_Timeout_Settings extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Timeout Too Long or Nonexistent';
@@ -60,7 +60,7 @@ class Diagnostic_Session_Timeout_Settings extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies session timeout settings follow security best practices';
@@ -68,7 +68,7 @@ class Diagnostic_Session_Timeout_Settings extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -83,7 +83,7 @@ class Diagnostic_Session_Timeout_Settings extends Diagnostic_Base {
 	 * 4. Idle timeout mechanisms
 	 * 5. Absolute session timeout
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -156,7 +156,7 @@ class Diagnostic_Session_Timeout_Settings extends Diagnostic_Base {
 	/**
 	 * Check if custom idle timeout is implemented
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return bool True if idle timeout mechanism exists.
 	 */
 	private static function check_custom_idle_timeout(): bool {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Checks for DISALLOW_FILE_MODS, plugin restrictions, network-only activation
  *
- * @since 1.6031.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_MultisitePluginThemeSecurity extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'multisite';
 /**
  * Run the diagnostic check.
  *
- * @since  1.6031.1445
+ * @since 1.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {

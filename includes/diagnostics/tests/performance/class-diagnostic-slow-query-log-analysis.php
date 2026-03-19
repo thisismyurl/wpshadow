@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.6034.2153
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Common slow query patterns (unindexed searches, SELECT *)
  * - Database query count per page
  *
- * @since 1.6034.2153
+ * @since 1.6093.1200
  */
 class Diagnostic_Slow_Query_Log_Analysis extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Slow_Query_Log_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2153
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if slow queries detected, null otherwise.
 	 */
 	public static function check() {

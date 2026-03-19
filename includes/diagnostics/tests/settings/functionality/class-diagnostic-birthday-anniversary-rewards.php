@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0930
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Emotional connection through birthday/anniversary rewards drives loyalty
  * and repeat purchases. Birthday emails get 5x higher engagement.
  *
- * @since 1.6035.0930
+ * @since 1.6093.1200
  */
 class Diagnostic_Birthday_Anniversary_Rewards extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Birthday_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0930
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -126,7 +126,7 @@ class Diagnostic_Birthday_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Check if birthday field is collected.
 	 *
-	 * @since  1.6035.0930
+	 * @since 1.6093.1200
 	 * @return bool True if birthday field exists.
 	 */
 	private static function check_birthday_field(): bool {
@@ -169,7 +169,7 @@ class Diagnostic_Birthday_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Check if purchase anniversary is tracked.
 	 *
-	 * @since  1.6035.0930
+	 * @since 1.6093.1200
 	 * @return bool True if anniversary tracking exists.
 	 */
 	private static function check_anniversary_tracking(): bool {
@@ -196,7 +196,7 @@ class Diagnostic_Birthday_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Check if celebration emails are configured.
 	 *
-	 * @since  1.6035.0930
+	 * @since 1.6093.1200
 	 * @return bool True if celebration emails exist.
 	 */
 	private static function check_celebration_emails(): bool {
@@ -232,7 +232,7 @@ class Diagnostic_Birthday_Anniversary_Rewards extends Diagnostic_Base {
 	/**
 	 * Check if special birthday offers are configured.
 	 *
-	 * @since  1.6035.0930
+	 * @since 1.6093.1200
 	 * @return bool True if special offers exist.
 	 */
 	private static function check_special_offers(): bool {

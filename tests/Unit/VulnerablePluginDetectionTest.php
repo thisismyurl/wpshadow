@@ -3,7 +3,7 @@
  * Tests for Vulnerable Plugin Detection Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.2802.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -16,7 +16,7 @@ use WPShadow\Tests\TestCase;
 /**
  * Vulnerable Plugin Detection Diagnostic Tests
  *
- * @since 1.2802.1430
+ * @since 1.6093.1200
  */
 class VulnerablePluginDetectionTest extends TestCase {
 
@@ -306,7 +306,7 @@ class VulnerablePluginDetectionTest extends TestCase {
 	 * @return void
 	 */
 	public function testFixedInVersionComparison(): void {
-		// Installed version 1.5.0, fixed in 1.6.0 = vulnerable
+		// Installed version.6093.1200, fixed in.6093.1200 = vulnerable
 		$this->mock_plugins( array(
 			'test-plugin/test-plugin.php' => array(
 				'Name'    => 'Test Plugin',

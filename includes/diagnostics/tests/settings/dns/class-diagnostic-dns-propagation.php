@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1620
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if DNS changes have spread worldwide.
  * Like verifying everyone has your new phone number.
  *
- * @since 1.6035.1620
+ * @since 1.6093.1200
  */
 class Diagnostic_DNS_Propagation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_Propagation extends Diagnostic_Base {
 	/**
 	 * Run the DNS propagation diagnostic check.
 	 *
-	 * @since  1.6035.1620
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if propagation issues detected, null otherwise.
 	 */
 	public static function check() {

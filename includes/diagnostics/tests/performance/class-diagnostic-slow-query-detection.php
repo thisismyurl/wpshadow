@@ -15,13 +15,13 @@
  * of wasted visitor time daily. Database optimization is the #1 performance improvement available.\n *
  * **Real-World Scenario:**\n * E-commerce site had product page query taking 4.2 seconds (checking stock across 50 warehouses).
  * Product pages load time: 5.5 seconds. After optimizing query with index and JOIN instead of loop:
- * 0.08 seconds. Product page: 1.3 seconds total. 4x faster. Bounce rate dropped 25%. Revenue increased
+ * 0.08 seconds. Product page:1.0 seconds total. 4x faster. Bounce rate dropped 25%. Revenue increased
  * 18%. Cost: 6 hours development. Value: $50,000+ in recovered conversions.\n *
  * **Business Impact:**\n * - Pages slow 3-10+ seconds (slow queries dominate)\n * - Bounce rate increases 20-40%\n * - Conversion rate drops 20-50%\n * - Database server upgrade needed ($50,000-$200,000 cost)\n * - Revenue loss: $1,000-$50,000+ monthly\n *
  * **Philosophy Alignment:**\n * - #9 Show Value: Highest ROI performance optimization\n * - #8 Inspire Confidence: Identifies and prioritizes fixes\n * - #10 Talk-About-Worthy: "Database optimization = massive speed gains"\n *
  * **Related Checks:**\n * - Database Index Efficiency (index solution)\n * - Query Result Set Size (data volume)\n * - Plugin Database Query Performance (plugin analysis)\n * - Meta Query Performance (postmeta slowness)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/slow-query-optimization\n * - Video: https://wpshadow.com/training/reading-slow-query-logs (7 min)\n * - Advanced: https://wpshadow.com/training/query-profiling-tools (13 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -73,7 +73,7 @@ class Diagnostic_Slow_Query_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2033
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Frontend Performance Monitoring Not Implemented.
  *
- * @since 1.6033.2033
+ * @since 1.6093.1200
  */
 class Diagnostic_Frontend_Performance_Monitoring_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Frontend_Performance_Monitoring_Not_Implemented extends Diagnos
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2033
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

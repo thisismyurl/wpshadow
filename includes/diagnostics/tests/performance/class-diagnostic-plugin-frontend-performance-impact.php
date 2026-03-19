@@ -12,7 +12,7 @@
  * 5. Analyzes mobile vs desktop impact
  * 6. Prioritizes optimization by revenue impact\n *
  * **Why This Matters:**\n * Visitors are impatient. Page loads 1 second slower = 7% bounce rate increase. Page loads 3 seconds
- * slower = 40% bounce rate increase. A plugin slowing site by 1.5 seconds = losing 20%+ of potential
+ * slower = 40% bounce rate increase. A plugin slowing site by1.0 seconds = losing 20%+ of potential
  * revenue per visit. With 100,000 monthly visitors and $2 average revenue per visit, that's $4,000
  * monthly loss from a single slow plugin.\n *
  * **Real-World Scenario:**\n * E-commerce site with 50,000 monthly visitors. Affiliate plugin tracked affiliate clicks (poorly
@@ -23,7 +23,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Directly ties to revenue impact\n * - #8 Inspire Confidence: Identifies revenue-draining plugins\n * - #10 Talk-About-Worthy: "Every plugin must earn its performance cost"\n *
  * **Related Checks:**\n * - Plugin Asset Loading (asset impact)\n * - Front-End Core Web Vitals (visitor experience metrics)\n * - Server Response Time (backend performance)\n * - Mobile Performance (mobile-specific slowdowns)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-frontend-impact\n * - Video: https://wpshadow.com/training/measuring-plugin-impact (6 min)\n * - Advanced: https://wpshadow.com/training/performance-budget-allocation (11 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -75,7 +75,7 @@ class Diagnostic_Plugin_Frontend_Performance_Impact extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

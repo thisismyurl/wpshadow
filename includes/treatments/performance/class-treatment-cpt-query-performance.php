@@ -20,16 +20,16 @@
  * **Real-World Scenario:**\n * Real estate site listing 5,000 properties (CPT). Property archive page loaded 20 properties but made
  * 320 database queries (1 to get properties + 15 to get metadata/images/relationships per property).
  * Page took 45 seconds to load. After optimizing to get all data in 5 queries (using get_posts with
- * meta_query consolidation and lazy-loading images), archive loaded in 1.2 seconds. Property inquiries
+ * meta_query consolidation and lazy-loading images), archive loaded in1.0 seconds. Property inquiries
  * increased 58% because site no longer timed out on archive pages. Cost: 8 hours optimization.
  * Value: $125,000 in additional property leads that quarter.\n *
  * **Business Impact:**\n * - Archive pages timeout (potential customers never see listings)\n * - Admin CPT management slow (admins can't edit/bulk actions)\n * - Site search broken if using CPT search (N+1 multiplies)\n * - Database server overwhelmed (affects all users)\n * - Revenue loss from timeouts ($5,000-$50,000 for e-commerce)\n *
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents cascade failures on high-traffic CPT pages\n * - #9 Show Value: Delivers 10-50x speedup for CPT archives\n * - #10 Talk-About-Worthy: \"Our product pages load instantly\" is huge for e-commerce\n *
  * **Related Checks:**\n * - Meta Query Performance (CPT metadata optimization)\n * - Missing Query Indexes (CPT-specific indexes)\n * - N+1 Query Detection (related pattern)\n * - Taxonomy Query Performance (CPT filtering)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/cpt-query-performance\n * - Video: https://wpshadow.com/training/custom-post-type-queries (7 min)\n * - Advanced: https://wpshadow.com/training/n-plus-one-elimination (12 min)\n *
- * @package    WPShadow\n * @subpackage Treatments\n * @since      1.6030.2148\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CPT Query Performance Class\n *\n * Analyzes custom post type query patterns for N+1 queries and missing indexes.
+ * @package    WPShadow\n * @subpackage Treatments\n * @since 1.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * CPT Query Performance Class\n *\n * Analyzes custom post type query patterns for N+1 queries and missing indexes.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_CPT_Query_Performance extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_CPT_Query_Performance extends Treatment_Base {
 	 * Tests query performance for CPTs and identifies slow queries
 	 * or missing database indexes.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if performance issues found, null otherwise.
 	 */
 	public static function check() {

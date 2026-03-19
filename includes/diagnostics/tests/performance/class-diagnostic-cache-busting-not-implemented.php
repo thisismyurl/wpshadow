@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (deployment reliability issue)
  * - Treatment: add filemtime()-based versioning to enqueues
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

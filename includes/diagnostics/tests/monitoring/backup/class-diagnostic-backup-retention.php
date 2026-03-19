@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies backup retention policy allows recovery from past issues.
  * Like checking how long you keep old versions of important files.
  *
- * @since 1.6035.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Retention extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Retention extends Diagnostic_Base {
 	/**
 	 * Run the backup retention policy diagnostic check.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if retention issues detected, null otherwise.
 	 */
 	public static function check() {

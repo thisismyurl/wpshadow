@@ -4,7 +4,7 @@
  *
  * Validates images use srcset for density variants.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that images use srcset with density variants (1x/2x/3x) and sizes
  * attribute for responsive image delivery, optimizing bandwidth.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Responsive_Image_Srcset extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Responsive_Image_Srcset extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

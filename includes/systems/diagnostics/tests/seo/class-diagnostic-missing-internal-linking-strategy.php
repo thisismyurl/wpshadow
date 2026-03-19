@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since      1.6035.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site implements strategic internal linking
  * for SEO and user navigation purposes.
  *
- * @since 1.6035.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Missing_Internal_Linking_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Missing_Internal_Linking_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

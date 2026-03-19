@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Navigation
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that multi-level submenus are accessible on touch devices
  * by using click/tap handlers instead of hover-only interactions.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Find submenu interaction issues.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_submenu_issues(): array {
@@ -139,7 +139,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Check if page has submenu structure.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return bool Has submenus.
 	 */
@@ -164,7 +164,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Check for hover-only submenu reveal.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Hover issues.
 	 */
@@ -207,7 +207,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Check for submenu visual indicators (chevrons, arrows).
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Missing indicator issues.
 	 */
@@ -243,7 +243,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Check for click event handlers on submenus.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array Click handler issues.
 	 */
@@ -295,7 +295,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Check if page has click handler.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html HTML content.
 	 * @return bool Has click handler.
 	 */
@@ -319,7 +319,7 @@ class Diagnostic_Mobile_Submenu extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

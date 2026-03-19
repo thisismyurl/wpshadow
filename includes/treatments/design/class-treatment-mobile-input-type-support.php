@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since      1.602.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.2.2 On Input (Level A)
  *
- * @since 1.602.1200
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Input_Type_Support extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Mobile_Input_Type_Support extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

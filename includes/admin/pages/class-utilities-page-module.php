@@ -195,7 +195,7 @@ function wpshadow_get_utilities_catalog() {
 		),
 
 		array(
-			'title'   => __( 'Quick Backup Manager', 'wpshadow' ),
+			'title'   => __( 'WPShadow Vault Light', 'wpshadow' ),
 			'desc'    => __( 'Schedule automatic backups and manage saved copies of your site (like keeping spare copies of important files).', 'wpshadow' ),
 			'tool'    => 'vault-light',
 			'icon'    => 'dashicons-backup',

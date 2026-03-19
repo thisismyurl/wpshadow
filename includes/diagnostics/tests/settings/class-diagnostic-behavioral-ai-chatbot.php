@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for AI-powered chatbot systems. AI chat handles 50-70% of inquiries
  * automatically, providing 24/7 support and freeing human agents for complex issues.
  *
- * @since 1.6034.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_AI_Chatbot extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_AI_Chatbot extends Diagnostic_Base {
 	 *
 	 * Looks for AI-powered chat services and plugins.
 	 *
-	 * @since  1.6034.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

@@ -25,11 +25,11 @@
  * **Business Impact:**
  * WooCommerce store: 10 years operation, 50K products deleted over
  * time. postmeta table: 15M rows, 2.4GB. Orphan check: 8.2M orphaned
- * rows (55%), 1.3GB wasted space. Query performance: meta_key lookups
+ * rows (55%),1.0GB wasted space. Query performance: meta_key lookups
  * taking 800ms (scanning millions of useless rows). Cleanup: DELETE
  * FROM wp_postmeta WHERE post_id NOT IN (SELECT ID FROM wp_posts).
  * 8 hours to execute (huge table). Result: 15M → 6.8M rows (55%
- * reduction). Space: 2.4GB → 1.1GB. Meta queries: 800ms → 120ms
+ * reduction). Space: 2.4GB →1.0GB. Meta queries: 800ms → 120ms
  * (85% faster). Admin product pages: load time halved. Setup: one-time
  * cleanup + monthly maintenance. ROI: massive performance improvement.
  *
@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant space + performance impact)
  * - Treatment: batched DELETE, OPTIMIZE TABLE
  *
- * @since 1.5049.1401
+ * @since 1.6093.1200
  */
 class Diagnostic_Orphaned_Post_Meta_Cleanup extends Diagnostic_Base {
 
@@ -124,7 +124,7 @@ class Diagnostic_Orphaned_Post_Meta_Cleanup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1401
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

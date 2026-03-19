@@ -20,7 +20,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2063
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures autoloaded WordPress options that load on every page request.
  *
- * @since 1.6033.2063
+ * @since 1.6093.1200
  */
 class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 	 * Warning: >1MB
 	 * Critical: >2MB
 	 *
-	 * @since  1.6033.2063
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

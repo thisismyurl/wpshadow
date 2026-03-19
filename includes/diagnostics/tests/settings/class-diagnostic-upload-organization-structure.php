@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if uploads are organized in year/month folders and validates
  * folder structure integrity for optimal media management.
  *
- * @since 1.6032.1352
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 	 * - Detects missing or misconfigured folders
 	 * - Checks permissions on upload directories
 	 *
-	 * @since  1.6032.1352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,7 +160,7 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 	 * - Permission issues
 	 * - Malformed folder names
 	 *
-	 * @since  1.6032.1352
+	 * @since 1.6093.1200
 	 * @param  string $base_dir Base upload directory path.
 	 * @return array Array of issues found.
 	 */
@@ -246,7 +246,7 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 	 * Counts files that are directly in the uploads root directory
 	 * instead of being organized in year/month folders.
 	 *
-	 * @since  1.6032.1352
+	 * @since 1.6093.1200
 	 * @param  string $base_dir Base upload directory path.
 	 * @return int Number of orphaned files.
 	 */
@@ -288,7 +288,7 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 	 * Queries for recent attachments and verifies they are stored
 	 * in year/month folders as expected.
 	 *
-	 * @since  1.6032.1352
+	 * @since 1.6093.1200
 	 * @return bool True if recent uploads are organized, false otherwise.
 	 */
 	private static function check_recent_uploads_organization() {
@@ -341,7 +341,7 @@ class Diagnostic_Upload_Organization_Structure extends Diagnostic_Base {
 	 * Determines if the site has uploaded any files recently
 	 * to avoid false positives for missing current month folder.
 	 *
-	 * @since  1.6032.1352
+	 * @since 1.6093.1200
 	 * @return bool True if site has uploads in the last 30 days, false otherwise.
 	 */
 	private static function has_recent_uploads() {

@@ -5,7 +5,7 @@
  * Evaluates theme performance and checks for optimization opportunities
  * including asset loading, bloat, and modern best practices.
  *
- * @since   1.6033.2084
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Block theme vs classic theme
  * - Theme optimization
  *
- * @since 1.6033.2084
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Performance_Analysis extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Theme_Performance_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2084
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_Theme_Performance_Analysis extends Diagnostic_Base {
 		// Count theme stylesheets
 		foreach ( $wp_styles->queue as $handle ) {
 			$style = $wp_styles->registered[ $handle ] ?? null;
-			if ( $style && strpos( $style->src ?? '', get_theme_file_uri() ) !== false ) {
+			if ( $style && isset( $style->src ) && is_string( $style->src ) && strpos( $style->src, get_theme_file_uri() ) !== false ) {
 				$theme_stylesheet_count++;
 			}
 		}
@@ -85,7 +85,7 @@ class Diagnostic_Theme_Performance_Analysis extends Diagnostic_Base {
 		// Count theme scripts
 		foreach ( $wp_scripts->queue as $handle ) {
 			$script = $wp_scripts->registered[ $handle ] ?? null;
-			if ( $script && strpos( $script->src ?? '', get_theme_file_uri() ) !== false ) {
+			if ( $script && isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, get_theme_file_uri() ) !== false ) {
 				$theme_script_count++;
 			}
 		}

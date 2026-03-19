@@ -5,7 +5,7 @@
  * Checks if a comprehensive backup strategy is in place.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0146
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

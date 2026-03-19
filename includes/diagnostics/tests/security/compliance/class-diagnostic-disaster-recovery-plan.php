@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that a Disaster Recovery (DR) plan exists, has been
  * tested, and is regularly validated to ensure recovery capability.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 	/**
 	 * Run the disaster recovery plan check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if DR plan missing, null otherwise.
 	 */
 	public static function check() {

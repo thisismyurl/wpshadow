@@ -5,7 +5,7 @@
  * Manages diagnostic collections tailored to specific WordPress user personas,
  * enabling targeted health assessments focused on what each group cares about most.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Core
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides persona definitions, diagnostic collections, and priority mappings
  * for all supported WordPress user types including corporate enterprises.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Persona_Registry {
 
@@ -157,7 +157,7 @@ class Persona_Registry {
     /**
      * Get all defined personas
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array Array of persona definitions keyed by persona slug.
      */
     public static function get_personas() {
@@ -167,7 +167,7 @@ class Persona_Registry {
     /**
      * Get specific persona definition
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @param  string $persona_slug Persona identifier.
      * @return array|null Persona definition or null if not found.
      */
@@ -178,7 +178,7 @@ class Persona_Registry {
     /**
      * Get all diagnostics for a specific persona, ranked by priority
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @param  string $persona_slug Persona identifier.
      * @return array Array of diagnostic slugs ranked by priority for this persona.
      */
@@ -192,7 +192,7 @@ class Persona_Registry {
      *
      * Developer humor: I have a joke about user personas, but only 3% of you will get it.
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @param  string $diagnostic_slug Diagnostic identifier.
      * @param  string $persona_slug    Persona identifier.
      * @return int Priority score 1-100 (100 = highest priority).
@@ -205,7 +205,7 @@ class Persona_Registry {
     /**
      * Get all personas this diagnostic applies to
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @param  string $diagnostic_slug Diagnostic identifier.
      * @return array Array of persona slugs this diagnostic applies to.
      */
@@ -217,7 +217,7 @@ class Persona_Registry {
     /**
      * Generate persona-specific action plan
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @param  string $persona_slug Persona identifier.
      * @param  array  $findings     Array of findings from recent scan.
      * @return array {
@@ -284,14 +284,14 @@ class Persona_Registry {
     /**
      * Get mapping of persona → array of diagnostics ranked by priority
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array Personas mapped to their ranked diagnostic collections.
      */
     protected static function get_persona_diagnostics_map() {
         /**
          * Filter persona diagnostic collections
          *
-         * @since 1.6030.2148
+         * @since 1.6093.1200
          *
          * @param array $diagnostics Persona → diagnostics mapping.
          */
@@ -456,14 +456,14 @@ class Persona_Registry {
     /**
      * Get priority scoring map (diagnostic → persona → priority score)
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array Priority mapping for all diagnostics across personas.
      */
     protected static function get_priority_map() {
         /**
          * Filter diagnostic priority by persona
          *
-         * @since 1.6030.2148
+         * @since 1.6093.1200
          *
          * @param array $priorities Diagnostic → persona priority mapping.
          */
@@ -546,7 +546,7 @@ class Persona_Registry {
     /**
      * Get mapping of diagnostic → personas it applies to
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array Diagnostic → personas mapping.
      */
     protected static function get_diagnostic_to_personas_map() {

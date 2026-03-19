@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks the uploads_use_yearmonth_folders setting and verifies recent
  * files follow the year/month folder structure.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Year_Month_Folder_Organization extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Year_Month_Folder_Organization extends Diagnostic_Base {
 	 * - File path structure for recent uploads
 	 * - Mixed folder patterns
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

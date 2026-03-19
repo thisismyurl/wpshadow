@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.6035.1700
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Color Contrast Diagnostic Class
  *
  * Verifies theme has sufficient color contrast for readability.
- * WCAG 2.1 Level AA Success Criterion 1.4.3 (Contrast Minimum).
+ * WCAG 2.1 Level AA Success Criterion1.0 (Contrast Minimum).
  *
- * @since 1.6035.1700
+ * @since 1.6093.1200
  */
 class Diagnostic_Color_Contrast extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Color_Contrast extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1700
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -135,7 +135,7 @@ class Diagnostic_Color_Contrast extends Diagnostic_Base {
 					'stats'          => $stats,
 					'issues'         => $issues,
 					'warnings'       => $warnings,
-					'wcag_criterion' => 'WCAG 2.1 Level AA - 1.4.3 Contrast (Minimum)',
+					'wcag_criterion' => 'WCAG 2.1 Level AA -1.0 Contrast (Minimum)',
 					'recommended_tools' => array(
 						'Browser DevTools' => 'Built-in contrast checker in Chrome/Edge/Firefox',
 						'WAVE Extension'   => 'Free browser extension for accessibility testing',

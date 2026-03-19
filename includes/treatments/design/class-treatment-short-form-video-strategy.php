@@ -4,7 +4,7 @@
  *
  * Tests whether the site has an active strategy for YouTube Shorts, Instagram Reels, and TikToks.
  *
- * @since   1.6034.0410
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Short-form videos generate 2.5x more engagement than traditional content.
  * Shorts, Reels, and TikToks are essential for discoverability in 2026.
  *
- * @since 1.6034.0410
+ * @since 1.6093.1200
  */
 class Treatment_Short_Form_Video_Strategy extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Short_Form_Video_Strategy extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6034.0410
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

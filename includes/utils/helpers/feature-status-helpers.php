@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Utils
- * @since      1.6037.1900
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - DDD = Julian day of year (001-365/366)
  * - HHMM = time (not relevant for status)
  *
- * @since  1.6037.1900
+ * @since 1.6093.1200
  * @param  string $since_version Version string from @since tag.
  * @return array {
  *     Feature status information.
@@ -41,7 +41,7 @@ function wpshadow_get_feature_status( string $since_version ): array {
 		'launch_date' => '',
 	);
 
-	// Parse version: 1.6037.1900 -> year=6 (2026), julian_day=037
+	// Parse version:1.0 -> year=6 (2026), julian_day=037
 	if ( ! preg_match( '/^1\.(\d)(\d{3})\./', $since_version, $matches ) ) {
 		return $default;
 	}
@@ -94,7 +94,7 @@ function wpshadow_get_feature_status( string $since_version ): array {
 /**
  * Check if a feature should be displayed.
  *
- * @since  1.6037.1900
+ * @since 1.6093.1200
  * @param  string $since_version Version string from @since tag.
  * @return bool True if feature is live and should be shown.
  */
@@ -106,7 +106,7 @@ function wpshadow_should_show_feature( string $since_version ): bool {
 /**
  * Get feature badge HTML based on status.
  *
- * @since  1.6037.1900
+ * @since 1.6093.1200
  * @param  string $since_version Version string from @since tag.
  * @return string Badge HTML or empty string.
  */
@@ -141,7 +141,7 @@ function wpshadow_get_feature_badge( string $since_version ): string {
  *
  * Expects items to have a 'since' key with version string.
  *
- * @since  1.6037.1900
+ * @since 1.6093.1200
  * @param  array $items Array of items with 'since' keys.
  * @return array Filtered items (includes only live features).
  */

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6036.1640
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for LocalBusiness schema markup.
  *
- * @since 1.6036.1640
+ * @since 1.6093.1200
  */
 class Treatment_Local_Business_Schema extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Local_Business_Schema extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6036.1640
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

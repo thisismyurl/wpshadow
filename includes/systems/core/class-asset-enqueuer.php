@@ -5,7 +5,7 @@
  * Handles enqueueing styles and scripts only when needed, avoiding
  * loading assets on pages where they're not required.
  *
- * @since   1.6033.1900
+ * @since 1.6093.1200
  * @package WPShadow\Core
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages conditional asset loading for WPShadow admin pages.
  * Ensures CSS/JS only load when actually needed.
  *
- * @since 1.6033.1900
+ * @since 1.6093.1200
  */
 class Asset_Enqueuer {
 
@@ -37,7 +37,7 @@ class Asset_Enqueuer {
 	/**
 	 * Initialize asset loading
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -47,7 +47,7 @@ class Asset_Enqueuer {
 	/**
 	 * Register an asset for conditional loading
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @param string $handle        Asset handle.
 	 * @param string $type          'style' or 'script'.
 	 * @param string $src           Asset source URL.
@@ -76,7 +76,7 @@ class Asset_Enqueuer {
 	/**
 	 * Enqueue assets conditionally based on current page
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function maybe_enqueue_assets(): void {
@@ -99,7 +99,7 @@ class Asset_Enqueuer {
 	/**
 	 * Check if current page is a WPShadow admin page
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @return bool
 	 */
 	private static function is_wpshadow_page(): bool {
@@ -109,7 +109,7 @@ class Asset_Enqueuer {
 	/**
 	 * Conditionally enqueue a style
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @param string $handle  Asset handle.
 	 * @param array  $asset   Asset configuration.
 	 * @param string $current Current page slug.
@@ -130,7 +130,7 @@ class Asset_Enqueuer {
 	/**
 	 * Conditionally enqueue a script
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @param string $handle  Asset handle.
 	 * @param array  $asset   Asset configuration.
 	 * @param string $current Current page slug.
@@ -152,7 +152,7 @@ class Asset_Enqueuer {
 	/**
 	 * Get asset URL helper
 	 *
-	 * @since 1.6033.1900
+	 * @since 1.6093.1200
 	 * @param string $type   'css' or 'js'.
 	 * @param string $file   File name without extension.
 	 * @return string Asset URL.

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates thumbnail availability and performance. Missing thumbnails cause
  * on-demand generation, which slows down the media library and front-end.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Thumbnail_Loading_Speed extends Treatment_Base {
 
@@ -66,7 +66,7 @@ class Treatment_Thumbnail_Loading_Speed extends Treatment_Base {
 	 * - Time to resolve thumbnails
 	 * - Thumbnail regeneration needs
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

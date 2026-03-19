@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that effective spam filtering is active and that the site
  * is protected from comment spam.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 	/**
 	 * Run the comment spam filter diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if spam filter issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 		}
 
 		// Check comment approval requirement for first-time commenters.
-		$comment_whitelist = get_option( 'comment_whitelist' );
+		$comment_whitelist = get_option( 'comment_previously_approved', 1 );
 		$stats['whitelist_enabled'] = boolval( $comment_whitelist );
 
 		if ( ! $comment_whitelist ) {
@@ -210,12 +210,10 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 
 		// Check spam per day rate.
 		$last_30_days = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments} 
-				 WHERE comment_approved = 'spam' 
-				 AND comment_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
-			)
-		);
+			"SELECT COUNT(*) FROM {$wpdb->comments}
+			 WHERE comment_approved = 'spam'
+			 AND comment_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
+		); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Static query without user input.
 
 		$avg_spam_per_day = intval( $last_30_days ) / 30;
 		$stats['avg_spam_per_day'] = round( $avg_spam_per_day, 1 );

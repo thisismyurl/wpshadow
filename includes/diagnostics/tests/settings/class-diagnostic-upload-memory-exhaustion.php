@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for memory limit issues during uploads.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -193,7 +193,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 
 		// Test actual memory availability for image processing.
 		$test_image_size = 4000 * 3000 * 3; // 12MP image, 3 bytes per pixel.
-		$estimated_memory = $test_image_size * 1.8; // Processing overhead.
+		$estimated_memory = $test_image_size *1.0; // Processing overhead.
 		
 		if ( $memory_bytes < $estimated_memory ) {
 			$issues[] = sprintf(

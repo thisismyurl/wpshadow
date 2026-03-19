@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.2033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages upgrade path recommendations for diagnostics that have
  * pro/cloud solutions available.
  *
- * @since 1.2033.0000
+ * @since 1.6093.1200
  */
 class Upgrade_Path_Helper {
 
@@ -98,7 +98,7 @@ class Upgrade_Path_Helper {
 	 *
 	 * Philosophy: Commandment #1 (Helpful Neighbor) + #4 (Advice, Not Sales)
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @param  array  $finding      Diagnostic finding array.
 	 * @param  string $product      Pro product slug (vault, integration, media-image, etc.).
 	 * @param  string $feature      Specific feature that solves this problem.
@@ -139,7 +139,7 @@ class Upgrade_Path_Helper {
 	/**
 	 * Get feature benefits for a specific product/feature combination
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @param  string $product Product slug.
 	 * @param  string $feature Feature slug.
 	 * @return array Benefits list.
@@ -290,7 +290,7 @@ class Upgrade_Path_Helper {
 	 *
 	 * Philosophy #9: Everything Has a KPI
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @param  string $finding_id Finding identifier.
 	 * @param  string $product    Product slug.
 	 * @param  string $feature    Feature slug.
@@ -301,6 +301,8 @@ class Upgrade_Path_Helper {
 		if ( class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'upgrade_path_shown',
+				__( 'Upgrade path prompt shown', 'wpshadow' ),
+				'upsell',
 				array(
 					'finding_id' => $finding_id,
 					'product'    => $product,
@@ -321,7 +323,7 @@ class Upgrade_Path_Helper {
 	 *
 	 * Called via AJAX from frontend.
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @param  string $finding_id Finding identifier.
 	 * @param  string $product    Product slug.
 	 * @return void
@@ -331,6 +333,8 @@ class Upgrade_Path_Helper {
 		if ( class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'upgrade_path_clicked',
+				__( 'Upgrade path prompt clicked', 'wpshadow' ),
+				'upsell',
 				array(
 					'finding_id' => $finding_id,
 					'product'    => $product,
@@ -350,7 +354,7 @@ class Upgrade_Path_Helper {
 	 *
 	 * Used in dashboard to show effectiveness of upgrade prompts.
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @return array Analytics data.
 	 */
 	public static function get_analytics() {
@@ -378,7 +382,7 @@ class Upgrade_Path_Helper {
 	/**
 	 * Check if user has a specific pro product
 	 *
-	 * @since  1.2033.0000
+	 * @since 1.6093.1200
 	 * @param  string $product Product slug.
 	 * @return bool Whether user has the product.
 	 */

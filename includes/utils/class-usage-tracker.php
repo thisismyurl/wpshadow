@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Analytics
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks feature usage and calculates impact metrics.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Usage_Tracker {
 
@@ -49,7 +49,7 @@ class Usage_Tracker {
 	/**
 	 * Initialize the usage tracker.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -63,7 +63,7 @@ class Usage_Tracker {
 	/**
 	 * Track activity and calculate savings.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $activity Activity array with keys: action, details, metadata, etc.
 	 * @return void
 	 */
@@ -127,7 +127,7 @@ class Usage_Tracker {
 	/**
 	 * Get usage statistics.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $period Optional. Time period in days. Default 0 (all time).
 	 * @return array Usage statistics.
 	 */
@@ -155,7 +155,7 @@ class Usage_Tracker {
 	/**
 	 * Filter statistics by time period.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $stats       Full statistics array.
 	 * @param  int   $cutoff_time Unix timestamp cutoff.
 	 * @return array Filtered statistics.
@@ -222,7 +222,7 @@ class Usage_Tracker {
 	/**
 	 * Get most used utility.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $period Optional. Time period in days. Default 0 (all time).
 	 * @return array {
 	 *     Most used utility data.
@@ -256,7 +256,7 @@ class Usage_Tracker {
 	/**
 	 * Calculate money saved based on hourly rate.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $time_saved_minutes Time saved in minutes.
 	 * @param  int $hourly_rate        Hourly rate in dollars. Default 100.
 	 * @return float Money saved in dollars.
@@ -269,7 +269,7 @@ class Usage_Tracker {
 	/**
 	 * Get utility label.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $utility Utility slug.
 	 * @return string Human-readable utility label.
 	 */
@@ -292,7 +292,7 @@ class Usage_Tracker {
 	/**
 	 * AJAX: Get usage statistics.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_get_stats() {

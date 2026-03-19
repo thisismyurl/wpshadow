@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1516
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests backup file integrity without attempting actual restoration.
  *
- * @since 1.6035.1516
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Restoration_Test extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Backup_Restoration_Test extends Diagnostic_Base {
 	/**
 	 * Run the backup restoration diagnostic check.
 	 *
-	 * @since  1.6035.1516
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Backup_Restoration_Test extends Diagnostic_Base {
 	/**
 	 * Find backup files.
 	 *
-	 * @since  1.6035.1516
+	 * @since 1.6093.1200
 	 * @return array Backup information.
 	 */
 	private static function find_backup_files(): array {
@@ -171,7 +171,7 @@ class Diagnostic_Backup_Restoration_Test extends Diagnostic_Base {
 	/**
 	 * Check if backup file is valid.
 	 *
-	 * @since  1.6035.1516
+	 * @since 1.6093.1200
 	 * @param  string $file_path Path to backup file.
 	 * @return bool True if valid, false otherwise.
 	 */

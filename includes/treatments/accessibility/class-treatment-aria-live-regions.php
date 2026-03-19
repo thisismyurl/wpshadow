@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Treatment_ARIA_Live_Regions Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_ARIA_Live_Regions extends Treatment_Base {
 

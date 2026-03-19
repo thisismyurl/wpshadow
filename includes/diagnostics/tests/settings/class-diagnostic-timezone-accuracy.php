@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates timezone configuration accuracy.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 	 *
 	 * Tests timezone configuration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -149,7 +149,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 	/**
 	 * Check if timezone is valid.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $timezone Timezone string.
 	 * @return bool True if timezone is valid.
 	 */
@@ -169,7 +169,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 	/**
 	 * Check if server timezone matches.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if matches.
 	 */
 	private static function server_timezone_matches() {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6034.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles modal block registration and rendering.
  *
- * @since 1.6034.1530
+ * @since 1.6093.1200
  */
 class Modal_Block {
 
 	/**
 	 * Initialize the modal block.
 	 *
-	 * @since 1.6034.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class Modal_Block {
 	/**
 	 * Register the modal block.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_block() {
@@ -114,7 +114,7 @@ class Modal_Block {
 	/**
 	 * Render the modal block.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @param  array  $attributes Block attributes.
 	 * @param  string $content    Block content (inner blocks).
 	 * @return string Rendered block HTML.
@@ -225,7 +225,7 @@ class Modal_Block {
 	/**
 	 * Get available modals for block editor.
 	 *
-	 * @since  1.6034.1530
+	 * @since 1.6093.1200
 	 * @return array Array of modals with id and title.
 	 */
 	public static function get_modal_options() {

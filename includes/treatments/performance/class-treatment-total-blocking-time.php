@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.2059
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors affecting TBT (Total Blocking Time).
  * TBT measures responsiveness during page load.
  *
- * @since 1.6033.2059
+ * @since 1.6093.1200
  */
 class Treatment_Total_Blocking_Time extends Treatment_Base {
 
@@ -70,7 +70,7 @@ class Treatment_Total_Blocking_Time extends Treatment_Base {
 	 * - Needs Improvement: 200-600ms
 	 * - Poor: >600ms
 	 *
-	 * @since  1.6033.2059
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

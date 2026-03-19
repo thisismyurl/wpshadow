@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since      1.6034.2151
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - opcache.enable_cli (optional, for WP-CLI)
  * - Sufficient opcache.memory_consumption
  *
- * @since 1.6034.2151
+ * @since 1.6093.1200
  */
 class Treatment_OPcache_Enabled_Check extends Treatment_Base {
 
@@ -75,7 +75,7 @@ class Treatment_OPcache_Enabled_Check extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2151
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if OPcache disabled, null if enabled.
 	 */
 	public static function check() {

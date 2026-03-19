@@ -4,7 +4,7 @@
  *
  * Analyzes error logging configuration and recent errors.
  *
- * @since   1.6033.2140
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates error logging and identifies recent critical errors.
  *
- * @since 1.6033.2140
+ * @since 1.6093.1200
  */
 class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2140
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -180,7 +180,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 		}
 
 		// Warning if debug display enabled on production
-		if ( $wp_debug_display && ! $this->is_local_environment() ) {
+		if ( $wp_debug_display && ! self::is_local_environment() ) {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -203,10 +203,10 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check if environment is local development.
 	 *
-	 * @since  1.6033.2140
+	 * @since 1.6093.1200
 	 * @return bool True if local environment.
 	 */
-	private function is_local_environment() {
+	private static function is_local_environment() {
 		$host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
 		return strpos( $host, 'localhost' ) !== false ||
 		       strpos( $host, '.local' ) !== false ||

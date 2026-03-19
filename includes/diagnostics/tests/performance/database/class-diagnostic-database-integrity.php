@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for corrupted tables and database errors.
  * Like checking your filing cabinet for damaged folders.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Integrity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Integrity extends Diagnostic_Base {
 	/**
 	 * Run the database integrity diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if integrity issues detected, null otherwise.
 	 */
 	public static function check() {

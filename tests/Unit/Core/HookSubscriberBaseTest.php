@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit\Core
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,14 +20,14 @@ use WPShadow\Tests\TestCase;
 /**
  * Hook_Subscriber_Base Test Class
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class HookSubscriberBaseTest extends TestCase {
 
 	/**
 	 * Set up before each test.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -38,7 +38,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that get_hooks returns expected structure.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_get_hooks_returns_array() {
@@ -51,7 +51,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test simple hook subscription (string callback).
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_simple_hook_subscription() {
@@ -64,7 +64,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test hook subscription with priority.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_hook_with_priority() {
@@ -79,7 +79,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test hook subscription with priority and arguments.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_hook_with_priority_and_args() {
@@ -95,7 +95,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test multiple callbacks for single hook.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_multiple_callbacks_per_hook() {
@@ -117,7 +117,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that subscribe() registers hooks with WordPress.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_subscribe_registers_hooks() {
@@ -151,7 +151,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that hooks execute callbacks correctly.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_hooks_execute_callbacks() {
@@ -169,7 +169,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that hooks with arguments pass them correctly.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_hooks_pass_arguments() {
@@ -186,7 +186,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that multiple callbacks execute in correct order.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_multiple_callbacks_execute_in_order() {
@@ -208,7 +208,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that hooks don't execute before subscription.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_hooks_dont_execute_before_subscription() {
@@ -223,7 +223,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that duplicate subscription doesn't create duplicate hooks.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_duplicate_subscription_prevention() {
@@ -241,7 +241,7 @@ class HookSubscriberBaseTest extends TestCase {
 	/**
 	 * Test that reset() clears tracking data.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_reset_clears_tracking() {

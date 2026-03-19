@@ -25,7 +25,7 @@
  * Theme CSS: 280KB unminified (includes comments, formatting).
  * Minification reduces to 165KB (41% savings). On mobile 3G:
  * load time reduced from 8.5s to 5s. Combined with gzip (further
- * 70% reduction): final size 50KB, loads in 1.5s. Bounce rate
+ * 70% reduction): final size 50KB, loads in1.0s. Bounce rate
  * on mobile improved 25%. Mobile revenue increased $15K/month.
  * Minification setup: 30 minutes (one-time). ROI: 600:1 annually.
  *
@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Real-World Scenario:**
  * Implemented WP Rocket minification. Original CSS: 12 files, 420KB
  * total. Minified + combined: 1 file, 180KB (57% reduction). With
- * gzip: 55KB over wire. Page load time improved 1.2 seconds.
+ * gzip: 55KB over wire. Page load time improved1.0 seconds.
  * Lighthouse performance score: 72 → 89. Developer can still debug
  * via source maps. Best of both worlds.
  *
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (performance optimization)
  * - Treatment: enable minification plugin or build process
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_CSS_Minification_Not_Implemented extends Treatment_Base {
 
@@ -120,7 +120,7 @@ class Treatment_CSS_Minification_Not_Implemented extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

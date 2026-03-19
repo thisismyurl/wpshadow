@@ -4,7 +4,7 @@
  *
  * Detects missing or misconfigured CDN setup that prevents geographic optimization benefits.
  *
- * @since   1.6033.2076
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates CDN setup for geographic performance optimization.
  *
- * @since 1.6033.2076
+ * @since 1.6093.1200
  */
 class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2076
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

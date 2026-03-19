@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures image optimization plugins are configured properly
  * and images are being compressed efficiently.
  *
- * @since 1.6033.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Image_Optimization_Integration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Media_Image_Optimization_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -163,7 +163,7 @@ class Diagnostic_Media_Image_Optimization_Integration extends Diagnostic_Base {
 					// If ratio is much higher, likely unoptimized.
 					$bytes_per_pixel = $file_size / $pixels;
 					
-					if ( $bytes_per_pixel > 1.5 ) {
+					if ( $bytes_per_pixel >1.0 ) {
 						$unoptimized_count++;
 					}
 				}

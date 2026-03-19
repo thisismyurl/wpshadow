@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies required and recommended PHP extensions are installed. Extensions
  * are like apps on your phone—without the right ones, some features won't work.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Php_Extensions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Php_Extensions extends Diagnostic_Base {
 	/**
 	 * Run the PHP extensions diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if extension issues detected, null otherwise.
 	 */
 	public static function check() {

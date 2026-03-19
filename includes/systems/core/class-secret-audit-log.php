@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6032.1000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides audit trail for secret access and modifications.
  *
- * @since 1.6032.1000
+ * @since 1.6093.1200
  */
 class Secret_Audit_Log {
 
 	/**
 	 * Log secret access
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $key_name Secret key name.
 	 * @param  string $action   Action performed (created|retrieved|updated|deleted).
 	 * @return void
@@ -54,7 +54,7 @@ class Secret_Audit_Log {
 	/**
 	 * Get current user login
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return string User login or 'unknown'.
 	 */
 	private static function get_user_login(): string {
@@ -70,7 +70,7 @@ class Secret_Audit_Log {
 	 *
 	 * Handles various proxy scenarios to get real client IP.
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return string Client IP address.
 	 */
 	private static function get_client_ip(): string {
@@ -105,7 +105,7 @@ class Secret_Audit_Log {
 	/**
 	 * Validate IP address format
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $ip IP address to validate.
 	 * @return bool True if valid IPv4 or IPv6.
 	 */
@@ -116,7 +116,7 @@ class Secret_Audit_Log {
 	/**
 	 * Get access logs for a specific secret
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $key_name Secret key name.
 	 * @param  int    $limit    Number of records to return. Default 50.
 	 * @return array Array of log entries.
@@ -134,7 +134,7 @@ class Secret_Audit_Log {
 	/**
 	 * Check if secret was recently accessed
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $key_name    Secret key name.
 	 * @param  int    $minutes_ago Check access within last N minutes. Default 60.
 	 * @return bool True if accessed recently.
@@ -148,7 +148,7 @@ class Secret_Audit_Log {
 	/**
 	 * Check if secret was accessed by user
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $key_name Secret key name.
 	 * @param  int    $user_id  User ID to check.
 	 * @return bool True if user accessed this secret.

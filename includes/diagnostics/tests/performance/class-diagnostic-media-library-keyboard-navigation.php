@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that media library supports complete keyboard navigation
  * including tab order, arrow keys, and keyboard shortcuts.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Library_Keyboard_Navigation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Library_Keyboard_Navigation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -113,7 +113,7 @@ class Diagnostic_Media_Library_Keyboard_Navigation extends Diagnostic_Base {
 		}
 
 		// Check for keyboard shortcut documentation.
-		$admin_page = get_current_screen();
+		$admin_page = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( $admin_page && function_exists( 'wp_admin_bar_render' ) ) {
 			// Admin bar exists for help menu.
 			$help_tabs = $admin_page->get_help_tabs();

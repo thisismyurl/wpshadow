@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies with formal qualification processes (BANT, MEDDIC) close
  * 30% more deals and improve sales efficiency dramatically.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Sales_Lead_Qualification_Process extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Sales_Lead_Qualification_Process extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Sales_Lead_Qualification_Process extends Diagnostic_Base {
 	/**
 	 * Check if qualification process exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if process detected, false otherwise.
 	 */
 	private static function has_qualification_process() {
@@ -142,7 +142,7 @@ class Diagnostic_No_Sales_Lead_Qualification_Process extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -171,7 +171,7 @@ class Diagnostic_No_Sales_Lead_Qualification_Process extends Diagnostic_Base {
 	/**
 	 * Get qualification frameworks.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Available frameworks with descriptions.
 	 */
 	private static function get_qualification_frameworks() {
@@ -198,7 +198,7 @@ class Diagnostic_No_Sales_Lead_Qualification_Process extends Diagnostic_Base {
 	/**
 	 * Get key qualification questions.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Key questions to ask.
 	 */
 	private static function get_qualification_questions() {

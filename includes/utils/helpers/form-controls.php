@@ -10,7 +10,7 @@
  * - CANON Accessibility: WCAG AA compliant, keyboard + screen reader accessible
  *
  * @package WPShadow
- * @since   1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ class Form_Controls {
 	/**
 	 * Generate a toggle switch (replaces checkbox)
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the toggle switch.
 	 *
@@ -109,7 +109,7 @@ class Form_Controls {
 	/**
 	 * Generate a slider with value display (replaces number input)
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the slider.
 	 *
@@ -198,7 +198,7 @@ class Form_Controls {
 	/**
 	 * Generate a styled dropdown (replaces select element)
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the dropdown.
 	 *
@@ -284,7 +284,7 @@ class Form_Controls {
 	/**
 	 * Generate a button group / segmented control (replaces radio buttons)
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the button group.
 	 *
@@ -350,7 +350,7 @@ class Form_Controls {
 	/**
 	 * Generate a modern styled textarea
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the textarea.
 	 *

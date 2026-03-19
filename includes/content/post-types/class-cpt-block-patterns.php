@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6181.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers block patterns for testimonials, team members, portfolio items,
  * events, resources, case studies, services, locations, and documentation.
  *
- * @since 1.6181.2359
+ * @since 1.6093.1200
  */
 class CPT_Block_Patterns {
 
 	/**
 	 * Initialize the block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register the WPShadow pattern category.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_pattern_category() {
@@ -60,7 +60,7 @@ class CPT_Block_Patterns {
 	 *
 	 * Only registers patterns for CPTs that are currently active.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_patterns() {
@@ -113,7 +113,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register testimonial block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_testimonial_patterns() {
@@ -246,7 +246,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register team member block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_team_member_patterns() {
@@ -315,7 +315,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register portfolio block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_portfolio_patterns() {
@@ -451,7 +451,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register event block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_event_patterns() {
@@ -537,7 +537,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register resource block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_resource_patterns() {
@@ -575,7 +575,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register case study block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_case_study_patterns() {
@@ -725,7 +725,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register service block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_service_patterns() {
@@ -865,7 +865,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register location block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_location_patterns() {
@@ -903,7 +903,7 @@ class CPT_Block_Patterns {
 	/**
 	 * Register documentation block patterns.
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_documentation_patterns() {

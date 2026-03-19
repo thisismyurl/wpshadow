@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1800
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures homepage is configured appropriately.
  *
- * @since 1.6032.1800
+ * @since 1.6093.1200
  */
 class Diagnostic_Homepage_Display_Configuration extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Homepage_Display_Configuration extends Diagnostic_Base {
 	 * - Static homepage page exists if configured
 	 * - Posts page exists if blog is shown
 	 *
-	 * @since  1.6032.1800
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

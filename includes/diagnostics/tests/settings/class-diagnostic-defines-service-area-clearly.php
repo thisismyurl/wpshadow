@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1130
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #20: Service Area Defined from Specialized & Emerging Success Habits.
  * Checks if the site clearly documents its geographic service area.
  *
- * @since 1.5003.1130
+ * @since 1.6093.1200
  */
 class Diagnostic_Defines_Service_Area_Clearly extends Diagnostic_Base {
 

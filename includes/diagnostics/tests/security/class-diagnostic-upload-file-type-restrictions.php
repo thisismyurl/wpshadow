@@ -42,7 +42,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (PHP allowed), high (dangerous types)
  * - Treatment: remove dangerous types from allowed list
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_File_Type_Restrictions extends Diagnostic_Base {
 
@@ -122,7 +122,7 @@ class Diagnostic_Upload_File_Type_Restrictions extends Diagnostic_Base {
 	 * Validates MIME type configuration and checks for security risks
 	 * or overly restrictive settings.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if file type issues found, null otherwise.
 	 */
 	public static function check() {

@@ -4,7 +4,7 @@
  *
  * Validates that HTML is well-formed for assistive technology compatibility.
  *
- * @since   1.6035.1200
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for valid HTML structure (WCAG 4.1.1 Level A).
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Treatment_WCAG_HTML_Validation extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_WCAG_HTML_Validation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

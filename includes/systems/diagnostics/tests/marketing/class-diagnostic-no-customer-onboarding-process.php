@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Effective onboarding increases product adoption by 50% and reduces churn by 30%.
  * First 7 days determine long-term customer success.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Onboarding_Process extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Onboarding_Process extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Onboarding_Process extends Diagnostic_Base {
 	/**
 	 * Check if onboarding process exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if onboarding detected, false otherwise.
 	 */
 	private static function has_onboarding_process() {
@@ -141,7 +141,7 @@ class Diagnostic_No_Customer_Onboarding_Process extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -170,7 +170,7 @@ class Diagnostic_No_Customer_Onboarding_Process extends Diagnostic_Base {
 	/**
 	 * Get onboarding stages.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Onboarding stages with descriptions.
 	 */
 	private static function get_onboarding_stages() {
@@ -187,7 +187,7 @@ class Diagnostic_No_Customer_Onboarding_Process extends Diagnostic_Base {
 	/**
 	 * Get onboarding metrics to track.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Onboarding metrics with descriptions.
 	 */
 	private static function get_onboarding_metrics() {

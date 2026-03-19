@@ -11,7 +11,7 @@ use WPShadow\Core\Form_Param_Helper;
  * Philosophy: Free as Possible (#2) - All templates editable locally, no paywalls
  * Philosophy: Show Value (#9) - Track email customization usage
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Email_Template_Manager {

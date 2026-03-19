@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2069
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies text compression is enabled. Compression reduces
  * transfer size by 70-80% for text resources.
  *
- * @since 1.6033.2069
+ * @since 1.6093.1200
  */
 class Diagnostic_GZIP_Brotli_Compression extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_GZIP_Brotli_Compression extends Diagnostic_Base {
 	 * Tests server response headers for compression.
 	 * GZIP/Brotli can reduce transfer by 70-80%.
 	 *
-	 * @since  1.6033.2069
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

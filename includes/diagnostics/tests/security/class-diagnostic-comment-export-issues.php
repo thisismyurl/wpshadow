@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for insecure comment export functionality that could expose
  * sensitive data or allow unauthorized access.
  *
- * @since 1.5049.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Export_Issues extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Comment_Export_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

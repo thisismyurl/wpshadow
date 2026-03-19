@@ -4,7 +4,7 @@
  *
  * Ensures skip-to-content link is visible on mobile.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures skip-to-content link exists and is keyboard accessible,
  * allowing users to bypass navigation blocks (WCAG 2.4.1).
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Skip_Links extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Skip_Links extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

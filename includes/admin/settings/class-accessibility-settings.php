@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,14 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages accessibility preference settings for the admin interface.
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Accessibility_Settings {
 
 	/**
 	 * Register hooks
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -49,7 +49,7 @@ class Accessibility_Settings {
 	/**
 	 * Add settings page to WordPress admin menu
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_settings_page(): void {
@@ -66,7 +66,7 @@ class Accessibility_Settings {
 	/**
 	 * Register settings section and fields
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_settings_section(): void {
@@ -144,7 +144,7 @@ class Accessibility_Settings {
 	/**
 	 * Render section description
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_section_description(): void {
@@ -157,7 +157,7 @@ class Accessibility_Settings {
 	/**
 	 * Render keyboard hints field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_keyboard_hints_field(): void {
@@ -176,7 +176,7 @@ class Accessibility_Settings {
 	/**
 	 * Render screen reader field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_screen_reader_field(): void {
@@ -195,7 +195,7 @@ class Accessibility_Settings {
 	/**
 	 * Render high contrast field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_high_contrast_field(): void {
@@ -214,7 +214,7 @@ class Accessibility_Settings {
 	/**
 	 * Render reduce motion field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_reduce_motion_field(): void {
@@ -233,7 +233,7 @@ class Accessibility_Settings {
 	/**
 	 * Render font size field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_font_size_field(): void {
@@ -250,7 +250,7 @@ class Accessibility_Settings {
 		/>
 		<span id="wpshadow_font_size_display"><?php echo esc_html( $value ); ?>×</span>
 		<p class="description">
-			<?php esc_html_e( 'Adjust text size (0.8 = smaller, 1.0 = normal, 2.0 = twice as large).', 'wpshadow' ); ?>
+			<?php esc_html_e( 'Adjust text size (0.8 = smaller,1.0 = normal, 2.0 = twice as large).', 'wpshadow' ); ?>
 		</p>
 		<?php
 	}
@@ -258,7 +258,7 @@ class Accessibility_Settings {
 	/**
 	 * Render simplified UI field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_simplified_ui_field(): void {
@@ -277,7 +277,7 @@ class Accessibility_Settings {
 	/**
 	 * Render focus indicators field
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_focus_indicators_field(): void {
@@ -303,7 +303,7 @@ class Accessibility_Settings {
 	/**
 	 * Render the settings page
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -355,7 +355,7 @@ class Accessibility_Settings {
 	/**
 	 * Enqueue assets for settings page
 	 *
-	 * @since 1.6035.1200
+	 * @since 1.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */

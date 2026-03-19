@@ -4,7 +4,7 @@
  *
  * Detects images without accessibility-required alt text.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Images without alt text fail accessibility (WCAG) and SEO.
  * Screen readers can't describe images. 15% of users affected.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Content_Missing_Alt_Text extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Content_Missing_Alt_Text extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies secure session storage configuration including location,
  * permissions, and protection against data leakage.
  *
- * @since 1.6035.1600
+ * @since 1.6093.1200
  */
 class Diagnostic_Session_Storage extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Session_Storage extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1600
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when WordPress navigation menus are excluded from
  * export files.
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Treatment_Missing_Navigation_Menus_In_Export extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Missing_Navigation_Menus_In_Export extends Treatment_Base {
 	 * Verifies that navigation menus and menu items are properly
 	 * included in export files.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

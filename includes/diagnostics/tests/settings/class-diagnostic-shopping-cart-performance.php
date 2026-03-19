@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1210
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that cart and checkout pages load quickly and are
  * optimized for conversion.
  *
- * @since 1.7034.1210
+ * @since 1.6093.1200
  */
 class Diagnostic_Shopping_Cart_Performance extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Shopping_Cart_Performance extends Diagnostic_Base {
 	 * Tests cart and checkout page performance including caching
 	 * exclusions, script optimization, and database queries.
 	 *
-	 * @since  1.7034.1210
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

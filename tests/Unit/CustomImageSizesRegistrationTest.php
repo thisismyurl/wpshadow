@@ -6,7 +6,7 @@
  * phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited
  *
  * @package WPShadow\Tests\Unit
- * @since   1.6032.0852
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

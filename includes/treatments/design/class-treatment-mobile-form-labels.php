@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Forms
- * @since      1.602.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that all form inputs have proper labels via <label> tags
  * or aria-label attributes. WCAG 3.3.2 Level A requirement.
  *
- * @since 1.602.1445
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Form_Labels extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Form_Labels extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Form_Labels extends Treatment_Base {
 	/**
 	 * Find inputs without proper labels.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_label_issues(): array {
@@ -114,7 +114,7 @@ class Treatment_Mobile_Form_Labels extends Treatment_Base {
 	/**
 	 * Check if input has a proper label.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @param  \DOMElement $input Input element.
 	 * @param  \DOMXPath   $xpath XPath object.
 	 * @return bool Has label.
@@ -154,7 +154,7 @@ class Treatment_Mobile_Form_Labels extends Treatment_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1445
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

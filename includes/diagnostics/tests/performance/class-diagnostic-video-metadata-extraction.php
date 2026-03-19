@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.0930
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WordPress can extract and store video metadata such as
  * duration, width, height, and other important video attributes.
  *
- * @since 1.7034.0930
+ * @since 1.6093.1200
  */
 class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 	 * Tests if WordPress can extract video metadata using available
 	 * libraries (getID3, FFmpeg, WordPress metadata parser).
 	 *
-	 * @since  1.7034.0930
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

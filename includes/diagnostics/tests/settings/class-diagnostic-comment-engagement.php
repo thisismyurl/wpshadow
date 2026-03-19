@@ -4,7 +4,7 @@
  *
  * Validates comment section engagement metrics and community activity.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment section engagement and community health indicators.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -375,7 +375,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 	/**
 	 * Check for featured comments system.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if system exists.
 	 */
 	private static function has_featured_comments_system() {

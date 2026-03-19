@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * "Like checking if your smoke detectors have been recalled—we'll tell you if
  * any of your plugins have known security problems that hackers could exploit."
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 
@@ -102,7 +102,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	 * **Return Structure (if no vulnerabilities):**
 	 * Returns null (no issue found)
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if vulnerabilities detected, null otherwise.
 	 */
 	public static function check() {
@@ -301,7 +301,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	/**
 	 * Determine severity based on vulnerabilities
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $vulnerable_plugins Vulnerable plugins array.
 	 * @return string Severity level.
 	 */
@@ -333,7 +333,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	/**
 	 * Calculate threat level (0-100)
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $vulnerable_plugins Vulnerable plugins array.
 	 * @return int Threat level.
 	 */
@@ -367,7 +367,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	/**
 	 * Build human-readable description
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $vulnerable_plugins Vulnerable plugins array.
 	 * @param  int   $total_vulnerabilities Total vulnerability count.
 	 * @return string Formatted description.

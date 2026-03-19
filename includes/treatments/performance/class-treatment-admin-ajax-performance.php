@@ -26,9 +26,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible responsiveness problems\n * - #9 Show Value: Delivers immediate snappiness improvement\n * - #10 Talk-About-Worthy: "Site feels fast now" is immediately noticed\n *
  * **Related Checks:**\n * - Plugin Load Performance (identifies problematic plugins)\n * - Database Query Optimization (slow queries block AJAX)\n * - Third-Party API Integration (external calls blocking)\n * - Server Response Time Too Slow (overall TTFB)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/admin-ajax-performance\n * - Video: https://wpshadow.com/training/ajax-optimization-101 (6 min)\n * - Advanced: https://wpshadow.com/training/async-patterns-wordpress (11 min)\n *
- * @package    WPShadow\n * @subpackage Treatments\n * @since      1.6033.2065\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Treatments\\Helpers\\Treatment_Request_Helper;\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Admin-Ajax Performance Treatment Class\n *\n * Measures admin-ajax.php endpoint performance and identifies slow handlers.
+ * @package    WPShadow\n * @subpackage Treatments\n * @since 1.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Treatments\\Helpers\\Treatment_Request_Helper;\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Admin-Ajax Performance Treatment Class\n *\n * Measures admin-ajax.php endpoint performance and identifies slow handlers.
  *
- * @since 1.6033.2065
+ * @since 1.6093.1200
  */
 class Treatment_Admin_Ajax_Performance extends Treatment_Base {
 
@@ -66,7 +66,7 @@ class Treatment_Admin_Ajax_Performance extends Treatment_Base {
 	 * Tests admin-ajax.php with a simple action.
 	 * Threshold: <300ms good, >1000ms slow
 	 *
-	 * @since  1.6033.2065
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

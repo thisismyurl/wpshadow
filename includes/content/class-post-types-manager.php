@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6033.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles registration and management of WPShadow custom post types.
  *
- * @since 1.6033.1530
+ * @since 1.6093.1200
  */
 class Post_Types_Manager extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -47,8 +47,8 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the post types manager (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Post_Types_Manager::subscribe() instead
-	 * @since      1.6033.1530
+	 * @deprecated1.0 Use Post_Types_Manager::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -58,7 +58,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get available post type definitions.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @return array Post type definitions.
 	 */
 	public static function get_available_post_types() {
@@ -89,7 +89,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 26,
 				'taxonomies'  => array( 'wps_department', 'wps_team_role' ),
-				'since'       => '1.6180.1200', // Release 1.6180 (June 2026).
+				'since'       => '1.6177.1200', // Release 1.6177 (June 2026).
 			),
 			'wps_portfolio'     => array(
 				'singular'    => __( 'Portfolio Item', 'wpshadow' ),
@@ -103,7 +103,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 27,
 				'taxonomies'  => array( 'wps_portfolio_category', 'wps_skill' ),
-				'since'       => '1.6272.1200', // Release 1.6272 (September 2026).
+				'since'       => '1.6240.1200', // Release 1.6240 (August 2026).
 			),
 			'wps_faq'           => array(
 				'singular'    => __( 'FAQ', 'wpshadow' ),
@@ -131,7 +131,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 29,
 				'taxonomies'  => array( 'wps_industry', 'wps_solution' ),
-				'since'       => '1.6272.1200', // Release 1.6272 (September 2026).
+				'since'       => '1.6268.1200', // Release 1.6268 (September 2026).
 			),
 			'wps_event'         => array(
 				'singular'    => __( 'Event', 'wpshadow' ),
@@ -145,7 +145,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 30,
 				'taxonomies'  => array( 'wps_event_category', 'wps_event_type' ),
-				'since'       => '1.6364.1200', // Release 1.6364 (December 2026).
+				'since'       => '1.6303.1200', // Release 1.6303 (October 2026).
 			),
 			'wps_resource'      => array(
 				'singular'    => __( 'Resource', 'wpshadow' ),
@@ -159,7 +159,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 31,
 				'taxonomies'  => array( 'wps_resource_type', 'wps_resource_category' ),
-				'since'       => '1.6180.1200', // Release 1.6180 (June 2026).
+				'since'       => '1.6212.1200', // Release 1.6212 (July 2026).
 			),
 			'wps_service'       => array(
 				'singular'    => __( 'Service', 'wpshadow' ),
@@ -173,7 +173,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 32,
 				'taxonomies'  => array( 'wps_service_category' ),
-				'since'       => '1.6364.1200', // Release 1.6364 (December 2026).
+				'since'       => '1.6331.1200', // Release 1.6331 (November 2026).
 			),
 			'wps_location'      => array(
 				'singular'    => __( 'Location', 'wpshadow' ),
@@ -187,7 +187,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 33,
 				'taxonomies'  => array( 'wps_location_type' ),
-				'since'       => '1.6364.1200', // Release 1.6364 (December 2026).
+				'since'       => '1.6359.1200', // Release 1.6359 (December 2026).
 			),
 			'wps_documentation' => array(
 				'singular'    => __( 'Documentation', 'wpshadow' ),
@@ -201,7 +201,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 				'show_in_rest' => true,
 				'menu_position' => 34,
 				'taxonomies'  => array( 'wps_doc_category', 'wps_doc_version' ),
-				'since'       => '1.6089.1200', // Release 1.6089 (March 2026).
+				'since'       => '1.6149.1200', // Release 1.6149 (May 2026).
 			),
 		);
 	}
@@ -209,7 +209,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get available taxonomy definitions.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @return array Taxonomy definitions.
 	 */
 	public static function get_available_taxonomies() {
@@ -358,7 +358,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Register active post types.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_active_post_types() {
@@ -378,7 +378,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Register a single post type.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $post_type Post type key.
 	 * @param  array  $config    Post type configuration.
 	 * @return void
@@ -433,7 +433,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Register active taxonomies.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_active_taxonomies() {
@@ -464,7 +464,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Register a single taxonomy.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $taxonomy Taxonomy key.
 	 * @param  array  $config   Taxonomy configuration.
 	 * @return void
@@ -508,7 +508,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get settings for a specific post type.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $post_type Post type key.
 	 * @return array Post type settings.
 	 */
@@ -528,7 +528,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Save settings for a specific post type.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $post_type Post type key.
 	 * @param  array  $settings  Settings to save.
 	 * @return bool Whether save was successful.
@@ -540,7 +540,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Activate a post type.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $post_type Post type key.
 	 * @return bool Whether activation was successful.
 	 */
@@ -560,7 +560,7 @@ class Post_Types_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Deactivate a post type.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $post_type Post type key.
 	 * @return bool Whether deactivation was successful.
 	 */

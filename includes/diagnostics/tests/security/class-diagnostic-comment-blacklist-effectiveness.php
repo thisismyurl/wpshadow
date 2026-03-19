@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,6 @@ class Diagnostic_Comment_Blacklist_Effectiveness extends Diagnostic_Base {
 
 	public static function check() {
 		$blacklist = get_option( 'disallowed_keys', '' );
-		$blacklist = get_option( 'blacklist_keys', $blacklist ); // Backwards compat.
 
 		$blacklist_count = empty( $blacklist ) ? 0 : count( explode( "\n", trim( $blacklist ) ) );
 

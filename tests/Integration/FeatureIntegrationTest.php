@@ -5,7 +5,7 @@
  * Tests the interaction between different components.
  *
  * @package WPShadow\Tests\Integration
- * @since   1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -52,7 +52,7 @@ class FeatureIntegrationTest extends TestCase {
 		$this->assertMatchesRegularExpression(
 			'/^1\.\d{3,4}\.\d{4}$/',
 			$version,
-			'Plugin version must follow format: 1.YDDD.HHMM in Toronto time (e.g., 1.6028.1430)'
+			'Plugin version must follow format: 1.YDDD.HHMM in Toronto time (e.g.,.6093.1200)'
 		);
 	}
 

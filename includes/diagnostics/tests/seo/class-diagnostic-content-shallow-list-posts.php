@@ -4,7 +4,7 @@
  *
  * Identifies list posts lacking sufficient detail per item.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies list posts (\"10 ways...\", \"7 best...\") that lack sufficient detail
  * to provide value, making them inferior to competitor content.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Shallow_List_Posts extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Shallow_List_Posts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

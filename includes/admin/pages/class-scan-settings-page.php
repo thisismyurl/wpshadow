@@ -5,7 +5,7 @@
  * Admin UI to search, filter, paginate, and toggle diagnostics (and treatments if present).
  * Uses AJAX for scalable loading.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Render the Scan Settings admin page.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  * @return void
  */
 function wpshadow_render_scan_settings() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Typography
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures body text on mobile is at least 16px to prevent iOS auto-zoom on form focus
  * and to maintain readability without pinch-zoom.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Font_Size extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Mobile_Font_Size extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_Mobile_Font_Size extends Diagnostic_Base {
 	/**
 	 * Find body text smaller than minimum.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Small text locations.
 	 */
 	private static function find_small_text(): array {
@@ -150,7 +150,7 @@ class Diagnostic_Mobile_Font_Size extends Diagnostic_Base {
 	/**
 	 * Get theme stylesheet content.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null CSS content.
 	 */
 	private static function get_stylesheet_content(): ?string {

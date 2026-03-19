@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1512
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Link-to-word ratio analysis
  * - Link distribution assessment
  *
- * @since 1.7030.1512
+ * @since 1.6093.1200
  */
 class Diagnostic_Excessive_Outbound extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Excessive_Outbound extends Diagnostic_Base {
 	 * - 2 points: <20% with excessive links
 	 * - 0 points: ≥20% with excessive links
 	 *
-	 * @since  1.7030.1512
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

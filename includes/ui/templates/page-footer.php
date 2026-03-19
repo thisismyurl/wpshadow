@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since      1.6030.211827
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

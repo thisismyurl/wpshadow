@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Auto-subscribes them to hooks
  * - Caches discovery for performance
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class CPT_Registry {
 
@@ -50,7 +50,7 @@ class CPT_Registry {
 	/**
 	 * Initialize the registry.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -60,7 +60,7 @@ class CPT_Registry {
 	/**
 	 * Discover and subscribe all CPT_Base classes.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function discover_and_subscribe(): void {
@@ -76,7 +76,7 @@ class CPT_Registry {
 	/**
 	 * Get discovered CPTs (with caching).
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array Array of CPT class names.
 	 */
 	private static function get_discovered_cpts(): array {
@@ -98,7 +98,7 @@ class CPT_Registry {
 	/**
 	 * Discover all CPT_Base classes in the codebase.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array Array of fully qualified class names.
 	 */
 	private static function discover_cpts(): array {
@@ -137,7 +137,7 @@ class CPT_Registry {
 	/**
 	 * Extract fully qualified class name from file.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @return string|null Fully qualified class name or null.
 	 */
@@ -190,7 +190,7 @@ class CPT_Registry {
 	 *
 	 * Useful when new CPT classes are added during development.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function clear_cache(): void {
@@ -200,7 +200,7 @@ class CPT_Registry {
 	/**
 	 * Get all registered CPT slugs.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array Array of post type slugs.
 	 */
 	public static function get_registered_slugs(): array {

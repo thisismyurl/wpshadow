@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1410
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates spam vs approved comments to detect moderation issues.
  *
- * @since 1.6035.1410
+ * @since 1.6093.1200
  */
 class Diagnostic_Spam_Comments_Ratio extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Spam_Comments_Ratio extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1410
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

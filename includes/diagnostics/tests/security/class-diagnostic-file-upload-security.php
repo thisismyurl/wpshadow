@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1030
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that file uploads have proper security including file type
  * validation, size limits, directory protection, and malicious file detection.
  *
- * @since 1.7034.1030
+ * @since 1.6093.1200
  */
 class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 	 * Tests file upload security including MIME type validation,
 	 * file size limits, and dangerous file type restrictions.
 	 *
-	 * @since  1.7034.1030
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

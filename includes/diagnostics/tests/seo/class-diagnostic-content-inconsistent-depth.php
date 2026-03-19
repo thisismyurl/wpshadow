@@ -4,7 +4,7 @@
  *
  * Identifies high variance in content depth without clear strategy.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies high variance in content depth (some 200 words, some 3000 words) without
  * clear strategy, which confuses reader expectations and dilutes site positioning.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Inconsistent_Depth extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Inconsistent_Depth extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

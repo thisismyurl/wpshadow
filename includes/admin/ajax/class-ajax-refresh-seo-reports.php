@@ -5,7 +5,7 @@
  * Handles the AJAX request to refresh the past SEO reports list.
  *
  * @package WPShadow\Admin\Ajax
- * @since   1.6041.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Returns updated HTML for the past SEO reports sidebar.
  *
- * @since 1.6041.1200
+ * @since 1.6093.1200
  */
 class Refresh_SEO_Reports_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX handler.
 	 *
-	 * @since 1.6041.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -41,7 +41,7 @@ class Refresh_SEO_Reports_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request to refresh SEO reports list.
 	 *
-	 * @since 1.6041.1200
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {

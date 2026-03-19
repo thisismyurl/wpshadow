@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites don't use geographic IP blocking to reduce attack
  * surface from regions they don't do business with.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Diagnostic_Geographic_IP_Blocking_Not_Configured extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Geographic_IP_Blocking_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -15,7 +15,7 @@
  * - #7 (Ridiculously Good): Snappy pagination with no wait time
  * - #8 (Inspire Confidence): Clear treatment list organization
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -53,7 +53,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -107,7 +107,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 	/**
 	 * Build or retrieve cached treatment catalog.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array<int,array<string,string>>
 	 */
 	private static function get_treatments_catalog(): array {

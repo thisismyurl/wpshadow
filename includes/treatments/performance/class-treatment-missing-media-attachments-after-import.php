@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when imported posts reference images that failed to download.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Treatment_Missing_Media_Attachments_After_Import extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Missing_Media_Attachments_After_Import extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

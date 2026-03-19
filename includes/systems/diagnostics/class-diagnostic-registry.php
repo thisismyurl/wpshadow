@@ -75,7 +75,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Get diagnostic file map (class name => file path + family)
 	 *
-	 * @since  1.6030.0135
+	 * @since 1.6093.1200
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	public static function get_diagnostic_file_map(): array {
@@ -112,7 +112,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Build diagnostic file map by scanning diagnostics directory
 	 *
-	 * @since  1.6030.0135
+	 * @since 1.6093.1200
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	private static function build_diagnostic_file_map(): array {
@@ -174,7 +174,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		/**
 		 * Filters the diagnostic file map.
 		 *
-		 * @since 1.6030.0135
+		 * @since 1.6093.1200
 		 *
 		 * @param array<string, array{file: string, family: string}> $map Diagnostic file map.
 		 */
@@ -184,7 +184,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Derive diagnostic family from file path.
 	 *
-	 * @since  1.6030.0135
+	 * @since 1.6093.1200
 	 * @param  string $path Diagnostic file path.
 	 * @return string Family slug.
 	 */
@@ -224,7 +224,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * Called during plugins_loaded. Loads all discovered diagnostic files.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -252,7 +252,21 @@ class Diagnostic_Registry extends Abstract_Registry {
 		// Find and load the class file
 		$file = self::find_diagnostic_file( $class_name );
 		if ( $file && file_exists( $file ) ) {
-			require_once $file;
+			// Wrap in error handler to catch parse errors
+			set_error_handler( function( $errno, $errstr ) {
+				// Suppress the error - we'll check if class loaded instead
+				return true;
+			} );
+			
+			try {
+				require_once $file;
+			} catch ( \Throwable $e ) {
+				// Class file has syntax error or fatal issue
+				error_log( 'Failed to load diagnostic file ' . $file . ': ' . $e->getMessage() );
+			} finally {
+				restore_error_handler();
+			}
+			
 			return class_exists( __NAMESPACE__ . '\\' . $class_name );
 		}
 
@@ -393,7 +407,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			/**
 			 * Filters whether a diagnostic is enabled.
 			 *
-			 * @since 1.6030.2148
+			 * @since 1.6093.1200
 			 *
 			 * @param bool   $enabled    Whether the diagnostic is enabled.
 			 * @param string $class_name Fully-qualified diagnostic class name.
@@ -407,14 +421,26 @@ class Diagnostic_Registry extends Abstract_Registry {
 			// Call the static check() method if it exists
 			if ( method_exists( $class_name, 'check' ) ) {
 				try {
+					// Set error handler to catch warnings/notices during check
+					set_error_handler( function( $errno, $errstr, $errfile, $errline ) {
+						// Log but don't stop execution
+						if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+							error_log( "Diagnostic warning in check(): [$errno] $errstr at $errfile:$errline" );
+						}
+						return true;
+					} );
+					
 					$result = call_user_func( array( $class_name, 'check' ) );
 
 					if ( null !== $result ) {
 						$findings[] = $result;
 					}
-				} catch ( \Exception $e ) {
+				} catch ( \Throwable $e ) {
+					// Catch ALL errors including Errors, not just Exceptions
 					// Log error but continue processing
 					error_log( 'Diagnostic error in ' . $class_name . ': ' . $e->getMessage() );
+				} finally {
+					restore_error_handler();
 				}
 			}
 		}
@@ -428,7 +454,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Call this if diagnostics are added/removed dynamically.
 	 * Also clears the file map transient.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function clear_cache(): void {
@@ -442,7 +468,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * Automatically clear cache when plugins/themes are updated.
 	 *
-	 * @since 1.6030.2046
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init_hooks(): void {
@@ -458,7 +484,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Handle plugin update to clear cache
 	 *
-	 * @since 1.6030.2046
+	 * @since 1.6093.1200
 	 * @param \WP_Upgrader $upgrader WP_Upgrader instance.
 	 * @param array        $options  Update options.
 	 * @return void

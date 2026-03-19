@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1504
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies adequate memory is allocated to PHP.
  *
- * @since 1.6035.1504
+ * @since 1.6093.1200
  */
 class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 	/**
 	 * Run the memory allocation diagnostic check.
 	 *
-	 * @since  1.6035.1504
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if memory issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 	/**
 	 * Parse memory limit string to bytes.
 	 *
-	 * @since  1.6035.1504
+	 * @since 1.6093.1200
 	 * @param  string $value Memory limit value (e.g., '256M', '2G').
 	 * @return int Memory in bytes, or -1 if unlimited.
 	 */
@@ -145,28 +145,28 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 			return -1;
 		}
 
-		$value = (int) $value;
 		$last_char = strtoupper( substr( $value, -1 ) );
+		$bytes = (int) $value;
 
 		switch ( $last_char ) {
 			case 'G':
-				$value *= 1024;
+				$bytes *= 1024;
 				// Fall through.
 			case 'M':
-				$value *= 1024;
+				$bytes *= 1024;
 				// Fall through.
 			case 'K':
-				$value *= 1024;
+				$bytes *= 1024;
 				break;
 		}
 
-		return $value;
+		return $bytes;
 	}
 
 	/**
 	 * Format bytes to human readable.
 	 *
-	 * @since  1.6035.1504
+	 * @since 1.6093.1200
 	 * @param  int $bytes Bytes to format.
 	 * @return string Formatted bytes.
 	 */

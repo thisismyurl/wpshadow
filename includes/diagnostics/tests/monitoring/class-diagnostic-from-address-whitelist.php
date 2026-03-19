@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1444
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the "from" email address matches the site domain to prevent spoofing risks.
  *
- * @since 1.6035.1444
+ * @since 1.6093.1200
  */
 class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 	/**
 	 * Run the from address whitelist diagnostic check.
 	 *
-	 * @since  1.6035.1444
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if spoofing risk detected, null otherwise.
 	 */
 	public static function check() {
@@ -114,7 +114,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 	/**
 	 * Get the site's domain.
 	 *
-	 * @since  1.6035.1444
+	 * @since 1.6093.1200
 	 * @return string Site domain.
 	 */
 	private static function get_site_domain(): string {
@@ -126,7 +126,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 	/**
 	 * Get the configured "from" email address.
 	 *
-	 * @since  1.6035.1444
+	 * @since 1.6093.1200
 	 * @return string|null From email address or null if not configured.
 	 */
 	private static function get_from_email() {

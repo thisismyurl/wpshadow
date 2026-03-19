@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Recommendations
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes WordPress context and suggests relevant WPShadow features.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Recommendation_Engine {
 
 	/**
 	 * Initialize the recommendation engine.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -53,7 +53,7 @@ class Recommendation_Engine {
 	/**
 	 * Recommend site cloning before WordPress update.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function recommend_before_update() {
@@ -86,7 +86,7 @@ class Recommendation_Engine {
 	/**
 	 * Recommend conflict detector on plugins page.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function recommend_conflict_detector() {
@@ -125,7 +125,7 @@ class Recommendation_Engine {
 	/**
 	 * Recommend theme workflow on themes page.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function recommend_theme_workflow() {
@@ -152,7 +152,7 @@ class Recommendation_Engine {
 	/**
 	 * Detect fatal errors and recommend conflict detector.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function detect_errors() {
@@ -188,7 +188,7 @@ class Recommendation_Engine {
 	/**
 	 * Store a recommendation.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $id   Recommendation identifier.
 	 * @param  array  $data Recommendation data.
 	 * @return void
@@ -215,7 +215,7 @@ class Recommendation_Engine {
 	/**
 	 * Get pending recommendations.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Pending recommendations sorted by priority.
 	 */
 	public static function get_recommendations() {
@@ -244,7 +244,7 @@ class Recommendation_Engine {
 	/**
 	 * Show recommendation notices.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function show_recommendations() {
@@ -332,7 +332,7 @@ class Recommendation_Engine {
 	/**
 	 * Dismiss a recommendation.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  string $id Recommendation identifier.
 	 * @return void
 	 */
@@ -368,7 +368,7 @@ class Recommendation_Engine {
 	/**
 	 * AJAX: Dismiss recommendation.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_dismiss() {
@@ -392,7 +392,7 @@ class Recommendation_Engine {
 	/**
 	 * AJAX: Get recommendations.
 	 *
-	 * @since 1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_get_recommendations() {

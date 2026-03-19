@@ -16,7 +16,7 @@
  * - Input Sanitization Not Implemented (XSS prevention)\n * - SSL/TLS Configuration Not Set (transport security)\n * - API Throttling Not Configured (abuse prevention)\n *
  * **Learn More:**
  * API security best practices: https://wpshadow.com/kb/external-api-security\n * Video: Secure API integration (12min): https://wpshadow.com/training/api-validation\n *
- * @since   1.6032.1000
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin calls external service for logo images. Response: Array with image URLs.\n * Plugin doesn't validate response structure. Attacker compromises service.\n * Response now contains: {\"images\": [\"https://attacker.com/inject.php?redirect=phishing\"]}.\n * Plugin displays without validation. Users click \"logo\" link (appears legitimate).\n * Redirected to phishing page. Credentials stolen.\n *
  * **Implementation Notes:**
  * - Scans for wp_remote_get/post/request calls\n * - Checks for response validation (is_array, isset)\n * - Validates sanitization before database storage\n * - Severity: critical (no validation), high (weak validation)\n * - Treatment: add response structure validation\n *
- * @since 1.6032.1000
+ * @since 1.6093.1200
  */
 class Diagnostic_External_API_Validation extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_External_API_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return array|null Finding if external APIs are not properly validated.
 	 */
 	public static function check() {
@@ -143,7 +143,7 @@ class Diagnostic_External_API_Validation extends Diagnostic_Base {
 	/**
 	 * Get total size of API cache
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return int Size in bytes.
 	 */
 	private static function get_api_cache_size(): int {

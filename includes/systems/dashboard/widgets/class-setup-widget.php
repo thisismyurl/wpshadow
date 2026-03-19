@@ -9,7 +9,7 @@
  * Philosophy #8: Inspire Confidence - Show clear progress
  *
  * @package WPShadow
- * @since 1.6030.2201
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Dashboard\Widgets;
@@ -140,7 +140,7 @@ class Setup_Widget {
 		.wpshadow-setup-tagline {
 			font-size: 14px;
 			color: #646970;
-			line-height: 1.6;
+			line-height:1.0;
 		}
 		
 		.wpshadow-setup-progress-bar {

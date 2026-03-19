@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since      1.6089
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages training videos and their relationships to findings/treatments.
  *
- * @since 1.6089
+ * @since 1.6093.1200
  */
 class Training_Video_Registry extends Hook_Subscriber_Base {
 
@@ -38,7 +38,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6089
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -58,8 +58,8 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Initialize registry (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Training_Video_Registry::subscribe() instead
-	 * @since      1.6030.1910
+	 * @deprecated1.0 Use Training_Video_Registry::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -69,7 +69,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register all training videos
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_videos() {
@@ -168,7 +168,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register a training video
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @param  string $id Video ID.
 	 * @param  array  $data Video data.
 	 * @return void
@@ -180,7 +180,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get video by ID
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @param  string $id Video ID.
 	 * @return array|null Video data or null.
 	 */
@@ -191,7 +191,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get video for finding
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @param  string $finding_id Finding ID.
 	 * @return array|null Video data or null.
 	 */
@@ -209,7 +209,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get videos by category
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @param  string $category Category slug.
 	 * @return array Videos in category.
 	 */
@@ -229,7 +229,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get all free videos
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @return array Free videos.
 	 */
 	public static function get_free_videos() {
@@ -248,7 +248,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get all videos
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @return array All registered videos.
 	 */
 	public static function get_all() {
@@ -265,7 +265,7 @@ class Training_Video_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Format duration for display
 	 *
-	 * @since  1.6030.1910
+	 * @since 1.6093.1200
 	 * @param  int $seconds Duration in seconds.
 	 * @return string Formatted duration (e.g., "7 min").
 	 */

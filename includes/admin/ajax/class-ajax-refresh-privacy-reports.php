@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage AJAX
- * @since 1.6041.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Refresh_Privacy_Reports_Handler Class
  *
- * @since 1.6041.1200
+ * @since 1.6093.1200
  */
 class Refresh_Privacy_Reports_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX hook.
 	 *
-	 * @since 1.6041.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -43,7 +43,7 @@ class Refresh_Privacy_Reports_Handler extends AJAX_Handler_Base {
 	 *
 	 * Returns HTML for the past reports card to be inserted into the DOM.
 	 *
-	 * @since 1.6041.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle(): void {

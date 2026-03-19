@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Pages
- * @since      1.6035.2400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Base class for admin settings pages providing common properties and methods.
  *
- * @since 1.6035.2400
+ * @since 1.6093.1200
  */
 abstract class Settings_Page_Base {
 
@@ -64,7 +64,7 @@ abstract class Settings_Page_Base {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.6035.2400
+	 * @since 1.6093.1200
 	 */
 	public function __construct() {
 		// Default menu title to page title if not set
@@ -79,7 +79,7 @@ abstract class Settings_Page_Base {
 	/**
 	 * Register the page with WordPress admin menu
 	 *
-	 * @since  1.6035.2400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function register_page(): void {
@@ -112,7 +112,7 @@ abstract class Settings_Page_Base {
 	 *
 	 * Must be implemented by child classes.
 	 *
-	 * @since  1.6035.2400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	abstract public function render(): void;
@@ -120,7 +120,7 @@ abstract class Settings_Page_Base {
 	/**
 	 * Check if current user has permission to view this page
 	 *
-	 * @since  1.6035.2400
+	 * @since 1.6093.1200
 	 * @return bool True if user has permission.
 	 */
 	protected function can_view(): bool {
@@ -130,7 +130,7 @@ abstract class Settings_Page_Base {
 	/**
 	 * Render permission denied message
 	 *
-	 * @since  1.6035.2400
+	 * @since 1.6093.1200
 	 * @return void Dies with error message.
 	 */
 	protected function render_permission_denied(): void {

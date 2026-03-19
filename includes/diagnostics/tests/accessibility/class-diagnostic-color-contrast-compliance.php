@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,14 +39,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Red-green colorblindness most common, blue-yellow also exists
  * - Age-related vision loss also reduces color perception
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Color_Contrast_Compliance extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'color-contrast-compliance';
@@ -54,7 +54,7 @@ class Diagnostic_Color_Contrast_Compliance extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Text Doesn\'t Meet WCAG AA Color Contrast Requirements';
@@ -62,7 +62,7 @@ class Diagnostic_Color_Contrast_Compliance extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if text/background colors meet accessibility contrast minimums';
@@ -70,7 +70,7 @@ class Diagnostic_Color_Contrast_Compliance extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'accessibility';
@@ -78,7 +78,7 @@ class Diagnostic_Color_Contrast_Compliance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

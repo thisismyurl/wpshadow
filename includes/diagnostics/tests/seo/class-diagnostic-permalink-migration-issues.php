@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies permalink structure changes and checks for proper redirect handling.
  *
- * @since 1.6032.1600
+ * @since 1.6093.1200
  */
 class Diagnostic_Permalink_Migration_Issues extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Permalink_Migration_Issues extends Diagnostic_Base {
 	 * - Old URLs still being indexed
 	 * - 404 error patterns
 	 *
-	 * @since  1.6032.1600
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -117,7 +117,7 @@ class Diagnostic_Permalink_Migration_Issues extends Diagnostic_Base {
 		}
 
 		// Check for .htaccess writability (Apache servers).
-		if ( got_mod_rewrite() ) {
+		if ( function_exists( 'got_mod_rewrite' ) && got_mod_rewrite() ) {
 			$htaccess_file = get_home_path() . '.htaccess';
 			if ( file_exists( $htaccess_file ) && ! is_writable( $htaccess_file ) ) {
 				$issues[] = __( '.htaccess file exists but is not writable; automatic rewrite rule updates will fail', 'wpshadow' );

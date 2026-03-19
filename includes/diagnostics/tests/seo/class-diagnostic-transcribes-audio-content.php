@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website provides complete transcripts for all audio and video content
  * to ensure accessibility and SEO benefits.
  *
- * @since 1.5002.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Transcribes_Audio_Content extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Transcribes_Audio_Content extends Diagnostic_Base {
 	 * for transcription plugins, transcript references in posts, transcript files,
 	 * and the coverage ratio of transcribed content.
 	 *
-	 * @since  1.5002.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

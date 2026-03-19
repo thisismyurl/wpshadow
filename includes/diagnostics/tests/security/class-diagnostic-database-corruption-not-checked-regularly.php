@@ -17,7 +17,7 @@
  * Database maintenance: https://wpshadow.com/kb/wordpress-database-maintenance\n * Video: Database repair and optimization (10min): https://wpshadow.com/training/db-repair\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site runs on shared hosting. Server power failure (data center incident).\n * Database connection interrupted mid-write. Table corruption occurs. WP_ALLOW_REPAIR\n * disabled. Site continues running with corrupted table. Admin doesn't notice for\n * 3 months. One day, all posts from corrupted table fail to load. Customer\n * investigation discovers corruption. Manual repair takes 4 hours (posts from backup).\n *
  * **Implementation Notes:**
  * - Uses SHOW TABLE STATUS query\n * - Checks for \"Crashed\" or \"Corrupt\" status\n * - Validates WP_ALLOW_REPAIR enabled\n * - Checks WordPress error logs\n * - Severity: high (corruption detected), medium (no checks running)\n * - Treatment: enable regular repairs, setup monitoring\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Corruption_Not_Checked_Regularly extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Database_Corruption_Not_Checked_Regularly extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

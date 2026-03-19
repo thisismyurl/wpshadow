@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies backups run often enough for site activity level.
  * Like checking how often you save your work.
  *
- * @since 1.6035.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 	/**
 	 * Run the backup frequency diagnostic check.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup frequency issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -189,7 +189,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 	/**
 	 * Get number of posts published in last N days.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @param  int $days Number of days to look back.
 	 * @return int Post count.
 	 */
@@ -214,7 +214,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 	/**
 	 * Get number of comments in last N days.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @param  int $days Number of days to look back.
 	 * @return int Comment count.
 	 */

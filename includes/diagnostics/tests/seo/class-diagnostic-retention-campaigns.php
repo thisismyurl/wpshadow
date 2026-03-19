@@ -4,7 +4,7 @@
  *
  * Tests whether the site runs proactive campaigns to reduce member churn.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Proactive retention campaigns can reduce churn by 10-20%. This includes
  * re-engagement emails, win-back campaigns, and targeted retention offers.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -188,7 +188,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for email platform.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if email platform exists, false otherwise.
 	 */
 	private static function check_email_platform() {
@@ -212,7 +212,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for re-engagement campaigns.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if campaigns exist, false otherwise.
 	 */
 	private static function check_reengagement_campaigns() {
@@ -239,7 +239,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for win-back campaigns.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if win-back campaigns exist, false otherwise.
 	 */
 	private static function check_winback_campaigns() {
@@ -266,7 +266,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for segmentation.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if segmentation exists, false otherwise.
 	 */
 	private static function check_segmentation() {
@@ -291,7 +291,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for automation.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if automation exists, false otherwise.
 	 */
 	private static function check_automation() {
@@ -314,7 +314,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for retention offers.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if retention offers exist, false otherwise.
 	 */
 	private static function check_retention_offers() {
@@ -355,7 +355,7 @@ class Diagnostic_Retention_Campaigns extends Diagnostic_Base {
 	/**
 	 * Check for campaign analytics.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if analytics exist, false otherwise.
 	 */
 	private static function check_campaign_analytics() {

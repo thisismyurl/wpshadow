@@ -4,7 +4,7 @@
  *
  * Validates that social media sharing buttons and plugins are properly configured.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper social media sharing implementation and button visibility.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -291,7 +291,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Check if any sharing plugin is installed.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if sharing plugin active.
 	 */
 	private static function has_sharing_plugin() {
@@ -317,7 +317,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Get currently active sharing plugin.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string Plugin slug or empty string.
 	 */
 	private static function get_active_sharing_plugin() {
@@ -341,7 +341,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Check plugin configuration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return array Plugin configuration data.
 	 */
@@ -357,7 +357,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Count configured social networks.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Number of networks.
 	 */
@@ -369,7 +369,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Get button placement configuration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return string Placement type.
 	 */

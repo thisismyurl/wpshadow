@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for restrictive upload file size limits.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_File_Size_Limit extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Upload_File_Size_Limit extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -112,10 +112,10 @@ class Diagnostic_Upload_File_Size_Limit extends Diagnostic_Base {
 
 		// Check if memory_limit is too close to post_max_size.
 		if ( $memory_bytes > 0 && $post_max_bytes > 0 ) {
-			if ( $memory_bytes < ( $post_max_bytes * 1.5 ) ) {
+			if ( $memory_bytes < ( $post_max_bytes *1.0 ) ) {
 				$issues[] = sprintf(
 					/* translators: 1: memory_limit, 2: post_max_size */
-					__( 'memory_limit (%1$s) too close to post_max_size (%2$s) (should be 1.5x higher)', 'wpshadow' ),
+					__( 'memory_limit (%1$s) too close to post_max_size (%2$s) (should be1.0x higher)', 'wpshadow' ),
 					$memory_limit,
 					$post_max_size
 				);

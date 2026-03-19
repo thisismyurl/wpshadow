@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if product/service pages use video explanations. Video increases
  * understanding and conversion rates significantly vs text-only pages.
  *
- * @since 1.6034.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Video_Sales_Letters extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Video_Sales_Letters extends Diagnostic_Base {
 	 *
 	 * Looks for video embeds on product, service, and landing pages.
 	 *
-	 * @since  1.6034.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

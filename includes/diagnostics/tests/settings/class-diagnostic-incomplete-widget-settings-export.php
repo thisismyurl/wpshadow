@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests whether sidebar widgets and configurations
  * are included in exports.
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 	 * Verifies that widget data and settings are properly
 	 * captured in export files.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

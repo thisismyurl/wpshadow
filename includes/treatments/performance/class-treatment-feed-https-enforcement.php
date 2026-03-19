@@ -36,7 +36,7 @@
  * See https://wpshadow.com/kb/feed-https-enforcement
  * or https://wpshadow.com/training/secure-content-delivery
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -98,7 +98,7 @@ class Treatment_Feed_HTTPS_Enforcement extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

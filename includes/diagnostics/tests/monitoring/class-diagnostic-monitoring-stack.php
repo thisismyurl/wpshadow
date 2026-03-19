@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6035.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects if comprehensive monitoring stack is configured
  * for metrics collection, visualization, and alerting.
  *
- * @since 1.6035.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Monitoring_Stack extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Monitoring_Stack extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

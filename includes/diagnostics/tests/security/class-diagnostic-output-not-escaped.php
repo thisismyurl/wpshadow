@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6036.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * vulnerabilities. Checks theme and custom plugin files for
  * common patterns of unsafe output.
  *
- * @since 1.6036.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Output_Not_Escaped extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Output_Not_Escaped extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6036.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Output_Not_Escaped extends Diagnostic_Base {
 	/**
 	 * Get all PHP files in a directory recursively.
 	 *
-	 * @since  1.6036.1200
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @return array Array of file paths.
 	 */
@@ -167,7 +167,7 @@ class Diagnostic_Output_Not_Escaped extends Diagnostic_Base {
 	/**
 	 * Scan files for unescaped output patterns.
 	 *
-	 * @since  1.6036.1200
+	 * @since 1.6093.1200
 	 * @param  array  $files Array of file paths.
 	 * @param  string $source Source identifier (theme/plugin name).
 	 * @return array Array of issues found.
@@ -213,7 +213,7 @@ class Diagnostic_Output_Not_Escaped extends Diagnostic_Base {
 	/**
 	 * Get a sample line matching the pattern.
 	 *
-	 * @since  1.6036.1200
+	 * @since 1.6093.1200
 	 * @param  string $content File content.
 	 * @param  string $pattern Regex pattern.
 	 * @return string Sample line or empty string.

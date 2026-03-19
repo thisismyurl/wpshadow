@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Bold text for emphasis
  * - Short paragraphs for readability
  *
- * @since 1.6034.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'formats-content-for-scanning';
@@ -44,7 +44,7 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Skimmable Content Format';
@@ -52,7 +52,7 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Tests if content uses headings, lists, and formatting for easy scanning';
@@ -60,7 +60,7 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6034.1200
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'content';
@@ -74,7 +74,7 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 	 * - Bold text for emphasis
 	 * - Short paragraphs
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @return array|null {
 	 *     Finding array if issue found, null otherwise.
 	 *
@@ -150,7 +150,7 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => self::get_description( $skimmable_percent, $analyzed_posts ),
+					'description'  => self::build_description( $skimmable_percent, $analyzed_posts ),
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
@@ -176,7 +176,7 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 	 * - Bold text: 20 points
 	 * - Short paragraphs: 25 points
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @param  string $content    Post content HTML.
 	 * @param  int    $word_count Word count of content.
 	 * @return int Skimmability score (0-100).
@@ -241,12 +241,12 @@ class Diagnostic_Formats_Content_For_Scanning extends Diagnostic_Base {
 	/**
 	 * Get detailed description of the finding.
 	 *
-	 * @since  1.6034.1200
+	 * @since 1.6093.1200
 	 * @param  float $skimmable_percent Percentage of skimmable posts.
 	 * @param  array $analyzed_posts    Array of analyzed posts with scores.
 	 * @return string Formatted description with recommendations.
 	 */
-	private static function get_description( $skimmable_percent, $analyzed_posts ) {
+	private static function build_description( $skimmable_percent, $analyzed_posts ) {
 		$worst_count = min( 3, count( $analyzed_posts ) );
 
 		$description = sprintf(

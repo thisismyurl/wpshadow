@@ -3,7 +3,7 @@
  * Tests for Date Format Not Localized Diagnostic
  *
  * @package WPShadow\Tests
- * @since   1.6028.2135
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Tests\Unit;
@@ -14,7 +14,7 @@ use WP_Mock\Tools\TestCase;
 /**
  * Date Format Not Localized Test Class
  *
- * @since 1.6028.2135
+ * @since 1.6093.1200
  */
 class DateFormatNotLocalizedTest extends TestCase {
 

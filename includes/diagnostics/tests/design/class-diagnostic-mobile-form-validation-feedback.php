@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since      1.602.1210
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.3.1 Error Identification (Level A), 3.3.3 Error Suggestion (Level AA)
  *
- * @since 1.602.1210
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -183,7 +183,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check for common form validation patterns.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @return array Status and issues found.
 	 */
 	private static function check_form_validation_patterns() {
@@ -226,7 +226,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check Contact Form 7 validation configuration.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_cf7_validation() {
@@ -271,7 +271,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check Gravity Forms validation.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_gravity_forms_validation() {
@@ -305,7 +305,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check WooCommerce validation.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_woocommerce_validation() {
@@ -334,7 +334,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check JavaScript validation patterns in theme/plugins.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_javascript_validation() {
@@ -380,7 +380,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Capture HTML for page.
 	 *
-	 * @since  1.602.1210
+	 * @since 1.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

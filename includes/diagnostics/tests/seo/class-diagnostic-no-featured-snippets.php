@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1521
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Definition paragraphs
  * - Question-answer format
  *
- * @since 1.7030.1521
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Featured_Snippets extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_No_Featured_Snippets extends Diagnostic_Base {
 	 * - 1 point: Strong question-answer formatting
 	 * - 1 point: Proper heading hierarchy
 	 *
-	 * @since  1.7030.1521
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

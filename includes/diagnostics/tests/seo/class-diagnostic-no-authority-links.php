@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1511
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Major publication identification
  * - External link analysis
  *
- * @since 1.7030.1511
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Authority_Links extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_No_Authority_Links extends Diagnostic_Base {
 	 * - 2 points: ≥40% have authority links
 	 * - 0 points: <40% have authority links
 	 *
-	 * @since  1.7030.1511
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

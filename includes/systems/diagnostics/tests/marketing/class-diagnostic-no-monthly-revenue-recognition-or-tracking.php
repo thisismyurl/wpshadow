@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6035.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site has implemented systems to track and
  * recognize monthly revenue for financial reporting and analysis.
  *
- * @since 1.6035.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Monthly_Revenue_Recognition_Or_Tracking extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Monthly_Revenue_Recognition_Or_Tracking extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,11 +6,11 @@
  * Pillar: 🌐 Culturally Respectful
  *
  * Checks if numbers respect locale formatting.
- * 1,000.50 vs 1.000,50 confuses international users.
+ * 1,000.50 vs1.0,50 confuses international users.
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Treatment_Number_Formatting_Localization Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_Number_Formatting_Localization extends Treatment_Base {
 

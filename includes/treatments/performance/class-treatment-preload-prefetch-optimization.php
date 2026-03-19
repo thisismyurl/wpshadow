@@ -4,7 +4,7 @@
  *
  * Detects resource preload and prefetch implementation optimization.
  *
- * @since   1.6033.2110
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes resource hint implementation for optimization opportunities.
  *
- * @since 1.6033.2110
+ * @since 1.6093.1200
  */
 class Treatment_Preload_Prefetch_Optimization extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Preload_Prefetch_Optimization extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2110
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

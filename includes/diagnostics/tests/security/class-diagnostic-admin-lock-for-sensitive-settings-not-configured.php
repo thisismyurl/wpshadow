@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects unlocked sensitive settings.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Lock_For_Sensitive_Settings_Not_Configured extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Admin_Lock_For_Sensitive_Settings_Not_Configured extends Diagno
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

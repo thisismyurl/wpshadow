@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2103
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * According to Acunetix, XSS vulnerabilities are found in 53% of
  * web applications tested.
  *
- * @since 1.2033.2103
+ * @since 1.6093.1200
  */
 class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'reflected-xss';
@@ -50,7 +50,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Reflected XSS Vulnerability';
@@ -58,7 +58,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects potential reflected (non-persistent) XSS vulnerabilities';
@@ -66,7 +66,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	 * Scans theme and plugin code for patterns indicating
 	 * reflected XSS vulnerabilities.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -229,7 +229,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	/**
 	 * Scan directory for PHP files.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files to scan.
 	 * @return array File paths.
@@ -264,7 +264,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	/**
 	 * Scan file for reflected XSS patterns.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Dangerous patterns.
 	 * @return array Violations found.
@@ -299,7 +299,7 @@ class Diagnostic_Reflected_XSS extends Diagnostic_Base {
 	/**
 	 * Check if WordPress search form is vulnerable.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return bool True if vulnerable.
 	 */
 	private static function search_form_vulnerable() {

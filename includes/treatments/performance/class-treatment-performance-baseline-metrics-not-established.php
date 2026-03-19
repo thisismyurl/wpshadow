@@ -50,7 +50,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Established baseline: Lighthouse audit (performance: 58, saved JSON),
  * GTmetrix (4.2s load, screenshot), Core Web Vitals from Search Console
  * (LCP 3.8s, CLS 0.22). Documented in project wiki. After 3 months
- * optimization: Lighthouse 92, GTmetrix 1.1s, LCP 1.2s, CLS 0.03.
+ * optimization: Lighthouse 92, GTmetrix1.0s, LCP1.0s, CLS 0.03.
  * Created comparison report with before/after graphs. Stakeholders
  * impressed, optimization budget renewed.
  *
@@ -91,7 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (best practice but not critical)
  * - Treatment: document current metrics as baseline
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Performance_Baseline_Metrics_Not_Established extends Treatment_Base {
 
@@ -126,7 +126,7 @@ class Treatment_Performance_Baseline_Metrics_Not_Established extends Treatment_B
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

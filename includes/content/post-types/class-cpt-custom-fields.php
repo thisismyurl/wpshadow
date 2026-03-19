@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6090.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages custom fields for all Custom Post Types.
  *
- * @since 1.6090.2359
+ * @since 1.6093.1200
  */
 class CPT_Custom_Fields {
 
 	/**
 	 * Initialize custom fields system.
 	 *
-	 * @since 1.6034.1000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -40,7 +40,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Register all metaboxes.
 	 *
-	 * @since 1.6034.1000
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_meta_boxes() {
@@ -148,7 +148,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render testimonial fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -210,7 +210,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render team member fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -274,7 +274,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render portfolio fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -323,7 +323,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render event fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -389,7 +389,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render resource fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -446,7 +446,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render case study fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -517,7 +517,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render service fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -568,7 +568,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render location fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -668,7 +668,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render documentation fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -714,7 +714,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render product fields.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -772,7 +772,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save all meta boxes.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int      $post_id Post ID.
 	 * @param  \WP_Post $post    Post object.
 	 * @return void
@@ -823,7 +823,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save testimonial meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -857,7 +857,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save team member meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -890,7 +890,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save portfolio meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -921,7 +921,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save event meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -956,7 +956,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save resource meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -991,7 +991,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save case study meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1025,7 +1025,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save service meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1056,7 +1056,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save location meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1093,7 +1093,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save documentation meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1123,7 +1123,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save product meta.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1157,7 +1157,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Get meta value helper.
 	 *
-	 * @since  1.6034.1000
+	 * @since 1.6093.1200
 	 * @param  int    $post_id Post ID.
 	 * @param  string $key     Meta key (without underscore prefix).
 	 * @param  mixed  $default Default value if not found.

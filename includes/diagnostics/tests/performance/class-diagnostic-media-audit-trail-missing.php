@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if media file operations are logged for audit purposes.
  * Required for compliance (SOC 2, ISO 27001) and security investigations.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Audit_Trail_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Media_Audit_Trail_Missing extends Diagnostic_Base {
 	 * Checks if media operations are logged. Audit trails are critical
 	 * for accountability, security investigations, and compliance.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_Media_Audit_Trail_Missing extends Diagnostic_Base {
 	 *
 	 * Detects existing audit/activity log plugins for media operations.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if audit logging detected.
 	 */
 	private static function has_audit_logging() {
@@ -144,7 +144,7 @@ class Diagnostic_Media_Audit_Trail_Missing extends Diagnostic_Base {
 	 *
 	 * Detects indicators that site requires audit trails.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return bool True if compliance requirements detected.
 	 */
 	private static function has_compliance_requirements() {

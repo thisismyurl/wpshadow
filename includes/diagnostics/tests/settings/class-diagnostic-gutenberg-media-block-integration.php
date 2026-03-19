@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1635
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests if Gutenberg media blocks (image, video, audio, file) are properly
  * registered and integrated with the block editor for optimal media management.
  *
- * @since 1.6033.1635
+ * @since 1.6093.1200
  */
 class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6033.1635
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 	/**
 	 * Check if media blocks are registered
 	 *
-	 * @since  1.6033.1635
+	 * @since 1.6093.1200
 	 * @return array List of registered media blocks.
 	 */
 	private static function check_media_blocks() {

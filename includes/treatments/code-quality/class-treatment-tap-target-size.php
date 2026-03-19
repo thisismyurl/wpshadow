@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Accessibility
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * or 48×48px (Material Design) to support accurate tapping on mobile devices.
  * WCAG 2.5.5 Level AAA requirement.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Treatment_Tap_Target_Size extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Tap_Target_Size extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

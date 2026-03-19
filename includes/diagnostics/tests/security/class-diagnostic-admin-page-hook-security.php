@@ -97,7 +97,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0634
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -136,7 +136,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Performance Optimization: Broader admin speed analysis
  * - Plugin Code Quality: Detects deprecated function usage
  *
- * @since 1.6033.0634
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Page_Hook_Security extends Diagnostic_Base {
 

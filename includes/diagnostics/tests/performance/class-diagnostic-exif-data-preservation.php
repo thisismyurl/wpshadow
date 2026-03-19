@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether EXIF metadata is being preserved or stripped from
  * uploaded images, and validates if this aligns with privacy settings.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_EXIF_Data_Preservation extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_EXIF_Data_Preservation extends Diagnostic_Base {
 	 * Tests EXIF handling by examining recent uploads and comparing
 	 * with WordPress settings and expected behavior.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

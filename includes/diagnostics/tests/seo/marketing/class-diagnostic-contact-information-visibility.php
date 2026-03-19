@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6064.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that a contact page exists and is discoverable in menus,
  * with at least one contact method available.
  *
- * @since 1.6064.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Contact_Information_Visibility extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Contact_Information_Visibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6064.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Contact_Information_Visibility extends Diagnostic_Base {
 	/**
 	 * Find pages or posts by keyword search.
 	 *
-	 * @since  1.6064.1200
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching page titles.
 	 */
@@ -164,7 +164,7 @@ class Diagnostic_Contact_Information_Visibility extends Diagnostic_Base {
 	/**
 	 * Find navigation menu items that look like contact links.
 	 *
-	 * @since  1.6064.1200
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching menu item titles.
 	 */

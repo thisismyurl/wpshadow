@@ -14,7 +14,7 @@
  * **Why This Matters:**\n * Server memory is shared among all concurrent processes. If one plugin allocates 100MB per request,
  * only 2-3 concurrent users can use site before server runs out of memory and crashes. WordPress memory
  * limit is usually 256MB. A plugin using 128MB leaves only 128MB for WordPress core + other plugins.\n *
- * With 10 concurrent users, each requesting a page: server needs 1.28GB memory. If server only has 512MB,\n * it crashes and becomes inaccessible.\n *
+ * With 10 concurrent users, each requesting a page: server needs1.0GB memory. If server only has 512MB,\n * it crashes and becomes inaccessible.\n *
  * **Real-World Scenario:**\n * Large media site used plugin for on-the-fly image resizing. Plugin loaded entire 50MB image into memory,
  * resized it, then freed memory (hopefully). Every image resize = temporary 50MB spike. With high traffic,
  * multiple resizes simultaneously = 200MB+ memory used. During traffic spike, server hit memory limit,\n * crashed. Site went offline during peak traffic. After implementing cron-based pre-generation (resizes
@@ -23,7 +23,7 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents crash-under-load scenarios\n * - #9 Show Value: Prevents expensive server upgrades\n * - #10 Talk-About-Worthy: "Site handles traffic spikes without crashing"\n *
  * **Related Checks:**\n * - Server Memory Availability (total capacity)\n * - Concurrent User Capacity (load simulation)\n * - Background Job Performance (memory-intensive tasks)\n * - System Health Monitoring (resource tracking)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-memory-optimization\n * - Video: https://wpshadow.com/training/php-memory-profiling (6 min)\n * - Advanced: https://wpshadow.com/training/memory-leak-detection (12 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -75,7 +75,7 @@ class Treatment_Plugin_Memory_Usage extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

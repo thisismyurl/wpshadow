@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2109
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Insecure session storage allows attackers to read session files
  * directly from the filesystem or database, bypassing authentication.
  *
- * @since 1.2033.2109
+ * @since 1.6093.1200
  */
 class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2109
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-storage-security';
@@ -50,7 +50,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2109
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Storage Security';
@@ -58,7 +58,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2109
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies secure session storage configuration';
@@ -66,7 +66,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2109
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	 *
 	 * Validates session storage security.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -175,7 +175,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check session save path permissions.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null.
 	 */
 	private static function check_session_save_path_permissions() {
@@ -212,7 +212,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check shared /tmp usage.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return bool True if using shared tmp.
 	 */
 	private static function check_shared_tmp_usage() {
@@ -244,7 +244,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check web-accessible sessions.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return bool True if web-accessible.
 	 */
 	private static function check_web_accessible_sessions() {
@@ -265,7 +265,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check session garbage collection.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return bool True if disabled.
 	 */
 	private static function check_session_gc() {
@@ -288,7 +288,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check database session encryption.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return bool True if unencrypted.
 	 */
 	private static function check_database_session_encryption() {
@@ -318,7 +318,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check session handler security.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null.
 	 */
 	private static function check_session_handler_security() {
@@ -346,7 +346,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since  1.2033.2109
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

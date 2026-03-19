@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that plugins are loading in the correct order and detects
  * potential conflicts or dependency issues.
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 	/**
 	 * Run the plugin load order diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if load order issues detected, null otherwise.
 	 */
 	public static function check() {

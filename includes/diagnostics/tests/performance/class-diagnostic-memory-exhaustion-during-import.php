@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether available memory is sufficient for large content imports.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Memory_Exhaustion_During_Import extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Memory_Exhaustion_During_Import extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -102,7 +102,9 @@ class Diagnostic_Memory_Exhaustion_During_Import extends Diagnostic_Base {
 		// Check WP_DEBUG_LOG for memory warnings.
 		$debug_log_file = WP_CONTENT_DIR . '/debug.log';
 		if ( file_exists( $debug_log_file ) ) {
-			$log_content = file_get_contents( $debug_log_file, false, null, -1000 );
+			$file_size   = filesize( $debug_log_file );
+			$start_byte  = ( false !== $file_size && $file_size > 1000 ) ? $file_size - 1000 : 0;
+			$log_content = file_get_contents( $debug_log_file, false, null, $start_byte, 1000 );
 			if ( is_string( $log_content ) && stripos( $log_content, 'memory' ) !== false && stripos( $log_content, 'allowed' ) !== false ) {
 				$issues[] = __( 'Memory limit warnings found in debug.log', 'wpshadow' );
 			}

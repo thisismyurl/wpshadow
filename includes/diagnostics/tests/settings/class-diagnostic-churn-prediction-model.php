@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses data to predict and prevent member churn.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Predictive churn models allow proactive intervention, potentially reducing
  * churn by 20-30% through early identification of at-risk members.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -188,7 +188,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for analytics platform.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if analytics platform exists, false otherwise.
 	 */
 	private static function check_analytics_platform() {
@@ -211,7 +211,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for behavioral tracking.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if behavioral tracking exists, false otherwise.
 	 */
 	private static function check_behavioral_tracking() {
@@ -239,7 +239,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for churn indicators.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if indicators exist, false otherwise.
 	 */
 	private static function check_churn_indicators() {
@@ -267,7 +267,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for risk scoring.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if risk scoring exists, false otherwise.
 	 */
 	private static function check_risk_scoring() {
@@ -299,7 +299,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for predictive tools.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if predictive tools exist, false otherwise.
 	 */
 	private static function check_predictive_tools() {
@@ -331,7 +331,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for intervention workflows.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if workflows exist, false otherwise.
 	 */
 	private static function check_intervention_workflows() {
@@ -364,7 +364,7 @@ class Diagnostic_Churn_Prediction_Model extends Diagnostic_Base {
 	/**
 	 * Check for performance tracking.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists, false otherwise.
 	 */
 	private static function check_performance_tracking() {

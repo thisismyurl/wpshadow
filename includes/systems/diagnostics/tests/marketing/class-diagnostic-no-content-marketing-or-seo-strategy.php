@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * strategy, you're publishing randomly. Content marketing generates 3x more leads
  * than paid ads at 1/3 the cost. Companies with strategies are 6x more likely to succeed.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Content_Marketing_Or_Seo_Strategy extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Content_Marketing_Or_Seo_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_No_Content_Marketing_Or_Seo_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if content strategy exists
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if strategy detected
 	 */
 	private static function check_content_strategy(): bool {
@@ -139,7 +139,7 @@ class Diagnostic_No_Content_Marketing_Or_Seo_Strategy extends Diagnostic_Base {
 	/**
 	 * Check publishing frequency
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Publishing frequency analysis
 	 */
 	private static function check_publishing_frequency(): array {
@@ -177,7 +177,7 @@ class Diagnostic_No_Content_Marketing_Or_Seo_Strategy extends Diagnostic_Base {
 	/**
 	 * Get required strategy elements
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of strategy elements
 	 */
 	private static function get_strategy_elements(): array {
@@ -223,7 +223,7 @@ class Diagnostic_No_Content_Marketing_Or_Seo_Strategy extends Diagnostic_Base {
 	/**
 	 * Get business impact metrics
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Business impact data
 	 */
 	private static function get_business_impact(): array {

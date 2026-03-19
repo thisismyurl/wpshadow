@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer test suite patterns.
  *
- * @since 1.6033.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Local_Optimization_Tools_Missing extends Diagnostic_Base {
 
@@ -104,7 +104,7 @@ class Diagnostic_Local_Optimization_Tools_Missing extends Diagnostic_Base {
 	 * Checks for local image optimization tools. Missing tools result in
 	 * slower cloud-based optimization or reduced functionality.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -163,7 +163,7 @@ class Diagnostic_Local_Optimization_Tools_Missing extends Diagnostic_Base {
 	/**
 	 * Check if image optimizer plugin is active.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @return bool True if optimizer plugin detected.
 	 */
 	private static function has_image_optimizer_plugin() {
@@ -187,7 +187,7 @@ class Diagnostic_Local_Optimization_Tools_Missing extends Diagnostic_Base {
 	/**
 	 * Check if optimization tool is installed.
 	 *
-	 * @since  1.6033.1500
+	 * @since 1.6093.1200
 	 * @param  string $tool Tool name.
 	 * @return bool True if tool is installed.
 	 */

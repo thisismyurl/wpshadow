@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing zero downtime deployment.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Zero_Downtime_Deployment_Not_Implemented extends Diagnostic_Base {
 
@@ -59,12 +59,13 @@ class Diagnostic_Zero_Downtime_Deployment_Not_Implemented extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for blue-green deployment or canary release support
-		if ( ! has_option( 'zero_downtime_deployment_enabled' ) ) {
+		$deployment_enabled = get_option( 'zero_downtime_deployment_enabled', null );
+		if ( null === $deployment_enabled ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

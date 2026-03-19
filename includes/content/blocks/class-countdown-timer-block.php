@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since      1.6034.1630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates countdown timers with timezone support.
  *
- * @since 1.6034.1630
+ * @since 1.6093.1200
  */
 class Countdown_Timer_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6034.1630
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Countdown_Timer_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since  1.6034.1630
+	 * @since 1.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -80,7 +80,7 @@ class Countdown_Timer_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since  1.6034.1630
+	 * @since 1.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */

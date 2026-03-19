@@ -7,7 +7,7 @@
  * of the architecture and can be used for manual testing.
  *
  * @package WPShadow
- * @since   1.6004.0400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 11. Reward_System::redeem() deducts points and delivers reward
  * 12. User receives reward (Guardian credits, storage, or Pro access)
  *
- * @since 1.6004.0400
+ * @since 1.6093.1200
  */
 class Gamification_Integration_Test {
 
@@ -44,7 +44,7 @@ class Gamification_Integration_Test {
 	 *
 	 * Scenario: User sees "Share X" action on Rewards page, clicks "Claim Points"
 	 *
-	 * @since 1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Test result.
 	 */
 	public static function test_claim_social_share(): array {
@@ -100,7 +100,7 @@ class Gamification_Integration_Test {
 	 *
 	 * Scenario: User has 1000 points, clicks "Get 100 Credits" reward
 	 *
-	 * @since 1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Test result.
 	 */
 	public static function test_redeem_guardian_credits(): array {
@@ -154,7 +154,7 @@ class Gamification_Integration_Test {
 	 *
 	 * Scenario: User enables Guardian monitoring in settings
 	 *
-	 * @since 1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Test result.
 	 */
 	public static function test_setup_guardian_auto_award(): array {
@@ -198,7 +198,7 @@ class Gamification_Integration_Test {
 	 *
 	 * Scenario: User shares on X, LinkedIn, and Facebook
 	 *
-	 * @since 1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Test result.
 	 */
 	public static function test_social_supporter_achievement(): array {
@@ -249,7 +249,7 @@ class Gamification_Integration_Test {
 	 * 6. User redeems for 500-point reward (Guardian 100 credits)
 	 * 7. Remaining: ~50 points
 	 *
-	 * @since 1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Test result with journey steps.
 	 */
 	public static function test_user_journey(): array {

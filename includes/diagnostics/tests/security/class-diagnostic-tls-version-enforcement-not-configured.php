@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,10 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_TLS_Version_Enforcement_Not_Configured Class
  *
- * Detects when servers allow outdated TLS versions (1.0, 1.1) that are
+ * Detects when servers allow outdated TLS versions (1.0,1.0) that are
  * vulnerable to POODLE, BEAST, and other downgrade attacks.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base {
 
@@ -50,7 +50,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Verifies minimum TLS 1.2 is enforced for all HTTPS connections';
+	protected static $description = 'Verifies minimum TLS1.0 is enforced for all HTTPS connections';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -62,7 +62,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,8 +79,8 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 		// Try to determine TLS configuration.
 		$tls_config = self::detect_tls_configuration();
 
-		// If TLS 1.2+ is enforced, return null.
-		if ( ! empty( $tls_config['enforced'] ) && $tls_config['min_version'] >= 1.2 ) {
+		// If TLS1.0+ is enforced, return null.
+		if ( ! empty( $tls_config['enforced'] ) && $tls_config['min_version'] >=1.0 ) {
 			return null;
 		}
 
@@ -95,7 +95,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => __(
-				'Your server may allow outdated TLS versions (1.0, 1.1) that are vulnerable to downgrade attacks. TLS 1.0 and 1.1 are officially deprecated (RFC 8996, 2021) and vulnerable to: POODLE attacks (padding oracle), BEAST attacks (cipher block chaining), weak ciphers (RC4, 3DES). Major browsers now block TLS 1.0/1.1 by default. PCI DSS compliance requires TLS 1.2+ for payment data. Modern TLS 1.3 provides: perfect forward secrecy (ephemeral keys), reduced handshake latency (faster connections), stronger cipher suites (AES-GCM, ChaCha20). Enforcing TLS 1.2+ prevents man-in-the-middle attacks that steal login credentials and customer data.',
+				'Your server may allow outdated TLS versions (1.0,1.0) that are vulnerable to downgrade attacks. TLS1.0 and1.0 are officially deprecated (RFC 8996, 2021) and vulnerable to: POODLE attacks (padding oracle), BEAST attacks (cipher block chaining), weak ciphers (RC4, 3DES). Major browsers now block TLS1.0/1.1 by default. PCI DSS compliance requires TLS1.0+ for payment data. Modern TLS1.0 provides: perfect forward secrecy (ephemeral keys), reduced handshake latency (faster connections), stronger cipher suites (AES-GCM, ChaCha20). Enforcing TLS1.0+ prevents man-in-the-middle attacks that steal login credentials and customer data.',
 				'wpshadow'
 			),
 			'severity'     => 'high',
@@ -119,7 +119,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 	/**
 	 * Detect TLS configuration from server environment.
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array TLS configuration details.
 	 */
 	private static function detect_tls_configuration() {
@@ -143,7 +143,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 					$contents = file_get_contents( $config_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 					if ( preg_match( '/SSLProtocol\s+(-all\s+)?\+?TLSv1\.([23])/i', $contents, $matches ) ) {
 						$config['enforced']     = true;
-						$config['min_version']  = 1.2;
+						$config['min_version']  =1.0;
 						$config['detected_at']  = 'apache_config';
 						$config['config_value'] = $matches[0];
 						break;
@@ -163,7 +163,7 @@ class Diagnostic_TLS_Version_Enforcement_Not_Configured extends Diagnostic_Base 
 				$contents = file_get_contents( $config_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 				if ( preg_match( '/ssl_protocols\s+TLSv1\.([23])/i', $contents, $matches ) ) {
 					$config['enforced']     = true;
-					$config['min_version']  = 1.2;
+					$config['min_version']  =1.0;
 					$config['detected_at']  = 'nginx_config';
 					$config['config_value'] = $matches[0];
 					break;

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1040
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that admin actions (login, post edits, settings changes) are
  * logged for security auditing and compliance requirements.
  *
- * @since 1.7034.1040
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 	 * Tests if WordPress has activity logging enabled for admin
 	 * actions including logins, post edits, and settings changes.
 	 *
-	 * @since  1.7034.1040
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

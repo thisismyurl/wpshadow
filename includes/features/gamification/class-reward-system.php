@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6180
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles reward redemption and delivery.
  *
- * @since 1.6180
+ * @since 1.6093.1200
  */
 class Reward_System extends Hook_Subscriber_Base {
 
@@ -39,7 +39,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -49,7 +49,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6180
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -59,8 +59,8 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Initialize reward system (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Reward_System::subscribe() instead
-	 * @since      1.6004.0400
+	 * @deprecated1.0 Use Reward_System::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -74,7 +74,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Register all rewards.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function register_rewards() {
@@ -177,7 +177,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Register a reward.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $id     Reward ID.
 	 * @param  array  $reward Reward data.
 	 * @return void
@@ -200,7 +200,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Get reward definition.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $reward_id Reward ID.
 	 * @return array|null Reward data or null.
 	 */
@@ -215,7 +215,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Get all rewards.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  string $category Optional category filter.
 	 * @return array All rewards.
 	 */
@@ -239,7 +239,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Redeem a reward.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id   User ID.
 	 * @param  string $reward_id Reward ID.
 	 * @return array {
@@ -337,7 +337,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Deliver redeemed reward.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id   User ID.
 	 * @param  string $reward_id Reward ID.
 	 * @param  array  $reward    Reward data.
@@ -400,7 +400,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Generate secure download URL.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  string $item    Item identifier.
 	 * @return string Download URL.
@@ -422,7 +422,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Record redemption.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id   User ID.
 	 * @param  string $reward_id Reward ID.
 	 * @param  array  $reward    Reward data.
@@ -448,7 +448,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Get user's redemption history.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @param  int $limit   Number to return.
 	 * @return array Redemption history.
@@ -468,7 +468,7 @@ class Reward_System extends Hook_Subscriber_Base {
 	/**
 	 * Get reward categories.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Category labels.
 	 */
 	public static function get_categories() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1449
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Form plugin detection
  * - Opt-in form presence in content
  *
- * @since 1.7030.1449
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Email_Optin extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_No_Email_Optin extends Diagnostic_Base {
 	 * - 1 point: Form plugin active
 	 * - 1 point: Opt-in forms found in content
 	 *
-	 * @since  1.7030.1449
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

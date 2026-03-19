@@ -4,7 +4,7 @@
  *
  * Detects dead code elimination and tree-shaking implementation.
  *
- * @since   1.6033.2115
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes JavaScript for tree-shaking and dead code elimination.
  *
- * @since 1.6033.2115
+ * @since 1.6093.1200
  */
 class Diagnostic_Tree_Shaking_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Tree_Shaking_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2115
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

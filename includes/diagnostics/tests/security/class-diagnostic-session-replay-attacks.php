@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6041.0204
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Long session lifetimes without rotation
  * - No device/IP binding to sessions
  *
- * @since 1.6041.0204
+ * @since 1.6093.1200
  */
 class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6041.0204
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

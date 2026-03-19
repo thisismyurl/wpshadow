@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2205
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies duplicate jQuery, React, Vue, and other JavaScript library versions.
  *
- * @since 1.6030.2205
+ * @since 1.6093.1200
  */
 class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2205
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,7 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 						}
 						$libraries[ $library ][] = array(
 							'handle' => $handle,
-							'src'    => $script->src,
+							'src'    => isset( $script->src ) && is_string( $script->src ) ? $script->src : '',
 							'ver'    => $script->ver,
 						);
 					}
@@ -143,8 +143,9 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 		// Check for no-conflict mode issues.
 		if ( isset( $libraries['jquery'] ) ) {
 			foreach ( $libraries['jquery'] as $jquery_instance ) {
-				if ( strpos( $jquery_instance['src'], 'jquery.min.js' ) !== false
-					&& strpos( $jquery_instance['src'], 'wp-includes' ) === false ) {
+				$jquery_src = isset( $jquery_instance['src'] ) && is_string( $jquery_instance['src'] ) ? $jquery_instance['src'] : '';
+				if ( false !== strpos( $jquery_src, 'jquery.min.js' )
+					&& false === strpos( $jquery_src, 'wp-includes' ) ) {
 					$issues[] = __( 'Plugin loading jQuery directly (bypassing WordPress jQuery no-conflict mode)', 'wpshadow' );
 					break;
 				}
@@ -157,16 +158,16 @@ class Diagnostic_JavaScript_Library_Version_Conflicts extends Diagnostic_Base {
 		$local_scripts = 0;
 
 		foreach ( $wp_scripts->registered as $script ) {
-			if ( ! empty( $script->src ) ) {
+			if ( isset( $script->src ) && is_string( $script->src ) && '' !== $script->src ) {
 				$is_cdn = false;
 				foreach ( $cdn_patterns as $pattern ) {
-					if ( strpos( $script->src, $pattern ) !== false ) {
+					if ( false !== strpos( $script->src, $pattern ) ) {
 						$is_cdn = true;
 						++$cdn_scripts;
 						break;
 					}
 				}
-				if ( ! $is_cdn && ( strpos( $script->src, '/plugins/' ) !== false || strpos( $script->src, '/themes/' ) !== false ) ) {
+				if ( ! $is_cdn && ( false !== strpos( $script->src, '/plugins/' ) || false !== strpos( $script->src, '/themes/' ) ) ) {
 					++$local_scripts;
 				}
 			}

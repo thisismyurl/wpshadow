@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2110
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enabled file editing allows compromised admin accounts to inject
  * malicious code directly through the WordPress admin interface.
  *
- * @since 1.2033.2110
+ * @since 1.6093.1200
  */
 class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2110
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'file-editing-disabled';
@@ -50,7 +50,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2110
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'File Editing Not Disabled';
@@ -58,7 +58,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2110
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies WordPress file editor is disabled for security';
@@ -66,7 +66,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2110
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	 *
 	 * Validates file editing restrictions.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -180,7 +180,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * Check DISALLOW_FILE_EDIT constant.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return bool True if disabled.
 	 */
 	private static function check_file_edit_constant() {
@@ -190,7 +190,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * Check DISALLOW_FILE_MODS constant.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return bool True if disabled.
 	 */
 	private static function check_file_mods_constant() {
@@ -200,7 +200,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * Check theme editor accessibility.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return bool True if accessible.
 	 */
 	private static function check_theme_editor_accessibility() {
@@ -211,7 +211,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * Check plugin editor accessibility.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return bool True if accessible.
 	 */
 	private static function check_plugin_editor_accessibility() {
@@ -222,7 +222,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * Check critical file permissions.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return array Writable files.
 	 */
 	private static function check_critical_file_permissions() {
@@ -251,7 +251,7 @@ class Diagnostic_File_Editing_Disabled extends Diagnostic_Base {
 	/**
 	 * Check for alternative editing routes.
 	 *
-	 * @since  1.2033.2110
+	 * @since 1.6093.1200
 	 * @return bool True if alternative routes exist.
 	 */
 	private static function check_alternative_editing_routes() {

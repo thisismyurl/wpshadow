@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies HTTP Strict Transport Security is enabled.
  * Like telling browsers to always use the secure entrance.
  *
- * @since 1.6035.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 	/**
 	 * Run the HSTS headers diagnostic check.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if HSTS issues detected, null otherwise.
 	 */
 	public static function check() {

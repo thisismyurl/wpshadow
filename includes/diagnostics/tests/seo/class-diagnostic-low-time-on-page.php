@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1446
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Time on page meta data
  * - Engagement metrics
  *
- * @since 1.7030.1446
+ * @since 1.6093.1200
  */
 class Diagnostic_Low_Time_On_Page extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Low_Time_On_Page extends Diagnostic_Base {
 	 * - 1 point: Time on page tracking exists
 	 * - 0 points if low time detected
 	 *
-	 * @since  1.7030.1446
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

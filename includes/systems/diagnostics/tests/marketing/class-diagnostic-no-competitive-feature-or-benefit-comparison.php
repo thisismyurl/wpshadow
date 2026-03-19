@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when visitors cannot easily compare your offering with alternatives.
  * Clear comparisons reduce decision friction and improve conversions.
  *
- * @since 1.6035.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Competitive_Feature_Or_Benefit_Comparison extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Competitive_Feature_Or_Benefit_Comparison extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Competitive_Feature_Or_Benefit_Comparison extends Diagnostic
 	/**
 	 * Count pages or posts that look like competitive comparisons.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return int Number of comparison pages found.
 	 */
 	private static function count_comparison_pages(): int {
@@ -108,7 +108,7 @@ class Diagnostic_No_Competitive_Feature_Or_Benefit_Comparison extends Diagnostic
 	/**
 	 * Count posts/pages containing any keyword.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Count of matching posts/pages.
 	 */
@@ -131,7 +131,7 @@ class Diagnostic_No_Competitive_Feature_Or_Benefit_Comparison extends Diagnostic
 	/**
 	 * Get recommended comparison elements.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return array Comparison elements.
 	 */
 	private static function get_comparison_elements(): array {

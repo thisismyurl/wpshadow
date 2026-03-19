@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1410
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that multilingual sites have proper language switcher
  * implementation for easy language selection.
  *
- * @since 1.7034.1410
+ * @since 1.6093.1200
  */
 class Diagnostic_Language_Switcher_Implementation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Language_Switcher_Implementation extends Diagnostic_Base {
 	 * Tests language switcher implementation including plugin detection,
 	 * switcher placement, and accessibility.
 	 *
-	 * @since  1.7034.1410
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

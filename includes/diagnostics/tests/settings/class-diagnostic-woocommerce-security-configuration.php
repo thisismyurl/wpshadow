@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WooCommerce has proper security measures including
  * SSL for checkout, secure payment gateways, and fraud prevention.
  *
- * @since 1.7034.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_WooCommerce_Security_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_WooCommerce_Security_Configuration extends Diagnostic_Base {
 	 * Tests WooCommerce security including SSL, payment gateway security,
 	 * checkout protection, and PCI compliance measures.
 	 *
-	 * @since  1.7034.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

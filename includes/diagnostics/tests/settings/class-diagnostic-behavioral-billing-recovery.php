@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1455
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for automatic payment retry systems. 20-40% of subscription failures
  * are temporary (expired cards, insufficient funds). Smart retry recovers 60%+.
  *
- * @since 1.6034.1455
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Billing_Recovery extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Billing_Recovery extends Diagnostic_Base {
 	 *
 	 * Looks for retry rules in subscription/membership systems.
 	 *
-	 * @since  1.6034.1455
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no retry, null if configured.
 	 */
 	public static function check() {

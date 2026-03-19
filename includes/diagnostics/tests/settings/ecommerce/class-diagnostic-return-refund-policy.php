@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Ecommerce
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that return policy pages and navigation links exist.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Return_Refund_Policy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Return_Refund_Policy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,7 @@ class Diagnostic_Return_Refund_Policy extends Diagnostic_Base {
 	/**
 	 * Find pages or posts by keyword search.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching page titles.
 	 */
@@ -126,7 +126,7 @@ class Diagnostic_Return_Refund_Policy extends Diagnostic_Base {
 	/**
 	 * Find navigation menu links by keyword.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching menu item titles.
 	 */

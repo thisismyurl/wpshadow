@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since 1.6364
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages Vault admin pages and AJAX handlers.
  *
- * @since 1.6364
+ * @since 1.6093.1200
  */
 class Vault_UI extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6364
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -58,8 +58,8 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Initialize UI hooks (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Vault_UI::subscribe() instead
-	 * @since      1.6030.1845
+	 * @deprecated1.0 Use Vault_UI::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -72,7 +72,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	 * Vault menu is disabled in core - this is a pro feature.
 	 * Vault Light functionality remains available programmatically.
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_pages() {
@@ -93,7 +93,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render main Vault page
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_vault_page() {
@@ -120,7 +120,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render registration prompt
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function render_registration_prompt() {
@@ -189,7 +189,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render Vault header with stats
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @param  array $status Vault status.
 	 * @return void
 	 */
@@ -255,7 +255,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render backup list table
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @param  array $backups List of backups.
 	 * @param  array $status Vault status.
 	 * @return void
@@ -349,7 +349,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue UI assets
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -401,7 +401,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Handle create backup AJAX request
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_create_backup() {
@@ -422,7 +422,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Handle delete backup AJAX request
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_delete_backup() {
@@ -443,7 +443,7 @@ class Vault_UI extends Hook_Subscriber_Base {
 	/**
 	 * Handle restore backup AJAX request
 	 *
-	 * @since  1.6030.1845
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_restore_backup() {

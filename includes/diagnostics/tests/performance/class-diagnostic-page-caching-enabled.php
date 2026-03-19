@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since      1.6034.2150
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Browser caching headers
  * - CDN integration
  *
- * @since 1.6034.2150
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Caching_Enabled extends Diagnostic_Base {
 
@@ -81,7 +81,7 @@ class Diagnostic_Page_Caching_Enabled extends Diagnostic_Base {
 	 * - Check for cache directories
 	 * - Check advanced-cache.php drop-in
 	 *
-	 * @since  1.6034.2150
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if caching is disabled, null if enabled.
 	 */
 	public static function check() {

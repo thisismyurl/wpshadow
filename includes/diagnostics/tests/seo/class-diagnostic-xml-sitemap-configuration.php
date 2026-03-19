@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site generates XML sitemaps and submits them
  * to search engines for better indexing and discovery.
  *
- * @since 1.7034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_XML_Sitemap_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_XML_Sitemap_Configuration extends Diagnostic_Base {
 	 * Tests XML sitemap configuration including generation, index file,
 	 * and search engine submission.
 	 *
-	 * @since  1.7034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

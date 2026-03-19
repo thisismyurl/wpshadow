@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #2: Product Videos Created from Specialized & Emerging Success Habits.
  * Checks if the site includes product video demonstrations.
  *
- * @since 1.5003.1145
+ * @since 1.6093.1200
  */
 class Diagnostic_Includes_Product_Videos extends Diagnostic_Base {
 

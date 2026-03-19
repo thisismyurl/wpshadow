@@ -4,7 +4,7 @@
  *
  * Validates user profile data and information disclosure risks.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user profile data and information disclosure.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Profile_Data extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Profile_Data extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

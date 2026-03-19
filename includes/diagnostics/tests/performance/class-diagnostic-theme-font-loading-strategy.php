@@ -15,16 +15,16 @@
  * preload (start font download immediately), font-display: swap (show text immediately). Without these,
  * font loading is slow and blocks content.\n *
  * **Real-World Scenario:**\n * Theme loaded fonts naively (no preconnect, no preload, no font-display). Fonts loaded during page parse
- * (late). Text didn't appear until fonts ready. Performance: 1.8s before text visible. After adding
+ * (late). Text didn't appear until fonts ready. Performance:1.0s before text visible. After adding
  * preconnect + preload + font-display: swap, font download started immediately and text appeared via
- * system font in 0.1s (custom font loaded in parallel). Visitors saw content 1.7 seconds faster.\n *
+ * system font in 0.1s (custom font loaded in parallel). Visitors saw content1.0 seconds faster.\n *
  * **Business Impact:**\n * - Visible text delay: 1-3 seconds slower\n * - Blank space where text should be\n * - Bounce rate increases 15-25%\n * - Core Web Vitals: LCP delayed 1-3 seconds\n * - Conversion rate drops 15-30%\n *
  * **Philosophy Alignment:**\n * - #9 Show Value: Immediate visible performance improvement\n * - #8 Inspire Confidence: Modern optimization patterns\n * - #10 Talk-About-Worthy: "Fonts load invisibly in background now"\n *
  * **Related Checks:**\n * - Theme Font Loading Issues (overall strategy)\n * - Theme Asset Loading Optimization (asset patterns)\n * - First Contentful Paint (content timing)\n * - Core Web Vitals (LCP measurement)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/font-strategy-optimization\n * - Video: https://wpshadow.com/training/preload-preconnect-hints (7 min)\n * - Advanced: https://wpshadow.com/training/font-subsetting-strategies (12 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2240
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Flags themes loading fonts without optimization hints.
  *
- * @since 1.6030.2240
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Font_Loading_Strategy extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Theme_Font_Loading_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2240
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

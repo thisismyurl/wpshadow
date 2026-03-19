@@ -4,7 +4,7 @@
  *
  * @package WPShadow
  * @subpackage Reports
- * @since 1.6038.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -251,7 +251,7 @@ if ( $privacy_score >= 80 ) {
 			padding: 12px;
 			margin: 0;
 			font-size: 12px;
-			line-height: 1.5;
+			line-height:1.0;
 		}
 
 		.wps-user-search-results {

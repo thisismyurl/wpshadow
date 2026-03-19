@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes content distribution across quarters to detect seasonal imbalance.
  * Balanced publishing throughout the year maximizes SEO opportunities.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 	 * Analyzes last 12 months to check if content is concentrated in specific
 	 * quarters. Ideally, content should be distributed relatively evenly.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

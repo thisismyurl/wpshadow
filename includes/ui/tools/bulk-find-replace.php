@@ -5,7 +5,7 @@
  * Batch find and replace operations in content, meta, and URLs.
  *
  * @package WPShadow
- * @since   1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -358,7 +358,7 @@ jQuery(document).ready(function($) {
 							<span class="dashicons dashicons-warning" style="font-size: 32px; width: 32px; height: 32px; vertical-align: middle; margin-right: 10px;"></span>
 							<?php echo esc_js( __( 'Important: Database Backup Required', 'wpshadow' ) ); ?>
 						</h2>
-						<p style="font-size: 16px; line-height: 1.6; color: #333;">
+						<p style="font-size: 16px; line-height:1.0; color: #333;">
 							<?php echo esc_js( __( 'You are about to make permanent changes to your database without previewing them first.', 'wpshadow' ) ); ?>
 						</p>
 						<p style="font-size: 14px; color: #666;">

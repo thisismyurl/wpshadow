@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses machine learning for personalized user experiences.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * ML-powered personalization adapts content, products, and experiences to individual
  * users based on behavior patterns, improving engagement and conversions.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -175,7 +175,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Check for recommendation engine.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if recommendation engine exists, false otherwise.
 	 */
 	private static function check_recommendation_engine() {
@@ -210,7 +210,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Check for user segmentation.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if user segmentation exists, false otherwise.
 	 */
 	private static function check_user_segmentation() {
@@ -233,7 +233,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Check for dynamic content delivery.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if dynamic content exists, false otherwise.
 	 */
 	private static function check_dynamic_content() {
@@ -256,7 +256,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Check for personalized email campaigns.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if personalized email exists, false otherwise.
 	 */
 	private static function check_personalized_email() {
@@ -279,7 +279,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Check for predictive search.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if predictive search exists, false otherwise.
 	 */
 	private static function check_predictive_search() {
@@ -303,7 +303,7 @@ class Diagnostic_Machine_Learning_Personalization extends Diagnostic_Base {
 	/**
 	 * Check for behavioral targeting.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if behavioral targeting exists, false otherwise.
 	 */
 	private static function check_behavioral_targeting() {

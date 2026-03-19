@@ -3,7 +3,7 @@
  * Tests for Weak WordPress Salts Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.2802.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -16,7 +16,7 @@ use WPShadow\Tests\TestCase;
 /**
  * Weak WordPress Salts Diagnostic Tests
  *
- * @since 1.2802.1500
+ * @since 1.6093.1200
  */
 class WeakWordPressSaltsTest extends TestCase {
 

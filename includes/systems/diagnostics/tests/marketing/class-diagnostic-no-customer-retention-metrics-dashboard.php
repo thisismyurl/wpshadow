@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * profitable than acquisition—keeping customers 5x cheaper than getting new ones.
  * Without tracking retention, you're flying blind on your most profitable metric.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_No_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base
 	/**
 	 * Check if retention tracking is implemented
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if tracking is in place
 	 */
 	private static function check_retention_tracking(): bool {
@@ -126,7 +126,7 @@ class Diagnostic_No_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base
 	/**
 	 * Check if any analytics tracking is enabled
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if analytics enabled
 	 */
 	private static function has_analytics_tracking(): bool {
@@ -154,7 +154,7 @@ class Diagnostic_No_Customer_Retention_Metrics_Dashboard extends Diagnostic_Base
 	/**
 	 * Get list of recommended retention metrics
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of recommended metrics with descriptions
 	 */
 	private static function get_recommended_metrics(): array {

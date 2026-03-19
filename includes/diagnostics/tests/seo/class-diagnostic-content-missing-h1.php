@@ -4,7 +4,7 @@
  *
  * Detects missing H1 tag on a page.
  *
- * @since   1.6033.1730
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Missing H1 is a critical SEO and accessibility issue. Every page
  * should have exactly one H1 tag.
  *
- * @since 1.6033.1730
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Missing_H1 extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Missing_H1 extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1730
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

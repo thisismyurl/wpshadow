@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website runs marketing campaigns tailored to specific regional
  * audiences with localized messaging, offers, and content.
  *
- * @since 1.5002.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Runs_Regional_Marketing_Campaigns extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Runs_Regional_Marketing_Campaigns extends Diagnostic_Base {
 	 * This diagnostic checks for geo-targeting plugins, regional content, localized
 	 * offers, and multi-region strategy.
 	 *
-	 * @since  1.5002.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

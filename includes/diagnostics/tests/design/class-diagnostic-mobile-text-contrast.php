@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Typography
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,10 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Mobile Text Contrast Ratio
  *
- * Ensures text contrast meets WCAG 1.4.3 requirements (4.5:1 for normal text, 3:1 for large text).
+ * Ensures text contrast meets WCAG1.0 requirements (4.5:1 for normal text, 3:1 for large text).
  * Critical for readability, especially for mobile devices used outdoors.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 
@@ -48,7 +48,7 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Ensures text contrast meets WCAG 1.4.3 requirements';
+	protected static $description = 'Ensures text contrast meets WCAG1.0 requirements';
 
 	/**
 	 * The diagnostic family.
@@ -74,7 +74,7 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 	/**
 	 * Find text contrast violations.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array List of violations.
 	 */
 	private static function find_contrast_violations(): array {
@@ -166,7 +166,7 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 	/**
 	 * Calculate WCAG contrast ratio.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $color1 Hex color 1.
 	 * @param  string $color2 Hex color 2.
 	 * @return float Contrast ratio.
@@ -184,7 +184,7 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 	/**
 	 * Get relative luminance of a color.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $hex Hex color code.
 	 * @return float Luminance (0-1).
 	 */
@@ -196,9 +196,9 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 		$b = hexdec( substr( $hex, 4, 2 ) ) / 255;
 
 		// Apply gamma correction
-		$r = $r <= 0.03928 ? $r / 12.92 : pow( ( $r + 0.055 ) / 1.055, 2.4 );
-		$g = $g <= 0.03928 ? $g / 12.92 : pow( ( $g + 0.055 ) / 1.055, 2.4 );
-		$b = $b <= 0.03928 ? $b / 12.92 : pow( ( $b + 0.055 ) / 1.055, 2.4 );
+		$r = $r <= 0.03928 ? $r / 12.92 : pow( ( $r + 0.055 ) /1.0, 2.4 );
+		$g = $g <= 0.03928 ? $g / 12.92 : pow( ( $g + 0.055 ) /1.0, 2.4 );
+		$b = $b <= 0.03928 ? $b / 12.92 : pow( ( $b + 0.055 ) /1.0, 2.4 );
 
 		return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
 	}
@@ -206,7 +206,7 @@ class Diagnostic_Mobile_Text_Contrast extends Diagnostic_Base {
 	/**
 	 * Get theme stylesheet content.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null CSS content.
 	 */
 	private static function get_stylesheet_content(): ?string {

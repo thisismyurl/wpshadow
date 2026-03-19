@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Returns severity: medium (1-50 corrupt), critical (50+ corrupt)
  * - Non-fixable diagnostic (requires database admin to fix)
  *
- * @since 1.6031.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Status_Inconsistencies extends Diagnostic_Base {
 	protected static $slug = 'comment-status-inconsistencies';

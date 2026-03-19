@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1625
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * PHP Error Logging Diagnostic Test Class
  *
- * @since 1.6028.1625
+ * @since 1.6093.1200
  */
 class PHPErrorLoggingTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test diagnostic passes when properly configured
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_when_properly_configured(): void {
@@ -64,7 +64,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test diagnostic flags debug display on production
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_debug_display_on_production(): void {
@@ -115,7 +115,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test diagnostic flags debug without logging on production
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_debug_without_logging_production(): void {
@@ -164,7 +164,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test diagnostic suggests enabling debug on development
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_suggests_enabling_debug_on_development(): void {
@@ -214,7 +214,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test diagnostic flags oversized debug log
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_oversized_debug_log(): void {
@@ -264,7 +264,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -324,7 +324,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test meta includes debug configuration
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_debug_config(): void {
@@ -376,7 +376,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test details include current configuration
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_current_config(): void {
@@ -425,7 +425,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test details include recommended configuration
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_recommended_config(): void {
@@ -474,7 +474,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test details include why this matters
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_why_matters(): void {
@@ -523,7 +523,7 @@ class PHPErrorLoggingTest extends TestCase {
 	/**
 	 * Test threat level increases with critical issues
 	 *
-	 * @since 1.6028.1625
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_increases_with_critical_issues(): void {

@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (niche use case)
  * - Treatment: implement VM detection if high-security needs
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Virtual_Machine_Detection_Not_Implemented extends Diagnostic_Base {
 
@@ -118,7 +118,7 @@ class Diagnostic_Virtual_Machine_Detection_Not_Implemented extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

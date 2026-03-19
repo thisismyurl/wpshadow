@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2033
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Function Argument Type Checking Not Enforced.
  *
- * @since 1.6033.2033
+ * @since 1.6093.1200
  */
 class Diagnostic_Function_Argument_Type_Checking_Not_Enforced extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Function_Argument_Type_Checking_Not_Enforced extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2033
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

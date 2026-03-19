@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2107
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * must be masked when displayed, showing only the first 6 and last 4
  * digits at most. GDPR requires minimizing exposure of personal data.
  *
- * @since 1.2033.2107
+ * @since 1.6093.1200
  */
 class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'data-masking-in-ui';
@@ -51,7 +51,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Data Masking in UI';
@@ -59,7 +59,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies sensitive data is properly masked in user interfaces';
@@ -67,7 +67,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2107
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	 *
 	 * Scans admin pages and templates for unmasked sensitive data.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -196,7 +196,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Scan for password fields using type="text".
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array Files with issue.
 	 */
 	private static function scan_for_text_password_fields() {
@@ -221,7 +221,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Check settings pages for visible API keys.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array Files with visible keys.
 	 */
 	private static function check_settings_pages_for_visible_keys() {
@@ -266,7 +266,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Scan for credit card patterns in HTML.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return bool True if found.
 	 */
 	private static function scan_for_credit_cards_in_html() {
@@ -296,7 +296,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Scan for sensitive data in HTML comments.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array Files with issue.
 	 */
 	private static function scan_for_data_in_comments() {
@@ -321,7 +321,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Scan JavaScript for sensitive data.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return array Files with issue.
 	 */
 	private static function scan_javascript_for_sensitive_data() {
@@ -352,7 +352,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Scan for SSN display patterns.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @return bool True if found.
 	 */
 	private static function scan_for_ssn_display() {
@@ -376,7 +376,7 @@ class Diagnostic_Data_Masking_In_UI extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since  1.2033.2107
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

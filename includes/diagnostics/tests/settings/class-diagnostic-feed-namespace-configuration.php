@@ -33,7 +33,7 @@
  * See https://wpshadow.com/kb/feed-namespace-configuration
  * or https://wpshadow.com/training/rss-xml-standards
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -95,7 +95,7 @@ class Diagnostic_Feed_Namespace_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

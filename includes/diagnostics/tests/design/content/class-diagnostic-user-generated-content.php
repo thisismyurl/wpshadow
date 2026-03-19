@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6035.2310
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the site encourages and displays user-generated content.
  *
- * @since 1.6035.2310
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Generated_Content extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2310
+	 * @since 1.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {

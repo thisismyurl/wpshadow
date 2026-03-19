@@ -21,7 +21,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/font-loading-optimization\n * - Video: https://wpshadow.com/training/google-fonts-optimization (6 min)\n * - Advanced: https://wpshadow.com/training/variable-fonts-performance (10 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for inefficient font loading in theme.
  *
- * @since 1.5049.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Font_Loading_Issues extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Theme_Font_Loading_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -156,7 +156,7 @@ class Diagnostic_Theme_Font_Loading_Issues extends Diagnostic_Base {
 
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $style ) {
-				if ( isset( $style->src ) ) {
+				if ( isset( $style->src ) && is_string( $style->src ) && '' !== $style->src ) {
 					foreach ( $icon_fonts as $icon_font ) {
 						if ( stripos( $style->src, $icon_font ) !== false ) {
 							$icon_font_count++;

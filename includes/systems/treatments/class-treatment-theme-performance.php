@@ -4,7 +4,7 @@
  *
  * Disables non-critical stylesheets and defers non-critical JavaScript.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Optimizes theme asset loading performance.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Treatment_Theme_Performance extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -42,7 +42,7 @@ class Treatment_Theme_Performance extends Treatment_Base {
 	 *
 	 * Defers loading of non-critical stylesheets and scripts.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -113,7 +113,7 @@ class Treatment_Theme_Performance extends Treatment_Base {
 	 *
 	 * Restores original asset loading.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {

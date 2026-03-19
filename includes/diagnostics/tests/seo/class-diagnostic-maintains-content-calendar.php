@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2321
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Editorial plugins installed
  * - Content planning tools active
  *
- * @since 1.6034.2321
+ * @since 1.6093.1200
  */
 class Diagnostic_Maintains_Content_Calendar extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Maintains_Content_Calendar extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2321
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no calendar detected, null otherwise.
 	 */
 	public static function check() {
@@ -147,7 +147,7 @@ class Diagnostic_Maintains_Content_Calendar extends Diagnostic_Base {
 	/**
 	 * Count scheduled future posts
 	 *
-	 * @since  1.6034.2321
+	 * @since 1.6093.1200
 	 * @return int Number of scheduled posts.
 	 */
 	private static function count_scheduled_posts() {
@@ -165,7 +165,7 @@ class Diagnostic_Maintains_Content_Calendar extends Diagnostic_Base {
 	/**
 	 * Check for editorial calendar plugins
 	 *
-	 * @since  1.6034.2321
+	 * @since 1.6093.1200
 	 * @return bool True if editorial plugin found.
 	 */
 	private static function has_editorial_plugin() {
@@ -188,7 +188,7 @@ class Diagnostic_Maintains_Content_Calendar extends Diagnostic_Base {
 	/**
 	 * Count draft posts
 	 *
-	 * @since  1.6034.2321
+	 * @since 1.6093.1200
 	 * @return int Number of draft posts.
 	 */
 	private static function count_draft_posts() {
@@ -206,7 +206,7 @@ class Diagnostic_Maintains_Content_Calendar extends Diagnostic_Base {
 	/**
 	 * Check for regular publishing pattern
 	 *
-	 * @since  1.6034.2321
+	 * @since 1.6093.1200
 	 * @return bool True if regular pattern detected.
 	 */
 	private static function has_regular_pattern() {

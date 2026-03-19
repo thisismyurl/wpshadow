@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6034.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if all CPT enhancement features are active and working.
  *
- * @since 1.6034.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Features extends Diagnostic_Base {
 
@@ -88,7 +88,7 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 	 *
 	 * Verifies that all CPT feature classes exist and are initialized.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 	/**
 	 * Check if class has registered WordPress hooks
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  string $class_name Class name to check.
 	 * @return bool True if hooks are registered.
 	 */
@@ -202,7 +202,7 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 	/**
 	 * Get count of active features
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Count of active features.
 	 */
 	public static function get_active_count() {
@@ -230,7 +230,7 @@ class Diagnostic_CPT_Features extends Diagnostic_Base {
 	/**
 	 * Get total expected feature count
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Expected feature count.
 	 */
 	public static function get_expected_count() {

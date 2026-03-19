@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether import performance meets expected throughput targets.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Import_Performance_And_Throughput extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Import_Performance_And_Throughput extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -135,10 +135,13 @@ class Diagnostic_Import_Performance_And_Throughput extends Diagnostic_Base {
 			$issues[] = __( 'No index on post meta key - meta queries during import will be slow', 'wpshadow' );
 		}
 
-		// Check for query caching.
-		$query_cache = $wpdb->get_var( "SHOW VARIABLES LIKE 'query_cache_size'" );
-		if ( empty( $query_cache ) || $query_cache === '0' ) {
-			$issues[] = __( 'Query caching disabled - import queries not cached', 'wpshadow' );
+		// Query cache was removed in MySQL 8.0; do not check it there.
+		$db_version = $wpdb->db_version();
+		if ( version_compare( $db_version, '8.0', '<' ) ) {
+			$query_cache = $wpdb->get_var( "SHOW VARIABLES LIKE 'query_cache_size'" );
+			if ( empty( $query_cache ) || '0' === $query_cache ) {
+				$issues[] = __( 'Query caching disabled - import queries not cached', 'wpshadow' );
+			}
 		}
 
 		if ( ! empty( $issues ) ) {

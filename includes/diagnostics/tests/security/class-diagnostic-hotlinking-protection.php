@@ -1,13 +1,8 @@
 <?php
-<?php
 /**
  * Hotlinking Protection Diagnostic
  *
- * Checks if hotlinking protection is configured for media files. Hotlinking\n * (direct image linking from external sites) wastes bandwidth and exposes media\n * to unintended context. Protects both bandwidth costs and image copyright.\n *
- * **What This Check Does:**
- * - Validates referrer-based hotlink blocking\n * - Checks .htaccess or nginx rules for hotlink prevention\n * - Detects if external image requests rejected\n * - Tests if placeholder image shown for hotlinked content\n * - Confirms legitimate referrers whitelisted\n * - Validates protection covers all media types (images, video, PDF)\n *
- * **Why This Matters:**
- * Unprotected hotlinking drains bandwidth and increases costs. Scenarios:\n * - External site embeds your images directly (no hotlink protection)\n * - Each image load consumes your server bandwidth\n * - 100,000 page views on external site = 100K+ image requests\n * - Bandwidth bill increases $500-$2,000 per incident\n * - Images appear in contexts you don't control (misinformation)\n *
+ * Checks if hotlinking protection is configured for media files.
  * **Business Impact:**
  * Photography portfolio site. Images directly linked from 50+ forum/blog posts.\n * Receives 1M page views/month on external sites (your images embedded).\n * Your images = 500GB bandwidth/month externally. ISP/CDN bill: $5K/month extra.\n * Enable hotlink protection: image requests redirected to placeholder.\n * Saves $5K/month bandwidth + prevents image misuse.\n *
  * **Philosophy Alignment:**
@@ -18,7 +13,7 @@
  * Hotlink protection setup: https://wpshadow.com/kb/hotlinking-protection-wordpress\n * Video: Bandwidth optimization via hotlink blocking (8min): https://wpshadow.com/training/hotlink-protection\n *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer uploads high-quality product images (5MB each). No hotlink\n * protection. Third-party comparison shopping site embeds images directly.\n * Site gets 1M visitors/month. Your images loaded for each visit (no caching\n * by third party). Bandwidth explosion. ISP throttles due to overuse.\n * Sites takes 30 seconds to load (legitimate traffic suffers).\n *
  * **Implementation Notes:**
  * - Checks .htaccess for RewriteCond rules\n * - Validates HTTP_REFERER blocking\n * - Tests placeholder image setup\n * - Severity: medium (no protection), high (major bandwidth waste)\n * - Treatment: enable hotlink blocking via .htaccess\n *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 
@@ -83,7 +78,7 @@ class Diagnostic_Hotlinking_Protection extends Diagnostic_Base {
 	 * - Response difference for external referrers
 	 * - Hotlink protection plugins
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

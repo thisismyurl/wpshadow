@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that multiple acquisition channels are active.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_Channel_Diversification extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Channel_Diversification extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -163,7 +163,7 @@ class Diagnostic_Channel_Diversification extends Diagnostic_Base {
 	/**
 	 * Check whether any plugin in a list is active.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @param  array $plugins Plugin map.
 	 * @return bool
 	 */

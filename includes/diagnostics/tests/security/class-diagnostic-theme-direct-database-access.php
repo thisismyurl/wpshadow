@@ -42,7 +42,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2240
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no prepare), medium (uses prepare)
  * - Treatment: use WordPress APIs or add \$wpdb->prepare
  *
- * @since 1.6030.2240
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Direct_Database_Access extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Theme_Direct_Database_Access extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2240
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

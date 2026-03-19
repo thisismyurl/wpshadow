@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since      1.6034.2327
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Better conversion rates
  * - Longer content shelf life
  *
- * @since 1.6034.2327
+ * @since 1.6093.1200
  */
 class Diagnostic_Publishes_Long_Form_Content extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Publishes_Long_Form_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2327
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if insufficient long-form content, null otherwise.
 	 */
 	public static function check() {

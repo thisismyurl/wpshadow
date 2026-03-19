@@ -15,7 +15,7 @@
  * - #7 (Ridiculously Good): Snappy pagination
  * - #8 (Inspire Confidence): Organized view of all checks
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -49,7 +49,7 @@ class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6030.2148
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle() {

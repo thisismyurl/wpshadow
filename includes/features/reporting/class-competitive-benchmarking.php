@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since      1.6030.2200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,14 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides industry and peer comparison metrics.
  *
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Competitive_Benchmarking {
 
 	/**
 	 * Generate benchmark report
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Benchmark comparison data.
 	 */
 	public static function generate_report(): array {
@@ -61,7 +61,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get site profile for comparison
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Site characteristics.
 	 */
 	private static function get_site_profile(): array {
@@ -86,7 +86,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get industry benchmarks for site category
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @return array Benchmark data.
 	 */
@@ -133,7 +133,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare performance metrics
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Performance comparison.
@@ -174,7 +174,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare health scores
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Health comparison.
@@ -203,7 +203,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare security posture
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Security comparison.
@@ -230,7 +230,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare plugin efficiency
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Plugin comparison.
@@ -259,7 +259,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Calculate overall percentile ranking
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Percentile data.
@@ -293,7 +293,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get peer comparison data
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @return array Peer comparison.
 	 */
@@ -320,7 +320,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Generate recommendations based on benchmarks
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Recommendations.
@@ -382,7 +382,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Calculate health percentile
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $score Your health score.
 	 * @param  float $avg_score Average score.
 	 * @return int Percentile (0-100).
@@ -402,7 +402,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Calculate performance percentile
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $load_time Your load time.
 	 * @param  float $avg_load Average load time.
 	 * @return int Percentile (0-100).
@@ -418,7 +418,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get percentile badge
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $percentile Percentile ranking.
 	 * @return array Badge data.
 	 */
@@ -457,7 +457,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get health rank description
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  float $score Health score.
 	 * @return string Rank description.
 	 */
@@ -478,7 +478,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get current health score
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Health score.
 	 */
 	private static function get_current_health_score(): float {
@@ -489,7 +489,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Detect site type
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return string Site type.
 	 */
 	private static function detect_site_type(): string {
@@ -508,7 +508,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Check if site has ecommerce
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return bool True if ecommerce detected.
 	 */
 	private static function has_ecommerce(): bool {
@@ -518,7 +518,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Check if site has membership functionality
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return bool True if membership detected.
 	 */
 	private static function has_membership(): bool {
@@ -528,7 +528,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get active user count
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return int User count.
 	 */
 	private static function get_active_user_count(): int {
@@ -539,7 +539,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get average page load time
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Load time in seconds.
 	 */
 	private static function get_average_page_load(): float {
@@ -552,7 +552,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get database size in MB
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Database size.
 	 */
 	private static function get_database_size(): float {
@@ -573,7 +573,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get opt-in status
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Opt-in information.
 	 */
 	private static function get_opt_in_status(): array {

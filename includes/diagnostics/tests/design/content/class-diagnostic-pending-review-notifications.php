@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.1350
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if pending post notifications are properly configured
  * and being delivered to appropriate users.
  *
- * @since 1.6033.1350
+ * @since 1.6093.1200
  */
 class Diagnostic_Pending_Review_Notifications extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Pending_Review_Notifications extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1350
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

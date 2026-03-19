@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no limits), medium (weak limits)
  * - Treatment: implement per-IP rate limiting
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Treatment_Media_API_Rate_Limiting extends Treatment_Base {
 
@@ -123,7 +123,7 @@ class Treatment_Media_API_Rate_Limiting extends Treatment_Base {
 	 * Tests if REST API has rate limiting to prevent abuse
 	 * and protect against DDoS attacks.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Matomo analytics data
  * - Average bounce rate calculation
  *
- * @since 1.7030.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_High_Bounce_Rate extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_High_Bounce_Rate extends Diagnostic_Base {
 	 * - 1 point: Bounce rate tracking meta exists
 	 * - 0 points if high bounce rate detected
 	 *
-	 * @since  1.7030.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

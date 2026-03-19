@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,14 +90,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant space + performance issue)
  * - Treatment: set revision limit in wp-config.php
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -109,7 +109,7 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 	 *
 	 * Sets post revision limit in wp-config.php.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

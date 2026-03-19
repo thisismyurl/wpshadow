@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * You can't assume your system is secure.
  * Test for vulnerabilities before attackers find them.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Security_Testing_Or_Penetration_Testing_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Security_Testing_Or_Penetration_Testing_Program extends Diag
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_No_Security_Testing_Or_Penetration_Testing_Program extends Diag
 	/**
 	 * Check if security testing exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if testing detected, false otherwise.
 	 */
 	private static function has_security_testing() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Security_Testing_Or_Penetration_Testing_Program extends Diag
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Security_Testing_Or_Penetration_Testing_Program extends Diag
 	/**
 	 * Get testing types.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Security testing types.
 	 */
 	private static function get_testing_types() {

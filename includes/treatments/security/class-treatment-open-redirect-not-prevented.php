@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.2033
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs treatment check for Open Redirect Not Prevented.
  *
- * @since 1.6033.2033
+ * @since 1.6093.1200
  */
 class Treatment_Open_Redirect_Not_Prevented extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Open_Redirect_Not_Prevented extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2033
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

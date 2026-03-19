@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Attackers redirect to phishing sites
  * - One XSS hole compromises all users
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Treatment_XSS_Protection extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'xss-protection';
@@ -57,7 +57,7 @@ class Treatment_XSS_Protection extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'User Input Not Escaped on Output (XSS Vulnerability)';
@@ -65,7 +65,7 @@ class Treatment_XSS_Protection extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if output is escaped to prevent Cross-Site Scripting (XSS) attacks';
@@ -73,7 +73,7 @@ class Treatment_XSS_Protection extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Treatment_XSS_Protection extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

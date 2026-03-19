@@ -4,7 +4,7 @@
  *
  * Validates user roles and capabilities are properly configured.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user roles and capabilities configuration.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_User_Roles_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Roles_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -492,7 +492,7 @@ add_role(
 	/**
 	 * Get default WordPress capabilities.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array Default capabilities
 	 */
 	private static function get_default_capabilities() {

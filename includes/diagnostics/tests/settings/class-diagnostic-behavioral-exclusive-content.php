@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1450
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for gated content and regular premium additions. Member-only content
  * increases retention by 40% and justifies recurring payments.
  *
- * @since 1.6034.1450
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_Exclusive_Content extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Exclusive_Content extends Diagnostic_Base {
 	 *
 	 * Looks for content restriction and member-only posts/pages.
 	 *
-	 * @since  1.6034.1450
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no exclusivity, null if present.
 	 */
 	public static function check() {

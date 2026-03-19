@@ -4,7 +4,7 @@
  *
  * Analyzes web font loading implementation and performance impact.
  *
- * @since   1.6033.2110
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates font loading strategy and optimization opportunities.
  *
- * @since 1.6033.2110
+ * @since 1.6093.1200
  */
 class Diagnostic_Font_Loading_Strategy extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Font_Loading_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2110
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

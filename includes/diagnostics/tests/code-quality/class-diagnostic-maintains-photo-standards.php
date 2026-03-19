@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #1: Product Photography Standards from Specialized & Emerging Success Habits.
  * Checks if the site maintains professional product photography standards.
  *
- * @since 1.5003.1145
+ * @since 1.6093.1200
  */
 class Diagnostic_Maintains_Photo_Standards extends Diagnostic_Base {
 

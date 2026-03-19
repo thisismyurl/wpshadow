@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1502
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Image distribution
  * - Heading frequency
  *
- * @since 1.7030.1502
+ * @since 1.6093.1200
  */
 class Diagnostic_Wall_Of_Text extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Wall_Of_Text extends Diagnostic_Base {
 	 * - 1 point: Headings every 300 words
 	 * - 1 point: <20% of posts are walls of text
 	 *
-	 * @since  1.7030.1502
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

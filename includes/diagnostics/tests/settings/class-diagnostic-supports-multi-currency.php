@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1025
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #27: Multi-Currency Support from Specialized & Emerging Success Habits.
  * Checks if the site provides multiple currency options with automatic detection.
  *
- * @since 1.5003.1025
+ * @since 1.6093.1200
  */
 class Diagnostic_Supports_Multi_Currency extends Diagnostic_Base {
 

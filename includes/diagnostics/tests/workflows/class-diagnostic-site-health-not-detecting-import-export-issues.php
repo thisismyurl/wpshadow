@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates Site Health integration with import/export diagnostics.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnost
 	 *
 	 * Tests Site Health integration for import/export issues.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnost
 	/**
 	 * Check for Site Health tests.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if tests implemented.
 	 */
 	private static function has_site_health_tests() {
@@ -142,7 +142,7 @@ class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnost
 	/**
 	 * Check for Site Health API integration.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if integrated.
 	 */
 	private static function integrates_with_site_health() {
@@ -167,7 +167,7 @@ class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnost
 	/**
 	 * Check for result reporting.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if results reported.
 	 */
 	private static function reports_results_to_site_health() {
@@ -187,7 +187,7 @@ class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnost
 	/**
 	 * Check for status sync.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if status synced.
 	 */
 	private static function syncs_with_site_health_status() {
@@ -208,7 +208,7 @@ class Diagnostic_Site_Health_Not_Detecting_Import_Export_Issues extends Diagnost
 	/**
 	 * Check for user notification.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if notification implemented.
 	 */
 	private static function notifies_users_via_site_health() {

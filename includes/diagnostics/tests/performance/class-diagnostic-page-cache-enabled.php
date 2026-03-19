@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2052
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies page caching is active. Page caching is the single most
  * impactful performance optimization (50-90% reduction).
  *
- * @since 1.6033.2052
+ * @since 1.6093.1200
  */
 class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 	 *
 	 * Checks for common cache plugins and cache headers.
 	 *
-	 * @since  1.6033.2052
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

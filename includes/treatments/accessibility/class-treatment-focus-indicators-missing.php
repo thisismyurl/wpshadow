@@ -4,7 +4,7 @@
  *
  * Checks if keyboard focus indicators are visible.
  *
- * @since   1.6035.1400
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that keyboard focus is visible (not hidden with outline:none).
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Treatment_Focus_Indicators_Missing extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Focus_Indicators_Missing extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects attachments that are not attached to any post and not referenced
  * in post content. Unused media increases storage costs and slows backups.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Orphaned_Media_Detection extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Orphaned_Media_Detection extends Treatment_Base {
 	 * - Orphaned attachments (missing parent)
 	 * - Content references
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7033.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if media is properly configured for headless WordPress
  * with appropriate CORS and authentication.
  *
- * @since 1.7033.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Headless_CMS_Media_Serving extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Headless_CMS_Media_Serving extends Diagnostic_Base {
 	 * Tests if WordPress is configured for headless CMS usage
 	 * with proper CORS and media serving.
 	 *
-	 * @since  1.7033.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

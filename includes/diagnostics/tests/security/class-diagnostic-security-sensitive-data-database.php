@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects sensitive information stored in plaintext within the database.
  * Checks for passwords, credit cards, API keys in wp_usermeta and wp_options.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Security_Sensitive_Data_Database extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Security_Sensitive_Data_Database extends Diagnostic_Base {
 	 * - Credit card numbers
 	 * - API keys (various services)
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

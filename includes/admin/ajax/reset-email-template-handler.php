@@ -11,7 +11,7 @@ use WPShadow\Admin\Pages\Email_Template_Manager;
  *
  * Resets customized email template to default.
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Reset_Email_Template_Handler extends AJAX_Handler_Base {

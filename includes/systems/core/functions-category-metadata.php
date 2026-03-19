@@ -61,7 +61,7 @@ function wpshadow_get_site_findings(): array {
  *
  * Converts numeric threat level (0-100) to readable label.
  *
- * @since  1.6046.2100
+ * @since 1.6093.1200
  * @param  int $threat_level Threat level (0-100).
  * @return string Threat label (Critical, High, Medium, Low).
  */
@@ -82,7 +82,7 @@ function wpshadow_get_threat_label( int $threat_level ): string {
  *
  * Returns a color code for visualizing threat levels.
  *
- * @since  1.6046.2100
+ * @since 1.6093.1200
  * @param  int $threat_level Threat level (0-100).
  * @return string Hex color code.
  */

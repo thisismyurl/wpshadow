@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Pages\SecurityAPI
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Hook into WordPress admin to register the security API settings page.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 function init_security_api_settings() {
 	// Only in admin

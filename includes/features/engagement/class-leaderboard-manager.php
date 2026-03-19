@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Show Value (#9) - Visualize achievements
  * Philosophy: Helpful Neighbor (#1) - Friendly competition
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Leaderboard_Manager {

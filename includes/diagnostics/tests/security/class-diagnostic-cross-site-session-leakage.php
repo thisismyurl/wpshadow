@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2108
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Cross-site session leakage exposes authentication tokens and
  * sensitive session data to untrusted domains.
  *
- * @since 1.2033.2108
+ * @since 1.6093.1200
  */
 class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'cross-site-session-leakage';
@@ -50,7 +50,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Cross-Site Session Leakage';
@@ -58,7 +58,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects session data leakage to cross-origin contexts';
@@ -66,7 +66,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	 *
 	 * Validates cross-site session security.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -176,7 +176,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Check cookie domain scope.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if too broad.
 	 */
 	private static function check_cookie_domain_scope() {
@@ -201,7 +201,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Check SameSite attribute.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if missing.
 	 */
 	private static function check_samesite_attribute() {
@@ -224,7 +224,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Check CORS credentials exposure.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if exposed.
 	 */
 	private static function check_cors_credentials_exposure() {
@@ -256,7 +256,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Check for session tokens in URLs.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if found.
 	 */
 	private static function check_session_tokens_in_urls() {
@@ -279,7 +279,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Check Secure flag.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if missing on HTTPS.
 	 */
 	private static function check_secure_flag() {
@@ -301,7 +301,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Check HttpOnly flag.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if missing.
 	 */
 	private static function check_httponly_flag() {
@@ -318,7 +318,7 @@ class Diagnostic_Cross_Site_Session_Leakage extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

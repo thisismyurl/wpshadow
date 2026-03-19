@@ -3,7 +3,7 @@
  * Tests for Internal Link Anchor Text Diversity Diagnostic
  *
  * @package WPShadow\Tests
- * @since   1.6028.2120
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Tests\Unit;
@@ -14,7 +14,7 @@ use WP_Mock\Tools\TestCase;
 /**
  * Internal Link Anchor Diversity Test Class
  *
- * @since 1.6028.2120
+ * @since 1.6093.1200
  */
 class InternalLinkAnchorDiversityTest extends TestCase {
 

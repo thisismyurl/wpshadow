@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that a GDPR-compliant privacy policy is present and
  * that customer data handling is documented.
  *
- * @since 1.6035.1400
+ * @since 1.6093.1200
  */
 class Diagnostic_GDPR_Privacy_Policy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_GDPR_Privacy_Policy extends Diagnostic_Base {
 	/**
 	 * Run the GDPR privacy policy diagnostic check.
 	 *
-	 * @since  1.6035.1400
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if GDPR issues detected, null otherwise.
 	 */
 	public static function check() {

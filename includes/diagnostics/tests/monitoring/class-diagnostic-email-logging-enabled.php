@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1446
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that email logging is active for troubleshooting purposes.
  *
- * @since 1.6035.1446
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Logging_Enabled extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Logging_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the email logging diagnostic check.
 	 *
-	 * @since  1.6035.1446
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if logging is not enabled, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_Email_Logging_Enabled extends Diagnostic_Base {
 	/**
 	 * Get email logging status from various sources.
 	 *
-	 * @since  1.6035.1446
+	 * @since 1.6093.1200
 	 * @return array Logging status information.
 	 */
 	private static function get_email_logging_status(): array {

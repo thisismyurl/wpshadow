@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1513
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Content topic analysis
  * - Category/tag coverage
  *
- * @since 1.7030.1513
+ * @since 1.6093.1200
  */
 class Diagnostic_Keyword_Gaps extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Keyword_Gaps extends Diagnostic_Base {
 	 * - 1 point: Good topic diversity (10+ categories)
 	 * - 1 point: Regular content publishing (4+ posts/month)
 	 *
-	 * @since  1.7030.1513
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

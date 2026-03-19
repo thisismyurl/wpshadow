@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for ML-powered recommendation and personalization systems. ML learns
  * user preferences over time, delivering personalized experiences that convert better.
  *
- * @since 1.6034.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 	 *
 	 * Looks for recommendation engines and ML-powered systems.
 	 *
-	 * @since  1.6034.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

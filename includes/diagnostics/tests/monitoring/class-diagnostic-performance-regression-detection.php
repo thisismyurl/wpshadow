@@ -4,7 +4,7 @@
  *
  * Analyzes performance trends and detects regressions.
  *
- * @since   1.6033.2140
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks performance metrics over time and identifies regressions.
  *
- * @since 1.6033.2140
+ * @since 1.6093.1200
  */
 class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2140
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 			$curr_time = $current_metrics['generation_time'] ?? 0;
 
 			// Flag if performance degraded by >30%
-			if ( $curr_time > ( $prev_time * 1.3 ) ) {
+			if ( $curr_time > ( $prev_time *1.0 ) ) {
 				$has_regression = true;
 			}
 		}

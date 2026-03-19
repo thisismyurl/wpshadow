@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * common issues that should be proactively addressed across
  * the agency's client portfolio.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the support ticket analysis check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if critical trends detected, null otherwise.
 	 */
 	public static function check() {
@@ -164,7 +164,7 @@ class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 		$stats['tickets_this_week'] = $tickets_this_week;
 		$stats['tickets_last_week'] = $tickets_last_week;
 
-		if ( $tickets_this_week > $tickets_last_week * 1.5 ) {
+		if ( $tickets_this_week > $tickets_last_week *1.0 ) {
 			$issues[] = sprintf(
 				/* translators: %d: percentage */
 				__( 'Support tickets up %d%% - may indicate system issues', 'wpshadow' ),
@@ -195,7 +195,7 @@ class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 	/**
 	 * Count tickets in a date range.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @param  string $from From date (relative).
 	 * @param  string $to   To date (relative, optional).
 	 * @return int Ticket count.

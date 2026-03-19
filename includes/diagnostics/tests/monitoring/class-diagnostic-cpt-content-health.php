@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6034.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks content quality metrics across all custom post types.
  *
- * @since 1.6034.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Content_Health extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_CPT_Content_Health extends Diagnostic_Base {
 	 *
 	 * Analyzes content across all CPTs for quality issues.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_CPT_Content_Health extends Diagnostic_Base {
 	/**
 	 * Analyze individual post quality
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  int    $post_id  Post ID to analyze.
 	 * @param  string $cpt_slug CPT slug.
 	 * @return array Array of issues found.
@@ -211,7 +211,7 @@ class Diagnostic_CPT_Content_Health extends Diagnostic_Base {
 	/**
 	 * Get content health score (0-100)
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Health score.
 	 */
 	public static function get_health_score() {

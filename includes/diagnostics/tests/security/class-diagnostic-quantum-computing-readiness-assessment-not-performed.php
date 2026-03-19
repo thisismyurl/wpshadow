@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (no quantum plan), high (critical data unprotected)
  * - Treatment: implement post-quantum cryptography roadmap
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Quantum_Computing_Readiness_Assessment_Not_Performed extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Quantum_Computing_Readiness_Assessment_Not_Performed extends Di
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

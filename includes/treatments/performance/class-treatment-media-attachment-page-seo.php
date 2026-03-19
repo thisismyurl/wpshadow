@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tests
- * @since      1.6033.1625
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates SEO controls for attachment pages.
  *
- * @since 1.6033.1625
+ * @since 1.6093.1200
  */
 class Treatment_Media_Attachment_Page_SEO extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Media_Attachment_Page_SEO extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1625
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

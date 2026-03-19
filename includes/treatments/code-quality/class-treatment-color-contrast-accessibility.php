@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1310
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that text and UI elements meet WCAG 2.1 AA color contrast
  * requirements for users with visual impairments.
  *
- * @since 1.7034.1310
+ * @since 1.6093.1200
  */
 class Treatment_Color_Contrast_Accessibility extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Color_Contrast_Accessibility extends Treatment_Base {
 	 * Tests color contrast ratios for text, links, buttons, and
 	 * other UI elements against WCAG standards.
 	 *
-	 * @since  1.7034.1310
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

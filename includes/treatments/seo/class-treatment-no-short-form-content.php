@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Content
- * @since      1.6034.2208
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - 50% medium (600-1500 words)
  * - 20% long-form (1500+ words)
  *
- * @since 1.6034.2208
+ * @since 1.6093.1200
  */
 class Treatment_No_Short_Form_Content extends Treatment_Base {
 
@@ -80,7 +80,7 @@ class Treatment_No_Short_Form_Content extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2208
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no short-form content, null otherwise.
 	 */
 	public static function check() {

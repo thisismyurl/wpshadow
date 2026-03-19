@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6034.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if rewrite rules are properly configured for all CPTs.
  *
- * @since 1.6034.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Rewrite_Rules extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_CPT_Rewrite_Rules extends Diagnostic_Base {
 	 *
 	 * Verifies rewrite rules exist for all custom post types.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,7 +160,7 @@ class Diagnostic_CPT_Rewrite_Rules extends Diagnostic_Base {
 	/**
 	 * Get last rewrite rules flush timestamp
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int|false Timestamp or false if never flushed.
 	 */
 	public static function get_last_flush_time() {

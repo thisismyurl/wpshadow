@@ -4,7 +4,7 @@
  *
  * Identifies sites with no short-form content opportunity.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects sites with only long-form content (all posts > 1,500 words) that miss
  * opportunities for quick, high-velocity content serving different user intents.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Content_No_Shortform extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Content_No_Shortform extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

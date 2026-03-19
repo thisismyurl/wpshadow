@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2108
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Backup authentication bypass allows attackers to access sensitive
  * data or restore malicious backups without proper authentication.
  *
- * @since 1.2033.2108
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'backup-authentication-bypass';
@@ -50,7 +50,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Backup Authentication Bypass';
@@ -58,7 +58,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects authentication bypass in backup and restore functionality';
@@ -66,7 +66,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2108
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	 *
 	 * Scans for backup authentication vulnerabilities.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -200,7 +200,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * Find web-accessible backup files.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array Backup file paths.
 	 */
 	private static function find_accessible_backup_files() {
@@ -253,7 +253,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * Find emergency admin scripts.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array Script paths.
 	 */
 	private static function find_emergency_admin_scripts() {
@@ -286,7 +286,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * Check backup plugin restore security.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if unsafe.
 	 */
 	private static function check_backup_plugin_restore_security() {
@@ -319,7 +319,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * Check for predictable backup naming.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return bool True if predictable.
 	 */
 	private static function check_predictable_backup_urls() {
@@ -345,7 +345,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * Find SQL files in uploads.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array SQL file paths.
 	 */
 	private static function find_sql_files_in_uploads() {
@@ -368,7 +368,7 @@ class Diagnostic_Backup_Authentication_Bypass extends Diagnostic_Base {
 	/**
 	 * Check backup directory protection.
 	 *
-	 * @since  1.2033.2108
+	 * @since 1.6093.1200
 	 * @return array Unprotected directories.
 	 */
 	private static function check_backup_directory_protection() {

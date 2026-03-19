@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * crt.sh (https://crt.sh/) is a free service that searches CT logs and provides
  * an API at no cost.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Certificate_Transparency extends Diagnostic_Base {
 
@@ -83,7 +83,7 @@ class Diagnostic_Certificate_Transparency extends Diagnostic_Base {
 	 * Queries Certificate Transparency logs for all certificates issued for the
 	 * domain and checks for suspicious/unauthorized certificates.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if suspicious certs found, null otherwise.
 	 */
 	public static function check() {
@@ -124,7 +124,7 @@ class Diagnostic_Certificate_Transparency extends Diagnostic_Base {
 	/**
 	 * Get current certificate info from server.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Certificate information.
 	 */
 	private static function get_current_certificate_info() : array {
@@ -181,7 +181,7 @@ class Diagnostic_Certificate_Transparency extends Diagnostic_Base {
 	/**
 	 * Get all CT log certificates for domain.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  string $domain Domain to search.
 	 * @return array|WP_Error Certificate array or error.
 	 */
@@ -236,7 +236,7 @@ class Diagnostic_Certificate_Transparency extends Diagnostic_Base {
 	 * 2. Issued very recently (within last 24 hours) but not by your current CA
 	 * 3. For a domain variant (e.g., example.com when checking www.example.com)
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $ct_certs CT log certificates.
 	 * @param  array $current_cert Current certificate info.
 	 * @return array Suspicious certificates.

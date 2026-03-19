@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Engagement
- * @since      1.6034.2216
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Content upgrades (lead magnets)
  * - Welcome bar at top
  *
- * @since 1.6034.2216
+ * @since 1.6093.1200
  */
 class Treatment_No_Email_Opt_In_Forms extends Treatment_Base {
 
@@ -75,7 +75,7 @@ class Treatment_No_Email_Opt_In_Forms extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2216
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no email forms detected, null otherwise.
 	 */
 	public static function check() {

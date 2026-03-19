@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since      1.6034.2210
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Avoid: weekends, early mornings, late nights
  * - Test and optimize for your audience
  *
- * @since 1.6034.2210
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Peak_Traffic_Publishing extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_No_Peak_Traffic_Publishing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2210
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if poor timing detected, null otherwise.
 	 */
 	public static function check() {

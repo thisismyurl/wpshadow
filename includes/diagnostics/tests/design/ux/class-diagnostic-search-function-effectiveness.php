@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures visitors can find content through search.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_Search_Function_Effectiveness extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Search_Function_Effectiveness extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {

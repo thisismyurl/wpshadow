@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Admin/AJAX
- * @since 1.6049.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Guardian dashboard refresh handler.
  *
- * @since 1.6049.1500
+ * @since 1.6093.1200
  */
 class Guardian_Refresh_Sections_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX hook.
 	 *
-	 * @since 1.6049.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -39,7 +39,7 @@ class Guardian_Refresh_Sections_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle section refresh request.
 	 *
-	 * @since 1.6049.1500
+	 * @since 1.6093.1200
 	 * @return void Sends JSON response.
 	 */
 	public static function handle(): void {

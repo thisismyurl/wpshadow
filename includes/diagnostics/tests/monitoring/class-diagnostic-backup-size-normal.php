@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1215
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks the most recent backup archive size against lightweight heuristics
  * to detect potentially incomplete backups.
  *
- * @since 1.6035.1215
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Size_Normal extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Backup_Size_Normal extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.1215
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Backup_Size_Normal extends Diagnostic_Base {
 	/**
 	 * Get the most recent backup file across common backup locations.
 	 *
-	 * @since  1.6035.1215
+	 * @since 1.6093.1200
 	 * @return array|null Array with file path, size, and modified time.
 	 */
 	private static function get_latest_backup_file() {

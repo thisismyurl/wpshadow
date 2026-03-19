@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1220
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that product images are optimized with proper sizes,
  * compression, and lazy loading for fast catalog browsing.
  *
- * @since 1.7034.1220
+ * @since 1.6093.1200
  */
 class Treatment_Product_Image_Optimization extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Product_Image_Optimization extends Treatment_Base {
 	 * Tests product image optimization including sizes, compression,
 	 * format, and lazy loading configuration.
 	 *
-	 * @since  1.7034.1220
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since      1.6034.2212
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Team coordination for campaigns
  * - Buffer for unexpected events
  *
- * @since 1.6034.2212
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Scheduled_Future_Content extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_No_Scheduled_Future_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2212
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if no scheduled content, null otherwise.
 	 */
 	public static function check() {

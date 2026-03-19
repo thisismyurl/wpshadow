@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * CDN Readiness Diagnostic Test Class
  *
- * @since 1.6028.1615
+ * @since 1.6093.1200
  */
 class CDNReadinessTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test diagnostic passes when CDN ready
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_when_cdn_ready(): void {
@@ -70,7 +70,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test diagnostic flags protocol-relative URLs
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_protocol_relative_urls(): void {
@@ -106,7 +106,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test diagnostic flags absolute URLs
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_absolute_urls(): void {
@@ -141,7 +141,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test diagnostic flags hardcoded assets
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_hardcoded_assets(): void {
@@ -176,7 +176,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -224,7 +224,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test meta includes CDN readiness status
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_cdn_status(): void {
@@ -262,7 +262,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test details include why CDN matters
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_why_matters(): void {
@@ -299,7 +299,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test details include recommended steps
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_recommended_steps(): void {
@@ -336,7 +336,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test details include CDN providers
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_cdn_providers(): void {
@@ -373,7 +373,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test threat level increases with issues
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_increases_with_issues(): void {
@@ -409,7 +409,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test performance impact calculation
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_performance_impact_calculation(): void {
@@ -445,7 +445,7 @@ class CDNReadinessTest extends TestCase {
 	/**
 	 * Test details include expected benefits
 	 *
-	 * @since 1.6028.1615
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_expected_benefits(): void {

@@ -21,7 +21,7 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents timeout failures\n * - #9 Show Value: Enables traffic spikes without crashes\n * - #10 Talk-About-Worthy: "Site handles Black Friday traffic easily"\n *
  * **Related Checks:**\n * - Slow Query Detection (specific slow queries)\n * - Database Index Efficiency (optimization)\n * - Database Connection Limits (resource exhaustion)\n * - Load Testing Results (failure thresholds)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/query-timeout-prevention\n * - Video: https://wpshadow.com/training/load-testing-basics (7 min)\n * - Advanced: https://wpshadow.com/training/query-optimization-under-load (13 min)\n *
- * @since   1.4031.1939
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -73,7 +73,7 @@ class Diagnostic_Query_Timeout_Risk extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.4031.1939
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

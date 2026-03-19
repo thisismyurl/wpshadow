@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0900
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that DNS records resolve consistently across common variants.
  *
- * @since 1.6035.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_DNS_Propagation_Status extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_Propagation_Status extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_DNS_Propagation_Status extends Diagnostic_Base {
 	/**
 	 * Extract IPs from DNS records.
 	 *
-	 * @since  1.6035.0900
+	 * @since 1.6093.1200
 	 * @param  array|false $records DNS record array.
 	 * @return array List of unique IPs.
 	 */

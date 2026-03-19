@@ -3,7 +3,7 @@
  * Tests for Permalink 404 Errors Diagnostic
  *
  * @package WPShadow\Tests\Unit
- * @since   1.6032.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

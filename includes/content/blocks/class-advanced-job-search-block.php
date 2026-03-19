@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Advanced Job Search and Filters Block Class
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Advanced_Job_Search_Block extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -41,7 +41,7 @@ class Advanced_Job_Search_Block extends Hook_Subscriber_Base {
 	/**
 	 * Register the advanced job search block.
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 */
 	public static function register_block(): void {
 		register_block_type(
@@ -86,7 +86,7 @@ class Advanced_Job_Search_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render the advanced job search block.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered block HTML.
 	 */

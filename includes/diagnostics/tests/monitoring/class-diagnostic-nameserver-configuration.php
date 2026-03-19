@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1546
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies correct nameservers are configured for domain.
  *
- * @since 1.6035.1546
+ * @since 1.6093.1200
  */
 class Diagnostic_Nameserver_Configuration extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Nameserver_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the nameserver configuration diagnostic check.
 	 *
-	 * @since  1.6035.1546
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if nameserver issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -119,7 +119,7 @@ class Diagnostic_Nameserver_Configuration extends Diagnostic_Base {
 	/**
 	 * Get nameservers for domain.
 	 *
-	 * @since  1.6035.1546
+	 * @since 1.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array List of nameservers.
 	 */
@@ -144,7 +144,7 @@ class Diagnostic_Nameserver_Configuration extends Diagnostic_Base {
 	/**
 	 * Get domain from site URL.
 	 *
-	 * @since  1.6035.1546
+	 * @since 1.6093.1200
 	 * @return string Domain name.
 	 */
 	private static function get_domain_from_site_url(): string {

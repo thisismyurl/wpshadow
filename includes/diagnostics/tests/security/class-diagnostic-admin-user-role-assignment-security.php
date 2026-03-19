@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0636
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Menu Visibility: Validates role-appropriate UI
  * - REST API Authentication: Checks privileged endpoint access
  *
- * @since 1.6033.0636
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_User_Role_Assignment_Security extends Diagnostic_Base {
 

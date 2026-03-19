@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1510
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Link quality assessment
  * - Broken link detection
  *
- * @since 1.7030.1510
+ * @since 1.6093.1200
  */
 class Diagnostic_Low_Quality_Links extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Low_Quality_Links extends Diagnostic_Base {
 	 * - 2 points: <5 suspicious links
 	 * - 0 points: ≥5 suspicious links
 	 *
-	 * @since  1.7030.1510
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

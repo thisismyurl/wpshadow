@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6030.0218
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Backup Scheduler
  *
- * @since 1.6030.0218
+ * @since 1.6093.1200
  */
 class Backup_Scheduler {
 	/**
@@ -36,7 +36,7 @@ class Backup_Scheduler {
 	/**
 	 * Initialize scheduler hooks.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -52,7 +52,7 @@ class Backup_Scheduler {
 	/**
 	 * Register cron schedules for weekly and monthly backups.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @param array $schedules Existing schedules.
 	 * @return array
 	 */
@@ -77,7 +77,7 @@ class Backup_Scheduler {
 	/**
 	 * Ensure schedule exists if enabled.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function maybe_schedule(): void {
@@ -95,7 +95,7 @@ class Backup_Scheduler {
 	/**
 	 * Reschedule backup job when settings change.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function reschedule(): void {
@@ -111,7 +111,7 @@ class Backup_Scheduler {
 	/**
 	 * Run the scheduled backup.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function run_scheduled_backup(): void {
@@ -143,7 +143,7 @@ class Backup_Scheduler {
 	/**
 	 * Determine if scheduled backups are enabled.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @return bool
 	 */
 	private static function is_enabled(): bool {
@@ -153,7 +153,7 @@ class Backup_Scheduler {
 	/**
 	 * Schedule the next run based on current settings.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private static function schedule_next_run(): void {
@@ -167,7 +167,7 @@ class Backup_Scheduler {
 	/**
 	 * Get the next timestamp based on time and frequency.
 	 *
-	 * @since 1.6030.0218
+	 * @since 1.6093.1200
 	 * @param string $time Time string (HH:MM).
 	 * @param string $frequency Frequency slug.
 	 * @return int Timestamp.

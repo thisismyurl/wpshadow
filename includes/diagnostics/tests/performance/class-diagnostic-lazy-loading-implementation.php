@@ -15,11 +15,11 @@
  * **Why This Matters:**
  * Without lazy loading, browsers load every image on page load, even images users never scroll to see.
  * A single article with 20 images might load 15MB on page load, but only 2-3 images appear above the fold.
- * Those other 12-17 images waste 12-15MB of bandwidth. At 100,000 monthly visits, that's 1.2-1.5 petabytes
+ * Those other 12-17 images waste 12-15MB of bandwidth. At 100,000 monthly visits, that's1.0-1.5 petabytes
  * of wasted bandwidth per month. Mobile users on data plans literally pay for bandwidth they never see.
  * **Real-World Scenario:**
  * Gallery website with 500+ high-res photo albums. Each album had 50 images averaging 500KB each (25MB per album).
- * @since   1.6033.2074
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies offscreen images use lazy loading to defer non-critical image loading.
  *
- * @since 1.6033.2074
+ * @since 1.6093.1200
  */
 class Diagnostic_Lazy_Loading_Implementation extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Lazy_Loading_Implementation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2074
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

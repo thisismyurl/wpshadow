@@ -23,7 +23,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/hero-section-optimization\n * - Video: https://wpshadow.com/training/hero-section-techniques (6 min)\n * - Advanced: https://wpshadow.com/training/hero-video-optimization (10 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1600
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

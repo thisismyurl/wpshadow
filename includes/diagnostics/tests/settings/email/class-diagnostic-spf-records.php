@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SPF helps prevent your emails from being marked as spam by proving you're
  * authorized to send email from your domain.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Spf_Records extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Spf_Records extends Diagnostic_Base {
 	/**
 	 * Run the SPF records diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if SPF issues detected, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.6034.2145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * users with low vision or color blindness.
  *
  * **Why This Matters:**
- * - WCAG 2.1 Level AA compliance (SC 1.4.3 Contrast Minimum)
+ * - WCAG 2.1 Level AA compliance (SC1.0 Contrast Minimum)
  * - Legal requirement for ADA/Section 508 compliance
  * - 8% of men have color blindness
  * - Poor contrast = 53% user abandonment
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Large text (18pt+): 3:1 minimum contrast ratio
  * - UI components: 3:1 minimum contrast ratio
  *
- * @since 1.6034.2145
+ * @since 1.6093.1200
  */
 class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	 * - Button colors and hover states
 	 * - Custom CSS color declarations
 	 *
-	 * @since  1.6034.2145
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -154,7 +154,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	 *
 	 * Formula: (L1 + 0.05) / (L2 + 0.05) where L is relative luminance.
 	 *
-	 * @since  1.6034.2145
+	 * @since 1.6093.1200
 	 * @param  string $color1 Hex color code (with or without #).
 	 * @param  string $color2 Hex color code (with or without #).
 	 * @return float Contrast ratio.
@@ -172,7 +172,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	/**
 	 * Calculate relative luminance for a color
 	 *
-	 * @since  1.6034.2145
+	 * @since 1.6093.1200
 	 * @param  string $hex Hex color code.
 	 * @return float Relative luminance (0-1).
 	 */
@@ -186,9 +186,9 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 		$b = hexdec( substr( $hex, 4, 2 ) ) / 255;
 
 		// Apply gamma correction
-		$r = ( $r <= 0.03928 ) ? $r / 12.92 : pow( ( $r + 0.055 ) / 1.055, 2.4 );
-		$g = ( $g <= 0.03928 ) ? $g / 12.92 : pow( ( $g + 0.055 ) / 1.055, 2.4 );
-		$b = ( $b <= 0.03928 ) ? $b / 12.92 : pow( ( $b + 0.055 ) / 1.055, 2.4 );
+		$r = ( $r <= 0.03928 ) ? $r / 12.92 : pow( ( $r + 0.055 ) /1.0, 2.4 );
+		$g = ( $g <= 0.03928 ) ? $g / 12.92 : pow( ( $g + 0.055 ) /1.0, 2.4 );
+		$b = ( $b <= 0.03928 ) ? $b / 12.92 : pow( ( $b + 0.055 ) /1.0, 2.4 );
 
 		// Calculate luminance
 		return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;

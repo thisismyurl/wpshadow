@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies slow database queries that hurt performance.
  * Like finding which tasks take too long to complete.
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Slow_Queries extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Slow_Queries extends Diagnostic_Base {
 	/**
 	 * Run the slow query diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if slow queries detected, null otherwise.
 	 */
 	public static function check() {

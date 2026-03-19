@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * with mobile screen readers (VoiceOver, TalkBack).
  * WCAG 4.1.2 Level A requirement.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 	/**
 	 * Find screen reader accessibility issues.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_screen_reader_issues(): array {
@@ -123,7 +123,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 	/**
 	 * Check for proper landmark regions.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html Page HTML.
 	 * @return array Landmark issues.
 	 */
@@ -154,7 +154,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 	/**
 	 * Check for ARIA labels on interactive elements.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html Page HTML.
 	 * @return array ARIA issues.
 	 */
@@ -185,7 +185,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 	/**
 	 * Check for proper form labels.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  string $html Page HTML.
 	 * @return array Form label issues.
 	 */
@@ -216,7 +216,7 @@ class Diagnostic_Mobile_Screen_Reader extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

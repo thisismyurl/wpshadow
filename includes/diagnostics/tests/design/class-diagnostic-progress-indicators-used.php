@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses progress indicators in multi-step processes to improve completion rates.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Progress bars increase completion rates by 28% by reducing uncertainty
  * and motivating users to finish what they started.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 	/**
 	 * Check for multi-step forms.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if multi-step forms exist, false otherwise.
 	 */
 	private static function check_multistep_forms() {
@@ -171,7 +171,7 @@ class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 	/**
 	 * Check checkout progress.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if checkout progress exists, false otherwise.
 	 */
 	private static function check_checkout_progress() {
@@ -192,7 +192,7 @@ class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 	/**
 	 * Check onboarding progress.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if onboarding progress exists, false otherwise.
 	 */
 	private static function check_onboarding_progress() {
@@ -221,7 +221,7 @@ class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 	/**
 	 * Check profile completion.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if profile completion exists, false otherwise.
 	 */
 	private static function check_profile_completion() {
@@ -247,7 +247,7 @@ class Diagnostic_Progress_Indicators_Used extends Diagnostic_Base {
 	/**
 	 * Check content progress.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if content progress exists, false otherwise.
 	 */
 	private static function check_content_progress() {

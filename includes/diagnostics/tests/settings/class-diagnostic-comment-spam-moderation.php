@@ -4,7 +4,7 @@
  *
  * Validates spam prevention and comment moderation setup.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper spam prevention and comment moderation configuration.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -294,7 +294,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Check if spam protection plugin installed.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if installed.
 	 */
 	private static function has_spam_plugin() {
@@ -318,7 +318,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Get active spam plugin name.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string Plugin name or empty.
 	 */
 	private static function get_active_spam_plugin() {
@@ -341,7 +341,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Check if spam plugin is configured.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $plugin Plugin name.
 	 * @return bool True if configured.
 	 */
@@ -356,7 +356,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Check if comment form is protected.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if protected.
 	 */
 	private static function is_comment_form_protected() {

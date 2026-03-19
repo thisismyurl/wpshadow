@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tests
- * @since      1.6033.1605
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that recent media attachments are accessible
  * via their URLs without returning errors.
  *
- * @since 1.6033.1605
+ * @since 1.6093.1200
  */
 class Treatment_Media_File_URL_Accessibility extends Treatment_Base {
 
@@ -62,7 +62,7 @@ class Treatment_Media_File_URL_Accessibility extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1605
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -4,7 +4,7 @@
  *
  * Measures time from first tap to browser response for interactivity.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures time from first tap to browser response, a Core Web Vitals metric
  * critical for user experience and Google rankings.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_FID_First_Input_Delay extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_FID_First_Input_Delay extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

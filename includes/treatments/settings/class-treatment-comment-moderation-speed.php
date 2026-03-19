@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6031.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

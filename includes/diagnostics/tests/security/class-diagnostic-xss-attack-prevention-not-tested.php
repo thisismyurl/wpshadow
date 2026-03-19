@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (XSS is very common)
  * - Treatment: implement automated XSS testing
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_XSS_Attack_Prevention_Not_Tested extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_XSS_Attack_Prevention_Not_Tested extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

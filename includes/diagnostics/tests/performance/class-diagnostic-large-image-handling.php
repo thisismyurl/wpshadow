@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * threshold (default 2560px) to automatically downscale large uploads.
  * Very large images can cause memory exhaustion and slow page loads.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 	 * - Existing oversized images
 	 * - File size limits
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

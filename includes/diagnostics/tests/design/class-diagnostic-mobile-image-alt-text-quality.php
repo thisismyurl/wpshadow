@@ -4,7 +4,7 @@
  *
  * Ensures images have descriptive alt text.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Mobile Image Alt Text Quality Diagnostic Class
  *
  * Ensures all images have descriptive alt text for screen reader users,
- * following WCAG 1.1.1 requirements.
+ * following WCAG1.0 requirements.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Image_Alt_Text_Quality extends Diagnostic_Base {
 
@@ -47,7 +47,7 @@ class Diagnostic_Mobile_Image_Alt_Text_Quality extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Ensure all images have descriptive alt text (WCAG 1.1.1)';
+	protected static $description = 'Ensure all images have descriptive alt text (WCAG1.0)';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Image_Alt_Text_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

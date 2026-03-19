@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1538
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies backups are stored in remote/offsite location.
  *
- * @since 1.6035.1538
+ * @since 1.6093.1200
  */
 class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 	/**
 	 * Run the offsite backup storage diagnostic check.
 	 *
-	 * @since  1.6035.1538
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if offsite backup not configured, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 	/**
 	 * Check for offsite backup storage configuration.
 	 *
-	 * @since  1.6035.1538
+	 * @since 1.6093.1200
 	 * @return bool True if offsite storage configured.
 	 */
 	private static function check_offsite_storage(): bool {

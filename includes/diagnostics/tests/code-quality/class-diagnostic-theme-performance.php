@@ -4,7 +4,7 @@
  *
  * Validates theme performance and optimization.
  *
- * @since   1.2034.1615
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme performance and optimization.
  *
- * @since 1.2034.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Performance extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Theme_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ include get_template_directory() . '/dist/critical.css';
 echo '</style>';",
 						'measuring_improvement'   => array(
 							'Before: 15 stylesheets, 3.5s load',
-							'After combining: 3 stylesheets, 1.2s load',
+							'After combining: 3 stylesheets,1.0s load',
 							'65% improvement in load time',
 						),
 						'tools'                   => array(

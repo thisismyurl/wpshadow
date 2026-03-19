@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Ecommerce
- * @since      1.6031.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies e-commerce sites meet ADA/WCAG accessibility standards.
  *
- * @since 1.6031.1505
+ * @since 1.6093.1200
  */
 class Diagnostic_Ecommerce_ADA_Compliance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ecommerce_ADA_Compliance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6031.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

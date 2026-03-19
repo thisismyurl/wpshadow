@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Security
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (wildcard origin), medium (overly permissive)
  * - Treatment: restrict CORS to your domain only
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_Media_CORS_Configuration extends Treatment_Base {
 
@@ -126,7 +126,7 @@ class Treatment_Media_CORS_Configuration extends Treatment_Base {
 	 * - CDN host differences
 	 * - send_headers filters
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

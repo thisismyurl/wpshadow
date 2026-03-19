@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Password expiration policy (90-180 days)
  * - Admin accounts require stronger passwords
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Password_Strength_Enforcement extends Diagnostic_Base {
 

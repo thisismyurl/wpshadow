@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses chatbot assistance to guide purchase decisions and drive conversions.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Conversion-optimized chatbots can increase sales by 20-40% by answering questions,
  * overcoming objections, and guiding buyers through the purchase process.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,7 +160,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for chatbot installation.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if chatbot exists, false otherwise.
 	 */
 	private static function check_chatbot_installed() {
@@ -185,7 +185,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for proactive messaging.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if proactive messages exist, false otherwise.
 	 */
 	private static function check_proactive_messaging() {
@@ -211,7 +211,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for product recommendations.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if recommendations exist, false otherwise.
 	 */
 	private static function check_product_recommendations() {
@@ -228,7 +228,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for cart assistance.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if cart assistance exists, false otherwise.
 	 */
 	private static function check_cart_assistance() {
@@ -247,7 +247,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for FAQ integration.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if FAQ integration exists, false otherwise.
 	 */
 	private static function check_faq_integration() {
@@ -278,7 +278,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for lead capture.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if lead capture exists, false otherwise.
 	 */
 	private static function check_lead_capture() {
@@ -295,7 +295,7 @@ class Diagnostic_Chatbot_For_Conversion extends Diagnostic_Base {
 	/**
 	 * Check for conversion tracking.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists, false otherwise.
 	 */
 	private static function check_conversion_tracking() {

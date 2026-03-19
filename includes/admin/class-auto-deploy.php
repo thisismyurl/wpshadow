@@ -6,7 +6,7 @@
  * Only enabled when WPSHADOW_AUTO_DEPLOY constant is true.
  *
  * @package WPShadow\Admin
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -45,7 +45,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -63,7 +63,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	/**
 	 * Initialize auto-deploy if enabled (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Auto_Deploy::subscribe() instead
+	 * @deprecated1.0 Use Auto_Deploy::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {
@@ -471,7 +471,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 * Ensures paths don't escape the plugin directory using ../ sequences.
 	 * Fun fact: "../" walks into a bar... wait, wrong directory!
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $path Path to validate.
 	 * @param  string $allowed_base Base directory path that $path should stay within.
 	 * @return bool True if path is safe.
@@ -495,7 +495,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 * Validates that webhook request comes from GitHub's IP ranges.
 	 * Applies allowlist with override for development environments.
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return bool True if IP is valid GitHub IP.
 	 */
 	private static function is_github_ip(): bool {
@@ -523,7 +523,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	/**
 	 * Check if IP is within CIDR range
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $ip IP address to check.
 	 * @param  string $cidr CIDR range (e.g., "192.168.0.0/24").
 	 * @return bool True if IP is in range.
@@ -548,7 +548,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 * GitHub provides its IP ranges via API.
 	 * This should be called periodically to keep whitelist current.
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return bool True if update successful.
 	 */
 	public static function update_github_ips(): bool {
@@ -587,7 +587,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	 *
 	 * Prevents abuse by limiting deployments to 10 per hour.
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return bool True if within rate limit, false if exceeded.
 	 */
 	private static function check_rate_limit(): bool {
@@ -612,7 +612,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	/**
 	 * Log webhook attempt for security auditing
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $status Webhook status (success|signature_invalid|rate_limit_exceeded|etc).
 	 * @param  array  $data   Optional additional data to log.
 	 * @return void
@@ -638,7 +638,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	/**
 	 * Get client IP address
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @return string Client IP address.
 	 */
 	private static function get_client_ip(): string {
@@ -673,7 +673,7 @@ class Auto_Deploy extends Hook_Subscriber_Base {
 	/**
 	 * Validate IP address format
 	 *
-	 * @since  1.6032.1000
+	 * @since 1.6093.1200
 	 * @param  string $ip IP address to validate.
 	 * @return bool True if valid IPv4 or IPv6.
 	 */

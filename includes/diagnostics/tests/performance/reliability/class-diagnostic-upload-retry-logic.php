@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,14 +40,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Without retry, users lose their uploaded file and must try again
  * - Automatic retry provides seamless experience
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_Retry_Logic extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'upload-retry-logic';
@@ -55,7 +55,7 @@ class Diagnostic_Upload_Retry_Logic extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Failed Upload Has No Retry Mechanism';
@@ -63,7 +63,7 @@ class Diagnostic_Upload_Retry_Logic extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if failed uploads can be automatically retried';
@@ -71,7 +71,7 @@ class Diagnostic_Upload_Retry_Logic extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -79,7 +79,7 @@ class Diagnostic_Upload_Retry_Logic extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

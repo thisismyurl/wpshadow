@@ -52,7 +52,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.603.1345
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -70,14 +70,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Repairs database tables identified as corrupt.
  *
- * @since 1.603.1345
+ * @since 1.6093.1200
  */
 class Treatment_Database_Table_Corruption_Check extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since  1.603.1345
+	 * @since 1.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -89,7 +89,7 @@ class Treatment_Database_Table_Corruption_Check extends Treatment_Base {
 	 *
 	 * Runs REPAIR TABLE on all corrupted tables identified by the diagnostic.
 	 *
-	 * @since  1.603.1345
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

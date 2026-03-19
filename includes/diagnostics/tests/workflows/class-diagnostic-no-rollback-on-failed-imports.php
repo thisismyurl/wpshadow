@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates data rollback mechanisms for import failures.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	 *
 	 * Tests rollback mechanisms for import failures.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	/**
 	 * Check for pre-import backup.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if backups created.
 	 */
 	private static function has_pre_import_backup() {
@@ -142,7 +142,7 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	/**
 	 * Check for transaction support.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if transactions supported.
 	 */
 	private static function supports_transactions() {
@@ -167,7 +167,7 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	/**
 	 * Check for change tracking.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if changes tracked.
 	 */
 	private static function tracks_changes() {
@@ -189,7 +189,7 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	/**
 	 * Check for rollback mechanism.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if rollback implemented.
 	 */
 	private static function has_rollback_mechanism() {
@@ -214,7 +214,7 @@ class Diagnostic_No_Rollback_On_Failed_Imports extends Diagnostic_Base {
 	/**
 	 * Check for rollback verification.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if rollback verified.
 	 */
 	private static function verifies_rollback() {

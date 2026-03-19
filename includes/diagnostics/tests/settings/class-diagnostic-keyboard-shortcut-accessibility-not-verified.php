@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing keyboard shortcut accessibility.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Keyboard_Shortcut_Accessibility_Not_Verified extends Diagnostic_Base {
 
@@ -59,12 +59,12 @@ class Diagnostic_Keyboard_Shortcut_Accessibility_Not_Verified extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for documented keyboard shortcuts
-		if ( ! has_option( 'keyboard_shortcuts_documented' ) ) {
+		if ( null === get_option( 'keyboard_shortcuts_documented', null ) ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

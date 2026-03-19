@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5049.1331
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing bounce handling for comment notification emails.
  *
- * @since 1.5049.1331
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Bounce_Rate_For_Comments extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Bounce_Rate_For_Comments extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.5049.1331
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

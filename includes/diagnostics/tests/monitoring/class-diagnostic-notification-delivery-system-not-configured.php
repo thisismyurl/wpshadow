@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing notification delivery.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Notification_Delivery_System_Not_Configured extends Diagnostic_Base {
 
@@ -59,12 +59,13 @@ class Diagnostic_Notification_Delivery_System_Not_Configured extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for notification service integration
-		if ( ! has_option( 'notification_service_enabled' ) ) {
+		$notification_enabled = get_option( 'notification_service_enabled', null );
+		if ( null === $notification_enabled ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

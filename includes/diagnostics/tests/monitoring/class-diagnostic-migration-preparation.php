@@ -4,7 +4,7 @@
  *
  * Validates site readiness for migration or cloning to new environment.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if site is prepared for migration or cloning to new environment.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -325,7 +325,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Check if migration plugin installed.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if migration plugin active.
 	 */
 	private static function has_migration_plugin() {
@@ -349,7 +349,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Check for hardcoded URLs in database.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return int Count of hardcoded URLs.
 	 */
 	private static function check_hardcoded_urls() {
@@ -370,7 +370,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Get database size in bytes.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return int Database size.
 	 */
 	private static function get_database_size() {
@@ -386,7 +386,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Check if test environment exists.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if test environment detected.
 	 */
 	private static function has_test_environment() {

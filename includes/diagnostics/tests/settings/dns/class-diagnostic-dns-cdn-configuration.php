@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1620
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies CDN routing and CNAME configuration.
  * Like checking mail forwarding rules are set up correctly.
  *
- * @since 1.6035.1620
+ * @since 1.6093.1200
  */
 class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the CNAME/CDN configuration diagnostic check.
 	 *
-	 * @since  1.6035.1620
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if configuration issues detected, null otherwise.
 	 */
 	public static function check() {

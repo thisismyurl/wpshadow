@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since      1.602.1215
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,9 +26,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks that forms use HTML5 autocomplete attributes to enable mobile
  * browsers' auto-fill features, dramatically improving form completion speed.
  *
- * WCAG Reference: 1.3.5 Identify Input Purpose (Level AA)
+ * WCAG Reference:1.0 Identify Input Purpose (Level AA)
  *
- * @since 1.602.1215
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Form_Autofill_Support extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Mobile_Form_Autofill_Support extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1215
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

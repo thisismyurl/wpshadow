@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages external integrations for reports.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Report_Integration_Manager {
 
 	/**
 	 * Send report to Slack
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $webhook_url Slack webhook URL.
 	 * @param  string $report_id   Report identifier.
 	 * @param  array  $data        Report data.
@@ -81,7 +81,7 @@ class Report_Integration_Manager {
 	/**
 	 * Send report to Microsoft Teams
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $webhook_url Teams webhook URL.
 	 * @param  string $report_id   Report identifier.
 	 * @param  array  $data        Report data.
@@ -134,7 +134,7 @@ class Report_Integration_Manager {
 	/**
 	 * Trigger webhook
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $webhook_url Webhook URL.
 	 * @param  string $report_id   Report identifier.
 	 * @param  array  $data        Report data.
@@ -177,7 +177,7 @@ class Report_Integration_Manager {
 		/**
 		 * Fires after webhook is triggered.
 		 *
-		 * @since 1.603.0200
+		 * @since 1.6093.1200
 		 *
 		 * @param string $webhook_url Webhook URL.
 		 * @param int    $status_code Response status code.
@@ -191,7 +191,7 @@ class Report_Integration_Manager {
 	/**
 	 * Count findings by severity
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  array  $data     Report data.
 	 * @param  string $severity Severity level.
 	 * @return int Count.
@@ -214,7 +214,7 @@ class Report_Integration_Manager {
 	/**
 	 * Register REST API endpoints for reports
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_api_endpoints() {
@@ -252,7 +252,7 @@ class Report_Integration_Manager {
 	/**
 	 * API permission check
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return bool Permission granted.
 	 */
 	public static function api_permission_check() {
@@ -262,7 +262,7 @@ class Report_Integration_Manager {
 	/**
 	 * API endpoint: Get available reports
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return WP_REST_Response Response.
 	 */
 	public static function api_get_reports() {
@@ -288,7 +288,7 @@ class Report_Integration_Manager {
 	/**
 	 * API endpoint: Get report details
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response.
 	 */
@@ -314,7 +314,7 @@ class Report_Integration_Manager {
 	/**
 	 * API endpoint: Run a report
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response.
 	 */

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Accessibility
- * @since      1.6035.1700
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Color Contrast Treatment Class
  *
  * Verifies theme has sufficient color contrast for readability.
- * WCAG 2.1 Level AA Success Criterion 1.4.3 (Contrast Minimum).
+ * WCAG 2.1 Level AA Success Criterion1.0 (Contrast Minimum).
  *
- * @since 1.6035.1700
+ * @since 1.6093.1200
  */
 class Treatment_Color_Contrast extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Color_Contrast extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6035.1700
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

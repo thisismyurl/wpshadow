@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7034.1110
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that expired transients are cleaned automatically to
  * prevent database bloat and performance degradation.
  *
- * @since 1.7034.1110
+ * @since 1.6093.1200
  */
 class Treatment_Transient_Cleanup_Automation extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Transient_Cleanup_Automation extends Treatment_Base {
 	 * Tests if transients are accumulating in the database and
 	 * if automatic cleanup mechanisms are configured.
 	 *
-	 * @since  1.7034.1110
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

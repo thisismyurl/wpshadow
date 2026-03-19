@@ -135,7 +135,7 @@ class Workflow_Examples {
 	/**
 	 * Get featured workflow examples for quick-start cards.
 	 *
-	 * @since  1.6047.1200
+	 * @since 1.6093.1200
 	 * @return array Featured example definitions keyed by example slug.
 	 */
 	public static function get_featured_examples() {

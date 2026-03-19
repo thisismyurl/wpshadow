@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * defined Recovery Time Objective (RTO) and Recovery Point
  * Objective (RPO) metrics.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Business_Continuity_Plan extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Business_Continuity_Plan extends Diagnostic_Base {
 	/**
 	 * Run the business continuity plan check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if BC plan missing, null otherwise.
 	 */
 	public static function check() {

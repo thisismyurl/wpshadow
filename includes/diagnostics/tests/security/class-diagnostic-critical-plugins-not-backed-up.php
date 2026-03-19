@@ -17,7 +17,7 @@
  * Plugin backup best practices: https://wpshadow.com/kb/plugin-backup-strategy\n * Video: Setting up plugin backups (8min): https://wpshadow.com/training/backup-plugins\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site uses custom plugin \"Membership Manager\". Works fine for 1 year.\n * Plugin updated. New version has subtle PHP 8.1 compatibility issue.\n * Fatal error: parse error in plugin file. Site broken.\n * No backup exists. Developer must: deactivate plugin (doesn't work, error on load),\n * manually SSH into server, restore from FTP (2 hours). Business lost during downtime.\n *
  * **Implementation Notes:**
  * - Scans /wp-content/plugins/ for active plugins\n * - Checks backup plugin locations (typically /backups/plugins/)\n * - Validates backup file timestamp\n * - Severity: high (no backup), medium (stale backup)\n * - Treatment: enable automatic plugin backups\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Critical_Plugins_Not_Backed_Up extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Critical_Plugins_Not_Backed_Up extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

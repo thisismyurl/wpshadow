@@ -12,10 +12,10 @@
  * 5. Measures render-blocking asset impact
  * 6. Flags inefficient loading patterns\n *
  * **Why This Matters:**\n * Unoptimized asset loading is one of the biggest page speed problems. A theme loading 3 large,
- * render-blocking CSS files sequentially = 1.5 seconds to load just CSS before content appears.\n * Adding defer to scripts and inlining critical CSS = 1.5 seconds to 0.2 seconds (7x faster).\n *
+ * render-blocking CSS files sequentially =1.0 seconds to load just CSS before content appears.\n * Adding defer to scripts and inlining critical CSS =1.0 seconds to 0.2 seconds (7x faster).\n *
  * **Real-World Scenario:**\n * Premium theme loaded 8 separate CSS files (not minified) and 5 JavaScript files (blocking). Page
  * load time: 4.2 seconds. User perceived slowness: all blank white screen for 3 seconds. After
- * implementing: minification, concatenation, critical CSS inline, script defer: page load 1.1 seconds.
+ * implementing: minification, concatenation, critical CSS inline, script defer: page load1.0 seconds.
  * First paint: 0.4 seconds. User sees content almost instantly. Bounce rate dropped 35%. Cost: theme
  * optimization. Value: $30,000+ in recovered conversions.\n *
  * **Business Impact:**\n * - White blank screen 2-4 seconds (users think page is broken)\n * - Bounce rate increases 30-50%\n * - SEO ranking penalty (Core Web Vitals fail)\n * - Conversion rate drops 30-50%\n * - Mobile users especially impacted\n * - Revenue loss: $5,000-$100,000+ monthly\n *
@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-asset-optimization\n * - Video: https://wpshadow.com/training/critical-css-workflow (8 min)\n * - Advanced: https://wpshadow.com/training/asset-loading-strategies (14 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme asset loading strategies for performance.
  *
- * @since 1.6032.1230
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Asset_Loading_Optimization extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Theme_Asset_Loading_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_Theme_Asset_Loading_Optimization extends Diagnostic_Base {
 
 		if ( ! empty( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( ! empty( $script->src ) && false !== strpos( $script->src, get_template_directory_uri() ) ) {
+				if ( ! empty( $script->src ) && is_string( $script->src ) && false !== strpos( $script->src, get_template_directory_uri() ) ) {
 					$theme_scripts++;
 
 					// Check for defer/async.
@@ -110,7 +110,7 @@ class Diagnostic_Theme_Asset_Loading_Optimization extends Diagnostic_Base {
 
 		if ( ! empty( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( ! empty( $style->src ) && false !== strpos( $style->src, get_template_directory_uri() ) ) {
+				if ( ! empty( $style->src ) && is_string( $style->src ) && false !== strpos( $style->src, get_template_directory_uri() ) ) {
 					$theme_styles++;
 				}
 			}

@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1655
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Dead Code Diagnostic Test Class
  *
- * @since 1.6028.1655
+ * @since 1.6093.1200
  */
 class DeadCodeTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test diagnostic passes with minimal dead code
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_minimal_dead_code(): void {
@@ -69,7 +69,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test diagnostic flags high dead code percentage
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_high_dead_code_percentage(): void {
@@ -110,7 +110,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test diagnostic flags excessive dead code
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_excessive_dead_code(): void {
@@ -146,7 +146,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -193,7 +193,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test meta includes scan statistics
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_scan_statistics(): void {
@@ -231,7 +231,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test details include function samples
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_function_samples(): void {
@@ -271,7 +271,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test details include recommendations
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_recommendations(): void {
@@ -307,7 +307,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test threat level scales with percentage
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_scales_with_percentage(): void {
@@ -342,7 +342,7 @@ class DeadCodeTest extends TestCase {
 	/**
 	 * Test class samples included
 	 *
-	 * @since 1.6028.1655
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_class_samples_included(): void {

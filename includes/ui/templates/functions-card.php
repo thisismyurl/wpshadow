@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since      1.6037.0000
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Supports optional header (title, description, icon), body content,
  * footer content, and action buttons.
  *
- * @since  1.6037.0000
+ * @since 1.6093.1200
  * @param  array $args {
  *     Card configuration.
  *
@@ -175,7 +175,7 @@ function wpshadow_render_card( array $args = array() ) {
 /**
  * Render action buttons for a card.
  *
- * @since  1.6037.0000
+ * @since 1.6093.1200
  * @param  array $actions Action definitions.
  * @return void
  */
@@ -233,7 +233,7 @@ function wpshadow_render_card_actions( array $actions = array() ) {
 /**
  * Build an HTML attribute string from a key/value array.
  *
- * @since  1.6037.0000
+ * @since 1.6093.1200
  * @param  array $attrs Attributes.
  * @return string
  */

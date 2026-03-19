@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies custom post type permalinks are properly configured with
  * working rewrite rules. Detects issues causing 404 errors or incorrect URLs.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Treatment_CPT_Permalink_Structure extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_CPT_Permalink_Structure extends Treatment_Base {
 	 * Validates custom post type permalink configuration and rewrite rules.
 	 * Detects broken rewrites, missing slugs, and slug conflicts.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if permalink issues found, null otherwise.
 	 */
 	public static function check() {

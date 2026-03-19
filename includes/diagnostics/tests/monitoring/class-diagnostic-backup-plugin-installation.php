@@ -4,7 +4,7 @@
  *
  * Validates that a backup solution is installed and properly configured.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for installed backup solutions and their configuration status.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Plugin_Installation extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Backup_Plugin_Installation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -250,7 +250,7 @@ class Diagnostic_Backup_Plugin_Installation extends Diagnostic_Base {
 	/**
 	 * Get list of installed backup plugins.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array Array of backup plugins with active status.
 	 */
 	private static function get_installed_backup_plugins() {
@@ -303,7 +303,7 @@ class Diagnostic_Backup_Plugin_Installation extends Diagnostic_Base {
 	/**
 	 * Get last backup time for plugin.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $slug Plugin slug.
 	 * @return int|null Timestamp of last backup.
 	 */
@@ -315,7 +315,7 @@ class Diagnostic_Backup_Plugin_Installation extends Diagnostic_Base {
 	/**
 	 * Check if backup storage destination is configured.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @param  string $slug Plugin slug.
 	 * @return bool True if storage configured.
 	 */

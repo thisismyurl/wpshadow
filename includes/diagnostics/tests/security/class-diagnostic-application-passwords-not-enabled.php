@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SaaS company integrates 12 third-party tools: email, analytics, CRM, backup, etc.\n * Each tool stores WordPress password in their servers (no app password support, company\n * disabled them). June 2024: one SaaS vendor gets breached, 50K customer passwords stolen.\n * Attacker tests passwords on WordPress sites: 30% reuse same password, grants full access.\n * Company: 24-hour incident response, force password resets for all users, restore from backup,\n * lost 72 hours productivity. Cost: $200K+. Prevention: enable app passwords, rotate 2024 breach\n * exposure to single-app compromise.\n *
  * **Implementation Notes:**
  * - Checks WordPress version and REST API availability\n * - Tests app password creation/authentication flow\n * - Returns severity: medium (feature disabled/unavailable)\n * - Auto-fixable treatment: enable app passwords, provide setup guide\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */\nclass Diagnostic_Application_Passwords_Not_Enabled extends Diagnostic_Base {
 
 	/**
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

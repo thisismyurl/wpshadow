@@ -4,7 +4,7 @@
  *
  * Optimizes email signup form for mobile devices.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates email signup form optimization for mobile devices,
  * ensuring proper input type and button sizing for better conversions.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Email_Signup_Form extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Email_Signup_Form extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

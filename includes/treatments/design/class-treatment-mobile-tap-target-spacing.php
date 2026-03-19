@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Touch
- * @since      1.602.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that interactive elements have adequate spacing between them
  * to prevent accidental taps. WCAG 2.5.8 Level AA requirement.
  *
- * @since 1.602.1430
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 	/**
 	 * Find tap target spacing violations.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return array Violations found.
 	 */
 	private static function find_spacing_violations(): array {
@@ -124,7 +124,7 @@ class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 	/**
 	 * Get element position and size.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  \DOMElement $element DOM element.
 	 * @return array|null Position array or null.
 	 */
@@ -154,7 +154,7 @@ class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 	/**
 	 * Calculate center-to-center distance between elements.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @param  array $pos1 First position.
 	 * @param  array $pos2 Second position.
 	 * @return float Distance in pixels.
@@ -168,7 +168,7 @@ class Treatment_Mobile_Tap_Target_Spacing extends Treatment_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since  1.602.1430
+	 * @since 1.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #8: Shipping Calculator Accurate from Specialized & Emerging Success Habits.
  * Checks if the site provides real-time shipping calculations.
  *
- * @since 1.5003.1145
+ * @since 1.6093.1200
  */
 class Diagnostic_Provides_Accurate_Shipping_Calculator extends Diagnostic_Base {
 

@@ -17,7 +17,7 @@
  * Auto-update setup: https://wpshadow.com/kb/wordpress-auto-updates\n * Video: Enabling automatic updates (5min): https://wpshadow.com/training/auto-updates\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Client disables auto-updates due to fear of \"breaking changes\". Site runs\n * WordPress 6.0 for 6 months (current: 6.8). Major security hole discovered\n * affecting versions 6.0-6.4. Client's site vulnerable for entire window.\n * Attacker finds vulnerability details. Scans for unpatched 6.0 sites. Client\n * site hit. Enables auto-updates retroactively (too late, already compromised).\n *
  * **Implementation Notes:**
  * - Checks AUTOMATIC_UPDATER_DISABLED constant\n * - Validates auto_core_update_enable option\n * - Tests for disabling filters\n * - Severity: critical (major patch missing), high (minor patch)\n * - Treatment: enable auto-updates, explain safety\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Core_WordPress_Updates_Not_Automatically_Applied extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Core_WordPress_Updates_Not_Automatically_Applied extends Diagno
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

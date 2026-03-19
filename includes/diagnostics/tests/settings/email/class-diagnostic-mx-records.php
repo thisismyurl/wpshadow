@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * email servers where to deliver mail for your domain (like a forwarding
  * address on your mailbox).
  *
- * @since 1.6035.1530
+ * @since 1.6093.1200
  */
 class Diagnostic_Mx_Records extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mx_Records extends Diagnostic_Base {
 	/**
 	 * Run the MX records diagnostic check.
 	 *
-	 * @since  1.6035.1530
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if MX issues detected, null otherwise.
 	 */
 	public static function check() {

@@ -5,7 +5,7 @@
  * Verifies Content Security Policy headers are configured for security
  * without impacting performance with excessive inline script blocking.
  *
- * @since   1.6033.2094
+ * @since 1.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - CSP report-only mode
  * - Security vs performance balance
  *
- * @since 1.6033.2094
+ * @since 1.6093.1200
  */
 class Treatment_Content_Security_Policy extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Content_Security_Policy extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2094
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

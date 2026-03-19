@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Updating old content can increase organic traffic by 111% (HubSpot).
  * Outdated content hurts SEO rankings and user trust.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Content_Refresh_Or_Update_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Content_Refresh_Or_Update_Strategy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_No_Content_Refresh_Or_Update_Strategy extends Diagnostic_Base {
 	/**
 	 * Count old content (18+ months without update).
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return int Number of old posts.
 	 */
 	private static function count_old_content() {
@@ -127,7 +127,7 @@ class Diagnostic_No_Content_Refresh_Or_Update_Strategy extends Diagnostic_Base {
 	/**
 	 * Get content refresh priorities.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Prioritization criteria.
 	 */
 	private static function get_refresh_priorities() {
@@ -144,7 +144,7 @@ class Diagnostic_No_Content_Refresh_Or_Update_Strategy extends Diagnostic_Base {
 	/**
 	 * Get content update checklist.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Update checklist items.
 	 */
 	private static function get_update_checklist() {

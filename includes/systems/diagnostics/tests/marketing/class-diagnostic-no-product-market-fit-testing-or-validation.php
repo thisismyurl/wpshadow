@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Most startups fail because they build something people don't want.
  * Validate that customers actually need your solution.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Product_Market_Fit_Testing_Or_Validation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Product_Market_Fit_Testing_Or_Validation extends Diagnostic_
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Product_Market_Fit_Testing_Or_Validation extends Diagnostic_
 	/**
 	 * Check if PMF validation exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if validation detected, false otherwise.
 	 */
 	private static function has_pmf_validation() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Product_Market_Fit_Testing_Or_Validation extends Diagnostic_
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Product_Market_Fit_Testing_Or_Validation extends Diagnostic_
 	/**
 	 * Get validation methods.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Validation methods with descriptions.
 	 */
 	private static function get_validation_methods() {
@@ -170,7 +170,7 @@ class Diagnostic_No_Product_Market_Fit_Testing_Or_Validation extends Diagnostic_
 	/**
 	 * Get product-market fit signals.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array PMF signals with thresholds.
 	 */
 	private static function get_pmf_signals() {

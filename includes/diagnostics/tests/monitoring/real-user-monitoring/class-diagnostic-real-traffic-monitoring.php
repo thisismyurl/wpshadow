@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1630
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies real user traffic patterns are being tracked.
  * Like watching how customers move through your store.
  *
- * @since 1.6035.1630
+ * @since 1.6093.1200
  */
 class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the real traffic monitoring diagnostic check.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if monitoring issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check if Google Analytics is present.
 	 *
-	 * @since  1.6035.1630
+	 * @since 1.6093.1200
 	 * @return bool True if GA detected.
 	 */
 	private static function has_google_analytics() {

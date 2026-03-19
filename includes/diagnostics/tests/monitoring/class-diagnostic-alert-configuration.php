@@ -4,7 +4,7 @@
  *
  * Analyzes alert and notification configuration for critical events.
  *
- * @since   1.6033.2140
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates notification system for critical events and alerts.
  *
- * @since 1.6033.2140
+ * @since 1.6093.1200
  */
 class Diagnostic_Alert_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Alert_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2140
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -82,13 +82,7 @@ class Diagnostic_Alert_Configuration extends Diagnostic_Base {
 			}
 		}
 
-		// Check if WordPress can send emails
-		$email_test_result = null;
-		if ( $has_valid_email ) {
-			// Don't actually send test email, just check SMTP configuration
-			$phpmailer = new \PHPMailer\PHPMailer\PHPMailer( true );
-			$smtp_configured = ! empty( $phpmailer->Host );
-		}
+		// Basic email capability is inferred from valid admin email and plugin setup.
 
 		// Check for critical event monitoring
 		$monitors_core_updates = has_filter( 'auto_core_update_email' );

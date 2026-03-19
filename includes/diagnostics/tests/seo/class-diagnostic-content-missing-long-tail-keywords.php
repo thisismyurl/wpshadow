@@ -4,7 +4,7 @@
  *
  * Detects missing long-tail keyword targeting.
  *
- * @since   1.6033.1715
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Long-tail keywords drive ~70% of traffic. Only targeting 1-2 word
  * terms creates impossible competition.
  *
- * @since 1.6033.1715
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Missing_Long_Tail_Keywords extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Missing_Long_Tail_Keywords extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1715
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

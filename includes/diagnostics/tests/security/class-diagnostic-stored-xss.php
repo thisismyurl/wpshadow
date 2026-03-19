@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2102
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * malicious script persists in the database and affects all users
  * who view the content, not just the victim who clicked a link.
  *
- * @since 1.2033.2102
+ * @since 1.6093.1200
  */
 class Diagnostic_Stored_XSS extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'stored-xss';
@@ -50,7 +50,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Stored XSS Vulnerability';
@@ -58,7 +58,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects potential stored (persistent) XSS vulnerabilities';
@@ -66,7 +66,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	 * Scans theme and plugin code for patterns that indicate
 	 * potential stored XSS vulnerabilities.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -226,7 +226,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * Scan a directory for PHP files.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @param  int    $limit Maximum number of files.
 	 * @return array Array of file paths.
@@ -261,7 +261,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * Scan a file for XSS patterns.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Array of patterns.
 	 * @return array Array of violations found.
@@ -296,7 +296,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * Scan database for actual malicious content.
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @return array Array of malicious content found.
 	 */
 	private static function scan_database_for_malicious_content() {

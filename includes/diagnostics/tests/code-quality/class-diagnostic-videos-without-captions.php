@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since      1.6034.2145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * or subtitles, making content inaccessible to deaf or hard-of-hearing users.
  *
  * **Why This Matters:**
- * - WCAG 2.1 Level A requirement (SC 1.2.2 Captions Prerecorded)
+ * - WCAG 2.1 Level A requirement (SC1.0 Captions Prerecorded)
  * - Legal requirement for ADA/Section 508 compliance
  * - 15% of US population has hearing loss
  * - 85% of Facebook videos watched without sound
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - HTML5 <video> elements (checks for <track> elements)
  * - Video file attachments without caption metadata
  *
- * @since 1.6034.2145
+ * @since 1.6093.1200
  */
 class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 	 * - HTML5: <track kind="captions"> element
 	 * - Video attachments: caption metadata
 	 *
-	 * @since  1.6034.2145
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -190,7 +190,7 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 			'details'      => array(
 				'video_count'      => $count,
 				'sample_videos'    => array_slice( $videos_without_captions, 0, 10 ),
-				'wcag_requirement' => 'Level A: Success Criterion 1.2.2 (Captions Prerecorded)',
+				'wcag_requirement' => 'Level A: Success Criterion1.0 (Captions Prerecorded)',
 			),
 		);
 	}

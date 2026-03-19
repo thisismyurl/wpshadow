@@ -36,7 +36,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Import Lost Shortcodes and Formatting
  * - Export Corrupt XML Files
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 
@@ -100,7 +100,7 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -197,9 +197,12 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 
 		$corrupted_count = 0;
 		foreach ( $recent_posts as $post ) {
+			$post_content = isset( $post['post_content'] ) && is_string( $post['post_content'] ) ? $post['post_content'] : '';
+			$post_title   = isset( $post['post_title'] ) && is_string( $post['post_title'] ) ? $post['post_title'] : '';
+
 			foreach ( $corruption_patterns as $corrupt => $correct ) {
-				if ( strpos( $post['post_content'], $corrupt ) !== false || 
-				     strpos( $post['post_title'], $corrupt ) !== false ) {
+				if ( false !== strpos( $post_content, $corrupt ) ||
+					 false !== strpos( $post_title, $corrupt ) ) {
 					++$corrupted_count;
 					break;
 				}
@@ -215,11 +218,16 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		}
 
 		// Check for emoji in database (requires utf8mb4).
+		$emoji_pattern = '%😀%';
 		$emoji_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_content REGEXP '[\\x{1F600}-\\x{1F64F}]' 
-			OR post_title REGEXP '[\\x{1F600}-\\x{1F64F}]'"
+			$wpdb->prepare(
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_content LIKE %s
+				OR post_title LIKE %s",
+				$emoji_pattern,
+				$emoji_pattern
+			)
 		);
 
 		if ( $emoji_posts > 0 && 'utf8mb4' !== $charset ) {

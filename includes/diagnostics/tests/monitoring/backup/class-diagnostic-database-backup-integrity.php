@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1615
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if database backups are complete and can be restored.
  * Like testing that your saved game files actually work.
  *
- * @since 1.6035.1615
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 	/**
 	 * Run the database backup integrity diagnostic check.
 	 *
-	 * @since  1.6035.1615
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup integrity issues detected, null otherwise.
 	 */
 	public static function check() {

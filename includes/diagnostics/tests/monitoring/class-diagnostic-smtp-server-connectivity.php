@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that the configured SMTP server is reachable and can accept connections.
  *
- * @since 1.6035.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_SMTP_Server_Connectivity extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SMTP_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Run the SMTP server connectivity diagnostic check.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if connectivity issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_SMTP_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Get SMTP configuration from various sources.
 	 *
-	 * @since  1.6035.1430
+	 * @since 1.6093.1200
 	 * @return array SMTP configuration with host and port.
 	 */
 	private static function get_smtp_configuration(): array {

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6031.1400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (UX issue, not critical)
  * - Treatment: reduce threading depth to 5-10
  *
- * @since 1.6031.1400
+ * @since 1.6093.1200
  */
 class Treatment_Comment_Threading_Depth_Limit extends Treatment_Base {
 	protected static $slug = 'comment-threading-depth-limit';

@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (queries timing out)
  * - Treatment: add recommended indexes
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Database_Performance_Index_Not_Optimized extends Treatment_Base {
 
@@ -123,7 +123,7 @@ class Treatment_Database_Performance_Index_Not_Optimized extends Treatment_Base 
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

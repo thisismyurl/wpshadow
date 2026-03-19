@@ -10,7 +10,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Beyond Pure (#10) - User control over data lifecycle
  * Philosophy: Show Value (#9) - Maintain valuable historical data
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Data_Retention_Manager {

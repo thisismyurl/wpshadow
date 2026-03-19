@@ -22,9 +22,9 @@
  * defragments, reclaims space. Queries faster.
  *
  * **Business Impact:**
- * wp_postmeta table: 800K rows, 45% overhead (1.8GB data + 1.5GB
+ * wp_postmeta table: 800K rows, 45% overhead (1.8GB data +1.0GB
  * wasted space). Queries take 600ms (should be 180ms). Ran
- * OPTIMIZE TABLE. Reclaimed 1.5GB. Table size: 1.8GB (60% smaller).
+ * OPTIMIZE TABLE. Reclaimed1.0GB. Table size:1.0GB (60% smaller).
  * Query time: 600ms → 180ms (3.3x faster). Backup time reduced
  * 12 minutes. Database disk usage reduced 30%. Server costs
  * reduced $40/month (smaller disk tier). Optimization time: 8 minutes.
@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.5049.1401
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (gradual degradation)
  * - Treatment: run OPTIMIZE TABLE on affected tables
  *
- * @since 1.5049.1401
+ * @since 1.6093.1200
  */
 class Treatment_Database_Table_Optimization_Status extends Treatment_Base {
 
@@ -120,7 +120,7 @@ class Treatment_Database_Table_Optimization_Status extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.5049.1401
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

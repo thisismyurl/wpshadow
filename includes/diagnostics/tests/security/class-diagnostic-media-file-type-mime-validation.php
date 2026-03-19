@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since      1.6033.2102
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for uploaded files. Detects potential MIME spoofing vulnerabilities
  * where the actual file content doesn't match the declared MIME type.
  *
- * @since 1.6033.2102
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_File_Type_MIME_Validation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Media_File_Type_MIME_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2102
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

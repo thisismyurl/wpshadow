@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5003.1145
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #4: Cross-Sell Strategy Active from Specialized & Emerging Success Habits.
  * Checks if the site implements effective cross-selling.
  *
- * @since 1.5003.1145
+ * @since 1.6093.1200
  */
 class Diagnostic_Implements_Cross_Sell_Strategy extends Diagnostic_Base {
 

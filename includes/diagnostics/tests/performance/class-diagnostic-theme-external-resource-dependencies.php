@@ -20,7 +20,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/external-resource-optimization\n * - Video: https://wpshadow.com/training/self-hosted-fonts (6 min)\n * - Advanced: https://wpshadow.com/training/cdn-fallback-strategies (11 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies external resource dependencies that could affect performance.
  *
- * @since 1.6032.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 		// Check enqueued scripts for external URLs.
 		if ( ! empty( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( ! empty( $script->src ) && self::is_external_url( $script->src ) ) {
+				if ( ! empty( $script->src ) && is_string( $script->src ) && self::is_external_url( $script->src ) ) {
 					$external_resources[] = array(
 						'type'   => 'script',
 						'handle' => $handle,
@@ -97,7 +97,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 		// Check enqueued styles for external URLs.
 		if ( ! empty( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
-				if ( ! empty( $style->src ) && self::is_external_url( $style->src ) ) {
+				if ( ! empty( $style->src ) && is_string( $style->src ) && self::is_external_url( $style->src ) ) {
 					$external_resources[] = array(
 						'type'   => 'style',
 						'handle' => $handle,
@@ -121,6 +121,10 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 		$theme_files = self::get_theme_files( $theme_dir );
 		foreach ( $theme_files as $file ) {
 			$content = file_get_contents( $file );
+			if ( ! is_string( $content ) || '' === $content ) {
+				continue;
+			}
+
 			foreach ( $patterns as $pattern ) {
 				if ( false !== stripos( $content, $pattern ) ) {
 					$external_resources[] = array(
@@ -158,11 +162,15 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 	/**
 	 * Check if a URL is external.
 	 *
-	 * @since  1.6032.1200
+	 * @since 1.6093.1200
 	 * @param  string $url URL to check.
 	 * @return bool True if external, false otherwise.
 	 */
 	private static function is_external_url( $url ) {
+		if ( ! is_string( $url ) || '' === $url ) {
+			return false;
+		}
+
 		$site_url = site_url();
 		$home_url = home_url();
 
@@ -172,7 +180,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 	/**
 	 * Get all PHP files in theme directory.
 	 *
-	 * @since  1.6032.1200
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @return array Array of file paths.
 	 */

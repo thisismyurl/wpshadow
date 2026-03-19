@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since      1.6004.0400
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides definitions, eligibility checks, and claim handling
  * for optional point-earning actions.
  *
- * @since 1.6004.0400
+ * @since 1.6093.1200
  */
 class Earn_Actions {
 
@@ -36,7 +36,7 @@ class Earn_Actions {
 	/**
 	 * Get all available earn actions.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @return array Earn actions definitions.
 	 */
 	public static function get_actions(): array {
@@ -140,7 +140,7 @@ class Earn_Actions {
 	/**
 	 * Get action status for the current user.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Action status data.
 	 */
@@ -181,7 +181,7 @@ class Earn_Actions {
 	/**
 	 * Claim a manual earn action.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id   User ID.
 	 * @param  string $action_id Action ID.
 	 * @return array Result data.
@@ -263,7 +263,7 @@ class Earn_Actions {
 	/**
 	 * Mark an action as claimed for the user.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id   User ID.
 	 * @param  string $action_id Action ID.
 	 * @return void
@@ -281,7 +281,7 @@ class Earn_Actions {
 	/**
 	 * Check if an action has been claimed.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int    $user_id   User ID.
 	 * @param  string $action_id Action ID.
 	 * @return bool True if claimed.
@@ -294,7 +294,7 @@ class Earn_Actions {
 	/**
 	 * Determine if an auto action is completed.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  array $action Action data.
 	 * @return bool True if completed.
 	 */
@@ -311,7 +311,7 @@ class Earn_Actions {
 	/**
 	 * Get eligibility for a claimable action.
 	 *
-	 * @since  1.6004.0400
+	 * @since 1.6093.1200
 	 * @param  int   $user_id User ID.
 	 * @param  array $action  Action data.
 	 * @return array {eligible:bool, message:string}

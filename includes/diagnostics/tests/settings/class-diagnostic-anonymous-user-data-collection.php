@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2240
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates data collection practices for anonymous users.
  *
- * @since 1.6030.2240
+ * @since 1.6093.1200
  */
 class Diagnostic_Anonymous_User_Data_Collection extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Anonymous_User_Data_Collection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2240
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,12 @@ class Diagnostic_Anonymous_User_Data_Collection extends Diagnostic_Base {
 
 		$email_capture_count = 0;
 		if ( isset( $wp_filter['wp_footer'] ) ) {
-			$email_capture_count += count( $wp_filter['wp_footer'] );
+			$wp_footer_hook = $wp_filter['wp_footer'];
+			if ( $wp_footer_hook instanceof \WP_Hook ) {
+				$email_capture_count += is_array( $wp_footer_hook->callbacks ) ? count( $wp_footer_hook->callbacks ) : 0;
+			} elseif ( is_array( $wp_footer_hook ) ) {
+				$email_capture_count += count( $wp_footer_hook );
+			}
 		}
 
 		if ( $email_capture_count > 5 ) {
@@ -154,7 +159,7 @@ class Diagnostic_Anonymous_User_Data_Collection extends Diagnostic_Base {
 		} else {
 			// Check if privacy policy is public and accessible
 			$privacy_post = get_post( $privacy_policy_page_id );
-			if ( 'publish' !== $privacy_post->post_status ) {
+			if ( ! $privacy_post || 'publish' !== $privacy_post->post_status ) {
 				$issues[] = __( 'Privacy policy page is not published', 'wpshadow' );
 			}
 		}
@@ -169,16 +174,26 @@ class Diagnostic_Anonymous_User_Data_Collection extends Diagnostic_Base {
 
 		// Check wp_enqueue_script calls
 		if ( isset( $wp_filter['wp_enqueue_scripts'] ) ) {
-			// Rough check for externally loaded scripts
-			foreach ( $wp_filter['wp_enqueue_scripts'] as $priority => $callbacks ) {
+			$enqueue_hook = $wp_filter['wp_enqueue_scripts'];
+			$enqueue_callbacks = array();
+
+			if ( $enqueue_hook instanceof \WP_Hook && is_array( $enqueue_hook->callbacks ) ) {
+				$enqueue_callbacks = $enqueue_hook->callbacks;
+			} elseif ( is_array( $enqueue_hook ) ) {
+				$enqueue_callbacks = $enqueue_hook;
+			}
+
+			// Rough check for externally loaded scripts.
+			foreach ( $enqueue_callbacks as $priority => $callbacks ) {
 				foreach ( $callbacks as $callback ) {
 					// This is a simplified check - real implementation would need more analysis
 					foreach ( $third_party_scripts as $script ) {
-						if ( strpos( print_r( $callback, true ), $script ) !== false ) {
+						if ( false !== strpos( print_r( $callback, true ), $script ) ) {
+							$script_domain = wp_parse_url( 'https://' . $script, PHP_URL_HOST );
 							$issues[] = sprintf(
 								/* translators: %s: script domain */
 								__( 'Third-party script detected: %s', 'wpshadow' ),
-							Diagnostic_URL_And_Pattern_Helper::get_domain( $script )
+								is_string( $script_domain ) ? $script_domain : $script
 							);
 						}
 					}

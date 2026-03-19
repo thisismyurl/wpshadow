@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.0644
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Settings Sanitization: Protects REST update inputs
  * - Capability Map Consistency: Ensures auth checks align with roles
  *
- * @since 1.6033.0644
+ * @since 1.6093.1200
  */
 class Treatment_Admin_Rest_Api_Authentication extends Treatment_Base {
 

@@ -22,7 +22,7 @@
  * Real estate site listing 5,000 properties (CPT). Property archive page loaded 20 properties but made
  * 320 database queries (1 to get properties + 15 to get metadata/images/relationships per property).
  * Page took 45 seconds to load. After optimizing to get all data in 5 queries (using get_posts with
- * meta_query consolidation and lazy-loading images), archive loaded in 1.2 seconds. Property inquiries
+ * meta_query consolidation and lazy-loading images), archive loaded in1.0 seconds. Property inquiries
  * increased 58% because site no longer timed out on archive pages. Cost: 8 hours optimization.
  * Value: $125,000 in additional property leads that quarter.
  *
@@ -51,7 +51,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes custom post type query patterns for N+1 queries and missing indexes.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 
@@ -107,7 +107,7 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 	 * Tests query performance for CPTs and identifies slow queries
 	 * or missing database indexes.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if performance issues found, null otherwise.
 	 */
 	public static function check() {

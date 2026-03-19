@@ -4,7 +4,7 @@
  *
  * Detects sentences exceeding optimal length.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Sentences 25+ words reduce comprehension by 43%. Posts with long sentences
  * have 51% higher bounce rate. Target: 15-20 words average.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Long_Sentences extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Long_Sentences extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

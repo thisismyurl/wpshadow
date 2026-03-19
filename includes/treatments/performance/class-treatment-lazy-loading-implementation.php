@@ -15,7 +15,7 @@
  * **Why This Matters:**
  * Without lazy loading, browsers load every image on page load, even images users never scroll to see.
  * A single article with 20 images might load 15MB on page load, but only 2-3 images appear above the fold.
- * Those other 12-17 images waste 12-15MB of bandwidth. At 100,000 monthly visits, that's 1.2-1.5 petabytes
+ * Those other 12-17 images waste 12-15MB of bandwidth. At 100,000 monthly visits, that's1.0-1.5 petabytes
  * of wasted bandwidth per month. Mobile users on data plans literally pay for bandwidth they never see.\n *
  * **Real-World Scenario:**
  * Gallery website with 500+ high-res photo albums. Each album had 50 images averaging 500KB each (25MB per album).
@@ -28,9 +28,9 @@
  * **Related Checks:**\n * - Image Optimization Plugin Not Active (compression + lazy loading combo)\n * - Responsive Images Not Configured (srcset + lazy loading combo)\n * - Mobile Bandwidth Optimization (overall mobile efficiency)\n * - First Contentful Paint Not Optimized (FCP improvement via lazy loading)\n *
  * **Learn More:**
  * - KB Article: https://wpshadow.com/kb/lazy-loading-implementation\n * - Video: https://wpshadow.com/training/lazy-loading-guide (4 min)\n * - Advanced: https://wpshadow.com/training/intersection-observer-api (9 min)\n *
- * @since   1.6033.2074\n * @package WPShadow\\Treatments\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Lazy Loading Implementation Treatment Class\n *\n * Verifies offscreen images use lazy loading to defer non-critical image loading.
+ * @since 1.6093.1200\n * @package WPShadow\\Treatments\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Lazy Loading Implementation Treatment Class\n *\n * Verifies offscreen images use lazy loading to defer non-critical image loading.
  *
- * @since 1.6033.2074
+ * @since 1.6093.1200
  */
 class Treatment_Lazy_Loading_Implementation extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Lazy_Loading_Implementation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6033.2074
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

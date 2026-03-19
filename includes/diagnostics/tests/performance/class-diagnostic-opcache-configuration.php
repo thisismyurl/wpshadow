@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2050
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies OPcache configuration is optimized for WordPress.
  * Checks memory, file limits, and revalidation settings.
  *
- * @since 1.6033.2050
+ * @since 1.6093.1200
  */
 class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 	 *
 	 * Checks OPcache configuration against WordPress best practices.
 	 *
-	 * @since  1.6033.2050
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

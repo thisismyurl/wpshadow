@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1300
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that regular backups are being created and that the most
  * recent backup is current (within the last 24 hours).
  *
- * @since 1.6035.1300
+ * @since 1.6093.1200
  */
 class Diagnostic_Backups_Recent extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backups_Recent extends Diagnostic_Base {
 	/**
 	 * Run the backups recent diagnostic check.
 	 *
-	 * @since  1.6035.1300
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if backup issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -177,8 +177,10 @@ class Diagnostic_Backups_Recent extends Diagnostic_Base {
 		// Check database size for backup viability.
 		global $wpdb;
 		$database_size_query = $wpdb->get_results(
-			"SELECT SUM(ROUND(((data_length + index_length) / 1024 / 1024), 2)) as size FROM information_schema.TABLES WHERE table_schema = %s",
-			$wpdb->prepare( '%s', DB_NAME )
+			$wpdb->prepare(
+				'SELECT SUM(ROUND(((data_length + index_length) / 1024 / 1024), 2)) as size FROM information_schema.TABLES WHERE table_schema = %s',
+				DB_NAME
+			)
 		);
 
 		$db_size_mb = isset( $database_size_query[0] ) ? floatval( $database_size_query[0]->size ) : 0;

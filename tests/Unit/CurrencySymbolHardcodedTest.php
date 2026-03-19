@@ -3,7 +3,7 @@
  * Tests for Currency Symbol Hardcoded Diagnostic
  *
  * @package WPShadow\Tests
- * @since   1.6028.2140
+ * @since 1.6093.1200
  */
 
 namespace WPShadow\Tests\Unit;
@@ -14,7 +14,7 @@ use WP_Mock\Tools\TestCase;
 /**
  * Currency Symbol Hardcoded Test Class
  *
- * @since 1.6028.2140
+ * @since 1.6093.1200
  */
 class CurrencySymbolHardcodedTest extends TestCase {
 

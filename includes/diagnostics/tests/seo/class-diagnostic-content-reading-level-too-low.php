@@ -4,7 +4,7 @@
  *
  * Detects when content is overly simple for target audience.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * For technical/professional audiences, overly simple content damages credibility.
  * Grade 6 content on developer blog reduces authority.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Reading_Level_Too_Low extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Reading_Level_Too_Low extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

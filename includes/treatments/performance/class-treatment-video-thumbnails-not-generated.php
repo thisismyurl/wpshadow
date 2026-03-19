@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6033.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if videos have thumbnails. WordPress doesn't generate
  * thumbnails automatically, requiring manual work.
  *
- * @since 1.6033.1430
+ * @since 1.6093.1200
  */
 class Treatment_Video_Thumbnails_Not_Generated extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Video_Thumbnails_Not_Generated extends Treatment_Base {
 	 * Checks if videos have thumbnails. Auto-generated thumbnails
 	 * improve UX and eliminate manual work.
 	 *
-	 * @since  1.6033.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

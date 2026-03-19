@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Mobile app users engage 3x more than web users and have 2x higher
  * customer lifetime value. Apps create sticky engagement.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Mobile_App_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Mobile_App_Strategy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Mobile_App_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if mobile app strategy exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if strategy detected, false otherwise.
 	 */
 	private static function has_mobile_app_strategy() {
@@ -141,7 +141,7 @@ class Diagnostic_No_Mobile_App_Strategy extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -170,7 +170,7 @@ class Diagnostic_No_Mobile_App_Strategy extends Diagnostic_Base {
 	/**
 	 * Get mobile app approaches.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array App approaches with pros/cons.
 	 */
 	private static function get_app_approaches() {
@@ -205,7 +205,7 @@ class Diagnostic_No_Mobile_App_Strategy extends Diagnostic_Base {
 	/**
 	 * Get decision criteria for mobile apps.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Decision criteria questions.
 	 */
 	private static function get_decision_criteria() {

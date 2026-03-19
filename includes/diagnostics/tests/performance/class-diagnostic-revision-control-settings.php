@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1120
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that post revisions are limited to prevent excessive
  * database storage and performance degradation.
  *
- * @since 1.7034.1120
+ * @since 1.6093.1200
  */
 class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 	 * Tests if post revisions are limited via WP_POST_REVISIONS
 	 * constant and if excessive revisions exist.
 	 *
-	 * @since  1.7034.1120
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

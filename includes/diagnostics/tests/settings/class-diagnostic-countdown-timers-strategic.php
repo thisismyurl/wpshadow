@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses countdown timers ethically to create genuine urgency.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ethical countdown timers can increase conversions by 10-15% when tied to
  * genuine deadlines. Fake urgency damages trust and long-term customer value.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Check for timer plugins.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if timer plugins exist, false otherwise.
 	 */
 	private static function check_timer_plugins() {
@@ -185,7 +185,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Check for real deadlines.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if real deadlines exist, false otherwise.
 	 */
 	private static function check_real_deadlines() {
@@ -252,7 +252,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Check timer placement.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if strategic placement exists, false otherwise.
 	 */
 	private static function check_timer_placement() {
@@ -300,7 +300,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Check for transparency.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if transparent messaging exists, false otherwise.
 	 */
 	private static function check_transparency() {
@@ -326,7 +326,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Check for timer variety.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if variety exists, false otherwise.
 	 */
 	private static function check_timer_variety() {
@@ -361,7 +361,7 @@ class Diagnostic_Countdown_Timers_Strategic extends Diagnostic_Base {
 	/**
 	 * Check mobile optimization.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if mobile-optimized, false otherwise.
 	 */
 	private static function check_mobile_optimization() {

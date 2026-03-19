@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates CSRF protection in tool operations.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 	 *
 	 * Tests CSRF protection in tool actions.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 	/**
 	 * Check import nonce protection.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_import_nonce_protection() {
@@ -144,7 +144,7 @@ class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 	/**
 	 * Check export nonce protection.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_export_nonce_protection() {
@@ -164,7 +164,7 @@ class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 	/**
 	 * Check AJAX nonce validation.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_ajax_nonce_validation() {
@@ -207,7 +207,7 @@ class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 	/**
 	 * Check referer validation.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_referer_validation() {
@@ -225,7 +225,7 @@ class Diagnostic_CSRF_Vulnerabilities_In_Tool_Actions extends Diagnostic_Base {
 	/**
 	 * Check double-submit cookie pattern.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_double_submit_cookie_pattern() {

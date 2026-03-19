@@ -5,7 +5,7 @@
  * Critical for agencies, corporate, and e-commerce: tests that recent backups can
  * actually be restored, not just that they exist.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests that recent backups are not corrupted and can be restored.
  * High priority for: Agency (95), Corporate (100), E-commerce (100)
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Backup_Restoration_Test extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Backup_Restoration_Test extends Diagnostic_Base {
     /**
      * Run the diagnostic check
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {

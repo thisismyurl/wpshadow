@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (critical XSS defense layer)
  * - Treatment: configure strict CSP with nonce/hash-based policies
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_XSS_Content_Security_Policy_Not_Configured extends Treatment_Base {
 
@@ -120,7 +120,7 @@ class Treatment_XSS_Content_Security_Policy_Not_Configured extends Treatment_Bas
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

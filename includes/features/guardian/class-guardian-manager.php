@@ -34,7 +34,7 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -50,7 +50,7 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 	 * Called on plugins_loaded hook.
 	 * Sets up cron jobs if not already scheduled.
 	 *
-	 * @deprecated 1.7035.1400 Use Guardian_Manager::subscribe() instead
+	 * @deprecated1.0 Use Guardian_Manager::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {

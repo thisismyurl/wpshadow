@@ -5,7 +5,7 @@
  * Critical for e-commerce: measures checkout page load time.
  * Slow checkouts directly impact conversion rate and revenue.
  *
- * @since   1.6030.2148
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures E-commerce checkout page load time. Targets <2 second load time.
  * High priority for: E-commerce (100)
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Checkout_Speed extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
     /**
      * Run the diagnostic check
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
     /**
      * Measure page load time using HTTP HEAD request
      *
-     * @since  1.6030.2148
+     * @since 1.6093.1200
      * @param  string $url Page URL to measure.
      * @return int Load time in milliseconds.
      */

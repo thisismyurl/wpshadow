@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Export
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests whether export processes block admin access for other users.
  * Checks for database locks, concurrent user handling, and background processing.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 	 *
 	 * Tests for blocking behavior and suggests background processing.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -132,7 +132,7 @@ class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 	/**
 	 * Check if background processing is enabled.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if background processing available.
 	 */
 	private static function has_background_processing() {
@@ -170,7 +170,7 @@ class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 	/**
 	 * Check for database lock risks.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_database_lock_risks() {
@@ -213,7 +213,7 @@ class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 	/**
 	 * Check for concurrent user handling.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if concurrent access supported.
 	 */
 	private static function has_concurrent_user_handling() {
@@ -238,7 +238,7 @@ class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 	/**
 	 * Check for timeout risk during export.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_timeout_risk() {
@@ -265,7 +265,7 @@ class Diagnostic_Export_Process_Blocking_Admin_Access extends Diagnostic_Base {
 	/**
 	 * Check for multi-user export support.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return bool True if multi-user support available.
 	 */
 	private static function has_multiuser_support() {

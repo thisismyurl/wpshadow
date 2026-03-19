@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for search performance issues in the media library.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -216,7 +216,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		$partial_time = microtime( true ) - $start_time;
 
-		if ( $partial_time > 1.5 ) {
+		if ( $partial_time >1.0 ) {
 			$issues[] = sprintf(
 				/* translators: %s: search time */
 				__( 'Partial word search took %ss (wildcard queries are slow)', 'wpshadow' ),
@@ -287,7 +287,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		$date_search_time = microtime( true ) - $start_time;
 
-		if ( $date_search_time > 1.2 ) {
+		if ( $date_search_time >1.0 ) {
 			$issues[] = sprintf(
 				/* translators: %s: search time */
 				__( 'Date-filtered search took %ss (optimize date queries)', 'wpshadow' ),

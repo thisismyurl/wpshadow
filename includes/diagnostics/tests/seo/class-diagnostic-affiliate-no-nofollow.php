@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1509
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - rel attribute verification
  * - Affiliate link plugins
  *
- * @since 1.7030.1509
+ * @since 1.6093.1200
  */
 class Diagnostic_Affiliate_No_Nofollow extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Affiliate_No_Nofollow extends Diagnostic_Base {
 	 * - 2 points: Affiliate link plugin installed
 	 * - 2 points: No affiliate links without proper rel
 	 *
-	 * @since  1.7030.1509
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

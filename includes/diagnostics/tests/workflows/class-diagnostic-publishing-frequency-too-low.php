@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since      1.6034.2215
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - To compete: 2-3x per week
  * - Industry average: 2.5x per week
  *
- * @since 1.6034.2215
+ * @since 1.6093.1200
  */
 class Diagnostic_Publishing_Frequency_Too_Low extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Publishing_Frequency_Too_Low extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2215
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if frequency too low, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Publishing_Frequency_Too_Low extends Diagnostic_Base {
 		if ( $posts_per_month < 1 ) {
 			$severity = 'high';
 			$threat_level = 70;
-		} elseif ( $posts_per_month < 1.5 ) {
+		} elseif ( $posts_per_month <1.0 ) {
 			$severity = 'medium';
 			$threat_level = 60;
 		}

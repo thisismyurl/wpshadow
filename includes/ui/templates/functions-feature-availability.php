@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage UI\Templates
- * @since      1.6035.2150
+ * @since 1.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,7 +30,7 @@ use WPShadow\Core\Version_Checker;
  * );
  * ```
  *
- * @since  1.6035.2150
+ * @since 1.6093.1200
  * @param  string   $class_name       Full class name to check.
  * @param  string   $title            Card title.
  * @param  string   $description      Card description.
@@ -108,7 +108,7 @@ function wpshadow_render_feature_card_if_live(
 /**
  * Render a "coming soon" placeholder for future features
  *
- * @since  1.6035.2150
+ * @since 1.6093.1200
  * @param  string $title      Card title.
  * @param  string $class_name Class name (to show @since version).
  * @return void
@@ -164,7 +164,7 @@ function wpshadow_render_coming_soon_card( string $title, string $class_name = '
  * );
  * ```
  *
- * @since  1.6035.2150
+ * @since 1.6093.1200
  * @param  string $class_name   Full class name to check.
  * @param  string $label        Menu label.
  * @param  string $url          Menu URL.
@@ -220,7 +220,7 @@ function wpshadow_render_menu_link_if_live(
 /**
  * Check if feature is live (for use in templates)
  *
- * @since  1.6035.2150
+ * @since 1.6093.1200
  * @param  string $class_name Full class name.
  * @return bool True if live.
  */

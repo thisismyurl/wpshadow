@@ -117,7 +117,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0638
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -163,7 +163,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Menu Visibility: Checks CPT menu items respect capabilities
  * - REST API Security: Validates CPT REST endpoints have auth
  *
- * @since 1.6033.0638
+ * @since 1.6093.1200
  */
 class Diagnostic_Admin_Custom_Post_Type_Registration extends Diagnostic_Base {
 

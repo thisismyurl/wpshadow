@@ -4,7 +4,7 @@
  *
  * Tests whether the site regularly A/B tests email subject lines to optimize open rates.
  *
- * @since   1.6034.0315
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * A/B testing subject lines improves open rates by 49% on average.
  * Without testing, you're guessing what resonates with subscribers.
  *
- * @since 1.6034.0315
+ * @since 1.6093.1200
  */
 class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0315
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 	/**
 	 * Check A/B testing capability.
 	 *
-	 * @since  1.6034.0315
+	 * @since 1.6093.1200
 	 * @return bool True if capable, false otherwise.
 	 */
 	private static function check_ab_testing_capability() {
@@ -164,7 +164,7 @@ class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 	/**
 	 * Check analytics tracking.
 	 *
-	 * @since  1.6034.0315
+	 * @since 1.6093.1200
 	 * @return bool True if tracking exists, false otherwise.
 	 */
 	private static function check_analytics_tracking() {
@@ -180,7 +180,7 @@ class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 	/**
 	 * Check testing frequency.
 	 *
-	 * @since  1.6034.0315
+	 * @since 1.6093.1200
 	 * @return bool True if regular testing, false otherwise.
 	 */
 	private static function check_testing_frequency() {
@@ -200,7 +200,7 @@ class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 	/**
 	 * Check best practices.
 	 *
-	 * @since  1.6034.0315
+	 * @since 1.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_best_practices() {
@@ -220,7 +220,7 @@ class Diagnostic_Email_Subject_Line_Testing extends Diagnostic_Base {
 	/**
 	 * Check advanced testing.
 	 *
-	 * @since  1.6034.0315
+	 * @since 1.6093.1200
 	 * @return bool True if advanced tactics used, false otherwise.
 	 */
 	private static function check_advanced_testing() {

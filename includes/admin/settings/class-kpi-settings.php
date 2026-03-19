@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since      1.6035.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages KPI tracking and value demonstration settings to show
  * users the measurable impact WPShadow has on their site.
  *
- * @since 1.6035.1500
+ * @since 1.6093.1200
  */
 class KPI_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -44,7 +44,7 @@ class KPI_Settings {
 	/**
 	 * Enqueue KPI settings assets.
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -64,7 +64,7 @@ class KPI_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -80,7 +80,7 @@ class KPI_Settings {
 	/**
 	 * Render the KPI settings page
 	 *
-	 * @since 1.6035.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {

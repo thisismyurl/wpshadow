@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that mobile users receive proper visual feedback during
  * media uploads, including progress bars and status indicators.
  *
- * @since 1.6033.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Media_Mobile_Upload_Progress_Indicators extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Mobile_Upload_Progress_Indicators extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

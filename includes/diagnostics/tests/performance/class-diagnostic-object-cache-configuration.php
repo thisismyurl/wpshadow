@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2061
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies persistent object cache (Redis/Memcached) is properly configured.
  * Persistent object caching dramatically reduces database load.
  *
- * @since 1.6033.2061
+ * @since 1.6093.1200
  */
 class Diagnostic_Object_Cache_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Object_Cache_Configuration extends Diagnostic_Base {
 	 * Checks for persistent object cache and proper configuration.
 	 * Without persistent cache, all cached data is lost between requests.
 	 *
-	 * @since  1.6033.2061
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

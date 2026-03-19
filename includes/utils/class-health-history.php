@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Analytics
- * @since      1.602.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks site health metrics over time and provides data for visualization.
  *
- * @since 1.602.0200
+ * @since 1.6093.1200
  */
 class Health_History {
 
@@ -43,7 +43,7 @@ class Health_History {
 	/**
 	 * Initialize health history tracking.
 	 *
-	 * @since 1.602.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -64,7 +64,7 @@ class Health_History {
 	/**
 	 * Record a health snapshot with current metrics.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  array $findings Optional. Findings data if available.
 	 * @return bool True on success, false on failure.
 	 */
@@ -102,7 +102,7 @@ class Health_History {
 	/**
 	 * Get health history data.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  int $days Optional. Number of days to retrieve. Default all.
 	 * @return array Health history keyed by date.
 	 */
@@ -126,7 +126,7 @@ class Health_History {
 	/**
 	 * Calculate overall health score.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  array $findings Diagnostic findings.
 	 * @return int Health score 0-100.
 	 */
@@ -158,7 +158,7 @@ class Health_History {
 	/**
 	 * Calculate category-specific health score.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  string $category Category name.
 	 * @param  array  $findings Diagnostic findings.
 	 * @return int Health score 0-100.
@@ -177,7 +177,7 @@ class Health_History {
 	/**
 	 * Count findings by severity level.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  string $severity Severity level.
 	 * @param  array  $findings Diagnostic findings.
 	 * @return int Count of findings.
@@ -196,7 +196,7 @@ class Health_History {
 	/**
 	 * Trim old snapshots beyond retention period.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @return bool True on success.
 	 */
 	public static function trim_old_snapshots() {
@@ -217,7 +217,7 @@ class Health_History {
 	/**
 	 * Get summary statistics for a date range.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @param  int $days Number of days to analyze.
 	 * @return array {
 	 *     Summary statistics.
@@ -261,7 +261,7 @@ class Health_History {
 	/**
 	 * Backfill historical data from activity log.
 	 *
-	 * @since  1.602.0200
+	 * @since 1.6093.1200
 	 * @return int Number of snapshots created.
 	 */
 	public static function backfill_from_activity_log() {

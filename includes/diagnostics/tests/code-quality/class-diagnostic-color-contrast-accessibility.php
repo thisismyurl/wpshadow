@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7034.1310
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that text and UI elements meet WCAG 2.1 AA color contrast
  * requirements for users with visual impairments.
  *
- * @since 1.7034.1310
+ * @since 1.6093.1200
  */
 class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 	 * Tests color contrast ratios for text, links, buttons, and
 	 * other UI elements against WCAG standards.
 	 *
-	 * @since  1.7034.1310
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -197,11 +197,11 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 					'issues_detected'         => $issues,
 					'recommendation'          => __( 'Install accessibility checker, ensure 4.5:1 contrast for text, 3:1 for large text', 'wpshadow' ),
 					'wcag_requirements'       => array(
-						'WCAG 1.4.3 (AA) - Normal text'  => '4.5:1 contrast ratio',
-						'WCAG 1.4.3 (AA) - Large text'   => '3:1 contrast ratio (18pt+)',
-						'WCAG 1.4.6 (AAA) - Normal text' => '7:1 contrast ratio',
-						'WCAG 1.4.6 (AAA) - Large text'  => '4.5:1 contrast ratio',
-						'WCAG 1.4.11 - UI components'    => '3:1 contrast ratio',
+						'WCAG1.0 (AA) - Normal text'  => '4.5:1 contrast ratio',
+						'WCAG1.0 (AA) - Large text'   => '3:1 contrast ratio (18pt+)',
+						'WCAG1.0 (AAA) - Normal text' => '7:1 contrast ratio',
+						'WCAG1.0 (AAA) - Large text'  => '4.5:1 contrast ratio',
+						'WCAG1.0 - UI components'    => '3:1 contrast ratio',
 					),
 					'safe_color_combinations' => array(
 						'Black on white'      => '#000000 on #FFFFFF (21:1 ratio)',

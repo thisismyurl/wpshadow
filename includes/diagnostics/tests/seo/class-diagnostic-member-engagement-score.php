@@ -4,7 +4,7 @@
  *
  * Tests whether the site tracks member engagement levels systematically.
  *
- * @since   1.6034.0230
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Engagement scoring allows proactive intervention before churn occurs.
  * Sites that track engagement can identify and assist at-risk members early.
  *
- * @since 1.6034.0230
+ * @since 1.6093.1200
  */
 class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -180,7 +180,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check for activity tracking.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if activity tracking exists, false otherwise.
 	 */
 	private static function check_activity_tracking() {
@@ -210,7 +210,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check for engagement metrics.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if metrics exist, false otherwise.
 	 */
 	private static function check_engagement_metrics() {
@@ -238,7 +238,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check for scoring system.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if scoring system exists, false otherwise.
 	 */
 	private static function check_scoring_system() {
@@ -271,7 +271,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check for engagement segments.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if segmentation exists, false otherwise.
 	 */
 	private static function check_engagement_segments() {
@@ -304,7 +304,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check for analytics dashboard.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if dashboard exists, false otherwise.
 	 */
 	private static function check_analytics_dashboard() {
@@ -337,7 +337,7 @@ class Diagnostic_Member_Engagement_Score extends Diagnostic_Base {
 	/**
 	 * Check for automated alerts.
 	 *
-	 * @since  1.6034.0230
+	 * @since 1.6093.1200
 	 * @return bool True if alerts exist, false otherwise.
 	 */
 	private static function check_automated_alerts() {

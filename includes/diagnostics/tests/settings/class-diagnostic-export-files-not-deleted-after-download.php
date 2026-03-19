@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since      1.2034.1455
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that export files are properly cleaned up.
  *
- * @since 1.2034.1455
+ * @since 1.6093.1200
  */
 class Diagnostic_Export_Files_Not_Deleted_After_Download extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Export_Files_Not_Deleted_After_Download extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1455
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

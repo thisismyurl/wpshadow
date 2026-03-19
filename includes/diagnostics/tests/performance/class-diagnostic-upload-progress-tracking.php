@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for asynchronous uploads with progress indicators. Issues with JavaScript
  * handlers or session support can break progress tracking.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 	 * - wp-ajax endpoint availability
 	 * - JavaScript error logs
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

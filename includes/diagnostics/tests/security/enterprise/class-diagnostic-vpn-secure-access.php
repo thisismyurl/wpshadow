@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that secure remote access (VPN, IP allowlisting) is configured
  * for administrative areas in enterprise environments.
  *
- * @since 1.6035.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Vpn_Secure_Access extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Vpn_Secure_Access extends Diagnostic_Base {
 	/**
 	 * Run the VPN/secure access diagnostic check.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if secure access gaps detected, null otherwise.
 	 */
 	public static function check() {
@@ -195,7 +195,7 @@ class Diagnostic_Vpn_Secure_Access extends Diagnostic_Base {
 	/**
 	 * Check if IP appears to be from a VPN.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @param  string $ip IP address to check.
 	 * @return bool True if IP appears to be from VPN, false otherwise.
 	 */
@@ -219,7 +219,7 @@ class Diagnostic_Vpn_Secure_Access extends Diagnostic_Base {
 	/**
 	 * Check if IP is in CIDR range.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @param  string $ip    IP address to check.
 	 * @param  string $range CIDR range (e.g., '192.168.0.0/16').
 	 * @return bool True if IP is in range, false otherwise.
@@ -241,7 +241,7 @@ class Diagnostic_Vpn_Secure_Access extends Diagnostic_Base {
 	/**
 	 * Determine if this is an enterprise environment.
 	 *
-	 * @since  1.6035.1200
+	 * @since 1.6093.1200
 	 * @return bool True if enterprise indicators detected, false otherwise.
 	 */
 	private static function is_enterprise_environment() {

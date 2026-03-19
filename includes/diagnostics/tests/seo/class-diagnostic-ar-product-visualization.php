@@ -4,7 +4,7 @@
  *
  * Tests whether the site provides augmented reality product previews that reduce returns.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Augmented Reality allows customers to visualize products in their own space,
  * improving purchase confidence and reducing returns, especially for furniture and home decor.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -175,7 +175,7 @@ class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 	/**
 	 * Check for 3D models in media library or products.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if 3D models exist, false otherwise.
 	 */
 	private static function check_3d_models() {
@@ -223,7 +223,7 @@ class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 	/**
 	 * Check for Apple AR Quick Look support.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if Apple AR support exists, false otherwise.
 	 */
 	private static function check_apple_ar_support() {
@@ -250,7 +250,7 @@ class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 	/**
 	 * Check for Google Scene Viewer support.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if Google AR support exists, false otherwise.
 	 */
 	private static function check_google_ar_support() {
@@ -277,7 +277,7 @@ class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 	/**
 	 * Check for AR indicators on the site.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if AR indicators exist, false otherwise.
 	 */
 	private static function check_ar_indicators() {
@@ -305,7 +305,7 @@ class Diagnostic_Ar_Product_Visualization extends Diagnostic_Base {
 	/**
 	 * Check if products are suitable for AR visualization.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if suitable products exist, false otherwise.
 	 */
 	private static function check_suitable_products() {

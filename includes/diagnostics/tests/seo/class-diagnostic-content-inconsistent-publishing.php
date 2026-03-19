@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes posting patterns and checks for consistency. Detects irregular
  * publishing which negatively impacts audience engagement.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 	 * A consistent schedule means posts are distributed relatively evenly,
 	 * not clustered on certain days with long gaps on others.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -126,9 +126,9 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 
 		$threat_level = 50; // Medium severity.
 		
-		if ( $coefficient_of_var > 1.5 ) {
+		if ( $coefficient_of_var >1.0 ) {
 			$threat_level = 70; // High inconsistency.
-		} elseif ( $coefficient_of_var > 1.0 ) {
+		} elseif ( $coefficient_of_var >1.0 ) {
 			$threat_level = 60;
 		}
 

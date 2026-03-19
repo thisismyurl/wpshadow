@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that enterprise penetration testing has been performed
  * and results are documented for compliance audits.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Penetration_Test_Results extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Penetration_Test_Results extends Diagnostic_Base {
 	/**
 	 * Run the penetration test results check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if pen test results missing, null otherwise.
 	 */
 	public static function check() {

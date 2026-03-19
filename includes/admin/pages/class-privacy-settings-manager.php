@@ -10,7 +10,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Beyond Pure (#10) - Privacy-first, transparent, consent-based
  * Philosophy: Show Value (#9) - Track user preferences
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Privacy_Settings_Manager {

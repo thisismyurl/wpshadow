@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Inspire Confidence (#8) - Visual status symbols
  * Philosophy: Show Value (#9) - Visible skill progression
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Badge_Manager {

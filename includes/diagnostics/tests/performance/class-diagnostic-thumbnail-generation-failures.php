@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since      1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to generate thumbnails. Failures can occur due to memory limits, library
  * issues, or corrupted source images.
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 	 * - Memory limits for image processing
 	 * - Image format support
 	 *
-	 * @since  1.6030.2148
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

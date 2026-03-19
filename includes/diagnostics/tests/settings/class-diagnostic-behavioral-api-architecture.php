@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1445
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the site implements proper REST API architecture patterns
  * following WordPress and industry best practices.
  *
- * @since 1.6035.1445
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Run the API architecture diagnostic check.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if API architecture issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -170,7 +170,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check API versioning.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array Versioning information.
 	 */
 	private static function check_api_versioning(): array {
@@ -204,7 +204,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check error handling.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array Error handling information.
 	 */
 	private static function check_error_handling(): array {
@@ -231,7 +231,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check rate limiting.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return bool True if rate limiting detected.
 	 */
 	private static function check_rate_limiting(): bool {
@@ -254,7 +254,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check authentication methods.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array Detected authentication methods.
 	 */
 	private static function check_authentication_methods(): array {
@@ -286,7 +286,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check API documentation.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array Documentation information.
 	 */
 	private static function check_api_documentation(): array {
@@ -312,7 +312,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check CORS configuration.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return bool True if CORS configured.
 	 */
 	private static function check_cors_configuration(): bool {
@@ -322,7 +322,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check response formatting consistency.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return bool True if consistent formatting detected.
 	 */
 	private static function check_response_formatting(): bool {
@@ -333,7 +333,7 @@ class Diagnostic_Behavioral_API_Architecture extends Diagnostic_Base {
 	/**
 	 * Check endpoint organization.
 	 *
-	 * @since  1.6035.1445
+	 * @since 1.6093.1200
 	 * @return array Organization information.
 	 */
 	private static function check_endpoint_organization(): array {

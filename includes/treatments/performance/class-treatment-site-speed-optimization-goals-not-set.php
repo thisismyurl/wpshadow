@@ -27,7 +27,7 @@
  * load time 4.5s → 2.8s (38% faster). Client: "That's it? Still feels
  * slow." Expectations mismatch. No defined success criteria. Next
  * project: established goals first. Client goal: "Match competitor
- * speed (1.5s load, Lighthouse 90+)." Agency: optimized to 1.4s load,
+ * speed (1.5s load, Lighthouse 90+)." Agency: optimized to1.0s load,
  * Lighthouse 92. Client: thrilled, clear success. Approved ongoing
  * optimization retainer ($1.5K/month). Lesson: always define goals
  * before optimization. Goals create accountability, align expectations,
@@ -50,7 +50,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (best practice, high long-term value)
  * - Treatment: establish SMART speed goals
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Site_Speed_Optimization_Goals_Not_Set extends Treatment_Base {
 
@@ -125,7 +125,7 @@ class Treatment_Site_Speed_Optimization_Goals_Not_Set extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

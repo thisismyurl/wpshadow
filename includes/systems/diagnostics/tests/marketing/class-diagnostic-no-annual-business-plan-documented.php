@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Businesses with written annual plans grow 30% faster than those without.
  * A documented plan provides clarity, alignment, and accountability.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Annual_Business_Plan_Documented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Annual_Business_Plan_Documented extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Annual_Business_Plan_Documented extends Diagnostic_Base {
 	/**
 	 * Check if business plan exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if plan detected, false otherwise.
 	 */
 	private static function has_business_plan() {
@@ -143,7 +143,7 @@ class Diagnostic_No_Annual_Business_Plan_Documented extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -172,7 +172,7 @@ class Diagnostic_No_Annual_Business_Plan_Documented extends Diagnostic_Base {
 	/**
 	 * Get business plan components.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Plan components with descriptions.
 	 */
 	private static function get_plan_components() {
@@ -193,7 +193,7 @@ class Diagnostic_No_Annual_Business_Plan_Documented extends Diagnostic_Base {
 	/**
 	 * Get annual planning process.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Planning process steps.
 	 */
 	private static function get_planning_process() {

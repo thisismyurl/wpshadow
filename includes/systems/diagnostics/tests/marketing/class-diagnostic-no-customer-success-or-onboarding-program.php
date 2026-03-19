@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since      1.6035.2100
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Good onboarding reduces churn by 50% because customers succeed faster and see
  * ROI immediately. Without onboarding, customers get lost and disappear.
  *
- * @since 1.6035.2100
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Success_Or_Onboarding_Program extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Customer_Success_Or_Onboarding_Program extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_No_Customer_Success_Or_Onboarding_Program extends Diagnostic_Ba
 	/**
 	 * Check if onboarding program exists
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return bool True if onboarding program detected
 	 */
 	private static function check_onboarding_program(): bool {
@@ -135,7 +135,7 @@ class Diagnostic_No_Customer_Success_Or_Onboarding_Program extends Diagnostic_Ba
 	/**
 	 * Get recommended onboarding elements
 	 *
-	 * @since  1.6035.2100
+	 * @since 1.6093.1200
 	 * @return array Array of onboarding elements
 	 */
 	private static function get_onboarding_elements(): array {

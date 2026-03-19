@@ -5,7 +5,7 @@
  * Provides standardized URL parsing, validation, and common regex patterns
  * for meta tag extraction used across multiple diagnostics.
  *
- * @since   1.6032.0900
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics\Helpers
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Consolidates URL parsing methods and regex patterns to eliminate
  * duplicated URL extraction and meta tag detection code across diagnostics.
  *
- * @since 1.6032.0900
+ * @since 1.6093.1200
  */
 class Diagnostic_URL_And_Pattern_Helper {
 
@@ -172,7 +172,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	 *
 	 * Uses wp_parse_url() which is WordPress-aware and safe.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url   The URL to parse.
 	 * @param  int    $component PHP_URL_* constant (SCHEME, HOST, PORT, USER, PASS, PATH, QUERY, FRAGMENT).
 	 * @return string|null The requested component, or null if not found.
@@ -202,7 +202,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	/**
 	 * Get the domain/host from a URL.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url The URL to extract domain from.
 	 * @return string|null The domain/host, or null if not extractable.
 	 */
@@ -213,7 +213,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	/**
 	 * Get the scheme (http/https) from a URL.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url The URL to extract scheme from.
 	 * @return string|null The scheme ('http', 'https'), or null.
 	 */
@@ -224,7 +224,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	/**
 	 * Check if a URL has a www subdomain.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url The URL to check.
 	 * @return bool True if URL contains www subdomain.
 	 */
@@ -237,7 +237,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	 *
 	 * Compares just the host portions, ignoring scheme and path.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url1 First URL to compare.
 	 * @param  string $url2 Second URL to compare.
 	 * @return bool True if domains match.
@@ -251,7 +251,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	/**
 	 * Check if two URLs have the same scheme (http or https).
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url1 First URL to compare.
 	 * @param  string $url2 Second URL to compare.
 	 * @return bool True if schemes match.
@@ -268,7 +268,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	 * Supports both attribute orders: property/name="..." content="..."
 	 * and content="..." property/name="...".
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $html_content The HTML content to search.
 	 * @param  string $pattern      Regex pattern (use PATTERN_* constants).
 	 * @return bool True if meta tag is found.
@@ -282,7 +282,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	 *
 	 * Retrieves the content attribute value from a matching meta tag.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $html_content The HTML content to search.
 	 * @param  string $pattern      Regex pattern (use PATTERN_* constants).
 	 * @return string|null The content value, or null if not found.
@@ -300,7 +300,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	 *
 	 * More flexible variant that allows custom patterns.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $html_content The HTML content to search.
 	 * @param  string $tag_name     The tag name to search for (e.g., 'og:image').
 	 * @param  string $attribute    The attribute name ('property' or 'name').
@@ -318,7 +318,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	 *
 	 * Extracts all URLs from src/href attributes that don't match the site domain.
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $html_content The HTML content to search.
 	 * @param  string $site_domain  The site's domain (for comparison).
 	 * @return array Array of external URLs found.
@@ -342,7 +342,7 @@ class Diagnostic_URL_And_Pattern_Helper {
 	/**
 	 * Check if URL is internal (same domain as site).
 	 *
-	 * @since  1.6032.0900
+	 * @since 1.6093.1200
 	 * @param  string $url         The URL to check.
 	 * @param  string $site_domain Optional. The site domain. Default: uses home_url().
 	 * @return bool True if URL is internal (same domain).

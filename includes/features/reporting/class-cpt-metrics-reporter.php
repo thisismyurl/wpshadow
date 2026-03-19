@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.6034.1230
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides metrics and insights about CPT usage.
  *
- * @since 1.6034.1230
+ * @since 1.6093.1200
  */
 class CPT_Metrics_Reporter {
 
 	/**
 	 * Get comprehensive CPT metrics
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     CPT metrics array.
 	 *
@@ -62,7 +62,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get post type statistics
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array Post type stats.
 	 */
 	private static function get_post_type_stats() {
@@ -132,7 +132,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get taxonomy statistics
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array Taxonomy stats.
 	 */
 	private static function get_taxonomy_stats() {
@@ -151,7 +151,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get feature adoption statistics
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array Feature stats.
 	 */
 	private static function get_feature_stats() {
@@ -179,7 +179,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get content health score
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Health score (0-100).
 	 */
 	private static function get_content_health_score() {
@@ -193,7 +193,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get block pattern count
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return int Pattern count.
 	 */
 	private static function get_block_pattern_count() {
@@ -207,7 +207,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get actionable recommendations
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array Array of recommendation strings.
 	 */
 	private static function get_recommendations() {
@@ -315,7 +315,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get dashboard widget data
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array Widget data for dashboard display.
 	 */
 	public static function get_dashboard_widget_data() {
@@ -374,7 +374,7 @@ class CPT_Metrics_Reporter {
 	/**
 	 * Get CSS class for health score
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  int $score Health score (0-100).
 	 * @return string CSS class.
 	 */

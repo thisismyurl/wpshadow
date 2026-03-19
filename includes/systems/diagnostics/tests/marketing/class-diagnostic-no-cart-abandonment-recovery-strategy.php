@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Average cart abandonment rate is 69.8%. Recovery emails recover
  * 10-15% of abandoned carts, generating massive additional revenue.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Cart_Abandonment_Recovery_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Cart_Abandonment_Recovery_Strategy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Cart_Abandonment_Recovery_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if abandonment recovery exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if recovery detected, false otherwise.
 	 */
 	private static function has_abandonment_recovery() {
@@ -137,7 +137,7 @@ class Diagnostic_No_Cart_Abandonment_Recovery_Strategy extends Diagnostic_Base {
 	/**
 	 * Get recommended email sequence.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Email sequence structure.
 	 */
 	private static function get_email_sequence() {
@@ -166,7 +166,7 @@ class Diagnostic_No_Cart_Abandonment_Recovery_Strategy extends Diagnostic_Base {
 	/**
 	 * Get recovery optimization tips.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Optimization tips.
 	 */
 	private static function get_optimization_tips() {

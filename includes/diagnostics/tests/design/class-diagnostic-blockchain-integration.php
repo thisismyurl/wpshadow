@@ -4,7 +4,7 @@
  *
  * Tests whether the site integrates blockchain technology for transactions or verification.
  *
- * @since   1.6034.0200
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Blockchain technology provides decentralized verification, transparent transactions,
  * and immutable records, useful for supply chain, authentication, and trust building.
  *
- * @since 1.6034.0200
+ * @since 1.6093.1200
  */
 class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -188,7 +188,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	/**
 	 * Check for smart contract functionality.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if smart contracts exist, false otherwise.
 	 */
 	private static function check_smart_contracts() {
@@ -212,7 +212,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	/**
 	 * Check for decentralized identity systems.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if DID system exists, false otherwise.
 	 */
 	private static function check_decentralized_identity() {
@@ -235,7 +235,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	/**
 	 * Check for blockchain verification features.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if verification features exist, false otherwise.
 	 */
 	private static function check_verification_features() {
@@ -266,7 +266,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	/**
 	 * Check for distributed storage integration.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if distributed storage exists, false otherwise.
 	 */
 	private static function check_distributed_storage() {
@@ -288,7 +288,7 @@ class Diagnostic_Blockchain_Integration extends Diagnostic_Base {
 	/**
 	 * Check for blockchain-related content.
 	 *
-	 * @since  1.6034.0200
+	 * @since 1.6093.1200
 	 * @return bool True if blockchain content exists, false otherwise.
 	 */
 	private static function check_blockchain_content() {

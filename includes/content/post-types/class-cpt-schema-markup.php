@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6090.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Generates JSON-LD schema markup for all Custom Post Types.
  *
- * @since 1.6090.2359
+ * @since 1.6093.1200
  */
 class CPT_Schema_Markup {
 
 	/**
 	 * Initialize schema markup system.
 	 *
-	 * @since 1.6034.1100
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -40,7 +40,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Output schema markup for current post.
 	 *
-	 * @since 1.6034.1100
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function output_schema_markup() {
@@ -68,7 +68,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get schema for a specific post.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data or empty array.
 	 */
@@ -102,7 +102,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get Review schema for testimonials.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -144,7 +144,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get Person schema for team members.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -206,7 +206,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get CreativeWork schema for portfolio items.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -257,7 +257,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get Event schema for events.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -342,7 +342,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get DigitalDocument schema for resources.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -379,7 +379,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get Article schema for case studies.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -430,7 +430,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get Service schema for services.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -479,7 +479,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get LocalBusiness schema for locations.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -562,7 +562,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get TechArticle schema for documentation.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -609,7 +609,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get Product schema for products.
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Post object.
 	 * @return array Schema data.
 	 */
@@ -672,7 +672,7 @@ class CPT_Schema_Markup {
 	/**
 	 * Get schema for a list of posts (for archive pages).
 	 *
-	 * @since  1.6034.1100
+	 * @since 1.6093.1200
 	 * @param  array  $posts Array of WP_Post objects.
 	 * @param  string $type  Post type.
 	 * @return array Schema data.

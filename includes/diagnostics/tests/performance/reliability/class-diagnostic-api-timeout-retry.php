@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,14 +40,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Infinite retries waste server resources
  * - Users see spinning admin UI with no feedback
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_API_Timeout_Retry extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'api-timeout-retry';
@@ -55,7 +55,7 @@ class Diagnostic_API_Timeout_Retry extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'External API Calls Don\'t Timeout or Retry';
@@ -63,7 +63,7 @@ class Diagnostic_API_Timeout_Retry extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if external API requests have timeout and retry logic';
@@ -71,7 +71,7 @@ class Diagnostic_API_Timeout_Retry extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -79,7 +79,7 @@ class Diagnostic_API_Timeout_Retry extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -18,7 +18,7 @@
  * - Future-proofing: new feature additions can be added to interface
  *
  * @package WPShadow
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -52,7 +52,7 @@ namespace WPShadow\Treatments;
  * }
  * ```
  *
- * @since 1.6030.2148
+ * @since 1.6093.1200
  */
 interface Treatment_Interface {
 	/**

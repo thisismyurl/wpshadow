@@ -11,7 +11,7 @@ use WPShadow\Admin\Pages\Scan_Frequency_Manager;
  *
  * Updates diagnostic scan scheduling configuration.
  *
- * @since 1.6030
+ * @since 1.6093.1200
  * @package WPShadow
  */
 class Update_Scan_Frequency_Handler extends AJAX_Handler_Base {

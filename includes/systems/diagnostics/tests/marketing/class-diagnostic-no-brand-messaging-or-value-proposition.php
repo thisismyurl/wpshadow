@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies with clear value propositions get 2-3x more engagement.
  * Confused messaging kills conversions.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Brand_Messaging_Or_Value_Proposition extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Brand_Messaging_Or_Value_Proposition extends Diagnostic_Base
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Brand_Messaging_Or_Value_Proposition extends Diagnostic_Base
 	/**
 	 * Check if brand messaging exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if messaging detected, false otherwise.
 	 */
 	private static function has_brand_messaging() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Brand_Messaging_Or_Value_Proposition extends Diagnostic_Base
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Brand_Messaging_Or_Value_Proposition extends Diagnostic_Base
 	/**
 	 * Get messaging components.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Key messaging components.
 	 */
 	private static function get_messaging_components() {
@@ -170,7 +170,7 @@ class Diagnostic_No_Brand_Messaging_Or_Value_Proposition extends Diagnostic_Base
 	/**
 	 * Get brand elements to define.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array Brand elements to define.
 	 */
 	private static function get_brand_elements() {

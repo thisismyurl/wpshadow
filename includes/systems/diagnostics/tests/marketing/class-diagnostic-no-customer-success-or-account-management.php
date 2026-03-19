@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies with dedicated customer success teams have 30% higher NPS
  * and 25% lower churn. Success is a function, not just support.
  *
- * @since 1.6035.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Customer_Success_Or_Account_Management extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Success_Or_Account_Management extends Diagnostic_Ba
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Success_Or_Account_Management extends Diagnostic_Ba
 	/**
 	 * Check if CS function exists.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return bool True if CS detected, false otherwise.
 	 */
 	private static function has_cs_function() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Customer_Success_Or_Account_Management extends Diagnostic_Ba
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Customer_Success_Or_Account_Management extends Diagnostic_Ba
 	/**
 	 * Get customer success roles.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array CS roles with descriptions.
 	 */
 	private static function get_cs_roles() {
@@ -156,7 +156,7 @@ class Diagnostic_No_Customer_Success_Or_Account_Management extends Diagnostic_Ba
 	/**
 	 * Get customer success activities.
 	 *
-	 * @since  1.6035.0000
+	 * @since 1.6093.1200
 	 * @return array CS activities with descriptions.
 	 */
 	private static function get_success_activities() {

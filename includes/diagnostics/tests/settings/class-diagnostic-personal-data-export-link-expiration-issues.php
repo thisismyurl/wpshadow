@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since      1.2034.1430
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if export link expiration is properly configured.
  *
- * @since 1.2034.1430
+ * @since 1.6093.1200
  */
 class Diagnostic_Personal_Data_Export_Link_Expiration_Issues extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Personal_Data_Export_Link_Expiration_Issues extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.2034.1430
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

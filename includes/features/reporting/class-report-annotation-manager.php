@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since      1.603.0200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages annotations on report findings.
  *
- * @since 1.603.0200
+ * @since 1.6093.1200
  */
 class Report_Annotation_Manager {
 
@@ -36,7 +36,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Maybe create table
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function maybe_create_table() {
@@ -46,7 +46,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Add annotation
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @param  string $finding_id Finding ID.
 	 * @param  string $text Annotation text.
@@ -78,7 +78,7 @@ class Report_Annotation_Manager {
 			/**
 			 * Fires after annotation is added.
 			 *
-			 * @since 1.603.0200
+			 * @since 1.6093.1200
 			 *
 			 * @param int    $annotation_id Annotation ID.
 			 * @param string $report_id Report ID.
@@ -95,7 +95,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Get annotations for finding
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @param  string $finding_id Finding ID.
 	 * @return array Annotations.
@@ -138,7 +138,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Update annotation status
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  int    $annotation_id Annotation ID.
 	 * @param  string $status New status.
 	 * @return bool Success.
@@ -158,7 +158,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Get all annotations for report
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @return array Annotations grouped by finding.
 	 */
@@ -197,7 +197,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Delete annotation
 	 *
-	 * @since  1.603.0200
+	 * @since 1.6093.1200
 	 * @param  int $annotation_id Annotation ID.
 	 * @return bool Success.
 	 */
@@ -208,7 +208,7 @@ class Report_Annotation_Manager {
 	/**
 	 * Normalize comment record into legacy annotation array shape.
 	 *
-	 * @since  1.7050.0000
+	 * @since 1.6093.1200
 	 * @param  \WP_Comment $comment Comment object.
 	 * @return array Annotation array.
 	 */

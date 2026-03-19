@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1545
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies SSL certificate is valid for the current domain.
  * Like checking that your security badge has the right name on it.
  *
- * @since 1.6035.1545
+ * @since 1.6093.1200
  */
 class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Run the SSL domain validity diagnostic check.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if domain validity issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -171,7 +171,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Get domains covered by SSL certificate.
 	 *
-	 * @since  1.6035.1545
+	 * @since 1.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array|false Array of covered domains or false on failure.
 	 */

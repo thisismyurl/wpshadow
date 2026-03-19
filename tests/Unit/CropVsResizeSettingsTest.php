@@ -4,7 +4,7 @@
  *
  * @package    WPShadow\Tests\Unit
  * @subpackage Diagnostics
- * @since      1.2032.1352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ use WPShadow\Diagnostics\Diagnostic_Crop_Vs_Resize_Settings;
 /**
  * Test class for Crop vs Resize Settings Diagnostic
  *
- * @since 1.2032.1352
+ * @since 1.6093.1200
  */
 class CropVsResizeSettingsTest extends TestCase {
 

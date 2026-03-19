@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6050.0000
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Supply chain attacks via compromised CDNs are increasingly common.
  * SRI (Subresource Integrity) ensures browsers reject modified files.
  *
- * @since 1.6050.0000
+ * @since 1.6093.1200
  */
 class Diagnostic_Third_Party_Script_Integrity extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'third-party-script-integrity';
@@ -50,7 +50,7 @@ class Diagnostic_Third_Party_Script_Integrity extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Third-Party Scripts Loaded from Unverified Sources';
@@ -58,7 +58,7 @@ class Diagnostic_Third_Party_Script_Integrity extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies external scripts use Subresource Integrity (SRI) hashes';
@@ -66,7 +66,7 @@ class Diagnostic_Third_Party_Script_Integrity extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6050.0000
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -74,7 +74,7 @@ class Diagnostic_Third_Party_Script_Integrity extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -139,7 +139,7 @@ class Diagnostic_Third_Party_Script_Integrity extends Diagnostic_Base {
 	/**
 	 * Check if script is external (CDN or third-party)
 	 *
-	 * @since  1.6050.0000
+	 * @since 1.6093.1200
 	 * @param  string $src Script source URL.
 	 * @return bool True if script is external.
 	 */

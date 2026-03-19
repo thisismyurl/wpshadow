@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since      1.6034.2324
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Both old→new and new→old links
  * - Avoiding orphan pages
  *
- * @since 1.6034.2324
+ * @since 1.6093.1200
  */
 class Diagnostic_Implements_Internal_Linking extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Implements_Internal_Linking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6034.2324
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if poor linking detected, null otherwise.
 	 */
 	public static function check() {

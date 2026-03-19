@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2102
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * over 90% of attempted logins during attacks. Using the default
  * username reduces attack complexity by 50%.
  *
- * @since 1.2033.2102
+ * @since 1.6093.1200
  */
 class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'default-admin-credentials';
@@ -50,7 +50,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Default Admin Credentials';
@@ -58,7 +58,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects default administrator usernames and setup credentials';
@@ -66,7 +66,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2102
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	 * 3. Identifies other common default usernames
 	 * 4. Verifies admin accounts have changed password since creation
 	 *
-	 * @since  1.2033.2102
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

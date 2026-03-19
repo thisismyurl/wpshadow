@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.6033.1530
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides admin interface for managing custom post types.
  *
- * @since 1.6033.1530
+ * @since 1.6093.1200
  */
 class Post_Types_Page extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -44,8 +44,8 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the post types page (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Post_Types_Page::subscribe() instead
-	 * @since      1.6033.1530
+	 * @deprecated1.0 Use Post_Types_Page::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -55,7 +55,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue page assets.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -105,7 +105,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render post types page.
 	 *
-	 * @since  1.6033.1530
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function render_page() {

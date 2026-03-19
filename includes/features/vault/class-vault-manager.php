@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since      1.6030.1830
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages backup creation, storage, retrieval, and restoration.
  * Handles free tier limits (3 backups, 7-day retention) and paid upgrades.
  *
- * @since 1.6030.1830
+ * @since 1.6093.1200
  */
 class Vault_Manager {
 
@@ -50,13 +50,13 @@ class Vault_Manager {
 	 * Local backups are UNLIMITED in Core (stored on user's server, no cost to us)
 	 * Cloud storage tiers are managed in wpshadow-cloud repository
 	 *
-	 * @since 1.6030.1830
+	 * @since 1.6093.1200
 	 */
 
 	/**
 	 * Get singleton instance
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return Vault_Manager Instance.
 	 */
 	public static function get_instance() {
@@ -69,7 +69,7 @@ class Vault_Manager {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.6030.1830
+	 * @since 1.6093.1200
 	 */
 	private function __construct() {
 		$upload_dir       = wp_upload_dir();
@@ -82,7 +82,7 @@ class Vault_Manager {
 	/**
 	 * Setup WordPress hooks
 	 *
-	 * @since 1.6030.1830
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private function setup_hooks() {
@@ -96,7 +96,7 @@ class Vault_Manager {
 	/**
 	 * Ensure backup directory exists with proper permissions
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return bool True if directory ready, false on failure.
 	 */
 	private function ensure_backup_directory() {
@@ -152,7 +152,7 @@ class Vault_Manager {
 	/**
 	 * Check if user is registered with Vault
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return bool True if registered, false otherwise.
 	 */
 	public function is_registered() {
@@ -163,7 +163,7 @@ class Vault_Manager {
 	/**
 	 * Get user's Vault tier (free, starter, professional, agency)
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return string Tier identifier.
 	 */
 	public function get_tier() {
@@ -193,7 +193,7 @@ class Vault_Manager {
 	/**
 	 * Fetch account tier from Vault API
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $api_key API key.
 	 * @return string Tier identifier.
 	 */
@@ -209,7 +209,7 @@ class Vault_Manager {
 	 * Local backups in Core are unlimited (stored on user's server).
 	 * Cloud storage limits are managed in wpshadow-cloud repository.
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return string Always 'unlimited' for local backups in Core.
 	 */
 	public function get_max_backups() {
@@ -224,7 +224,7 @@ class Vault_Manager {
 	 * Local backups in Core have unlimited retention (user's disk space).
 	 * Cloud storage retention policies are managed in wpshadow-cloud repository.
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return int Days to retain backups (0 = unlimited).
 	 */
 	public function get_retention_days() {
@@ -236,7 +236,7 @@ class Vault_Manager {
 	/**
 	 * Create a full-site backup
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $label Optional backup label/description.
 	 * @return array {
 	 *     Backup result.
@@ -322,7 +322,7 @@ class Vault_Manager {
 	/**
 	 * Check if user can create another backup
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return bool True if can create, false if at limit.
 	 */
 	private function can_create_backup() {
@@ -339,7 +339,7 @@ class Vault_Manager {
 	/**
 	 * Create backup archive file
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $backup_id Backup ID.
 	 * @return array {
 	 *     Archive creation result.
@@ -418,7 +418,7 @@ class Vault_Manager {
 	 * MURPHY-SAFE: Uses streaming to prevent memory exhaustion on large databases.
 	 * Checks disk space before writing. Processes rows in chunks of 1000.
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Export result.
 	 *
@@ -552,7 +552,7 @@ class Vault_Manager {
 	/**
 	 * Get list of all backups
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return array Array of backup metadata.
 	 */
 	public function get_backups() {
@@ -572,7 +572,7 @@ class Vault_Manager {
 	/**
 	 * Save backup metadata
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $backup_id Backup ID.
 	 * @param  array  $metadata Backup metadata.
 	 * @return bool True on success.
@@ -600,7 +600,7 @@ class Vault_Manager {
 	/**
 	 * Delete a backup
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $backup_id Backup ID to delete.
 	 * @return array {
 	 *     Deletion result.
@@ -644,7 +644,7 @@ class Vault_Manager {
 	 *
 	 * Triggered by wpshadow_before_treatment_apply hook.
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $class Treatment class name.
 	 * @param  string $finding_id Finding ID being treated.
 	 * @param  bool   $dry_run Whether this is a dry run.
@@ -680,7 +680,7 @@ class Vault_Manager {
 	/**
 	 * Get treatment severity level
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $finding_id Finding ID.
 	 * @return string Severity level.
 	 */
@@ -693,7 +693,7 @@ class Vault_Manager {
 	/**
 	 * Cleanup oldest backup if over limit
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	private function maybe_cleanup_oldest_backup() {
@@ -717,7 +717,7 @@ class Vault_Manager {
 	 *
 	 * Triggered by wpshadow_daily_cleanup hook.
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function cleanup_expired_backups() {
@@ -736,7 +736,7 @@ class Vault_Manager {
 	/**
 	 * Restore from backup
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $backup_id Backup ID to restore.
 	 * @return array {
 	 *     Restore result.
@@ -814,7 +814,7 @@ class Vault_Manager {
 	/**
 	 * Recursively delete directory
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @return void
 	 */
@@ -836,7 +836,7 @@ class Vault_Manager {
 	/**
 	 * Get Vault status for dashboard display
 	 *
-	 * @since  1.6030.1830
+	 * @since 1.6093.1200
 	 * @return array {
 	 *     Vault status information.
 	 *

@@ -4,7 +4,7 @@
  *
  * Checks for prefers-reduced-motion media query support to respect user's motion sensitivity preferences.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that animations and motion effects respect the prefers-reduced-motion media query
  * preference, ensuring accessibility for vestibular disorder users and WCAG AAA compliance.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Reduce_Motion_Preference extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Reduce_Motion_Preference extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

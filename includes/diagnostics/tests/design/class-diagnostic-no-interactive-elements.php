@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.7030.1451
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Interactive shortcodes in content
  * - Interactive elements in posts
  *
- * @since 1.7030.1451
+ * @since 1.6093.1200
  */
 class Diagnostic_No_Interactive_Elements extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_No_Interactive_Elements extends Diagnostic_Base {
 	 * - 1 point: Interactive elements found in content
 	 * - 1 point: Multiple types of interactive content
 	 *
-	 * @since  1.7030.1451
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

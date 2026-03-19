@@ -5,7 +5,7 @@
  * Checks if two-factor authentication is enabled for admin accounts.
  * Encourages adoption of 2FA for improved security.
  *
- * @since   1.6032.1020
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates two-factor authentication enablement.
  *
- * @since 1.6032.1020
+ * @since 1.6093.1200
  */
 class Diagnostic_2FA_Status extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since  1.6032.1020
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -186,7 +186,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Check if a 2FA plugin is available
 	 *
-	 * @since  1.6032.1020
+	 * @since 1.6093.1200
 	 * @return bool
 	 */
 	private static function has_2fa_plugin(): bool {
@@ -212,7 +212,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Check if user has 2FA enabled
 	 *
-	 * @since  1.6032.1020
+	 * @since 1.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return bool
 	 */

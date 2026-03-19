@@ -5,7 +5,7 @@
  * Checks if Google Analytics is properly configured for traffic tracking.
  *
  * @package WPShadow\Diagnostics
- * @since   1.6032.0146
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);

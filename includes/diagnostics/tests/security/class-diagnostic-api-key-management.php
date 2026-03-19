@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.2033.2103
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * over 10 million secrets are leaked on GitHub annually. Hardcoded
  * API keys are the #1 cause of cloud breaches (42% of incidents).
  *
- * @since 1.2033.2103
+ * @since 1.6093.1200
  */
 class Diagnostic_API_Key_Management extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'api-key-management';
@@ -50,7 +50,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'API Key Management';
@@ -58,7 +58,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects insecure API key storage and management practices';
@@ -66,7 +66,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.2033.2103
+	 * @since 1.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	 * 4. Detects keys in JavaScript
 	 * 5. Checks for key rotation metadata
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -206,7 +206,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Scan code for hardcoded API keys.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return array Files with hardcoded keys.
 	 */
 	private static function scan_for_hardcoded_keys() {
@@ -254,7 +254,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check if .git directory is web-accessible.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return bool True if exposed.
 	 */
 	private static function check_git_exposure() {
@@ -287,7 +287,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check wp-config.php for API key constants.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return int Number of keys found.
 	 */
 	private static function check_wpconfig_keys() {
@@ -309,7 +309,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Scan JavaScript files for exposed keys.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return array Files with exposed keys.
 	 */
 	private static function scan_javascript_for_keys() {
@@ -343,7 +343,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check for key rotation mechanism.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return bool True if mechanism exists.
 	 */
 	private static function check_key_rotation_mechanism() {
@@ -363,7 +363,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Scan wp_options for unencrypted API keys.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @return int Number of keys found.
 	 */
 	private static function scan_options_for_keys() {
@@ -386,7 +386,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit File limit.
 	 * @return array File paths.
@@ -419,7 +419,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check if file contains key pattern.
 	 *
-	 * @since  1.2033.2103
+	 * @since 1.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Key patterns.
 	 * @return bool True if contains pattern.

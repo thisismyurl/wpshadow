@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6035.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site demonstrates organizational
  * commitment to performance optimization.
  *
- * @since 1.6035.1505
+ * @since 1.6093.1200
  */
 class Treatment_Performance_Culture extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Performance_Culture extends Treatment_Base {
 	/**
 	 * Run the performance culture treatment check.
 	 *
-	 * @since  1.6035.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if performance culture issues detected, null otherwise.
 	 */
 	public static function check() {

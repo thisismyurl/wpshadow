@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects unsubmitted sitemap.
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Sitemap_XML_Not_Submitted_To_Search_Engines extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Sitemap_XML_Not_Submitted_To_Search_Engines extends Treatment_Ba
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

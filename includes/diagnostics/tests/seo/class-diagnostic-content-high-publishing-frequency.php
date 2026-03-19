@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site publishes excessively (3+ posts/day). While content volume
  * is good, excessive frequency often indicates quality issues.
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 	 * Analyzes posting frequency over last 30 days. Publishing 3+ posts per day
 	 * often indicates rushed content or unsustainable pace.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

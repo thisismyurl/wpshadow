@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7029.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if WordPress is properly generating srcset attributes
  * for responsive images to serve optimal sizes per device.
  *
- * @since 1.7029.1200
+ * @since 1.6093.1200
  */
 class Treatment_Responsive_Image_Srcset_Generation extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Responsive_Image_Srcset_Generation extends Treatment_Base {
 	 * Tests if WordPress generates proper srcset attributes with
 	 * multiple image size variants.
 	 *
-	 * @since  1.7029.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.5002.1425
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website publishes podcast episodes on a consistent schedule
  * (minimum bi-weekly cadence).
  *
- * @since 1.5002.1425
+ * @since 1.6093.1200
  */
 class Diagnostic_Publishes_Podcast_Regularly extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Publishes_Podcast_Regularly extends Diagnostic_Base {
 	 * This diagnostic checks for podcast plugins, recent episodes, publishing
 	 * frequency, and consistency.
 	 *
-	 * @since  1.5002.1425
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

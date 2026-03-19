@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6035.1415
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that payment gateway connections are active and that
  * payment processors are responding normally.
  *
- * @since 1.6035.1415
+ * @since 1.6093.1200
  */
 class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 	/**
 	 * Run the payment gateway status diagnostic check.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if gateway status issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -261,7 +261,7 @@ class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 	/**
 	 * Check individual gateway connectivity.
 	 *
-	 * @since  1.6035.1415
+	 * @since 1.6093.1200
 	 * @param  object $gateway Payment gateway object.
 	 * @return array {
 	 *     @type bool   $connected Whether gateway is connected.

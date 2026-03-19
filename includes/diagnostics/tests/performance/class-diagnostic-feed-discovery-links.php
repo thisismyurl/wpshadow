@@ -72,7 +72,7 @@
  * See https://wpshadow.com/kb/feed-discovery-configuration for setup guide
  * or https://wpshadow.com/training/content-syndication-optimization
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -110,7 +110,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Feed XML Validity: Ensures feeds contain valid XML
  * - Theme Integration: Checks if theme calls `wp_head()`
  *
- * @since 1.6032.1921
+ * @since 1.6093.1200
  */
 class Diagnostic_Feed_Discovery_Links extends Diagnostic_Base {
 	/**
@@ -144,7 +144,7 @@ class Diagnostic_Feed_Discovery_Links extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

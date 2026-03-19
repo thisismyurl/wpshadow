@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since      1.6034.2151
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - opcache.validate_timestamps: 0 (production)
  * - opcache.revalidate_freq: 0 (if timestamps disabled)
  *
- * @since 1.6034.2151
+ * @since 1.6093.1200
  */
 class Treatment_OPcache_Configuration_Optimization extends Treatment_Base {
 
@@ -74,7 +74,7 @@ class Treatment_OPcache_Configuration_Optimization extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2151
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if suboptimal, null if well-configured.
 	 */
 	public static function check() {

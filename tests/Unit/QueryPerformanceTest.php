@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6027.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Database Query Performance Diagnostic Test Class
  *
- * @since 1.6027.1500
+ * @since 1.6093.1200
  */
 class QueryPerformanceTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -40,7 +40,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -51,7 +51,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test diagnostic returns null when no slow queries
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_when_no_slow_queries(): void {
@@ -72,7 +72,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test diagnostic flags slow queries
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_slow_queries(): void {
@@ -124,7 +124,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -181,7 +181,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test finding includes top slow queries
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_top_slow_queries(): void {
@@ -233,7 +233,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test finding includes optimization tips
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_optimization_tips(): void {
@@ -279,7 +279,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test threat level increases with more slow queries
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_increases_with_slow_query_count(): void {
@@ -322,7 +322,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test threat level increases with slower query times
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_increases_with_query_time(): void {
@@ -367,7 +367,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test meta includes performance metrics
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_performance_metrics(): void {
@@ -417,7 +417,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test finding includes immediate actions
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_immediate_actions(): void {
@@ -463,7 +463,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test finding includes advanced options
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_includes_advanced_options(): void {
@@ -509,7 +509,7 @@ class QueryPerformanceTest extends TestCase {
 	/**
 	 * Test severity is high for many slow queries
 	 *
-	 * @since 1.6027.1500
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_severity_high_for_many_slow_queries(): void {
@@ -524,7 +524,7 @@ class QueryPerformanceTest extends TestCase {
 					'stack'        => 'test',
 					'optimization' => 'Test',
 				) ),
-				'slowest_time' => 1.5,
+				'slowest_time' =>.6093.1200,
 			),
 		) );
 

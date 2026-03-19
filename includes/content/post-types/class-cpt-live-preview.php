@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since      1.6365.2359
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enables live preview mode for all custom post types with
  * iframe-based rendering and real-time updates.
  *
- * @since 1.6365.2359
+ * @since 1.6093.1200
  */
 class CPT_Live_Preview {
 
 	/**
 	 * Initialize the live preview system.
 	 *
-	 * @since 1.6034.1230
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -44,7 +44,7 @@ class CPT_Live_Preview {
 	/**
 	 * Enqueue preview assets.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -86,7 +86,7 @@ class CPT_Live_Preview {
 	/**
 	 * Add preview meta box.
 	 *
-	 * @since 1.6034.1230
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function add_preview_meta_box() {
@@ -107,7 +107,7 @@ class CPT_Live_Preview {
 	/**
 	 * Render preview meta box.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -154,7 +154,7 @@ class CPT_Live_Preview {
 	/**
 	 * Handle AJAX preview request.
 	 *
-	 * @since 1.6034.1230
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function handle_preview_ajax() {
@@ -176,7 +176,7 @@ class CPT_Live_Preview {
 	/**
 	 * Modify preview link for better compatibility.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  string   $link Preview link.
 	 * @param  \WP_Post $post Post object.
 	 * @return string Modified preview link.
@@ -192,7 +192,7 @@ class CPT_Live_Preview {
 	/**
 	 * Check if post type supports live preview.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @param  string $post_type Post type slug.
 	 * @return bool True if supported.
 	 */
@@ -212,7 +212,7 @@ class CPT_Live_Preview {
 	/**
 	 * Get supported post types.
 	 *
-	 * @since  1.6034.1230
+	 * @since 1.6093.1200
 	 * @return array Supported post types.
 	 */
 	private static function get_supported_post_types() {

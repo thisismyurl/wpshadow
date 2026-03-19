@@ -15,14 +15,14 @@ use WPShadow\Core\Hook_Subscriber_Base;
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6030.2200
+ * @since 1.6093.1200
  */
 class Browser_Compatibility_Analyzer extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -36,7 +36,7 @@ class Browser_Compatibility_Analyzer extends Hook_Subscriber_Base {
 	/**
 	 * Initialize browser monitoring (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Browser_Compatibility_Analyzer::subscribe() instead
+	 * @deprecated1.0 Use Browser_Compatibility_Analyzer::subscribe() instead
 	 * @return     void
 	 */
 	public static function init(): void {

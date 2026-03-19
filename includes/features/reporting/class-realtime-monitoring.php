@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6180
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors site health in real-time and generates intelligent alerts.
  *
- * @since 1.6180
+ * @since 1.6093.1200
  */
 class Realtime_Monitoring extends Hook_Subscriber_Base {
 
@@ -43,7 +43,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since  1.7035.1400
+	 * @since 1.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -56,7 +56,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since  1.6180
+	 * @since 1.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -66,8 +66,8 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Initialize monitoring (deprecated)
 	 *
-	 * @deprecated 1.7035.1400 Use Realtime_Monitoring::subscribe() instead
-	 * @since      1.6030.2200
+	 * @deprecated1.0 Use Realtime_Monitoring::subscribe() instead
+	 * @since 1.6093.1200
 	 * @return     void
 	 */
 	public static function init(): void {
@@ -83,7 +83,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Add 5-minute cron interval
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $schedules Existing schedules.
 	 * @return array Modified schedules.
 	 */
@@ -98,7 +98,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Run monitoring cycle
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function run_monitoring_cycle(): void {
@@ -139,7 +139,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Collect current metrics
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Current site metrics.
 	 */
 	private static function collect_metrics(): array {
@@ -164,7 +164,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Detect anomalies in metrics
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $current_metrics Current metrics.
 	 * @return array Detected anomalies.
 	 */
@@ -198,7 +198,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 		// Memory spike
 		if ( ! empty( $historical['memory_usage'] ) ) {
 			$avg_memory = array_sum( $historical['memory_usage'] ) / count( $historical['memory_usage'] );
-			$spike_threshold = $avg_memory * 1.5;
+			$spike_threshold = $avg_memory *1.0;
 			
 			if ( $current_metrics['memory_usage'] > $spike_threshold ) {
 				$anomalies[] = array(
@@ -281,7 +281,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Process detected anomalies
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $anomalies Detected anomalies.
 	 * @return void
 	 */
@@ -313,7 +313,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Check if alert should be sent
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $anomaly Anomaly data.
 	 * @return bool True if alert should be sent.
 	 */
@@ -346,7 +346,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Send alert notification
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $anomaly Anomaly data.
 	 * @return void
 	 */
@@ -378,7 +378,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 		/**
 		 * Fires after an alert is sent.
 		 *
-		 * @since 1.6030.2200
+		 * @since 1.6093.1200
 		 *
 		 * @param array $anomaly Anomaly data.
 		 */
@@ -388,7 +388,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Create incident record
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $anomaly Anomaly data.
 	 * @return void
 	 */
@@ -417,7 +417,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Check if anomaly can be auto-remediated
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $anomaly Anomaly data.
 	 * @return bool True if auto-remediation possible.
 	 */
@@ -429,7 +429,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Attempt automatic remediation
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $anomaly Anomaly data.
 	 * @return void
 	 */
@@ -458,7 +458,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Store metrics in history
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $metrics Current metrics.
 	 * @return void
 	 */
@@ -475,7 +475,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Update live dashboard
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  array $metrics Current metrics.
 	 * @param  array $anomalies Detected anomalies.
 	 * @return void
@@ -489,7 +489,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get historical metrics
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Historical metrics by type.
 	 */
 	private static function get_historical_metrics(): array {
@@ -513,7 +513,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get current health score
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Health score.
 	 */
 	private static function get_current_health_score(): float {
@@ -524,7 +524,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get server load average
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float|null Load average or null if unavailable.
 	 */
 	private static function get_server_load(): ?float {
@@ -538,7 +538,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Measure site response time
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float Response time in seconds.
 	 */
 	private static function measure_response_time(): float {
@@ -555,7 +555,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get recent error count
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return int Number of recent errors.
 	 */
 	private static function get_recent_error_count(): int {
@@ -567,7 +567,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get recent failed login attempts
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return int Number of failed logins.
 	 */
 	private static function get_recent_failed_logins(): int {
@@ -578,7 +578,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get disk usage percentage
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return float|null Disk usage percentage or null if unavailable.
 	 */
 	private static function get_disk_usage(): ?float {
@@ -596,7 +596,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get uptime status
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return bool True if site is up.
 	 */
 	private static function get_uptime_status(): bool {
@@ -607,7 +607,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get live dashboard data
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Live monitoring data.
 	 */
 	public static function get_live_dashboard_data(): array {
@@ -623,7 +623,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get recent incidents
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @param  int $hours Hours to look back.
 	 * @return array Recent incidents.
 	 */
@@ -639,7 +639,7 @@ class Realtime_Monitoring extends Hook_Subscriber_Base {
 	/**
 	 * Get overall system status
 	 *
-	 * @since  1.6030.2200
+	 * @since 1.6093.1200
 	 * @return array Status information.
 	 */
 	private static function get_overall_status(): array {

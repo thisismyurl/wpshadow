@@ -27,7 +27,7 @@
  * Optimized: converted to WebP, resized for display size (1920px),
  * responsive images for mobile (750px). File size: 180KB desktop,
  * 65KB mobile. Mobile load: 2 seconds. Bounce rate: 25%. Homepage
- * conversions increased 210%. Largest Contentful Paint: 8.5s → 1.8s.
+ * conversions increased 210%. Largest Contentful Paint: 8.5s →1.0s.
  * Setup time: 30 minutes. Revenue impact: +$60K/month.
  *
  * **Philosophy Alignment:**
@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Homepage hero: 1920x1080px, saved as PNG (8MB). Lighthouse
  * flags: "Largest Contentful Paint: 9.2s". Converted to WebP,
  * quality 85%, with srcset for mobile. Desktop: 220KB. Mobile:
- * 750px width, 75KB. LCP improved to 1.9s. Lighthouse score:
+ * 750px width, 75KB. LCP improved to1.0s. Lighthouse score:
  * 42 → 87. Mobile bounce rate improved 55%.
  *
  * **Implementation Notes:**
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (affects first impression)
  * - Treatment: optimize with WebP, responsive images
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Treatment_Homepage_Hero_Image_Not_Optimized extends Treatment_Base {
 
@@ -121,7 +121,7 @@ class Treatment_Homepage_Hero_Image_Not_Optimized extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

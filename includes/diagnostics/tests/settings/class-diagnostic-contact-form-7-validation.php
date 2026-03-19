@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6031.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies CF7 forms have proper validation and security measures in place.
  *
- * @since 1.6031.1200
+ * @since 1.6093.1200
  */
 class Diagnostic_Contact_Form_7_Validation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Contact_Form_7_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6031.1200
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Contact_Form_7_Validation extends Diagnostic_Base {
 	/**
 	 * Analyze form for security issues.
 	 *
-	 * @since  1.6031.1200
+	 * @since 1.6093.1200
 	 * @param  int    $form_id   Form ID.
 	 * @param  string $form_html Form HTML content.
 	 * @param  string $form_name Form name/title.

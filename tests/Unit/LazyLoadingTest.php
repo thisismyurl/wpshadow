@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1550
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Lazy Loading Diagnostic Test Class
  *
- * @since 1.6028.1550
+ * @since 1.6093.1200
  */
 class LazyLoadingTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test diagnostic passes when lazy loading is implemented
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_lazy_loading(): void {
@@ -67,7 +67,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test diagnostic flags missing lazy loading
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_missing_lazy_loading(): void {
@@ -99,7 +99,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test diagnostic passes with no images
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_no_images(): void {
@@ -120,7 +120,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -165,7 +165,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test meta includes image statistics
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_image_statistics(): void {
@@ -202,7 +202,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test details include implementation methods
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_implementation_methods(): void {
@@ -236,7 +236,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test details include code examples
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_code_examples(): void {
@@ -270,7 +270,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test details include exceptions
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_exceptions(): void {
@@ -304,7 +304,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test threat level increases with more eager images
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_threat_level_increases_with_eager_images(): void {
@@ -336,7 +336,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test performance impact reflects severity
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_performance_impact_reflects_severity(): void {
@@ -369,7 +369,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test details include Core Web Vitals impact
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_core_web_vitals_impact(): void {
@@ -404,7 +404,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test details include browser support information
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_browser_support(): void {
@@ -437,7 +437,7 @@ class LazyLoadingTest extends TestCase {
 	/**
 	 * Test details include why it matters
 	 *
-	 * @since 1.6028.1550
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_why_matters(): void {

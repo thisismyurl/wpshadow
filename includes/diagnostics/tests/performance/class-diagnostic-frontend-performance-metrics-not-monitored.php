@@ -25,7 +25,7 @@
  * Site has "performance issues" (vague user complaints).
  * No monitoring = can't measure or prioritize. Implement RUM
  * (Real User Monitoring). Discover: mobile LCP = 5.8s (terrible),
- * desktop LCP = 1.2s (good). Mobile bounce rate: 62%. Optimized
+ * desktop LCP =1.0s (good). Mobile bounce rate: 62%. Optimized
  * mobile specifically (image optimization, lazy loading). Mobile
  * LCP improved to 2.1s. Bounce rate dropped to 31%. Mobile revenue
  * increased 180%. Monitoring cost: $20/month. ROI: 900:1.
@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -79,7 +79,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * getLCP(sendToAnalytics);
  * Dashboard shows: LCP=2.8s (75th percentile), FID=85ms, CLS=0.15.
  * Identified problem pages. Targeted optimization. Tracked improvement
- * weekly. LCP improved to 1.8s. User satisfaction increased measurably.
+ * weekly. LCP improved to1.0s. User satisfaction increased measurably.
  *
  * **Implementation Notes:**
  * - Checks performance monitoring setup
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (can't improve what you don't measure)
  * - Treatment: implement RUM or web-vitals library
  *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Frontend_Performance_Metrics_Not_Monitored extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Frontend_Performance_Metrics_Not_Monitored extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Analytics
- * @since      1.6034.2207
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Conversions/goals
  * - Comments and engagement
  *
- * @since 1.6034.2207
+ * @since 1.6093.1200
  */
 class Treatment_No_Content_Performance_Tracking extends Treatment_Base {
 
@@ -76,7 +76,7 @@ class Treatment_No_Content_Performance_Tracking extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since  1.6034.2207
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if tracking not configured, null otherwise.
 	 */
 	public static function check() {

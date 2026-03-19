@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.6030.1200
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Run Family Diagnostics Handler
  *
- * @since 1.6030.1200
+ * @since 1.6093.1200
  */
 class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX handler.
 	 *
-	 * @since 1.6030.1200
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -40,7 +40,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since  1.6030.1200
+	 * @since 1.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {

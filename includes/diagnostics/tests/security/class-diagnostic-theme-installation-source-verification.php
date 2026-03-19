@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6032.1340
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (unverified custom), medium (WP.org non-updated)
  * - Treatment: only use WP.org themes or verified commercial themes
  *
- * @since 1.6032.1340
+ * @since 1.6093.1200
  */
 class Diagnostic_Theme_Installation_Source_Verification extends Diagnostic_Base {
 
@@ -124,7 +124,7 @@ class Diagnostic_Theme_Installation_Source_Verification extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1340
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

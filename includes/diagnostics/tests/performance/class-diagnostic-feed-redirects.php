@@ -42,7 +42,7 @@
  * See https://wpshadow.com/kb/feed-redirect-strategy
  * or https://wpshadow.com/training/rss-distribution-reliability
  *
- * @since   1.6032.1921
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -105,7 +105,7 @@ class Diagnostic_Feed_Redirects extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6032.1921
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

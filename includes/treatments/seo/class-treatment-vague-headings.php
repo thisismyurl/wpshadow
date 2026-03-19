@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since      1.7030.1505
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Heading length analysis
  * - Keyword presence in headings
  *
- * @since 1.7030.1505
+ * @since 1.6093.1200
  */
 class Treatment_Vague_Headings extends Treatment_Base {
 
@@ -70,7 +70,7 @@ class Treatment_Vague_Headings extends Treatment_Base {
 	 * - 2 points: <30% are vague
 	 * - 0 points: ≥30% are vague
 	 *
-	 * @since  1.7030.1505
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -4,7 +4,7 @@
  *
  * Ensures text scales to 200% when user zooms without horizontal scroll.
  *
- * @since   1.6033.1645
+ * @since 1.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures text scales to 200% when user zooms without horizontal scroll,
  * a critical WCAG AA requirement for low-vision users.
  *
- * @since 1.6033.1645
+ * @since 1.6093.1200
  */
 class Diagnostic_Mobile_Text_Zoom_Capability extends Diagnostic_Base {
 
@@ -47,7 +47,7 @@ class Diagnostic_Mobile_Text_Zoom_Capability extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Ensure text scales to 200% when user zooms without horizontal scroll (WCAG 1.4.4)';
+	protected static $description = 'Ensure text scales to 200% when user zooms without horizontal scroll (WCAG1.0)';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Text_Zoom_Capability extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.1645
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

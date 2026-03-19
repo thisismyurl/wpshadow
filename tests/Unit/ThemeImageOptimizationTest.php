@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1720
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * Theme Image Optimization Test Class
  *
- * @since 1.6028.1720
+ * @since 1.6093.1200
  */
 class ThemeImageOptimizationTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test diagnostic passes with optimized images
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_optimized_images(): void {
@@ -64,7 +64,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test diagnostic flags unoptimized images
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_unoptimized_images(): void {
@@ -107,7 +107,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test diagnostic flags missing WebP
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_missing_webp(): void {
@@ -149,7 +149,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -197,7 +197,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test meta includes image statistics
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_image_statistics(): void {
@@ -237,7 +237,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test details include top unoptimized list
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_top_unoptimized(): void {
@@ -275,7 +275,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -311,7 +311,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test severity scales with count
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_severity_scales_with_count(): void {
@@ -345,7 +345,7 @@ class ThemeImageOptimizationTest extends TestCase {
 	/**
 	 * Test potential savings calculation
 	 *
-	 * @since 1.6028.1720
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_potential_savings_calculation(): void {

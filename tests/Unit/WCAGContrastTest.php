@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Tests\Unit
- * @since      1.6028.1740
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WP_Mock\Tools\TestCase;
 /**
  * WCAG Contrast Test Class
  *
- * @since 1.6028.1740
+ * @since 1.6093.1200
  */
 class WCAGContrastTest extends TestCase {
 
 	/**
 	 * Set up test environment
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function setUp(): void {
@@ -35,7 +35,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Tear down test environment
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function tearDown(): void {
@@ -46,7 +46,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test diagnostic passes with compliant contrast
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_passes_with_compliant_contrast(): void {
@@ -64,7 +64,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test diagnostic flags low contrast violations
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_flags_low_contrast_violations(): void {
@@ -99,7 +99,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test finding structure is valid
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_finding_structure_valid(): void {
@@ -140,7 +140,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test meta includes compliance percentage
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_compliance_percentage(): void {
@@ -169,7 +169,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test meta includes WCAG requirements
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_meta_includes_wcag_requirements(): void {
@@ -200,7 +200,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test details include violations list
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_details_include_violations_list(): void {
@@ -242,7 +242,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test recommendations included
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_recommendations_included(): void {
@@ -271,7 +271,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test severity scales with compliance
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_severity_scales_with_compliance(): void {
@@ -300,7 +300,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test high severity with many violations
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_high_severity_with_many_violations(): void {
@@ -329,7 +329,7 @@ class WCAGContrastTest extends TestCase {
 	/**
 	 * Test contrast ratio in violations
 	 *
-	 * @since 1.6028.1740
+	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public function test_contrast_ratio_in_violations(): void {

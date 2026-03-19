@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6033.2033
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Database Connection Encryption Not Enabled.
  *
- * @since 1.6033.2033
+ * @since 1.6093.1200
  */
 class Diagnostic_Database_Connection_Encryption_Not_Enabled extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Connection_Encryption_Not_Enabled extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6033.2033
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

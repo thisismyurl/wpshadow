@@ -8,7 +8,7 @@
  * Issue: https://github.com/thisismyurl/wpshadow/issues/4028
  *
  * @package    WPShadow\Treatments\Mobile
- * @since      1.6034.1440
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects hover-only interactions that don't work on touch devices.
  * All hover interactions should have touch equivalents (tap, long-press).
  *
- * @since 1.6034.1440
+ * @since 1.6093.1200
  */
 class Treatment_Mobile_Hover_Dependent extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Mobile_Hover_Dependent extends Treatment_Base {
 	 * Analyzes theme CSS and JavaScript for hover-only interactions.
 	 * Common issues: dropdown menus, tooltips, hidden content.
 	 *
-	 * @since  1.6034.1440
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since      1.6034.1500
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for AI content creation tools. AI assistance accelerates research,
  * outlining, and drafting - increasing content output 2-3x while maintaining quality.
  *
- * @since 1.6034.1500
+ * @since 1.6093.1200
  */
 class Diagnostic_Behavioral_AI_Content extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_AI_Content extends Diagnostic_Base {
 	 *
 	 * Looks for AI writing assistant plugins.
 	 *
-	 * @since  1.6034.1500
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {

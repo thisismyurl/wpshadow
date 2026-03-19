@@ -17,7 +17,7 @@
  * WordPress session security: https://wpshadow.com/kb/wordpress-sessions\n * Video: Session management best practices (8min): https://wpshadow.com/training/session-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6030.2352
+ * @since 1.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site with custom session storage (Sessions plugin). Site admin\n * stops using the plugin (switches to default). Sessions never cleanup. After\n * 2 years: 50,000 expired sessions in wp_options. Admin notices: \"Why is my\n * database so large?\" Discovers old sessions. Manually deletes via MySQL.\n * If automated cleanup was enabled, would never have been an issue.\n *
  * **Implementation Notes:**
  * - Queries wp_options for session keys\n * - Validates session expiration times\n * - Checks for cleanup hooks in wp-cron\n * - Severity: medium (stale sessions), high (many stale)\n * - Treatment: enable session cleanup, setup cron\n *
- * @since 1.6030.2352
+ * @since 1.6093.1200
  */
 class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  1.6030.2352
+	 * @since 1.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -186,26 +186,6 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 		}
 
 		// No issues - sessions/transients managed properly.
-		return null;
-	}
-3. Remove abandoned sessions when users log out or reset passwords.
-4. Audit session tables periodically for growth and anomalies.
-5. Use session storage with built-in expiration (Redis/Memcached) when possible.',
-						'wpshadow'
-					),
-				),
-			);
-
-			$finding = Upgrade_Path_Helper::add_upgrade_path(
-				$finding,
-				'security',
-				'session-hardening',
-				'expired_session_cleanup'
-			);
-
-			return $finding;
-		}
-
 		return null;
 	}
 }
