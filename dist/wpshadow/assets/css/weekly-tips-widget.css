@@ -1,0 +1,78 @@
+.wpshadow-weekly-tip {
+	font-size: 13px;
+}
+
+.wpshadow-weekly-tip__title {
+	margin: 0 0 10px;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.wpshadow-weekly-tip__description {
+	margin: 0 0 15px;
+	color: #50575e;
+	line-height: 1.6;
+}
+
+.wpshadow-weekly-tip__points {
+	margin: 0 0 15px;
+	padding-left: 20px;
+}
+
+.wpshadow-weekly-tip__points li {
+	margin-bottom: 8px;
+	color: #1d2327;
+}
+
+.wpshadow-weekly-tip__actions {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 15px;
+}
+
+.wpshadow-weekly-tip__actions .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.wpshadow-weekly-tip__actions .dashicons {
+	margin-top: 3px;
+}
+
+.wpshadow-weekly-tip__feedback {
+	margin-bottom: 15px;
+	padding-top: 15px;
+	border-top: 1px solid #ddd;
+}
+
+.wpshadow-tip-helpful {
+	background: none;
+	border: none;
+	padding: 5px 10px;
+	color: #2271b1;
+	cursor: pointer;
+	font-size: 13px;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.wpshadow-tip-helpful:hover {
+	color: #135e96;
+}
+
+.wpshadow-tip-helpful .dashicons {
+	font-size: 16px;
+}
+
+.wpshadow-tip-helpful-thanks-hidden {
+	display: none;
+}
+
+.wpshadow-weekly-tip__footer {
+	padding-top: 10px;
+	border-top: 1px solid #ddd;
+	color: #646970;
+}

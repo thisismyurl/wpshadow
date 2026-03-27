@@ -1,0 +1,5 @@
+.wpshadow-scan-settings-row {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 8px;
+}

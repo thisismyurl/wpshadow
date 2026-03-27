@@ -1,0 +1,38 @@
+.wps-scan-frequency-option {
+	border: 2px solid #e0e0e0;
+	background: #fff;
+}
+
+.wps-scan-frequency-option-selected {
+	border-color: #0073aa;
+	background: #f0f6fc;
+}
+
+.wps-scan-frequency-option-default {
+	border-color: #e0e0e0;
+	background: #fff;
+}
+
+.wps-scan-time-hidden {
+	display: none;
+}
+
+.wps-scan-run-now-title {
+	color: #2e7d32;
+}
+
+.wps-scan-now-btn {
+	flex-shrink: 0;
+}
+
+.wps-scan-result {
+	margin-top: 12px;
+}
+
+.wps-scan-status-success {
+	color: #2e7d32;
+}
+
+.wps-scan-status-error {
+	color: #c62828;
+}

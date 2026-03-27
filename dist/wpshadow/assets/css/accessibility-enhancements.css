@@ -1,0 +1,428 @@
+/**
+ * WPShadow Accessibility Enhancements
+ * Version: 1.0 (Phase 5: Final Polish & Validation)
+ *
+ * Comprehensive WCAG AA compliance enhancements.
+ * Ensures all interactive elements have proper focus indicators,
+ * color contrast, keyboard navigation, and screen reader support.
+ *
+ * Philosophy Alignment:
+ * - CANON Pillar #1: Accessibility First
+ * - WCAG 2.1 AA Compliance (Minimum Standard)
+ * - No feature complete until accessible
+ *
+ * @package WPShadow
+ * @since   1.6030.2148
+ */
+
+/* ============================================================================
+	SCREEN READER TEXT - Hidden but accessible
+	============================================================================ */
+
+.wps-sr-only,
+.screen-reader-text,
+.screen-reader-shortcut {
+	position: absolute !important;
+	left: -10000px !important;
+	top: auto !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+	clip: rect(1px, 1px, 1px, 1px) !important;
+	clip-path: inset(50%) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+	padding: 0 !important;
+	margin: -1px !important;
+}
+
+/* Show on focus for skip links */
+.screen-reader-text:focus,
+.screen-reader-shortcut:focus {
+	position: fixed !important;
+	left: 6px !important;
+	top: 6px !important;
+	height: auto !important;
+	width: auto !important;
+	clip: auto !important;
+	clip-path: none !important;
+	padding: 12px 16px !important;
+	margin: 0 !important;
+	background: var(--wps-gray-900) !important;
+	color: #ffffff !important;
+	border-radius: var(--wps-radius-sm) !important;
+	box-shadow: var(--wps-shadow-xl) !important;
+	font-size: var(--wps-text-sm) !important;
+	font-weight: var(--wps-font-semibold) !important;
+	z-index: 100000 !important;
+	text-decoration: none !important;
+	line-height: var(--wps-leading-tight) !important;
+}
+
+/* ============================================================================
+	FOCUS INDICATORS - Enhanced visibility
+	============================================================================ */
+
+/* Default focus ring for all focusable elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible {
+	outline: 3px solid var(--wps-primary) !important;
+	outline-offset: 2px !important;
+	/* Ensure 3:1 contrast ratio with background */
+}
+
+/* Specific focus styles for WPShadow components */
+.wps-btn:focus-visible,
+.wps-toggle:focus-visible,
+.wps-dropdown:focus-visible {
+	box-shadow: var(--wps-shadow-focus) !important;
+}
+
+/* Danger actions get red focus ring */
+.wps-btn-danger:focus-visible,
+[data-danger="true"]:focus-visible {
+	outline-color: var(--wps-danger) !important;
+	box-shadow: var(--wps-shadow-focus-danger) !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	button:focus,
+	a:focus,
+	input:focus,
+	select:focus,
+	textarea:focus,
+	[tabindex]:not([tabindex="-1"]):focus {
+		outline: 3px solid !important;
+		outline-offset: 3px !important;
+	}
+}
+
+/* ============================================================================
+	KEYBOARD NAVIGATION INDICATORS
+	============================================================================ */
+
+/* Show visual hint when keyboard navigation is active */
+body.wps-keyboard-nav *:focus {
+	outline: 3px solid var(--wps-primary) !important;
+	outline-offset: 2px !important;
+}
+
+/* Visual feedback for keyboard users on interactive cards */
+body.wps-keyboard-nav .wps-card:focus,
+body.wps-keyboard-nav .finding-card:focus {
+	box-shadow: 0 0 0 4px rgba(18, 52, 86, 0.3) !important;
+}
+
+/* ============================================================================
+	COLOR CONTRAST ENHANCEMENTS
+	============================================================================ */
+
+/* Ensure minimum 4.5:1 contrast for normal text */
+.wps-text-muted,
+.wps-helper-text,
+.wps-hint {
+	color: var(--wps-gray-600) !important; /* Ensures 4.5:1 on white */
+}
+
+/* Ensure minimum 3:1 contrast for large text (18px+) */
+.wps-page-title,
+.wps-card-title,
+.wps-section-heading {
+	color: var(--wps-gray-900) !important; /* Ensures 7:1 on white */
+}
+
+/* Link colors with sufficient contrast */
+a {
+	color: var(--wps-primary) !important;
+	text-decoration: underline !important; /* Non-color indicator */
+}
+
+a:hover {
+	color: var(--wps-primary-hover) !important;
+	text-decoration: underline !important;
+}
+
+a:focus {
+	color: var(--wps-primary-hover) !important;
+}
+
+/* Button contrast requirements */
+.wps-btn-primary {
+	background-color: var(--wps-primary) !important;
+	color: #ffffff !important; /* Ensures 4.5:1 minimum */
+}
+
+.wps-btn-secondary {
+	border: 2px solid var(--wps-gray-300) !important;
+	color: var(--wps-gray-900) !important;
+}
+
+/* Status colors with WCAG AA compliance */
+.wps-status-success,
+.status-pass {
+	color: var(--wps-success-dark) !important; /* 4.5:1 on white */
+	background-color: var(--wps-success-light) !important;
+}
+
+.wps-status-warning,
+.status-warn {
+	color: var(--wps-warning-dark) !important; /* 4.5:1 on white */
+	background-color: var(--wps-warning-light) !important;
+}
+
+.wps-status-error,
+.status-fail {
+	color: var(--wps-danger-dark) !important; /* 4.5:1 on white */
+	background-color: var(--wps-danger-light) !important;
+}
+
+/* ============================================================================
+	REDUCED MOTION SUPPORT
+	============================================================================ */
+
+.wps-reduced-motion *,
+.wps-reduced-motion *::before,
+.wps-reduced-motion *::after {
+	animation-duration: 0.01ms !important;
+	animation-iteration-count: 1 !important;
+	transition-duration: 0.01ms !important;
+	scroll-behavior: auto !important;
+}
+
+/* Alternative to motion: use opacity changes */
+.wps-reduced-motion .wps-fade-in {
+	animation: none !important;
+	opacity: 1 !important;
+}
+
+.wps-reduced-motion .wps-slide-in {
+	animation: none !important;
+	transform: none !important;
+}
+
+/* ============================================================================
+	ARIA LIVE REGIONS
+	============================================================================ */
+
+[role="status"],
+[role="alert"],
+[aria-live] {
+	position: relative;
+	min-height: 1px; /* Ensure screen readers detect changes */
+}
+
+/* Visual feedback for assertive announcements */
+[aria-live="assertive"][role="alert"] {
+	padding: 12px 16px;
+	border-radius: var(--wps-radius-sm);
+	background-color: var(--wps-danger-light);
+	border-left: 4px solid var(--wps-danger);
+	color: var(--wps-danger-dark);
+}
+
+/* Polite announcements */
+[aria-live="polite"][role="status"] {
+	padding: 12px 16px;
+	border-radius: var(--wps-radius-sm);
+	background-color: var(--wps-info-light);
+	border-left: 4px solid var(--wps-info);
+	color: var(--wps-info-dark);
+}
+
+/* ============================================================================
+	TOUCH TARGET SIZES (WCAG 2.5.5)
+	============================================================================ */
+
+/* Minimum 44x44px touch targets for mobile */
+@media (max-width: 768px) {
+	button,
+	a,
+	input[type="checkbox"],
+	input[type="radio"],
+	.wps-toggle,
+	[role="button"],
+	[role="link"] {
+		min-width: 44px !important;
+		min-height: 44px !important;
+		padding: 12px !important;
+	}
+
+	/* Exception for inline text links */
+	p a,
+	li a {
+		min-width: auto !important;
+		min-height: auto !important;
+		padding: 4px 8px !important;
+	}
+}
+
+/* ============================================================================
+	FORM FIELD STATES
+	============================================================================ */
+
+/* Required field indicator */
+.wps-field-required::after,
+[aria-required="true"] label::after {
+	content: " *";
+	color: var(--wps-danger);
+	font-weight: var(--wps-font-bold);
+	margin-left: 2px;
+}
+
+/* Error state with sufficient contrast */
+.wps-input-error,
+[aria-invalid="true"] {
+	border-color: var(--wps-danger) !important;
+	border-width: 2px !important;
+}
+
+.wps-error-message {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+	color: var(--wps-danger-dark) !important;
+	font-size: var(--wps-text-sm);
+	font-weight: var(--wps-font-medium);
+}
+
+.wps-error-message::before {
+	content: "⚠";
+	font-size: var(--wps-text-base);
+}
+
+/* Disabled state with clear visual indication */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"] {
+	opacity: 0.6 !important;
+	cursor: not-allowed !important;
+	background-color: var(--wps-gray-100) !important;
+	color: var(--wps-gray-500) !important;
+}
+
+/* ============================================================================
+	LOADING STATES
+	============================================================================ */
+
+/* Loading indicators with aria-busy */
+[aria-busy="true"] {
+	position: relative;
+	pointer-events: none;
+	opacity: 0.7;
+}
+
+[aria-busy="true"]::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	margin: -10px 0 0 -10px;
+	border: 2px solid var(--wps-gray-300);
+	border-top-color: var(--wps-primary);
+	border-radius: 50%;
+	animation: wps-spin 0.8s linear infinite;
+}
+
+@keyframes wps-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Disable spinner in reduced motion mode */
+.wps-reduced-motion [aria-busy="true"]::after {
+	animation: none;
+	content: "⏳";
+	border: none;
+	width: auto;
+	height: auto;
+}
+
+/* ============================================================================
+	MODAL ACCESSIBILITY
+	============================================================================ */
+
+/* Backdrop with aria-hidden */
+.wps-modal-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: var(--wps-z-modal);
+}
+
+/* Modal dialog */
+.wps-modal[role="dialog"],
+.wps-modal[role="alertdialog"] {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow-y: auto;
+	background: #ffffff;
+	border-radius: var(--wps-radius-lg);
+	box-shadow: var(--wps-shadow-xl);
+	z-index: calc(var(--wps-z-modal) + 1);
+}
+
+/* ============================================================================
+	RTL LANGUAGE SUPPORT
+	============================================================================ */
+
+[dir="rtl"] .wps-icon-right {
+	margin-right: 8px;
+	margin-left: 0;
+	transform: scaleX(-1);
+}
+
+[dir="rtl"] .wps-icon-left {
+	margin-left: 8px;
+	margin-right: 0;
+	transform: scaleX(-1);
+}
+
+/* ============================================================================
+	PRINT ACCESSIBILITY
+	============================================================================ */
+
+@media print {
+	/* Show URLs for links */
+	a[href]::after {
+		content: " (" attr(href) ")";
+		font-size: 0.8em;
+		color: var(--wps-gray-600);
+	}
+
+	/* Don't show URLs for internal anchors */
+	a[href^="#"]::after,
+	a[href^="javascript:"]::after {
+		content: "";
+	}
+
+	/* Ensure focus indicators are visible in print */
+	*:focus {
+		outline: 2px solid #000000 !important;
+	}
+
+	/* Hide screen-reader-only text in print */
+	.screen-reader-text,
+	.wps-sr-only {
+		display: none !important;
+	}
+}

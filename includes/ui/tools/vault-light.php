@@ -132,25 +132,31 @@ if ( is_dir( $backup_dir ) ) {
 		
 		<h3><?php esc_html_e( 'WPShadow Vault Light Settings', 'wpshadow' ); ?></h3>
 
-		<div class="wps-form-group">
-			<label>
-				<input type="checkbox" id="wpshadow_backup_enabled" name="wpshadow_backup_enabled" value="1" <?php checked( $backup_enabled ); ?> />
-				<?php esc_html_e( 'Create a Vault Light snapshot before treatments', 'wpshadow' ); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e( 'Capture critical configuration and WPShadow settings before treatments, so you can roll back quickly if needed.', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+		echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+			array(
+				'id'          => 'wpshadow_backup_enabled',
+				'name'        => 'wpshadow_backup_enabled',
+				'label'       => __( 'Create a Vault Light snapshot before treatments', 'wpshadow' ),
+				'helper_text' => __( 'Capture critical configuration and WPShadow settings before treatments, so you can roll back quickly if needed.', 'wpshadow' ),
+				'checked'     => (bool) $backup_enabled,
+			)
+		);
+		?>
 
-		<div class="wps-form-group">
-			<label>
-				<input type="checkbox" id="wpshadow_backup_schedule_enabled" name="wpshadow_backup_schedule_enabled" value="1" <?php checked( $backup_schedule_enabled ); ?> />
-				<?php esc_html_e( 'Enable scheduled WPShadow Vault Light snapshots', 'wpshadow' ); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e( 'Run lightweight snapshots on a schedule so you always have a recent restore point.', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+		echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+			array(
+				'id'          => 'wpshadow_backup_schedule_enabled',
+				'name'        => 'wpshadow_backup_schedule_enabled',
+				'label'       => __( 'Enable scheduled WPShadow Vault Light snapshots', 'wpshadow' ),
+				'helper_text' => __( 'Run lightweight snapshots on a schedule so you always have a recent restore point.', 'wpshadow' ),
+				'checked'     => (bool) $backup_schedule_enabled,
+			)
+		);
+		?>
 
 		<div class="wps-form-group">
 			<label for="wpshadow_backup_schedule_frequency"><?php esc_html_e( 'Snapshot frequency', 'wpshadow' ); ?></label>
@@ -168,15 +174,18 @@ if ( is_dir( $backup_dir ) ) {
 			<p class="description"><?php esc_html_e( 'We will run the snapshot at this time in your WordPress timezone.', 'wpshadow' ); ?></p>
 		</div>
 
-		<div class="wps-form-group">
-			<label>
-				<input type="checkbox" id="wpshadow_backup_include_database" name="wpshadow_backup_include_database" value="1" <?php checked( $backup_include_database ); ?> />
-				<?php esc_html_e( 'Include database in snapshots', 'wpshadow' ); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e( 'Include database settings in your Vault Light snapshot for faster recovery.', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+		echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+			array(
+				'id'          => 'wpshadow_backup_include_database',
+				'name'        => 'wpshadow_backup_include_database',
+				'label'       => __( 'Include database in snapshots', 'wpshadow' ),
+				'helper_text' => __( 'Include database settings in your Vault Light snapshot for faster recovery.', 'wpshadow' ),
+				'checked'     => (bool) $backup_include_database,
+			)
+		);
+		?>
 
 		<div class="wps-form-group">
 			<label for="wpshadow_backup_retention_days"><?php esc_html_e( 'Keep snapshots for', 'wpshadow' ); ?></label>
@@ -198,35 +207,44 @@ if ( is_dir( $backup_dir ) ) {
 
 		<h3><?php esc_html_e( 'Advanced Options', 'wpshadow' ); ?></h3>
 
-		<div class="wps-form-group">
-			<label>
-				<input type="checkbox" id="wpshadow_backup_compress" name="wpshadow_backup_compress" value="1" <?php checked( $backup_compress ); ?> />
-				<?php esc_html_e( 'Compress snapshots', 'wpshadow' ); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e( 'Compress snapshot files to save disk space (slower but saves ~70% space).', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+		echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+			array(
+				'id'          => 'wpshadow_backup_compress',
+				'name'        => 'wpshadow_backup_compress',
+				'label'       => __( 'Compress snapshots', 'wpshadow' ),
+				'helper_text' => __( 'Compress snapshot files to save disk space (slower but saves ~70% space).', 'wpshadow' ),
+				'checked'     => (bool) $backup_compress,
+			)
+		);
+		?>
 
-		<div class="wps-form-group">
-			<label>
-				<input type="checkbox" id="wpshadow_backup_exclude_uploads" name="wpshadow_backup_exclude_uploads" value="1" <?php checked( $backup_exclude_uploads ); ?> />
-				<?php esc_html_e( 'Exclude /uploads folder', 'wpshadow' ); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e( 'Skip the /wp-content/uploads folder to reduce snapshot size (only backup files that might be modified by treatments).', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+		echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+			array(
+				'id'          => 'wpshadow_backup_exclude_uploads',
+				'name'        => 'wpshadow_backup_exclude_uploads',
+				'label'       => __( 'Exclude /uploads folder', 'wpshadow' ),
+				'helper_text' => __( 'Skip the /wp-content/uploads folder to reduce snapshot size (only backup files that might be modified by treatments).', 'wpshadow' ),
+				'checked'     => (bool) $backup_exclude_uploads,
+			)
+		);
+		?>
 
-		<div class="wps-form-group">
-			<label>
-				<input type="checkbox" id="wpshadow_backup_verify" name="wpshadow_backup_verify" value="1" <?php checked( $backup_verify ); ?> />
-				<?php esc_html_e( 'Verify snapshots after creation', 'wpshadow' ); ?>
-			</label>
-			<p class="description">
-				<?php esc_html_e( 'Test each snapshot for integrity (slower but ensures you can rollback if needed).', 'wpshadow' ); ?>
-			</p>
-		</div>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Form_Controls outputs escaped HTML.
+		echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+			array(
+				'id'          => 'wpshadow_backup_verify',
+				'name'        => 'wpshadow_backup_verify',
+				'label'       => __( 'Verify snapshots after creation', 'wpshadow' ),
+				'helper_text' => __( 'Test each snapshot for integrity (slower but ensures you can rollback if needed).', 'wpshadow' ),
+				'checked'     => (bool) $backup_verify,
+			)
+		);
+		?>
 
 		<p class="submit">
 			<button type="submit" class="wps-btn wps-btn-primary">

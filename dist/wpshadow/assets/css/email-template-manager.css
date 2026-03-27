@@ -1,0 +1,27 @@
+.wps-email-template-option {
+	padding: 12px;
+	border: 2px solid #ddd;
+	border-radius: 6px;
+	background: #f9f9f9;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.wps-email-template-option-custom {
+	border-color: #2196f3;
+	background: #e3f2fd;
+}
+
+.wps-email-template-option-default {
+	border-color: #ddd;
+	background: #f9f9f9;
+}
+
+.wps-email-template-customized {
+	font-size: 12px;
+	color: #2271b1;
+}
+
+.wps-email-actions {
+	margin-top: 12px;
+}

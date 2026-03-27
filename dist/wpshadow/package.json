@@ -1,0 +1,26 @@
+{
+  "name": "wpshadow",
+  "version": "1.6035.0948",
+  "description": "> **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "echo 'WordPress development environment ready'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thisismyurl/wpshadow.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/thisismyurl/wpshadow/issues"
+  },
+  "homepage": "https://github.com/thisismyurl/wpshadow#readme",
+  "devDependencies": {}
+}

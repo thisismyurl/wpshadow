@@ -1,0 +1,36 @@
+/**
+ * Vault Dashboard Styles
+ *
+ * @package WPShadow
+ * @since   1.6030.1840
+ */
+
+/* Vault status badge styles */
+.wpshadow-vault-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.wpshadow-vault-badge-free {
+	background-color: #f0f6fc;
+	color: #0969da;
+	border: 1px solid #d0d7de;
+}
+
+.wpshadow-vault-badge-pro {
+	background-color: #f2fcff;
+	color: #1b6ac1;
+	border: 1px solid #b6e3ff;
+}
+
+.wpshadow-vault-badge-full {
+	background-color: #fff8c5;
+	color: #9a6700;
+	border: 1px solid #eac54f;
+}
