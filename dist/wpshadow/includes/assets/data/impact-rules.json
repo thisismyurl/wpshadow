@@ -1,0 +1,21 @@
+{
+  "exact": {
+    "backup": { "impact": "extreme", "guardian": "manual" },
+    "broken-links": { "impact": "extreme", "guardian": "manual" },
+    "core-response-time-total": { "impact": "high", "guardian": "scheduled" },
+    "core-homepage-load-time": { "impact": "high", "guardian": "scheduled" },
+    "abandoned-plugins": { "impact": "very_high", "guardian": "scheduled" },
+    "alt-text-coverage": { "impact": "very_high", "guardian": "scheduled" }
+  },
+  "contains": [
+    { "needle": "backup", "impact": "extreme", "guardian": "manual" },
+    { "needle": "malware", "impact": "very_high", "guardian": "scheduled" },
+    { "needle": "broken-link", "impact": "extreme", "guardian": "manual" },
+    { "needle": "outdated-plugin", "impact": "high", "guardian": "scheduled" },
+    { "needle": "response-time", "impact": "high", "guardian": "scheduled" },
+    { "needle": "homepage-load", "impact": "high", "guardian": "scheduled" },
+    { "needle": "seo-missing-h1", "impact": "high", "guardian": "scheduled" },
+    { "needle": "alt-text", "impact": "very_high", "guardian": "scheduled" },
+    { "needle": "abandoned", "impact": "very_high", "guardian": "scheduled" }
+  ]
+}

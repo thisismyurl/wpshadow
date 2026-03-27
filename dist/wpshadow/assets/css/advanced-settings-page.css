@@ -1,0 +1,30 @@
+.wpshadow-advanced-warning-card {
+	background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+	border: none;
+	color: #ffffff;
+}
+
+.wps-advanced-sample-rate-display {
+	font-weight: bold;
+	margin-left: 8px;
+}
+
+.wps-advanced-sample-rate-slider {
+	width: 100%;
+	max-width: 400px;
+}
+
+.wps-advanced-system-row {
+	border-bottom: 1px solid #ddd;
+}
+
+.wps-advanced-system-description {
+	display: block;
+	font-size: 11px;
+	margin-top: 2px;
+}
+
+.wps-advanced-copy-textarea {
+	position: absolute;
+	left: -9999px;
+}

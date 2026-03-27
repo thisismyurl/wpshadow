@@ -1,0 +1,61 @@
+.wpshadow-stats-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.wpshadow-stat-box {
+	padding: 12px;
+	background: #f5f5f5;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.wpshadow-stat-icon {
+	font-size: 24px;
+}
+
+.wpshadow-stat-info {
+	flex: 1;
+}
+
+.wpshadow-stat-label {
+	margin: 0;
+	font-size: 12px;
+	color: #666;
+}
+
+.wpshadow-stat-number {
+	margin: 4px 0 0;
+	font-size: 18px;
+	font-weight: bold;
+	color: #333;
+}
+
+.wpshadow-stat-number-has-new {
+	color: #d63638;
+}
+
+.wpshadow-stat-number-zero-new {
+	color: #999;
+}
+
+.wpshadow-widget-actions {
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid #eee;
+}
+
+.wpshadow-widget-actions p {
+	margin: 8px 0;
+}
+
+.wpshadow-widget-actions a.button {
+	margin-right: 6px;
+	margin-bottom: 6px;
+	font-size: 12px;
+	padding: 4px 8px;
+}

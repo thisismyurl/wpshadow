@@ -1,0 +1,395 @@
+/**
+ * WPShadow Exit Interview Styles
+ *
+ * Styles for the exit interview modal shown on plugin deactivation.
+ *
+ * Philosophy:
+ * - CANON: Accessibility First - WCAG AA compliant
+ * - CANON: Culturally Respectful - RTL support
+ * - Commandment #7 (Ridiculously Good) - Modern, professional design
+ *
+ * @package WPShadow
+ * @since   1.6030.2148
+ */
+
+/* Modal Container */
+.wpshadow-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 999999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Modal Overlay */
+.wpshadow-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(2px);
+}
+
+/* Modal Content */
+.wpshadow-modal-content {
+	position: relative;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+	max-width: 600px;
+	width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+	z-index: 1;
+}
+
+/* Modal Header */
+.wpshadow-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 24px 32px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.wpshadow-modal-header h2 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 600;
+	color: #1d1d1f;
+}
+
+.wpshadow-modal-close {
+	background: none;
+	border: none;
+	font-size: 28px;
+	line-height: 1;
+	color: #666;
+	cursor: pointer;
+	padding: 4px;
+	margin: -4px;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+}
+
+.wpshadow-modal-close:hover,
+.wpshadow-modal-close:focus {
+	background: #f5f5f5;
+	color: #000;
+	outline: none;
+}
+
+.wpshadow-modal-close:focus {
+	box-shadow: 0 0 0 2px #0073aa;
+}
+
+/* Modal Body */
+.wpshadow-modal-body {
+	padding: 32px;
+}
+
+.wpshadow-exit-interview-intro {
+	margin: 0 0 24px;
+	font-size: 15px;
+	line-height: 1.6;
+	color: #4a4a4a;
+}
+
+/* Form Styles */
+.wpshadow-form-group {
+	margin-bottom: 24px;
+}
+
+.wpshadow-form-group:last-child {
+	margin-bottom: 0;
+}
+
+.wpshadow-form-label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+	font-size: 14px;
+	color: #1d1d1f;
+}
+
+.wpshadow-form-label .required {
+	color: #d63638;
+	margin-inline-start: 4px;
+}
+
+.wpshadow-form-control {
+	width: 100%;
+	padding: 10px 12px;
+	font-size: 14px;
+	line-height: 1.5;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wpshadow-form-control:focus {
+	outline: none;
+	border-color: #0073aa;
+	box-shadow: 0 0 0 1px #0073aa;
+}
+
+.wpshadow-form-control:invalid {
+	border-color: #d63638;
+}
+
+textarea.wpshadow-form-control {
+	resize: vertical;
+	min-height: 80px;
+}
+
+/* Checkbox Label */
+.wpshadow-checkbox-label {
+	display: flex;
+	align-items: flex-start;
+	cursor: pointer;
+	user-select: none;
+}
+
+.wpshadow-checkbox-label input[type="checkbox"] {
+	margin-inline-end: 10px;
+	margin-top: 2px;
+	cursor: pointer;
+}
+
+.wpshadow-checkbox-label input[type="checkbox"]:focus {
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
+}
+
+.wpshadow-checkbox-label span {
+	font-size: 14px;
+	line-height: 1.5;
+	color: #1d1d1f;
+}
+
+/* Help Text */
+.wpshadow-help-text {
+	margin: 8px 0 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #666;
+}
+
+/* Form Messages */
+.wpshadow-form-message {
+	padding: 12px 16px;
+	border-radius: 4px;
+	margin-top: 16px;
+}
+
+.wpshadow-form-message p {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.wpshadow-message-success {
+	background: #d7f0d1;
+	border: 1px solid #4caf50;
+	color: #1b5e20;
+}
+
+.wpshadow-message-error {
+	background: #fce4ec;
+	border: 1px solid #d63638;
+	color: #c62828;
+}
+
+/* Modal Footer */
+.wpshadow-modal-footer {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	padding: 20px 32px;
+	border-top: 1px solid #e0e0e0;
+	background: #f9f9f9;
+}
+
+/* Buttons */
+.wpshadow-button {
+	padding: 10px 20px;
+	font-size: 14px;
+	font-weight: 500;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.wpshadow-button:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px #0073aa;
+}
+
+.wpshadow-button-primary {
+	background: #0073aa;
+	color: #fff;
+}
+
+.wpshadow-button-primary:hover {
+	background: #005a87;
+}
+
+.wpshadow-button-primary:disabled {
+	background: #ccc;
+	cursor: not-allowed;
+}
+
+.wpshadow-button-secondary {
+	background: #fff;
+	color: #333;
+	border: 1px solid #ccc;
+}
+
+.wpshadow-button-secondary:hover {
+	background: #f5f5f5;
+	border-color: #999;
+}
+
+/* Screen Reader Only */
+.screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+	.wpshadow-modal-content {
+		width: 95%;
+		max-height: 95vh;
+	}
+
+	.wpshadow-modal-header,
+	.wpshadow-modal-body {
+		padding: 20px;
+	}
+
+	.wpshadow-modal-footer {
+		padding: 16px 20px;
+		flex-direction: column-reverse;
+	}
+
+	.wpshadow-button {
+		width: 100%;
+	}
+}
+
+/* RTL Support */
+[dir="rtl"] .wpshadow-checkbox-label input[type="checkbox"] {
+	margin-inline-end: 0;
+	margin-inline-start: 10px;
+}
+
+[dir="rtl"] .wpshadow-form-label .required {
+	margin-inline-start: 0;
+	margin-inline-end: 4px;
+}
+
+/* Dark Mode Support (respects user preference) */
+@media (prefers-color-scheme: dark) {
+	.wpshadow-modal-content {
+		background: #1e1e1e;
+		border: 1px solid #3a3a3a;
+	}
+
+	.wpshadow-modal-header {
+		border-bottom-color: #3a3a3a;
+	}
+
+	.wpshadow-modal-header h2 {
+		color: #e0e0e0;
+	}
+
+	.wpshadow-modal-close {
+		color: #b0b0b0;
+	}
+
+	.wpshadow-modal-close:hover,
+	.wpshadow-modal-close:focus {
+		background: #2a2a2a;
+		color: #fff;
+	}
+
+	.wpshadow-exit-interview-intro,
+	.wpshadow-form-label,
+	.wpshadow-checkbox-label span {
+		color: #e0e0e0;
+	}
+
+	.wpshadow-form-control {
+		background: #2a2a2a;
+		border-color: #3a3a3a;
+		color: #e0e0e0;
+	}
+
+	.wpshadow-form-control:focus {
+		border-color: #0073aa;
+	}
+
+	.wpshadow-help-text {
+		color: #999;
+	}
+
+	.wpshadow-modal-footer {
+		background: #1a1a1a;
+		border-top-color: #3a3a3a;
+	}
+
+	.wpshadow-button-secondary {
+		background: #2a2a2a;
+		color: #e0e0e0;
+		border-color: #3a3a3a;
+	}
+
+	.wpshadow-button-secondary:hover {
+		background: #333;
+		border-color: #4a4a4a;
+	}
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+	.wpshadow-modal,
+	.wpshadow-modal-overlay,
+	.wpshadow-form-control,
+	.wpshadow-button,
+	.wpshadow-modal-close {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+	.wpshadow-modal-content {
+		border: 2px solid currentColor;
+	}
+
+	.wpshadow-form-control:focus {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+
+	.wpshadow-button:focus {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+}

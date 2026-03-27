@@ -1,0 +1,57 @@
+.wpshadow-settings-intro {
+	background: #fff;
+	border-left: 4px solid #2271b1;
+	padding: 20px;
+	margin: 20px 0;
+}
+
+.wpshadow-settings-intro h2 {
+	margin-top: 0;
+}
+
+.wpshadow-settings-footer {
+	margin-top: 40px;
+	padding-top: 20px;
+	border-top: 1px solid #c3c4c7;
+}
+
+.wpshadow-privacy-box,
+.wpshadow-example-box {
+	margin-top: 10px;
+	padding: 10px;
+	background: #f0f0f1;
+	font-size: 14px;
+}
+
+.wpshadow-privacy-box {
+	border-left: 4px solid #00a32a;
+}
+
+.wpshadow-example-box {
+	border-left: 4px solid #2271b1;
+}
+
+.wpshadow-example-list {
+	margin: 10px 0 0 20px;
+}
+
+.wpshadow-value-formula {
+	margin-top: 10px;
+	padding: 15px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.wpshadow-value-formula-list {
+	margin: 10px 0 0 20px;
+	list-style: disc;
+}
+
+.wpshadow-value-formula-tip {
+	margin-top: 10px;
+	font-style: italic;
+	color: #646970;
+}
