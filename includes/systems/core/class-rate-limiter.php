@@ -83,6 +83,7 @@ class Rate_Limiter {
 		'wpshadow_get_activity'          => 'high_usage',
 		'wpshadow_get_automation_activity' => 'high_usage',
 		'wpshadow_get_kanban_data'       => 'high_usage',
+		'wpshadow_run_pending_diagnostics' => 'high_usage',
 	);
 
 	/**

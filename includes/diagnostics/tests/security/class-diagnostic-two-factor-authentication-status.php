@@ -126,7 +126,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 		$issues = array();
 
 		// Check for 2FA plugins.
-		$2fa_plugins = array(
+		$two_factor_plugins = array(
 			'two-factor-authentication/two-factor-authentication.php'  => 'Two Factor Authentication',
 			'wordfence/wordfence.php'                                  => 'Wordfence (includes 2FA)',
 			'google-authenticator-per-user-prompt/google-auth.php'     => 'Google Authenticator',
@@ -135,15 +135,15 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 			'duo/duo.php'                                              => 'Duo Two-Factor Authentication',
 		);
 
-		$active_2fa_plugins = array();
+		$active_two_factor_plugins = array();
 
-		foreach ( $2fa_plugins as $plugin_path => $plugin_name ) {
+		foreach ( $two_factor_plugins as $plugin_path => $plugin_name ) {
 			if ( is_plugin_active( $plugin_path ) ) {
-				$active_2fa_plugins[] = $plugin_name;
+				$active_two_factor_plugins[] = $plugin_name;
 			}
 		}
 
-		if ( empty( $active_2fa_plugins ) ) {
+		if ( empty( $active_two_factor_plugins ) ) {
 			$issues[] = __( 'No 2FA plugin detected (admin accounts are vulnerable to brute force)', 'wpshadow' );
 		}
 
@@ -233,7 +233,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 		}
 
 		// Check if 2FA is enforced.
-		if ( ! empty( $active_2fa_plugins ) ) {
+		if ( ! empty( $active_two_factor_plugins ) ) {
 			// Check if 2FA is mandatory.
 			$force_2fa = get_option( 'wf_force_2fa' );
 
@@ -245,7 +245,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 		// Check for password reset option that bypasses 2FA.
 		$admin_password_reset = get_option( 'admin_password_reset_allowed', 1 );
 
-		if ( $admin_password_reset && ! empty( $active_2fa_plugins ) ) {
+		if ( $admin_password_reset && ! empty( $active_two_factor_plugins ) ) {
 			$issues[] = __( 'Admin password reset is allowed (can bypass 2FA if not properly configured)', 'wpshadow' );
 		}
 
@@ -260,7 +260,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 		// Check for concurrent session limits.
 		$has_session_limiting = false;
 
-		foreach ( $active_2fa_plugins as $plugin ) {
+		foreach ( $active_two_factor_plugins as $plugin ) {
 			if ( false !== stripos( $plugin, 'wordfence' ) ) {
 				$has_session_limiting = true;
 			}
@@ -273,7 +273,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 		// Check for login notification.
 		$login_notify = get_option( 'wf_login_notification_enabled' );
 
-		if ( ! $login_notify && ! empty( $active_2fa_plugins ) ) {
+		if ( ! $login_notify && ! empty( $active_two_factor_plugins ) ) {
 			$issues[] = __( 'Login notifications not configured (cannot detect unauthorized access)', 'wpshadow' );
 		}
 
@@ -321,7 +321,7 @@ class Diagnostic_Two_Factor_Authentication_Status extends Diagnostic_Base {
 					'issues'              => $issues,
 					'admin_count'         => count( $admins ),
 					'admins_without_2fa'  => count( $admins_without_2fa ),
-					'active_2fa_plugins'  => $active_2fa_plugins,
+					'active_2fa_plugins'  => $active_two_factor_plugins,
 					'recommendation'      => __( 'Install 2FA plugin (Wordfence or Two Factor Authentication). Enable 2FA for all admin accounts. Enforce 2FA for admin role. Configure login notifications and session timeouts.', 'wpshadow' ),
 				),
 			);

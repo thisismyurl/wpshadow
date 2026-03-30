@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses CHAR_LENGTH for accurate multi-byte character counting\n * - Threshold: 5000 characters reasonable for typical comments\n * - Returns severity: high (1000+ long comments), critical (100KB+ comments)\n * - Auto-fixable treatment: enforce length limit at form submission\n *
  * @since 1.6093.1200
- */\nclass Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
 
 	protected static $slug = 'comment-text-length-limits';
 	protected static $title = 'Comment Text Length Limits';

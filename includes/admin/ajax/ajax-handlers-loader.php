@@ -32,6 +32,8 @@ require_once $ajax_path . 'change-finding-status-handler.php';
 // Dashboard operations
 require_once $ajax_path . 'get-dashboard-data-handler.php';
 require_once $ajax_path . 'save-dashboard-prefs-handler.php';
+require_once $ajax_path . 'heartbeat-diagnostics-handler.php';
+require_once $ajax_path . 'bulk-run-pending-diagnostics-handler.php';
 
 // Scanning operations
 require_once $ajax_path . 'first-scan-handler.php';
@@ -213,5 +215,13 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Get_Dashboard_Data_Handler' ) ) {
 
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Save_Dashboard_Prefs_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Save_Dashboard_Prefs_Handler::register();
+}
+
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Heartbeat_Diagnostics_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Heartbeat_Diagnostics_Handler::register();
+}
+
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Bulk_Run_Pending_Diagnostics_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Bulk_Run_Pending_Diagnostics_Handler::register();
 }
 

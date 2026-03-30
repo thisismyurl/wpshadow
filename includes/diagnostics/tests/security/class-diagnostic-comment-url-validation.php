@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Detects common URL shortener services\n * - Checks free domain registrars (known for malware)\n * - Flags raw IPs (lack of domain = obfuscation attempt)\n * - Returns severity: critical (malicious URL present), high (shorteners detected)\n * - Auto-fixable treatment: sanitize existing URLs, enforce validation\n *
  * @since 1.6093.1200
- */\nclass Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 	protected static $slug = 'comment-url-validation';
 	protected static $title = 'Comment URL Validation';
 	protected static $description = 'Checks if comment URLs are validated for malware';

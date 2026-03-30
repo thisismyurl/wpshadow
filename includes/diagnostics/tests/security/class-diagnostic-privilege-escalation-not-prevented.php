@@ -65,3 +65,5 @@ class Diagnostic_Privilege_Escalation_Not_Prevented extends Diagnostic_Base {
 	 */
 	public static function check() {
 		return null;
+	}
+}

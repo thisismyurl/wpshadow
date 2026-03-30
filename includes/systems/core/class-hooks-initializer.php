@@ -525,10 +525,13 @@ class Hooks_Initializer {
 		wp_enqueue_script(
 			'wpshadow-dashboard-realtime',
 			WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-			array( 'jquery', 'wpshadow-design-system', 'wpshadow-modal' ),
+			array( 'jquery', 'heartbeat', 'wpshadow-design-system', 'wpshadow-modal' ),
 			file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
 			false
 		);
+
+		// Ensure WordPress heartbeat API is active on dashboard pages.
+		wp_enqueue_script( 'heartbeat' );
 
 		wp_localize_script(
 			'wpshadow-dashboard-realtime',

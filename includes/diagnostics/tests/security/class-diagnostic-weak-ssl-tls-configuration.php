@@ -65,3 +65,5 @@ class Diagnostic_Weak_SSL_TLS_Configuration extends Diagnostic_Base {
 	 */
 	public static function check() {
 		return null;
+	}
+}

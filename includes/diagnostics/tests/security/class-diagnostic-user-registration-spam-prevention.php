@@ -295,7 +295,7 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 				),
 				'context'      => array(
 					'why'            => __(
-						Automated registrations enable spam, phishing, and resource abuse. Bots create fake accounts to post spam links, scrape data, or abuse member features. This can damage deliverability (email blacklisting), inflate database size, and degrade community trust. CAPTCHA and email verification reduce automated signups, while rate limiting and domain filtering block known spam sources.',
+						'Automated registrations enable spam, phishing, and resource abuse. Bots create fake accounts to post spam links, scrape data, or abuse member features. This can damage deliverability (email blacklisting), inflate database size, and degrade community trust. CAPTCHA and email verification reduce automated signups, while rate limiting and domain filtering block known spam sources.',
 						'wpshadow'
 					),
 					'recommendation' => __(

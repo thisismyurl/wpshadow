@@ -38,6 +38,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Guardian_Executor {
 
 	/**
+	 * Queue pointer option key.
+	 *
+	 * @var string
+	 */
+	const HEARTBEAT_QUEUE_POINTER_OPTION = 'wpshadow_heartbeat_queue_pointer';
+
+	/**
 	 * Maximum execution time per heartbeat cycle (milliseconds)
 	 *
 	 * @var int
@@ -284,31 +291,69 @@ class Guardian_Executor {
 	 *     @type array $findings         Array of findings detected.
 	 * }
 	 */
-	protected static function batch_execute( array $diagnostic_slugs, int $max_time_ms ): array {
+	protected static function batch_execute( array $diagnostic_classes, int $max_time_ms ): array {
 		$start_time      = microtime( true );
 		$executed        = 0;
 		$findings        = array();
 		$diagnostics_run = array();
+		$results         = array();
+		$completed_at    = time();
+		$disabled        = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		if ( ! is_array( $disabled ) ) {
+			$disabled = array();
+		}
 
-		foreach ( $diagnostic_slugs as $slug ) {
+		foreach ( $diagnostic_classes as $class_name ) {
 			// Check if we're approaching time limit
 			$elapsed_ms = ( microtime( true ) - $start_time ) * 1000;
 			if ( $elapsed_ms >= $max_time_ms * 0.9 ) { // 90% threshold
 				break;
 			}
 
+			$qualified_class = self::normalize_diagnostic_class_name( (string) $class_name );
+			if ( '' === $qualified_class ) {
+				continue;
+			}
+
+			$short_name = str_replace( 'WPShadow\\Diagnostics\\', '', $qualified_class );
+			if ( in_array( $qualified_class, $disabled, true ) || in_array( $short_name, $disabled, true ) ) {
+				continue;
+			}
+
+			$cached_state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
+				? \wpshadow_get_valid_diagnostic_test_state( $qualified_class, $completed_at )
+				: null;
+			if ( is_array( $cached_state ) ) {
+				$results[ $qualified_class ] = array(
+					'status'     => (string) ( $cached_state['status'] ?? 'unknown' ),
+					'category'   => (string) ( $cached_state['category'] ?? '' ),
+					'finding_id' => (string) ( $cached_state['finding_id'] ?? '' ),
+				);
+				continue;
+			}
+
 			// Execute diagnostic
-			$finding = self::execute_diagnostic( $slug );
+			$finding = self::execute_diagnostic( $qualified_class );
+
+			$results[ $qualified_class ] = array(
+				'status'     => is_array( $finding ) ? 'failed' : 'passed',
+				'category'   => is_array( $finding ) ? (string) ( $finding['category'] ?? '' ) : '',
+				'finding_id' => is_array( $finding ) ? (string) ( $finding['id'] ?? '' ) : '',
+			);
 
 			if ( null !== $finding ) {
 				$findings[] = $finding;
 			}
 
-			$diagnostics_run[] = $slug;
+			$diagnostics_run[] = $qualified_class;
 			++$executed;
 
 			// Record execution time
-			Diagnostic_Scheduler::record_run( $slug );
+			Diagnostic_Scheduler::record_run( self::get_diagnostic_run_key( $qualified_class ) );
+		}
+
+		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
+			\wpshadow_record_diagnostic_test_states( $results, $completed_at );
 		}
 
 		return array(
@@ -326,17 +371,24 @@ class Guardian_Executor {
 	 * @param  string $slug Diagnostic slug.
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
-	protected static function execute_diagnostic( string $slug ): ?array {
-		// Get diagnostic class from registry
-		$diagnostics = Diagnostic_Registry::get_diagnostics();
-		$class_name  = $diagnostics[ $slug ] ?? null;
-
-		if ( ! $class_name ) {
+	protected static function execute_diagnostic( string $class_name ): ?array {
+		if ( '' === $class_name ) {
 			return null;
 		}
 
-		// Build full class name with namespace
-		$full_class_name = 'WPShadow\\Diagnostics\\' . $class_name;
+		$full_class_name = self::normalize_diagnostic_class_name( $class_name );
+		if ( '' === $full_class_name ) {
+			return null;
+		}
+
+		if ( ! class_exists( $full_class_name ) ) {
+			$map = Diagnostic_Registry::get_diagnostic_file_map();
+			$short_name = str_replace( 'WPShadow\\Diagnostics\\', '', $full_class_name );
+			$file = $map[ $short_name ]['file'] ?? $map[ $full_class_name ]['file'] ?? '';
+			if ( is_string( $file ) && '' !== $file && file_exists( $file ) ) {
+				require_once $file;
+			}
+		}
 
 		if ( ! class_exists( $full_class_name ) || ! method_exists( $full_class_name, 'execute' ) ) {
 			return null;
@@ -354,11 +406,11 @@ class Guardian_Executor {
 					sprintf(
 						/* translators: %s: diagnostic slug */
 						__( 'Checked diagnostic: %s', 'wpshadow' ),
-						$slug
+						$full_class_name
 					),
 					'guardian',
 					array(
-						'diagnostic'      => $slug,
+						'diagnostic'      => $full_class_name,
 						'trigger'         => 'heartbeat',
 						'execution_ms'    => (int) round( ( microtime( true ) - $start_time ) * 1000 ),
 						'finding_detected' => null !== $finding,
@@ -369,7 +421,7 @@ class Guardian_Executor {
 			// Track KPI if finding detected
 			if ( null !== $finding && class_exists( 'WPShadow\Core\KPI_Tracker' ) ) {
 				$severity = $finding['severity'] ?? 'medium';
-				KPI_Tracker::log_finding_detected( $slug, $severity, 'guardian_auto' );
+				KPI_Tracker::log_finding_detected( $full_class_name, $severity, 'guardian_auto' );
 			}
 
 			if ( null !== $finding && class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
@@ -378,11 +430,11 @@ class Guardian_Executor {
 					sprintf(
 						/* translators: %s: finding title */
 						__( 'Found issue: %s', 'wpshadow' ),
-						$finding['title'] ?? $slug
+						$finding['title'] ?? $full_class_name
 					),
 					$finding['category'] ?? 'guardian',
 					array(
-						'diagnostic' => $slug,
+						'diagnostic' => $full_class_name,
 						'finding_id' => $finding['id'] ?? '',
 						'trigger'    => 'heartbeat',
 					)
@@ -397,12 +449,12 @@ class Guardian_Executor {
 					sprintf(
 						/* translators: 1: diagnostic slug, 2: error message */
 						__( 'Diagnostic failed: %1$s (%2$s)', 'wpshadow' ),
-						$slug,
+						$full_class_name,
 						$e->getMessage()
 					),
 					'guardian',
 					array(
-						'diagnostic' => $slug,
+						'diagnostic' => $full_class_name,
 						'trigger'    => 'heartbeat',
 					)
 				);
@@ -411,7 +463,7 @@ class Guardian_Executor {
 			// Log error but don't fail
 			if ( class_exists( 'WPShadow\Core\Error_Handler' ) ) {
 				Error_Handler::log_error(
-					sprintf( 'Guardian diagnostic execution failed: %s', $slug ),
+					sprintf( 'Guardian diagnostic execution failed: %s', $full_class_name ),
 					$e
 				);
 			}
@@ -426,32 +478,114 @@ class Guardian_Executor {
 	 * @return array Array of diagnostic slugs.
 	 */
 	protected static function get_background_diagnostics_due(): array {
-		// Get all diagnostics from registry
-		$all_diagnostics = Diagnostic_Registry::get_diagnostics();
-		$due_diagnostics = array();
-		$count           = 0;
+		return self::get_next_heartbeat_queue_batch( self::MAX_DIAGNOSTICS_PER_HEARTBEAT );
+	}
 
-		foreach ( array_keys( $all_diagnostics ) as $slug ) {
-			// Check if diagnostic is background-safe
-			if ( ! self::is_background_safe( $slug ) ) {
-				continue;
+	/**
+	 * Get next diagnostics batch from the persisted heartbeat queue.
+	 *
+	 * @param int $batch_size Number of diagnostics to return.
+	 * @return array<int, string> Array of diagnostic class names.
+	 */
+	protected static function get_next_heartbeat_queue_batch( int $batch_size ): array {
+		$all_diagnostics = Diagnostic_Registry::get_all();
+		if ( ! is_array( $all_diagnostics ) || empty( $all_diagnostics ) ) {
+			return array();
+		}
+
+		$queue = array_values( array_filter( array_map( array( __CLASS__, 'normalize_diagnostic_class_name' ), $all_diagnostics ) ) );
+		if ( empty( $queue ) ) {
+			return array();
+		}
+
+		sort( $queue, SORT_STRING );
+
+		$queue_size = count( $queue );
+		$pointer    = (int) get_option( self::HEARTBEAT_QUEUE_POINTER_OPTION, 0 );
+		if ( $pointer < 0 || $pointer >= $queue_size ) {
+			$pointer = 0;
+		}
+
+		$batch        = array();
+		$visited      = 0;
+		$checked_at   = time();
+		$max_batch    = max( 1, $batch_size );
+
+		while ( $visited < $queue_size && count( $batch ) < $max_batch ) {
+			$index     = ( $pointer + $visited ) % $queue_size;
+			$candidate = (string) $queue[ $index ];
+
+			if ( self::is_heartbeat_candidate_due( $candidate, $checked_at ) ) {
+				$batch[] = $candidate;
 			}
 
-			// Check if diagnostic should run now
-			if ( ! Diagnostic_Scheduler::should_run( $slug ) ) {
-				continue;
-			}
+			++$visited;
+		}
 
-			$due_diagnostics[] = $slug;
-			++$count;
+		if ( $visited > 0 ) {
+			$new_pointer = ( $pointer + $visited ) % $queue_size;
+			update_option( self::HEARTBEAT_QUEUE_POINTER_OPTION, $new_pointer, false );
+		}
 
-			// Limit to max per heartbeat
-			if ( $count >= self::MAX_DIAGNOSTICS_PER_HEARTBEAT ) {
-				break;
+		return $batch;
+	}
+
+	/**
+	 * Determine whether a heartbeat queue candidate should execute now.
+	 *
+	 * @param string $class_name Fully-qualified diagnostic class name.
+	 * @param int    $timestamp  Current timestamp.
+	 * @return bool
+	 */
+	protected static function is_heartbeat_candidate_due( string $class_name, int $timestamp ): bool {
+		if ( '' === $class_name ) {
+			return false;
+		}
+
+		$run_key = self::get_diagnostic_run_key( $class_name );
+		if ( ! self::is_background_safe( $run_key ) ) {
+			return false;
+		}
+
+		if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
+			$cached_state = \wpshadow_get_valid_diagnostic_test_state( $class_name, $timestamp );
+			if ( is_array( $cached_state ) ) {
+				return false;
 			}
 		}
 
-		return $due_diagnostics;
+		return Diagnostic_Scheduler::should_run( $run_key );
+	}
+
+	/**
+	 * Normalize class name to fully-qualified WPShadow diagnostics class.
+	 *
+	 * @param string $class_name Diagnostic class name.
+	 * @return string
+	 */
+	protected static function normalize_diagnostic_class_name( string $class_name ): string {
+		$class_name = trim( $class_name );
+		if ( '' === $class_name ) {
+			return '';
+		}
+
+		if ( 0 === strpos( $class_name, 'WPShadow\\Diagnostics\\' ) ) {
+			return $class_name;
+		}
+
+		return 'WPShadow\\Diagnostics\\' . ltrim( $class_name, '\\' );
+	}
+
+	/**
+	 * Build stable key for scheduler run-record tracking.
+	 *
+	 * @param string $class_name Fully-qualified diagnostic class name.
+	 * @return string
+	 */
+	protected static function get_diagnostic_run_key( string $class_name ): string {
+		$short_name = str_replace( 'WPShadow\\Diagnostics\\', '', $class_name );
+		$short_name = strtolower( str_replace( '_', '-', $short_name ) );
+		return sanitize_key( $short_name );
 	}
 
 	/**
@@ -490,6 +624,11 @@ class Guardian_Executor {
 	 * @return bool True if diagnostic can run in background.
 	 */
 	protected static function is_background_safe( string $slug ): bool {
+		if ( ! self::ensure_performance_classifier_loaded() ) {
+			// Fail open for heartbeat safety if classifier is unavailable.
+			return true;
+		}
+
 		$impact = Performance_Impact_Classifier::predict( $slug );
 
 		// Check guardian classification
@@ -521,12 +660,34 @@ class Guardian_Executor {
 	 * @return bool True if diagnostic should only run during scheduled times.
 	 */
 	protected static function is_scheduled_only( string $slug ): bool {
+		if ( ! self::ensure_performance_classifier_loaded() ) {
+			return false;
+		}
+
 		$impact = Performance_Impact_Classifier::predict( $slug );
 
 		// Check guardian classification
 		$guardian = $impact['guardian_level'] ?? '';
 		return $guardian === Performance_Impact_Classifier::GUARDIAN_SCHEDULED ||
 			   $guardian === Performance_Impact_Classifier::GUARDIAN_MANUAL;
+	}
+
+	/**
+	 * Ensure the performance impact classifier is available.
+	 *
+	 * @return bool
+	 */
+	protected static function ensure_performance_classifier_loaded(): bool {
+		if ( class_exists( '\\WPShadow\\Core\\Performance_Impact_Classifier' ) ) {
+			return true;
+		}
+
+		$classifier_file = WPSHADOW_PATH . 'includes/systems/core/class-performance-impact-classifier.php';
+		if ( file_exists( $classifier_file ) ) {
+			require_once $classifier_file;
+		}
+
+		return class_exists( '\\WPShadow\\Core\\Performance_Impact_Classifier' );
 	}
 
 	/**

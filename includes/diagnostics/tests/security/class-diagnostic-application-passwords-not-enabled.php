@@ -43,7 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Checks WordPress version and REST API availability\n * - Tests app password creation/authentication flow\n * - Returns severity: medium (feature disabled/unavailable)\n * - Auto-fixable treatment: enable app passwords, provide setup guide\n *
  * @since 1.6093.1200
- */\nclass Diagnostic_Application_Passwords_Not_Enabled extends Diagnostic_Base {
+ */
+class Diagnostic_Application_Passwords_Not_Enabled extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

@@ -1,5 +1,4 @@
 <?php
-<?php
 /**
  * CPT Capability Mapping Diagnostic
  *

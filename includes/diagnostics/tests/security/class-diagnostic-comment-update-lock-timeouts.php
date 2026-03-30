@@ -42,7 +42,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses _post_lock_life constant (typically 150 seconds)\n * - Scans postmeta for old lock records\n * - Severity: high if many stale locks, medium if one or two\n * - Treatment: auto-cleanup of expired locks\n *
  * @since 1.6093.1200
- */\nclass Diagnostic_Comment_Update_Lock_Timeouts extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_Update_Lock_Timeouts extends Diagnostic_Base {
 	protected static $slug = 'comment-update-lock-timeouts';
 	protected static $title = 'Comment Update Lock Timeouts';
 	protected static $description = 'Detects comments stuck in update locks';
