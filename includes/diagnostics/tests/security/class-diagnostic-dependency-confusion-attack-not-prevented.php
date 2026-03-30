@@ -64,4 +64,5 @@ class Diagnostic_Dependency_Confusion_Attack_Not_Prevented extends Diagnostic_Ba
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		return null;
+		return null;	}
+}

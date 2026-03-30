@@ -133,7 +133,7 @@ class Diagnostic_Post_Content_Encoding_Issues extends Diagnostic_Base {
 				OR post_content LIKE '%â€™%'
 				OR post_content LIKE '%â€œ%'
 				OR post_content LIKE '%â€�%'
-				OR post_content LIKE '%â€"%'
+				OR post_content LIKE '%â€”%'
 			)"
 		);
 

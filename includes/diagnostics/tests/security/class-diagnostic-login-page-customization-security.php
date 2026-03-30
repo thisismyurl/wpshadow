@@ -1,5 +1,4 @@
 <?php
-<?php
 /**
  * Login Page Customization Security Diagnostic
  *

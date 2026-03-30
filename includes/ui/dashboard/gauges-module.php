@@ -53,10 +53,13 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 	wp_enqueue_script(
 		'wpshadow-dashboard-realtime',
 		WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-		array( 'jquery' ),
+		array( 'jquery', 'heartbeat' ),
 		file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
 		false // Load in header so inline scripts can use jQuery
 	);
+
+	// Ensure WordPress heartbeat API is active on dashboard pages.
+	wp_enqueue_script( 'heartbeat' );
 
 	// Localize dashboard script with nonce
 	wp_localize_script(

@@ -1,5 +1,4 @@
 <?php
-<?php
 /**
  * External API Validation Diagnostic
  *

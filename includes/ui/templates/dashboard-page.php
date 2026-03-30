@@ -18,6 +18,189 @@ use WPShadow\Core\Form_Param_Helper;
 require_once WPSHADOW_PATH . 'includes/systems/core/functions-category-metadata.php';
 
 /**
+ * Build scheduler run key from fully-qualified diagnostic class name.
+ *
+ * @param string $class_name Diagnostic class name.
+ * @return string
+ */
+function wpshadow_get_diagnostic_run_key_from_class( string $class_name ): string {
+	$short_name = str_replace( 'WPShadow\\Diagnostics\\', '', $class_name );
+	$short_name = strtolower( str_replace( '_', '-', $short_name ) );
+
+	return sanitize_key( $short_name );
+}
+
+/**
+ * Format a timestamp in human-friendly relative text with precise tooltip.
+ *
+ * @param int $timestamp Unix timestamp.
+ * @return string
+ */
+function wpshadow_format_human_time_with_tooltip( int $timestamp ): string {
+	if ( $timestamp <= 0 ) {
+		return esc_html__( 'Never', 'wpshadow' );
+	}
+
+	$now      = time();
+	$relative = $timestamp > $now
+		? sprintf(
+			/* translators: %s: human time difference */
+			esc_html__( 'in %s', 'wpshadow' ),
+			human_time_diff( $now, $timestamp )
+		)
+		: sprintf(
+			/* translators: %s: human time difference */
+			esc_html__( '%s ago', 'wpshadow' ),
+			human_time_diff( $timestamp, $now )
+		);
+
+	$precise = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $timestamp );
+
+	return sprintf(
+		'<span title="%s">%s</span>',
+		esc_attr( $precise ),
+		esc_html( $relative )
+	);
+}
+
+/**
+ * Build diagnostics activity rows for dashboard display.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function wpshadow_get_diagnostics_activity_rows(): array {
+	if ( ! class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+		return array();
+	}
+
+	$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+	if ( empty( $file_map ) || ! is_array( $file_map ) ) {
+		return array();
+	}
+
+	$rows = array();
+	$now  = time();
+
+	foreach ( $file_map as $short_class => $diagnostic_data ) {
+		if ( ! is_string( $short_class ) || '' === $short_class ) {
+			continue;
+		}
+
+		$class_name = 0 === strpos( $short_class, 'WPShadow\\Diagnostics\\' )
+			? $short_class
+			: 'WPShadow\\Diagnostics\\' . $short_class;
+
+		$file = isset( $diagnostic_data['file'] ) ? (string) $diagnostic_data['file'] : '';
+		if ( ! class_exists( $class_name ) && '' !== $file && file_exists( $file ) ) {
+			require_once $file;
+		}
+
+		$friendly_name = str_replace( '_', ' ', str_replace( 'Diagnostic_', '', $short_class ) );
+		$friendly_name = ucwords( strtolower( $friendly_name ) );
+		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_title' ) ) {
+			$title = (string) call_user_func( array( $class_name, 'get_title' ) );
+			if ( '' !== trim( $title ) ) {
+				$friendly_name = $title;
+			}
+		}
+
+		$run_key      = wpshadow_get_diagnostic_run_key_from_class( $class_name );
+		$last_run_raw = (int) get_option( 'wpshadow_last_run_' . $run_key, 0 );
+
+		$frequency = DAY_IN_SECONDS;
+		if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Scheduler' ) ) {
+			$schedule = \WPShadow\Core\Diagnostic_Scheduler::get_schedule( $run_key );
+			if ( is_array( $schedule ) && isset( $schedule['frequency'] ) ) {
+				$frequency = (int) $schedule['frequency'];
+			}
+		}
+
+		$next_run_label = esc_html__( 'On first run', 'wpshadow' );
+		if ( $last_run_raw > 0 ) {
+			if ( 0 === $frequency ) {
+				$next_run_label = esc_html__( 'On every request', 'wpshadow' );
+			} else {
+				$next_run_label = wpshadow_format_human_time_with_tooltip( $last_run_raw + $frequency );
+			}
+		}
+
+		$status_label = esc_html__( 'Unknown', 'wpshadow' );
+		if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
+			$state = wpshadow_get_valid_diagnostic_test_state( $class_name, $now );
+			if ( is_array( $state ) && isset( $state['status'] ) ) {
+				$status = (string) $state['status'];
+				if ( 'passed' === $status ) {
+					$status_label = esc_html__( 'Passed', 'wpshadow' );
+				} elseif ( 'failed' === $status ) {
+					$status_label = esc_html__( 'Failed', 'wpshadow' );
+				}
+			}
+		}
+
+		$rows[] = array(
+			'name'      => $friendly_name,
+			'last_run'  => $last_run_raw > 0 ? wpshadow_format_human_time_with_tooltip( $last_run_raw ) : esc_html__( 'Never', 'wpshadow' ),
+			'next_run'  => $next_run_label,
+			'status'    => $status_label,
+		);
+	}
+
+	usort(
+		$rows,
+		static function ( array $a, array $b ): int {
+			return strcasecmp( (string) $a['name'], (string) $b['name'] );
+		}
+	);
+
+	return $rows;
+}
+
+/**
+ * Render diagnostics recent activities table at the bottom of dashboard.
+ *
+ * @return void
+ */
+function wpshadow_render_diagnostics_recent_activities(): void {
+	$rows = wpshadow_get_diagnostics_activity_rows();
+
+	if ( empty( $rows ) ) {
+		return;
+	}
+	?>
+	<div class="wps-card wps-mt-8">
+		<div class="wps-card-header">
+			<h2 class="wps-card-title"><?php esc_html_e( 'Recent Activities', 'wpshadow' ); ?></h2>
+		</div>
+		<div class="wps-card-body">
+			<p><?php esc_html_e( 'Diagnostics run history and scheduling status.', 'wpshadow' ); ?></p>
+			<div style="max-height: 480px; overflow: auto; border: 1px solid #dcdcde; border-radius: 6px;">
+				<table class="widefat striped" style="margin:0;">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Diagnostic', 'wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Last Run', 'wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Next Run', 'wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Result', 'wpshadow' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $rows as $row ) : ?>
+							<tr>
+								<td><?php echo esc_html( (string) $row['name'] ); ?></td>
+								<td><?php echo wp_kses_post( (string) $row['last_run'] ); ?></td>
+								<td><?php echo wp_kses_post( (string) $row['next_run'] ); ?></td>
+								<td><?php echo esc_html( (string) $row['status'] ); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
  * Render the main WPShadow dashboard
  *
  * Requirements (Issue #562):
@@ -83,30 +266,7 @@ function wpshadow_render_dashboard() {
 		<?php endif; ?>
 
 
-		<?php if ( $needs_refresh ) : ?>
-			<!-- Stale data overlay with progress -->
-			<div class="wps-scan-overlay" id="wpshadow-refresh-overlay" role="dialog" aria-labelledby="wpshadow-scan-heading" aria-modal="true" aria-busy="true">
-				<div class="wps-scan-overlay-content">
-					<h2 id="wpshadow-scan-heading"><?php echo esc_html( $never_run ? __( 'Running Initial Scan', 'wpshadow' ) : __( 'Refreshing Dashboard Data', 'wpshadow' ) ); ?></h2>
-					<div class="wps-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-						<div class="wps-progress-fill" id="wpshadow-progress-fill"></div>
-					</div>
-					<p class="wps-progress-text" id="wpshadow-progress-text" aria-live="polite">
-						<?php esc_html_e( 'Preparing scan...', 'wpshadow' ); ?>
-					</p>
-					<p class="wps-progress-details" id="wpshadow-progress-details">
-						<span id="wpshadow-current-diagnostic"></span>
-					</p>
-					<div class="wps-scan-overlay-actions" id="wpshadow-overlay-actions" hidden>
-						<button type="button" class="button wps-btn wps-btn--secondary" id="wpshadow-overlay-dismiss">
-							<?php esc_html_e( 'Close and Continue', 'wpshadow' ); ?>
-						</button>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-
-		<div class="wpshadow-dashboard-content <?php echo $needs_refresh ? 'wps-loading' : ''; ?>">
+		<div class="wpshadow-dashboard-content">
 			<?php
 			/**
 			 * Health Gauges Section
@@ -140,6 +300,8 @@ function wpshadow_render_dashboard() {
 			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
 				wpshadow_render_page_activities( 'general', 3 );
 			}
+
+			wpshadow_render_diagnostics_recent_activities();
 			?>
 		</div>
 	</div>

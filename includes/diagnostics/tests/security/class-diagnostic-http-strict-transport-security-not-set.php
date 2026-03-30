@@ -64,4 +64,5 @@ class Diagnostic_HTTP_Strict_Transport_Security_Not_Set extends Diagnostic_Base 
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		return null;
+		return null;	}
+}

@@ -64,4 +64,5 @@ class Diagnostic_Endpoint_Rate_Limiting_Not_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
-		return null;
+		return null;	}
+}

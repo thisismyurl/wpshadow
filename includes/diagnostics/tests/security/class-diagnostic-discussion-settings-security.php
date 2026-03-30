@@ -1,5 +1,4 @@
 <?php
-<?php
 /**
  * Discussion Settings Security Diagnostic
  *

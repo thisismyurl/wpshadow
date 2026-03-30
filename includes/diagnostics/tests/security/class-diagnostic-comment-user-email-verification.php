@@ -42,7 +42,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Uses WordPress require_name_email option\n * - Detects common spam patterns in email field\n * - Returns severity: medium (email not required), low (fake emails detected)\n * - Auto-fixable treatment: enable email requirement\n *
  * @since 1.6093.1200
- */\nclass Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
+ */
+class Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
 	protected static $slug = 'comment-user-email-verification';
 	protected static $title = 'Comment User Email Verification';
 	protected static $description = 'Verifies commenter email addresses when needed';

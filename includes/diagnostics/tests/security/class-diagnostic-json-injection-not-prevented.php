@@ -65,3 +65,5 @@ class Diagnostic_JSON_Injection_Not_Prevented extends Diagnostic_Base {
 	 */
 	public static function check() {
 		return null;
+	}
+}

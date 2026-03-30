@@ -44,7 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Reads wp-config.php constants or uses get_option fallbacks\n * - Makes real HTTP test to verify header presence\n * - Returns severity: critical (no security flags), high (partial protection)\n * - Non-fixable diagnostic (requires wp-config.php modification)\n *
  * @since 1.6093.1200
- */\nclass Diagnostic_Authentication_Cookie_Hijacking_Prevention extends Diagnostic_Base {
+ */
+class Diagnostic_Authentication_Cookie_Hijacking_Prevention extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug

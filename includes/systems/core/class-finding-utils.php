@@ -234,6 +234,16 @@ function wpshadow_get_diagnostic_test_states(): array {
 }
 
 /**
+ * Build transient key for a diagnostic state.
+ *
+ * @param string $class_name Fully-qualified diagnostic class name.
+ * @return string Transient key.
+ */
+function wpshadow_get_diagnostic_state_transient_key( string $class_name ): string {
+	return 'wpshadow_diag_state_' . md5( $class_name );
+}
+
+/**
  * Get a valid (non-expired) diagnostic test state.
  *
  * @param string $class_name Fully-qualified diagnostic class name.
@@ -241,6 +251,15 @@ function wpshadow_get_diagnostic_test_states(): array {
  * @return array<string, mixed>|null Valid state when present, null otherwise.
  */
 function wpshadow_get_valid_diagnostic_test_state( string $class_name, int $timestamp = 0 ): ?array {
+	$transient_key = wpshadow_get_diagnostic_state_transient_key( $class_name );
+	$cached_state  = get_transient( $transient_key );
+	if ( is_array( $cached_state ) ) {
+		$status = isset( $cached_state['status'] ) ? (string) $cached_state['status'] : 'unknown';
+		if ( 'passed' === $status || 'failed' === $status ) {
+			return $cached_state;
+		}
+	}
+
 	$states = wpshadow_get_diagnostic_test_states();
 	if ( ! isset( $states[ $class_name ] ) || ! is_array( $states[ $class_name ] ) ) {
 		return null;
@@ -294,6 +313,8 @@ function wpshadow_record_diagnostic_test_states( array $results, int $timestamp 
 			'expires_at' => $checked_at + $ttl,
 			'ttl'        => $ttl,
 		);
+
+		set_transient( wpshadow_get_diagnostic_state_transient_key( $class_name ), $states[ $class_name ], $ttl );
 	}
 
 	update_option( 'wpshadow_diagnostic_test_states', $states );

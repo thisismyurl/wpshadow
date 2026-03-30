@@ -1,5 +1,4 @@
 <?php
-<?php
 /**
  * File Permission Security Diagnostic
  *
