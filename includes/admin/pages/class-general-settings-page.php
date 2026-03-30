@@ -119,6 +119,54 @@ class General_Settings_Page {
 				);
 				?>
 
+				<!-- File Editor Access Section -->
+				<?php
+				wpshadow_render_card(
+					array(
+						'title'       => __( 'File Editor Access', 'wpshadow' ),
+						'description' => __( 'Choose whether administrators can open WordPress file editors for themes and plugins.', 'wpshadow' ),
+						'icon'        => 'dashicons-edit',
+						'body'        => function() {
+							?>
+							<div class="wps-form-group">
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
+								echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+									array(
+										'id'          => 'wpshadow_enable_theme_file_editor',
+										'name'        => 'wpshadow_enable_theme_file_editor',
+										'label'       => __( 'Allow Theme File Editor', 'wpshadow' ),
+										'helper_text' => __( 'When enabled, administrators can use the built-in editor for theme files.', 'wpshadow' ),
+										'checked'     => (bool) get_option( 'wpshadow_enable_theme_file_editor', true ),
+									)
+								);
+								?>
+							</div>
+
+							<div class="wps-form-group wps-mt-4">
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
+								echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+									array(
+										'id'          => 'wpshadow_enable_plugin_file_editor',
+										'name'        => 'wpshadow_enable_plugin_file_editor',
+										'label'       => __( 'Allow Plugin File Editor', 'wpshadow' ),
+										'helper_text' => __( 'When enabled, administrators can use the built-in editor for plugin files.', 'wpshadow' ),
+										'checked'     => (bool) get_option( 'wpshadow_enable_plugin_file_editor', true ),
+									)
+								);
+								?>
+							</div>
+
+							<p class="wps-help-text wps-mt-3">
+								<?php esc_html_e( 'If your host enforces DISALLOW_FILE_EDIT in wp-config.php, those editors stay disabled regardless of these toggles.', 'wpshadow' ); ?>
+							</p>
+							<?php
+						},
+					)
+				);
+				?>
+
 				<?php
 				// Note: Visual Comparison settings have been removed as the feature is not yet implemented.
 				// When the visual comparison feature is added to Reports, the settings should be co-located there.

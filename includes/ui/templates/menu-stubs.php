@@ -163,12 +163,19 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 
 		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
+			// Redirect legacy individual tabs to the unified Preferences page.
+			if ( in_array( $tab, array( 'defensive', 'kpi', 'learning', 'cultural' ), true ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings&tab=preferences' ) );
+				exit;
+			}
+
 			$settings_pages = array(
 				'general'           => 'WPShadow\\Admin\\Pages\\General_Settings_Page',
 				'privacy'           => 'WPShadow\\Admin\\Pages\\Privacy_Settings_Page',
 				'privacy-dashboard' => 'WPShadow\\Admin\\Privacy_Dashboard_Page',
 				'notifications'     => 'WPShadow\\Admin\\Pages\\Notifications_Settings_Page',
 				'advanced'          => 'WPShadow\\Admin\\Pages\\Advanced_Settings_Page',
+				'preferences'       => 'WPShadow\\Admin\\Pages\\Preferences_Settings_Page',
 			);
 
 			// Check if the requested tab exists
@@ -178,6 +185,8 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				// Require the settings file if it exists
 				if ( 'WPShadow\\Admin\\Privacy_Dashboard_Page' === $class ) {
 					$file_path = WPSHADOW_PATH . 'includes/admin/class-privacy-dashboard-page.php';
+				} elseif ( false !== strpos( $class, 'WPShadow\\Admin\\' ) && false === strpos( $class, 'WPShadow\\Admin\\Pages\\' ) ) {
+					$file_path = WPSHADOW_PATH . 'includes/admin/settings/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\\Admin\\', '', $class ) ) ) . '.php';
 				} else {
 					$file_path = WPSHADOW_PATH . 'includes/admin/pages/class-' . str_replace( '_', '-', strtolower( str_replace( 'WPShadow\\Admin\\Pages\\', '', $class ) ) ) . '.php';
 				}
@@ -246,33 +255,38 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			<?php
 			$settings_cards = array(
 				array(
-					'title'        => __( 'General Settings', 'wpshadow' ),
-					'description'  => __( 'Configure general plugin behavior and preferences.', 'wpshadow' ),
+					'title'        => __( 'General', 'wpshadow' ),
+					'description'  => __( 'Diagnostic caching and file-editor access controls.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=general' ),
 					'icon'         => 'dashicons-admin-generic',
 					'action_label' => __( 'Configure', 'wpshadow' ),
 				),
-
 				array(
-					'title'        => __( 'Privacy Dashboard', 'wpshadow' ),
-					'description'  => __( 'Manage data export, deletion, and privacy preferences.', 'wpshadow' ),
+					'title'        => __( 'Privacy & Data', 'wpshadow' ),
+					'description'  => __( 'Manage data collection, export, deletion, and privacy preferences.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=privacy-dashboard' ),
 					'icon'         => 'dashicons-lock',
 					'action_label' => __( 'Open', 'wpshadow' ),
 				),
-
 				array(
 					'title'        => __( 'Notifications', 'wpshadow' ),
-					'description'  => __( 'Configure email alerts and notification preferences.', 'wpshadow' ),
+					'description'  => __( 'Configure email alerts, recipients, scheduling, and smart filtering.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ),
 					'icon'         => 'dashicons-email',
 					'action_label' => __( 'Configure', 'wpshadow' ),
 				),
 				array(
 					'title'        => __( 'Advanced', 'wpshadow' ),
-					'description'  => __( 'Advanced configuration options for power users.', 'wpshadow' ),
+					'description'  => __( 'Debugging, API integrations, performance monitoring, and system information.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ),
 					'icon'         => 'dashicons-admin-tools',
+					'action_label' => __( 'Configure', 'wpshadow' ),
+				),
+				array(
+					'title'        => __( 'Preferences', 'wpshadow' ),
+					'description'  => __( 'Impact tracking, learning style, regional formats, and reliability behaviour.', 'wpshadow' ),
+					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=preferences' ),
+					'icon'         => 'dashicons-admin-users',
 					'action_label' => __( 'Configure', 'wpshadow' ),
 				),
 			);

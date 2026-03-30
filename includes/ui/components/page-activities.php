@@ -24,6 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function wpshadow_render_page_activities( string $context = '', int $limit = 10, string $report_slug = '' ): void {
+	$show_activities = (bool) apply_filters( 'wpshadow_show_page_activities', false, $context, $limit, $report_slug );
+	if ( ! $show_activities ) {
+		return;
+	}
+
 	if ( empty( $context ) ) {
 		return;
 	}

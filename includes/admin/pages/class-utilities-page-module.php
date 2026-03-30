@@ -213,6 +213,15 @@ function wpshadow_get_utilities_catalog() {
 			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
+			'title'   => __( 'Profile Page Simplifier', 'wpshadow' ),
+			'desc'    => __( 'Choose which profile page sections non-admin users can see, so the profile screen feels cleaner and less overwhelming.', 'wpshadow' ),
+			'tool'    => 'profile-sections',
+			'icon'    => 'dashicons-id-alt',
+			'family'  => 'site-management',
+			'enabled' => true,
+			'since'   => '1.6030.2200',
+		),
+		array(
 			'title'   => __( 'Email Delivery Checker', 'wpshadow' ),
 			'desc'    => __( 'Test if your site can send emails properly and fix the sender name/address (like making sure your mail goes through).', 'wpshadow' ),
 			'tool'    => 'email-test',
@@ -475,7 +484,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 					</h2>
 
 					<!-- Utilities Grid -->
-					<div class="wps-grid wps-grid-auto-320">
+					<div class="wps-grid wps-grid-cols-2" style="gap: var(--wps-space-6);">
 						<?php
 						foreach ( $family_items as $item ) :
 							$icon_class = ! empty( $item['icon'] ) ? $item['icon'] : 'dashicons-admin-generic';

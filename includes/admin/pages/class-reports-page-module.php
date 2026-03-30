@@ -378,16 +378,6 @@ function wpshadow_get_reports_catalog() {
 			'since'   => '1.6359.1200', // Release1.0 (December 2026)
 		),
 
-		// Activity & History Reports
-		array(
-			'title'   => __( 'Activity History Report', 'wpshadow' ),
-			'desc'    => __( 'See a complete timeline of everything WPShadow has done for your site (like a maintenance log for your car showing all the oil changes and repairs). Great for tracking improvements over time.', 'wpshadow' ),
-			'report'  => 'activity-history',
-			'icon'    => 'dashicons-backup',
-			'family'  => 'history',
-			'enabled' => true,
-			'since'   => '1.6150.1200', // Release1.0 (May 2026)
-		),
 	);
 }
 
@@ -551,7 +541,6 @@ function wpshadow_render_report_detail( $report ) {
 		'broken-links'         => 'broken-links.php',
 		'visual-comparisons'   => 'visual-comparisons.php',
 		'customization-audit'  => 'customization-audit.php',
-		'activity-history'     => 'activity-history.php',
 	);
 
 	// Check if report exists

@@ -48,13 +48,8 @@ class Learning_Settings {
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
-		add_options_page(
-			__( 'Learning Settings', 'wpshadow' ),
-			__( 'Learning', 'wpshadow' ),
-			'manage_options',
-			'wpshadow-learning',
-			array( __CLASS__, 'render_page' )
-		);
+		// This screen is rendered as a tab card in wpshadow-settings.
+		// Kept for backwards compatibility with existing init() flow.
 	}
 
 	/**
@@ -65,7 +60,8 @@ class Learning_Settings {
 	 * @return void
 	 */
 	public static function enqueue_assets( string $hook ): void {
-		if ( 'settings_page_wpshadow-learning' !== $hook ) {
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		if ( 'wpshadow_page_wpshadow-settings' !== $hook || 'learning' !== $tab ) {
 			return;
 		}
 
