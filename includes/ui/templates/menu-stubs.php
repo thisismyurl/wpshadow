@@ -163,9 +163,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 
 		// If a specific tab is requested, load and render the appropriate settings page
 		if ( ! empty( $tab ) ) {
-			// Redirect legacy individual tabs to the unified Preferences page.
-			if ( in_array( $tab, array( 'defensive', 'kpi', 'learning', 'cultural' ), true ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings&tab=preferences' ) );
+			// Redirect legacy individual tabs to the consolidated General settings page.
+			if ( in_array( $tab, array( 'defensive', 'kpi', 'learning', 'cultural', 'preferences' ), true ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings&tab=general' ) );
 				exit;
 			}
 
@@ -175,7 +175,6 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 				'privacy-dashboard' => 'WPShadow\\Admin\\Privacy_Dashboard_Page',
 				'notifications'     => 'WPShadow\\Admin\\Pages\\Notifications_Settings_Page',
 				'advanced'          => 'WPShadow\\Admin\\Pages\\Advanced_Settings_Page',
-				'preferences'       => 'WPShadow\\Admin\\Pages\\Preferences_Settings_Page',
 			);
 
 			// Check if the requested tab exists
@@ -256,7 +255,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			$settings_cards = array(
 				array(
 					'title'        => __( 'General', 'wpshadow' ),
-					'description'  => __( 'Diagnostic caching and file-editor access controls.', 'wpshadow' ),
+					'description'  => __( 'Plugin behaviour, preferences, regional formats, and reliability settings.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=general' ),
 					'icon'         => 'dashicons-admin-generic',
 					'action_label' => __( 'Configure', 'wpshadow' ),
@@ -280,13 +279,6 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					'description'  => __( 'Debugging, API integrations, performance monitoring, and system information.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ),
 					'icon'         => 'dashicons-admin-tools',
-					'action_label' => __( 'Configure', 'wpshadow' ),
-				),
-				array(
-					'title'        => __( 'Preferences', 'wpshadow' ),
-					'description'  => __( 'Impact tracking, learning style, regional formats, and reliability behaviour.', 'wpshadow' ),
-					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=preferences' ),
-					'icon'         => 'dashicons-admin-users',
 					'action_label' => __( 'Configure', 'wpshadow' ),
 				),
 			);
