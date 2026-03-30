@@ -72,6 +72,8 @@ class Hooks_Initializer {
 		add_action( 'edit_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
 		add_action( 'personal_options_update', array( __CLASS__, 'on_personal_options_update' ) );
 		add_action( 'edit_user_profile_update', array( __CLASS__, 'on_personal_options_update' ) );
+		add_action( 'admin_head-profile.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
+		add_action( 'admin_head-user-edit.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
 		add_action( 'wp_login', array( __CLASS__, 'on_user_login' ), 10, 2 );
 
 		// Settings changes tracking
@@ -93,6 +95,7 @@ class Hooks_Initializer {
 		add_filter( 'site_status_tests', array( __CLASS__, 'filter_site_status_tests' ) );
 		add_filter( 'debug_information', array( __CLASS__, 'filter_debug_information' ) );
 		add_filter( 'wp_mail_from_name', array( __CLASS__, 'filter_wp_mail_from_name' ), 999 );
+		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_file_editor_caps' ), 10, 4 );
 
 		// Privacy
 		add_filter( 'wp_privacy_personal_data_exporters', array( __CLASS__, 'filter_privacy_exporters' ) );
@@ -295,6 +298,26 @@ class Hooks_Initializer {
 	 */
 	public static function on_admin_menu() {
 		// Menus are registered by Menu_Manager
+		self::remove_file_editor_menu_items();
+	}
+
+	/**
+	 * Remove WordPress file editor menu items when disabled in settings.
+	 *
+	 * @since 1.7090.1200
+	 * @return void
+	 */
+	public static function remove_file_editor_menu_items() {
+		$theme_editor_enabled  = self::get_file_editor_setting( 'wpshadow_enable_theme_file_editor', true );
+		$plugin_editor_enabled = self::get_file_editor_setting( 'wpshadow_enable_plugin_file_editor', true );
+
+		if ( ! $theme_editor_enabled ) {
+			remove_submenu_page( 'themes.php', 'theme-editor.php' );
+		}
+
+		if ( ! $plugin_editor_enabled ) {
+			remove_submenu_page( 'plugins.php', 'plugin-editor.php' );
+		}
 	}
 
 	/**
@@ -818,6 +841,88 @@ class Hooks_Initializer {
 	}
 
 	/**
+	 * Apply admin-defined profile section visibility settings.
+	 *
+	 * Hides selected profile sections for non-admin users to simplify
+	 * the profile editing experience.
+	 *
+	 * @return void
+	 */
+	public static function on_profile_sections_visibility() {
+		if ( current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$defaults = array(
+			'visual_preferences'     => true,
+			'toolbar'                => true,
+			'language'               => true,
+			'contact_info'           => true,
+			'about'                  => true,
+			'profile_picture'        => true,
+			'application_passwords'  => true,
+			'sessions'               => true,
+		);
+
+		$visibility = get_option( 'wpshadow_profile_sections_visibility', $defaults );
+		if ( ! is_array( $visibility ) ) {
+			$visibility = $defaults;
+		}
+
+		$selectors = array();
+
+		if ( empty( $visibility['visual_preferences'] ) ) {
+			$selectors[] = '.user-rich-editing-wrap';
+			$selectors[] = '.user-syntax-highlighting-wrap';
+			$selectors[] = '.user-admin-color-wrap';
+			$selectors[] = '.user-comment-shortcuts-wrap';
+		}
+
+		if ( empty( $visibility['toolbar'] ) ) {
+			$selectors[] = '.show-admin-bar';
+		}
+
+		if ( empty( $visibility['language'] ) ) {
+			$selectors[] = '.user-language-wrap';
+		}
+
+		if ( empty( $visibility['contact_info'] ) ) {
+			$selectors[] = '.user-email-wrap';
+			$selectors[] = '.user-url-wrap';
+			$selectors[] = '.user-aim-wrap';
+			$selectors[] = '.user-yim-wrap';
+			$selectors[] = '.user-jabber-wrap';
+		}
+
+		if ( empty( $visibility['about'] ) ) {
+			$selectors[] = '.user-description-wrap';
+		}
+
+		if ( empty( $visibility['profile_picture'] ) ) {
+			$selectors[] = '.user-profile-picture';
+		}
+
+		if ( empty( $visibility['application_passwords'] ) ) {
+			$selectors[] = '#application-passwords-section';
+		}
+
+		if ( empty( $visibility['sessions'] ) ) {
+			$selectors[] = '#sessions';
+		}
+
+		$selectors = array_values( array_unique( array_filter( $selectors ) ) );
+		if ( empty( $selectors ) ) {
+			return;
+		}
+
+		?>
+		<style id="wpshadow-profile-section-visibility">
+		<?php echo esc_html( implode( ',', $selectors ) ); ?> { display: none !important; }
+		</style>
+		<?php
+	}
+
+	/**
 	 * Filter plugin action links
 	 */
 	public static function filter_plugin_action_links( $links ) {
@@ -921,6 +1026,79 @@ class Hooks_Initializer {
 		}
 
 		return $from_name;
+	}
+
+	/**
+	 * Restrict file editor capabilities based on WPShadow settings.
+	 *
+	 * @since 1.7090.1200
+	 * @param array  $caps    Primitive capabilities required for the requested capability.
+	 * @param string $cap     Capability being checked.
+	 * @param int    $user_id User ID.
+	 * @param array  $args    Adds context to the capability check, typically starting with object ID.
+	 * @return array
+	 */
+	public static function filter_file_editor_caps( $caps, $cap, $user_id, $args ) {
+		if ( ! in_array( $cap, array( 'edit_themes', 'edit_plugins' ), true ) ) {
+			return $caps;
+		}
+
+		$theme_editor_enabled  = self::get_file_editor_setting( 'wpshadow_enable_theme_file_editor', true );
+		$plugin_editor_enabled = self::get_file_editor_setting( 'wpshadow_enable_plugin_file_editor', true );
+
+		if ( 'edit_themes' === $cap && ! $theme_editor_enabled ) {
+			return array( 'do_not_allow' );
+		}
+
+		if ( 'edit_plugins' === $cap && ! $plugin_editor_enabled ) {
+			return array( 'do_not_allow' );
+		}
+
+		return $caps;
+	}
+
+	/**
+	 * Read file-editor setting without loading all autoloaded options.
+	 *
+	 * This runs inside capability checks where memory pressure matters.
+	 * We query only the required option and cache it for the request.
+	 *
+	 * @since 1.7090.1201
+	 * @param string $option_name Option name.
+	 * @param bool   $default     Default value when option is missing.
+	 * @return bool
+	 */
+	private static function get_file_editor_setting( string $option_name, bool $default ): bool {
+		static $cache = array();
+
+		if ( array_key_exists( $option_name, $cache ) ) {
+			return (bool) $cache[ $option_name ];
+		}
+
+		global $wpdb;
+
+		if ( ! isset( $wpdb ) || ! ( $wpdb instanceof \wpdb ) ) {
+			$cache[ $option_name ] = $default;
+			return $default;
+		}
+
+		$value = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1",
+				$option_name
+			)
+		);
+
+		if ( null === $value ) {
+			$cache[ $option_name ] = $default;
+			return $default;
+		}
+
+		$normalized = strtolower( trim( (string) $value ) );
+		$enabled    = ! in_array( $normalized, array( '', '0', 'false', 'no', 'off' ), true );
+
+		$cache[ $option_name ] = $enabled;
+		return $enabled;
 	}
 
 	/**

@@ -133,11 +133,6 @@ class Lazy_Widget_Loader {
 					'title'    => __( 'Recommendations', 'wpshadow' ),
 					'priority' => 30,
 				),
-				array(
-					'id'       => 'wpshadow_recent_activity_widget',
-					'title'    => __( 'Recent Activity', 'wpshadow' ),
-					'priority' => 40,
-				),
 			)
 		);
 	}

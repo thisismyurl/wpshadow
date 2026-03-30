@@ -512,6 +512,30 @@ class Settings_Registry {
 			)
 		);
 
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_enable_theme_file_editor',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Allow access to the WordPress Theme File Editor', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_enable_plugin_file_editor',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Allow access to the WordPress Plugin File Editor', 'wpshadow' ),
+			)
+		);
+
 		// =================================================================
 		// BACKUP SETTINGS (Vault Light)
 		// =================================================================

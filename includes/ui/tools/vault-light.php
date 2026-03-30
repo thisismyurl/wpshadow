@@ -253,15 +253,7 @@ if ( is_dir( $backup_dir ) ) {
 		</p>
 	</form>
 
-	<!-- Backup Management -->
-	<div class="wpshadow-tool-section">
-		<h3><?php esc_html_e( 'Snapshot Management', 'wpshadow' ); ?></h3>
-		<p><?php esc_html_e( 'You can view, download, and delete Vault Light snapshots from the Activity Log.', 'wpshadow' ); ?></p>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=activity-history' ) ); ?>" class="wps-btn wps-btn-secondary">
-			<span class="dashicons dashicons-archive"></span>
-			<?php esc_html_e( 'View All Snapshots', 'wpshadow' ); ?>
-		</a>
-	</div>
+	<!-- Snapshot Management section intentionally removed -->
 
 </div>
 

@@ -216,6 +216,10 @@ class Menu_Manager {
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
 			'wpshadow-privacy'                => 'wpshadow-settings&tab=privacy-dashboard',
 			'wpshadow-tools'                  => 'wpshadow-utilities',
+			'wpshadow-defensive'              => 'wpshadow-settings&tab=defensive',
+			'wpshadow-kpi'                    => 'wpshadow-settings&tab=kpi',
+			'wpshadow-learning'               => 'wpshadow-settings&tab=learning',
+			'wpshadow-cultural'               => 'wpshadow-settings&tab=cultural',
 		);
 
 		if ( isset( $redirects[ $page ] ) ) {

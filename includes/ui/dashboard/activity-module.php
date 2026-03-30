@@ -139,6 +139,11 @@ function wpshadow_format_time_with_tooltip( int $timestamp ): string {
  * Called via wpshadow_dashboard_activity hook
  */
 function wpshadow_render_recent_activity(): void {
+	$show_recent_activity = (bool) apply_filters( 'wpshadow_show_dashboard_recent_activity', false );
+	if ( ! $show_recent_activity ) {
+		return;
+	}
+
 	$activity = wpshadow_get_recent_activity();
 
 	if ( empty( $activity ) ) {
