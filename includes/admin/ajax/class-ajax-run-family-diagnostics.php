@@ -87,6 +87,17 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		$all_diagnostics = Diagnostic_Registry::get_all();
 		$family_diagnostics = array();
 		$findings = array();
+		$executed_diagnostics = array();
+		$diagnostic_results = array();
+		$cached_findings = function_exists( 'wpshadow_get_cached_findings' )
+			? \wpshadow_get_cached_findings()
+			: get_option( 'wpshadow_site_findings', array() );
+		if ( ! is_array( $cached_findings ) ) {
+			$cached_findings = array();
+		}
+		if ( function_exists( 'wpshadow_index_findings_by_id' ) ) {
+			$cached_findings = \wpshadow_index_findings_by_id( $cached_findings );
+		}
 		$start_time = microtime( true );
 		$max_duration = 25;
 		$timed_out = false;
@@ -120,6 +131,27 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 			// Run the diagnostic
 			try {
 				$diagnostic_start = microtime( true );
+				$cached_state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
+					? \wpshadow_get_valid_diagnostic_test_state( $class )
+					: null;
+
+				if ( is_array( $cached_state ) ) {
+					$cached_status = (string) ( $cached_state['status'] ?? 'unknown' );
+					if ( 'failed' === $cached_status ) {
+						$cached_finding_id = (string) ( $cached_state['finding_id'] ?? '' );
+						if ( '' !== $cached_finding_id && isset( $cached_findings[ $cached_finding_id ] ) && is_array( $cached_findings[ $cached_finding_id ] ) ) {
+							$findings[] = $cached_findings[ $cached_finding_id ];
+						}
+					}
+
+					$diagnostic_results[ $class ] = array(
+						'status'     => $cached_status,
+						'category'   => $family,
+						'finding_id' => (string) ( $cached_state['finding_id'] ?? '' ),
+					);
+					continue;
+				}
+
 				if ( method_exists( $class, 'execute' ) ) {
 					$result = $class::execute();
 				} elseif ( method_exists( $class, 'check' ) ) {
@@ -127,6 +159,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 				} else {
 					continue;
 				}
+				$executed_diagnostics[] = $class;
 				$diagnostic_duration = microtime( true ) - $diagnostic_start;
 				error_log( sprintf( 'WPShadow: %s diagnostic end %s (%.3fs)', $family, $slug, $diagnostic_duration ) );
 				if ( $diagnostic_duration > 1 ) {
@@ -146,6 +179,12 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 						'family'       => $family,
 					);
 				}
+
+				$diagnostic_results[ $class ] = array(
+					'status'     => ( ! empty( $result ) && is_array( $result ) ) ? 'failed' : 'passed',
+					'category'   => $family,
+					'finding_id' => ( ! empty( $result ) && is_array( $result ) ) ? (string) ( $result['id'] ?? $slug ) : '',
+				);
 			} catch ( \Exception $e ) {
 				// Log error but continue with other diagnostics
 				error_log( sprintf( 'WPShadow: Error running diagnostic %s: %s', $class, $e->getMessage() ) );
@@ -256,9 +295,16 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		} else {
 			update_option( 'wpshadow_site_findings', \wpshadow_index_findings_by_id( $merged_findings ) );
 		}
+		$completed_at = time();
+		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
+			\wpshadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
+		}
+		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
+			\wpshadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
+		}
 
-		update_option( 'wpshadow_last_quick_scan', time() );
-		update_option( 'wpshadow_last_quick_checks', time() );
+		update_option( 'wpshadow_last_quick_scan', $completed_at );
+		update_option( 'wpshadow_last_quick_checks', $completed_at );
 
 		self::send_success(
 			array(

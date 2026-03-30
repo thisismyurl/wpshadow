@@ -197,23 +197,28 @@ echo "  • Use 'docker compose exec wordpress bash' to enter WordPress containe
 echo ""
 
 # ============================================================================
-# START FILE WATCHER FOR AUTO-DEPLOYMENT
+# OPTIONAL FILE WATCHER FOR AUTO-DEPLOYMENT
 # ============================================================================
-echo -e "${BLUE}Starting file watcher for auto-deployment...${NC}"
-if command -v inotifywait &> /dev/null; then
-    # Check if watcher is already running to avoid duplicates
-    if ! pgrep -f "watch-and-deploy.sh" > /dev/null 2>&1; then
-        # Run watcher in background with nohup so it survives terminal close
-        cd /workspaces/wpshadow
-        nohup ./watch-and-deploy.sh > /tmp/wpshadow-watch.log 2>&1 &
-        WATCHER_PID=$!
-        echo -e "${GREEN}✓ File watcher started (PID: $WATCHER_PID)${NC}"
-        echo "  View logs: ${BLUE}tail -f /tmp/wpshadow-watch.log${NC}"
+echo -e "${BLUE}Auto-deploy file watcher:${NC}"
+if [ "${WPSHADOW_AUTO_WATCHER:-0}" = "1" ]; then
+    if command -v inotifywait &> /dev/null; then
+        # Check if watcher is already running to avoid duplicates
+        if ! pgrep -f "watch-and-deploy.sh" > /dev/null 2>&1; then
+            # Run watcher in background with nohup so it survives terminal close
+            cd /workspaces/wpshadow
+            nohup ./watch-and-deploy.sh > /tmp/wpshadow-watch.log 2>&1 &
+            WATCHER_PID=$!
+            echo -e "${GREEN}✓ File watcher started (PID: $WATCHER_PID)${NC}"
+            echo "  View logs: ${BLUE}tail -f /tmp/wpshadow-watch.log${NC}"
+        else
+            echo -e "${GREEN}✓ File watcher already running${NC}"
+        fi
     else
-        echo -e "${GREEN}✓ File watcher already running${NC}"
+        echo -e "${YELLOW}⚠ inotify-tools not available${NC}"
     fi
 else
-    echo -e "${YELLOW}⚠ inotify-tools not available${NC}"
+    echo -e "${GREEN}✓ Disabled by default for performance${NC}"
+    echo "  To enable: export WPSHADOW_AUTO_WATCHER=1"
 fi
 echo ""
 

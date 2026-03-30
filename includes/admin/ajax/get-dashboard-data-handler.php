@@ -37,6 +37,8 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
 
 			$category_meta = \wpshadow_get_category_metadata();
+			$last_scan     = (int) get_option( 'wpshadow_last_quick_scan', 0 );
+			$never_run     = empty( $last_scan );
 
 			$findings = \wpshadow_get_cached_findings();
 			if ( empty( $findings ) ) {
@@ -52,6 +54,9 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			);
 
 			$snapshot = \wpshadow_build_gauge_snapshot( array_values( $findings ), $category_meta );
+			if ( function_exists( 'wpshadow_get_gauge_test_counts' ) ) {
+				$snapshot['test_counts'] = \wpshadow_get_gauge_test_counts( $category_meta, $never_run );
+			}
 
 			self::send_success( $snapshot );
 		} catch ( \Exception $e ) {

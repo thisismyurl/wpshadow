@@ -139,9 +139,13 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 		$total                = count( $diagnostic_classes );
 		$findings             = array();
 		$completed            = 0;
+		$executed_diagnostics = array();
+		$diagnostic_results   = array();
 		$skipped              = 0;
 		$progress_by_category = array();
 		$findings_by_category = array();
+		$previous_findings    = Options_Manager::get_array( 'wpshadow_site_findings', array() );
+		$previous_findings    = is_array( $previous_findings ) ? $previous_findings : array();
 
 		foreach ( $diagnostic_classes as $diagnostic_class ) {
 			try {
@@ -162,6 +166,23 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 				}
 
 				if ( class_exists( $class_name ) && method_exists( $class_name, 'execute' ) ) {
+					$cached_state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
+						? \wpshadow_get_valid_diagnostic_test_state( $class_name )
+						: null;
+
+					if ( is_array( $cached_state ) ) {
+						$cached_status = (string) ( $cached_state['status'] ?? 'unknown' );
+						if ( 'failed' === $cached_status ) {
+							$cached_finding_id = (string) ( $cached_state['finding_id'] ?? '' );
+							if ( '' !== $cached_finding_id && isset( $previous_findings[ $cached_finding_id ] ) && is_array( $previous_findings[ $cached_finding_id ] ) ) {
+								$findings[] = $previous_findings[ $cached_finding_id ];
+							}
+						}
+
+						++$completed;
+						continue;
+					}
+
 					$result = call_user_func( array( $class_name, 'execute' ) );
 					if ( null !== $result && is_array( $result ) ) {
 						$findings[] = $result;
@@ -201,6 +222,13 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 							);
 						}
 					}
+
+					$diagnostic_results[ $class_name ] = array(
+						'status'     => ( null !== $result && is_array( $result ) ) ? 'failed' : 'passed',
+						'category'   => isset( $result['category'] ) ? (string) $result['category'] : '',
+						'finding_id' => isset( $result['id'] ) ? (string) $result['id'] : '',
+					);
+					$executed_diagnostics[] = $class_name;
 					++$completed;
 				} else {
 					++$skipped;
@@ -211,8 +239,6 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		$previous_findings = Options_Manager::get_array( 'wpshadow_site_findings', array() );
-		$previous_findings = is_array( $previous_findings ) ? $previous_findings : array();
 		$previous_ids      = array_keys( $previous_findings );
 
 		$indexed_findings = \wpshadow_index_findings_by_id( $findings );
@@ -235,6 +261,15 @@ class Quick_Scan_Handler extends AJAX_Handler_Base {
 		}
 
 		\wpshadow_store_gauge_snapshot( array_values( $indexed_findings ) );
+		$completed_at = time();
+		update_option( 'wpshadow_last_quick_scan', $completed_at );
+		update_option( 'wpshadow_last_quick_checks', $completed_at );
+		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
+			\wpshadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
+		}
+		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
+			\wpshadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
+		}
 
 		// Log comprehensive activity
 		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {

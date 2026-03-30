@@ -265,7 +265,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 					'description'  => __( 'Manage data collection, export, deletion, and privacy preferences.', 'wpshadow' ),
 					'url'          => admin_url( 'admin.php?page=wpshadow-settings&tab=privacy-dashboard' ),
 					'icon'         => 'dashicons-lock',
-					'action_label' => __( 'Open', 'wpshadow' ),
+					'action_label' => __( 'Configure', 'wpshadow' ),
 				),
 				array(
 					'title'        => __( 'Notifications', 'wpshadow' ),
