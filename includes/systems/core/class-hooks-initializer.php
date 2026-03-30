@@ -526,7 +526,7 @@ class Hooks_Initializer {
 			'wpshadow-dashboard-realtime',
 			WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
 			array( 'jquery', 'wpshadow-design-system', 'wpshadow-modal' ),
-			WPSHADOW_VERSION,
+			file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
 			false
 		);
 

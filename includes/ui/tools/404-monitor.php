@@ -91,8 +91,4 @@ $top_404s          = get_option( 'wpshadow_top_404s', array() ) ?: array();
 	<?php endif; ?>
 </div>
 
-<div class="notice notice-info">
-	<p><strong><?php esc_html_e( 'Pro Features:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Upgrade to WPShadow Pro to create redirects, get smart suggestions, and auto-redirect similar URLs.', 'wpshadow' ); ?></p>
-</div>
-
 <?php Tool_View_Base::render_footer(); ?>

@@ -73,8 +73,40 @@ class Run_SEO_Report_Handler extends AJAX_Handler_Base {
 
 		// Run SEO diagnostics to generate fresh findings for this report.
 		$seo_findings = array();
+		$executed_diagnostics = array();
+		$diagnostic_results = array();
+		$cached_findings_index = function_exists( 'wpshadow_get_cached_findings' )
+			? \wpshadow_get_cached_findings()
+			: get_option( 'wpshadow_site_findings', array() );
+		if ( ! is_array( $cached_findings_index ) ) {
+			$cached_findings_index = array();
+		}
+		if ( function_exists( 'wpshadow_index_findings_by_id' ) ) {
+			$cached_findings_index = \wpshadow_index_findings_by_id( $cached_findings_index );
+		}
 		foreach ( $seo_diagnostics as $slug => $class ) {
 			try {
+				$cached_state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
+					? \wpshadow_get_valid_diagnostic_test_state( $class )
+					: null;
+
+				if ( is_array( $cached_state ) ) {
+					$cached_status = (string) ( $cached_state['status'] ?? 'unknown' );
+					if ( 'failed' === $cached_status ) {
+						$cached_finding_id = (string) ( $cached_state['finding_id'] ?? '' );
+						if ( '' !== $cached_finding_id && isset( $cached_findings_index[ $cached_finding_id ] ) && is_array( $cached_findings_index[ $cached_finding_id ] ) ) {
+							$seo_findings[] = $cached_findings_index[ $cached_finding_id ];
+						}
+					}
+
+					$diagnostic_results[ $class ] = array(
+						'status'     => $cached_status,
+						'category'   => 'seo',
+						'finding_id' => (string) ( $cached_state['finding_id'] ?? '' ),
+					);
+					continue;
+				}
+
 				if ( method_exists( $class, 'execute' ) ) {
 					$result = $class::execute();
 				} elseif ( method_exists( $class, 'check' ) ) {
@@ -82,6 +114,7 @@ class Run_SEO_Report_Handler extends AJAX_Handler_Base {
 				} else {
 					continue;
 				}
+				$executed_diagnostics[] = $class;
 
 				if ( ! empty( $result ) && is_array( $result ) ) {
 					$seo_findings[] = array(
@@ -95,6 +128,12 @@ class Run_SEO_Report_Handler extends AJAX_Handler_Base {
 						'family'       => 'seo',
 					);
 				}
+
+				$diagnostic_results[ $class ] = array(
+					'status'     => ( ! empty( $result ) && is_array( $result ) ) ? 'failed' : 'passed',
+					'category'   => 'seo',
+					'finding_id' => ( ! empty( $result ) && is_array( $result ) ) ? (string) ( $result['id'] ?? $slug ) : '',
+				);
 			} catch ( \Exception $e ) {
 				// Continue running remaining diagnostics.
 			}
@@ -140,9 +179,16 @@ class Run_SEO_Report_Handler extends AJAX_Handler_Base {
 		} else {
 			update_option( 'wpshadow_site_findings', \wpshadow_index_findings_by_id( $merged_findings ) );
 		}
+		$completed_at = time();
+		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
+			\wpshadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
+		}
+		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
+			\wpshadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
+		}
 
-		update_option( 'wpshadow_last_quick_scan', time() );
-		update_option( 'wpshadow_last_quick_checks', time() );
+		update_option( 'wpshadow_last_quick_scan', $completed_at );
+		update_option( 'wpshadow_last_quick_checks', $completed_at );
 
 		// Get site SEO metadata.
 		$site_title       = get_bloginfo( 'name' );

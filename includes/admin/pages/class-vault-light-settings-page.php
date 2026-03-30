@@ -43,16 +43,6 @@ class Vault_Light_Settings_Page {
 			);
 			?>
 
-			<!-- Safety Notice -->
-			<?php
-			wpshadow_render_card(
-				array(
-					'card_class' => 'wps-card--success',
-					'body'       => '<p><strong>' . esc_html__( 'Safety First:', 'wpshadow' ) . '</strong> ' . esc_html__( 'WPShadow Vault Light creates scheduled snapshots and pre-treatment safety points so you can recover fast. Vault upgrades are seamless later.', 'wpshadow' ) . '</p>',
-				)
-			);
-			?>
-
 			<form method="post" action="options.php" class="wps-settings-form">
 				<?php settings_fields( 'wpshadow_settings' ); ?>
 
@@ -224,12 +214,24 @@ class Vault_Light_Settings_Page {
 							<label for="wpshadow_backup_max_size_mb" class="wps-form-label">
 								<?php esc_html_e( 'Maximum Total Snapshot Size', 'wpshadow' ); ?>
 							</label>
+							<?php
+							$available_backup_space_mb = absint( get_option( 'wpshadow_backup_max_size_mb', 500 ) );
+							if ( $available_backup_space_mb < 100 ) {
+								$available_backup_space_mb = 500;
+							}
+
+							$disk_probe_path = is_dir( WP_CONTENT_DIR ) ? WP_CONTENT_DIR : ABSPATH;
+							$disk_free_bytes = disk_free_space( $disk_probe_path );
+							$disk_free_label = ( false !== $disk_free_bytes )
+								? size_format( (float) $disk_free_bytes, 2 )
+								: __( 'unavailable', 'wpshadow' );
+							?>
 							<div class="wps-input-group">
 								<input 
 									type="number" 
 									id="wpshadow_backup_max_size_mb" 
 									name="wpshadow_backup_max_size_mb" 
-									value="<?php echo esc_attr( get_option( 'wpshadow_backup_max_size_mb', 500 ) ); ?>"
+									value="<?php echo esc_attr( $available_backup_space_mb ); ?>"
 									min="100"
 									step="50"
 									class="wps-input wps-w-32"
@@ -237,7 +239,14 @@ class Vault_Light_Settings_Page {
 								<span class="wps-input-addon">MB</span>
 							</div>
 							<p class="wps-form-description">
-								<?php esc_html_e( 'When snapshots exceed this size, oldest snapshots are deleted. Default: 500MB.', 'wpshadow' ); ?>
+								<?php
+								printf(
+									/* translators: 1: configured backup limit in megabytes, 2: available free disk space */
+									esc_html__( 'Vault Light can use up to %1$d MB for backups. Free space currently available on this server: %2$s.', 'wpshadow' ),
+									$available_backup_space_mb,
+									esc_html( $disk_free_label )
+								);
+								?>
 							</p>
 						</div>
 						<?php

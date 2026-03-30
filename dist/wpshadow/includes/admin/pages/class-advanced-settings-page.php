@@ -275,9 +275,11 @@ class Advanced_Settings_Page {
 						'icon'        => 'dashicons-info',
 						'body'        => function() {
 							$diagnostic_count = \WPShadow\Diagnostics\Diagnostic_Registry::count();
-							$treatment_count  = class_exists( '\WPShadow\Treatments\Treatment_Registry' ) 
-								? \WPShadow\Treatments\Treatment_Registry::count() 
-								: 0;
+							$treatment_count  = 0;
+
+							if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) && method_exists( '\WPShadow\Treatments\Treatment_Registry', 'get_all' ) ) {
+								$treatment_count = count( \WPShadow\Treatments\Treatment_Registry::get_all() );
+							}
 							?>
 							<table class="wps-table wps-table-collapse">
 								<tr class="wps-advanced-system-row">

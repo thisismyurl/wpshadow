@@ -109,12 +109,19 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 		// Run all deep scan checks (quick + deep diagnostics)
 		$findings = Diagnostic_Registry::run_deepscan_checks();
+		$scan_stats = Diagnostic_Registry::get_last_run_stats();
+		$requested_diagnostics = isset( $scan_stats['requested'] ) && is_array( $scan_stats['requested'] )
+			? $scan_stats['requested']
+			: array();
+		$executed_diagnostics = isset( $scan_stats['executed'] ) && is_array( $scan_stats['executed'] )
+			? $scan_stats['executed']
+			: array();
+		$diagnostic_results = isset( $scan_stats['results'] ) && is_array( $scan_stats['results'] )
+			? $scan_stats['results']
+			: array();
 
-		// Get quick diagnostics to count total diagnostics run
-		$quick_count = count( Diagnostic_Registry::get_diagnostics() );
-		$deep_extras = apply_filters( 'wpshadow_deep_scan_diagnostics', array() );
-		$total       = $quick_count + count( $deep_extras );
-		$completed   = $total;
+		$total     = ! empty( $requested_diagnostics ) ? count( $requested_diagnostics ) : count( Diagnostic_Registry::get_diagnostics() );
+		$completed = ! empty( $executed_diagnostics ) ? count( $executed_diagnostics ) : $total;
 
 			// Build progress by category and findings breakdown
 			$progress_by_category = array();
@@ -187,6 +194,15 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		}
 
 		\wpshadow_store_gauge_snapshot( array_values( $indexed_findings ) );
+		$completed_at = time();
+		update_option( 'wpshadow_last_quick_scan', $completed_at );
+		update_option( 'wpshadow_last_quick_checks', $completed_at );
+		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
+			\wpshadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
+		}
+		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
+			\wpshadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
+		}
 
 		// Log comprehensive activity
 		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {

@@ -34,6 +34,18 @@ class Diagnostic_Registry extends Abstract_Registry {
 	private static $diagnostic_file_map = null;
 
 	/**
+	 * Stats for the most recent registry-driven scan.
+	 *
+	 * @var array<string, mixed>
+	 */
+	private static $last_run_stats = array(
+		'requested' => array(),
+		'executed'  => array(),
+		'results'   => array(),
+		'timestamp' => 0,
+	);
+
+	/**
 	 * Flag to track if initialization has been completed
 	 *
 	 * @var bool
@@ -391,6 +403,15 @@ class Diagnostic_Registry extends Abstract_Registry {
 	}
 
 	/**
+	 * Get execution stats for the most recent registry-driven scan.
+	 *
+	 * @return array<string, mixed> Scan stats.
+	 */
+	public static function get_last_run_stats(): array {
+		return self::$last_run_stats;
+	}
+
+	/**
 	 * Run checks for given diagnostics
 	 *
 	 * Executes each diagnostic and collects findings.
@@ -400,6 +421,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 */
 	private static function run_checks( array $diagnostic_classes ): array {
 		$findings = array();
+		$requested = array();
+		$executed  = array();
+		$results   = array();
+		$stored_findings = get_option( 'wpshadow_site_findings', array() );
+		if ( ! is_array( $stored_findings ) ) {
+			$stored_findings = array();
+		}
 
 		// Read disabled diagnostics from settings (fully-qualified class names)
 		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
@@ -439,6 +467,30 @@ class Diagnostic_Registry extends Abstract_Registry {
 				continue;
 			}
 
+			$requested[] = $class_name;
+
+			$cached_state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
+				? \wpshadow_get_valid_diagnostic_test_state( $class_name )
+				: null;
+
+			if ( is_array( $cached_state ) ) {
+				$cached_status = (string) ( $cached_state['status'] ?? 'unknown' );
+				if ( 'failed' === $cached_status ) {
+					$cached_finding_id = (string) ( $cached_state['finding_id'] ?? '' );
+					if ( '' !== $cached_finding_id && isset( $stored_findings[ $cached_finding_id ] ) && is_array( $stored_findings[ $cached_finding_id ] ) ) {
+						$findings[] = $stored_findings[ $cached_finding_id ];
+					}
+				}
+
+				$results[ $class_name ] = array(
+					'status'     => $cached_status,
+					'category'   => (string) ( $cached_state['category'] ?? '' ),
+					'finding_id' => (string) ( $cached_state['finding_id'] ?? '' ),
+					'source'     => 'cache',
+				);
+				continue;
+			}
+
 			// Execute through Diagnostic_Base wrapper so hooks/logging stay consistent.
 			if ( method_exists( $class_name, 'execute' ) ) {
 				try {
@@ -452,6 +504,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 					} );
 					
 					$result = call_user_func( array( $class_name, 'execute' ) );
+					$executed[] = $class_name;
+					$results[ $class_name ] = array(
+						'status'     => null === $result ? 'passed' : 'failed',
+						'category'   => is_array( $result ) ? (string) ( $result['category'] ?? '' ) : '',
+						'finding_id' => is_array( $result ) ? (string) ( $result['id'] ?? '' ) : '',
+						'source'     => 'fresh',
+					);
 
 					if ( null !== $result ) {
 						$findings[] = $result;
@@ -465,6 +524,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 				}
 			}
 		}
+
+		self::$last_run_stats = array(
+			'requested' => array_values( array_unique( $requested ) ),
+			'executed'  => array_values( array_unique( $executed ) ),
+			'results'   => $results,
+			'timestamp' => time(),
+		);
 
 		return $findings;
 	}

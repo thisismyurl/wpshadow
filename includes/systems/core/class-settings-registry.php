@@ -514,6 +514,102 @@ class Settings_Registry {
 
 		register_setting(
 			'wpshadow_settings',
+			'wpshadow_notifications_enabled',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Enable email notifications', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_notify_admin_email',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Send notifications to the site administrator email', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_notification_severity',
+			array(
+				'type'              => 'string',
+				'default'           => 'critical',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_notification_severity' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Minimum severity required before sending notifications', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_additional_recipients',
+			array(
+				'type'              => 'string',
+				'default'           => '',
+				'sanitize_callback' => 'sanitize_textarea_field',
+				'show_in_rest'      => false,
+				'description'       => __( 'Additional notification recipients, one email per line', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_notification_digest',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Send one daily digest email instead of individual alerts', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_notification_deduplicate',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Avoid sending repeated notifications for known issues', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_notification_resolved',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Send follow-up notifications when issues are resolved', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_notification_time',
+			array(
+				'type'              => 'string',
+				'default'           => '09:00',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_notification_time' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Time of day for daily digest delivery (24h)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
 			'wpshadow_enable_theme_file_editor',
 			array(
 				'type'              => 'boolean',
@@ -1489,6 +1585,37 @@ class Settings_Registry {
 		$valid = array( 'wordpress', '12h', '24h' );
 		$value = sanitize_key( (string) $value );
 		return in_array( $value, $valid, true ) ? $value : 'wordpress';
+	}
+
+	/**
+	 * Sanitize notification severity threshold.
+	 *
+	 * @since 1.7090.1201
+	 * @param mixed $value Input value.
+	 * @return string
+	 */
+	public static function sanitize_notification_severity( $value ): string {
+		$valid = array( 'critical', 'high', 'medium', 'all' );
+		$value = sanitize_key( (string) $value );
+
+		return in_array( $value, $valid, true ) ? $value : 'critical';
+	}
+
+	/**
+	 * Sanitize notification digest time (HH:MM).
+	 *
+	 * @since 1.7090.1201
+	 * @param mixed $value Input value.
+	 * @return string
+	 */
+	public static function sanitize_notification_time( $value ): string {
+		$value = sanitize_text_field( (string) $value );
+
+		if ( preg_match( '/^([01]\d|2[0-3]):([0-5]\d)$/', $value ) ) {
+			return $value;
+		}
+
+		return '09:00';
 	}
 
 	/**

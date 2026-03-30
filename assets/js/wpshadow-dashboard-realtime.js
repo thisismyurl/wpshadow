@@ -175,35 +175,67 @@
 				return;
 			}
 
-			// Update overall health gauge (0–1000 scale: sum of 10 category gauges).
-			if (data.overall_health !== undefined) {
-				const score = data.overall_health;
-				$( '#wpshadow-overall-gauge circle:eq(2)' ).css(
-					{
-						'stroke-dasharray': Math.round( (score / 1000) * 534 ) + ' 534'
+			// Update test count displays with pass rates
+			if (data.test_counts) {
+				$.each(
+					data.test_counts,
+					function (category, countData) {
+						const total = parseInt( countData.total || 0, 10 );
+						const passed = parseInt( (countData.passed !== undefined ? countData.passed : countData.run) || 0, 10 );
+						const unknown = parseInt( countData.unknown || 0, 10 );
+						const passedLabel = unknown > 0
+							? 'Passed: ' + passed + '/' + total + ' (Unknown: ' + unknown + ')'
+							: 'Passed: ' + passed + '/' + total;
+						$( `[data-test-category="${category}"]` ).text( passedLabel );
 					}
 				);
-				$( '#wpshadow-overall-gauge text:eq(0)' ).text( score );
 			}
 
-			// Update category gauges
-			$.each(
-				data.gauges,
-				function (category, gaugeData) {
-					const $gauge = $( `[data-category="${category}"]` );
-					if ($gauge.length) {
-						const circleIndex = 2; // Third circle element
-						const dasharray   = Math.round( (gaugeData.percent / 100) * 251 ) + ' 251';
-						$gauge.find( 'circle' ).eq( circleIndex ).css( 'stroke-dasharray', dasharray );
-						$gauge.find( 'text' ).text( Math.round( gaugeData.percent ) + '%' );
-
-						// Update finding count
-						$gauge.closest( 'a' ).find( '.wpshadow-finding-count' ).text(
-							gaugeData.findings_count + ' issue' + (gaugeData.findings_count !== 1 ? 's' : '')
-						);
-					}
+			// Update overall gauge with pass rate percentage
+			if (data.test_counts && data.test_counts.overall) {
+				const overallTotal = parseInt( data.test_counts.overall.total || 0, 10 );
+				if ( data.test_counts.overall.passed === undefined ) {
+					return;
 				}
-			);
+				const overallPassed = parseInt( data.test_counts.overall.passed || 0, 10 );
+				const overallPassRate = overallTotal > 0 ? Math.round( (overallPassed / overallTotal) * 100 ) : 0;
+				const strokeDasharray = Math.round( (overallPassRate / 100) * 534 );
+				
+				$( '#wpshadow-overall-gauge circle:eq(2)' ).css(
+					{
+						'stroke-dasharray': strokeDasharray + ' 534'
+					}
+				);
+				$( '#wpshadow-overall-gauge text:eq(0)' ).text( overallPassed );
+				// Update percentage text (third text element is percentage/status)
+				$( '#wpshadow-overall-gauge text:eq(2)' ).text( overallPassRate + '% Pass' );
+			}
+
+			// Update category gauges with pass rate percentages
+			if (data.test_counts) {
+				$.each(
+					data.test_counts,
+					function (category, countData) {
+						if ( 'overall' === category ) {
+							return; // Skip overall (handled above)
+						}
+						const $gauge = $( `[data-category="${category}"]` );
+						if ($gauge.length) {
+							const total = parseInt( countData.total || 0, 10 );
+							if ( countData.passed === undefined ) {
+								return;
+							}
+							const passed = parseInt( countData.passed || 0, 10 );
+							const passRate = total > 0 ? Math.round( (passed / total) * 100 ) : 0;
+							const strokeDasharray = Math.round( (passRate / 100) * 251 ) + ' 251';
+							
+							const circleIndex = 2; // Third circle element
+							$gauge.find( 'circle' ).eq( circleIndex ).css( 'stroke-dasharray', strokeDasharray );
+							$gauge.find( 'text' ).eq( 0 ).text( passRate + '%' );
+						}
+					}
+				);
+			}
 
 			// Update findings count badge
 			if (data.total_findings !== undefined) {
