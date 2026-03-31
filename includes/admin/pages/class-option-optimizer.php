@@ -39,9 +39,30 @@ class Option_Optimizer {
 	public static function init(): void {
 		// Prime option cache on admin init
 		add_action( 'admin_init', array( __CLASS__, 'prime_option_cache' ) );
+		add_action( 'admin_init', array( __CLASS__, 'enforce_autoload_defaults' ), 20 );
 
 		// Set autoload=false for large options
 		add_action( 'update_option', array( __CLASS__, 'manage_autoload' ), 10, 3 );
+	}
+
+	/**
+	 * Get options that should never autoload.
+	 *
+	 * @return array
+	 */
+	private static function get_no_autoload_options(): array {
+		return array(
+			'wpshadow_activity_log',        // Activity log can get large
+			'wpshadow_events',              // Event logger
+			'wpshadow_error_reports',       // Error reports
+			'wpshadow_workflow_executions', // Execution log
+			'wpshadow_workflows',           // Workflow definitions and metadata
+			'wpshadow_kpi_tracking',        // KPI history and aggregates
+			'wpshadow_dashboard_snapshot',  // Dashboard snapshot payload
+			'wpshadow_diagnostic_test_states', // Diagnostic run-state map
+			'wpshadow_kb_articles_v1',      // KB cache
+			'wpshadow_tooltips_all',        // Tooltip cache (transient)
+		);
 	}
 
 	/**
@@ -114,15 +135,7 @@ class Option_Optimizer {
 			return;
 		}
 
-		// Large options that should NOT autoload
-		$no_autoload = array(
-			'wpshadow_activity_log',        // Activity log can get large
-			'wpshadow_events',              // Event logger
-			'wpshadow_error_reports',       // Error reports
-			'wpshadow_workflow_executions', // Execution log
-			'wpshadow_kb_articles_v1',      // KB cache
-			'wpshadow_tooltips_all',        // Tooltip cache (transient)
-		);
+		$no_autoload = self::get_no_autoload_options();
 
 		if ( in_array( $option_name, $no_autoload, true ) ) {
 			global $wpdb;
@@ -133,6 +146,37 @@ class Option_Optimizer {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Enforce autoload flags for large options on existing installs.
+	 *
+	 * Runs at most once every 24 hours in admin requests.
+	 *
+	 * @return void
+	 */
+	public static function enforce_autoload_defaults(): void {
+		$last_run = (int) get_option( 'wpshadow_autoload_optimized_at', 0 );
+		if ( $last_run > 0 && ( time() - $last_run ) < DAY_IN_SECONDS ) {
+			return;
+		}
+
+		global $wpdb;
+
+		if ( ! isset( $wpdb ) || ! ( $wpdb instanceof \wpdb ) ) {
+			return;
+		}
+
+		foreach ( self::get_no_autoload_options() as $option_name ) {
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$wpdb->options} SET autoload = 'no' WHERE option_name = %s",
+					$option_name
+				)
+			);
+		}
+
+		update_option( 'wpshadow_autoload_optimized_at', time() );
 	}
 
 	/**

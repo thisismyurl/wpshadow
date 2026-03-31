@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Integration
- * @since 1.6093.1200
+ * @since 1.6151.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages API connections to WPShadow Cloud for external utilities.
  *
- * @since 1.6093.1200
+ * @since 1.6151.1200
  */
 class Cloud_Service_Connector {
 
@@ -36,7 +36,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Get API key.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return string|null API key or null if not registered.
 	 */
 	public static function get_api_key() {
@@ -46,7 +46,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Check if site is registered with cloud services.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return bool True if registered.
 	 */
 	public static function is_registered() {
@@ -57,7 +57,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Register site with WPShadow Cloud.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $email    User email address.
 	 * @param  string $site_url Site URL.
 	 * @return array {
@@ -70,6 +70,13 @@ class Cloud_Service_Connector {
 	 * }
 	 */
 	public static function register( $email, $site_url ) {
+		if ( ! \WPShadow\Core\External_Request_Guard::is_allowed( 'cloud_registration' ) ) {
+			return array(
+				'success' => false,
+				'message' => \WPShadow\Core\External_Request_Guard::get_denied_message( __( 'Cloud registration', 'wpshadow' ) ),
+			);
+		}
+
 		$response = wp_remote_post(
 			self::API_BASE . '/register',
 			array(
@@ -130,7 +137,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Make API request to cloud service.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $endpoint API endpoint (e.g., 'uptime/check').
 	 * @param  array  $data     Request data.
 	 * @param  string $method   HTTP method (GET, POST, PUT, DELETE).
@@ -143,6 +150,13 @@ class Cloud_Service_Connector {
 	 * }
 	 */
 	public static function request( $endpoint, $data = array(), $method = 'POST' ) {
+		if ( ! \WPShadow\Core\External_Request_Guard::is_allowed( 'cloud_api' ) ) {
+			return array(
+				'success' => false,
+				'message' => \WPShadow\Core\External_Request_Guard::get_denied_message( __( 'Cloud requests', 'wpshadow' ) ),
+			);
+		}
+
 		$api_key = self::get_api_key();
 
 		if ( ! $api_key ) {
@@ -221,7 +235,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Get usage statistics for current site.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array Usage stats by service.
 	 */
 	public static function get_usage_stats() {
@@ -237,7 +251,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Get free tier limits.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array Free tier limits by service.
 	 */
 	public static function get_free_tier_limits() {
@@ -270,7 +284,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Deregister site from cloud services.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array Result of deregistration.
 	 */
 	public static function deregister() {

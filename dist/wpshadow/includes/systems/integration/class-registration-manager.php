@@ -19,6 +19,8 @@ namespace WPShadow\Cloud;
  * - wpshadow_registration_date: Timestamp of registration
  * - wpshadow_subscription_tier: 'free' or 'pro'
  * - wpshadow_subscription_expires: ISO date when pro tier expires
+ *
+ * @since 1.6151.1200
  */
 class Registration_Manager {
 

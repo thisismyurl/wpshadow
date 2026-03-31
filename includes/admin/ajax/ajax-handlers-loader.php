@@ -29,6 +29,9 @@ require_once $ajax_path . 'toggle-autofix-permission-handler.php';
 require_once $ajax_path . 'allow-all-autofixes-handler.php';
 require_once $ajax_path . 'change-finding-status-handler.php';
 
+// Post-scan treatment application
+require_once $ajax_path . 'post-scan-treatments-handler.php';
+
 // Dashboard operations
 require_once $ajax_path . 'get-dashboard-data-handler.php';
 require_once $ajax_path . 'save-dashboard-prefs-handler.php';
@@ -150,9 +153,11 @@ require_once $ajax_path . 'refresh-kanban-board-handler.php';
 // Diagnostics & Treatments listing/toggles (Scan Settings UI)
 require_once $ajax_path . 'class-ajax-diagnostics-list.php';
 require_once $ajax_path . 'class-ajax-toggle-diagnostic.php';
+require_once $ajax_path . 'class-ajax-set-diagnostic-frequency.php';
 require_once $ajax_path . 'class-ajax-treatments-list.php';
 require_once $ajax_path . 'class-ajax-toggle-treatment.php';
 require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
+require_once $ajax_path . 'class-ajax-run-single-diagnostic.php';
 require_once $ajax_path . 'class-ajax-diagnostics-status.php';
 require_once $ajax_path . 'class-ajax-last-family-results.php';
 
@@ -170,6 +175,10 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Consent_Preferences_Handler' ) ) {
 // Register family diagnostics handler explicitly to guarantee availability.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {
 	\WPShadow\Admin\Ajax\AJAX_Run_Family_Diagnostics::register();
+}
+
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Single_Diagnostic' ) ) {
+	\WPShadow\Admin\Ajax\AJAX_Run_Single_Diagnostic::register();
 }
 
 // Register diagnostics status handler explicitly for live progress polling.
@@ -223,5 +232,9 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Heartbeat_Diagnostics_Handler' ) ) 
 
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Bulk_Run_Pending_Diagnostics_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Bulk_Run_Pending_Diagnostics_Handler::register();
+}
+
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Post_Scan_Treatments_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Post_Scan_Treatments_Handler::register();
 }
 

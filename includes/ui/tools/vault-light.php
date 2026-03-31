@@ -53,7 +53,7 @@ if ( is_dir( $backup_dir ) ) {
 }
 ?>
 
-	<p><?php esc_html_e( 'Vault Light gives you scheduled snapshots inspired by Vault. It keeps your site safer today and makes a seamless upgrade to Vault later.', 'wpshadow' ); ?></p>
+	<p><?php esc_html_e( 'Vault Light gives you scheduled snapshots to help protect your site and simplify recovery when changes go wrong.', 'wpshadow' ); ?></p>
 
 	<!-- Backup Status Overview -->
 	<div class="wpshadow-tool-section">
@@ -271,27 +271,5 @@ if ( is_dir( $backup_dir ) ) {
 	<!-- Snapshot Management section intentionally removed -->
 
 </div>
-
-<?php
-// Load and render sales widget
-require_once WPSHADOW_PATH . 'includes/ui/components/sales-widget.php';
-
-wpshadow_render_sales_widget(
-	array(
-		'title'       => __( 'Upgrade to WPShadow Vault', 'wpshadow' ),
-		'description' => __( 'WPShadow Vault adds continuous protection, encryption, journaling, and offsite storage with one-click restore.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Continuous Vault protection', 'wpshadow' ),
-			__( 'Encryption and journaling', 'wpshadow' ),
-			__( 'Offsite storage with one-click restore', 'wpshadow' ),
-			__( 'Priority support for recovery issues', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Learn More About WPShadow Vault', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-backup',
-		'style'       => 'default',
-	)
-);
-?>
 
 <?php Tool_View_Base::render_footer(); ?>

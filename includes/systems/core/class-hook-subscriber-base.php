@@ -79,34 +79,35 @@ abstract class Hook_Subscriber_Base {
 		$hooks = static::get_hooks();
 
 		foreach ( $hooks as $hook => $config ) {
-			// Normalize config to array format
-			if ( is_string( $config ) ) {
-				// Simple format: 'hook' => 'method'
-				$method   = $config;
-				$priority = 10;
-				$args     = 1;
-			} elseif ( is_array( $config ) ) {
-				// Extended format: 'hook' => ['method', priority, args]
-				$method   = $config[0] ?? '';
-				$priority = $config[1] ?? 10;
-				$args     = $config[2] ?? 1;
-			} else {
-				continue; // Skip invalid config
-			}
+			$configs = ( is_array( $config ) && isset( $config[0] ) && is_array( $config[0] ) )
+				? $config
+				: array( $config );
 
-			// Validate method exists
-			if ( ! method_exists( static::class, $method ) ) {
-				continue;
-			}
+			foreach ( $configs as $entry ) {
+				if ( is_string( $entry ) ) {
+					$method   = $entry;
+					$priority = 10;
+					$args     = 1;
+				} elseif ( is_array( $entry ) ) {
+					$method   = $entry[0] ?? '';
+					$priority = $entry[1] ?? 10;
+					$args     = $entry[2] ?? 1;
+				} else {
+					continue;
+				}
 
-			// Determine if this is a filter or action based on hook name
-			$is_filter = strpos( $hook, 'filter_' ) === 0 || strpos( $hook, '_filter' ) !== false;
+				if ( ! is_string( $method ) || '' === $method || ! method_exists( static::class, $method ) ) {
+					continue;
+				}
 
-			// Register the hook
-			if ( $is_filter ) {
-				add_filter( $hook, array( static::class, $method ), $priority, $args );
-			} else {
-				add_action( $hook, array( static::class, $method ), $priority, $args );
+				// Determine if this is a filter or action based on hook name
+				$is_filter = strpos( $hook, 'filter_' ) === 0 || strpos( $hook, '_filter' ) !== false;
+
+				if ( $is_filter ) {
+					add_filter( $hook, array( static::class, $method ), $priority, $args );
+				} else {
+					add_action( $hook, array( static::class, $method ), $priority, $args );
+				}
 			}
 		}
 	}

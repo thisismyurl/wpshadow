@@ -15,6 +15,8 @@ namespace WPShadow\Cloud;
  *
  * Data Storage:
  * - wpshadow_notification_preferences: Array of notification toggles (wp_options)
+ *
+ * @since 1.6151.1200
  */
 class Notification_Manager {
 

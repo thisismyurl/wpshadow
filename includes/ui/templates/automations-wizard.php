@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Get the current step from URL parameter
-$current_step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : 'trigger-selection'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$current_step = isset( $_GET['step'] ) ? sanitize_key( wp_unslash( $_GET['step'] ) ) : 'trigger-selection'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 // Allowed steps
 $allowed_steps = array(
@@ -37,7 +37,7 @@ if ( ! in_array( $current_step, $allowed_steps, true ) ) {
 
 // Get workflow data if editing
 $workflow = array();
-$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( wp_unslash( $_GET['workflow'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 if ( ! empty( $workflow_id ) ) {
 	$workflow = \WPShadow\Workflow\Workflow_Manager::get_workflow( $workflow_id );

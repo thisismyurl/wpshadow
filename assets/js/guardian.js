@@ -24,6 +24,160 @@
             this.initAutoRefresh();
             this.initHeartbeatCountdown();
             this.initHeartbeatRefresh();
+            this.initDiagnosticScanBrowser();
+        },
+
+        /**
+         * Initialize diagnostics scan browser controls.
+         */
+        initDiagnosticScanBrowser: function() {
+            const self = this;
+            const $browser = $('.wps-diagnostic-scan-browser');
+
+            if (!$browser.length) {
+                return;
+            }
+
+            $browser.each(function() {
+                const $wrap = $(this);
+                const storageKey = 'wpshadowGuardianDiagnosticFilters';
+                const $search = $wrap.find('#wpshadow-diagnostic-search');
+                const $family = $wrap.find('#wpshadow-diagnostic-family');
+                const $status = $wrap.find('#wpshadow-diagnostic-status');
+                const $reset = $wrap.find('#wpshadow-diagnostic-filter-reset');
+                const $results = $wrap.find('#wpshadow-diagnostic-scan-results');
+                const nonce = $wrap.data('nonce') || '';
+
+                if (!nonce || !$results.length) {
+                    return;
+                }
+
+                let state = {
+                    search: '',
+                    family: '',
+                    status: 'all'
+                };
+
+                try {
+                    const saved = JSON.parse(window.localStorage.getItem(storageKey) || '{}');
+                    state = $.extend({}, state, saved);
+                } catch (e) {
+                    // Ignore malformed local storage values.
+                }
+
+                $search.val(state.search || '');
+                $status.val(state.status || 'all');
+
+                const saveState = function() {
+                    state.search = ($search.val() || '').trim();
+                    state.family = $family.val() || '';
+                    state.status = $status.val() || 'all';
+                    window.localStorage.setItem(storageKey, JSON.stringify(state));
+                };
+
+                const populateFamilies = function(families) {
+                    if (!$family.length || !Array.isArray(families)) {
+                        return;
+                    }
+
+                    const selectedFamily = state.family || '';
+                    let options = '<option value="">All families</option>';
+
+                    families.sort().forEach(function(item) {
+                        const value = String(item || '');
+                        if (!value) {
+                            return;
+                        }
+
+                        const selected = selectedFamily === value ? ' selected' : '';
+                        options += '<option value="' + value.replace(/"/g, '&quot;') + '"' + selected + '>' + value + '</option>';
+                    });
+
+                    $family.html(options);
+                };
+
+                const renderRows = function(items) {
+                    if (!Array.isArray(items) || !items.length) {
+                        $results.html('<tr><td colspan="4" class="wps-text-muted">No diagnostics found for the selected filters.</td></tr>');
+                        return;
+                    }
+
+                    let html = '';
+                    items.forEach(function(item, index) {
+                        const isEnabled = !!item.enabled;
+                        html += '<tr>' +
+                            '<td>' + (index + 1) + '</td>' +
+                            '<td><strong>' + (item.title || item.slug || 'Diagnostic') + '</strong></td>' +
+                            '<td>' + (item.family || 'general') + '</td>' +
+                            '<td>' + (isEnabled ? 'Enabled' : 'Disabled') + '</td>' +
+                            '</tr>';
+                    });
+
+                    $results.html(html);
+                };
+
+                const fetchDiagnostics = function() {
+                    saveState();
+                    $results.html('<tr><td colspan="4" class="wps-text-muted">Loading diagnostics…</td></tr>');
+
+                    $.ajax({
+                        url: wpshadowGuardian.ajaxUrl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'wpshadow_list_diagnostics',
+                            nonce: nonce,
+                            page: 1,
+                            per_page: 100,
+                            family: state.family,
+                            search: state.search,
+                            get_families: 1
+                        },
+                        success: function(response) {
+                            if (!response || !response.success || !response.data) {
+                                $results.html('<tr><td colspan="4" class="wps-text-muted">Unable to load diagnostics right now.</td></tr>');
+                                return;
+                            }
+
+                            const payload = response.data;
+                            populateFamilies(payload.families || []);
+
+                            let items = Array.isArray(payload.items) ? payload.items : [];
+                            if (state.status === 'enabled') {
+                                items = items.filter(function(item) { return !!item.enabled; });
+                            } else if (state.status === 'disabled') {
+                                items = items.filter(function(item) { return !item.enabled; });
+                            }
+
+                            renderRows(items);
+                        },
+                        error: function() {
+                            $results.html('<tr><td colspan="4" class="wps-text-muted">Unable to load diagnostics right now.</td></tr>');
+                        }
+                    });
+                };
+
+                let searchTimer = null;
+
+                $search.off('.wpsDiagScan').on('input.wpsDiagScan', function() {
+                    window.clearTimeout(searchTimer);
+                    searchTimer = window.setTimeout(fetchDiagnostics, 250);
+                });
+
+                $family.off('.wpsDiagScan').on('change.wpsDiagScan', fetchDiagnostics);
+                $status.off('.wpsDiagScan').on('change.wpsDiagScan', fetchDiagnostics);
+
+                $reset.off('.wpsDiagScan').on('click.wpsDiagScan', function() {
+                    state = { search: '', family: '', status: 'all' };
+                    $search.val('');
+                    $family.val('');
+                    $status.val('all');
+                    window.localStorage.setItem(storageKey, JSON.stringify(state));
+                    fetchDiagnostics();
+                });
+
+                fetchDiagnostics();
+            });
         },
 
         /**
@@ -439,6 +593,7 @@
 
                     if (response.data.diagnostics_overview) {
                         $('#wpshadow-guardian-diagnostics-overview').html(response.data.diagnostics_overview);
+                        self.initDiagnosticScanBrowser();
                     }
 
                     if (response.data.activity_log) {

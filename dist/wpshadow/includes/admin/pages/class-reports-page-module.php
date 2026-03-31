@@ -29,7 +29,7 @@ function wpshadow_maybe_handle_user_privacy_download() {
 	$page   = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 	$report = isset( $_GET['report'] ) ? sanitize_key( wp_unslash( $_GET['report'] ) ) : '';
 	$download = isset( $_GET['download'] ) ? sanitize_key( wp_unslash( $_GET['download'] ) ) : '';
-	$snapshot_id = isset( $_GET['snapshot_id'] ) ? absint( $_GET['snapshot_id'] ) : 0;
+	$snapshot_id = isset( $_GET['snapshot_id'] ) ? absint( wp_unslash( $_GET['snapshot_id'] ) ) : 0;
 
 	if ( 'wpshadow-reports' !== $page || 'user-privacy-report' !== $report || empty( $download ) || ! $snapshot_id ) {
 		return;
@@ -56,7 +56,7 @@ function wpshadow_maybe_handle_seo_report_download() {
 	$page       = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 	$report     = isset( $_GET['report'] ) ? sanitize_key( wp_unslash( $_GET['report'] ) ) : '';
 	$download   = isset( $_GET['download'] ) ? sanitize_key( wp_unslash( $_GET['download'] ) ) : '';
-	$snapshot_id = isset( $_GET['snapshot_id'] ) ? absint( $_GET['snapshot_id'] ) : 0;
+	$snapshot_id = isset( $_GET['snapshot_id'] ) ? absint( wp_unslash( $_GET['snapshot_id'] ) ) : 0;
 
 	if ( 'wpshadow-reports' !== $page || 'seo-report' !== $report || empty( $download ) || ! $snapshot_id ) {
 		return;

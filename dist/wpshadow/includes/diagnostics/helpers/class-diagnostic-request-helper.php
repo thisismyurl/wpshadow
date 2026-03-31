@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Helpers;
 
+use WPShadow\Core\External_Request_Guard;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -114,6 +116,13 @@ class Diagnostic_Request_Helper {
 			return null;
 		}
 
+		$guard_purpose = isset( $args['guard_purpose'] ) ? sanitize_key( (string) $args['guard_purpose'] ) : 'diagnostics_http';
+		unset( $args['guard_purpose'] );
+
+		if ( ! External_Request_Guard::is_allowed( $guard_purpose ) ) {
+			return null;
+		}
+
 		$defaults = array(
 			'timeout'   => 5,
 			'sslverify' => false,
@@ -162,11 +171,22 @@ class Diagnostic_Request_Helper {
 			);
 		}
 
-		$cache_key     = 'wpshadow_http_' . md5( $method . '|' . $url );
-		$cache_ttl     = isset( $args['cache_ttl'] ) ? absint( $args['cache_ttl'] ) : 3600;
+		$cache_key      = 'wpshadow_http_' . md5( $method . '|' . $url );
+		$cache_ttl      = isset( $args['cache_ttl'] ) ? absint( $args['cache_ttl'] ) : 3600;
 		$allow_fallback = isset( $args['fallback'] ) ? (bool) $args['fallback'] : true;
+		$guard_purpose  = isset( $args['guard_purpose'] ) ? sanitize_key( (string) $args['guard_purpose'] ) : 'diagnostics_http';
 
-		unset( $args['cache_ttl'], $args['fallback'] );
+		unset( $args['cache_ttl'], $args['fallback'], $args['guard_purpose'] );
+
+		if ( ! External_Request_Guard::is_allowed( $guard_purpose ) ) {
+			return array(
+				'success'       => false,
+				'code'          => null,
+				'error_message' => External_Request_Guard::get_denied_message( __( 'Diagnostics checks', 'wpshadow' ) ),
+				'error_code'    => 'consent_required',
+				'response'      => null,
+			);
+		}
 
 		$defaults = array(
 			'timeout'   => 5,

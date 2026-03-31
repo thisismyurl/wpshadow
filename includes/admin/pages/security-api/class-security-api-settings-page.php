@@ -724,6 +724,13 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	 * @return array Test result.
 	 */
 	private function test_service_connection( $service ) {
+		if ( ! \WPShadow\Core\External_Request_Guard::is_allowed( 'security_api_test' ) ) {
+			return array(
+				'success' => false,
+				'message' => \WPShadow\Core\External_Request_Guard::get_denied_message( __( 'Security API tests', 'wpshadow' ) ),
+			);
+		}
+
 		switch ( $service ) {
 			case 'wpscan':
 				return $this->test_wpscan_connection();

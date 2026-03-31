@@ -20,7 +20,8 @@ require_once WPSHADOW_PATH . 'includes/systems/core/functions-category-metadata.
 /**
  * Build scheduler run key from fully-qualified diagnostic class name.
  *
- * @param string $class_name Diagnostic class name.
+ * @since  1.6120.0000
+ * @param  string $class_name Diagnostic class name.
  * @return string
  */
 function wpshadow_get_diagnostic_run_key_from_class( string $class_name ): string {
@@ -33,7 +34,8 @@ function wpshadow_get_diagnostic_run_key_from_class( string $class_name ): strin
 /**
  * Format a timestamp in human-friendly relative text with precise tooltip.
  *
- * @param int $timestamp Unix timestamp.
+ * @since  1.6120.0000
+ * @param  int    $timestamp Unix timestamp.
  * @return string
  */
 function wpshadow_format_human_time_with_tooltip( int $timestamp ): string {
@@ -66,12 +68,20 @@ function wpshadow_format_human_time_with_tooltip( int $timestamp ): string {
 /**
  * Build diagnostics activity rows for dashboard display.
  *
+ * @since  1.6120.0000
  * @return array<int, array<string, mixed>>
  */
 function wpshadow_get_diagnostics_activity_rows(): array {
 	if ( ! class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
 		return array();
 	}
+
+	$test_states = function_exists( 'wpshadow_get_diagnostic_test_states' )
+		? wpshadow_get_diagnostic_test_states()
+		: array();
+
+	$disabled_diagnostics = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+	$disabled_diagnostics = is_array( $disabled_diagnostics ) ? $disabled_diagnostics : array();
 
 	$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
 	if ( empty( $file_map ) || ! is_array( $file_map ) ) {
@@ -80,6 +90,28 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 
 	$rows = array();
 	$now  = time();
+	$category_meta = wpshadow_get_category_metadata();
+	$cached_findings = function_exists( 'wpshadow_get_cached_findings' )
+		? wpshadow_get_cached_findings()
+		: get_option( 'wpshadow_site_findings', array() );
+	if ( ! is_array( $cached_findings ) ) {
+		$cached_findings = array();
+	}
+	if ( function_exists( 'wpshadow_index_findings_by_id' ) ) {
+		$cached_findings = wpshadow_index_findings_by_id( $cached_findings );
+	}
+
+	$family_to_gauge = array(
+		'security'      => 'security',
+		'performance'   => 'performance',
+		'seo'           => 'seo',
+		'accessibility' => 'accessibility',
+		'design'        => 'design',
+		'settings'      => 'settings',
+		'monitoring'    => 'monitoring',
+		'workflows'     => 'workflows',
+		'code-quality'  => 'code-quality',
+	);
 
 	foreach ( $file_map as $short_class => $diagnostic_data ) {
 		if ( ! is_string( $short_class ) || '' === $short_class ) {
@@ -104,6 +136,16 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			}
 		}
 
+		$description = '';
+		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_description' ) ) {
+			$description = (string) call_user_func( array( $class_name, 'get_description' ) );
+		}
+
+		$family = '';
+		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_family' ) ) {
+			$family = (string) call_user_func( array( $class_name, 'get_family' ) );
+		}
+
 		$run_key      = wpshadow_get_diagnostic_run_key_from_class( $class_name );
 		$last_run_raw = (int) get_option( 'wpshadow_last_run_' . $run_key, 0 );
 
@@ -115,33 +157,150 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			}
 		}
 
-		$next_run_label = esc_html__( 'On first run', 'wpshadow' );
+		$next_run_label   = esc_html__( 'On first run', 'wpshadow' );
+		$is_overdue       = false;
+		$next_run_due_at  = 0;
 		if ( $last_run_raw > 0 ) {
 			if ( 0 === $frequency ) {
 				$next_run_label = esc_html__( 'On every request', 'wpshadow' );
 			} else {
-				$next_run_label = wpshadow_format_human_time_with_tooltip( $last_run_raw + $frequency );
-			}
-		}
-
-		$status_label = esc_html__( 'Unknown', 'wpshadow' );
-		if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
-			$state = wpshadow_get_valid_diagnostic_test_state( $class_name, $now );
-			if ( is_array( $state ) && isset( $state['status'] ) ) {
-				$status = (string) $state['status'];
-				if ( 'passed' === $status ) {
-					$status_label = esc_html__( 'Passed', 'wpshadow' );
-				} elseif ( 'failed' === $status ) {
-					$status_label = esc_html__( 'Failed', 'wpshadow' );
+				$next_run_due_at = $last_run_raw + $frequency;
+				if ( $next_run_due_at <= $now ) {
+					$next_run_label = esc_html__( 'Overdue', 'wpshadow' );
+					$is_overdue     = true;
+				} else {
+					$next_run_label = wpshadow_format_human_time_with_tooltip( $next_run_due_at );
 				}
 			}
 		}
 
+		$status_label = esc_html__( 'Unknown', 'wpshadow' );
+		$status_raw   = 'unknown';
+		$gauge_key    = '';
+		$finding_id   = '';
+		$failure_reason = '';
+		if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
+			$state = wpshadow_get_valid_diagnostic_test_state( $class_name, $now );
+			if ( is_array( $state ) && isset( $state['status'] ) ) {
+				$status = (string) $state['status'];
+				$finding_id = isset( $state['finding_id'] ) ? sanitize_key( (string) $state['finding_id'] ) : '';
+				$state_category = isset( $state['category'] ) ? sanitize_key( (string) $state['category'] ) : '';
+				if ( '' !== $state_category && isset( $category_meta[ $state_category ] ) ) {
+					$gauge_key = $state_category;
+				}
+				if ( 'passed' === $status ) {
+					$status_label = esc_html__( 'Passed', 'wpshadow' );
+					$status_raw   = 'passed';
+				} elseif ( 'failed' === $status ) {
+					$status_label = esc_html__( 'Failed', 'wpshadow' );
+					$status_raw   = 'failed';
+				}
+			}
+		}
+
+		if ( esc_html__( 'Unknown', 'wpshadow' ) === $status_label && $last_run_raw > 0 && ! $is_overdue ) {
+			$stored_state = isset( $test_states[ $class_name ] ) && is_array( $test_states[ $class_name ] )
+				? $test_states[ $class_name ]
+				: array();
+
+			$stored_status = isset( $stored_state['status'] ) ? (string) $stored_state['status'] : '';
+			if ( '' === $finding_id ) {
+				$finding_id = isset( $stored_state['finding_id'] ) ? sanitize_key( (string) $stored_state['finding_id'] ) : '';
+			}
+			if ( 'passed' === $stored_status ) {
+				$status_label = esc_html__( 'Passed', 'wpshadow' );
+				$status_raw   = 'passed';
+			} elseif ( 'failed' === $stored_status ) {
+				$status_label = esc_html__( 'Failed', 'wpshadow' );
+				$status_raw   = 'failed';
+			}
+
+			$stored_category = isset( $stored_state['category'] ) ? sanitize_key( (string) $stored_state['category'] ) : '';
+			if ( '' !== $gauge_key && '' === $stored_category ) {
+				$stored_category = $gauge_key;
+			}
+			if ( '' !== $stored_category && isset( $category_meta[ $stored_category ] ) ) {
+				$gauge_key = $stored_category;
+			}
+		}
+
+		if ( '' === $gauge_key ) {
+			$family_key = sanitize_key( $family );
+			if ( '' !== $family_key && isset( $family_to_gauge[ $family_key ] ) ) {
+				$mapped_gauge = $family_to_gauge[ $family_key ];
+				if ( isset( $category_meta[ $mapped_gauge ] ) ) {
+					$gauge_key = $mapped_gauge;
+				}
+			}
+		}
+
+		if ( '' === $gauge_key ) {
+			$gauge_key = 'overall';
+		}
+
+		if ( '' !== $finding_id && isset( $cached_findings[ $finding_id ] ) && is_array( $cached_findings[ $finding_id ] ) ) {
+			$finding = $cached_findings[ $finding_id ];
+			$failure_reason = isset( $finding['description'] ) ? trim( wp_strip_all_tags( (string) $finding['description'] ) ) : '';
+		}
+
+		if ( '' === $failure_reason && 'failed' === $status_raw ) {
+			$normalized_run_key = sanitize_key( $run_key );
+			$normalized_name    = strtolower( trim( wp_strip_all_tags( $friendly_name ) ) );
+
+			foreach ( $cached_findings as $cached_finding ) {
+				if ( ! is_array( $cached_finding ) ) {
+					continue;
+				}
+
+				$cached_id    = isset( $cached_finding['id'] ) ? sanitize_key( (string) $cached_finding['id'] ) : '';
+				$cached_title = isset( $cached_finding['title'] ) ? strtolower( trim( wp_strip_all_tags( (string) $cached_finding['title'] ) ) ) : '';
+				$is_match     = false;
+
+				if ( '' !== $cached_id && '' !== $normalized_run_key ) {
+					$is_match = ( $cached_id === $normalized_run_key ) || ( false !== strpos( $cached_id, $normalized_run_key ) ) || ( false !== strpos( $normalized_run_key, $cached_id ) );
+				}
+
+				if ( ! $is_match && '' !== $cached_title && '' !== $normalized_name ) {
+					$is_match = false !== strpos( $cached_title, $normalized_name ) || false !== strpos( $normalized_name, $cached_title );
+				}
+
+				if ( $is_match ) {
+					$failure_reason = isset( $cached_finding['description'] ) ? trim( wp_strip_all_tags( (string) $cached_finding['description'] ) ) : '';
+					if ( '' !== $failure_reason ) {
+						break;
+					}
+				}
+			}
+		}
+
+		$gauge_label = isset( $category_meta[ $gauge_key ]['label'] )
+			? (string) $category_meta[ $gauge_key ]['label']
+			: (string) $category_meta['overall']['label'];
+
+		$current_frequency = $frequency;
+
 		$rows[] = array(
+			'run_key'   => $run_key,
 			'name'      => $friendly_name,
+			'class'     => $class_name,
+			'enabled'   => ! in_array( $class_name, $disabled_diagnostics, true ),
+			'family'    => $family,
+			'gauge_key' => $gauge_key,
+			'gauge_label' => $gauge_label,
+			'description' => $description,
+			'frequency' => $current_frequency,
+			'failure_reason' => $failure_reason,
 			'last_run'  => $last_run_raw > 0 ? wpshadow_format_human_time_with_tooltip( $last_run_raw ) : esc_html__( 'Never', 'wpshadow' ),
 			'next_run'  => $next_run_label,
 			'status'    => $status_label,
+			'status_raw' => $status_raw,
+			'detail_url' => add_query_arg(
+				array(
+					'page'       => 'wpshadow',
+					'diagnostic' => $run_key,
+				),
+				admin_url( 'admin.php' )
+			),
 		);
 	}
 
@@ -156,8 +315,205 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 }
 
 /**
+ * Render selected diagnostic detail panel.
+ *
+ * @since  1.6120.0000
+ * @param  array<int, array<string, mixed>> $rows Diagnostics activity rows.
+ * @return void
+ */
+function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
+	$selected_run_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );
+	if ( '' === $selected_run_key ) {
+		return;
+	}
+
+	$selected = null;
+	foreach ( $rows as $row ) {
+		if ( isset( $row['run_key'] ) && $selected_run_key === (string) $row['run_key'] ) {
+			$selected = $row;
+			break;
+		}
+	}
+
+	if ( ! is_array( $selected ) ) {
+		return;
+	}
+
+	$description = isset( $selected['description'] ) ? trim( (string) $selected['description'] ) : '';
+	if ( '' === $description ) {
+		$description = esc_html__( 'This diagnostic checks a specific part of your site setup and helps you spot opportunities to improve reliability, performance, and visitor trust.', 'wpshadow' );
+	}
+
+	$family_label = isset( $selected['family'] ) ? (string) $selected['family'] : '';
+	$is_enabled   = isset( $selected['enabled'] ) ? (bool) $selected['enabled'] : true;
+	$gauge_label  = isset( $selected['gauge_label'] ) ? (string) $selected['gauge_label'] : (string) __( 'Overall Health', 'wpshadow' );
+	$run_key      = isset( $selected['run_key'] ) ? (string) $selected['run_key'] : '';
+	$frequency    = isset( $selected['frequency'] ) ? (int) $selected['frequency'] : DAY_IN_SECONDS;
+	$failure_reason = isset( $selected['failure_reason'] ) ? trim( (string) $selected['failure_reason'] ) : '';
+	$back_url     = add_query_arg( array( 'page' => 'wpshadow' ), admin_url( 'admin.php' ) );
+	$toggle_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
+	$run_nonce    = wp_create_nonce( 'wpshadow_security_scan' );
+
+	$frequency_options = array(
+		0       => __( 'Every request', 'wpshadow' ),
+		3600    => __( 'Hourly', 'wpshadow' ),
+		21600   => __( 'Every 6 hours', 'wpshadow' ),
+		86400   => __( 'Daily', 'wpshadow' ),
+		604800  => __( 'Weekly', 'wpshadow' ),
+		2592000 => __( 'Monthly', 'wpshadow' ),
+		7776000 => __( 'Quarterly', 'wpshadow' ),
+	);
+
+	if ( ! isset( $frequency_options[ $frequency ] ) ) {
+		$frequency = DAY_IN_SECONDS;
+	}
+
+	$d_raw = isset( $selected['status_raw'] ) ? (string) $selected['status_raw'] : 'unknown';
+	if ( '' === $failure_reason && 'failed' === $d_raw ) {
+		$class_name = isset( $selected['class'] ) ? (string) $selected['class'] : '';
+		if ( '' !== $class_name && class_exists( $class_name ) ) {
+			try {
+				$runtime_result = null;
+				if ( method_exists( $class_name, 'check' ) ) {
+					$runtime_result = call_user_func( array( $class_name, 'check' ) );
+				} elseif ( method_exists( $class_name, 'execute' ) ) {
+					$runtime_result = call_user_func( array( $class_name, 'execute' ) );
+				}
+
+				if ( is_array( $runtime_result ) && ! empty( $runtime_result['description'] ) ) {
+					$failure_reason = trim( wp_strip_all_tags( (string) $runtime_result['description'] ) );
+				}
+			} catch ( \Throwable $exception ) {
+				// Keep UI resilient if the fallback check errors.
+			}
+		}
+	}
+	?>
+	<div class="wps-card wps-mb-6">
+		<div class="wps-card-header">
+			<h2 class="wps-card-title"><?php echo esc_html( (string) $selected['name'] ); ?></h2>
+		</div>
+		<div class="wps-card-body">
+			<div class="wps-mb-4" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+				<span style="font-size:12px;color:#4b5563;"><?php esc_html_e( 'Diagnostic Details', 'wpshadow' ); ?></span>
+				<span style="font-size:12px;padding:4px 10px;border-radius:999px;background:#f0f6fc;color:#0b57d0;">
+					<?php echo esc_html( $gauge_label ); ?>
+				</span>
+				<a href="<?php echo esc_url( $back_url ); ?>" aria-label="<?php esc_attr_e( 'Close diagnostic details', 'wpshadow' ); ?>" title="<?php esc_attr_e( 'Close', 'wpshadow' ); ?>" style="font-size:20px;line-height:1;text-decoration:none;color:#374151;padding:2px 6px;border-radius:4px;border:1px solid #d1d5db;">
+					&times;
+				</a>
+			</div>
+
+			<div class="wps-mb-4" style="border:1px solid #dcdcde;border-radius:8px;padding:14px;background:#ffffff;">
+				<h3 style="margin-top:0;margin-bottom:10px;"><?php esc_html_e( 'Diagnostic Information', 'wpshadow' ); ?></h3>
+				<p><strong><?php esc_html_e( 'What this checks:', 'wpshadow' ); ?></strong></p>
+				<p><?php echo esc_html( $description ); ?></p>
+				<p><strong><?php esc_html_e( 'Why it matters:', 'wpshadow' ); ?></strong></p>
+				<p><?php esc_html_e( 'Keeping this area healthy helps prevent avoidable problems and keeps your site experience smoother for visitors and search engines.', 'wpshadow' ); ?></p>
+				<?php if ( '' !== $family_label ) : ?>
+					<p>
+						<strong><?php esc_html_e( 'Family:', 'wpshadow' ); ?></strong>
+						<?php echo esc_html( $family_label ); ?>
+					</p>
+				<?php endif; ?>
+			</div>
+
+			<div class="wps-mb-4" style="border:1px solid #dcdcde;border-radius:8px;padding:14px;background:#fafcff;">
+				<h3 style="margin-top:0;margin-bottom:10px;"><?php esc_html_e( 'Current Status', 'wpshadow' ); ?></h3>
+				<p>
+					<strong><?php esc_html_e( 'Status:', 'wpshadow' ); ?></strong>
+					<?php
+					if ( 'passed' === $d_raw ) {
+						echo '<span style="color:#00a32a;font-weight:600;">' . esc_html( (string) $selected['status'] ) . '</span>';
+					} elseif ( 'failed' === $d_raw ) {
+						echo '<span style="color:#d63638;font-weight:600;">' . esc_html( (string) $selected['status'] ) . '</span>';
+					} else {
+						echo esc_html( (string) $selected['status'] );
+					}
+					?>
+				</p>
+				<p><strong><?php esc_html_e( 'Last run:', 'wpshadow' ); ?></strong> <?php echo wp_kses_post( (string) $selected['last_run'] ); ?></p>
+				<p><strong><?php esc_html_e( 'Next run:', 'wpshadow' ); ?></strong> <?php echo wp_kses_post( (string) $selected['next_run'] ); ?></p>
+				<p>
+					<strong><?php esc_html_e( 'Diagnostic is currently:', 'wpshadow' ); ?></strong>
+					<span id="wpshadow-diagnostic-enabled-label">
+						<?php echo esc_html( $is_enabled ? __( 'Enabled', 'wpshadow' ) : __( 'Disabled', 'wpshadow' ) ); ?>
+					</span>
+				</p>
+				<?php if ( 'failed' === $d_raw ) : ?>
+					<div style="margin-top:10px;padding:10px 12px;border-radius:6px;background:#fef2f2;border-left:4px solid #d63638;">
+						<p style="margin:0 0 6px 0;"><strong><?php esc_html_e( 'Why this failed:', 'wpshadow' ); ?></strong></p>
+						<p style="margin:0;">
+							<?php
+							echo esc_html(
+								'' !== $failure_reason
+									? $failure_reason
+									: __( 'A specific issue was detected, but details are not available yet. Run this diagnostic now to refresh the latest failure reason.', 'wpshadow' )
+							);
+							?>
+						</p>
+					</div>
+				<?php endif; ?>
+			</div>
+
+			<div class="wps-mb-4" style="border:1px solid #dcdcde;border-radius:8px;padding:14px;background:#ffffff;">
+				<h3 style="margin-top:0;margin-bottom:10px;"><?php esc_html_e( 'Scheduling', 'wpshadow' ); ?></h3>
+				<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+					<label for="wpshadow-diagnostic-frequency">
+						<strong><?php esc_html_e( 'Run frequency:', 'wpshadow' ); ?></strong>
+					</label>
+					<select
+						id="wpshadow-diagnostic-frequency"
+						data-run-key="<?php echo esc_attr( $run_key ); ?>"
+						data-nonce="<?php echo esc_attr( $toggle_nonce ); ?>"
+					>
+						<?php foreach ( $frequency_options as $value => $label ) : ?>
+							<option value="<?php echo esc_attr( (string) $value ); ?>" <?php selected( $frequency, (int) $value ); ?>>
+								<?php echo esc_html( $label ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+					<button type="button" id="wpshadow-save-frequency-btn" class="button">
+						<?php esc_html_e( 'Save Frequency', 'wpshadow' ); ?>
+					</button>
+				</div>
+			</div>
+
+			<div style="border:1px solid #dcdcde;border-radius:8px;padding:14px;background:#f6fbf7;">
+				<h3 style="margin-top:0;margin-bottom:10px;"><?php esc_html_e( 'Actions', 'wpshadow' ); ?></h3>
+				<div class="wps-flex wps-gap-3 wps-mt-2" style="flex-wrap:wrap;">
+					<button
+						type="button"
+						id="wpshadow-toggle-diagnostic-btn"
+						class="button"
+						data-class-name="<?php echo esc_attr( (string) $selected['class'] ); ?>"
+						data-enabled="<?php echo esc_attr( $is_enabled ? '1' : '0' ); ?>"
+						data-nonce="<?php echo esc_attr( $toggle_nonce ); ?>"
+					>
+						<?php echo esc_html( $is_enabled ? __( 'Disable This Diagnostic', 'wpshadow' ) : __( 'Enable This Diagnostic', 'wpshadow' ) ); ?>
+					</button>
+
+					<button
+						type="button"
+						id="wpshadow-run-diagnostic-btn"
+						class="button button-primary"
+						data-class-name="<?php echo esc_attr( (string) $selected['class'] ); ?>"
+						data-nonce="<?php echo esc_attr( $run_nonce ); ?>"
+					>
+						<?php esc_html_e( 'Run This Diagnostic Now', 'wpshadow' ); ?>
+					</button>
+				</div>
+				<div id="wpshadow-diagnostic-action-status" role="status" aria-live="polite" class="wps-mt-3"></div>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
  * Render diagnostics recent activities table at the bottom of dashboard.
  *
+ * @since  1.6120.0000
  * @return void
  */
 function wpshadow_render_diagnostics_recent_activities(): void {
@@ -166,10 +522,12 @@ function wpshadow_render_diagnostics_recent_activities(): void {
 	if ( empty( $rows ) ) {
 		return;
 	}
+
+	wpshadow_render_selected_diagnostic_detail( $rows );
 	?>
 	<div class="wps-card wps-mt-8">
 		<div class="wps-card-header">
-			<h2 class="wps-card-title"><?php esc_html_e( 'Recent Activities', 'wpshadow' ); ?></h2>
+			<h2 class="wps-card-title"><?php esc_html_e( 'Diagnostic Status', 'wpshadow' ); ?></h2>
 		</div>
 		<div class="wps-card-body">
 			<p><?php esc_html_e( 'Diagnostics run history and scheduling status.', 'wpshadow' ); ?></p>
@@ -186,10 +544,23 @@ function wpshadow_render_diagnostics_recent_activities(): void {
 					<tbody>
 						<?php foreach ( $rows as $row ) : ?>
 							<tr>
-								<td><?php echo esc_html( (string) $row['name'] ); ?></td>
+								<td>
+									<a href="<?php echo esc_url( (string) $row['detail_url'] ); ?>">
+										<?php echo esc_html( (string) $row['name'] ); ?>
+									</a>
+								</td>
 								<td><?php echo wp_kses_post( (string) $row['last_run'] ); ?></td>
 								<td><?php echo wp_kses_post( (string) $row['next_run'] ); ?></td>
-								<td><?php echo esc_html( (string) $row['status'] ); ?></td>
+								<td><?php
+							$r_raw = isset( $row['status_raw'] ) ? (string) $row['status_raw'] : 'unknown';
+							if ( 'passed' === $r_raw ) {
+								echo '<span style="color:#00a32a;font-weight:600;">' . esc_html( (string) $row['status'] ) . '</span>';
+							} elseif ( 'failed' === $r_raw ) {
+								echo '<span style="color:#d63638;font-weight:600;">' . esc_html( (string) $row['status'] ) . '</span>';
+							} else {
+								echo esc_html( (string) $row['status'] );
+							}
+						?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -209,6 +580,7 @@ function wpshadow_render_diagnostics_recent_activities(): void {
  *    - If never run: Ask permission to run
  *    - If last run >5 minutes: Show progress bar with real-time updates
  *
+ * @since  1.6120.0000
  * @return void
  */
 function wpshadow_render_dashboard() {
@@ -476,6 +848,146 @@ function wpshadow_render_dashboard() {
 				clearInterval(progressInterval);
 			});
 		}
+
+		function updateToggleDiagnosticButtonState($button, enabled) {
+			$button.attr('data-enabled', enabled ? '1' : '0');
+			$button.text(
+				enabled
+					? '<?php echo esc_js( __( 'Disable This Diagnostic', 'wpshadow' ) ); ?>'
+					: '<?php echo esc_js( __( 'Enable This Diagnostic', 'wpshadow' ) ); ?>'
+			);
+
+			$('#wpshadow-diagnostic-enabled-label').text(
+				enabled
+					? '<?php echo esc_js( __( 'Enabled', 'wpshadow' ) ); ?>'
+					: '<?php echo esc_js( __( 'Disabled', 'wpshadow' ) ); ?>'
+			);
+		}
+
+		$(document).on('click', '#wpshadow-toggle-diagnostic-btn', function(event) {
+			event.preventDefault();
+
+			var $button = $(this);
+			var className = String($button.data('class-name') || '');
+			var nonce = String($button.data('nonce') || '');
+			var currentlyEnabled = String($button.attr('data-enabled')) === '1';
+			var nextEnabled = !currentlyEnabled;
+			var $status = $('#wpshadow-diagnostic-action-status');
+
+			if (!className || !nonce) {
+				$status.text('<?php echo esc_js( __( 'Missing diagnostic information. Please refresh and try again.', 'wpshadow' ) ); ?>');
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$status.text('<?php echo esc_js( __( 'Saving diagnostic setting...', 'wpshadow' ) ); ?>');
+
+			$.post(ajaxurl, {
+				action: 'wpshadow_toggle_diagnostic',
+				nonce: nonce,
+				class_name: className,
+				enable: nextEnabled ? 1 : 0
+			}).done(function(response) {
+				if (response && response.success) {
+					updateToggleDiagnosticButtonState($button, nextEnabled);
+					$status.text(
+						nextEnabled
+							? '<?php echo esc_js( __( 'Diagnostic enabled successfully.', 'wpshadow' ) ); ?>'
+							: '<?php echo esc_js( __( 'Diagnostic disabled successfully.', 'wpshadow' ) ); ?>'
+					);
+				} else {
+					var message = (response && response.data && response.data.message)
+						? response.data.message
+						: '<?php echo esc_js( __( 'Could not update diagnostic setting.', 'wpshadow' ) ); ?>';
+					$status.text(message);
+				}
+			}).fail(function() {
+				$status.text('<?php echo esc_js( __( 'Could not update diagnostic setting.', 'wpshadow' ) ); ?>');
+			}).always(function() {
+				$button.prop('disabled', false);
+			});
+		});
+
+		$(document).on('click', '#wpshadow-run-diagnostic-btn', function(event) {
+			event.preventDefault();
+
+			var $button = $(this);
+			var className = String($button.data('class-name') || '');
+			var nonce = String($button.data('nonce') || '');
+			var $status = $('#wpshadow-diagnostic-action-status');
+
+			if (!className || !nonce) {
+				$status.text('<?php echo esc_js( __( 'Missing diagnostic information. Please refresh and try again.', 'wpshadow' ) ); ?>');
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$status.text('<?php echo esc_js( __( 'Running this diagnostic now...', 'wpshadow' ) ); ?>');
+
+			$.post(ajaxurl, {
+				action: 'wpshadow_run_single_diagnostic',
+				nonce: nonce,
+				class_name: className
+			}).done(function(response) {
+				if (response && response.success) {
+					var message = (response.data && response.data.message)
+						? response.data.message
+						: '<?php echo esc_js( __( 'Diagnostic run completed.', 'wpshadow' ) ); ?>';
+					$status.text(message + ' <?php echo esc_js( __( 'Refreshing this page...', 'wpshadow' ) ); ?>');
+					setTimeout(function() {
+						window.location.reload();
+					}, 900);
+				} else {
+					var errorMessage = (response && response.data && response.data.message)
+						? response.data.message
+						: '<?php echo esc_js( __( 'Diagnostic run failed.', 'wpshadow' ) ); ?>';
+					$status.text(errorMessage);
+				}
+			}).fail(function() {
+				$status.text('<?php echo esc_js( __( 'Diagnostic run failed.', 'wpshadow' ) ); ?>');
+			}).always(function() {
+				$button.prop('disabled', false);
+			});
+		});
+
+		$(document).on('click', '#wpshadow-save-frequency-btn', function(event) {
+			event.preventDefault();
+
+			var $button = $(this);
+			var $select = $('#wpshadow-diagnostic-frequency');
+			var runKey = String($select.data('run-key') || '');
+			var nonce = String($select.data('nonce') || '');
+			var frequency = parseInt($select.val(), 10);
+			var $status = $('#wpshadow-diagnostic-action-status');
+
+			if (!runKey || !nonce || Number.isNaN(frequency)) {
+				$status.text('<?php echo esc_js( __( 'Missing scheduling information. Please refresh and try again.', 'wpshadow' ) ); ?>');
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$status.text('<?php echo esc_js( __( 'Saving frequency...', 'wpshadow' ) ); ?>');
+
+			$.post(ajaxurl, {
+				action: 'wpshadow_set_diagnostic_frequency',
+				nonce: nonce,
+				run_key: runKey,
+				frequency: frequency
+			}).done(function(response) {
+				if (response && response.success) {
+					$status.text('<?php echo esc_js( __( 'Frequency saved. Future runs will follow this schedule.', 'wpshadow' ) ); ?>');
+				} else {
+					var message = (response && response.data && response.data.message)
+						? response.data.message
+						: '<?php echo esc_js( __( 'Could not save frequency.', 'wpshadow' ) ); ?>';
+					$status.text(message);
+				}
+			}).fail(function() {
+				$status.text('<?php echo esc_js( __( 'Could not save frequency.', 'wpshadow' ) ); ?>');
+			}).always(function() {
+				$button.prop('disabled', false);
+			});
+		});
 		});
 	</script>
 	<?php

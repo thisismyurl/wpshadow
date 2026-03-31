@@ -114,7 +114,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function render_page() {
-		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'dashboard';
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
 
 		?>
 		<div class="wrap wpshadow-guardian-page">

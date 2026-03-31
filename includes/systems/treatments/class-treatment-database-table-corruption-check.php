@@ -116,10 +116,18 @@ class Treatment_Database_Table_Corruption_Check extends Treatment_Base {
 		$failed = array();
 
 		foreach ( $corrupt_tables as $table_info ) {
-			$table = $table_info['table'];
+			$table = isset( $table_info['table'] ) ? sanitize_key( (string) $table_info['table'] ) : '';
+
+			if ( '' === $table ) {
+				$failed[] = array(
+					'table' => '',
+					'error' => __( 'Invalid table name received', 'wpshadow' ),
+				);
+				continue;
+			}
 			
 			// Attempt to repair the table.
-			$results = $wpdb->get_results( "REPAIR TABLE {$table}", ARRAY_A );
+			$results = $wpdb->get_results( "REPAIR TABLE `{$table}`", ARRAY_A );
 			
 			if ( empty( $results ) ) {
 				$failed[] = array(

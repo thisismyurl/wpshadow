@@ -43,6 +43,19 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 	}
 
 	/**
+	 * Get the risk level for this treatment.
+	 *
+	 * Creates a mu-plugin file that runs on every page load.
+	 * Requires one-time user confirmation.
+	 *
+	 * @since  1.6132.1200
+	 * @return string
+	 */
+	public static function get_risk_level(): string {
+		return 'moderate';
+	}
+
+	/**
 	 * Apply the treatment.
 	 *
 	 * Adds skip links to site header via mu-plugin.

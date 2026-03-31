@@ -18,6 +18,22 @@ namespace WPShadow\Guardian;
 class Hook_Execution_Analyzer {
 
 	/**
+	 * Request sampling rate denominator.
+	 *
+	 * 100 = capture 1 out of every 100 requests.
+	 *
+	 * @var int
+	 */
+	private const REQUEST_SAMPLE_RATE = 100;
+
+	/**
+	 * Whether the current request is being sampled.
+	 *
+	 * @var bool
+	 */
+	private static $capture_request = false;
+
+	/**
 	 * @var array Hook execution data
 	 */
 	private static $hook_data = array();
@@ -33,6 +49,12 @@ class Hook_Execution_Analyzer {
 	 * @return void
 	 */
 	public static function init(): void {
+		if ( ! self::should_capture_request() ) {
+			return;
+		}
+
+		self::$capture_request = true;
+
 		// Track all hooks
 		add_action( 'all', array( __CLASS__, 'track_hook' ), 1 );
 
@@ -53,17 +75,16 @@ class Hook_Execution_Analyzer {
 	 * @return void
 	 */
 	public static function track_hook( string $hook_name ): void {
+		if ( ! self::$capture_request ) {
+			return;
+		}
+
 		// Skip our own hooks to avoid recursion
 		if ( strpos( $hook_name, 'wpshadow_' ) === 0 ) {
 			return;
 		}
 
 		++self::$hook_count;
-
-		// Sample hooks (only track 1% to avoid overhead)
-		if ( self::$hook_count % 100 !== 0 ) {
-			return;
-		}
 
 		if ( ! isset( self::$hook_data[ $hook_name ] ) ) {
 			self::$hook_data[ $hook_name ] = 0;
@@ -77,7 +98,7 @@ class Hook_Execution_Analyzer {
 	 * @return void
 	 */
 	public static function save_hook_data(): void {
-		if ( empty( self::$hook_data ) ) {
+		if ( ! self::$capture_request || empty( self::$hook_data ) ) {
 			return;
 		}
 
@@ -94,11 +115,11 @@ class Hook_Execution_Analyzer {
 			if ( ! isset( $stored['hooks'][ $hook ] ) ) {
 				$stored['hooks'][ $hook ] = 0;
 			}
-			// Multiply by 100 since we sampled at 1%
-			$stored['hooks'][ $hook ] += ( $count * 100 );
+			// Scale captured request data to estimate full traffic.
+			$stored['hooks'][ $hook ] += ( $count * self::REQUEST_SAMPLE_RATE );
 		}
 
-		$stored['total_count'] += ( self::$hook_count );
+		$stored['total_count'] += ( self::$hook_count * self::REQUEST_SAMPLE_RATE );
 
 		// Keep only top 100 hooks
 		arsort( $stored['hooks'] );
@@ -177,5 +198,22 @@ class Hook_Execution_Analyzer {
 	public static function clear_cache(): void {
 		\WPShadow\Core\Cache_Manager::delete( 'hook_execution_data', 'wpshadow_monitoring' );
 		\WPShadow\Core\Cache_Manager::delete( 'hook_execution_overhead', 'wpshadow_monitoring' );
+	}
+
+	/**
+	 * Determine whether to capture hook execution for this request.
+	 *
+	 * @return bool
+	 */
+	private static function should_capture_request(): bool {
+		if ( wp_doing_cron() ) {
+			return false;
+		}
+
+		if ( wp_doing_ajax() ) {
+			return false;
+		}
+
+		return 1 === wp_rand( 1, self::REQUEST_SAMPLE_RATE );
 	}
 }

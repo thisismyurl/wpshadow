@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since 1.6093.1200
+ * @since 1.6151.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages Vault account registration, API key exchange, and account verification.
  *
- * @since 1.6093.1200
+ * @since 1.6151.1200
  */
 class Vault_Registration extends Hook_Subscriber_Base {
 
@@ -42,7 +42,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -57,7 +57,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -68,7 +68,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	 * Initialize registration hooks (deprecated)
 	 *
 	 * @deprecated1.0 Use Vault_Registration::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -80,7 +80,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	 *
 	 * Creates new Vault account with email/password.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_register() {
@@ -152,7 +152,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	 *
 	 * For users who already have a Vault account.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_connect() {
@@ -193,7 +193,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	 *
 	 * Removes Vault API key (keeps local backups).
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_disconnect() {
@@ -218,7 +218,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	 *
 	 * Gets current Vault account status and usage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_check_status() {
@@ -242,7 +242,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	/**
 	 * Validate API key with Vault service
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $api_key API key to validate.
 	 * @return bool True if valid, false otherwise.
 	 */
@@ -289,7 +289,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	/**
 	 * Fetch account information from Vault API
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $api_key API key.
 	 * @return array|false Account info or false on failure.
 	 */
@@ -320,7 +320,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	/**
 	 * Check if Vault service is available
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return bool True if available, false otherwise.
 	 */
 	public static function is_service_available() {
@@ -354,7 +354,7 @@ class Vault_Registration extends Hook_Subscriber_Base {
 	 *
 	 * Explains free tier benefits.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return string Prompt message HTML.
 	 */
 	public static function get_registration_prompt() {

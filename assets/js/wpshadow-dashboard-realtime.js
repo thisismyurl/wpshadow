@@ -21,7 +21,8 @@
 			enableAutoRefresh: true,
 			bulkRunOfferThreshold: 100,
 			bulkRunBatchSize: 15,
-			bulkRunBatchBudgetMs: 2000
+			bulkRunBatchBudgetMs: 2000,
+			treatmentPromptCooldownMs: 30000
 		},
 
 		bulkRunOfferDismissed: false,
@@ -29,6 +30,9 @@
 		bulkRunPromptMounted: false,
 		bulkRunCountCheckInFlight: false,
 		bulkRunPendingCount: null,
+		postScanTreatmentsInFlight: false,
+		postScanTreatmentModalMounted: false,
+		lastPostScanPromptAt: 0,
 
 		/**
 		 * Initialize real-time dashboard updates
@@ -61,6 +65,7 @@
 				function () {
 					self.stopRealtimeUpdates();
 					self.refreshDashboard(); // One final refresh
+					self.maybeRunPostScanTreatments( 'scan_complete' );
 				}
 			);
 
@@ -678,6 +683,7 @@
 							$( '#wpshadow-bulk-run-summary' ).text( 'Bulk run completed for the current pending diagnostics queue.' );
 							$( '#wpshadow-bulk-run-progress-label' ).text( 'Completed. All pending diagnostics in this run have been processed.' );
 							$( '#wpshadow-bulk-run-controls' ).hide();
+							self.maybeRunPostScanTreatments( 'bulk_pending_complete' );
 							return;
 						}
 
@@ -708,6 +714,323 @@
 					}
 				}
 			);
+		},
+
+		/**
+		 * Fetch available post-scan treatments and run auto-apply flow.
+		 */
+		maybeRunPostScanTreatments: function () {
+			const now = Date.now();
+
+			if ( this.postScanTreatmentsInFlight ) {
+				return;
+			}
+
+			if ( now - this.lastPostScanPromptAt < this.config.treatmentPromptCooldownMs ) {
+				return;
+			}
+
+			this.postScanTreatmentsInFlight = true;
+
+			this.postScanTreatmentsRequest(
+				'fetch',
+				{},
+				function (fetchData) {
+					const safeTreatments = Array.isArray( fetchData && fetchData.safe ) ? fetchData.safe : [];
+					const moderateTreatments = Array.isArray( fetchData && fetchData.moderate ) ? fetchData.moderate : [];
+					const highTreatments = Array.isArray( fetchData && fetchData.high ) ? fetchData.high : [];
+					const alwaysApproved = Array.isArray( fetchData && fetchData.always_approved ) ? fetchData.always_approved : [];
+
+					if ( 0 === safeTreatments.length && 0 === moderateTreatments.length && 0 === highTreatments.length ) {
+						WPShadowDashboard.postScanTreatmentsInFlight = false;
+						WPShadowDashboard.lastPostScanPromptAt = now;
+						return;
+					}
+
+					WPShadowDashboard.postScanTreatmentsRequest(
+						'apply_safe',
+						{},
+						function () {
+							const alwaysApprovedMap = {};
+							$.each(
+								alwaysApproved,
+								function (index, findingId) {
+									alwaysApprovedMap[ String( findingId ) ] = true;
+								}
+							);
+
+							const riskyCandidates = moderateTreatments.concat( highTreatments );
+							const riskyTreatments = [];
+
+							$.each(
+								riskyCandidates,
+								function (index, treatment) {
+									const findingId = treatment && treatment.finding_id ? String( treatment.finding_id ) : '';
+									if ( ! findingId || alwaysApprovedMap[ findingId ] ) {
+										return;
+									}
+
+									riskyTreatments.push( treatment );
+								}
+							);
+
+							if ( riskyTreatments.length > 0 ) {
+								WPShadowDashboard.showRiskyTreatmentsModal(
+									riskyTreatments,
+									function () {
+										WPShadowDashboard.updateDashboardData();
+										WPShadowDashboard.postScanTreatmentsInFlight = false;
+										WPShadowDashboard.lastPostScanPromptAt = Date.now();
+									}
+								);
+								return;
+							}
+
+							WPShadowDashboard.updateDashboardData();
+							WPShadowDashboard.postScanTreatmentsInFlight = false;
+							WPShadowDashboard.lastPostScanPromptAt = Date.now();
+						},
+						function () {
+							WPShadowDashboard.postScanTreatmentsInFlight = false;
+						}
+					);
+				},
+				function () {
+					WPShadowDashboard.postScanTreatmentsInFlight = false;
+				}
+			);
+		},
+
+		/**
+		 * Execute post-scan treatment AJAX requests.
+		 */
+		postScanTreatmentsRequest: function (mode, extraData, onSuccess, onError) {
+			const dashboardNonce =
+				(typeof window.wpshadowDashboardData !== 'undefined' && window.wpshadowDashboardData.dashboard_nonce)
+					? window.wpshadowDashboardData.dashboard_nonce
+					: ((typeof window.wpshadow !== 'undefined' && window.wpshadow.dashboard_nonce)
+						? window.wpshadow.dashboard_nonce
+						: '');
+
+			if ( ! dashboardNonce ) {
+				onError();
+				return;
+			}
+
+			const data = $.extend(
+				{
+					action: 'wpshadow_post_scan_treatments',
+					nonce: dashboardNonce,
+					mode: mode
+				},
+				extraData || {}
+			);
+
+			$.ajax(
+				{
+					url: ajaxurl,
+					type: 'POST',
+					data: data,
+					success: function (response) {
+						let payload = response;
+						if ( typeof payload === 'string' ) {
+							try {
+								payload = JSON.parse( payload );
+							} catch (e) {
+								onError();
+								return;
+							}
+						}
+
+						if ( payload && payload.success && payload.data ) {
+							onSuccess( payload.data );
+							return;
+						}
+
+						onError();
+					},
+					error: function () {
+						onError();
+					}
+				}
+			);
+		},
+
+		/**
+		 * Build and display consent modal for moderate/high-risk treatments.
+		 */
+		showRiskyTreatmentsModal: function (riskyTreatments, onComplete) {
+			if ( ! this.postScanTreatmentModalMounted ) {
+				this.mountRiskyTreatmentsModal();
+			}
+
+			const $modal = $( '#wpshadow-post-scan-treatments-modal' );
+			const $list = $( '#wpshadow-post-scan-treatments-list' );
+			$list.empty();
+
+			$.each(
+				riskyTreatments,
+				function (index, treatment) {
+					const findingId = treatment && treatment.finding_id ? String( treatment.finding_id ) : '';
+					if ( ! findingId ) {
+						return;
+					}
+
+					const title = treatment.title ? String( treatment.title ) : findingId;
+					const riskLevel = treatment.risk_level ? String( treatment.risk_level ) : 'moderate';
+					const description = treatment.description ? String( treatment.description ) : '';
+
+					const $row = $( '<div class="wpshadow-post-scan-treatment-row" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:8px;background:#fff;"></div>' );
+					const $name = $( '<div style="font-weight:600;color:#0f172a;margin-bottom:4px;"></div>' ).text( title );
+					const $meta = $( '<div style="font-size:12px;color:#475569;margin-bottom:6px;"></div>' ).text( 'Risk level: ' + riskLevel );
+					const $desc = $( '<div style="font-size:12px;color:#334155;margin-bottom:8px;"></div>' ).text( description );
+					const $applyWrap = $( '<label style="display:block;font-size:12px;color:#1f2937;margin-bottom:6px;"></label>' );
+					const $apply = $( '<input type="checkbox" class="wpshadow-post-scan-apply" />' );
+					$apply.attr( 'data-finding-id', findingId );
+					$apply.attr( 'data-title', title );
+					$apply.attr( 'data-risk-level', riskLevel );
+
+					const $alwaysWrap = $( '<label style="display:block;font-size:12px;color:#475569;padding-left:18px;"></label>' );
+					const $always = $( '<input type="checkbox" class="wpshadow-post-scan-always" disabled="disabled" />' );
+					$always.attr( 'data-finding-id', findingId );
+
+					$applyWrap.append( $apply ).append( document.createTextNode( ' Apply this fix now' ) );
+					$alwaysWrap.append( $always ).append( document.createTextNode( ' Always apply this fix after future scans' ) );
+
+					$row.append( $name ).append( $meta );
+					if ( description ) {
+						$row.append( $desc );
+					}
+					$row.append( $applyWrap ).append( $alwaysWrap );
+					$list.append( $row );
+				}
+			);
+
+			$list.off( 'change', '.wpshadow-post-scan-apply' ).on(
+				'change',
+				'.wpshadow-post-scan-apply',
+				function () {
+					const findingId = String( $( this ).attr( 'data-finding-id' ) || '' );
+					const $always = $list.find( '.wpshadow-post-scan-always[data-finding-id="' + findingId + '"]' );
+					if ( $( this ).is( ':checked' ) ) {
+						$always.prop( 'disabled', false );
+					} else {
+						$always.prop( 'checked', false ).prop( 'disabled', true );
+					}
+				}
+			);
+
+			$( '#wpshadow-post-scan-apply-selected' ).off( 'click' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
+					const selections = [];
+
+					$list.find( '.wpshadow-post-scan-apply:checked' ).each(
+						function () {
+							const findingId = String( $( this ).attr( 'data-finding-id' ) || '' );
+							if ( ! findingId ) {
+								return;
+							}
+
+							const alwaysApply = $list.find( '.wpshadow-post-scan-always[data-finding-id="' + findingId + '"]' ).is( ':checked' );
+							selections.push(
+								{
+									finding_id: findingId,
+									always_apply: alwaysApply
+								}
+							);
+						}
+					);
+
+					$modal.hide();
+
+					if ( 0 === selections.length ) {
+						onComplete();
+						return;
+					}
+
+					WPShadowDashboard.applySelectedRiskyTreatments( selections, onComplete );
+				}
+			);
+
+			$( '#wpshadow-post-scan-skip' ).off( 'click' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
+					$modal.hide();
+					onComplete();
+				}
+			);
+
+			$modal.show();
+		},
+
+		/**
+		 * Apply selected risky treatments sequentially.
+		 */
+		applySelectedRiskyTreatments: function (selections, onComplete) {
+			const results = {
+				success: 0,
+				failed: 0
+			};
+
+			const runNext = function (index) {
+				if ( index >= selections.length ) {
+					if ( results.failed > 0 ) {
+						$( '#wpshadow-dashboard-status' ).html( 'Applied ' + results.success + ' selected fixes. ' + results.failed + ' failed.' );
+					} else {
+						$( '#wpshadow-dashboard-status' ).html( 'Applied ' + results.success + ' selected fixes.' );
+					}
+
+					onComplete();
+					return;
+				}
+
+				WPShadowDashboard.postScanTreatmentsRequest(
+					'apply_one',
+					{
+						finding_id: selections[ index ].finding_id,
+						always_apply: selections[ index ].always_apply ? '1' : '0'
+					},
+					function () {
+						results.success += 1;
+						runNext( index + 1 );
+					},
+					function () {
+						results.failed += 1;
+						runNext( index + 1 );
+					}
+				);
+			};
+
+			runNext( 0 );
+		},
+
+		/**
+		 * Mount post-scan treatment consent modal markup.
+		 */
+		mountRiskyTreatmentsModal: function () {
+			const html = [
+				'<div id="wpshadow-post-scan-treatments-modal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(15,23,42,.55);padding:24px;overflow:auto;">',
+				'<div role="dialog" aria-modal="true" aria-labelledby="wpshadow-post-scan-title" style="max-width:760px;margin:20px auto;background:#f8fafc;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 16px 40px rgba(2,6,23,.25);">',
+				'<div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;">',
+				'<h2 id="wpshadow-post-scan-title" style="margin:0;font-size:18px;line-height:1.3;color:#0f172a;">Review Recommended Fixes</h2>',
+				'<p style="margin:8px 0 0;font-size:13px;color:#334155;">We already applied low-risk fixes. Choose which higher-impact fixes to apply now.</p>',
+				'</div>',
+				'<div style="padding:16px 18px;max-height:420px;overflow:auto;">',
+				'<div id="wpshadow-post-scan-treatments-list"></div>',
+				'</div>',
+				'<div style="padding:14px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;justify-content:flex-end;background:#fff;">',
+				'<button id="wpshadow-post-scan-skip" class="button button-secondary">Skip for Now</button>',
+				'<button id="wpshadow-post-scan-apply-selected" class="button button-primary">Apply Selected</button>',
+				'</div>',
+				'</div>',
+				'</div>'
+			].join( '' );
+
+			$( 'body' ).append( html );
+			this.postScanTreatmentModalMounted = true;
 		},
 
 		/**

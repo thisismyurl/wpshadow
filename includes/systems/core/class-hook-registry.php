@@ -100,7 +100,7 @@ class Hook_Registry {
 
 				// Check if class exists and extends Hook_Subscriber_Base
 				if ( $class_name && class_exists( $class_name ) ) {
-					if ( is_subclass_of( $class_name, __CLASS__ . '_Base' ) ) {
+					if ( is_subclass_of( $class_name, __NAMESPACE__ . '\\Hook_Subscriber_Base' ) ) {
 						$subscribers[] = $class_name;
 					}
 				}
@@ -229,6 +229,11 @@ class Hook_Registry {
 			return true; // No version requirement
 		}
 
+		// Guard against protected/private methods in discovered subscriber classes.
+		if ( ! is_callable( array( $class_name, 'get_required_version' ) ) ) {
+			return true;
+		}
+
 		$required_version = $class_name::get_required_version();
 
 		if ( empty( $required_version ) ) {
@@ -282,13 +287,33 @@ class Hook_Registry {
 	 * @return array Cached subscribers or empty array.
 	 */
 	private static function get_cached_subscribers(): array {
-		// Only cache in production (not during development)
+		// Allow explicit cache bypass for development diagnostics.
+		if ( defined( 'WPSHADOW_BYPASS_HOOK_CACHE' ) && WPSHADOW_BYPASS_HOOK_CACHE ) {
+			return array();
+		}
+
+		// During development, always re-scan so newly added subscribers are picked up immediately.
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			return array();
 		}
 
 		$cached = get_transient( self::CACHE_KEY );
-		return is_array( $cached ) ? $cached : array();
+
+		// Backward compatibility: legacy payload was a flat array of class names.
+		if ( is_array( $cached ) && isset( $cached[0] ) ) {
+			return $cached;
+		}
+
+		if ( ! is_array( $cached ) || empty( $cached['version'] ) || empty( $cached['subscribers'] ) || ! is_array( $cached['subscribers'] ) ) {
+			return array();
+		}
+
+		$current_version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '';
+		if ( $current_version !== $cached['version'] ) {
+			return array();
+		}
+
+		return $cached['subscribers'];
 	}
 
 	/**
@@ -299,8 +324,22 @@ class Hook_Registry {
 	 * @return void
 	 */
 	private static function cache_subscribers( array $subscribers ): void {
-		// Cache for 1 hour
-		set_transient( self::CACHE_KEY, $subscribers, HOUR_IN_SECONDS );
+		if ( defined( 'WPSHADOW_BYPASS_HOOK_CACHE' ) && WPSHADOW_BYPASS_HOOK_CACHE ) {
+			return;
+		}
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			return;
+		}
+
+		$current_version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '';
+		$payload         = array(
+			'version'     => $current_version,
+			'subscribers' => $subscribers,
+		);
+
+		// Cache for 24 hours to avoid repeated filesystem scans.
+		set_transient( self::CACHE_KEY, $payload, DAY_IN_SECONDS );
 	}
 
 	/**

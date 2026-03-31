@@ -355,7 +355,7 @@ if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
 		}
 
 		// Check if a specific utility is requested via tab parameter
-		$tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 		if ( 'backup' === $tab ) {
 			$tab = 'vault-light';
 		}

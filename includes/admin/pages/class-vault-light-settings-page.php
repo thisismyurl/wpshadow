@@ -1,13 +1,8 @@
 <?php
 /**
  * WPShadow Vault Light Settings Page
-			<?php
-			wpshadow_render_page_header(
-				__( 'Vault Light', 'wpshadow' ),
-				__( 'Basic backup and restore functionality for your WordPress site.', 'wpshadow' ),
-				'dashicons-backup'
-			);
-			?>
+ *
+ * Renders the Vault Light settings UI for local snapshot behavior.
 
 namespace WPShadow\Admin\Pages;
 
@@ -55,39 +50,27 @@ class Vault_Light_Settings_Page {
 						'icon'        => 'dashicons-shield-alt',
 						'body'        => function() {
 							?>
-							<div class="wps-form-group">
-								<label class="wps-toggle" for="wpshadow_backup_enabled">
-									<input 
-										type="checkbox" 
-										id="wpshadow_backup_enabled" 
-										name="wpshadow_backup_enabled" 
-										value="1"
-										<?php checked( get_option( 'wpshadow_backup_enabled', true ) ); ?>
-									/>
-									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Create Snapshot Before Each Treatment', 'wpshadow' ); ?>
-								</label>
-								<p class="wps-form-description">
-									<?php esc_html_e( 'Capture critical settings before treatments so you can roll back quickly.', 'wpshadow' ); ?>
-								</p>
-							</div>
+<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+							array(
+								'id'          => 'wpshadow_backup_enabled',
+								'name'        => 'wpshadow_backup_enabled',
+								'label'       => __( 'Create Snapshot Before Each Treatment', 'wpshadow' ),
+								'helper_text' => __( 'Capture critical settings before treatments so you can roll back quickly.', 'wpshadow' ),
+								'checked'     => (bool) get_option( 'wpshadow_backup_enabled', true ),
+							)
+						); ?>
 
-							<div class="wps-form-group wps-mt-4">
-								<label class="wps-toggle" for="wpshadow_backup_include_database">
-									<input 
-										type="checkbox" 
-										id="wpshadow_backup_include_database" 
-										name="wpshadow_backup_include_database" 
-										value="1"
-										<?php checked( get_option( 'wpshadow_backup_include_database', true ) ); ?>
-									/>
-									<span class="wps-toggle-slider"></span>
-									<?php esc_html_e( 'Include Database in Snapshots', 'wpshadow' ); ?>
-								</label>
-								<p class="wps-form-description">
-									<?php esc_html_e( 'Include database settings in Vault Light snapshots for faster recovery.', 'wpshadow' ); ?>
-								</p>
-							</div>
+						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+							array(
+								'id'          => 'wpshadow_backup_include_database',
+								'name'        => 'wpshadow_backup_include_database',
+								'label'       => __( 'Include Database in Snapshots', 'wpshadow' ),
+								'helper_text' => __( 'Include database settings in Vault Light snapshots for faster recovery.', 'wpshadow' ),
+								'checked'     => (bool) get_option( 'wpshadow_backup_include_database', true ),
+							)
+						); ?>
 							<?php
 						},
 					)
@@ -103,22 +86,16 @@ class Vault_Light_Settings_Page {
 						'icon'        => 'dashicons-calendar',
 						'body'        => function() {
 							?>
-						<div class="wps-form-group">
-							<label class="wps-toggle" for="wpshadow_backup_schedule_enabled">
-								<input
-									type="checkbox"
-									id="wpshadow_backup_schedule_enabled"
-									name="wpshadow_backup_schedule_enabled"
-									value="1"
-									<?php checked( get_option( 'wpshadow_backup_schedule_enabled', false ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Enable scheduled Vault Light snapshots', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Run lightweight snapshots automatically on your schedule.', 'wpshadow' ); ?>
-							</p>
-						</div>
+<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+						array(
+							'id'          => 'wpshadow_backup_schedule_enabled',
+							'name'        => 'wpshadow_backup_schedule_enabled',
+							'label'       => __( 'Enable scheduled Vault Light snapshots', 'wpshadow' ),
+							'helper_text' => __( 'Run lightweight snapshots automatically on your schedule.', 'wpshadow' ),
+							'checked'     => (bool) get_option( 'wpshadow_backup_schedule_enabled', false ),
+						)
+					); ?>
 
 						<div class="wps-form-group wps-mt-4">
 							<label for="wpshadow_backup_schedule_frequency" class="wps-form-label">
@@ -263,58 +240,36 @@ class Vault_Light_Settings_Page {
 						'description' => __( 'Fine-tune snapshot behavior for power users.', 'wpshadow' ),
 						'icon'        => 'dashicons-admin-tools',
 						'body'        => function() {
-							?>
-						<div class="wps-form-group">
-							<label class="wps-toggle" for="wpshadow_backup_compress">
-								<input 
-									type="checkbox" 
-									id="wpshadow_backup_compress" 
-									name="wpshadow_backup_compress" 
-									value="1"
-									<?php checked( get_option( 'wpshadow_backup_compress', true ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Compress Snapshots', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Compress snapshot files to save disk space (slower but saves ~70% space).', 'wpshadow' ); ?>
-							</p>
-						</div>
-
-						<div class="wps-form-group wps-mt-4">
-							<label class="wps-toggle" for="wpshadow_backup_exclude_uploads">
-								<input 
-									type="checkbox" 
-									id="wpshadow_backup_exclude_uploads" 
-									name="wpshadow_backup_exclude_uploads" 
-									value="1"
-									<?php checked( get_option( 'wpshadow_backup_exclude_uploads', false ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Exclude /uploads Folder', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Skip the /wp-content/uploads folder to reduce snapshot size (only backup files that might be modified by treatments).', 'wpshadow' ); ?>
-							</p>
-						</div>
-
-						<div class="wps-form-group wps-mt-4">
-							<label class="wps-toggle" for="wpshadow_backup_verify">
-								<input 
-									type="checkbox" 
-									id="wpshadow_backup_verify" 
-									name="wpshadow_backup_verify" 
-									value="1"
-									<?php checked( get_option( 'wpshadow_backup_verify', true ) ); ?>
-								/>
-								<span class="wps-toggle-slider"></span>
-								<?php esc_html_e( 'Verify Snapshots After Creation', 'wpshadow' ); ?>
-							</label>
-							<p class="wps-form-description">
-								<?php esc_html_e( 'Test each snapshot for integrity (slower but ensures you can rollback if needed).', 'wpshadow' ); ?>
-							</p>
-						</div>
-						<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+								array(
+									'id'          => 'wpshadow_backup_compress',
+									'name'        => 'wpshadow_backup_compress',
+									'label'       => __( 'Compress Snapshots', 'wpshadow' ),
+									'helper_text' => __( 'Compress snapshot files to save disk space (slower but saves ~70% space).', 'wpshadow' ),
+									'checked'     => (bool) get_option( 'wpshadow_backup_compress', true ),
+								)
+							);
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+								array(
+									'id'          => 'wpshadow_backup_exclude_uploads',
+									'name'        => 'wpshadow_backup_exclude_uploads',
+									'label'       => __( 'Exclude /uploads Folder', 'wpshadow' ),
+									'helper_text' => __( 'Skip the /wp-content/uploads folder to reduce snapshot size (only backup files that might be modified by treatments).', 'wpshadow' ),
+									'checked'     => (bool) get_option( 'wpshadow_backup_exclude_uploads', false ),
+								)
+							);
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo \WPShadow\Helpers\Form_Controls::toggle_switch(
+								array(
+									'id'          => 'wpshadow_backup_verify',
+									'name'        => 'wpshadow_backup_verify',
+									'label'       => __( 'Verify Snapshots After Creation', 'wpshadow' ),
+									'helper_text' => __( 'Test each snapshot for integrity (slower but ensures you can rollback if needed).', 'wpshadow' ),
+									'checked'     => (bool) get_option( 'wpshadow_backup_verify', true ),
+								)
+							);
 						},
 					)
 				);

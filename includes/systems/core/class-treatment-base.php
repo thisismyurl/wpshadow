@@ -75,6 +75,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class Treatment_Base implements Treatment_Interface {
 	/**
+	 * Get the risk level for this treatment.
+	 *
+	 * Risk level controls whether a treatment is auto-applied after a scan or
+	 * requires explicit user consent. Subclasses override this when their
+	 * `apply()` performs file writes, database migrations, or other changes
+	 * that may be hard to reverse without manual intervention.
+	 *
+	 * - 'safe'     — Read-only checks or trivially reversible option updates.
+	 *                Auto-applied silently after a bulk scan (default).
+	 * - 'moderate' — Writes to theme files, creates mu-plugins, or touches
+	 *                post content. Requires one-time user confirmation unless
+	 *                the user has chosen "always apply" for this finding.
+	 * - 'high'     — Edits core config files (wp-config.php), modifies
+	 *                .htaccess, or performs bulk database changes.
+	 *                Always requires explicit user confirmation.
+	 *
+	 * @since  1.6132.1200
+	 * @return string Risk level: 'safe', 'moderate', or 'high'.
+	 */
+	public static function get_risk_level(): string {
+		return 'safe';
+	}
+
+	/**
 	 * Check if this treatment can be applied in the current environment.
 	 *
 	 * Handles both single-site and multisite capability checks.

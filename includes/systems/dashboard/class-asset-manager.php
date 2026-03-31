@@ -303,8 +303,8 @@ function wpshadow_enqueue_broken_links_assets( $hook ) {
  * @return void
  */
 function wpshadow_enqueue_site_health_assets( $hook ) {
-	// Site Health page is 'site-health.php' or in Tools menu
-	if ( $hook !== 'site-health.php' && strpos( $hook, 'tools.php' ) === false ) {
+	// Site Health styles should load only on the Site Health screen.
+	if ( 'site-health.php' !== $hook ) {
 		return;
 	}
 
@@ -371,6 +371,15 @@ function wpshadow_enqueue_dark_mode_assets( $hook ) {
  */
 function wpshadow_enqueue_tooltip_assets() {
 	global $pagenow;
+
+	if ( ! function_exists( 'get_current_screen' ) ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+	if ( ! $screen || strpos( (string) $screen->id, 'wpshadow' ) === false ) {
+		return;
+	}
 
 	// Skip tooltips on specific pages
 	if ( in_array( $pagenow, array( 'edit-comments.php', 'edit.php' ), true ) ) {

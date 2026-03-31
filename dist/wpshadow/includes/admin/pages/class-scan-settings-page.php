@@ -153,16 +153,49 @@ function wpshadow_render_scan_settings() {
 				)
 			);
 			?>
+		</form>
+
+		<section aria-labelledby="diagnostics-heading" class="wps-mt-4">
+			<h2 id="diagnostics-heading"><?php echo esc_html__( 'Diagnostic Scan', 'wpshadow' ); ?></h2>
+			<div class="wpshadow-controls">
+				<label for="wpshadow-search"><?php echo esc_html__( 'Search', 'wpshadow' ); ?></label>
+				<input type="search" id="wpshadow-search" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'wpshadow' ); ?>" />
+
+				<label for="wpshadow-family"><?php echo esc_html__( 'Family', 'wpshadow' ); ?></label>
+				<select id="wpshadow-family">
+					<option value=""><?php echo esc_html__( 'All families', 'wpshadow' ); ?></option>
 				</select>
+
+				<label for="wpshadow-status"><?php echo esc_html__( 'Status', 'wpshadow' ); ?></label>
+				<select id="wpshadow-status">
+					<option value="all"><?php echo esc_html__( 'All statuses', 'wpshadow' ); ?></option>
+					<option value="enabled"><?php echo esc_html__( 'Enabled', 'wpshadow' ); ?></option>
+					<option value="disabled"><?php echo esc_html__( 'Disabled', 'wpshadow' ); ?></option>
+				</select>
+
+				<button type="button" class="button" id="wpshadow-reset-filters"><?php echo esc_html__( 'Reset Filters', 'wpshadow' ); ?></button>
 			</div>
 
-			<div id="wpshadow-diagnostics-list" role="region" aria-live="polite"></div>
+			<table class="wp-list-table widefat striped" role="region" aria-live="polite">
+				<thead>
+					<tr>
+						<th scope="col" style="width:72px;"><?php echo esc_html__( '#', 'wpshadow' ); ?></th>
+						<th scope="col"><?php echo esc_html__( 'Diagnostic', 'wpshadow' ); ?></th>
+						<th scope="col" style="width:180px;"><?php echo esc_html__( 'Family', 'wpshadow' ); ?></th>
+						<th scope="col" style="width:160px;"><?php echo esc_html__( 'Status', 'wpshadow' ); ?></th>
+						<th scope="col" style="width:120px;"><?php echo esc_html__( 'Action', 'wpshadow' ); ?></th>
+					</tr>
+				</thead>
+				<tbody id="wpshadow-diagnostics-list"></tbody>
+			</table>
+
 			<div class="wpshadow-pagination">
 				<button type="button" class="button" id="wpshadow-prev" aria-label="<?php echo esc_attr__( 'Previous page', 'wpshadow' ); ?>">&larr;</button>
 				<span id="wpshadow-page">1</span>
 				<button type="button" class="button" id="wpshadow-next" aria-label="<?php echo esc_attr__( 'Next page', 'wpshadow' ); ?>">&rarr;</button>
 			</div>
 		</section>
+
 		<section aria-labelledby="treatments-heading">
 			<h2 id="treatments-heading"><?php echo esc_html__( 'Treatments', 'wpshadow' ); ?></h2>
 			<div class="wpshadow-controls">

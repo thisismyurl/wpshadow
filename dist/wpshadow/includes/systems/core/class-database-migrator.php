@@ -135,8 +135,14 @@ class Database_Migrator {
 		global $wpdb;
 
 		foreach ( self::get_tables() as $table ) {
+			$table_name = sanitize_key( (string) $table );
+
+			if ( '' === $table_name ) {
+				continue;
+			}
+
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // @phpstan-ignore-line
+			$wpdb->query( "DROP TABLE IF EXISTS `{$table_name}`" ); // @phpstan-ignore-line
 		}
 
 		// Reset version

@@ -32,6 +32,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class First_Activation_Welcome extends Hook_Subscriber_Base {
 
 	/**
+	 * Request-local cache for should_show_welcome() lookups.
+	 *
+	 * @var bool|null
+	 */
+	private static $should_show_welcome_cache = null;
+
+	/**
 	 * Get hook subscriptions.
 	 *
 	 * @since 1.6093.1200
@@ -64,15 +71,21 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	 * @return bool True if should show welcome.
 	 */
 	public static function should_show_welcome() {
+		if ( null !== self::$should_show_welcome_cache ) {
+			return self::$should_show_welcome_cache;
+		}
+
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id || ! current_user_can( 'manage_options' ) ) {
+			self::$should_show_welcome_cache = false;
 			return false;
 		}
 
 		// Check if user has completed welcome
 		$completed = get_user_meta( $user_id, 'wpshadow_welcome_completed', true );
 		if ( $completed ) {
+			self::$should_show_welcome_cache = false;
 			return false;
 		}
 
@@ -82,9 +95,11 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 		'wpshadow_activation'
 	);
 		if ( ! $plugin_activated ) {
+			self::$should_show_welcome_cache = false;
 			return false;
 		}
 
+		self::$should_show_welcome_cache = true;
 		return true;
 	}
 
@@ -350,6 +365,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 		// Mark welcome as completed
 		update_user_meta( $user_id, 'wpshadow_welcome_completed', time() );
 		update_user_meta( $user_id, 'wpshadow_welcome_skipped', $skipped );
+		self::$should_show_welcome_cache = false;
 
 		// Clear the activation flag
 		\WPShadow\Core\Cache_Manager::delete(

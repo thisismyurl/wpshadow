@@ -14,7 +14,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 1.6151.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Centralized account management for all WPShadow cloud services.
  *
- * @since 1.6093.1200
+ * @since 1.6151.1200
  */
 class WPShadow_Account_API {
 
@@ -51,10 +51,14 @@ class WPShadow_Account_API {
 	/**
 	 * Check if account service is available.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return bool True if service is reachable.
 	 */
 	public static function is_available() {
+		if ( ! External_Request_Guard::is_allowed( 'account_api' ) ) {
+			return false;
+		}
+
 		$cached = Cache_Manager::get( 'account_service_status', 'wpshadow_account' );
 		if ( false !== $cached ) {
 			return 'available' === $cached;
@@ -86,7 +90,7 @@ class WPShadow_Account_API {
 	/**
 	 * Check if user is registered.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return bool True if registered.
 	 */
 	public static function is_registered() {
@@ -97,7 +101,7 @@ class WPShadow_Account_API {
 	/**
 	 * Get stored API key.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return string API key or empty string.
 	 */
 	public static function get_api_key() {
@@ -107,7 +111,7 @@ class WPShadow_Account_API {
 	/**
 	 * Store API key.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $api_key API key to store.
 	 * @return bool True on success.
 	 */
@@ -125,7 +129,7 @@ class WPShadow_Account_API {
 	 * Creates unified account that works across Guardian, Vault,
 	 * Cloud Services, and Pro features. Free tier always.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $email    User email address.
 	 * @param  string $password User password (min 8 chars).
 	 * @return array {
@@ -138,6 +142,13 @@ class WPShadow_Account_API {
 	 * }
 	 */
 	public static function register( $email, $password ) {
+		if ( ! External_Request_Guard::is_allowed( 'account_registration' ) ) {
+			return array(
+				'success' => false,
+				'message' => External_Request_Guard::get_denied_message( __( 'Account registration', 'wpshadow' ) ),
+			);
+		}
+
 		// Validate inputs.
 		if ( ! is_email( $email ) ) {
 			return array(
@@ -231,7 +242,7 @@ class WPShadow_Account_API {
 	 *
 	 * For users who already have a WPShadow account.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $api_key API key from account.wpshadow.com.
 	 * @return array {
 	 *     Connection result.
@@ -242,6 +253,13 @@ class WPShadow_Account_API {
 	 * }
 	 */
 	public static function connect( $api_key ) {
+		if ( ! External_Request_Guard::is_allowed( 'account_api' ) ) {
+			return array(
+				'success' => false,
+				'message' => External_Request_Guard::get_denied_message( __( 'Account connection', 'wpshadow' ) ),
+			);
+		}
+
 		// Validate API key.
 		$is_valid = self::validate_api_key( $api_key );
 
@@ -291,7 +309,7 @@ class WPShadow_Account_API {
 	 *
 	 * Removes API key but keeps local data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array Result of disconnection.
 	 */
 	public static function disconnect() {
@@ -318,7 +336,7 @@ class WPShadow_Account_API {
 	/**
 	 * Validate API key with account service.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $api_key API key to validate.
 	 * @return bool True if valid.
 	 */
@@ -363,7 +381,7 @@ class WPShadow_Account_API {
 	/**
 	 * Get account information.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  bool $force_refresh Force refresh from API.
 	 * @return array|\WP_Error Account info or error.
 	 */
@@ -417,7 +435,7 @@ class WPShadow_Account_API {
 	/**
 	 * Get service status and free tier limits.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array {
 	 *     Service information.
 	 *
@@ -439,7 +457,7 @@ class WPShadow_Account_API {
 	/**
 	 * Get default service limits (free tier).
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return array Service limits.
 	 */
 	private static function get_default_service_limits() {
@@ -474,7 +492,7 @@ class WPShadow_Account_API {
 	/**
 	 * Make authenticated API request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @param  string $endpoint API endpoint (e.g., '/account').
 	 * @param  array  $args Request arguments.
 	 * @return array|\WP_Error Response body or error.
@@ -513,7 +531,7 @@ class WPShadow_Account_API {
 	/**
 	 * Get user agent string.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return string User agent.
 	 */
 	private static function get_user_agent() {
@@ -529,7 +547,7 @@ class WPShadow_Account_API {
 	 *
 	 * Updates Guardian, Vault, and Cloud Services with current account status.
 	 *
-	 * @since 1.6093.1200
+	 * @since 1.6151.1200
 	 * @return bool True if sync successful.
 	 */
 	public static function sync_services() {

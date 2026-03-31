@@ -336,7 +336,7 @@ class General_Settings_Page {
 										'id'          => 'wpshadow_dyslexia_friendly_font',
 										'name'        => 'wpshadow_dyslexia_friendly_font',
 										'label'       => __( 'Dyslexia-Friendly Font', 'wpshadow' ),
-										'helper_text' => __( 'Switches the WPShadow interface to OpenDyslexic — a font designed to make letters easier to distinguish and reduce reading errors.', 'wpshadow' ),
+										'helper_text' => __( 'Switches the WPShadow interface to a dyslexia-friendly local font stack with clearer letterforms and spacing.', 'wpshadow' ),
 										'checked'     => (bool) get_option( 'wpshadow_dyslexia_friendly_font', false ),
 									)
 								);

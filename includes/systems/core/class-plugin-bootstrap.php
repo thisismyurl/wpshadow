@@ -82,10 +82,7 @@ class Plugin_Bootstrap {
 		// 16. Load smart recommendations
 		self::load_smart_recommendations();
 
-		// 17. Load smart recommendations
-		self::load_smart_recommendations();
-
-		// 18. Load pro addon integration
+		// 17. Load pro addon integration
 		self::load_pro_integration();
 
 		// 19. Load WP-CLI commands
@@ -526,7 +523,7 @@ class Plugin_Bootstrap {
 			return;
 		}
 
-		$cli_path = WPSHADOW_PATH . 'includes/cli/';
+		$cli_path = WPSHADOW_PATH . 'includes/utils/cli/';
 
 		if ( file_exists( $cli_path . 'class-wpshadow-cli.php' ) ) {
 			require_once $cli_path . 'class-wpshadow-cli.php';

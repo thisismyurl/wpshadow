@@ -36,12 +36,32 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
-		return array(
-			'admin_bar_menu'        => array( 'add_admin_bar_item', 999 ),
-			'admin_enqueue_scripts' => array( 'enqueue_styles' ),
-			'admin_enqueue_scripts' => array( 'enqueue_scripts' ),
-			'wp_dashboard_setup'    => 'add_dashboard_widget',
+		$hooks = array(
+			'wp_dashboard_setup' => 'add_dashboard_widget',
 		);
+
+		if ( self::is_admin_bar_widget_enabled() ) {
+			$hooks['admin_bar_menu'] = array( 'add_admin_bar_item', 999 );
+			$hooks['admin_enqueue_scripts'] = array(
+				array( 'enqueue_styles' ),
+				array( 'enqueue_scripts' ),
+			);
+		}
+
+		return $hooks;
+	}
+
+	/**
+	 * Determine whether the admin-bar token widget is enabled.
+	 *
+	 * The admin-bar token UI is disabled by default while the feature is
+	 * stabilized. Site owners can opt in via filter if needed.
+	 *
+	 * @since  1.7091.1000
+	 * @return bool
+	 */
+	private static function is_admin_bar_widget_enabled(): bool {
+		return (bool) apply_filters( 'wpshadow_guardian_token_adminbar_enabled', false );
 	}
 
 	/**
@@ -63,8 +83,9 @@ class Token_Balance_Widget extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function add_admin_bar_item( $wp_admin_bar ) {
-		// Admin bar widget disabled
-		return;
+		if ( ! self::is_admin_bar_widget_enabled() ) {
+			return;
+		}
 
 		// Check if Guardian is enabled
 		$is_enabled = Guardian_Manager::is_enabled();

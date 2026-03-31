@@ -49,8 +49,8 @@ class Sample_Content_Generator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
 		}
 
-		$post_type = isset( $_POST['post_type'] ) ? sanitize_key( $_POST['post_type'] ) : '';
-		$count     = isset( $_POST['count'] ) ? absint( $_POST['count'] ) : 10;
+		$post_type = isset( $_POST['post_type'] ) ? sanitize_key( wp_unslash( $_POST['post_type'] ) ) : '';
+		$count     = isset( $_POST['count'] ) ? absint( wp_unslash( $_POST['count'] ) ) : 10;
 
 		if ( empty( $post_type ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid post type', 'wpshadow' ) ) );

@@ -213,7 +213,85 @@ class Diagnostic_Scheduler {
 	 * Get schedule for a diagnostic
 	 */
 	public static function get_schedule( string $diagnostic_slug ): ?array {
-		return self::$schedule_definitions[ $diagnostic_slug ] ?? self::get_default_for_new( $diagnostic_slug );
+		$schedule = self::$schedule_definitions[ $diagnostic_slug ] ?? self::get_default_for_new( $diagnostic_slug );
+
+		$overrides = self::get_frequency_overrides();
+		if ( isset( $overrides[ $diagnostic_slug ] ) ) {
+			$schedule['frequency'] = (int) $overrides[ $diagnostic_slug ];
+		}
+
+		return $schedule;
+	}
+
+	/**
+	 * Get configured frequency overrides.
+	 *
+	 * @since  1.6091.1200
+	 * @return array<string, int> Frequency overrides keyed by diagnostic slug.
+	 */
+	public static function get_frequency_overrides(): array {
+		$stored = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
+		if ( ! is_array( $stored ) ) {
+			return array();
+		}
+
+		$overrides = array();
+		foreach ( $stored as $slug => $frequency ) {
+			$clean_slug = sanitize_key( (string) $slug );
+			$clean_freq = self::sanitize_frequency_value( (int) $frequency );
+			if ( '' !== $clean_slug ) {
+				$overrides[ $clean_slug ] = $clean_freq;
+			}
+		}
+
+		return $overrides;
+	}
+
+	/**
+	 * Save a frequency override for one diagnostic.
+	 *
+	 * @since  1.6091.1200
+	 * @param  string $diagnostic_slug Diagnostic slug.
+	 * @param  int    $frequency       Desired frequency in seconds.
+	 * @return int Sanitized stored frequency.
+	 */
+	public static function set_frequency_override( string $diagnostic_slug, int $frequency ): int {
+		$slug = sanitize_key( $diagnostic_slug );
+		if ( '' === $slug ) {
+			return self::FREQUENCY_WEEKLY;
+		}
+
+		$sanitized_frequency = self::sanitize_frequency_value( $frequency );
+		$overrides           = self::get_frequency_overrides();
+		$overrides[ $slug ]  = $sanitized_frequency;
+		update_option( 'wpshadow_diagnostic_frequency_overrides', $overrides );
+
+		return $sanitized_frequency;
+	}
+
+	/**
+	 * Keep frequency values within allowed presets.
+	 *
+	 * @since  1.6091.1200
+	 * @param  int $frequency Frequency in seconds.
+	 * @return int Sanitized frequency preset.
+	 */
+	private static function sanitize_frequency_value( int $frequency ): int {
+		$allowed = array(
+			self::FREQUENCY_EVERY_REQUEST,
+			self::FREQUENCY_HOURLY,
+			self::FREQUENCY_6_HOURS,
+			self::FREQUENCY_DAILY,
+			self::FREQUENCY_WEEKLY,
+			self::FREQUENCY_MONTHLY,
+			self::FREQUENCY_QUARTERLY,
+		);
+
+		if ( in_array( $frequency, $allowed, true ) ) {
+			return $frequency;
+		}
+
+		return self::FREQUENCY_WEEKLY;
 	}
 
 	/**

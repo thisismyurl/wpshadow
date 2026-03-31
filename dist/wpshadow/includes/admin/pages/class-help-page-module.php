@@ -81,7 +81,7 @@ function wpshadow_render_help() {
 	if ( ! empty( $cloud_api_key ) ) {
 		$feed_url = apply_filters( 'wpshadow_help_activity_feed_url', '' );
 
-		if ( ! empty( $feed_url ) ) {
+		if ( ! empty( $feed_url ) && \WPShadow\Core\External_Request_Guard::is_allowed( 'help_feed' ) ) {
 			$feed_response = wp_remote_get(
 				$feed_url,
 				array(
