@@ -70,13 +70,13 @@ class Diagnostic_404_Error_Page_Functionality extends Diagnostic_Base {
 		// Check for 404.php template.
 		$error_404_file = $template_dir . '/404.php';
 		if ( ! file_exists( $error_404_file ) ) {
-			$issues[] = __( 'Missing 404.php template (falls back to index.php)', 'wpshadow' );
+			$issues[] = __( 'Your site is missing a dedicated "Page Not Found" template (404.php), so visitors may see a generic page when a link is broken.', 'wpshadow' );
 		} else {
 			$content = file_get_contents( $error_404_file );
 
 			// Check for search form.
 			if ( false === stripos( $content, 'get_search_form' ) && false === stripos( $content, '<form' ) && false === stripos( $content, 'role="search"' ) ) {
-				$issues[] = __( '404 template lacks search form (users cannot find content)', 'wpshadow' );
+				$issues[] = __( 'Your "Page Not Found" screen does not include a search box, so visitors have no easy way to find the page they wanted.', 'wpshadow' );
 			}
 
 			// Check for helpful navigation.
@@ -94,12 +94,12 @@ class Diagnostic_404_Error_Page_Functionality extends Diagnostic_Base {
 			}
 
 			if ( ! in_array( true, $helpful_elements, true ) ) {
-				$issues[] = __( '404 template lacks helpful navigation (no menus, recent posts, or archives)', 'wpshadow' );
+				$issues[] = __( 'Your "Page Not Found" screen does not guide visitors to helpful next steps (such as menu links, recent posts, or archives).', 'wpshadow' );
 			}
 
 			// Check content length (should be substantial).
 			if ( strlen( $content ) < 500 ) {
-				$issues[] = __( '404 template is very minimal (consider adding more helpful content)', 'wpshadow' );
+				$issues[] = __( 'Your "Page Not Found" screen is very short and may feel like a dead end. Adding a friendly message and useful links can keep visitors engaged.', 'wpshadow' );
 			}
 		}
 
@@ -119,7 +119,7 @@ class Diagnostic_404_Error_Page_Functionality extends Diagnostic_Base {
 		}
 
 		if ( $has_404_redirect ) {
-			$issues[] = __( '404 redirect plugin active (may hide broken links)', 'wpshadow' );
+			$issues[] = __( 'A 404 redirect plugin is active. This can help, but it can also hide broken links that should be fixed directly.', 'wpshadow' );
 		}
 
 		// Check recent 404 errors from option-based metrics.
@@ -128,7 +128,7 @@ class Diagnostic_404_Error_Page_Functionality extends Diagnostic_Base {
 		if ( $recent_404s > 100 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of 404 errors */
-				__( '%d 404 errors in the last 7 days (investigate broken links)', 'wpshadow' ),
+				__( 'Your site had %d "Page Not Found" visits in the last 7 days, which may mean visitors and search engines are hitting broken links.', 'wpshadow' ),
 				$recent_404s
 			);
 		}

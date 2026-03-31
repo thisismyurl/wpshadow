@@ -179,6 +179,7 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 		$gauge_key    = '';
 		$finding_id   = '';
 		$failure_reason = '';
+		$failure_issues = array();
 		if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
 			$state = wpshadow_get_valid_diagnostic_test_state( $class_name, $now );
 			if ( is_array( $state ) && isset( $state['status'] ) ) {
@@ -241,6 +242,9 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 		if ( '' !== $finding_id && isset( $cached_findings[ $finding_id ] ) && is_array( $cached_findings[ $finding_id ] ) ) {
 			$finding = $cached_findings[ $finding_id ];
 			$failure_reason = isset( $finding['description'] ) ? trim( wp_strip_all_tags( (string) $finding['description'] ) ) : '';
+			if ( isset( $finding['details']['issues'] ) && is_array( $finding['details']['issues'] ) ) {
+				$failure_issues = array_values( array_filter( $finding['details']['issues'], 'is_string' ) );
+			}
 		}
 
 		if ( '' === $failure_reason && 'failed' === $status_raw ) {
@@ -266,6 +270,9 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 
 				if ( $is_match ) {
 					$failure_reason = isset( $cached_finding['description'] ) ? trim( wp_strip_all_tags( (string) $cached_finding['description'] ) ) : '';
+					if ( isset( $cached_finding['details']['issues'] ) && is_array( $cached_finding['details']['issues'] ) ) {
+						$failure_issues = array_values( array_filter( $cached_finding['details']['issues'], 'is_string' ) );
+					}
 					if ( '' !== $failure_reason ) {
 						break;
 					}
@@ -290,6 +297,7 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			'description' => $description,
 			'frequency' => $current_frequency,
 			'failure_reason' => $failure_reason,
+			'failure_issues' => $failure_issues,
 			'last_run'  => $last_run_raw > 0 ? wpshadow_format_human_time_with_tooltip( $last_run_raw ) : esc_html__( 'Never', 'wpshadow' ),
 			'next_run'  => $next_run_label,
 			'status'    => $status_label,
@@ -312,6 +320,80 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 	);
 
 	return $rows;
+}
+
+/**
+ * Get plain-language guidance for a diagnostic issue.
+ *
+ * @since  1.6091.1200
+ * @param  string $run_key Diagnostic run key.
+ * @param  string $issue   Raw issue text.
+ * @return array{
+ *     issue_text: string,
+ *     explanation: string,
+ *     kb_link: string
+ * }
+ */
+function wpshadow_get_issue_guidance( string $run_key, string $issue ): array {
+	$issue_text   = trim( wp_strip_all_tags( $issue ) );
+	$explanation  = '';
+	$kb_link      = '';
+	$issue_lower  = strtolower( $issue_text );
+
+	if ( 'diagnostic-404-error-page-functionality' === $run_key ) {
+		if ( false !== strpos( $issue_lower, 'missing 404.php template' ) || false !== strpos( $issue_lower, 'dedicated 404 page template' ) ) {
+			$explanation = __( 'Visitors who land on a broken link are seeing a generic fallback page instead of a clear “Page Not Found” experience. A dedicated 404 page helps people recover quickly, stay on your site longer, and reduces frustration.', 'wpshadow' );
+			$kb_link     = 'https://wpshadow.com/kb/404-page-template';
+		} elseif ( false !== strpos( $issue_lower, 'search form' ) ) {
+			$explanation = __( 'When people hit a missing page, they need an easy next step. Without a search box, many visitors leave instead of finding what they wanted.', 'wpshadow' );
+			$kb_link     = 'https://wpshadow.com/kb/404-page-search-box';
+		} elseif ( false !== strpos( $issue_lower, 'helpful navigation' ) || false !== strpos( $issue_lower, 'menus' ) || false !== strpos( $issue_lower, 'archives' ) ) {
+			$explanation = __( 'Your 404 page should guide visitors to useful destinations, such as key pages, recent articles, or categories. This keeps people engaged instead of bouncing away.', 'wpshadow' );
+			$kb_link     = 'https://wpshadow.com/kb/404-page-navigation';
+		} elseif ( false !== strpos( $issue_lower, 'very minimal' ) || false !== strpos( $issue_lower, 'too short' ) ) {
+			$explanation = __( 'A very short 404 page often feels like an error dead-end. Adding a clear message, helpful links, and a search option gives visitors confidence and direction.', 'wpshadow' );
+			$kb_link     = 'https://wpshadow.com/kb/404-page-content';
+		} elseif ( false !== strpos( $issue_lower, 'redirect plugin active' ) ) {
+			$explanation = __( 'Automatic redirects can be useful, but they can also hide broken links that should be fixed at the source. Reviewing redirects helps keep your site structure clean and trustworthy.', 'wpshadow' );
+			$kb_link     = 'https://wpshadow.com/kb/404-redirect-strategy';
+		} elseif ( false !== strpos( $issue_lower, '404 errors in the last 7 days' ) ) {
+			$explanation = __( 'A high number of missing-page visits can mean outdated links, removed pages, or menu issues. Fixing those paths improves visitor experience and search engine confidence.', 'wpshadow' );
+			$kb_link     = 'https://wpshadow.com/kb/high-404-volume';
+		}
+	}
+
+	return array(
+		'issue_text'   => $issue_text,
+		'explanation'  => $explanation,
+		'kb_link'      => $kb_link,
+	);
+}
+
+/**
+ * Build user-friendly issue guidance list.
+ *
+ * @since  1.6091.1200
+ * @param  string              $run_key  Diagnostic run key.
+ * @param  array<int, string>  $issues   Diagnostic issues.
+ * @return array<int, array<string, string>>
+ */
+function wpshadow_get_issue_guidance_list( string $run_key, array $issues ): array {
+	$guidance = array();
+
+	foreach ( $issues as $issue ) {
+		if ( ! is_string( $issue ) ) {
+			continue;
+		}
+
+		$entry = wpshadow_get_issue_guidance( $run_key, $issue );
+		if ( '' === $entry['issue_text'] ) {
+			continue;
+		}
+
+		$guidance[] = $entry;
+	}
+
+	return $guidance;
 }
 
 /**
@@ -350,6 +432,7 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 	$run_key      = isset( $selected['run_key'] ) ? (string) $selected['run_key'] : '';
 	$frequency    = isset( $selected['frequency'] ) ? (int) $selected['frequency'] : DAY_IN_SECONDS;
 	$failure_reason = isset( $selected['failure_reason'] ) ? trim( (string) $selected['failure_reason'] ) : '';
+	$failure_issues = isset( $selected['failure_issues'] ) && is_array( $selected['failure_issues'] ) ? $selected['failure_issues'] : array();
 	$back_url     = add_query_arg( array( 'page' => 'wpshadow' ), admin_url( 'admin.php' ) );
 	$toggle_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	$run_nonce    = wp_create_nonce( 'wpshadow_security_scan' );
@@ -383,11 +466,17 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 				if ( is_array( $runtime_result ) && ! empty( $runtime_result['description'] ) ) {
 					$failure_reason = trim( wp_strip_all_tags( (string) $runtime_result['description'] ) );
 				}
+
+				if ( is_array( $runtime_result ) && isset( $runtime_result['details']['issues'] ) && is_array( $runtime_result['details']['issues'] ) ) {
+					$failure_issues = array_values( array_filter( $runtime_result['details']['issues'], 'is_string' ) );
+				}
 			} catch ( \Throwable $exception ) {
 				// Keep UI resilient if the fallback check errors.
 			}
 		}
 	}
+
+	$issue_guidance = wpshadow_get_issue_guidance_list( $run_key, $failure_issues );
 	?>
 	<div class="wps-card wps-mb-6">
 		<div class="wps-card-header">
@@ -452,6 +541,27 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 							);
 							?>
 						</p>
+
+						<?php if ( ! empty( $issue_guidance ) ) : ?>
+							<div style="margin-top:12px;">
+								<p style="margin:0 0 8px 0;"><strong><?php esc_html_e( 'What this means in plain language:', 'wpshadow' ); ?></strong></p>
+								<ul style="margin:0 0 0 20px;list-style:disc;">
+									<?php foreach ( $issue_guidance as $guidance_entry ) : ?>
+										<li style="margin-bottom:10px;">
+											<p style="margin:0 0 4px 0;"><?php echo esc_html( (string) $guidance_entry['issue_text'] ); ?></p>
+											<?php if ( '' !== (string) $guidance_entry['explanation'] ) : ?>
+												<p style="margin:0 0 4px 0;color:#374151;"><?php echo esc_html( (string) $guidance_entry['explanation'] ); ?></p>
+											<?php endif; ?>
+											<?php if ( '' !== (string) $guidance_entry['kb_link'] ) : ?>
+												<p style="margin:0;">
+													<a href="<?php echo esc_url( (string) $guidance_entry['kb_link'] ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn how to fix this', 'wpshadow' ); ?></a>
+												</p>
+											<?php endif; ?>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 			</div>

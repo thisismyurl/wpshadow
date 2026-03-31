@@ -1,8 +1,8 @@
 <?php
 /**
- * Database Optimization Needed Diagnostic
+ * Database Optimization Diagnostic
  *
- * Checks if database tables need optimization.
+ * Checks if database is optimized with proper indexes and maintenance.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Database Optimization Diagnostic Class
  *
- * Checks for database table fragmentation and overhead.
- * Like checking if your filing cabinet needs reorganizing.
+ * Verifies that database is optimized with proper indexes, regular
+ * maintenance, and cleanup of unnecessary data.
  *
  * @since 1.6093.1200
  */
@@ -41,156 +41,300 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Database Optimization Needed';
+	protected static $title = 'Database Optimization';
 
 	/**
 	 * The diagnostic description
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if database tables need optimization';
+	protected static $description = 'Checks if database is optimized with proper indexes and maintenance';
 
 	/**
 	 * The family this diagnostic belongs to
 	 *
 	 * @var string
 	 */
-	protected static $family = 'database';
+	protected static $family = 'performance';
 
 	/**
 	 * Run the database optimization diagnostic check.
 	 *
 	 * @since 1.6093.1200
-	 * @return array|null Finding array if optimization needed, null otherwise.
+	 * @return array|null Finding array if optimization issues detected, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
 
-		// Get table status information.
-		$tables = $wpdb->get_results(
+		$issues   = array();
+		$warnings = array();
+		$stats    = array();
+
+		// Get database size.
+		$db_size_query = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT TABLE_NAME, ENGINE, TABLE_ROWS, DATA_LENGTH, INDEX_LENGTH, DATA_FREE
-				FROM information_schema.TABLES
-				WHERE TABLE_SCHEMA = %s',
+				'SELECT 
+					SUM(data_length + index_length) as size 
+				FROM information_schema.TABLES 
+				WHERE table_schema = %s',
 				DB_NAME
-			),
-			ARRAY_A
+			)
 		);
 
-		if ( ! $tables ) {
-			return null; // Can't check optimization.
-		}
+		$db_size                      = ! empty( $db_size_query ) ? (int) $db_size_query[0]->size : 0;
+		$stats['database_size']       = size_format( $db_size );
+		$stats['database_size_bytes'] = $db_size;
 
-		$total_overhead = 0;
+		// Check for table overhead (fragmentation).
+		$overhead_query = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT 
+					table_name, 
+					data_free 
+				FROM information_schema.TABLES 
+				WHERE table_schema = %s 
+				AND data_free > 0',
+				DB_NAME
+			)
+		);
+
+		$total_overhead       = 0;
 		$tables_with_overhead = array();
-		$total_size = 0;
 
-		foreach ( $tables as $table ) {
-			$table_name = $table['TABLE_NAME'];
-			$data_free = (int) ( $table['DATA_FREE'] ?? 0 );
-			$table_size = (int) ( $table['DATA_LENGTH'] ?? 0 ) + (int) ( $table['INDEX_LENGTH'] ?? 0 );
-
-			$total_size += $table_size;
-
-			// Skip non-WordPress tables.
-			if ( false === strpos( $table_name, $wpdb->prefix ) ) {
-				continue;
-			}
-
-			// Check for overhead (fragmentation).
-			if ( $data_free > 0 ) {
-				$total_overhead += $data_free;
-				$overhead_pct = ( $data_free / max( $table_size, 1 ) ) * 100;
-
-				// Only report if overhead is significant (>10% or >1MB).
-				if ( $overhead_pct > 10 || $data_free > 1048576 ) {
-					$tables_with_overhead[] = array(
-						'table'        => $table_name,
-						'overhead'     => $data_free,
-						'overhead_pct' => $overhead_pct,
-					);
+		if ( ! empty( $overhead_query ) ) {
+			foreach ( $overhead_query as $table ) {
+				$total_overhead += $table->data_free;
+				if ( $table->data_free > 1024 * 1024 ) { // More than 1MB.
+					$tables_with_overhead[] = $table->table_name;
 				}
 			}
 		}
 
-		// Check for transient buildup.
-		$transient_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options}
-			WHERE option_name LIKE '%_transient_%'"
-		);
+		$stats['overhead']       = size_format( $total_overhead );
+		$stats['overhead_bytes'] = $total_overhead;
 
+		if ( $total_overhead > 10 * 1024 * 1024 ) { // 10MB.
+			$warnings[] = sprintf(
+				/* translators: %s: overhead size */
+				__( 'Database has %s of overhead - run OPTIMIZE TABLE', 'wpshadow' ),
+				$stats['overhead']
+			);
+		}
+
+		// Check transients.
 		$expired_transients = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options}
-				WHERE option_name LIKE %s
+				"SELECT COUNT(*) 
+				FROM {$wpdb->options} 
+				WHERE option_name LIKE %s 
 				AND option_value < %d",
-				'%_transient_timeout_%',
+				'_transient_timeout_%',
 				time()
 			)
 		);
 
-		// Check for autoload burden.
-		$autoload_size = $wpdb->get_var(
-			"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options}
-			WHERE autoload = 'yes'"
-		);
-
-		$autoload_mb = $autoload_size / 1024 / 1024;
-
-		// Report findings.
-		$issues = array();
-
-		if ( ! empty( $tables_with_overhead ) ) {
-			$issues[] = sprintf(
-				/* translators: 1: overhead size in MB, 2: number of tables */
-				__( '%1$s MB of table fragmentation across %2$d tables (like gaps in your filing cabinet from deleted files)', 'wpshadow' ),
-				number_format_i18n( $total_overhead / 1024 / 1024, 2 ),
-				count( $tables_with_overhead )
-			);
-		}
+		$stats['expired_transients'] = (int) $expired_transients;
 
 		if ( $expired_transients > 100 ) {
-			$issues[] = sprintf(
-				/* translators: %d: number of expired transients */
-				__( '%d expired cached items (temporary data that wasn\'t cleaned up)', 'wpshadow' ),
-				number_format_i18n( (int) $expired_transients )
+			$warnings[] = sprintf(
+				/* translators: %d: number of transients */
+				__( '%d expired transients should be cleaned up', 'wpshadow' ),
+				$expired_transients
 			);
 		}
 
-		if ( $autoload_mb > 1 ) {
-			$issues[] = sprintf(
-				/* translators: %s: autoload size in MB */
-				__( '%s MB of data loading on every page (like carrying too many folders at once)', 'wpshadow' ),
-				number_format_i18n( $autoload_mb, 2 )
+		// Check post revisions.
+		$revision_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'revision'"
+		);
+
+		$stats['revisions'] = (int) $revision_count;
+
+		if ( $revision_count > 1000 ) {
+			$warnings[] = sprintf(
+				/* translators: %d: number of revisions */
+				__( '%d post revisions - consider limiting revisions', 'wpshadow' ),
+				$revision_count
 			);
 		}
 
+		// Check auto-drafts.
+		$autodraft_count = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'auto-draft'"
+		);
+
+		$stats['auto_drafts'] = (int) $autodraft_count;
+
+		if ( $autodraft_count > 100 ) {
+			$warnings[] = sprintf(
+				/* translators: %d: number of auto-drafts */
+				__( '%d auto-drafts should be cleaned up', 'wpshadow' ),
+				$autodraft_count
+			);
+		}
+
+		// Check for missing indexes on postmeta.
+		$postmeta_indexes = $wpdb->get_results(
+			$wpdb->prepare(
+				"SHOW INDEX FROM {$wpdb->postmeta} WHERE Key_name != %s",
+				'PRIMARY'
+			)
+		);
+
+		$has_meta_key_index = false;
+		foreach ( $postmeta_indexes as $index ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- MySQL SHOW INDEX field name.
+			if ( 'meta_key' === $index->Column_name ) {
+				$has_meta_key_index = true;
+				break;
+			}
+		}
+
+		if ( ! $has_meta_key_index ) {
+			$issues[] = __( 'postmeta table missing meta_key index - queries will be slow', 'wpshadow' );
+		}
+
+		// Check spam comments.
+		$spam_comments = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved = 'spam'"
+		);
+
+		$stats['spam_comments'] = (int) $spam_comments;
+
+		if ( $spam_comments > 500 ) {
+			$warnings[] = sprintf(
+				/* translators: %d: number of spam comments */
+				__( '%d spam comments should be permanently deleted', 'wpshadow' ),
+				$spam_comments
+			);
+		}
+
+		// Check trash posts.
+		$trash_posts = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'trash'"
+		);
+
+		$stats['trash_posts'] = (int) $trash_posts;
+
+		if ( $trash_posts > 100 ) {
+			$warnings[] = sprintf(
+				/* translators: %d: number of trash posts */
+				__( '%d posts in trash - consider emptying', 'wpshadow' ),
+				$trash_posts
+			);
+		}
+
+		// Check for orphaned postmeta.
+		$orphaned_postmeta = $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
+			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
+			WHERE p.ID IS NULL"
+		);
+
+		$stats['orphaned_postmeta'] = (int) $orphaned_postmeta;
+
+		if ( $orphaned_postmeta > 100 ) {
+			$warnings[] = sprintf(
+				/* translators: %d: number of orphaned meta */
+				__( '%d orphaned postmeta rows - safe to delete', 'wpshadow' ),
+				$orphaned_postmeta
+			);
+		}
+
+		// Check for database optimization plugins.
+		$optimization_plugins = array(
+			'wp-optimize/wp-optimize.php',
+			'wp-sweep/wp-sweep.php',
+			'advanced-database-cleaner/advanced-db-cleaner.php',
+		);
+
+		$has_optimization_plugin = false;
+		foreach ( $optimization_plugins as $plugin ) {
+			if ( is_plugin_active( $plugin ) ) {
+				$has_optimization_plugin      = true;
+				$stats['optimization_plugin'] = dirname( $plugin );
+				break;
+			}
+		}
+
+		if ( ! $has_optimization_plugin ) {
+			$warnings[] = __( 'No database optimization plugin detected', 'wpshadow' );
+		}
+
+		// Check if WP_POST_REVISIONS is defined.
+		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
+			$warnings[] = __( 'WP_POST_REVISIONS not defined - unlimited revisions stored', 'wpshadow' );
+		} elseif ( WP_POST_REVISIONS === true || WP_POST_REVISIONS > 10 ) {
+			$warnings[] = __( 'WP_POST_REVISIONS set high - consider limiting to 5-10', 'wpshadow' );
+		}
+
+		// Check database charset.
+		$charset_query = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT 
+					CCSA.character_set_name 
+				FROM information_schema.TABLES T,
+					information_schema.COLLATION_CHARACTER_SET_APPLICABILITY CCSA
+				WHERE CCSA.collation_name = T.table_collation
+				AND T.table_schema = %s
+				AND T.table_name = %s',
+				DB_NAME,
+				$wpdb->posts
+			)
+		);
+
+		if ( ! empty( $charset_query ) ) {
+			$charset          = $charset_query[0]->character_set_name;
+			$stats['charset'] = $charset;
+
+			if ( 'utf8mb4' !== $charset && 'utf8' !== $charset ) {
+				$issues[] = sprintf(
+					/* translators: %s: charset name */
+					__( 'Database charset is %s - recommend utf8mb4', 'wpshadow' ),
+					$charset
+				);
+			}
+		}
+
+		// If critical issues found.
 		if ( ! empty( $issues ) ) {
-			$severity = ( $total_overhead > 10485760 || $autoload_mb > 3 ) ? 'medium' : 'low';
-			$threat_level = ( $total_overhead > 10485760 || $autoload_mb > 3 ) ? 50 : 30;
-
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %s: list of optimization issues */
-					__( 'Your database could benefit from optimization (like reorganizing a messy filing cabinet for faster access). Issues found: %s. Running database optimization improves query speed and reduces storage space. Use WP-Optimize, Advanced Database Cleaner, or similar plugins.', 'wpshadow' ),
-					implode( '; ', $issues )
-				),
-				'severity'     => $severity,
-				'threat_level' => $threat_level,
+				'description'  => __( 'Database optimization has critical issues: ', 'wpshadow' ) . implode( ', ', $issues ),
+				'severity'     => 'medium',
+				'threat_level' => 55,
 				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/database-optimization',
 				'context'      => array(
-					'total_overhead_mb'   => $total_overhead / 1024 / 1024,
-					'tables_with_overhead' => count( $tables_with_overhead ),
-					'expired_transients'  => (int) $expired_transients,
-					'autoload_mb'         => $autoload_mb,
-					'issues'              => $issues,
+					'stats'                   => $stats,
+					'has_optimization_plugin' => $has_optimization_plugin,
+					'tables_with_overhead'    => $tables_with_overhead,
+					'issues'                  => $issues,
+					'warnings'                => $warnings,
 				),
 			);
 		}
 
-		return null; // Database is optimized.
+		// If only warnings.
+		if ( ! empty( $warnings ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Database optimization has recommendations: ', 'wpshadow' ) . implode( ', ', $warnings ),
+				'severity'     => 'low',
+				'threat_level' => 35,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/database-optimization',
+				'context'      => array(
+					'stats'                   => $stats,
+					'has_optimization_plugin' => $has_optimization_plugin,
+					'tables_with_overhead'    => $tables_with_overhead,
+					'warnings'                => $warnings,
+				),
+			);
+		}
+
+		return null; // Database is well optimized.
 	}
 }

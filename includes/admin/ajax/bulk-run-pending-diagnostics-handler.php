@@ -94,22 +94,28 @@ class Bulk_Run_Pending_Diagnostics_Handler extends AJAX_Handler_Base {
 				$mode = 'batch';
 			}
 
+			$scope = self::get_post_param( 'scope', 'key', 'pending' );
+			if ( 'failed' !== $scope ) {
+				$scope = 'pending';
+			}
+
 			if ( 'cancel' === $mode ) {
-				delete_transient( self::get_queue_key() );
+				delete_transient( self::get_queue_key( $scope ) );
 				self::send_clean_success(
 					$buffer_level,
 					array(
 						'complete'  => true,
 						'cancelled' => true,
+						'scope'     => $scope,
 					)
 				);
 			}
 
 			if ( 'count' === $mode ) {
-				$state = get_transient( self::get_queue_key() );
+				$state = get_transient( self::get_queue_key( $scope ) );
 				if ( ! is_array( $state ) || ! isset( $state['queue'] ) || ! is_array( $state['queue'] ) ) {
-					$state = self::build_queue_state();
-					set_transient( self::get_queue_key(), $state, self::QUEUE_TTL );
+					$state = self::build_queue_state( $scope );
+					set_transient( self::get_queue_key( $scope ), $state, self::QUEUE_TTL );
 				}
 
 				$total     = (int) ( $state['total'] ?? 0 );
@@ -120,24 +126,26 @@ class Bulk_Run_Pending_Diagnostics_Handler extends AJAX_Handler_Base {
 					$buffer_level,
 					array(
 						'pending_total' => $remaining,
+						'scope'         => $scope,
 					)
 				);
 			}
 
-			$state = get_transient( self::get_queue_key() );
+			$state = get_transient( self::get_queue_key( $scope ) );
 			if ( 'start' === $mode || ! is_array( $state ) || empty( $state['queue'] ) ) {
-				$state = self::build_queue_state();
-				set_transient( self::get_queue_key(), $state, self::QUEUE_TTL );
+				$state = self::build_queue_state( $scope );
+				set_transient( self::get_queue_key( $scope ), $state, self::QUEUE_TTL );
 			}
 
 			$batch_size = max( 5, min( 25, (int) self::get_post_param( 'batch_size', 'int', self::DEFAULT_BATCH_SIZE ) ) );
 			$budget_ms  = max( 500, min( 5000, (int) self::get_post_param( 'budget_ms', 'int', self::DEFAULT_BATCH_BUDGET_MS ) ) );
 			$result     = self::run_batch( $state, $batch_size, $budget_ms );
+			$result['scope'] = $scope;
 
 			if ( ! empty( $result['complete'] ) ) {
-				delete_transient( self::get_queue_key() );
+				delete_transient( self::get_queue_key( $scope ) );
 			} else {
-				set_transient( self::get_queue_key(), $result['state'], self::QUEUE_TTL );
+				set_transient( self::get_queue_key( $scope ), $result['state'], self::QUEUE_TTL );
 			}
 
 			unset( $result['state'] );
@@ -271,13 +279,15 @@ class Bulk_Run_Pending_Diagnostics_Handler extends AJAX_Handler_Base {
 	/**
 	 * Build fresh queue state from diagnostics without valid cached states.
 	 *
+	 * @param string $scope Queue scope. Accepts 'pending' or 'failed'.
 	 * @return array<string, mixed>
 	 */
-	protected static function build_queue_state(): array {
+	protected static function build_queue_state( string $scope = 'pending' ): array {
 		$map      = Diagnostic_Registry::get_diagnostic_file_map();
 		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
 		$queue    = array();
 		$now      = time();
+		$scope    = 'failed' === $scope ? 'failed' : 'pending';
 
 		if ( ! is_array( $disabled ) ) {
 			$disabled = array();
@@ -295,11 +305,20 @@ class Bulk_Run_Pending_Diagnostics_Handler extends AJAX_Handler_Base {
 				continue;
 			}
 
+			$cached = null;
 			if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
 				$cached = \wpshadow_get_valid_diagnostic_test_state( $qualified, $now );
-				if ( is_array( $cached ) ) {
+			}
+
+			if ( 'failed' === $scope ) {
+				$cached_status = is_array( $cached ) && isset( $cached['status'] )
+					? (string) $cached['status']
+					: '';
+				if ( 'failed' !== $cached_status ) {
 					continue;
 				}
+			} elseif ( is_array( $cached ) ) {
+				continue;
 			}
 
 			if ( ! self::is_diagnostic_executable( $qualified, $map ) ) {
@@ -315,6 +334,7 @@ class Bulk_Run_Pending_Diagnostics_Handler extends AJAX_Handler_Base {
 			'queue'   => $queue,
 			'total'   => count( $queue ),
 			'pointer' => 0,
+			'scope'   => $scope,
 		);
 	}
 
@@ -409,13 +429,15 @@ class Bulk_Run_Pending_Diagnostics_Handler extends AJAX_Handler_Base {
 	 *
 	 * @return string
 	 */
-	protected static function get_queue_key(): string {
+	protected static function get_queue_key( string $scope = 'pending' ): string {
 		$user_id = get_current_user_id();
 		if ( $user_id <= 0 ) {
 			$user_id = 0;
 		}
 
-		return 'wpshadow_bulk_pending_queue_' . $user_id;
+		$scope = 'failed' === $scope ? 'failed' : 'pending';
+
+		return 'wpshadow_bulk_pending_queue_' . $scope . '_' . $user_id;
 	}
 
 	/**

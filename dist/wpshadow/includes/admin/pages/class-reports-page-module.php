@@ -174,12 +174,143 @@ function wpshadow_handle_delete_seo_reports() {
 add_action( 'admin_post_wpshadow_delete_seo_reports', 'wpshadow_handle_delete_seo_reports' );
 
 /**
+ * Get dashboard gauge reports keyed by report slug.
+ *
+ * @since  1.6090.1200
+ * @return array<string, array<string, mixed>> Dashboard gauge report definitions.
+ */
+function wpshadow_get_dashboard_gauge_report_map(): array {
+	return array(
+		'overall-health-report' => array(
+			'title'    => __( 'Overall Health Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed view of how your dashboard gauges are performing across security, speed, search visibility, accessibility, settings, and automation. See which areas are strongest and which ones deserve attention next.', 'wpshadow' ),
+			'report'   => 'overall-health-report',
+			'category' => 'overall',
+			'icon'     => 'dashicons-heart',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'security-gauge-report' => array(
+			'title'    => __( 'Security Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Security gauge so you can see which checks passed, which ones need attention, and what each result means in plain language.', 'wpshadow' ),
+			'report'   => 'security-gauge-report',
+			'category' => 'security',
+			'icon'     => 'dashicons-shield-alt',
+			'family'   => 'security',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'performance-gauge-report' => array(
+			'title'    => __( 'Performance Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Performance gauge, including which speed and efficiency checks are passing and which ones could help your pages load faster.', 'wpshadow' ),
+			'report'   => 'performance-gauge-report',
+			'category' => 'performance',
+			'icon'     => 'dashicons-performance',
+			'family'   => 'performance',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'code-quality-gauge-report' => array(
+			'title'    => __( 'Code Quality Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Code Quality gauge so you can spot risky patterns, technical debt, and maintenance concerns before they grow.', 'wpshadow' ),
+			'report'   => 'code-quality-gauge-report',
+			'category' => 'code-quality',
+			'icon'     => 'dashicons-editor-code',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'seo-gauge-report' => array(
+			'title'    => __( 'SEO Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your SEO gauge so you can understand what helps search engines read your site and what might be making it harder to discover.', 'wpshadow' ),
+			'report'   => 'seo-gauge-report',
+			'category' => 'seo',
+			'icon'     => 'dashicons-search',
+			'family'   => 'seo',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'design-gauge-report' => array(
+			'title'    => __( 'Design Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Design gauge so you can review user experience, visual polish, and presentation issues that affect how your site feels to visitors.', 'wpshadow' ),
+			'report'   => 'design-gauge-report',
+			'category' => 'design',
+			'icon'     => 'dashicons-admin-appearance',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'accessibility-gauge-report' => array(
+			'title'    => __( 'Accessibility Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Accessibility gauge so you can see how well your site supports keyboard users, screen readers, and people with different needs.', 'wpshadow' ),
+			'report'   => 'accessibility-gauge-report',
+			'category' => 'accessibility',
+			'icon'     => 'dashicons-universal-access',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'settings-gauge-report' => array(
+			'title'    => __( 'Settings Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Settings gauge so you can review configuration issues that affect stability, reliability, and day-to-day administration.', 'wpshadow' ),
+			'report'   => 'settings-gauge-report',
+			'category' => 'settings',
+			'icon'     => 'dashicons-admin-settings',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'monitoring-gauge-report' => array(
+			'title'    => __( 'Monitoring Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Monitoring gauge so you can understand how well your site is being watched for uptime, alerts, and ongoing issues.', 'wpshadow' ),
+			'report'   => 'monitoring-gauge-report',
+			'category' => 'monitoring',
+			'icon'     => 'dashicons-visibility',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+		'workflows-gauge-report' => array(
+			'title'    => __( 'Workflows Gauge Report', 'wpshadow' ),
+			'desc'     => __( 'Detailed breakdown of the diagnostics behind your Workflows gauge so you can see whether your automations, scheduled tasks, and routine maintenance jobs are staying dependable.', 'wpshadow' ),
+			'report'   => 'workflows-gauge-report',
+			'category' => 'workflows',
+			'icon'     => 'dashicons-update',
+			'family'   => 'analysis',
+			'enabled'  => true,
+			'since'    => '1.6090.1200',
+		),
+	);
+}
+
+/**
+ * Get the dashboard gauge report definition for a category.
+ *
+ * @since  1.6090.1200
+ * @param  string $category_key Dashboard gauge category key.
+ * @return array<string, mixed>|null Gauge report definition when available.
+ */
+function wpshadow_get_dashboard_gauge_report_for_category( string $category_key ): ?array {
+	foreach ( wpshadow_get_dashboard_gauge_report_map() as $report ) {
+		if ( isset( $report['category'] ) && $category_key === $report['category'] ) {
+			return $report;
+		}
+	}
+
+	return null;
+}
+
+/**
  * Get reports catalog.
  *
  * @return array Reports organized by category.
  */
 function wpshadow_get_reports_catalog() {
-	return array(
+	$dashboard_gauge_reports = array_values( wpshadow_get_dashboard_gauge_report_map() );
+
+	return array_merge(
+		array(
 		// Analysis & Insights Reports
 		array(
 			'title'   => __( 'Site DNA Report', 'wpshadow' ),
@@ -217,6 +348,9 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'since'   => '1.7038.1200',
 		),
+		),
+		$dashboard_gauge_reports,
+		array(
 
 		// Security Reports
 		array(
@@ -388,6 +522,7 @@ function wpshadow_get_reports_catalog() {
 			'enabled' => true,
 			'since'   => '1.6150.1200', // Release1.0 (May 2026)
 		),
+		)
 	);
 }
 
@@ -529,8 +664,11 @@ function wpshadow_render_report_card( $item ) {
  * @return void
  */
 function wpshadow_render_report_detail( $report ) {
+	$dashboard_gauge_report_views = array_fill_keys( array_keys( wpshadow_get_dashboard_gauge_report_map() ), 'dashboard-gauge-report.php' );
+
 	// Map report slugs to view files
-	$report_views = array(
+	$report_views = array_merge(
+		array(
 		'site-dna'             => 'site-dna.php',
 		'deep-scan'            => 'deep-scan.php',
 		'quick-scan'           => 'quick-scan.php',
@@ -552,6 +690,8 @@ function wpshadow_render_report_detail( $report ) {
 		'visual-comparisons'   => 'visual-comparisons.php',
 		'customization-audit'  => 'customization-audit.php',
 		'activity-history'     => 'activity-history.php',
+		),
+		$dashboard_gauge_report_views
 	);
 
 	// Check if report exists

@@ -140,6 +140,20 @@ class Bootstrap_Autoloader {
 	);
 
 	/**
+	 * Prefixes that should only be loaded for admin-side contexts.
+	 *
+	 * @var array<int, string>
+	 */
+	private static $admin_only_prefixes = array(
+		'includes/admin/',
+		'includes/ui/',
+		'includes/systems/dashboard/',
+		'includes/systems/core/class-menu-manager.php',
+		'includes/systems/core/class-ajax-router.php',
+		'includes/systems/core/class-hooks-initializer.php',
+	);
+
+	/**
 	 * Cache key for loaded files.
 	 *
 	 * @var string
@@ -171,6 +185,10 @@ class Bootstrap_Autoloader {
 	 */
 	private static function load_critical_classes(): void {
 		foreach ( self::$critical_classes as $file ) {
+			if ( self::is_admin_only_path( $file ) && ! self::is_admin_runtime_context() ) {
+				continue;
+			}
+
 			$path = WPSHADOW_PATH . $file;
 			
 			if ( file_exists( $path ) ) {
@@ -192,12 +210,14 @@ class Bootstrap_Autoloader {
 	 * @return void
 	 */
 	private static function load_features(): void {
+		$cache_key = self::get_feature_cache_key();
+
 		// Get cached file list or discover them
-		$files = wp_cache_get( self::CACHE_KEY, 'wpshadow' );
+		$files = wp_cache_get( $cache_key, 'wpshadow' );
 
 		if ( false === $files ) {
 			$files = self::discover_feature_files();
-			wp_cache_set( self::CACHE_KEY, $files, 'wpshadow', HOUR_IN_SECONDS );
+			wp_cache_set( $cache_key, $files, 'wpshadow', HOUR_IN_SECONDS );
 		}
 
 		// Load all discovered files
@@ -218,6 +238,10 @@ class Bootstrap_Autoloader {
 		$files = array();
 
 		foreach ( self::$feature_directories as $directory ) {
+			if ( self::is_admin_only_path( $directory ) && ! self::is_admin_runtime_context() ) {
+				continue;
+			}
+
 			$dir_path = WPSHADOW_PATH . $directory;
 
 			if ( ! is_dir( $dir_path ) ) {
@@ -229,6 +253,45 @@ class Bootstrap_Autoloader {
 		}
 
 		return $files;
+	}
+
+	/**
+	 * Determine whether a file path should only load in admin contexts.
+	 *
+	 * @since 1.6093.1200
+	 * @param  string $path Relative plugin path.
+	 * @return bool True when the path is admin-only.
+	 */
+	private static function is_admin_only_path( string $path ): bool {
+		foreach ( self::$admin_only_prefixes as $prefix ) {
+			if ( 0 === strpos( $path, $prefix ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determine whether current runtime should include admin files.
+	 *
+	 * @since 1.6093.1200
+	 * @return bool True when current request is admin, AJAX, CLI, or WP-CLI.
+	 */
+	private static function is_admin_runtime_context(): bool {
+		if ( function_exists( 'is_admin' ) && is_admin() ) {
+			return true;
+		}
+
+		if ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) {
+			return true;
+		}
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -284,7 +347,20 @@ class Bootstrap_Autoloader {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		wp_cache_delete( self::CACHE_KEY, 'wpshadow' );
+		wp_cache_delete( self::CACHE_KEY . '_admin', 'wpshadow' );
+		wp_cache_delete( self::CACHE_KEY . '_frontend', 'wpshadow' );
+	}
+
+	/**
+	 * Build runtime-specific cache key for feature file discovery.
+	 *
+	 * @since 1.6093.1200
+	 * @return string Cache key suffix by request context.
+	 */
+	private static function get_feature_cache_key(): string {
+		return self::is_admin_runtime_context()
+			? self::CACHE_KEY . '_admin'
+			: self::CACHE_KEY . '_frontend';
 	}
 
 	/**
