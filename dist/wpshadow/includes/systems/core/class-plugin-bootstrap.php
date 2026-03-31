@@ -526,7 +526,7 @@ class Plugin_Bootstrap {
 			return;
 		}
 
-		$cli_path = WPSHADOW_PATH . 'includes/cli/';
+		$cli_path = WPSHADOW_PATH . 'includes/utils/cli/';
 
 		if ( file_exists( $cli_path . 'class-wpshadow-cli.php' ) ) {
 			require_once $cli_path . 'class-wpshadow-cli.php';

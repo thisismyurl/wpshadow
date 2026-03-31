@@ -14,6 +14,8 @@ namespace WPShadow\Cloud;
  *
  * Security: All requests must include API token (stored in wp_options).
  * No API token is ever exposed in logs or error messages.
+ *
+ * @since 1.6151.1200
  */
 class Cloud_Client {
 
@@ -37,6 +39,12 @@ class Cloud_Client {
 		array $data = array(),
 		array $headers = array()
 	): array {
+		if ( ! \WPShadow\Core\External_Request_Guard::is_allowed( 'cloud_api' ) ) {
+			return array(
+				'error' => \WPShadow\Core\External_Request_Guard::get_denied_message( __( 'Cloud requests', 'wpshadow' ) ),
+			);
+		}
+
 		// Verify site is registered
 		$token = get_option( 'wpshadow_cloud_token' );
 		if ( ! $token && $endpoint !== '/register' ) {

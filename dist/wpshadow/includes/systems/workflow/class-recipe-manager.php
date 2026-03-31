@@ -410,7 +410,7 @@ class Recipe_Manager {
 		// Use Security_Validator for consistent security checks
 		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_recipes', 'manage_options', 'nonce' );
 
-		$recipe_id = isset( $_POST['recipe_id'] ) ? sanitize_key( $_POST['recipe_id'] ) : '';
+		$recipe_id = isset( $_POST['recipe_id'] ) ? sanitize_key( wp_unslash( $_POST['recipe_id'] ) ) : '';
 
 		if ( empty( $recipe_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid recipe ID', 'wpshadow' ) ) );
@@ -438,8 +438,8 @@ class Recipe_Manager {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
 		}
 
-		$recipe_id = isset( $_POST['recipe_id'] ) ? sanitize_key( $_POST['recipe_id'] ) : '';
-		$step_id   = isset( $_POST['step_id'] ) ? sanitize_key( $_POST['step_id'] ) : '';
+		$recipe_id = isset( $_POST['recipe_id'] ) ? sanitize_key( wp_unslash( $_POST['recipe_id'] ) ) : '';
+		$step_id   = isset( $_POST['step_id'] ) ? sanitize_key( wp_unslash( $_POST['step_id'] ) ) : '';
 
 		if ( empty( $recipe_id ) || empty( $step_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'wpshadow' ) ) );

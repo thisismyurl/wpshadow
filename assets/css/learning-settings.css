@@ -44,17 +44,16 @@
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-@font-face {
-	font-family: 'OpenDyslexic';
-	src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/fonts/opendyslexic-regular.woff2') format('woff2');
-	font-weight: normal;
-	font-style: normal;
-}
-
 body.wpshadow-dyslexic-font {
-	font-family: 'OpenDyslexic', sans-serif !important;
+	font-family: Verdana, Tahoma, Arial, sans-serif !important;
+	letter-spacing: 0.02em;
+	word-spacing: 0.04em;
+	line-height: 1.7;
 }
 
 body.wpshadow-dyslexic-font .wpshadow-font-preview-text {
-	font-family: 'OpenDyslexic', sans-serif;
+	font-family: Verdana, Tahoma, Arial, sans-serif;
+	letter-spacing: 0.02em;
+	word-spacing: 0.04em;
+	line-height: 1.7;
 }

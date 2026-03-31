@@ -75,16 +75,6 @@ class Learning_Settings {
 			array(),
 			WPSHADOW_VERSION
 		);
-
-		// Enqueue dyslexia-friendly font if enabled
-		if ( Settings_Registry::use_dyslexia_font() ) {
-			wp_enqueue_style(
-				'opendyslexic',
-				'https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/fonts/opendyslexic-regular.woff2',
-				array(),
-				'1.0.3'
-			);
-		}
 	}
 
 	/**
@@ -282,12 +272,12 @@ class Learning_Settings {
 									value="1" 
 									<?php checked( $dyslexia_font, true ); ?>
 								/>
-								<?php esc_html_e( 'Use OpenDyslexic font', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Use dyslexia-friendly font stack', 'wpshadow' ); ?>
 							</label>
 							<p class="description">
 								<?php
 								esc_html_e(
-									'Switches to OpenDyslexic, a font designed to make letters easier to distinguish and reduce reading errors for people with dyslexia.',
+									'Switches to a dyslexia-friendly local font stack with clearer letterforms and generous spacing to improve readability.',
 									'wpshadow'
 								);
 								?>
@@ -296,7 +286,7 @@ class Learning_Settings {
 								<p class="wpshadow-font-preview-text">
 									<?php
 									esc_html_e(
-										'This is how text looks with OpenDyslexic: letters have weighted bottoms to prevent rotation and confusion.',
+										'This is how text looks with the dyslexia-friendly font stack: clearer letter shapes and wider spacing can make reading more comfortable.',
 										'wpshadow'
 									);
 									?>

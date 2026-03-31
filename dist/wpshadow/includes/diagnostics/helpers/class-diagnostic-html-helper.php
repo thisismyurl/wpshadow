@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Helpers;
 
+use WPShadow\Core\External_Request_Guard;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -37,6 +39,13 @@ class Diagnostic_HTML_Helper {
 	 */
 	public static function fetch_html( string $url, array $args = array(), bool $allow_empty = false ): ?string {
 		if ( ! function_exists( 'wp_remote_get' ) ) {
+			return null;
+		}
+
+		$guard_purpose = isset( $args['guard_purpose'] ) ? sanitize_key( (string) $args['guard_purpose'] ) : 'diagnostics_html_fetch';
+		unset( $args['guard_purpose'] );
+
+		if ( ! External_Request_Guard::is_allowed( $guard_purpose ) ) {
 			return null;
 		}
 

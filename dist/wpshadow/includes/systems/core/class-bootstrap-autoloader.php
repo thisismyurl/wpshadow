@@ -55,6 +55,7 @@ class Bootstrap_Autoloader {
 		
 		// Core utilities
 		'includes/systems/core/class-security-validator.php',
+		'includes/systems/core/class-external-request-guard.php',
 		'includes/systems/core/class-secret-manager.php',
 		'includes/systems/core/class-secret-audit-log.php',
 		'includes/systems/core/class-activity-logger.php',

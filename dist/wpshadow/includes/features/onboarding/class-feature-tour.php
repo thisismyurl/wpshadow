@@ -229,19 +229,44 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	}
 
 	/**
+	 * Verify security requirements for feature-tour AJAX requests.
+	 *
+	 * @since 1.6093.1200
+	 * @return void
+	 */
+	private static function verify_ajax_tour_request() {
+		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
+			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
+			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
+		}
+	}
+
+	/**
+	 * Get a sanitized key from POST payload.
+	 *
+	 * @since  1.6093.1200
+	 * @param  string $key     Input key.
+	 * @param  string $default Optional. Default value.
+	 * @return string
+	 */
+	private static function get_post_key_param( string $key, string $default = '' ): string {
+		if ( ! isset( $_POST[ $key ] ) ) {
+			return $default;
+		}
+
+		return sanitize_key( wp_unslash( $_POST[ $key ] ) );
+	}
+
+	/**
 	 * AJAX: Start a tour.
 	 *
 	 * @since 1.6093.1200
 	 * @return void
 	 */
 	public static function ajax_start_tour() {
-		// Use Security_Validator for consistent security checks
-		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
-			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
-			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
-		}
+		self::verify_ajax_tour_request();
 
-		$tour_id = isset( $_POST['tour_id'] ) ? sanitize_key( $_POST['tour_id'] ) : '';
+		$tour_id = self::get_post_key_param( 'tour_id' );
 
 		if ( empty( $tour_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid tour ID', 'wpshadow' ) ) );
@@ -274,14 +299,10 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function ajax_complete_step() {
-		// Use Security_Validator for consistent security checks
-		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
-			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
-			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
-		}
+		self::verify_ajax_tour_request();
 
-		$tour_id = isset( $_POST['tour_id'] ) ? sanitize_key( $_POST['tour_id'] ) : '';
-		$step_id = isset( $_POST['step_id'] ) ? sanitize_key( $_POST['step_id'] ) : '';
+		$tour_id = self::get_post_key_param( 'tour_id' );
+		$step_id = self::get_post_key_param( 'step_id' );
 
 		if ( empty( $tour_id ) || empty( $step_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'wpshadow' ) ) );
@@ -330,13 +351,9 @@ class Feature_Tour extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	public static function ajax_dismiss_tour() {
-		// Use Security_Validator for consistent security checks
-		if ( ! \WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_feature_tour', 'nonce', false ) ||
-			 ! \WPShadow\Core\Security_Validator::verify_capability( 'manage_options', false ) ) {
-			wp_send_json_error( array( 'message' => \WPShadow\Core\Security_Validator::get_permission_error() ) );
-		}
+		self::verify_ajax_tour_request();
 
-		$tour_id = isset( $_POST['tour_id'] ) ? sanitize_key( $_POST['tour_id'] ) : '';
+		$tour_id = self::get_post_key_param( 'tour_id' );
 
 		if ( empty( $tour_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid tour ID', 'wpshadow' ) ) );

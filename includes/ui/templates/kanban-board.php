@@ -19,7 +19,7 @@ $diagnostic_registry = \WPShadow\Diagnostics\Diagnostic_Registry::class;
 $all_findings        = method_exists( $diagnostic_registry, 'run_enabled_scan' ) ? $diagnostic_registry::run_enabled_scan() : array();
 
 // Apply category filter if present (Issue #564)
-$kanban_category = isset( $_GET['kanban_category'] ) ? sanitize_key( $_GET['kanban_category'] ) : '';
+$kanban_category = isset( $_GET['kanban_category'] ) ? sanitize_key( wp_unslash( $_GET['kanban_category'] ) ) : '';
 if ( ! empty( $kanban_category ) ) {
 	$all_findings = array_filter(
 		$all_findings,

@@ -131,12 +131,6 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 						/>
 					</svg>
 				</div>
-
-				<div class="widget-footer">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-health-history' ) ); ?>" class="button">
-						<?php esc_html_e( 'View Full History', 'wpshadow' ); ?>
-					</a>
-				</div>
 			</div>
 		</div>
 		<?php

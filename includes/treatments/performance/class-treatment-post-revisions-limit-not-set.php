@@ -105,6 +105,19 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 	}
 
 	/**
+	 * Get the risk level for this treatment.
+	 *
+	 * Editing wp-config.php is a high-risk operation — a mistake can take
+	 * the entire site offline. The user must explicitly approve.
+	 *
+	 * @since  1.6132.1200
+	 * @return string
+	 */
+	public static function get_risk_level(): string {
+		return 'high';
+	}
+
+	/**
 	 * Apply the treatment.
 	 *
 	 * Sets post revision limit in wp-config.php.

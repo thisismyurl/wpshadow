@@ -30,6 +30,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Training_Widget extends Hook_Subscriber_Base {
 
 	/**
+	 * Determine if the current admin context is a WPShadow page.
+	 *
+	 * @since 1.6093.1200
+	 * @param string $hook Current admin page hook.
+	 * @return bool True when on a WPShadow admin screen.
+	 */
+	private static function is_wpshadow_admin_context( string $hook = '' ): bool {
+		if ( '' !== $hook && false !== strpos( $hook, 'wpshadow' ) ) {
+			return true;
+		}
+
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+		return $screen && isset( $screen->id ) && false !== strpos( (string) $screen->id, 'wpshadow' );
+	}
+
+	/**
 	 * Get hook subscriptions.
 	 *
 	 * @since 1.6093.1200
@@ -60,7 +80,11 @@ class Training_Widget extends Hook_Subscriber_Base {
 	 * @since 1.6093.1200
 	 * @return void
 	 */
-	public static function enqueue_assets() {
+	public static function enqueue_assets( $hook = '' ) {
+		if ( ! self::is_wpshadow_admin_context( (string) $hook ) ) {
+			return;
+		}
+
 		if ( wp_style_is( 'wpshadow-admin-pages', 'enqueued' ) || wp_style_is( 'wpshadow-admin-pages', 'registered' ) ) {
 			wp_enqueue_style(
 				'wpshadow-training-widget',
@@ -390,7 +414,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	public static function ajax_dismiss_widget() {
 		\WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_training_widget', 'nonce', true );
 
-		$context = isset( $_POST['context'] ) ? sanitize_key( $_POST['context'] ) : 'general';
+		$context = isset( $_POST['context'] ) ? sanitize_key( wp_unslash( $_POST['context'] ) ) : 'general';
 		$user_id = get_current_user_id();
 
 		update_user_meta( $user_id, 'wpshadow_dismissed_training_' . $context, time() );
@@ -407,7 +431,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	public static function ajax_track_click() {
 		\WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_training_widget', 'nonce', true );
 
-		$course = isset( $_POST['course'] ) ? sanitize_key( $_POST['course'] ) : '';
+		$course = isset( $_POST['course'] ) ? sanitize_key( wp_unslash( $_POST['course'] ) ) : '';
 		if ( empty( $course ) ) {
 			wp_send_json_error();
 		}

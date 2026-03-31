@@ -219,45 +219,47 @@ class Hooks_Initializer {
 			\WPShadow\Guardian\Guardian_Manager::init();
 		}
 
-		// Initialize analyzers
-		if ( class_exists( '\WPShadow\Guardian\Failed_Login_Analyzer' ) ) {
-			\WPShadow\Guardian\Failed_Login_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Dashboard_Performance_Analyzer' ) ) {
-			\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\REST_API_Performance_Analyzer' ) ) {
-			\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\CSP_Violation_Analyzer' ) ) {
-			\WPShadow\Guardian\CSP_Violation_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Compromised_Accounts_Analyzer' ) ) {
-			\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Cache_Invalidation_Analyzer' ) ) {
-			\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Shortcode_Execution_Analyzer' ) ) {
-			\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\API_Latency_Analyzer' ) ) {
-			\WPShadow\Guardian\API_Latency_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Block_Rendering_Performance_Analyzer' ) ) {
-			\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Bot_Traffic_Analyzer' ) ) {
-			\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Browser_Compatibility_Analyzer' ) ) {
-			\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Editor_Performance_Analyzer' ) ) {
-			\WPShadow\Guardian\Editor_Performance_Analyzer::init();
-		}
-		if ( class_exists( '\WPShadow\Guardian\Hook_Execution_Analyzer' ) ) {
-			\WPShadow\Guardian\Hook_Execution_Analyzer::init();
+		// Initialize analyzers only when Guardian is enabled.
+		if ( self::is_guardian_runtime_enabled() ) {
+			if ( class_exists( '\WPShadow\Guardian\Failed_Login_Analyzer' ) ) {
+				\WPShadow\Guardian\Failed_Login_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Dashboard_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\REST_API_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\CSP_Violation_Analyzer' ) ) {
+				\WPShadow\Guardian\CSP_Violation_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Compromised_Accounts_Analyzer' ) ) {
+				\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Cache_Invalidation_Analyzer' ) ) {
+				\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Shortcode_Execution_Analyzer' ) ) {
+				\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\API_Latency_Analyzer' ) ) {
+				\WPShadow\Guardian\API_Latency_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Block_Rendering_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Bot_Traffic_Analyzer' ) ) {
+				\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Browser_Compatibility_Analyzer' ) ) {
+				\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Editor_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\Editor_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Hook_Execution_Analyzer' ) ) {
+				\WPShadow\Guardian\Hook_Execution_Analyzer::init();
+			}
 		}
 
 		// Guardian command handlers
@@ -291,6 +293,16 @@ class Hooks_Initializer {
 
 		// Fire hook for external plugins/addons
 		do_action( 'wpshadow_core_loaded' );
+	}
+
+	/**
+	 * Determine whether Guardian runtime monitoring should be active.
+	 *
+	 * @since 1.7091.0900
+	 * @return bool
+	 */
+	private static function is_guardian_runtime_enabled(): bool {
+		return (bool) get_option( 'wpshadow_guardian_enabled', false );
 	}
 
 	/**
@@ -473,91 +485,95 @@ class Hooks_Initializer {
 			true
 		);
 
-		// Enqueue page-specific styles
-		wp_enqueue_style(
-			'wpshadow-gauges',
-			WPSHADOW_URL . 'assets/css/gauges.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+		$is_dashboard_screen = is_string( $hook ) && 'toplevel_page_wpshadow' === $hook;
 
-		wp_enqueue_style(
-			'wpshadow-safety-warnings',
-			WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+		if ( $is_dashboard_screen ) {
+			// Enqueue dashboard-specific styles.
+			wp_enqueue_style(
+				'wpshadow-gauges',
+				WPSHADOW_URL . 'assets/css/gauges.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
-		wp_enqueue_style(
-			'wpshadow-kanban-board',
-			WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+			wp_enqueue_style(
+				'wpshadow-safety-warnings',
+				WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
-		// Note: kanban-board-modern.css is now consolidated into kanban-board-consolidated.css
-		// This dependency is kept for backwards compatibility
-		wp_enqueue_style(
-			'wpshadow-kanban-board-modern',
-			WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+			wp_enqueue_style(
+				'wpshadow-kanban-board',
+				WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
-		wp_enqueue_style(
-			'wpshadow-dashboard-fullscreen',
-			WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+			// Note: kanban-board-modern.css is now consolidated into kanban-board-consolidated.css
+			// This dependency is kept for backwards compatibility
+			wp_enqueue_style(
+				'wpshadow-kanban-board-modern',
+				WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
-		// Modal system (needed for dashboard Guardian actions)
-		\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
+			wp_enqueue_style(
+				'wpshadow-dashboard-fullscreen',
+				WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
-		wp_enqueue_style(
-			'wpshadow-guardian-dashboard-modern',
-			WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+			// Modal system (needed for dashboard Guardian actions).
+			\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 
-		// Enqueue scripts
-		wp_enqueue_script(
-			'wpshadow-dashboard-realtime',
-			WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-			array( 'jquery', 'heartbeat', 'wpshadow-design-system', 'wpshadow-modal' ),
-			file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
-			false
-		);
+			wp_enqueue_style(
+				'wpshadow-guardian-dashboard-modern',
+				WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
-		// Ensure WordPress heartbeat API is active on dashboard pages.
-		wp_enqueue_script( 'heartbeat' );
+			// Enqueue dashboard scripts.
+			wp_enqueue_script(
+				'wpshadow-dashboard-realtime',
+				WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
+				array( 'jquery', 'heartbeat', 'wpshadow-design-system', 'wpshadow-modal' ),
+				file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
+				false
+			);
 
-		wp_localize_script(
-			'wpshadow-dashboard-realtime',
-			'wpshadow',
-			array(
-				'dashboard_nonce'  => wp_create_nonce( 'wpshadow_dashboard_nonce' ),
-				'first_scan_nonce' => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
-				'scan_nonce'       => wp_create_nonce( 'wpshadow_scan_nonce' ),
-			)
-		);
+			// Ensure WordPress heartbeat API is active on dashboard pages.
+			wp_enqueue_script( 'heartbeat' );
 
-		wp_enqueue_script(
-			'wpshadow-kanban-board',
-			WPSHADOW_URL . 'assets/js/kanban-board.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
+			wp_localize_script(
+				'wpshadow-dashboard-realtime',
+				'wpshadow',
+				array(
+					'dashboard_nonce'  => wp_create_nonce( 'wpshadow_dashboard_nonce' ),
+					'first_scan_nonce' => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
+					'scan_nonce'       => wp_create_nonce( 'wpshadow_scan_nonce' ),
+				)
+			);
 
-		wp_localize_script(
-			'wpshadow-kanban-board',
-			'wpshadowKanban',
-			array(
-				'kanban_nonce' => wp_create_nonce( 'wpshadow_kanban' ),
-			)
-		);
+			wp_enqueue_script(
+				'wpshadow-kanban-board',
+				WPSHADOW_URL . 'assets/js/kanban-board.js',
+				array( 'jquery' ),
+				WPSHADOW_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wpshadow-kanban-board',
+				'wpshadowKanban',
+				array(
+					'kanban_nonce' => wp_create_nonce( 'wpshadow_kanban' ),
+				)
+			);
+		}
 
 		// Workflow assets are enqueued via dashboard asset manager to avoid duplicate registrations.
 
@@ -666,6 +682,11 @@ class Hooks_Initializer {
 	 * Frontend enqueue scripts hook
 	 */
 	public static function on_wp_enqueue_scripts() {
+		$should_enqueue = (bool) apply_filters( 'wpshadow_enqueue_frontend_assets', false );
+		if ( ! $should_enqueue ) {
+			return;
+		}
+
 		wp_enqueue_style(
 			'wpshadow-safety-warnings-frontend',
 			WPSHADOW_URL . 'assets/css/utilities-consolidated.css',

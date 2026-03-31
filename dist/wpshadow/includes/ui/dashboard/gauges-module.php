@@ -53,10 +53,13 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 	wp_enqueue_script(
 		'wpshadow-dashboard-realtime',
 		WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-		array( 'jquery' ),
-		WPSHADOW_VERSION,
+		array( 'jquery', 'heartbeat' ),
+		file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
 		false // Load in header so inline scripts can use jQuery
 	);
+
+	// Ensure WordPress heartbeat API is active on dashboard pages.
+	wp_enqueue_script( 'heartbeat' );
 
 	// Localize dashboard script with nonce
 	wp_localize_script(
@@ -66,6 +69,7 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 			'dashboard_nonce'  => wp_create_nonce( 'wpshadow_dashboard_nonce' ),
 			'first_scan_nonce' => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
 			'scan_nonce'       => wp_create_nonce( 'wpshadow_scan_nonce' ),
+			'tests_run_label'  => __( 'Tests run: %1$d/%2$d', 'wpshadow' ),
 		)
 	);
 }
@@ -253,8 +257,8 @@ function wpshadow_get_wordpress_health(): array {
 /**
  * Get per-category test coverage counts for dashboard gauges.
  *
- * Counts associated diagnostics by category and estimates how many have run
- * based on whether a scan has been executed and whether diagnostics are disabled.
+ * Counts associated diagnostics by category and reports how many actually ran
+ * during the current dashboard freshness window.
  *
  * @param array $category_meta Dashboard category metadata.
  * @param bool  $never_run     Whether diagnostics have never been run.
@@ -265,33 +269,78 @@ function wpshadow_get_gauge_test_counts( array $category_meta, bool $never_run )
 
 	foreach ( $category_meta as $cat_key => $meta ) {
 		$counts[ $cat_key ] = array(
-			'run'   => 0,
-			'total' => 0,
+			'run'     => 0,
+			'passed'  => 0,
+			'failed'  => 0,
+			'unknown' => 0,
+			'total'   => 0,
 		);
 	}
+
+	$diagnostic_file_map = class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' )
+		? \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
+		: array();
 
 	$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
 	if ( ! is_array( $disabled ) ) {
 		$disabled = array();
 	}
 
-	if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) && method_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry', 'get_diagnostic_file_map' ) ) {
-		$diagnostic_file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+	// Load all persisted states once for the raw-state fallback (mirrors Diagnostic Status table logic).
+	$all_raw_states = function_exists( 'wpshadow_get_diagnostic_test_states' )
+		? wpshadow_get_diagnostic_test_states()
+		: array();
 
-		foreach ( $diagnostic_file_map as $class_name => $diagnostic_data ) {
-			$category = sanitize_key( (string) ( $diagnostic_data['family'] ?? '' ) );
-			if ( empty( $category ) || ! isset( $counts[ $category ] ) || 'overall' === $category || 'wordpress-health' === $category ) {
-				continue;
+	$now = time();
+	foreach ( $diagnostic_file_map as $class_name => $diagnostic_data ) {
+		if ( ! is_string( $class_name ) || '' === $class_name ) {
+			continue;
+		}
+
+		$qualified_class = 0 === strpos( $class_name, 'WPShadow\\Diagnostics\\' )
+			? $class_name
+			: 'WPShadow\\Diagnostics\\' . $class_name;
+
+		$is_disabled = in_array( $qualified_class, $disabled, true ) || in_array( $class_name, $disabled, true );
+		if ( $is_disabled ) {
+			continue;
+		}
+
+		$category = sanitize_key( (string) ( $diagnostic_data['family'] ?? '' ) );
+		if ( ! isset( $counts[ $category ] ) ) {
+			continue;
+		}
+
+		++$counts[ $category ]['total'];
+
+		$state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
+			? wpshadow_get_valid_diagnostic_test_state( $qualified_class, $now )
+			: null;
+
+		// Fallback: use persisted raw state when the valid-state check returns null
+		// (e.g. transient expired). This matches the same fallback used in the
+		// Diagnostic Status table so both surfaces show consistent counts.
+		if ( ! is_array( $state ) && isset( $all_raw_states[ $qualified_class ] ) && is_array( $all_raw_states[ $qualified_class ] ) ) {
+			$raw_status = (string) ( $all_raw_states[ $qualified_class ]['status'] ?? '' );
+			if ( 'passed' === $raw_status || 'failed' === $raw_status ) {
+				$state = $all_raw_states[ $qualified_class ];
 			}
+		}
 
-			++$counts[ $category ]['total'];
+		if ( ! is_array( $state ) ) {
+			++$counts[ $category ]['unknown'];
+			continue;
+		}
 
-			$qualified_class = 0 === strpos( $class_name, 'WPShadow\\Diagnostics\\' ) ? $class_name : 'WPShadow\\Diagnostics\\' . $class_name;
-			$is_disabled     = in_array( $qualified_class, $disabled, true ) || in_array( $class_name, $disabled, true );
-
-			if ( ! $never_run && ! $is_disabled ) {
-				++$counts[ $category ]['run'];
-			}
+		$status = (string) ( $state['status'] ?? 'unknown' );
+		if ( 'passed' === $status ) {
+			++$counts[ $category ]['passed'];
+			++$counts[ $category ]['run'];
+		} elseif ( 'failed' === $status ) {
+			++$counts[ $category ]['failed'];
+			++$counts[ $category ]['run'];
+		} else {
+			++$counts[ $category ]['unknown'];
 		}
 	}
 
@@ -331,9 +380,48 @@ function wpshadow_get_gauge_test_counts( array $category_meta, bool $never_run )
 	}
 
 	if ( isset( $counts['wordpress-health'] ) ) {
-		$counts['wordpress-health']['total'] = $wp_health_total;
-		$counts['wordpress-health']['run']   = $never_run ? 0 : min( $wp_health_run, $wp_health_total );
+		$wp_known = 0;
+		$wp_good  = 0;
+
+		if ( is_array( $wp_health_raw ) ) {
+			$wp_good        = (int) ( $wp_health_raw['good'] ?? 0 );
+			$wp_recommended = (int) ( $wp_health_raw['recommended'] ?? 0 );
+			$wp_critical    = (int) ( $wp_health_raw['critical'] ?? 0 );
+			$wp_known       = $wp_good + $wp_recommended + $wp_critical;
+		}
+
+		$counts['wordpress-health']['total']   = $wp_health_total;
+		$counts['wordpress-health']['passed']  = min( $wp_good, $wp_health_total );
+		$counts['wordpress-health']['failed']  = min( max( 0, $wp_known - $wp_good ), $wp_health_total );
+		$counts['wordpress-health']['run']     = min( $wp_known, $wp_health_total );
+		$counts['wordpress-health']['unknown'] = max( 0, $wp_health_total - $counts['wordpress-health']['run'] );
 	}
+
+	// Calculate overall test counts from category aggregates.
+	$overall_run     = 0;
+	$overall_passed  = 0;
+	$overall_failed  = 0;
+	$overall_unknown = 0;
+	$overall_total   = 0;
+	foreach ( $counts as $cat_key => $cat_counts ) {
+		if ( 'overall' === $cat_key ) {
+			continue;
+		}
+
+		$overall_run     += (int) ( $cat_counts['run'] ?? 0 );
+		$overall_passed  += (int) ( $cat_counts['passed'] ?? 0 );
+		$overall_failed  += (int) ( $cat_counts['failed'] ?? 0 );
+		$overall_unknown += (int) ( $cat_counts['unknown'] ?? 0 );
+		$overall_total   += (int) ( $cat_counts['total'] ?? 0 );
+	}
+
+	$counts['overall'] = array(
+		'run'     => $overall_run,
+		'passed'  => $overall_passed,
+		'failed'  => $overall_failed,
+		'unknown' => $overall_unknown,
+		'total'   => $overall_total,
+	);
 
 	return $counts;
 }
@@ -382,24 +470,29 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 		);
 	}
 
-	// Calculate overall health from all categories
-	$overall_health = \wpshadow_get_health_status();
+	// Calculate test pass rates from persisted per-test states.
+	$overall_total_tests   = (int) ( $test_counts['overall']['total'] ?? 0 );
+	$overall_tests_passed  = (int) ( $test_counts['overall']['passed'] ?? 0 );
+	$overall_tests_unknown = (int) ( $test_counts['overall']['unknown'] ?? 0 );
+	$overall_pass_rate     = $overall_total_tests > 0 ? (int) ( ( $overall_tests_passed / $overall_total_tests ) * 100 ) : 0;
 
-	// Get threat gauge color utility function
-	$get_threat_gauge_color = function ( $threat_level ) {
-		if ( $threat_level <= 25 ) {
-			return '#2e7d32'; // Green - Low threat
+	// Get pass rate color utility function
+	$get_pass_rate_color = function ( $pass_rate ) {
+		if ( $pass_rate >= 80 ) {
+			return '#2e7d32'; // Green - Good pass rate
 		}
-		if ( $threat_level <= 50 ) {
-			return '#f57c00'; // Orange - Medium threat
+		if ( $pass_rate >= 60 ) {
+			return '#f57c00'; // Orange - Fair pass rate
 		}
-		return '#f44336'; // Red - High threat
+		return '#f44336'; // Red - Poor pass rate
 	};
+	
+	$overall_color = $get_pass_rate_color( $overall_pass_rate );
 	?>
 	<div class="wps-dashboard-gauges wps-gap-6 wps-mb-8">
 		<!-- Left: Large Overall Health Gauge + Scan Buttons -->
 		<div class="wps-health-gauge-main">
-			<div class="wps-health-gauge-card" style="border-color: <?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>;">
+			<div class="wps-health-gauge-card" style="border-color: <?php echo esc_attr( $overall_color ); ?>;">
 				<h3 class="wps-health-gauge-title"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
 
 				<svg id="wpshadow-overall-gauge" width="200" height="200" viewBox="0 0 200 200" class="wps-health-gauge-svg" aria-labelledby="overall-health-title" role="img">
@@ -407,29 +500,76 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						<?php
 						echo esc_html(
 							sprintf(
-								/* translators: %d: health score out of 1000 */
-								__( 'Overall site health: %d/1000', 'wpshadow' ),
-								isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0
+								/* translators: 1: tests passed, 2: total tests, 3: pass rate percentage */
+								__( 'Overall tests passed: %1$d/%2$d (%3$d%%)', 'wpshadow' ),
+								$overall_tests_passed,
+								$overall_total_tests,
+								$overall_pass_rate
 							)
 						);
 						?>
 					</title>
 					<!-- Outer decorative circle -->
-					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="2" opacity="0.2" />
+					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( $overall_color ); ?>" stroke-width="2" opacity="0.2" />
 					<!-- Gauge background -->
 					<circle cx="100" cy="100" r="85" fill="none" stroke="#e0e0e0" stroke-width="16" />
 					<!-- Gauge progress -->
-					<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="16"
-						stroke-dasharray="<?php echo (int) ( ( isset( $overall_health['score'] ) ? $overall_health['score'] : 0 ) / 1000 * 534 ); ?> 534"
+					<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( $overall_color ); ?>" stroke-width="16"
+						stroke-dasharray="<?php echo (int) ( ( $overall_pass_rate / 100 ) * 534 ); ?> 534"
 						stroke-linecap="round" transform="rotate(-90 100 100)"
 						class="wps-gauge-progress" />
 					<!-- Center text -->
-				<text x="100" y="97" text-anchor="middle" font-size="40" font-weight="bold" fill="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>"><?php echo isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0; ?></text>
-				<text x="100" y="118" text-anchor="middle" font-size="16" fill="#999">/1000</text>
-				<text x="100" y="138" text-anchor="middle" font-size="14" fill="#666"><?php echo esc_html( isset( $overall_health['status'] ) && $overall_health['status'] ? $overall_health['status'] : 'Unknown' ); ?></text>
+					<text x="100" y="97" text-anchor="middle" font-size="40" font-weight="bold" fill="<?php echo esc_attr( $overall_color ); ?>"><?php echo (int) $overall_tests_passed; ?></text>
+					<text x="100" y="118" text-anchor="middle" font-size="16" fill="#999">/<?php echo (int) $overall_total_tests; ?></text>
+					<text x="100" y="138" text-anchor="middle" font-size="14" fill="#666"><?php echo esc_html( sprintf( __( '%d%% Pass', 'wpshadow' ), (int) $overall_pass_rate ) ); ?></text>
 				</svg>
 
-				<p class="wps-health-gauge-message"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
+				<p class="wps-health-gauge-message">
+					<?php
+					if ( $overall_tests_unknown > 0 ) {
+						echo esc_html(
+							sprintf(
+								/* translators: 1: unknown test count */
+								__( '%1$d tests are still unknown until they run.', 'wpshadow' ),
+								$overall_tests_unknown
+							)
+						);
+					} else {
+						echo esc_html(
+							sprintf(
+								/* translators: 1: pass rate percentage */
+								__( '%1$d%% of tests passed', 'wpshadow' ),
+								$overall_pass_rate
+							)
+						);
+					}
+					?>
+				</p>
+
+				<div class="wps-health-gauge-test-count" data-test-category="overall">
+					<?php
+					if ( $overall_tests_unknown > 0 ) {
+						echo esc_html(
+							sprintf(
+								/* translators: 1: tests passed, 2: total tests, 3: unknown tests */
+								__( 'Passed: %1$d/%2$d (Unknown: %3$d)', 'wpshadow' ),
+								$overall_tests_passed,
+								$overall_total_tests,
+								$overall_tests_unknown
+							)
+						);
+					} else {
+						echo esc_html(
+							sprintf(
+								/* translators: 1: tests passed, 2: total tests */
+								__( 'Passed: %1$d/%2$d', 'wpshadow' ),
+								$overall_tests_passed,
+								$overall_total_tests
+							)
+						);
+					}
+					?>
+				</div>
 			</div>
 
 			<!-- Fullscreen Button Only -->
@@ -450,29 +590,40 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					continue;
 				}
 									// Special handling for WordPress Health category
-					if ( 'wordpress-health' === $cat_key ) {
-						$wp_health = \wpshadow_get_wordpress_health();
-						$gauge_percent = $wp_health['score'];
-						$status_text = $wp_health['status'];
-						$status_icon = 'ℹ';
-						
-						// Determine status color for WordPress Health
-						if ( $gauge_percent >= 80 ) {
-							$status_color = '#10b981'; // Green
-							$gauge_color = '#2e7d32';
-						} elseif ( $gauge_percent >= 60 ) {
-							$status_color = '#f59e0b'; // Orange
-							$gauge_color = '#f57c00';
-						} else {
-							$status_color = '#ef4444'; // Red
-							$gauge_color = '#c62828';
-						}
-						
-						$total = 1; // For display purposes
-						$wp_test_run   = (int) ( $test_counts['wordpress-health']['run'] ?? 0 );
-						$wp_test_total = (int) ( $test_counts['wordpress-health']['total'] ?? 0 );
+									if ( 'wordpress-health' === $cat_key ) {
+										// Calculate WordPress Health pass rate from test_counts (same source as label).
+										$wp_test_total  = (int) ( $test_counts['wordpress-health']['total'] ?? 0 );
+										$wp_test_passed = (int) ( $test_counts['wordpress-health']['passed'] ?? 0 );
+										$gauge_percent  = $wp_test_total > 0 ? (int) ( ( $wp_test_passed / $wp_test_total ) * 100 ) : 0;
+
+										// Derive status from the same pass-rate metric shown on the gauge.
+										if ( $gauge_percent >= 80 ) {
+											$status_text = __( 'Excellent', 'wpshadow' );
+											$status_icon = '✓';
+										} elseif ( $gauge_percent >= 60 ) {
+											$status_text = __( 'Good', 'wpshadow' );
+											$status_icon = '✓';
+										} elseif ( $gauge_percent >= 40 ) {
+											$status_text = __( 'Fair', 'wpshadow' );
+											$status_icon = '◐';
+										} else {
+											$status_text = __( 'Needs Work', 'wpshadow' );
+											$status_icon = '✕';
+										}
+					
+										// Determine status color based on pass rate
+										if ( $gauge_percent >= 80 ) {
+											$status_color = '#10b981'; // Green
+											$gauge_color = '#2e7d32';
+										} elseif ( $gauge_percent >= 60 ) {
+											$status_color = '#f59e0b'; // Orange
+											$gauge_color = '#f57c00';
+										} else {
+											$status_color = '#ef4444'; // Red
+											$gauge_color = '#c62828';
+										}
 						?>
-						<div class="wps-category-gauge" aria-label="<?php esc_attr_e( 'WordPress Site Health status', 'wpshadow' ); ?>">
+						<div class="wps-category-gauge" data-category="wordpress-health" aria-label="<?php esc_attr_e( 'WordPress Site Health status', 'wpshadow' ); ?>">
 							<div class="wps-category-gauge-icon">
 								<svg width="70" height="70" viewBox="0 0 100 100" aria-hidden="true">
 									<!-- Gauge background -->
@@ -497,13 +648,13 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 										<span aria-hidden="true"><?php echo esc_html( $status_icon ); ?></span>
 										<?php echo esc_html( $status_text ); ?>
 									</span>
-									<div class="wps-category-gauge-count">
+									<div class="wps-category-gauge-count" data-test-category="<?php echo esc_attr( $cat_key ); ?>">
 										<?php
 										echo esc_html(
 											sprintf(
-												/* translators: 1: run tests, 2: total tests */
-												__( 'Tests run: %1$d/%2$d', 'wpshadow' ),
-												$wp_test_run,
+												/* translators: 1: passed tests, 2: total tests */
+												__( 'Passed: %1$d/%2$d', 'wpshadow' ),
+												$wp_test_passed,
 												$wp_test_total
 											)
 										);
@@ -516,49 +667,42 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						continue;
 					}
 					
-					$cat_findings = $findings_by_category[ $cat_key ] ?? array();
-					$total        = count( $cat_findings );
+					// Calculate category test pass rate from persisted states.
+					$cat_test_total   = (int) ( $test_counts[ $cat_key ]['total'] ?? 0 );
+					$cat_test_passed  = (int) ( $test_counts[ $cat_key ]['passed'] ?? 0 );
+					$cat_test_unknown = (int) ( $test_counts[ $cat_key ]['unknown'] ?? 0 );
+					$cat_pass_rate   = $cat_test_total > 0 ? (int) ( ( $cat_test_passed / $cat_test_total ) * 100 ) : 0;
+				
+					// Show 0% until diagnostics have been run
+					if ( $never_run ) {
+						$cat_pass_rate   = 0;
+						$cat_test_passed = 0;
+					}
 
-					$critical_count = count(
-						array_filter(
-							$cat_findings,
-							function ( $f ) {
-								return isset( $f['color'] ) && '#f44336' === $f['color'];
-							}
-						)
-					);
-
-					if ( 0 === $total ) {
+					// Set status and colors based on pass rate
+					if ( $cat_pass_rate >= 80 ) {
 						$status_text  = __( 'Excellent', 'wpshadow' );
 						$status_icon  = '✓';
 						$status_color = '#10b981';
-					} elseif ( 0 === $critical_count ) {
+						$gauge_color  = '#2e7d32';
+					} elseif ( $cat_pass_rate >= 60 ) {
 						$status_text  = __( 'Good', 'wpshadow' );
 						$status_icon  = '✓';
 						$status_color = '#10b981';
-					} elseif ( $critical_count < $total / 2 ) {
+						$gauge_color  = '#2e7d32';
+					} elseif ( $cat_pass_rate >= 40 ) {
 						$status_text  = __( 'Fair', 'wpshadow' );
 						$status_icon  = '◐';
 						$status_color = '#f59e0b';
+						$gauge_color  = '#f57c00';
 					} else {
 						$status_text  = __( 'Needs Work', 'wpshadow' );
 						$status_icon  = '✕';
 						$status_color = '#ef4444';
+						$gauge_color  = '#c62828';
 					}
-
-					$threat_total = 0;
-					foreach ( $cat_findings as $finding ) {
-						$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-					}
-					$gauge_percent = $total > 0 ? min( 100, $threat_total / $total ) : 0;
-					$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
-					
-					// Show 0% until diagnostics have been run
-					if ( $never_run ) {
-						$gauge_percent = 0;
-					}
-					
-					$gauge_color   = $get_threat_gauge_color( 100 - $gauge_percent );
+				
+					$gauge_percent = $cat_pass_rate;
 					$cat_test_run   = (int) ( $test_counts[ $cat_key ]['run'] ?? 0 );
 					$cat_test_total = (int) ( $test_counts[ $cat_key ]['total'] ?? 0 );
 					?>
@@ -569,10 +713,12 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						<?php
 						echo esc_attr(
 							sprintf(
-								/* translators: 1: category name, 2: health percentage */
-								__( '%1$s health: %2$d%%. Click to view details', 'wpshadow' ),
+								/* translators: 1: category name, 2: pass rate percentage, 3: tests passed, 4: total tests */
+								__( '%1$s: %2$d%% pass rate (%3$d/%4$d tests). Click to view details', 'wpshadow' ),
 								isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ),
-								(int) $gauge_percent
+								$cat_pass_rate,
+								$cat_test_passed,
+								$cat_test_total
 							)
 						);
 						?>
@@ -601,16 +747,28 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 									<span aria-hidden="true"><?php echo esc_html( $status_icon ); ?></span>
 									<?php echo esc_html( $status_text ); ?>
 								</span>
-								<div class="wps-category-gauge-count">
+								<div class="wps-category-gauge-count" data-test-category="<?php echo esc_attr( $cat_key ); ?>">
 									<?php
-									echo esc_html(
-										sprintf(
-											/* translators: 1: run tests, 2: total associated tests */
-											__( 'Tests run: %1$d/%2$d', 'wpshadow' ),
-											$cat_test_run,
-											$cat_test_total
-										)
-									);
+									if ( $cat_test_unknown > 0 ) {
+										echo esc_html(
+											sprintf(
+												/* translators: 1: passed tests, 2: total associated tests, 3: unknown tests */
+												__( 'Passed: %1$d/%2$d (Unknown: %3$d)', 'wpshadow' ),
+												$cat_test_passed,
+												$cat_test_total,
+												$cat_test_unknown
+											)
+										);
+									} else {
+										echo esc_html(
+											sprintf(
+												/* translators: 1: passed tests, 2: total associated tests */
+												__( 'Passed: %1$d/%2$d', 'wpshadow' ),
+												$cat_test_passed,
+												$cat_test_total
+											)
+										);
+									}
 									?>
 								</div>
 							</div>

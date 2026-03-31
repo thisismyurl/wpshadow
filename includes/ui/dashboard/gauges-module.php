@@ -286,6 +286,11 @@ function wpshadow_get_gauge_test_counts( array $category_meta, bool $never_run )
 		$disabled = array();
 	}
 
+	// Load all persisted states once for the raw-state fallback (mirrors Diagnostic Status table logic).
+	$all_raw_states = function_exists( 'wpshadow_get_diagnostic_test_states' )
+		? wpshadow_get_diagnostic_test_states()
+		: array();
+
 	$now = time();
 	foreach ( $diagnostic_file_map as $class_name => $diagnostic_data ) {
 		if ( ! is_string( $class_name ) || '' === $class_name ) {
@@ -311,6 +316,16 @@ function wpshadow_get_gauge_test_counts( array $category_meta, bool $never_run )
 		$state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
 			? wpshadow_get_valid_diagnostic_test_state( $qualified_class, $now )
 			: null;
+
+		// Fallback: use persisted raw state when the valid-state check returns null
+		// (e.g. transient expired). This matches the same fallback used in the
+		// Diagnostic Status table so both surfaces show consistent counts.
+		if ( ! is_array( $state ) && isset( $all_raw_states[ $qualified_class ] ) && is_array( $all_raw_states[ $qualified_class ] ) ) {
+			$raw_status = (string) ( $all_raw_states[ $qualified_class ]['status'] ?? '' );
+			if ( 'passed' === $raw_status || 'failed' === $raw_status ) {
+				$state = $all_raw_states[ $qualified_class ];
+			}
+		}
 
 		if ( ! is_array( $state ) ) {
 			++$counts[ $category ]['unknown'];

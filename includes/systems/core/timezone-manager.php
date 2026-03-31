@@ -71,6 +71,15 @@ class Timezone_Manager {
 			return;
 		}
 
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen || false === strpos( (string) $screen->id, 'wpshadow' ) ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'wpshadow-timezone-detection',
 			plugin_dir_url( __FILE__ ) . '../../assets/js/timezone-detection.js',

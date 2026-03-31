@@ -315,7 +315,7 @@ class Weekly_Tips_Widget extends Hook_Subscriber_Base {
 		// Use Security_Validator for consistent security checks
 		\WPShadow\Core\Security_Validator::verify_nonce( 'wpshadow_tip_feedback', 'nonce', true );
 
-		$tip_id = isset( $_POST['tip_id'] ) ? sanitize_key( $_POST['tip_id'] ) : '';
+		$tip_id = isset( $_POST['tip_id'] ) ? sanitize_key( wp_unslash( $_POST['tip_id'] ) ) : '';
 		if ( empty( $tip_id ) ) {
 			wp_send_json_error();
 		}

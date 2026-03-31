@@ -162,16 +162,6 @@ class Menu_Manager {
 			);
 		}
 
-		// Help & Documentation
-		add_submenu_page(
-			'wpshadow',
-			__( 'Help', 'wpshadow' ),
-			__( 'Help', 'wpshadow' ),
-			'read',
-			'wpshadow-help',
-			'wpshadow_render_help'
-		);
-
 		// Note: Vault submenu removed - Vault is a pro feature handled by wpshadow-pro-vault plugin
 		// Vault Light functionality remains available without menu item
 	}

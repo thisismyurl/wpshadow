@@ -1158,7 +1158,7 @@ class Settings_Registry {
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Use dyslexia-friendly font (OpenDyslexic)', 'wpshadow' ),
+				'description'       => __( 'Use a dyslexia-friendly font stack with clearer letterforms and spacing', 'wpshadow' ),
 			)
 		);
 

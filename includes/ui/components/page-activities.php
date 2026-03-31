@@ -106,6 +106,17 @@ function wpshadow_emit_activity_logged_event( array $activity ): void {
  * Localization data for activity display
  */
 function wpshadow_activity_display_localization(): void {
+	if ( is_admin() && function_exists( 'get_current_screen' ) ) {
+		$screen = get_current_screen();
+		if ( ! $screen || strpos( (string) $screen->id, 'wpshadow' ) === false ) {
+			return;
+		}
+	}
+
+	if ( ! wp_script_is( 'wpshadow-page-activities', 'enqueued' ) ) {
+		return;
+	}
+
 	wp_localize_script( 'wpshadow-page-activities', 'wpshadow_i18n', array(
 		'no_activities' => __( 'No activities yet', 'wpshadow' ),
 		'loading'       => __( 'Loading activity...', 'wpshadow' ),

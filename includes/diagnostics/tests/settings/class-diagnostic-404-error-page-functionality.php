@@ -134,14 +134,24 @@ class Diagnostic_404_Error_Page_Functionality extends Diagnostic_Base {
 		}
 
 		if ( ! empty( $issues ) ) {
+			$primary_issue = (string) $issues[0];
+			$remaining     = count( $issues ) - 1;
+
+			if ( 0 < $remaining ) {
+				$description = sprintf(
+					/* translators: 1: specific issue, 2: number of additional issues */
+					__( '%1$s (plus %2$d additional issue(s)).', 'wpshadow' ),
+					$primary_issue,
+					$remaining
+				);
+			} else {
+				$description = $primary_issue;
+			}
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => sprintf(
-					/* translators: %d: number of 404 page issues */
-					__( 'Found %d issues with 404 error page configuration.', 'wpshadow' ),
-					count( $issues )
-				),
+				'description'  => $description,
 				'severity'     => 'medium',
 				'threat_level' => 30,
 				'auto_fixable' => false,

@@ -1,264 +1,224 @@
 <?php
 /**
- * AJAX Handler: Get Automation Activity
+ * AJAX Handler: Automation Dashboard Actions
  *
- * Retrieves activity history for a specific automation/workflow.
+ * Handles AJAX requests for the automation dashboard:
+ * activity retrieval, execution, deletion, and toggling.
  *
- * @since 1.6093.1200
- * @package WPShadow\Admin\AJAX
+ * @since      1.6093.1200
+ * @package    WPShadow
+ * @subpackage Admin\Ajax
  */
+
+declare(strict_types=1);
+
+namespace WPShadow\Admin\Ajax;
+
+use WPShadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Handle AJAX request to get automation activity
+ * Automations_Dashboard_Handler Class
+ *
+ * Centralised handler for all AJAX actions on the automations dashboard.
+ * Consolidates activity retrieval, workflow execution, deletion, and
+ * enable/disable toggling into a single class-based handler.
  *
  * @since 1.6093.1200
- * @return void Dies with JSON response.
  */
-function wpshadow_get_automation_activity_handler() {
-	// Verify nonce and capability.
-	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
+class Automations_Dashboard_Handler extends AJAX_Handler_Base {
+
+	/**
+	 * Register AJAX hooks.
+	 *
+	 * @since 1.6093.1200
+	 * @return void
+	 */
+	public static function register(): void {
+		add_action( 'wp_ajax_wpshadow_get_automation_activity', array( __CLASS__, 'handle_get_activity' ) );
+		add_action( 'wp_ajax_wpshadow_run_automation',          array( __CLASS__, 'handle_run' ) );
+		add_action( 'wp_ajax_wpshadow_delete_automation',       array( __CLASS__, 'handle_delete' ) );
+		add_action( 'wp_ajax_wpshadow_toggle_automation',       array( __CLASS__, 'handle_toggle' ) );
 	}
 
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-	}
+	/**
+	 * Handle AJAX request to get automation activity history.
+	 *
+	 * @since  1.6093.1200
+	 * @return void Dies with JSON response.
+	 */
+	public static function handle_get_activity(): void {
+		self::verify_request( 'wpshadow_automations', 'read' );
 
-	// Get workflow ID.
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_id'] ) ) : '';
+		$workflow_id = self::get_post_param( 'workflow_id', 'text', '', true );
 
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => __( 'Missing workflow ID', 'wpshadow' ) ) );
-	}
-
-	// Get activity history for this workflow using Activity_Logger.
-	$activity_logger = \WPShadow\Core\Activity_Logger::class;
-
-	// Get recent workflow activity.
-	$activity = $activity_logger::get_activity(
-		array(
-			'type'     => 'workflow_executed',
-			'meta_key' => 'workflow_id',
-			'meta_value' => $workflow_id,
-			'limit'    => 10,
-			'orderby'  => 'timestamp',
-			'order'    => 'DESC',
-		)
-	);
-
-	if ( ! is_array( $activity ) ) {
-		$activity = array();
-	}
-
-	// Format activity for display.
-	$formatted_activity = array_map(
-		function( $item ) {
-			return array(
-				'timestamp' => isset( $item['timestamp'] ) ? $item['timestamp'] : time(),
-				'message'   => isset( $item['message'] ) ? $item['message'] : __( 'Workflow executed', 'wpshadow' ),
-			);
-		},
-		$activity
-	);
-
-	wp_send_json_success( $formatted_activity );
-}
-
-add_action( 'wp_ajax_wpshadow_get_automation_activity', 'wpshadow_get_automation_activity_handler' );
-
-/**
- * Handle AJAX request to run automation
- *
- * @since 1.6093.1200
- * @return void Dies with JSON response.
- */
-function wpshadow_run_automation_handler() {
-	// Verify nonce and capability.
-	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
-	}
-
-	// SECURITY: Require admin capability for executing automations.
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-	}
-
-	// Get workflow ID.
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_id'] ) ) : '';
-
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => __( 'Missing workflow ID', 'wpshadow' ) ) );
-	}
-
-	// Get the workflow.
-	$workflow_manager = \WPShadow\Workflow\Workflow_Manager::class;
-	$workflow = $workflow_manager::get_workflow( $workflow_id );
-
-	if ( ! $workflow ) {
-		wp_send_json_error( array( 'message' => __( 'Workflow not found', 'wpshadow' ) ) );
-	}
-
-	// Execute the workflow.
-	try {
-		$result = $workflow_manager::execute_workflow( $workflow_id );
-
-		// Log the execution.
-		\WPShadow\Core\Activity_Logger::log(
-			'workflow_executed',
-			array(
-				'workflow_id'   => $workflow_id,
-				'workflow_name' => $workflow['name'] ?? 'Unknown',
-				'result'        => $result,
-			)
-		);
-
-		wp_send_json_success(
-			array(
-				'message' => __( 'Automation executed successfully', 'wpshadow' ),
-				'result'  => $result,
-			)
-		);
-	} catch ( \Exception $e ) {
-		wp_send_json_error(
-			array(
-				'message' => __( 'Failed to execute automation', 'wpshadow' ),
-				'error'   => $e->getMessage(),
-			)
-		);
-	}
-}
-
-add_action( 'wp_ajax_wpshadow_run_automation', 'wpshadow_run_automation_handler' );
-
-/**
- * Handle AJAX request to delete automation
- *
- * @since 1.6093.1200
- * @return void Dies with JSON response.
- */
-function wpshadow_delete_automation_handler() {
-	// Verify nonce and capability.
-	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
-	}
-
-	// SECURITY: Require admin capability for deleting automations.
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
-	}
-
-	// Get workflow ID.
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_id'] ) ) : '';
-
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => __( 'Missing workflow ID', 'wpshadow' ) ) );
-	}
-
-	// Delete the workflow.
-	$workflow_manager = \WPShadow\Workflow\Workflow_Manager::class;
-
-	try {
-		$result = $workflow_manager::delete_workflow( $workflow_id );
-
-		if ( $result ) {
-			// Log the deletion.
-			\WPShadow\Core\Activity_Logger::log(
-				'workflow_deleted',
-				array(
-					'workflow_id' => $workflow_id,
-				)
-			);
-
-			wp_send_json_success( array( 'message' => __( 'Automation deleted successfully', 'wpshadow' ) ) );
-		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to delete automation', 'wpshadow' ) ) );
+		if ( empty( $workflow_id ) ) {
+			self::send_error( __( 'Missing workflow ID', 'wpshadow' ) );
 		}
-	} catch ( \Exception $e ) {
-		wp_send_json_error(
+
+		$activity = \WPShadow\Core\Activity_Logger::get_activity(
 			array(
-				'message' => __( 'Failed to delete automation', 'wpshadow' ),
-				'error'   => $e->getMessage(),
+				'type'       => 'workflow_executed',
+				'meta_key'   => 'workflow_id',
+				'meta_value' => $workflow_id,
+				'limit'      => 10,
+				'orderby'    => 'timestamp',
+				'order'      => 'DESC',
 			)
 		);
-	}
-}
 
-add_action( 'wp_ajax_wpshadow_delete_automation', 'wpshadow_delete_automation_handler' );
+		if ( ! is_array( $activity ) ) {
+			$activity = array();
+		}
 
-/**
- * Handle AJAX request to toggle automation enabled/disabled
- *
- * @since 1.6093.1200
- * @return void Dies with JSON response.
- */
-function wpshadow_toggle_automation_handler() {
-	// Verify nonce and capability.
-	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'wpshadow_automations' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'wpshadow' ) ) );
-	}
+		$formatted = array_map(
+			static function ( $item ) {
+				return array(
+					'timestamp' => isset( $item['timestamp'] ) ? $item['timestamp'] : time(),
+					'message'   => isset( $item['message'] ) ? $item['message'] : __( 'Workflow executed', 'wpshadow' ),
+				);
+			},
+			$activity
+		);
 
-	// SECURITY: Require admin capability for toggling automations.
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'wpshadow' ) ) );
+		self::send_success( $formatted );
 	}
 
-	// Get workflow ID and enabled status.
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_id'] ) ) : '';
-	$enabled = isset( $_POST['enabled'] ) ? rest_sanitize_boolean( $_POST['enabled'] ) : false;
+	/**
+	 * Handle AJAX request to run an automation.
+	 *
+	 * @since  1.6093.1200
+	 * @return void Dies with JSON response.
+	 */
+	public static function handle_run(): void {
+		self::verify_request( 'wpshadow_automations' );
 
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => __( 'Missing workflow ID', 'wpshadow' ) ) );
-	}
+		$workflow_id = self::get_post_param( 'workflow_id', 'text', '', true );
 
-	// Get the workflow.
-	$workflow_manager = \WPShadow\Workflow\Workflow_Manager::class;
-	$workflow = $workflow_manager::get_workflow( $workflow_id );
+		if ( empty( $workflow_id ) ) {
+			self::send_error( __( 'Missing workflow ID', 'wpshadow' ) );
+		}
 
-	if ( ! $workflow ) {
-		wp_send_json_error( array( 'message' => __( 'Workflow not found', 'wpshadow' ) ) );
-	}
+		$workflow = \WPShadow\Workflow\Workflow_Manager::get_workflow( $workflow_id );
 
-	// Update the workflow's enabled status.
-	$workflow['enabled'] = $enabled;
+		if ( ! $workflow ) {
+			self::send_error( __( 'Workflow not found', 'wpshadow' ) );
+		}
 
-	try {
-		$result = $workflow_manager::save_workflow( $workflow_id, $workflow );
+		try {
+			$result = \WPShadow\Workflow\Workflow_Manager::execute_workflow( $workflow_id );
 
-		if ( $result ) {
-			// Log the status change.
-			$action = $enabled ? 'workflow_enabled' : 'workflow_disabled';
 			\WPShadow\Core\Activity_Logger::log(
-				$action,
+				'workflow_executed',
 				array(
 					'workflow_id'   => $workflow_id,
 					'workflow_name' => $workflow['name'] ?? 'Unknown',
+					'result'        => $result,
 				)
 			);
 
-			wp_send_json_success(
+			self::send_success(
 				array(
-					'message' => $enabled ? __( 'Automation enabled', 'wpshadow' ) : __( 'Automation disabled', 'wpshadow' ),
+					'message' => __( 'Automation executed successfully', 'wpshadow' ),
+					'result'  => $result,
 				)
 			);
-		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to update automation status', 'wpshadow' ) ) );
+		} catch ( \Exception $e ) {
+			self::send_error( __( 'Failed to execute automation', 'wpshadow' ) );
 		}
-	} catch ( \Exception $e ) {
-		wp_send_json_error(
-			array(
-				'message' => __( 'Failed to update automation status', 'wpshadow' ),
-				'error'   => $e->getMessage(),
-			)
-		);
+	}
+
+	/**
+	 * Handle AJAX request to delete an automation.
+	 *
+	 * @since  1.6093.1200
+	 * @return void Dies with JSON response.
+	 */
+	public static function handle_delete(): void {
+		self::verify_request( 'wpshadow_automations' );
+
+		$workflow_id = self::get_post_param( 'workflow_id', 'text', '', true );
+
+		if ( empty( $workflow_id ) ) {
+			self::send_error( __( 'Missing workflow ID', 'wpshadow' ) );
+		}
+
+		try {
+			$result = \WPShadow\Workflow\Workflow_Manager::delete_workflow( $workflow_id );
+
+			if ( $result ) {
+				\WPShadow\Core\Activity_Logger::log(
+					'workflow_deleted',
+					array(
+						'workflow_id' => $workflow_id,
+					)
+				);
+
+				self::send_success( array( 'message' => __( 'Automation deleted successfully', 'wpshadow' ) ) );
+			} else {
+				self::send_error( __( 'Failed to delete automation', 'wpshadow' ) );
+			}
+		} catch ( \Exception $e ) {
+			self::send_error( __( 'Failed to delete automation', 'wpshadow' ) );
+		}
+	}
+
+	/**
+	 * Handle AJAX request to toggle an automation enabled/disabled.
+	 *
+	 * @since  1.6093.1200
+	 * @return void Dies with JSON response.
+	 */
+	public static function handle_toggle(): void {
+		self::verify_request( 'wpshadow_automations' );
+
+		$workflow_id = self::get_post_param( 'workflow_id', 'text', '', true );
+		$enabled     = rest_sanitize_boolean( self::get_post_param( 'enabled', 'text', '' ) );
+
+		if ( empty( $workflow_id ) ) {
+			self::send_error( __( 'Missing workflow ID', 'wpshadow' ) );
+		}
+
+		$workflow = \WPShadow\Workflow\Workflow_Manager::get_workflow( $workflow_id );
+
+		if ( ! $workflow ) {
+			self::send_error( __( 'Workflow not found', 'wpshadow' ) );
+		}
+
+		$workflow['enabled'] = $enabled;
+
+		try {
+			$result = \WPShadow\Workflow\Workflow_Manager::save_workflow( $workflow_id, $workflow );
+
+			if ( $result ) {
+				$action = $enabled ? 'workflow_enabled' : 'workflow_disabled';
+
+				\WPShadow\Core\Activity_Logger::log(
+					$action,
+					array(
+						'workflow_id'   => $workflow_id,
+						'workflow_name' => $workflow['name'] ?? 'Unknown',
+					)
+				);
+
+				self::send_success(
+					array(
+						'message' => $enabled
+							? __( 'Automation enabled', 'wpshadow' )
+							: __( 'Automation disabled', 'wpshadow' ),
+					)
+				);
+			} else {
+				self::send_error( __( 'Failed to update automation status', 'wpshadow' ) );
+			}
+		} catch ( \Exception $e ) {
+			self::send_error( __( 'Failed to update automation status', 'wpshadow' ) );
+		}
 	}
 }
 
-add_action( 'wp_ajax_wpshadow_toggle_automation', 'wpshadow_toggle_automation_handler' );
+// Register all handlers.
+Automations_Dashboard_Handler::register();

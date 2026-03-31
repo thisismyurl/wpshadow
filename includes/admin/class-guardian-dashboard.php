@@ -387,6 +387,62 @@ class Guardian_Dashboard {
 							<?php endif; ?>
 						</div>
 					</div>
+
+					<div class="wps-mt-4 wps-diagnostic-scan-browser" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_settings' ) ); ?>">
+						<div class="wps-text-sm wps-font-semibold wps-text-gray-800">
+							<?php esc_html_e( 'Diagnostic Scan Browser', 'wpshadow' ); ?>
+						</div>
+						<p class="wps-text-xs wps-text-muted wps-mt-1">
+							<?php esc_html_e( 'Search and filter diagnostics to quickly find specific checks.', 'wpshadow' ); ?>
+						</p>
+
+						<div class="wps-grid wps-grid-auto-240 wps-gap-3 wps-mt-2">
+							<div>
+								<label for="wpshadow-diagnostic-search" class="screen-reader-text"><?php esc_html_e( 'Search diagnostics', 'wpshadow' ); ?></label>
+								<input
+									type="search"
+									id="wpshadow-diagnostic-search"
+									class="regular-text"
+									placeholder="<?php echo esc_attr__( 'Search diagnostics…', 'wpshadow' ); ?>"
+								/>
+							</div>
+							<div>
+								<label for="wpshadow-diagnostic-family" class="screen-reader-text"><?php esc_html_e( 'Filter by family', 'wpshadow' ); ?></label>
+								<select id="wpshadow-diagnostic-family" class="wps-input">
+									<option value=""><?php esc_html_e( 'All families', 'wpshadow' ); ?></option>
+								</select>
+							</div>
+							<div>
+								<label for="wpshadow-diagnostic-status" class="screen-reader-text"><?php esc_html_e( 'Filter by status', 'wpshadow' ); ?></label>
+								<select id="wpshadow-diagnostic-status" class="wps-input">
+									<option value="all"><?php esc_html_e( 'All statuses', 'wpshadow' ); ?></option>
+									<option value="enabled"><?php esc_html_e( 'Enabled', 'wpshadow' ); ?></option>
+									<option value="disabled"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></option>
+								</select>
+							</div>
+							<div>
+								<button type="button" id="wpshadow-diagnostic-filter-reset" class="button">
+									<?php esc_html_e( 'Reset Filters', 'wpshadow' ); ?>
+								</button>
+							</div>
+						</div>
+
+						<table class="wp-list-table widefat striped wps-mt-3" aria-live="polite">
+							<thead>
+								<tr>
+									<th scope="col" style="width: 72px;"><?php esc_html_e( '#', 'wpshadow' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Diagnostic', 'wpshadow' ); ?></th>
+									<th scope="col" style="width: 180px;"><?php esc_html_e( 'Family', 'wpshadow' ); ?></th>
+									<th scope="col" style="width: 140px;"><?php esc_html_e( 'Status', 'wpshadow' ); ?></th>
+								</tr>
+							</thead>
+							<tbody id="wpshadow-diagnostic-scan-results">
+								<tr>
+									<td colspan="4" class="wps-text-muted"><?php esc_html_e( 'Loading diagnostics…', 'wpshadow' ); ?></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 					<?php
 				},
 			)
