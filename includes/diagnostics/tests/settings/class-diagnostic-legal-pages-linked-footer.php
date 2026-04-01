@@ -1,8 +1,8 @@
 <?php
 /**
- * OPcache Enabled Diagnostic (Stub)
+ * Legal Pages Linked in Footer Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 69.
+ * Generated diagnostic stub for post-install hardening checklist item 51.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OPcache Enabled Diagnostic Class (Stub)
+ * Legal Pages Linked in Footer Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -28,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
+class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 
 \t/**
 \t * Diagnostic slug.
 \t *
 \t * @var string
 \t */
-\tprotected static $slug = 'opcache-enabled';
+\tprotected static $slug = 'legal-pages-linked-footer';
 
 \t/**
 \t * Diagnostic title.
 \t *
 \t * @var string
 \t */
-\tprotected static $title = 'OPcache Enabled';
+\tprotected static $title = 'Legal Pages Linked in Footer';
 
 \t/**
 \t * Diagnostic description.
 \t *
 \t * @var string
 \t */
-\tprotected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+\tprotected static $description = 'Stub diagnostic for Legal Pages Linked in Footer. TODO: implement full test and remediation guidance.';
 
 \t/**
 \t * Gauge family/category for dashboard placement.
 \t *
 \t * @var string
 \t */
-\tprotected static $family = 'performance';
+\tprotected static $family = 'settings';
 
 \t/**
 \t * Run the diagnostic check.
 \t *
 \t * TODO Test Plan:
-\t * Use opcache_get_status enabled flag.
+\t * Check menu/widget/footer output for privacy/terms links.
 \t *
 \t * TODO Fix Plan:
-\t * Fix by enabling OPcache in PHP config.
+\t * Fix by adding legal links to footer navigation.
 \t *
 \t * Constraints:
 \t * - Must be testable using built-in WordPress functions or PHP checks.

@@ -1,8 +1,8 @@
 <?php
 /**
- * OPcache Enabled Diagnostic (Stub)
+ * Custom 404 Strategy Present Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 69.
+ * Generated diagnostic stub for post-install hardening checklist item 49.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OPcache Enabled Diagnostic Class (Stub)
+ * Custom 404 Strategy Present Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -28,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
+class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 
 \t/**
 \t * Diagnostic slug.
 \t *
 \t * @var string
 \t */
-\tprotected static $slug = 'opcache-enabled';
+\tprotected static $slug = 'custom-404-strategy-present';
 
 \t/**
 \t * Diagnostic title.
 \t *
 \t * @var string
 \t */
-\tprotected static $title = 'OPcache Enabled';
+\tprotected static $title = 'Custom 404 Strategy Present';
 
 \t/**
 \t * Diagnostic description.
 \t *
 \t * @var string
 \t */
-\tprotected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+\tprotected static $description = 'Stub diagnostic for Custom 404 Strategy Present. TODO: implement full test and remediation guidance.';
 
 \t/**
 \t * Gauge family/category for dashboard placement.
 \t *
 \t * @var string
 \t */
-\tprotected static $family = 'performance';
+\tprotected static $family = 'seo';
 
 \t/**
 \t * Run the diagnostic check.
 \t *
 \t * TODO Test Plan:
-\t * Use opcache_get_status enabled flag.
+\t * Check template resolution and 404 response content markers.
 \t *
 \t * TODO Fix Plan:
-\t * Fix by enabling OPcache in PHP config.
+\t * Fix by adding 404 template/page strategy.
 \t *
 \t * Constraints:
 \t * - Must be testable using built-in WordPress functions or PHP checks.

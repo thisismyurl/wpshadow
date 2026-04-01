@@ -35,6 +35,9 @@ class Plugin_Bootstrap {
 		// 1. Load core base classes (required before everything else)
 		self::load_core_classes();
 
+		// 1.5. Remove stale references after diagnostics/treatments change.
+		self::cleanup_stale_registry_references();
+
 		$core_path = WPSHADOW_PATH . 'includes/systems/core/';
 
 		// 2. Register hooks (should run early, before other systems)
@@ -105,6 +108,17 @@ class Plugin_Bootstrap {
 
 		// 21. Fire initialization complete hook
 		do_action( 'wpshadow_core_initialized' );
+	}
+
+	/**
+	 * Clean stale references to removed diagnostics and treatments.
+	 *
+	 * @return void
+	 */
+	private static function cleanup_stale_registry_references() {
+		if ( function_exists( 'wpshadow_maybe_cleanup_removed_diagnostic_treatment_references' ) ) {
+			wpshadow_maybe_cleanup_removed_diagnostic_treatment_references();
+		}
 	}
 
 	/**

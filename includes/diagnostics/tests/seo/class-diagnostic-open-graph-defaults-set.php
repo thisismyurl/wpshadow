@@ -1,8 +1,8 @@
 <?php
 /**
- * OPcache Enabled Diagnostic (Stub)
+ * Open Graph Defaults Set Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 69.
+ * Generated diagnostic stub for post-install hardening checklist item 64.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OPcache Enabled Diagnostic Class (Stub)
+ * Open Graph Defaults Set Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -28,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
+class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 
 \t/**
 \t * Diagnostic slug.
 \t *
 \t * @var string
 \t */
-\tprotected static $slug = 'opcache-enabled';
+\tprotected static $slug = 'open-graph-defaults-set';
 
 \t/**
 \t * Diagnostic title.
 \t *
 \t * @var string
 \t */
-\tprotected static $title = 'OPcache Enabled';
+\tprotected static $title = 'Open Graph Defaults Set';
 
 \t/**
 \t * Diagnostic description.
 \t *
 \t * @var string
 \t */
-\tprotected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+\tprotected static $description = 'Stub diagnostic for Open Graph Defaults Set. TODO: implement full test and remediation guidance.';
 
 \t/**
 \t * Gauge family/category for dashboard placement.
 \t *
 \t * @var string
 \t */
-\tprotected static $family = 'performance';
+\tprotected static $family = 'seo';
 
 \t/**
 \t * Run the diagnostic check.
 \t *
 \t * TODO Test Plan:
-\t * Use opcache_get_status enabled flag.
+\t * Check wp_head output for og:* tags.
 \t *
 \t * TODO Fix Plan:
-\t * Fix by enabling OPcache in PHP config.
+\t * Fix by setting OG defaults/site image/profile.
 \t *
 \t * Constraints:
 \t * - Must be testable using built-in WordPress functions or PHP checks.

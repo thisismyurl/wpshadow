@@ -1,8 +1,8 @@
 <?php
 /**
- * OPcache Enabled Diagnostic (Stub)
+ * Configure Site URL Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 69.
+ * Generated diagnostic stub for post-install hardening checklist item 01.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OPcache Enabled Diagnostic Class (Stub)
+ * Configure Site URL Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -28,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
+class Diagnostic_Configure_Site_Url extends Diagnostic_Base {
 
 \t/**
 \t * Diagnostic slug.
 \t *
 \t * @var string
 \t */
-\tprotected static $slug = 'opcache-enabled';
+\tprotected static $slug = 'configure-site-url';
 
 \t/**
 \t * Diagnostic title.
 \t *
 \t * @var string
 \t */
-\tprotected static $title = 'OPcache Enabled';
+\tprotected static $title = 'Configure Site URL';
 
 \t/**
 \t * Diagnostic description.
 \t *
 \t * @var string
 \t */
-\tprotected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+\tprotected static $description = 'Stub diagnostic for Configure Site URL. TODO: implement full test and remediation guidance.';
 
 \t/**
 \t * Gauge family/category for dashboard placement.
 \t *
 \t * @var string
 \t */
-\tprotected static $family = 'performance';
+\tprotected static $family = 'settings';
 
 \t/**
 \t * Run the diagnostic check.
 \t *
 \t * TODO Test Plan:
-\t * Use opcache_get_status enabled flag.
+\t * Use get_option('siteurl') and get_option('home') to verify consistency and valid URL format.
 \t *
 \t * TODO Fix Plan:
-\t * Fix by enabling OPcache in PHP config.
+\t * Fix via update_option for siteurl/home after validating environment.
 \t *
 \t * Constraints:
 \t * - Must be testable using built-in WordPress functions or PHP checks.

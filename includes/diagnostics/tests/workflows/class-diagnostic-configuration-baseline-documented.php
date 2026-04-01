@@ -1,8 +1,8 @@
 <?php
 /**
- * OPcache Enabled Diagnostic (Stub)
+ * Configuration Baseline Documented Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 69.
+ * Generated diagnostic stub for post-install hardening checklist item 100.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OPcache Enabled Diagnostic Class (Stub)
+ * Configuration Baseline Documented Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -28,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
+class Diagnostic_Configuration_Baseline_Documented extends Diagnostic_Base {
 
 \t/**
 \t * Diagnostic slug.
 \t *
 \t * @var string
 \t */
-\tprotected static $slug = 'opcache-enabled';
+\tprotected static $slug = 'configuration-baseline-documented';
 
 \t/**
 \t * Diagnostic title.
 \t *
 \t * @var string
 \t */
-\tprotected static $title = 'OPcache Enabled';
+\tprotected static $title = 'Configuration Baseline Documented';
 
 \t/**
 \t * Diagnostic description.
 \t *
 \t * @var string
 \t */
-\tprotected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+\tprotected static $description = 'Stub diagnostic for Configuration Baseline Documented. TODO: implement full test and remediation guidance.';
 
 \t/**
 \t * Gauge family/category for dashboard placement.
 \t *
 \t * @var string
 \t */
-\tprotected static $family = 'performance';
+\tprotected static $family = 'workflows';
 
 \t/**
 \t * Run the diagnostic check.
 \t *
 \t * TODO Test Plan:
-\t * Use opcache_get_status enabled flag.
+\t * Check existence/freshness of settings audit snapshot option/file.
 \t *
 \t * TODO Fix Plan:
-\t * Fix by enabling OPcache in PHP config.
+\t * Fix by exporting and storing baseline configuration snapshot.
 \t *
 \t * Constraints:
 \t * - Must be testable using built-in WordPress functions or PHP checks.

@@ -323,6 +323,313 @@ function wpshadow_record_diagnostic_test_states( array $results, int $timestamp 
 }
 
 /**
+ * Build a stable signature for the current diagnostic/treatment registry state.
+ *
+ * @return string Signature hash.
+ */
+function wpshadow_get_registry_cleanup_signature(): string {
+	$diagnostic_classes = array();
+	$treatment_classes  = array();
+
+	if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) && method_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry', 'get_diagnostic_file_map' ) ) {
+		$diagnostic_classes = array_keys( \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map() );
+	}
+
+	if ( class_exists( '\\WPShadow\\Treatments\\Treatment_Registry' ) && method_exists( '\\WPShadow\\Treatments\\Treatment_Registry', 'get_all' ) ) {
+		$treatment_classes = \WPShadow\Treatments\Treatment_Registry::get_all();
+	}
+
+	sort( $diagnostic_classes );
+	sort( $treatment_classes );
+
+	$payload = array(
+		'diagnostics' => $diagnostic_classes,
+		'treatments'  => $treatment_classes,
+	);
+
+	return md5( wp_json_encode( $payload ) );
+}
+
+/**
+ * Clean stale references that point to removed diagnostics/treatments.
+ *
+ * @return array<string, int> Cleanup counters.
+ */
+function wpshadow_cleanup_removed_diagnostic_treatment_references(): array {
+	$stats = array(
+		'disabled_diagnostics_removed' => 0,
+		'disabled_treatments_removed'  => 0,
+		'test_states_removed'          => 0,
+		'findings_removed'             => 0,
+		'frequency_overrides_removed'  => 0,
+		'diagnostic_transients_cleared' => 0,
+	);
+
+	if ( ! class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) || ! method_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry', 'get_diagnostic_file_map' ) ) {
+		return $stats;
+	}
+
+	$diagnostic_map    = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+	$valid_diag_fqcn  = array();
+	$valid_diag_short = array();
+	$valid_diag_slugs = array();
+
+	foreach ( $diagnostic_map as $class_name => $diagnostic_data ) {
+		$short_class = ltrim( (string) $class_name, '\\' );
+		if ( '' === $short_class ) {
+			continue;
+		}
+
+		$fqcn = 0 === strpos( $short_class, 'WPShadow\\Diagnostics\\' )
+			? $short_class
+			: 'WPShadow\\Diagnostics\\' . $short_class;
+
+		$valid_diag_fqcn[ $fqcn ]  = true;
+		$valid_diag_short[ $short_class ] = true;
+
+		$file_path = is_array( $diagnostic_data ) ? (string) ( $diagnostic_data['file'] ?? '' ) : '';
+		if ( ! class_exists( $fqcn ) && '' !== $file_path && file_exists( $file_path ) ) {
+			require_once $file_path;
+		}
+
+		if ( class_exists( $fqcn ) && method_exists( $fqcn, 'get_slug' ) ) {
+			$slug = sanitize_key( (string) $fqcn::get_slug() );
+			if ( '' !== $slug ) {
+				$valid_diag_slugs[ $slug ] = true;
+			}
+		}
+	}
+
+	$disabled_diagnostics = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+	if ( ! is_array( $disabled_diagnostics ) ) {
+		$disabled_diagnostics = array();
+	}
+
+	$clean_disabled_diagnostics = array();
+	foreach ( $disabled_diagnostics as $class_name ) {
+		if ( ! is_string( $class_name ) || '' === $class_name ) {
+			continue;
+		}
+
+		$normalized = ltrim( $class_name, '\\' );
+		if ( isset( $valid_diag_short[ $normalized ] ) ) {
+			$normalized = 0 === strpos( $normalized, 'WPShadow\\Diagnostics\\' )
+				? $normalized
+				: 'WPShadow\\Diagnostics\\' . $normalized;
+		} elseif ( ! isset( $valid_diag_fqcn[ $normalized ] ) ) {
+			++$stats['disabled_diagnostics_removed'];
+			continue;
+		}
+
+		$clean_disabled_diagnostics[ $normalized ] = true;
+	}
+
+	$clean_disabled_diagnostics = array_keys( $clean_disabled_diagnostics );
+	if ( $clean_disabled_diagnostics !== $disabled_diagnostics ) {
+		update_option( 'wpshadow_disabled_diagnostic_classes', $clean_disabled_diagnostics );
+	}
+
+	$states = get_option( 'wpshadow_diagnostic_test_states', array() );
+	if ( ! is_array( $states ) ) {
+		$states = array();
+	}
+
+	$clean_states = array();
+	foreach ( $states as $class_name => $state ) {
+		if ( ! is_string( $class_name ) || '' === $class_name ) {
+			continue;
+		}
+
+		$normalized_class = ltrim( $class_name, '\\' );
+		if ( isset( $valid_diag_short[ $normalized_class ] ) ) {
+			$normalized_class = 0 === strpos( $normalized_class, 'WPShadow\\Diagnostics\\' )
+				? $normalized_class
+				: 'WPShadow\\Diagnostics\\' . $normalized_class;
+		} elseif ( ! isset( $valid_diag_fqcn[ $normalized_class ] ) ) {
+			++$stats['test_states_removed'];
+			continue;
+		}
+
+		if ( ! is_array( $state ) ) {
+			++$stats['test_states_removed'];
+			continue;
+		}
+
+		$finding_id = sanitize_key( (string) ( $state['finding_id'] ?? '' ) );
+		if ( '' !== $finding_id && ! isset( $valid_diag_slugs[ $finding_id ] ) ) {
+			++$stats['test_states_removed'];
+			continue;
+		}
+
+		$clean_states[ $normalized_class ] = $state;
+	}
+
+	if ( $clean_states !== $states ) {
+		update_option( 'wpshadow_diagnostic_test_states', $clean_states );
+	}
+
+	$stored_findings = get_option( 'wpshadow_site_findings', array() );
+	if ( ! is_array( $stored_findings ) ) {
+		$stored_findings = array();
+	}
+
+	$clean_findings = array();
+	foreach ( $stored_findings as $finding_key => $finding ) {
+		if ( ! is_array( $finding ) ) {
+			++$stats['findings_removed'];
+			continue;
+		}
+
+		$finding_id = sanitize_key( (string) ( $finding['id'] ?? $finding_key ) );
+		$diag_class = ltrim( (string) ( $finding['diagnostic_class'] ?? '' ), '\\' );
+
+		$has_valid_id    = '' !== $finding_id && isset( $valid_diag_slugs[ $finding_id ] );
+		$has_valid_class = '' !== $diag_class && ( isset( $valid_diag_short[ $diag_class ] ) || isset( $valid_diag_fqcn[ $diag_class ] ) );
+
+		if ( ! $has_valid_id && ! $has_valid_class ) {
+			++$stats['findings_removed'];
+			continue;
+		}
+
+		$index_key = '' !== $finding_id ? $finding_id : sanitize_key( (string) $finding_key );
+		if ( '' === $index_key ) {
+			$index_key = md5( wp_json_encode( $finding ) );
+		}
+
+		$finding['id']             = $index_key;
+		$clean_findings[ $index_key ] = $finding;
+	}
+
+	if ( $clean_findings !== $stored_findings ) {
+		update_option( 'wpshadow_site_findings', $clean_findings );
+	}
+
+	$frequency_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
+	if ( ! is_array( $frequency_overrides ) ) {
+		$frequency_overrides = array();
+	}
+
+	$clean_frequency_overrides = array();
+	foreach ( $frequency_overrides as $slug => $frequency ) {
+		$clean_slug = sanitize_key( (string) $slug );
+		if ( '' === $clean_slug || ! isset( $valid_diag_slugs[ $clean_slug ] ) ) {
+			++$stats['frequency_overrides_removed'];
+			continue;
+		}
+
+		$clean_frequency_overrides[ $clean_slug ] = (int) $frequency;
+	}
+
+	if ( $clean_frequency_overrides !== $frequency_overrides ) {
+		update_option( 'wpshadow_diagnostic_frequency_overrides', $clean_frequency_overrides );
+	}
+
+	$disabled_treatments = get_option( 'wpshadow_disabled_treatment_classes', array() );
+	if ( ! is_array( $disabled_treatments ) ) {
+		$disabled_treatments = array();
+	}
+
+	$valid_treatments = array();
+	if ( class_exists( '\\WPShadow\\Treatments\\Treatment_Registry' ) && method_exists( '\\WPShadow\\Treatments\\Treatment_Registry', 'get_all' ) ) {
+		$valid_treatments = \WPShadow\Treatments\Treatment_Registry::get_all();
+	}
+
+	$valid_treatment_fqcn = array();
+	$valid_treatment_short = array();
+	foreach ( $valid_treatments as $class_name ) {
+		if ( ! is_string( $class_name ) || '' === $class_name ) {
+			continue;
+		}
+
+		$normalized_class = ltrim( $class_name, '\\' );
+		$valid_treatment_fqcn[ $normalized_class ] = true;
+
+		$parts      = explode( '\\', $normalized_class );
+		$short_name = (string) end( $parts );
+		if ( '' !== $short_name ) {
+			$valid_treatment_short[ $short_name ] = true;
+		}
+	}
+
+	$clean_disabled_treatments = array();
+	foreach ( $disabled_treatments as $class_name ) {
+		if ( ! is_string( $class_name ) || '' === $class_name ) {
+			continue;
+		}
+
+		$normalized_class = ltrim( $class_name, '\\' );
+		if ( isset( $valid_treatment_short[ $normalized_class ] ) ) {
+			$normalized_class = 0 === strpos( $normalized_class, 'WPShadow\\Treatments\\' )
+				? $normalized_class
+				: 'WPShadow\\Treatments\\' . $normalized_class;
+		} elseif ( ! isset( $valid_treatment_fqcn[ $normalized_class ] ) ) {
+			++$stats['disabled_treatments_removed'];
+			continue;
+		}
+
+		$clean_disabled_treatments[ $normalized_class ] = true;
+	}
+
+	$clean_disabled_treatments = array_keys( $clean_disabled_treatments );
+	if ( $clean_disabled_treatments !== $disabled_treatments ) {
+		update_option( 'wpshadow_disabled_treatment_classes', $clean_disabled_treatments );
+	}
+
+	global $wpdb;
+	if ( isset( $wpdb ) && $wpdb instanceof \wpdb ) {
+		$prefix         = $wpdb->esc_like( '_transient_wpshadow_diag_state_' ) . '%';
+		$timeout_prefix = $wpdb->esc_like( '_transient_timeout_wpshadow_diag_state_' ) . '%';
+
+		$deleted_data = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $prefix ) );
+		if ( is_int( $deleted_data ) && $deleted_data > 0 ) {
+			$stats['diagnostic_transients_cleared'] += $deleted_data;
+		}
+
+		$deleted_timeouts = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $timeout_prefix ) );
+		if ( is_int( $deleted_timeouts ) && $deleted_timeouts > 0 ) {
+			$stats['diagnostic_transients_cleared'] += $deleted_timeouts;
+		}
+	}
+
+	if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) && method_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry', 'clear_cache' ) ) {
+		\WPShadow\Diagnostics\Diagnostic_Registry::clear_cache();
+	}
+
+	return $stats;
+}
+
+/**
+ * Conditionally run stale registry-reference cleanup when registry changes.
+ *
+ * @return array<string, int|string> Cleanup result details.
+ */
+function wpshadow_maybe_cleanup_removed_diagnostic_treatment_references(): array {
+	$signature = wpshadow_get_registry_cleanup_signature();
+	if ( '' === $signature ) {
+		return array(
+			'ran' => 0,
+		);
+	}
+
+	$option_key        = 'wpshadow_registry_cleanup_signature';
+	$stored_signature  = (string) get_option( $option_key, '' );
+
+	if ( hash_equals( $stored_signature, $signature ) ) {
+		return array(
+			'ran' => 0,
+		);
+	}
+
+	$stats               = wpshadow_cleanup_removed_diagnostic_treatment_references();
+	$stats['ran']        = 1;
+	$stats['signature']  = $signature;
+
+	update_option( $option_key, $signature );
+
+	return $stats;
+}
+
+/**
  * Build gauge snapshot from findings.
  *
  * @param array $findings Findings array.
