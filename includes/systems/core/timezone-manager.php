@@ -12,7 +12,7 @@
  * 2. JavaScript detects browser timezone on each admin page load
  * 3. AJAX sends detection to server, stored in wp_options
  * 4. WordPress timezone_string option updated automatically
- * 5. Manual tool at /wp-admin/?page=wpshadow-utilities&tool=timezone-alignment allows override
+ * 5. Manual override is available from WPShadow settings tools.
  *
  * SECURITY:
  * - Uses sanitize_text_field on all timezone inputs

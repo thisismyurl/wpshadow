@@ -22,10 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/class-context-builder.php';
-require_once __DIR__ . '/../../utils/class-email-service.php';
 require_once __DIR__ . '/../core/class-options-manager.php';
 
-use WPShadow\Utils\Email_Service;
 use WPShadow\Core\Options_Manager;
 use WPShadow\Core\Form_Param_Helper;
 

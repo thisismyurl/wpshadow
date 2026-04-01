@@ -35,6 +35,17 @@ class Dismiss_Tip_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_tip_dismiss', 'read', 'nonce' );
 
+		if ( ! function_exists( 'wpshadow_get_user_tip_prefs' ) || ! function_exists( 'wpshadow_save_user_tip_prefs' ) ) {
+			$tooltip_helpers = WPSHADOW_PATH . 'includes/systems/dashboard/widgets/class-tooltip-manager.php';
+			if ( file_exists( $tooltip_helpers ) ) {
+				require_once $tooltip_helpers;
+			}
+		}
+
+		if ( ! function_exists( 'wpshadow_get_user_tip_prefs' ) || ! function_exists( 'wpshadow_save_user_tip_prefs' ) ) {
+			self::send_error( __( 'Tooltip helper functions are unavailable.', 'wpshadow' ) );
+		}
+
 		$user_id = get_current_user_id();
 		if ( ! $user_id ) {
 			self::send_error( __( 'User not authenticated.', 'wpshadow' ) );

@@ -13,11 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Load feature availability helper functions
-if ( file_exists( WPSHADOW_PATH . 'includes/ui/templates/functions-feature-availability.php' ) ) {
-	require_once WPSHADOW_PATH . 'includes/ui/templates/functions-feature-availability.php';
-}
-
 if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page (Kanban Board)
@@ -149,15 +144,9 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 			$tab = 'vault-light';
 		}
 
-		// If vault-light tab is requested, redirect to Utilities instead
-		if ( 'vault-light' === $tab ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-utilities&tab=vault-light' ) );
-			exit;
-		}
-
-		// If import-export tab is requested, redirect to Utilities instead
-		if ( 'import-export' === $tab ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-utilities&tab=import-export' ) );
+		// Legacy utility tabs now route back to Settings.
+		if ( in_array( $tab, array( 'vault-light', 'import-export' ), true ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings' ) );
 			exit;
 		}
 
@@ -345,23 +334,18 @@ if ( ! function_exists( 'wpshadow_render_scan_settings' ) ) {
 	}
 }
 
-// Load Utilities module (defines wpshadow_render_utilities if not already defined)
-// Legacy: Also define wpshadow_render_tools for backward compatibility
-if ( ! function_exists( 'wpshadow_render_utilities' ) ) {
-	require_once WPSHADOW_PATH . 'includes/admin/pages/class-utilities-page-module.php';
-}
-
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	/**
-	 * Legacy function name - redirects to wpshadow_render_utilities()
+	 * Legacy function name - redirects to dashboard.
 	 *
-	 * @deprecated Use wpshadow_render_utilities() instead
+	 * @deprecated Utilities page removed.
 	 */
 	function wpshadow_render_tools() {
 		if ( function_exists( '_deprecated_function' ) ) {
-			_deprecated_function( __FUNCTION__, '0.6030.2200', 'wpshadow_render_utilities' );
+			_deprecated_function( __FUNCTION__, '0.6093.1200', 'wpshadow_render_dashboard' );
 		}
-		wpshadow_render_utilities();
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+		exit;
 	}
 }
 

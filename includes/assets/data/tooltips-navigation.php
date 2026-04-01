@@ -38,15 +38,6 @@ return array(
 		'kb_url'   => 'https://wpshadow.com/kb/general-workflow-manager?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
-		'id'       => 'nav-wpshadow-utilities',
-		'selector' => '#menu-wpshadow li a[href*="page=wpshadow-utilities"]',
-		'title'    => __( 'WPShadow Utilities', 'wpshadow' ),
-		'message'  => __( 'Access specialized analysis utilities including accessibility audits, link checks, and color contrast analysis.', 'wpshadow' ),
-		'category' => 'navigation',
-		'level'    => 'intermediate',
-		'kb_url'   => 'https://wpshadow.com/kb/general-wpshadow-utilities?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
-	),
-	array(
 		'id'       => 'nav-wpshadow-help',
 		'selector' => '#menu-wpshadow li a[href*="page=wpshadow-help"]',
 		'title'    => __( 'Help & Guidance', 'wpshadow' ),

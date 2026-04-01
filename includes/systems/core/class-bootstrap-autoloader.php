@@ -71,8 +71,6 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-upgrade-path-helper.php',
 		'includes/systems/core/class-utm-link-manager.php',
 		'includes/systems/core/class-finding-utils.php',
-		'includes/core/class-version-checker.php',
-
 		// Plugin initialization
 		'includes/systems/core/class-plugin-bootstrap.php',
 

@@ -264,7 +264,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Check if WP_POST_REVISIONS is defined.
 		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
 			$warnings[] = __( 'WP_POST_REVISIONS not defined - unlimited revisions stored', 'wpshadow' );
-		} elseif ( WP_POST_REVISIONS == = false || WP_POST_REVISIONS > 10 ) {
+		} elseif ( WP_POST_REVISIONS === false || WP_POST_REVISIONS > 10 ) {
 			$warnings[] = __( 'WP_POST_REVISIONS set high - consider limiting to 5-10', 'wpshadow' );
 		}
 

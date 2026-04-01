@@ -251,7 +251,7 @@ class Tool_View_Base {
 			<div class="wps-card-body">
 				<h3><?php esc_html_e( '🌐 Cloud Service Required', 'wpshadow' ); ?></h3>
 				<p><?php echo esc_html( $description ); ?></p>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-utilities&tab=cloud-registration' ) ); ?>" class="wps-btn wps-btn--primary">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=advanced' ) ); ?>" class="wps-btn wps-btn--primary">
 					<span class="dashicons dashicons-cloud"></span>
 					<?php esc_html_e( 'Register for Free Cloud Access', 'wpshadow' ); ?>
 				</a>

@@ -107,12 +107,6 @@ require_once $ajax_path . 'toggle-guardian-handler.php';
 require_once $ajax_path . 'schedule-overnight-fix-handler.php';
 require_once $ajax_path . 'schedule-offpeak-handler.php';
 
-// Utilities
-require_once $ajax_path . 'clear-cache-handler.php';
-require_once $ajax_path . 'create-magic-link-handler.php';
-require_once $ajax_path . 'revoke-magic-link-handler.php';
-require_once $ajax_path . 'create-permanent-user-handler.php';
-require_once $ajax_path . 'save-cache-options-handler.php';
 
 // Reports
 require_once $ajax_path . 'class-site-dna-handler.php';
@@ -141,9 +135,6 @@ require_once $ajax_path . 'set-timezone-handler.php';
 // Visual comparison operations
 require_once $ajax_path . 'get-visual-comparisons-handler.php';
 require_once $ajax_path . 'get-visual-comparison-handler.php';
-
-// Utilities operations
-require_once $ajax_path . 'load-tool-handler.php';
 
 // Kanban operations (loaded separately in kanban-module.php)
 // - get-finding-family-handler.php

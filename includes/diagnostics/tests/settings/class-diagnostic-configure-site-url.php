@@ -16,7 +16,7 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-\texit;
+	exit;
 }
 
 /**
@@ -30,54 +30,54 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Configure_Site_Url extends Diagnostic_Base {
 
-\t/**
-\t * Diagnostic slug.
-\t *
-\t * @var string
-\t */
-\tprotected static $slug = 'configure-site-url';
+	/**
+	 * Diagnostic slug.
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'configure-site-url';
 
-\t/**
-\t * Diagnostic title.
-\t *
-\t * @var string
-\t */
-\tprotected static $title = 'Configure Site URL';
+	/**
+	 * Diagnostic title.
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Configure Site URL';
 
-\t/**
-\t * Diagnostic description.
-\t *
-\t * @var string
-\t */
-\tprotected static $description = 'Stub diagnostic for Configure Site URL. TODO: implement full test and remediation guidance.';
+	/**
+	 * Diagnostic description.
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Stub diagnostic for Configure Site URL. TODO: implement full test and remediation guidance.';
 
-\t/**
-\t * Gauge family/category for dashboard placement.
-\t *
-\t * @var string
-\t */
-\tprotected static $family = 'settings';
+	/**
+	 * Gauge family/category for dashboard placement.
+	 *
+	 * @var string
+	 */
+	protected static $family = 'settings';
 
-\t/**
-\t * Run the diagnostic check.
-\t *
-\t * TODO Test Plan:
-\t * Use get_option('siteurl') and get_option('home') to verify consistency and valid URL format.
-\t *
-\t * TODO Fix Plan:
-\t * Fix via update_option for siteurl/home after validating environment.
-\t *
-\t * Constraints:
-\t * - Must be testable using built-in WordPress functions or PHP checks.
-\t * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-\t * - Must not modify WordPress core files.
-\t * - Must improve performance, security, or site success.
-\t *
-\t * @since  0.6093.1200
-\t * @return array|null Return finding array when issue exists, null when healthy.
-\t */
-\tpublic static function check() {
-\t\t// TODO: Implement real test logic. Stub returns null to avoid false positives.
-\t\treturn null;
-\t}
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * TODO Test Plan:
+	 * Use get_option('siteurl') and get_option('home') to verify consistency and valid URL format.
+	 *
+	 * TODO Fix Plan:
+	 * Fix via update_option for siteurl/home after validating environment.
+	 *
+	 * Constraints:
+	 * - Must be testable using built-in WordPress functions or PHP checks.
+	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
+	 * - Must not modify WordPress core files.
+	 * - Must improve performance, security, or site success.
+	 *
+	 * @since  0.6093.1200
+	 * @return array|null Return finding array when issue exists, null when healthy.
+	 */
+	public static function check() {
+		// TODO: Implement real test logic. Stub returns null to avoid false positives.
+		return null;
+	}
 }

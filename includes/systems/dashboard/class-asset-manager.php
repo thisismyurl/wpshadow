@@ -164,7 +164,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
  * @return void
  */
 function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
+	if ( strpos( $hook, 'wpshadow-reports' ) === false ) {
 		return;
 	}
 
@@ -208,7 +208,7 @@ function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
  * @return void
  */
 function wpshadow_enqueue_a11y_audit_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
+	if ( strpos( $hook, 'wpshadow-reports' ) === false ) {
 		return;
 	}
 
@@ -252,7 +252,7 @@ function wpshadow_enqueue_a11y_audit_assets( $hook ) {
  * @return void
  */
 function wpshadow_enqueue_broken_links_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-utilities' ) === false ) {
+	if ( strpos( $hook, 'wpshadow-reports' ) === false ) {
 		return;
 	}
 
@@ -381,6 +381,18 @@ function wpshadow_enqueue_tooltip_assets() {
 
 	$user_id = get_current_user_id();
 	if ( ! $user_id ) {
+		return;
+	}
+
+	// Ensure tooltip helper functions are loaded before calling them.
+	if ( ! function_exists( 'wpshadow_get_user_tip_prefs' ) || ! function_exists( 'wpshadow_get_tooltip_catalog' ) ) {
+		$tooltip_helpers = WPSHADOW_PATH . 'includes/systems/dashboard/widgets/class-tooltip-manager.php';
+		if ( file_exists( $tooltip_helpers ) ) {
+			require_once $tooltip_helpers;
+		}
+	}
+
+	if ( ! function_exists( 'wpshadow_get_user_tip_prefs' ) || ! function_exists( 'wpshadow_get_tooltip_catalog' ) ) {
 		return;
 	}
 

@@ -130,7 +130,7 @@ class Diagnostic_Post_Revisions_Limit_Not_Set extends Diagnostic_Base {
 	 */
 	public static function check() {
 		// Check post revisions limit
-		if ( ! defined( 'WP_POST_REVISIONS' ) || WP_POST_REVISIONS == = false ) {
+		if ( ! defined( 'WP_POST_REVISIONS' ) || WP_POST_REVISIONS === false ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,

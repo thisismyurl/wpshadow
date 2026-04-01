@@ -110,16 +110,6 @@ class Menu_Manager {
 			);
 		}
 
-		// Reports (Analytics & Insights).
-		add_submenu_page(
-			'wpshadow',
-			__( 'Reports', 'wpshadow' ),
-			__( 'Reports', 'wpshadow' ),
-			$admin_capability,
-			'wpshadow-reports',
-			'wpshadow_render_reports'
-		);
-
 		// Settings (including Notifications & Scan Settings as tabs).
 		add_submenu_page(
 			'wpshadow',
@@ -135,32 +125,7 @@ class Menu_Manager {
 		// Scan Settings is now a tab on Settings page, not a separate menu.
 		// Legacy redirect handled in handle_legacy_redirects().
 
-		// Utilities (Advanced Features & Tools).
-		add_submenu_page(
-			'wpshadow',
-			__( 'Utilities', 'wpshadow' ),
-			__( 'Utilities', 'wpshadow' ),
-			$analyst_capability,
-			'wpshadow-utilities',
-			'wpshadow_render_utilities'
-		);
-
-		// Academy (moved above Help priority).
-		$academy_available = true;
-		if ( class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) ) {
-			$academy_available = \WPShadow\Academy\Academy_Release_Gate::is_available();
-		}
-
-		if ( $academy_available ) {
-			add_submenu_page(
-				'wpshadow',
-				__( 'WPShadow Academy', 'wpshadow' ),
-				__( 'Academy', 'wpshadow' ),
-				$admin_capability,
-				'wpshadow-academy',
-				array( 'WPShadow\\Academy\\Academy_UI', 'render_academy_page' )
-			);
-		}
+		
 
 		// Achievements (with Leaderboard & Rewards as submenus).
 		if ( class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
@@ -213,11 +178,11 @@ class Menu_Manager {
 		}
 
 		$redirects = array(
-			'wpshadow-guardian-reports'       => 'wpshadow-reports',
+			'wpshadow-guardian-reports'       => 'wpshadow',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
 			'wpshadow-privacy'                => 'wpshadow-settings&tab=privacy-dashboard',
-			'wpshadow-tools'                  => 'wpshadow-utilities',
+			'wpshadow-tools'                  => 'wpshadow',
 			'wpshadow-defensive'              => 'wpshadow-settings&tab=defensive',
 			'wpshadow-kpi'                    => 'wpshadow-settings&tab=kpi',
 			'wpshadow-learning'               => 'wpshadow-settings&tab=learning',
